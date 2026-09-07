@@ -14,7 +14,91 @@
 // so both types need the same Action Dice lifecycle management here.
 const COMBATANT_TYPES = ["character", "npc"];
 
+/**
+ * Shared dice-commit prompt — same dialog both actor sheets used to duplicate for Roll
+ * Initiative, now centralized here since EssenceCombat#rollInitiative is the one place this
+ * fires from (sheet button, Combat Tracker's per-combatant dice icon, and its Roll All/Roll NPC
+ * buttons all funnel through Combat#rollInitiative).
+ */
+function promptDiceCount({ title, label, min, max, initial }) {
+  return new Promise((resolve) => {
+    new foundry.applications.api.DialogV2({
+      window: { title },
+      content: `<p>${label}</p><input type="number" name="count" value="${initial}" min="${min}" max="${max}" autofocus>`,
+      buttons: [
+        {
+          action: "commit",
+          label: "Roll",
+          default: true,
+          callback: (event, button) => {
+            const raw = Number(button.form.elements.count.value);
+            const n = Number.isFinite(raw) ? raw : initial;
+            return Math.min(max, Math.max(min, n));
+          }
+        },
+        { action: "cancel", label: "Cancel", callback: () => "essence-cancelled" }
+      ],
+      submit: (result) => resolve(result === "essence-cancelled" ? null : result)
+    }).render(true);
+  });
+}
+
 export default class EssenceCombat extends Combat {
+  /**
+   * Routes every entry point that rolls Initiative — the sheet's Roll Initiative button, the
+   * Combat Tracker's per-combatant dice icon, and its Roll All/Roll NPCs buttons all call this
+   * single method — through our dice-commit flow instead of a flat formula roll, for character
+   * and npc combatants. Anything else (a plain monster token with no essence-system actor type)
+   * falls back to core's own roll.
+   */
+  async rollInitiative(ids, options = {}) {
+    ids = typeof ids === "string" ? [ids] : ids;
+    const ours = [];
+    const rest = [];
+    for (const id of ids) {
+      const actor = this.combatants.get(id)?.actor;
+      (COMBATANT_TYPES.includes(actor?.type) ? ours : rest).push(id);
+    }
+    if (rest.length) await super.rollInitiative(rest, options);
+
+    for (const id of ours) {
+      const combatant = this.combatants.get(id);
+      if (!combatant?.isOwner) continue;
+      const actor = combatant.actor;
+      const base = actor.system.baseCombatDice;
+      const committed = await promptDiceCount({
+        title: `Roll Initiative — ${actor.name}`,
+        label: `Commit how many dice to Initiative? (0 = Pass, max ${base}). Whatever you don't commit carries over as your first turn's Action Dice.`,
+        min: 0, max: base, initial: base
+      });
+      if (committed === null) continue;
+
+      let faces = [];
+      let total = 0;
+      if (committed > 0) {
+        const roll = new Roll(`${committed}d10`);
+        await roll.evaluate();
+        faces = roll.terms[0].results.map((r) => r.result);
+        total = faces.reduce((a, b) => a + b, 0);
+        await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor: "Initiative" });
+      } else {
+        await ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<p><strong>${actor.name}</strong> passes on Initiative.</p>`
+        });
+      }
+
+      await actor.update({
+        "system.playState.initiativeDice": committed,
+        "system.playState.initiativeFaces": faces,
+        "system.playState.initiativeTotal": total,
+        "system.playState.initiativeCommitted": true
+      });
+      await combatant.update({ initiative: total });
+    }
+    return this;
+  }
+
   /** Fires once per round, awaited before _onStartTurn. Round 1 is combat's actual start. */
   async _onStartRound(context) {
     await super._onStartRound(context);

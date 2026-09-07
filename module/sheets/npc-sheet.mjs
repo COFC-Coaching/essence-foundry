@@ -265,13 +265,6 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       ui.notifications.warn("Start a combat encounter from the Combat Tracker first.");
       return;
     }
-    const base = this.actor.system.baseCombatDice;
-    const committed = await EssenceNpcSheet.#promptDiceCount({
-      title: "Roll Initiative",
-      label: `Commit how many dice to Initiative? (0 = Pass, max ${base}). Whatever you don't commit carries over as your first turn's Action Dice.`,
-      min: 0, max: base, initial: base
-    });
-    if (committed === null) return;
 
     let combatant = combat.combatants.find((c) => c.actor?.id === this.actor.id);
     if (!combatant) {
@@ -281,28 +274,10 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       }]);
     }
 
-    let faces = [];
-    let total = 0;
-    if (committed > 0) {
-      const roll = new Roll(`${committed}d10`);
-      await roll.evaluate();
-      faces = roll.terms[0].results.map((r) => r.result);
-      total = faces.reduce((a, b) => a + b, 0);
-      await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), flavor: "Initiative" });
-    } else {
-      await ChatMessage.create({
-        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        content: `<p><strong>${this.actor.name}</strong> passes on Initiative.</p>`
-      });
-    }
-
-    await this.actor.update({
-      "system.playState.initiativeDice": committed,
-      "system.playState.initiativeFaces": faces,
-      "system.playState.initiativeTotal": total,
-      "system.playState.initiativeCommitted": true
-    });
-    await combatant.update({ initiative: total });
+    // EssenceCombat#rollInitiative owns the dice-commit dialog and roll — the Combat Tracker's
+    // own dice icon and Roll All/Roll NPCs buttons call the exact same method, so this button and
+    // the native tracker UI always produce the same result.
+    await combat.rollInitiative(combatant.id);
   }
 
   static async #onEndTurn() {
