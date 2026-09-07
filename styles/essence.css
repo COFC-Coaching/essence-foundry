@@ -108,14 +108,16 @@
    (no space) instead, which matches an element carrying both classes directly. */
 .essence.roll-card { padding: 6px 8px; }
 .essence.roll-card h3 { margin: 0 0 6px; }
-.essence.roll-card .dice-faces { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 8px; }
+.essence.roll-card .dice-faces { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 8px; }
 .essence.roll-card .die {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 32px; height: 32px; font-size: 16px; font-weight: bold;
-  background: #2b2b2b; border: 1px solid #888; border-radius: 5px; color: #eee;
-  box-shadow: 0 2px 3px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+  display: inline-flex; align-items: flex-start; justify-content: center;
+  width: 36px; height: 36px; padding-top: 9px; box-sizing: border-box;
+  font-size: 15px; font-weight: bold; background: #2b2b2b; border: 1px solid #888; color: #eee;
+  /* Kite/rhombus outline, matching a d10's face shape rather than a generic square die. */
+  clip-path: polygon(50% 0%, 100% 35%, 82% 100%, 18% 100%, 0% 35%);
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.6));
 }
-.essence.roll-card .die.success-die { background: #2e7d32; border-color: #4caf50; color: #fff; box-shadow: 0 2px 4px rgba(46,125,50,0.6), inset 0 1px 0 rgba(255,255,255,0.15); }
+.essence.roll-card .die.success-die { background: #2e7d32; color: #fff; filter: drop-shadow(0 2px 3px rgba(46,125,50,0.7)); }
 .essence.roll-card .die.surge-die { background: #f9a825; border-color: #ffca28; color: #000; }
 .essence.roll-card .pass { color: #2e7d32; font-weight: bold; }
 .essence.roll-card .fail { color: #c62828; font-weight: bold; }
