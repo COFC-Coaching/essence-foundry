@@ -1,5 +1,18 @@
 .essence .essence-sheet-root { display: flex; flex-direction: column; height: 100%; padding: 4px 8px; overflow-y: auto; }
 .essence input:disabled, .essence select:disabled, .essence textarea:disabled { opacity: 0.65; cursor: not-allowed; }
+
+/* Give rich-text (<prose-mirror>) fields the same visible box our text inputs already have —
+   core's own ProseMirror styling is transparent by default (meant to blend into document-style
+   pages), which on this system's dark sheet backgrounds left no visual cue that a writable field
+   was even there. */
+.essence prose-mirror.editor {
+  background: rgb(48, 40, 49);
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 4px 6px;
+  box-sizing: border-box;
+}
+.essence prose-mirror.editor .editor-content { min-height: 4em; }
 .essence .locked { opacity: 0.4; cursor: not-allowed; }
 .essence .sheet-header { display: flex; align-items: flex-start; gap: 10px; }
 .essence .profile-img { width: 64px; height: 64px; object-fit: cover; border-radius: 4px; }

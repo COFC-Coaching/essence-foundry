@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.5.8
+
+- Give rich-text (`<prose-mirror>`) fields — Concept/Background, Biography, GM Notes, Passive
+  Features, and every item sheet's HTML fields — a visible bordered box matching the sheet's other
+  inputs. Core's own ProseMirror styling is transparent by default, which on this system's dark
+  sheet backgrounds meant a writable field looked identical to empty page background until you
+  happened to hover over it.
+
 ## 0.5.7
 
 - Fix every rich-text field's Edit button being completely inert system-wide: the Character
