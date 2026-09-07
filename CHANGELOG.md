@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.12
+
+- Add a "Role Budget System" page to the Game Master's Guide compendium journal, documenting the
+  Monster Creator's Minion/Standard/Elite/Nemesis budget table introduced in 0.6.8: the full
+  per-Role Attribute/Skill/Resilience/Wounds/Card/Equipment numbers, the Resilience-by-Tier
+  formula, and exactly what order Auto-Generate rolls things up in. Same content also published
+  as a standalone reference doc on the project wiki.
+
 ## 0.6.11
 
 - Add an in-sheet way to set an Actor's canvas Token Image, on both the Character and NPC sheets:

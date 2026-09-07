@@ -18,6 +18,23 @@
       "ownership": {
         "default": -1
       }
+    },
+    {
+      "_id": "549235712acb1c89",
+      "_key": "!journal.pages!14ab7e12b200c927.549235712acb1c89",
+      "name": "Role Budget System",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p>Every NPC has a <strong>Role</strong> tag &mdash; Minion, Standard, Elite, or Nemesis &mdash; but nothing in the printed rules defines what that tag actually means mechanically. The Monster Creator's <strong>Auto-Generate Stat Block</strong> needs something to generate <em>from</em>, so this system invents a budget: a plain, tunable table of numbers (kept in <code>module/data/monster-budgets.mjs</code>) that caps what you can hand-enter on a Monster and drives what Auto-Generate rolls up on its own. Treat every number here as homebrew, not canon &mdash; revisit it if actual play says a Role feels off.</p><h2>The Tier Ladder</h2><p>Four Roles, seven budget axes each. Every axis climbs by the same flat step from one Role to the next &mdash; no exponential curves &mdash; so you can eyeball roughly how much stronger the next Role up is without doing math. Total Combat Cards (Action + Reaction), for instance, lands on 1 &rarr; 3 &rarr; 5 &rarr; 7: a clean +2 every Role.</p><table><thead><tr><th>Role</th><th>Attributes</th><th>Skills</th><th>Resilience</th><th>Temp Wounds</th><th>Cards (A/R)</th><th>Equipment</th></tr></thead><tbody><tr><td>Minion</td><td>2 pts, max 2</td><td>2 pts, max 2</td><td>1 + 1&times;Tier</td><td>0</td><td>1 / 0</td><td>1</td></tr><tr><td>Standard</td><td>7 pts, max 3</td><td>5 pts, max 3</td><td>3 + 2&times;Tier</td><td>1</td><td>2 / 1</td><td>2</td></tr><tr><td>Elite</td><td>10 pts, max 4</td><td>8 pts, max 4</td><td>5 + 3&times;Tier</td><td>2</td><td>3 / 2</td><td>3</td></tr><tr><td>Nemesis</td><td>13 pts, max 5</td><td>12 pts, max 5</td><td>7 + 4&times;Tier</td><td>3</td><td>4 / 3</td><td>4</td></tr></tbody></table><h2>Resilience Scales With Tier</h2><p>Resilience is the one axis that is a formula rather than a flat number, since a Tier 5 Minion shouldn't take the same hit before Wounds start as a Tier 1 one. <strong>Resilience = Base + Per-Tier &times; Tier</strong>, both of which climb with Role:</p><table><thead><tr><th>Role</th><th>Tier 1</th><th>Tier 3</th><th>Tier 5</th></tr></thead><tbody><tr><td>Minion</td><td>2</td><td>4</td><td>6</td></tr><tr><td>Standard</td><td>5</td><td>9</td><td>13</td></tr><tr><td>Elite</td><td>8</td><td>14</td><td>20</td></tr><tr><td>Nemesis</td><td>11</td><td>19</td><td>27</td></tr></tbody></table><h2>How Auto-Generate Spends the Budget</h2><p>The one-button path on the Concept step rolls the whole stat block in this order, then hands every result back to you to hand-edit exactly like the rest of the Monster Creator. Each step below also has its own Reroll button for redoing just that part.</p><ol><li><strong>Attributes &amp; Skills</strong> &mdash; a weighted point-buy: each point is a coin-flip weighted 3-to-1 toward whichever Domain you picked as the Emphasis (Physical/Mental/Spiritual), enough to lean the roll without ever locking the other two Domains out. Skills respect the same five Distinction gates a player would: Gestalt (requires Gifted), Magecraft (Arcanist), Psionics (Psyker), Ritualism (Invoker), and Calling (Summoner) only receive points if the matching Distinction is already attached.</li><li><strong>Resilience, Temporary Wounds, Equipment Limit</strong> &mdash; set directly from the Role/Tier budget table above, no randomness.</li><li><strong>Combat Cards</strong> &mdash; every owned Action/Reaction Card is cleared and re-picked from the qualifying pool, weighted 3-to-1 toward the three Skills the Attribute/Skill roll happened to land highest on, so a Nemesis that rolled heavy Ritualism tends to walk away with Ritualism cards.</li><li><strong>Equipment</strong> &mdash; a straight random draw from the Equipment compendium, capped at the Role's Equipment count.</li></ol><h2>Tuning It</h2><p>Every number above is a plain object literal in <code>module/data/monster-budgets.mjs</code> &mdash; nothing else in the system reasons about the exact values, so any of them can be edited directly. A retuned number takes effect on the very next sheet opened; no migration, no data to rebuild.</p>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
     }
   ],
   "folder": null,
