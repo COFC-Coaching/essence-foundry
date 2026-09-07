@@ -128,7 +128,7 @@
               </span>
             </div>
             {{#unless s.gateOpen}}<div class="gate-note"><i class="fa-solid fa-lock"></i> Requires {{s.gateDistinction}} Distinction</div>{{/unless}}
-            {{#each s.expertises as |e|}}<div class="expertise-line">{{e.name}}{{#if e.subtype}} ({{e.subtype}}){{/if}}</div>{{/each}}
+            {{#each s.expertises as |e|}}<div class="expertise-line">{{e.name}}{{#if e.subtypeText}} ({{e.subtypeText}}){{/if}}</div>{{/each}}
           </div>
         {{/each}}
       </div>
@@ -136,28 +136,38 @@
   </div>
 
   <h3 class="section-head">Expertises</h3>
-  <div class="array-rows">
+  <div class="expertise-blocks">
     {{#each expertiseRows as |row|}}
-      <div class="array-row">
-        <select name="system.expertises.{{row.i}}.skill">
-          <option value="">Skill…</option>
-          {{#each ../skillOptions as |sk|}}
-            <option value="{{sk}}" {{#if (eq sk row.skill)}}selected{{/if}}>{{sk}}</option>
+      <div class="expertise-block">
+        <div class="expertise-block-head">
+          <select name="system.expertises.{{row.i}}.skill">
+            <option value="">Skill…</option>
+            {{#each ../skillOptions as |sk|}}
+              <option value="{{sk}}" {{#if (eq sk row.skill)}}selected{{/if}}>{{sk}}</option>
+            {{/each}}
+          </select>
+          <select name="system.expertises.{{row.i}}.name">
+            <option value="">Expertise…</option>
+            {{#each row.expertiseOptions as |opt|}}
+              <option value="{{opt}}" {{#if (eq opt row.name)}}selected{{/if}}>{{opt}}</option>
+            {{/each}}
+          </select>
+          <a data-action="deleteArrayRow" data-array="expertises" data-index="{{row.i}}"><i class="fa-solid fa-trash"></i></a>
+        </div>
+        <div class="subtype-list">
+          {{#each row.subtypes as |st|}}
+            <div class="subtype-row">
+              <select name="system.expertises.{{row.i}}.subtypes.{{st.j}}">
+                <option value="">Sub-Type…</option>
+                {{#each row.subtypeOptions as |opt|}}
+                  <option value="{{opt}}" {{#if (eq opt st.value)}}selected{{/if}}>{{opt}}</option>
+                {{/each}}
+              </select>
+              <a data-action="deleteSubtype" data-index="{{row.i}}" data-sub-index="{{st.j}}"><i class="fa-solid fa-trash"></i></a>
+            </div>
           {{/each}}
-        </select>
-        <select name="system.expertises.{{row.i}}.name">
-          <option value="">Expertise…</option>
-          {{#each row.expertiseOptions as |opt|}}
-            <option value="{{opt}}" {{#if (eq opt row.name)}}selected{{/if}}>{{opt}}</option>
-          {{/each}}
-        </select>
-        <select name="system.expertises.{{row.i}}.subtype">
-          <option value="">Sub-Type…</option>
-          {{#each row.subtypeOptions as |opt|}}
-            <option value="{{opt}}" {{#if (eq opt row.subtype)}}selected{{/if}}>{{opt}}</option>
-          {{/each}}
-        </select>
-        <a data-action="deleteArrayRow" data-array="expertises" data-index="{{row.i}}"><i class="fa-solid fa-trash"></i></a>
+          <button type="button" data-action="addSubtype" data-index="{{row.i}}"><i class="fa-solid fa-plus"></i> Add Sub-Type</button>
+        </div>
       </div>
     {{/each}}
     <button type="button" data-action="addArrayRow" data-array="expertises"><i class="fa-solid fa-plus"></i> Add Expertise</button>

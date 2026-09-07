@@ -75,7 +75,7 @@ export default class EssenceCharacterData extends foundry.abstract.TypeDataModel
       expertises: new fields.ArrayField(new fields.SchemaField({
         name: new fields.StringField({ initial: "" }),
         skill: new fields.StringField({ initial: "" }),
-        subtype: new fields.StringField({ initial: "" })
+        subtypes: new fields.ArrayField(new fields.StringField())
       })),
       nonCombatSkills: new fields.ArrayField(new fields.SchemaField({
         name: new fields.StringField({ initial: "" }),

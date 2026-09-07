@@ -71,6 +71,13 @@
 .essence.actor .nc-skill-row { display: flex; gap: 6px; align-items: center; margin-bottom: 2px; }
 .essence.actor .nc-skill-row input[type="text"] { flex: 1; }
 .essence.actor .array-rows { margin-bottom: 8px; }
+.essence.actor .expertise-blocks { margin-bottom: 8px; }
+.essence.actor .expertise-block { border: 1px solid #555; border-radius: 4px; padding: 6px; margin-bottom: 6px; }
+.essence.actor .expertise-block-head { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
+.essence.actor .expertise-block-head select { flex: 1; }
+.essence.actor .subtype-list { padding-left: 16px; display: flex; flex-direction: column; gap: 4px; }
+.essence.actor .subtype-row { display: flex; gap: 6px; align-items: center; }
+.essence.actor .subtype-row select { flex: 1; max-width: 220px; }
 .essence.actor .array-row { display: flex; gap: 6px; align-items: center; margin-bottom: 2px; }
 .essence.actor .array-row input[type="text"] { flex: 1; }
 .essence.actor .array-row select { flex: 1; }

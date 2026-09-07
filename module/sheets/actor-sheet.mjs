@@ -27,7 +27,7 @@ function pips(value, max = PIP_MAX) {
 const ARRAY_ROW_DEFAULTS = {
   nonCombatSkills: { name: "", rating: 0 },
   passiveFeatures: { name: "", source: "", text: "" },
-  expertises: { name: "", skill: "", subtype: "" }
+  expertises: { name: "", skill: "", subtypes: [] }
 };
 
 export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
@@ -51,7 +51,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       toggleTempInfluence: EssenceActorSheet.#onToggleTempInfluence,
       toggleCoreInfluence: EssenceActorSheet.#onToggleCoreInfluence,
       addArrayRow: EssenceActorSheet.#onAddArrayRow,
-      deleteArrayRow: EssenceActorSheet.#onDeleteArrayRow
+      deleteArrayRow: EssenceActorSheet.#onDeleteArrayRow,
+      addSubtype: EssenceActorSheet.#onAddSubtype,
+      deleteSubtype: EssenceActorSheet.#onDeleteSubtype
     }
   };
 
@@ -136,7 +138,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
           label: key,
           value: system[key],
           pips: pips(system[key]),
-          expertises: system.expertises.filter((e) => (e.skill || "").toLowerCase() === key),
+          expertises: system.expertises
+            .filter((e) => (e.skill || "").toLowerCase() === key)
+            .map((e) => ({ name: e.name, subtypeText: e.subtypes.filter(Boolean).join(", ") })),
           gateDistinction,
           gateOpen
         };
@@ -154,9 +158,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       i,
       skill: e.skill,
       name: e.name,
-      subtype: e.subtype,
       expertiseOptions: EXPERTISE_DATABASE[e.skill] || [],
-      subtypeOptions: SUBTYPE_DATABASE[e.skill] || []
+      subtypeOptions: SUBTYPE_DATABASE[e.skill] || [],
+      subtypes: e.subtypes.map((value, j) => ({ value, j }))
     }));
     context.temporaryWoundPips = pips(system.playState.currentTemporaryWounds, system.temporaryWoundsAvailable);
     context.temporaryInfluencePips = pips(system.playState.currentTemporaryInfluence, system.temporaryInfluence);
@@ -350,6 +354,21 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const rows = this.actor.system[key].map((row) => foundry.utils.deepClone(row));
     rows.splice(i, 1);
     await this.actor.update({ [`system.${key}`]: rows });
+  }
+
+  static async #onAddSubtype(event, target) {
+    const i = Number(target.dataset.index);
+    const expertises = this.actor.system.expertises.map((e) => ({ name: e.name, skill: e.skill, subtypes: [...e.subtypes] }));
+    expertises[i].subtypes.push("");
+    await this.actor.update({ "system.expertises": expertises });
+  }
+
+  static async #onDeleteSubtype(event, target) {
+    const i = Number(target.dataset.index);
+    const j = Number(target.dataset.subIndex);
+    const expertises = this.actor.system.expertises.map((e) => ({ name: e.name, skill: e.skill, subtypes: [...e.subtypes] }));
+    expertises[i].subtypes.splice(j, 1);
+    await this.actor.update({ "system.expertises": expertises });
   }
 
   static #onItemEdit(event, target) {
