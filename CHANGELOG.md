@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.5.2
+
+- Foundry's native Combat Tracker (per-combatant dice icon, Roll All, Roll NPCs) now routes
+  through the real Essence Initiative dice-commit flow instead of a flat formula roll. Previously
+  only the character/NPC sheet's own Roll Initiative button used the real mechanic; clicking the
+  tracker's own dice icon silently bypassed it. Centralized in `EssenceCombat#rollInitiative` so
+  every entry point behaves identically. Verified live against the Combat Tracker UI.
+
 ## 0.5.1
 
 - Fix NPC/Adversary actors failing to create at all — the new Role tag field rejected its own
