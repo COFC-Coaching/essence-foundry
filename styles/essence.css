@@ -75,8 +75,9 @@
 .essence .expertise-row select { flex: 1; font-size: 0.85em; }
 .essence .add-expertise { font-size: 0.8em; padding: 2px 6px; margin-top: 2px; }
 
-.essence .combat-controls { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
-.essence .combat-state { text-align: right; opacity: 0.85; font-size: 0.85em; flex: 0 1 auto; margin-left: auto; max-width: 220px; }
+.essence .combat-header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex: 0 0 auto; margin-left: auto; max-width: 260px; }
+.essence .combat-controls { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.essence .combat-state { text-align: right; opacity: 0.85; font-size: 0.85em; }
 .essence .combat-state p { margin: 0 0 2px; }
 
 .essence .specialties { margin-bottom: 8px; }

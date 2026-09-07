@@ -126,9 +126,16 @@
         <span class="attr-label">Reaction Dice</span> {{system.playState.reactionDice}}
       </div>
     </div>
-    <div class="combat-state">
-      <p>Round: {{combatRound}} — Turn: {{system.playState.combatTurn}} — Initiative: {{system.playState.initiativeTotal}} ({{system.playState.initiativeDice}}d10)</p>
-      <p class="muted">Start/end combat and advance rounds &amp; turns from the Combat Tracker.</p>
+    <div class="combat-header-right">
+      <div class="combat-controls">
+        <button type="button" data-action="rollInitiative">Roll Initiative</button>
+        <button type="button" data-action="endTurn">End Turn</button>
+        <button type="button" data-action="burnDice">Burn Dice</button>
+      </div>
+      <div class="combat-state">
+        <p>Round: {{combatRound}} — Turn: {{system.playState.combatTurn}} — Initiative: {{system.playState.initiativeTotal}} ({{system.playState.initiativeDice}}d10)</p>
+        <p class="muted">Start/end combat and advance rounds &amp; turns from the Combat Tracker.</p>
+      </div>
     </div>
   </div>
 
@@ -251,12 +258,6 @@
       {{/if}}
     </div>
   {{/if}}
-
-  <div class="combat-controls">
-    <button type="button" data-action="rollInitiative">Roll Initiative</button>
-    <button type="button" data-action="endTurn">End Turn</button>
-    <button type="button" data-action="burnDice">Burn Dice</button>
-  </div>
 
   <h3 class="section-head">Action Cards</h3>
   <ul class="item-list">
