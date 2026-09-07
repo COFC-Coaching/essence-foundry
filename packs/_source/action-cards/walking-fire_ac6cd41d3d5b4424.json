@@ -1,0 +1,51 @@
+{
+  "_id": "ac6cd41d3d5b4424",
+  "name": "Walking Fire",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose a 2-unit line within weapon range. Compare this Action against each enemy in the line. On a success, deal 1 weapon damage to that enemy."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One affected enemy suffers -1 Defense until its next turn."
+      },
+      {
+        "n": "2",
+        "html": "One affected enemy burns 1 die on its next Action."
+      }
+    ],
+    "rider": {
+      "title": "SUPPRESSION",
+      "html": "If your Locked target is affected, it cannot make Reactions against Ballistics Actions until the start of its next turn.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

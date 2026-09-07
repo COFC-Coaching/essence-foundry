@@ -1,0 +1,51 @@
+{
+  "_id": "57920c0e1bf442c7",
+  "name": "Hooked Tendril",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Gestalt",
+    "subtype": "Chimera",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One eligible creature within range."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within 2 units. On a success, deal 1 Piercing damage and pull it 1 unit toward you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Deal +1 damage."
+      },
+      {
+        "n": "2",
+        "html": "On a success, apply <b>Punctured</b>."
+      }
+    ],
+    "rider": {
+      "title": "CHIMERA ADAPTATION",
+      "html": "Before resolving this Action, you may assume <b>Hooked Form</b>. While maintained: You gain a secondary natural appendage with 2-unit reach that can manipulate unattended objects.",
+      "meta": "UPKEEP: 1 STAMINA"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "a9d1811d028240c5",
+  "name": "Cut the Lane",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Might",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Payload, Penetration",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within weapon range. On a success, deal 1 weapon damage and it burns 1 die if it willingly moves more than 2 units before its next turn ends."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a success, the target's equipment-granted Defense is reduced by 1 until the start of its next turn."
+      },
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense granted by equipment or cover for this Action."
+      }
+    ],
+    "rider": {
+      "title": "SUPPRESSION",
+      "html": "If your Locked target is affected, increase the first die it burns because of this Action by 1.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

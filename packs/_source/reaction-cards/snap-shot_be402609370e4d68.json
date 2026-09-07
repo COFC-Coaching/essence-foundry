@@ -1,0 +1,51 @@
+{
+  "_id": "be402609370e4d68",
+  "name": "Snap Shot",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Ballistics",
+    "subtype": "Overwatch",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "0",
+    "expertises": "-",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "The barrel is nearly touching when it goes off.",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature moves adjacent to you or to a creature you are protecting."
+      },
+      {
+        "label": "Effect",
+        "html": "Fire your sidearm at it point-blank. Deal 1 Physical damage."
+      },
+      {
+        "label": "1",
+        "html": "The creature suffers -1 die on its next attack before the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 damage."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

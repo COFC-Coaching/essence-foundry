@@ -1,0 +1,51 @@
+{
+  "_id": "462fb22b69084535",
+  "name": "Stand Beside Them, Forebear",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Ancestor",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Accord, Vessel",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Manifest an Ancestor beside one ally within 4 units. Until your next turn, the first Action against that ally suffers -1 die."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "If this Action affects an ally, that ally gains +1 Defense until its next turn."
+      },
+      {
+        "n": "1",
+        "html": "After this resolves, gain +1 Defense until your next turn as the entity partially overlays you."
+      }
+    ],
+    "rider": {
+      "title": "ANCESTOR — FULL MANIFESTATION",
+      "html": "If you spent at least <b>5 dice</b> on this Action, as it resolves you may spend <b>3 additional Mana</b> to fully manifest your Ancestor.",
+      "meta": "CALLING SUBTYPE: ANCESTOR · RANK 2"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

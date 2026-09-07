@@ -1,0 +1,51 @@
+{
+  "_id": "c48ec29fdf394423",
+  "name": "Not So Fast",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Reversal",
+    "attr": "Resolve",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Exploitation, Improvisation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature within 3 units fails an Action or has an Action fail against you."
+      },
+      {
+        "label": "Effect",
+        "html": "Make the triggering creature Exposed. If it was already Exposed, it instead burns 1 die."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "If the triggering enemy is Exposed or has a normal Condition, it cannot make another Reaction until the start of its next turn."
+      },
+      {
+        "n": "1",
+        "html": "After declaration, change one eligible target or destination of this Reaction by up to 1 unit."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

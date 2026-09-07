@@ -1,0 +1,51 @@
+{
+  "_id": "c2b791719e214b53",
+  "name": "Crane Shelters the Flock",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Guard",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Phalanx, Skirmishing",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An enemy within weapon range deals damage to you."
+      },
+      {
+        "label": "Effect",
+        "html": "Reduce the triggering damage by 1, minimum 0. You may spend 1 Combo to make a Basic Strike against the attacker after the Action resolves."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One adjacent ally also gains +1 Defense against the triggering effect."
+      },
+      {
+        "n": "1",
+        "html": "After this Reaction resolves, move 1 unit without triggering Reactions from the triggering creature."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

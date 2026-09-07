@@ -1,0 +1,51 @@
+{
+  "_id": "17d7804ea3964475",
+  "name": "The High Priestess Knows",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Divination",
+    "attr": "Presence",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Sympathy, Liturgy",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one point within 6 units. Until your next turn, creatures cannot benefit from ordinary concealment against you while inside 2 units of that point."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Choose one creature or object affected by this Action as the Rite's sympathetic link. The Rite may trigger from that link within 6 units as though it were at the Rite's location."
+      },
+      {
+        "n": "2",
+        "html": "Increase this Rite's Echo Limit by 1; when its final Echo resolves, one ally in range becomes Rallied."
+      }
+    ],
+    "rider": {
+      "title": "DIVINATION RITE",
+      "html": "After resolving this Action, you may establish this Rite. <b>Trigger:</b> A creature within 5 units moves into concealment or out of line of sight. <b>Echo:</b> One ally may treat the creature as visible until the end of the current turn.",
+      "meta": "ECHO LIMIT: 2"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

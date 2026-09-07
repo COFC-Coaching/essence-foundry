@@ -1,0 +1,51 @@
+{
+  "_id": "3467bb9f7b304da9",
+  "name": "Plan for the Plan",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Reversal",
+    "attr": "Resolve",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Improvisation, Deception",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature within 3 units fails an Action or has an Action fail against you."
+      },
+      {
+        "label": "Effect",
+        "html": "Make the triggering creature Exposed. If it was already Exposed, it instead burns 1 die."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After the triggering effect resolves, move its source or one of its eligible destinations 1 unit if the effect permits movement."
+      },
+      {
+        "n": "1",
+        "html": "If this Reaction affects an enemy, it cannot make another Reaction until the start of its next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

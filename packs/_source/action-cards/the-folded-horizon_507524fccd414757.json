@@ -1,0 +1,51 @@
+{
+  "_id": "507524fccd414757",
+  "name": "The Folded Horizon",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Space",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Disjunction, Augmentation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose yourself or one willing ally within 5 units. Teleport the target up to 3 units to a visible empty space."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "The teleported target may end one magical effect currently restricting its movement or position, if that effect is Rank 1 or lower."
+      },
+      {
+        "n": "1",
+        "html": "One affected ally gains +1 Movement until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "SPACE THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread before resolving a future Magecraft Action that teleports or moves a creature to increase that distance by 1 unit.",
+      "meta": "TYPE: SPACE · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

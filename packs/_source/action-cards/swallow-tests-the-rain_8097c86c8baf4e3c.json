@@ -1,0 +1,55 @@
+{
+  "_id": "8097c86c8baf4e3c",
+  "name": "Swallow Tests the Rain",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Prowess",
+    "subtype": "Opener",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "The attacking creature becomes Exposed."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Gain +1 Defense against the target until your next turn."
+      },
+      {
+        "n": "1",
+        "html": "Your next Prowess Action against the target this turn ignores 1 Defense."
+      }
+    ],
+    "rider": {
+      "title": "OPENER",
+      "html": "If you began this Action with no Combo and deal damage, gain +1 Defense against the target until the start of your next turn.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

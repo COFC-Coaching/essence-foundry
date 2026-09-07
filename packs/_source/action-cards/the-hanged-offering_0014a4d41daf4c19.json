@@ -1,0 +1,51 @@
+{
+  "_id": "0014a4d41daf4c19",
+  "name": "The Hanged Offering",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Offering",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Entreaty, Severance",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Spend 1 additional Mana. Choose one creature within 5 units; remove one normal Condition from it. If you spend the additional Mana, you may also make that creature <b>Possessed</b>."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "If this Rite triggers because of an ally, that ally becomes Rallied."
+      },
+      {
+        "n": "1",
+        "html": "When this Rite's Echo resolves, it may also remove one normal Condition from an affected creature."
+      }
+    ],
+    "rider": {
+      "title": "OFFERING RITE",
+      "html": "After resolving this Action, you may establish this Rite. <b>Trigger:</b> You spend Stamina, Focus, or Mana while within 5 units of the Rite. <b>Echo:</b> One ally within 5 units gains +1 Defense until its next turn.",
+      "meta": "ECHO LIMIT: 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

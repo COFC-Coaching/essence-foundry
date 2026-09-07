@@ -1,0 +1,51 @@
+{
+  "_id": "a5e1e5e433674133",
+  "name": "Your Nerves Are Shared",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Resonance",
+    "attr": "Acuity",
+    "skill": "Psionics",
+    "defense": "Composure",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Telepathy, Mesmerism",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose two creatures within 5 units. On a success against an unwilling target, link them until your next turn; the first time one becomes Exposed or Dazed, the other also becomes Exposed."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Choose one creature this Action succeeds against; make it <b>Exposed</b>."
+      },
+      {
+        "n": "1",
+        "html": "If this card targets Composure, ignore 1 Defense."
+      }
+    ],
+    "rider": {
+      "title": "RESONANCE — STRAIN",
+      "html": "If you gained Strain while resolving this Action, when one linked creature moves voluntarily the other may move 1 unit.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

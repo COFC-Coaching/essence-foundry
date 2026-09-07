@@ -1,0 +1,51 @@
+{
+  "_id": "b8da8ac93b21408d",
+  "name": "Wall Meets the Wave",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Guard",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Phalanx, Skirmishing",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You or an adjacent ally is targeted by an Action."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose the triggering target. It gains +1 Defense against the Action. You may spend 1 Combo to become the target instead if eligible."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One adjacent ally also gains +1 Defense against the triggering effect."
+      },
+      {
+        "n": "1",
+        "html": "After this Reaction resolves, move 1 unit without triggering Reactions from the triggering creature."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "10b8777e118d4ef1",
+  "name": "Heron Opens the Gate",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Opener",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Dueling, Skirmishing",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage. If it has not yet acted this round, it suffers -1 Defense against this Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "If this Action has only one target, deal +1 weapon damage."
+      },
+      {
+        "n": "2",
+        "html": "If you moved at least 3 units before this Action, deal +1 weapon damage."
+      }
+    ],
+    "rider": {
+      "title": "OPENER",
+      "html": "If you began this Action with no Combo and deal damage, make the target <b>Exposed</b>.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

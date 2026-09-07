@@ -1,0 +1,51 @@
+{
+  "_id": "a8c271ce76694b1f",
+  "name": "Borrowed Pattern",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Mimic",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Plasticity, Locomotion",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose yourself. Until the start of your next turn, gain +1 Defense against Actions originating more than 2 units away."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Until your next turn, you may pass through spaces one size category smaller than normal."
+      },
+      {
+        "n": "1",
+        "html": "Until the end of this turn, you may climb or leap through difficult terrain without additional movement cost."
+      }
+    ],
+    "rider": {
+      "title": "MIMIC ADAPTATION",
+      "html": "Before resolving this Action, you may assume <b>Veiled Form</b>. While maintained: Gain +1 Defense against ranged Actions while adjacent to cover or terrain.",
+      "meta": "UPKEEP: 1 STAMINA"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

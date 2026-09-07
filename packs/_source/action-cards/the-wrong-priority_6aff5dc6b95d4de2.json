@@ -1,0 +1,51 @@
+{
+  "_id": "6aff5dc6b95d4de2",
+  "name": "The Wrong Priority",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Diversion",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Deception, Sleight",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one ally within 4 units. Until your next turn, enemies cannot make Reactions caused solely by that ally's movement."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target cannot make Reactions against you until the end of this turn."
+      },
+      {
+        "n": "1",
+        "html": "Draw, conceal, place, or interact with one small carried or unattended item as part of this Action."
+      }
+    ],
+    "rider": {
+      "title": "DIVERSION CONTINGENCY",
+      "html": "After resolving this Action, you may establish this Contingency. <b>Trigger:</b> An enemy targets the chosen ally. <b>Effect:</b> The ally gains +1 Defense against that Action.",
+      "meta": "EXPIRES: START OF YOUR NEXT TURN"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

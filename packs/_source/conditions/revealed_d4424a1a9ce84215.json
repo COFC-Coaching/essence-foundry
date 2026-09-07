@@ -1,0 +1,27 @@
+{
+  "_id": "d4424a1a9ce84215",
+  "name": "REVEALED",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "DAMAGE CONDITION",
+        "html": "Associated damage: <b>Radiant</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "You cannot benefit from concealment or invisibility. Attacks against you ignore 1 Defense granted by cover."
+      },
+      {
+        "label": "DURATION",
+        "html": "Revealed lasts until the end of your next turn unless removed earlier."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "75f0b396bdfa4f2b",
+  "name": "Raking Volley",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Salvo",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Cadence, Payload",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "An area or group within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose a 2-unit burst within weapon range. Compare this Action against each creature in the burst. On a success, deal 1 weapon damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Choose one creature this Action succeeds against. Gain +1 die on your next Ballistics Action against it this turn."
+      },
+      {
+        "n": "1",
+        "html": "Choose one creature this Action succeeds against; reduce its equipment-granted Defense by 1 until the start of its next turn."
+      }
+    ],
+    "rider": {
+      "title": "SALVO",
+      "html": "If your Locked target is in the area, you may exclude one ally from this Action's targets.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

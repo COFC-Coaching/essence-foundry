@@ -1,0 +1,51 @@
+{
+  "_id": "2c0c7ea10b6d429f",
+  "name": "Layered Hide",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Bulwark",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Regeneration, Integration",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose yourself or one adjacent ally. The target gains +1 Defense until your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Remove Chilled, Shocked, or Concussed from yourself."
+      },
+      {
+        "n": "2",
+        "html": "After this resolves, remove Unstable."
+      }
+    ],
+    "rider": {
+      "title": "BULWARK ADAPTATION",
+      "html": "Before resolving this Action, you may assume <b>Layered Hide</b>. While maintained: The first time each round equipment or an effect would reduce your Defense, ignore 1 point of that reduction.",
+      "meta": "UPKEEP: 1 STAMINA"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

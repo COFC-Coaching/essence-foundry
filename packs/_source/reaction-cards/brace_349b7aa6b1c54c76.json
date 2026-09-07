@@ -1,0 +1,51 @@
+{
+  "_id": "349b7aa6b1c54c76",
+  "name": "Brace",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "",
+    "subtype": "",
+    "attr": "",
+    "skill": "",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You are targeted by an Action."
+      },
+      {
+        "label": "Effect",
+        "html": "The target gains +1 Defense against the triggering attack."
+      },
+      {
+        "label": "Effect",
+        "html": "Gain +1 Defense against the triggering Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": ""
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

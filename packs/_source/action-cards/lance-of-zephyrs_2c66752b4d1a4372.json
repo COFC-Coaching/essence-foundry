@@ -1,0 +1,51 @@
+{
+  "_id": "2c66752b4d1a4372",
+  "name": "Lance of Zephyrs",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Magecraft",
+    "subtype": "Air",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within 6 units. On a success, deal 1 Lightning damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase this spell's damage by 1."
+      },
+      {
+        "n": "2",
+        "html": "On a success, apply <b>Shocked</b>."
+      }
+    ],
+    "rider": {
+      "title": "AIR THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread before resolving a future Magecraft Action to increase its range by 2 units.",
+      "meta": "TYPE: AIR · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

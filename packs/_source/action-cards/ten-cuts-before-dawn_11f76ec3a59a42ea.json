@@ -1,0 +1,51 @@
+{
+  "_id": "11f76ec3a59a42ea",
+  "name": "Ten Cuts Before Dawn",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Blitz",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Reaving, Dueling",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage. If you have 2 or more Combo, the target cannot make Reactions against your movement this turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "If this Action defeats or wounds the target, gain 1 Combo."
+      },
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense against the primary target for this Action."
+      }
+    ],
+    "rider": {
+      "title": "BLITZ",
+      "html": "If this Action deals damage, you may spend 1 Combo to move up to 2 units and remain engaged with the target if possible.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

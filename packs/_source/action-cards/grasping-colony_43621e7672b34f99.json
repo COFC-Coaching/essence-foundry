@@ -1,0 +1,51 @@
+{
+  "_id": "43621e7672b34f99",
+  "name": "Grasping Colony",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Chimera",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Armament, Integration",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One eligible creature within range."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose up to two creatures within 2 units. Compare this Action against each. On a success, deal 1 Piercing damage and pull that creature 1 unit toward you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Choose one creature damaged by this Action; apply <b>Punctured</b>."
+      },
+      {
+        "n": "1",
+        "html": "If you are Unstable, ignore Unstable's restriction until this Action finishes resolving."
+      }
+    ],
+    "rider": {
+      "title": "CHIMERA ADAPTATION",
+      "html": "Before resolving this Action, you may assume <b>Hooked Form</b>. While maintained: You gain a secondary natural appendage with 2-unit reach that can manipulate unattended objects.",
+      "meta": "UPKEEP: 1 STAMINA"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

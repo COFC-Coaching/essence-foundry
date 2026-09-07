@@ -1,0 +1,51 @@
+{
+  "_id": "e9d5f00f2df74d55",
+  "name": "Kestrel Claims the First Step",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Opener",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Dueling, Brawling",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage. If you began this Action with no Combo, choose either gain +1 Defense until your next turn or make the target Exposed."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Gain +1 Defense against the primary target until the start of your next turn."
+      },
+      {
+        "n": "1",
+        "html": "On a success, the target suffers -1 Fortitude against your next Prowess Action this turn."
+      }
+    ],
+    "rider": {
+      "title": "OPENER",
+      "html": "If you began this Action with no Combo and deal damage, your next Prowess Action against the target this turn may commit 1 fewer die, minimum 2.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

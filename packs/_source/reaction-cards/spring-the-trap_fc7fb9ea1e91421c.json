@@ -1,0 +1,51 @@
+{
+  "_id": "fc7fb9ea1e91421c",
+  "name": "Spring the Trap",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Ambush",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Observation, Exploitation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An Exposed enemy enters your weapon range or uses an Action that does not target you."
+      },
+      {
+        "label": "Effect",
+        "html": "Attack the triggering enemy. On a success, deal 1 weapon damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After the triggering effect resolves, learn whether its source has any unused Reactions or maintained effects."
+      },
+      {
+        "n": "1",
+        "html": "If the triggering enemy is Exposed or has a normal Condition, ignore 1 Defense for this attack."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "adda8a68da2a4c30",
+  "name": "I Have Already Seen This",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Trance",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Precognition, Biokinesis",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Enter a sensory trance until your next turn. You can perceive creatures and movement through ordinary visual obstruction within 3 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Gain +1 Defense against the next Action that targets you before your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Remove one Physical damage Condition from yourself."
+      }
+    ],
+    "rider": {
+      "title": "TRANCE — STRAIN",
+      "html": "If you gained Strain while resolving this Action, increase the Trance's perception range by 2 units.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

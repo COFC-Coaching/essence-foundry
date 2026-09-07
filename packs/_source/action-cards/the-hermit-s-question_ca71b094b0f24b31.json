@@ -1,0 +1,51 @@
+{
+  "_id": "ca71b094b0f24b31",
+  "name": "The Hermit's Question",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Divination",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Entreaty, Liturgy",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one ally within 5 units. It gains +1 Defense against the next Action from a creature you can see before your next turn. You may make that ally <b>Possessed</b>."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "If this Rite triggers because of an ally, that ally becomes Rallied."
+      },
+      {
+        "n": "2",
+        "html": "Increase this Rite's Echo Limit by 1; when its final Echo resolves, one ally in range becomes Rallied."
+      }
+    ],
+    "rider": {
+      "title": "DIVINATION RITE",
+      "html": "After resolving this Action, you may establish this Rite. <b>Trigger:</b> An enemy within 5 units becomes Exposed or uses a Reaction. <b>Echo:</b> Reveal whether it has any remaining Reactions or maintained effects; one ally gains +1 die against it.",
+      "meta": "ECHO LIMIT: 2"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

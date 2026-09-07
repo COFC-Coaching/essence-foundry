@@ -1,0 +1,51 @@
+{
+  "_id": "0f2d3d528aae4c12",
+  "name": "Guard Them, Faithful Hunter",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Beast",
+    "attr": "Adaptability",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Accord, Chorus",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Manifest the Beast around yourself or one ally within 2 units. The target gains +1 Defense until your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "If this Action affects an ally, that ally gains +1 Defense until its next turn."
+      },
+      {
+        "n": "1",
+        "html": "If you used another Calling subtype earlier this round, gain +1 Defense until your next turn."
+      }
+    ],
+    "rider": {
+      "title": "BEAST — FULL MANIFESTATION",
+      "html": "If you spent at least <b>4 dice</b> on this Action, as it resolves you may spend <b>2 additional Mana</b> to fully manifest your Beast.",
+      "meta": "CALLING SUBTYPE: BEAST · RANK 1"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

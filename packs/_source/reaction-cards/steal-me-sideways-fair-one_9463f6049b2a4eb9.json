@@ -1,0 +1,51 @@
+{
+  "_id": "9463f6049b2a4eb9",
+  "name": "Steal Me Sideways, Fair One",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Fey",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Banishment, Transference",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You are targeted by an Action from a creature you can see."
+      },
+      {
+        "label": "Effect",
+        "html": "Teleport 2 units to a visible empty space. If you become an illegal target, the Action loses you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "If the triggering effect is supernatural, suppress one Rank 0 maintained benefit until the end of the turn."
+      },
+      {
+        "n": "2",
+        "html": "After this Reaction resolves, move one normal Condition between you and one willing ally within 3 units."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "c0e4ef50d4234e1e",
+  "name": "Exit Strategy",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Evasion",
+    "attr": "Resolve",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sleight, Observation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 3 units. This movement does not trigger Reactions caused solely by leaving an enemy's reach."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Draw, conceal, place, or interact with one small carried or unattended item as part of this Action."
+      },
+      {
+        "n": "1",
+        "html": "After moving, choose one enemy that could see you before or after the movement; learn whether it has any unused Reactions or maintained effects."
+      }
+    ],
+    "rider": {
+      "title": "EVASION CONTINGENCY",
+      "html": "After resolving this Action, you may establish this Contingency. <b>Trigger:</b> An enemy follows your movement and ends adjacent to you. <b>Effect:</b> Move 1 additional unit.",
+      "meta": "EXPIRES: START OF YOUR NEXT TURN"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

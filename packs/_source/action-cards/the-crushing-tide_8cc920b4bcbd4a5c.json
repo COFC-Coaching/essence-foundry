@@ -1,0 +1,51 @@
+{
+  "_id": "8cc920b4bcbd4a5c",
+  "name": "The Crushing Tide",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Water",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Reinforcement, Sculpting",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one ally within 4 units. Until your next turn, reduce forced movement against it by 2 units and it ignores difficult terrain."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the forced-movement reduction granted by this Action by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Choose one additional ally adjacent to the first; it ignores difficult terrain until your next turn."
+      }
+    ],
+    "rider": {
+      "title": "WATER THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread when a future Magecraft Action grants Defense or movement resistance to increase that benefit by 1.",
+      "meta": "TYPE: WATER · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

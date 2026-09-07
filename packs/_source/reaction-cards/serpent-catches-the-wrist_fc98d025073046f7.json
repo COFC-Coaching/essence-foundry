@@ -1,0 +1,51 @@
+{
+  "_id": "fc98d025073046f7",
+  "name": "Serpent Catches the Wrist",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Breaker",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Grappling, Berserking",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature within weapon range moves, Shoves, or attempts to Grapple you."
+      },
+      {
+        "label": "Effect",
+        "html": "Spend 1 Combo. The triggering creature stops after its current unit of movement and suffers -1 Fortitude until the end of its turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "If the triggering creature is within weapon range, move it 1 unit or knock it Prone after this Reaction resolves."
+      },
+      {
+        "n": "1",
+        "html": "After this Reaction resolves, you may suffer -1 Defense until your next turn to gain 1 Combo."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

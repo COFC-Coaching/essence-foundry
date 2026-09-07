@@ -1,0 +1,27 @@
+{
+  "_id": "c6170b6f3d3840d5",
+  "name": "CONCUSSED",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "DAMAGE CONDITION",
+        "html": "Associated damage: <b>Bludgeoning</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "The next Reaction you use before the start of your next turn burns 1 additional die."
+      },
+      {
+        "label": "DURATION",
+        "html": "Remove Concussed after that Reaction resolves or at the start of your next turn."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

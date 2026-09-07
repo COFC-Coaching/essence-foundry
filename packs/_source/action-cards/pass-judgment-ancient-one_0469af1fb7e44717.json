@@ -1,0 +1,51 @@
+{
+  "_id": "0469af1fb7e44717",
+  "name": "Pass Judgment, Ancient One",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Ancestor",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "Harmony",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Banishment, Vessel",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Invoke an Ancestor's judgment against one creature within 5 units. On a success, deal 1 Piercing damage and make it Exposed."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense granted by a supernatural effect."
+      },
+      {
+        "n": "1",
+        "html": "After this resolves, gain +1 Defense until your next turn as the entity partially overlays you."
+      }
+    ],
+    "rider": {
+      "title": "ANCESTOR — FULL MANIFESTATION",
+      "html": "If you spent at least <b>5 dice</b> on this Action, as it resolves you may spend <b>3 additional Mana</b> to fully manifest your Ancestor.",
+      "meta": "CALLING SUBTYPE: ANCESTOR · RANK 2"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

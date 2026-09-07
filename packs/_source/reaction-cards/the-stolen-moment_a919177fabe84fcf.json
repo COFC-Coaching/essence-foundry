@@ -1,0 +1,51 @@
+{
+  "_id": "a919177fabe84fcf",
+  "name": "The Stolen Moment",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Time",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Augmentation, Sculpting",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature you can see within 4 units begins an Action or Reaction."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose yourself or one ally within 4 units. That creature gains +1 Defense against the triggering effect, or may move 1 unit after it resolves."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One creature benefiting from this Reaction gains +1 Movement until its next turn."
+      },
+      {
+        "n": "1",
+        "html": "Choose one additional eligible creature within 1 unit to receive a non-damage benefit of this Reaction."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

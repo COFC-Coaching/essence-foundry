@@ -1,0 +1,51 @@
+{
+  "_id": "ed62a48be8404b24",
+  "name": "Wolf Among Reeds",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Blitz",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Reaving, Berserking",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage. If you already damaged this target this turn, deal +1 weapon damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 weapon damage. If the target is already wounded, this costs 1 fewer Surge, minimum 1."
+      },
+      {
+        "n": "2",
+        "html": "If you began this Action below your maximum Core Wounds, deal +1 weapon damage."
+      }
+    ],
+    "rider": {
+      "title": "BLITZ",
+      "html": "After this Action deals damage, you may spend 1 Combo to gain +1 die on your next Prowess Action this turn.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

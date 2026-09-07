@@ -1,0 +1,51 @@
+{
+  "_id": "96b11db9f79a4216",
+  "name": "You Cannot Attend to Both",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Fracture",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Telekinesis, Precognition",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one living creature within 4 units. On a success, it suffers -2 Movement until the end of its next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a success, move one affected creature or unsecured object 1 unit."
+      },
+      {
+        "n": "1",
+        "html": "Gain +1 Defense against the next Action that targets you before your next turn."
+      }
+    ],
+    "rider": {
+      "title": "FRACTURE — STRAIN",
+      "html": "If you gained Strain while resolving this Action, the target cannot Dash until the end of its next turn.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

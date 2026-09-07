@@ -1,0 +1,51 @@
+{
+  "_id": "6c0ddebad65f4efe",
+  "name": "Sigil of Raw Aether",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Aether",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Fabrication, Reinforcement",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within 6 units. On a success, deal 1 Arcane damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "On a success, leave a persistent aetheric sigil on the target and apply <b>Distorted</b>."
+      },
+      {
+        "n": "1",
+        "html": "Extend a non-Concentration duration of this spell through the end of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "AETHER THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread before resolving a future Magecraft Action to treat 1 damage from it as Breach.",
+      "meta": "TYPE: AETHER · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

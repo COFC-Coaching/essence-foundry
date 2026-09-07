@@ -1,0 +1,51 @@
+{
+  "_id": "d9a1a177e8c34986",
+  "name": "Death Collects Its Due",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Offering",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Reagents, Severance",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Suffer -1 Defense until your next turn. Choose one ally within 5 units; it gains +1 die on its next Action or Reaction."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "When this Rite's next Echo resolves, it may affect one additional eligible target."
+      },
+      {
+        "n": "1",
+        "html": "If the Rite targets a Possessed creature, you may remove Possessed after an Echo resolves."
+      }
+    ],
+    "rider": {
+      "title": "OFFERING RITE",
+      "html": "After resolving this Action, you may establish this Rite. <b>Trigger:</b> A creature within 5 units suffers a Wound. <b>Echo:</b> Choose one ally within 5 units; it may remove Dazed, Concussed, or Shocked.",
+      "meta": "ECHO LIMIT: 2"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

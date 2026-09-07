@@ -1,0 +1,51 @@
+{
+  "_id": "830bbff28b4342d7",
+  "name": "We Are Connected",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Psionics",
+    "subtype": "Resonance",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose two willing creatures within 5 units. Until your next turn, each knows the other's location and may communicate silently."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the link's range by 2 units."
+      },
+      {
+        "n": "2",
+        "html": "Choose one additional willing creature within range to join the link."
+      }
+    ],
+    "rider": {
+      "title": "RESONANCE — STRAIN",
+      "html": "If you gained Strain while resolving this Action, the link lasts until the end of the encounter unless broken by distance greater than 8 units.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

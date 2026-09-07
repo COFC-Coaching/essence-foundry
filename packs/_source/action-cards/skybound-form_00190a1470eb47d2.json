@@ -1,0 +1,51 @@
+{
+  "_id": "00190a1470eb47d2",
+  "name": "Skybound Form",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Strider",
+    "attr": "Grace",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Locomotion, Awareness",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose a point within 4 units you can reach by movement. Move there, then gain +1 Defense until your next turn. After this resolves, you may become Unstable; if you do, gain +1 additional Defense until your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Until the end of this turn, you may climb or leap through difficult terrain without additional movement cost."
+      },
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense from concealment or cover for this Action."
+      }
+    ],
+    "rider": {
+      "title": "STRIDER ADAPTATION",
+      "html": "Before resolving this Action, you may assume <b>Skybound Form</b>. While maintained: You may move vertically through open space; if you end your turn unsupported, descend safely to the nearest surface.",
+      "meta": "UPKEEP: 1 STAMINA"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

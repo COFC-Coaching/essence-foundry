@@ -1,0 +1,51 @@
+{
+  "_id": "6282e109bfb04509",
+  "name": "Rolling Barrage",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Penetration, Mobility",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose a 2-unit burst within weapon range. Compare this Action against each enemy in the burst. On a success, deal 1 weapon damage and the enemy burns 1 die if it willingly leaves the burst before its next turn ends."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense granted by equipment or cover for this Action."
+      },
+      {
+        "n": "2",
+        "html": "After this resolves, move up to 2 units without triggering Reactions caused by leaving cover or reach."
+      }
+    ],
+    "rider": {
+      "title": "SUPPRESSION",
+      "html": "If your Locked target is affected, increase the first die it burns because of this Action by 1.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

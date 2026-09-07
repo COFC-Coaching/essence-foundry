@@ -1,0 +1,16 @@
+<div class="essence roll-card">
+  <h3>{{label}}</h3>
+  <div class="dice-faces">
+    {{#each faces as |face i|}}
+      <span class="die {{#if (eq i ../successDieIndex)}}success-die{{else if (gte face 6)}}surge-die{{/if}}">{{face}}</span>
+    {{/each}}
+  </div>
+  <div class="roll-summary">
+    <p><strong>Pool:</strong> {{pool}}d10{{#if defense}} vs Defense {{defense}}{{/if}}</p>
+    <p><strong>Success Die:</strong> {{successDie}} —
+      {{#if succeeded}}<span class="pass">Success</span>{{else}}<span class="fail">Failure</span>{{/if}}
+    </p>
+    <p><strong>Surges:</strong> {{surges}}</p>
+    <p class="muted"><strong>Open-difficulty successes (6+):</strong> {{poolSuccesses}}</p>
+  </div>
+</div>

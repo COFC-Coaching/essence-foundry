@@ -1,0 +1,51 @@
+{
+  "_id": "b0dd5400f7b04a6b",
+  "name": "The Blade Falls Elsewhere",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Projection",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Clairvoyance, Telekinesis",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature or object within 5 units would move, fall, or be forcibly moved."
+      },
+      {
+        "label": "Effect",
+        "html": "Alter that movement by up to 2 units. You may gain 1 Strain to alter it by 1 additional unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase this Reaction's range by 2 units or ignore line of sight to a creature you can locate."
+      },
+      {
+        "n": "1",
+        "html": "Increase any movement, barrier, or forced-movement value in this Reaction by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

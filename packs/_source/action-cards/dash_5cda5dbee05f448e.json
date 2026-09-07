@@ -1,0 +1,55 @@
+{
+  "_id": "5cda5dbee05f448e",
+  "name": "Dash",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "",
+    "subtype": "",
+    "attr": "",
+    "skill": "",
+    "defense": "",
+    "min": "1",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Yourself."
+      },
+      {
+        "label": "Effect",
+        "html": "Deal 1 damage."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to half your Movement in addition to your normal movement this turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a success, the target suffers -1 Defense against your next Ballistics Action this turn."
+      },
+      {
+        "n": "2",
+        "html": "This Action may trace its shot around one intervening obstacle that does not completely enclose the target."
+      }
+    ],
+    "rider": {
+      "title": "TARGETING",
+      "html": "If the target is Locked by you, you may trace your next Ballistics Action against it this turn from your current position even if you move before then.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

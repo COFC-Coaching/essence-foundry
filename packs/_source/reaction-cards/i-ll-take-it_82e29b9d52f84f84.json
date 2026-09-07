@@ -1,0 +1,51 @@
+{
+  "_id": "82e29b9d52f84f84",
+  "name": "I'll Take It.",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Example",
+    "attr": "Adaptability",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Inspiration, Provocation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An ally within 3 units is targeted by an Action."
+      },
+      {
+        "label": "Effect",
+        "html": "Become the target instead if eligible. If you do, the original ally becomes Rallied after the Action resolves."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One affected ally becomes Rallied after the triggering effect resolves."
+      },
+      {
+        "n": "1",
+        "html": "If an enemy triggered this Reaction, it becomes Exposed if it ignores you on its next Action."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

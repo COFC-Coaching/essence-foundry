@@ -1,0 +1,55 @@
+{
+  "_id": "bf366051e06e4a2f",
+  "name": "Dividing Wall",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Space",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Sculpting, Reinforcement",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "Fold a wall of dense space into being.",
+    "body": [
+      {
+        "label": "Target",
+        "html": "A line of open spaces within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Fold a wall of dense space up to 3 units long until the start of your next turn. It blocks movement and line of sight through its spaces and provides Cover."
+      },
+      {
+        "label": "1",
+        "html": "Extend the wall 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "A creature the wall would form on top of is pushed 1 unit to the nearest open space."
+      },
+      {
+        "n": "3",
+        "html": "Creatures benefiting from the wall's Cover gain an additional +1 Defense."
+      }
+    ],
+    "rider": {
+      "title": "SPACE - THREAD",
+      "html": "Create a Space Thread. When a future Magecraft Action grants Defense or creates Cover, consume it to increase one such bonus by 1.",
+      "meta": "TYPE: SPACE · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

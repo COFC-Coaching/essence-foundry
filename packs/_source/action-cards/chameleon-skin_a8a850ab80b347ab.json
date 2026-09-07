@@ -1,0 +1,51 @@
+{
+  "_id": "a8a850ab80b347ab",
+  "name": "Chameleon Skin",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Mimic",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Awareness, Plasticity",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature that can see you. Until your next turn, the first Action it uses against you burns 1 die."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Gain +1 Defense against the next Reaction triggered by this Action."
+      },
+      {
+        "n": "1",
+        "html": "Until the end of this turn, you may pass through spaces one size category smaller than normal."
+      }
+    ],
+    "rider": {
+      "title": "MIMIC ADAPTATION",
+      "html": "Before resolving this Action, you may assume <b>Borrowed Pattern</b>. While maintained: You may visually match nearby terrain or a creature of similar size; the first Action against you each round cannot benefit from targeting bonuses.",
+      "meta": "UPKEEP: 1 STAMINA"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

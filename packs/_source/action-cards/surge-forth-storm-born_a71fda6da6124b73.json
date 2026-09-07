@@ -1,0 +1,51 @@
+{
+  "_id": "a71fda6da6124b73",
+  "name": "Surge Forth, Storm-Born",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Elemental",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Anchoring, Chorus",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Send an elemental surge through a 3-unit line within 5 units. On a success, deal 1 Lightning damage and move the creature 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase this Action's range by 2 units. If you fully manifest through it, the manifestation also gains +1 Defense until your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Choose one creature damaged by this Action; apply <b>Shocked</b>. If another creature damaged by this Action is adjacent to it, you may also apply Shocked to that creature."
+      }
+    ],
+    "rider": {
+      "title": "ELEMENTAL — FULL MANIFESTATION",
+      "html": "If you spent at least <b>5 dice</b> on this Action, as it resolves you may spend <b>3 additional Mana</b> to fully manifest your Elemental.",
+      "meta": "CALLING SUBTYPE: ELEMENTAL · RANK 2"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "9bd86f70c50d450e",
+  "name": "Take the Shot",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Execution",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Payload, Flair",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "Your Locked target becomes Exposed, Prone, or suffers a Core Wound."
+      },
+      {
+        "label": "Effect",
+        "html": "End your Lock on the triggering creature and make a ranged attack against it. On a success, deal 1 weapon damage and treat that damage as Breach."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "If this Reaction deals damage, the target's equipment-granted Defense is reduced by 1 until its next turn."
+      },
+      {
+        "n": "1",
+        "html": "If this Reaction succeeds, the triggering creature cannot make Reactions against your next Ballistics Action this turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

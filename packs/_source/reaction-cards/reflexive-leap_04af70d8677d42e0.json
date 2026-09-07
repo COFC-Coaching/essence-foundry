@@ -1,0 +1,51 @@
+{
+  "_id": "04af70d8677d42e0",
+  "name": "Reflexive Leap",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Strider",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Locomotion, Plasticity",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An enemy enters your reach, targets you with a close-range Action, or creates an area beneath you."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 2 units. If you are in a Strider Adaptation, this movement does not trigger Reactions."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase any movement this Reaction grants by 1 unit."
+      },
+      {
+        "n": "1",
+        "html": "Increase the reach or affected distance of this Reaction by 1 unit."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

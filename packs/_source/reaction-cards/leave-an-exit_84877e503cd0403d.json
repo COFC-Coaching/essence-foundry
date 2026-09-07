@@ -1,0 +1,51 @@
+{
+  "_id": "84877e503cd0403d",
+  "name": "Leave an Exit",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Evasion",
+    "attr": "Resolve",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Infiltration, Sleight",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An area effect is declared that includes your space."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 2 units toward the nearest edge of the area. If you leave the area, gain +1 Defense against the triggering Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Any movement from this Reaction ignores Reactions caused by leaving reach or cover."
+      },
+      {
+        "n": "1",
+        "html": "Draw, conceal, or interact with one small item as part of this Reaction."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

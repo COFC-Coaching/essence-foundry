@@ -1,0 +1,51 @@
+{
+  "_id": "dcca15430c494bf8",
+  "name": "Not Yet!",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Signal",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Tactics, Guardianship",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An ally within 5 units is targeted by an Action or declares a Reaction."
+      },
+      {
+        "label": "Effect",
+        "html": "The ally gains +1 Defense against the triggering Action or +1 die on the triggering Reaction. If it is Rallied, it may choose both and then remove Rallied."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One affected ally may move 1 unit after the triggering effect resolves."
+      },
+      {
+        "n": "1",
+        "html": "Increase a Defense bonus granted by this Reaction by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

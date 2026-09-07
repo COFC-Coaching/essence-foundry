@@ -1,0 +1,51 @@
+{
+  "_id": "96078415c5fb438c",
+  "name": "Field of Slowed Hours",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Time",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Reinforcement, Sculpting",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose a 1-unit burst within 5 units. Enemies in the burst suffer -2 Movement while you maintain Concentration. <b>Concentration:</b> This ongoing effect lasts only while you maintain Concentration."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "If you voluntarily end this Concentration, its effect persists until the end of the current turn."
+      },
+      {
+        "n": "2",
+        "html": "Increase the burst's radius by 1 unit."
+      }
+    ],
+    "rider": {
+      "title": "TIME THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread before resolving a future Magecraft Action that reduces Movement or changes timing to increase that effect by 1.",
+      "meta": "TYPE: TIME · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "04648c6fd1944ea1",
+  "name": "The Tempered Moment",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Imbuement",
+    "attr": "Presence",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Consecration, Severance",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An imbued ally or object within 5 units is targeted or used."
+      },
+      {
+        "label": "Effect",
+        "html": "Increase one Defense, damage, or movement value granted by that Imbuement by 1 for the triggering effect."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One ally affected by this Reaction gains +1 Defense until its next turn."
+      },
+      {
+        "n": "1",
+        "html": "If this Reaction affects a maintained supernatural effect, reduce or end one Rank 0 component of it."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

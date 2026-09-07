@@ -1,0 +1,51 @@
+{
+  "_id": "1c67b76529244d6f",
+  "name": "Keep Their Heads Down",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Might",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Cadence, Payload",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose a 1-unit burst within weapon range. Compare this Action against each enemy in the burst. On a success, that enemy suffers -1 Defense until the start of its next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Choose one creature this Action succeeds against. After this resolves, you may make a Basic Shot against it by committing that Basic Shot's dice normally."
+      },
+      {
+        "n": "1",
+        "html": "Objects and cover affected by this Action count their Defense as 1 lower."
+      }
+    ],
+    "rider": {
+      "title": "SUPPRESSION",
+      "html": "If your Locked target is inside the affected area, the area remains threatened until your next turn; the first enemy that enters it burns 1 die.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

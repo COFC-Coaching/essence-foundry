@@ -1,0 +1,51 @@
+{
+  "_id": "ce70f7d1beb54cc2",
+  "name": "Reach Through the Veil",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Phantom",
+    "attr": "Adaptability",
+    "skill": "Calling",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Banishment, Anchoring",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Manifest a Phantom through one creature within 4 units. On a success, deal 1 Psychic damage and it cannot make Reactions against you this turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense granted by a supernatural effect."
+      },
+      {
+        "n": "1",
+        "html": "Increase this Action's range by 2 units. If you fully manifest through it, the manifestation also gains +1 Defense until your next turn."
+      }
+    ],
+    "rider": {
+      "title": "PHANTOM — FULL MANIFESTATION",
+      "html": "If you spent at least <b>4 dice</b> on this Action, as it resolves you may spend <b>2 additional Mana</b> to fully manifest your Phantom.",
+      "meta": "CALLING SUBTYPE: PHANTOM · RANK 1"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

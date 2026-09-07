@@ -1,0 +1,51 @@
+{
+  "_id": "9b849fa96164455e",
+  "name": "Aegis of the West Wind",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Air",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sculpting, Channeling",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You or an ally within 3 units is targeted by a ranged Action."
+      },
+      {
+        "label": "Effect",
+        "html": "The target gains +1 Defense against the triggering Action. If the Action fails, move the target 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Choose one additional eligible creature within 1 unit to receive a non-damage benefit of this Reaction."
+      },
+      {
+        "n": "1",
+        "html": "Increase the Defense bonus from this Reaction by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

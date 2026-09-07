@@ -1,0 +1,51 @@
+{
+  "_id": "577898df2b294c7f",
+  "name": "Between Heartbeats",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Space",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Disjunction, Augmentation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You are targeted by an Action or included in an area effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 2 units. If this makes you an illegal target or moves you outside the area, the triggering Action no longer affects you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "If the triggering effect is supernatural, reduce one Defense or bonus it grants by 1 for this resolution."
+      },
+      {
+        "n": "1",
+        "html": "One creature benefiting from this Reaction gains +1 Movement until its next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

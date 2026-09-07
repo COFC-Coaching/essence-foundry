@@ -1,0 +1,51 @@
+{
+  "_id": "8b6f025a285b4a1c",
+  "name": "Bank Shot",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One eligible creature within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within weapon range. This attack may ricochet from one visible solid surface. On a success, deal 1 weapon damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense from cover or an intervening obstacle."
+      },
+      {
+        "n": "1",
+        "html": "Interact with one unattended object along the shot's path."
+      }
+    ],
+    "rider": {
+      "title": "TRICKSHOT",
+      "html": "If the target is Locked by you, you may ignore one intervening creature or obstacle when tracing this shot.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

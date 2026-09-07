@@ -1,0 +1,51 @@
+{
+  "_id": "84c843b9d7044a01",
+  "name": "Tiger Devours the Moon",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Finisher",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Dueling, Grappling",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage. If the target is wounded, ignore 1 Defense."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Gain +1 Defense against the primary target until the start of your next turn."
+      },
+      {
+        "n": "1",
+        "html": "On a success, the target cannot voluntarily move more than 2 units before its next turn ends."
+      }
+    ],
+    "rider": {
+      "title": "FINISHER",
+      "html": "After rolling, you may spend 2 Combo. If you do and the Action succeeds, knock the target Prone after dealing damage.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "d87b2922652a4b74",
+  "name": "Go There.",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Projection",
+    "attr": "Acuity",
+    "skill": "Psionics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Clairvoyance, Telekinesis",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature or unsecured object within 7 units. On a success, move it up to 4 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore line of sight for one target you can otherwise locate within this card's range."
+      },
+      {
+        "n": "1",
+        "html": "On a success, move one affected creature or unsecured object 1 unit."
+      }
+    ],
+    "rider": {
+      "title": "PROJECTION — STRAIN",
+      "html": "If you gained Strain while resolving this Action, increase its range by 2 units.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

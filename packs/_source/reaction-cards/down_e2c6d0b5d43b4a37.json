@@ -1,0 +1,51 @@
+{
+  "_id": "e2c6d0b5d43b4a37",
+  "name": "Down!",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Leadership",
+    "subtype": "Signal",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An ally within 5 units is targeted by an Action or declares a Reaction."
+      },
+      {
+        "label": "Effect",
+        "html": "The ally gains +1 Defense against the triggering Action or +1 die on the triggering Reaction. If it is Rallied, it may choose both and then remove Rallied."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One affected ally gains +1 Defense until its next turn."
+      },
+      {
+        "n": "2",
+        "html": "One affected ally becomes Rallied."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

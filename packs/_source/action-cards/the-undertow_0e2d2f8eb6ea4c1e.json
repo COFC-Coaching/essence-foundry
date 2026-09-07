@@ -1,0 +1,51 @@
+{
+  "_id": "0e2d2f8eb6ea4c1e",
+  "name": "The Undertow",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Magecraft",
+    "subtype": "Water",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within 5 units. On a success, deal 1 Cold damage and move it 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase this spell's damage by 1."
+      },
+      {
+        "n": "2",
+        "html": "On a success, apply <b>Chilled</b>."
+      }
+    ],
+    "rider": {
+      "title": "WATER THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread before resolving a future Magecraft Action that moves a creature to increase that movement by 1 unit.",
+      "meta": "TYPE: WATER · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

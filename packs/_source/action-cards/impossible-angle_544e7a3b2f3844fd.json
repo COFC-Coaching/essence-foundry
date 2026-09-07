@@ -1,0 +1,51 @@
+{
+  "_id": "544e7a3b2f3844fd",
+  "name": "Impossible Angle",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Might",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Trajectory, Flair",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One eligible creature within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature behind partial cover within weapon range. On a success, deal 1 weapon damage and ignore all Defense granted by that cover."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense granted by cover for this Action."
+      },
+      {
+        "n": "1",
+        "html": "On a success, the target cannot make Reactions against your next Ballistics Action this turn."
+      }
+    ],
+    "rider": {
+      "title": "TRICKSHOT",
+      "html": "If the target is Locked by you, after this resolves you may shift the Lock to another creature within 2 units of it without paying the normal Lock die.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

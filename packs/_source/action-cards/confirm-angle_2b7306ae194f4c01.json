@@ -1,0 +1,51 @@
+{
+  "_id": "2b7306ae194f4c01",
+  "name": "Confirm Angle",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Targeting",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Precision, Trajectory",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range and line of sight."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage. If the target is Locked by you, it cannot benefit from concealment against this Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a success, the target suffers -1 Defense against your next Ballistics Action this turn."
+      },
+      {
+        "n": "2",
+        "html": "This Action may trace its shot around one intervening obstacle that does not completely enclose the target."
+      }
+    ],
+    "rider": {
+      "title": "TARGETING",
+      "html": "If the target is Locked by you, you may trace your next Ballistics Action against it this turn from your current position even if you move before then.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

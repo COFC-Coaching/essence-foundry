@@ -1,0 +1,51 @@
+{
+  "_id": "c0d6741c3c78482b",
+  "name": "Already Gone",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Evasion",
+    "attr": "Resolve",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Infiltration, Observation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An enemy enters a space adjacent to you."
+      },
+      {
+        "label": "Effect",
+        "html": "Move 1 unit without triggering Reactions. The triggering enemy becomes Exposed if it follows you this turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Any movement from this Reaction ignores Reactions caused by leaving reach or cover."
+      },
+      {
+        "n": "1",
+        "html": "After the triggering effect resolves, learn whether its source has any unused Reactions or maintained effects."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

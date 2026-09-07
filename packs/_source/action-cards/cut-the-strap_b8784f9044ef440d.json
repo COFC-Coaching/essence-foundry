@@ -1,0 +1,51 @@
+{
+  "_id": "b8784f9044ef440d",
+  "name": "Cut the Strap",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Might",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Flair, Payload",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One eligible creature within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within weapon range. On a success, deal 1 weapon damage and it drops one non-signature held item; ignore 1 Defense from cover."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a success, the target cannot make Reactions against your next Ballistics Action this turn."
+      },
+      {
+        "n": "1",
+        "html": "On a success, the target's equipment-granted Defense is reduced by 1 until the start of its next turn."
+      }
+    ],
+    "rider": {
+      "title": "TRICKSHOT",
+      "html": "If the target is Locked by you, you may ignore one intervening creature or obstacle when tracing this shot.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

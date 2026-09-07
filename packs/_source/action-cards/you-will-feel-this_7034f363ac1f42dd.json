@@ -1,0 +1,51 @@
+{
+  "_id": "7034f363ac1f42dd",
+  "name": "You Will Feel This",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Assault",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Telepathy, Mesmerism",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within 5 units. On a success, deal 1 Psychic damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Until your next turn, you always know the target's location while it remains within 5 units of you."
+      },
+      {
+        "n": "1",
+        "html": "If this card targets Composure, ignore 1 Defense."
+      }
+    ],
+    "rider": {
+      "title": "ASSAULT — STRAIN",
+      "html": "If you gained Strain while resolving this Action, on a success the target becomes Dazed.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

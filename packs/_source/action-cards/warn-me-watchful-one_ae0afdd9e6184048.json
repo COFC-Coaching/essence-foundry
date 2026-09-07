@@ -1,0 +1,51 @@
+{
+  "_id": "ae0afdd9e6184048",
+  "name": "Warn Me, Watchful One",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Calling",
+    "subtype": "Familiar",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Your Familiar alerts you to danger. Gain +1 Defense against the next Action that targets you before your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Defense bonus from this Action by 1."
+      },
+      {
+        "n": "2",
+        "html": "Reduce the Full Manifestation dice threshold by 1. This Surge may be used only once."
+      }
+    ],
+    "rider": {
+      "title": "FAMILIAR — FULL MANIFESTATION",
+      "html": "If you spent at least <b>3 dice</b> on this Action, as it resolves you may spend <b>1 additional Mana</b> to fully manifest your Familiar.",
+      "meta": "CALLING SUBTYPE: FAMILIAR · RANK 0"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

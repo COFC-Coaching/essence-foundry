@@ -1,0 +1,38 @@
+<header class="sheet-header">
+  <img class="profile-img" src="{{item.img}}" data-action="editImage">
+  <h1><input name="name" type="text" value="{{item.name}}"></h1>
+</header>
+
+<div class="equipment-fields grid-3">
+  <label>Category
+    <select name="system.category">
+      <option value="weapon" {{#if (eq system.category "weapon")}}selected{{/if}}>weapon</option>
+      <option value="armor" {{#if (eq system.category "armor")}}selected{{/if}}>armor</option>
+      <option value="tool" {{#if (eq system.category "tool")}}selected{{/if}}>tool</option>
+      <option value="gear" {{#if (eq system.category "gear")}}selected{{/if}}>gear</option>
+    </select>
+  </label>
+  <label>Slot
+    <select name="system.slot">
+      <option value="signature" {{#if (eq system.slot "signature")}}selected{{/if}}>signature</option>
+      <option value="temporary" {{#if (eq system.slot "temporary")}}selected{{/if}}>temporary</option>
+      <option value="armory" {{#if (eq system.slot "armory")}}selected{{/if}}>armory</option>
+    </select>
+  </label>
+  <label>Tier <input name="system.tier" type="number" value="{{system.tier}}"></label>
+  <label>Type <input name="system.type" type="text" value="{{system.type}}"></label>
+  <label>Cost <input name="system.cost" type="text" value="{{system.cost}}"></label>
+  <label>Range <input name="system.range" type="text" value="{{system.range}}"></label>
+  <label>Fortitude <input name="system.fortitude" type="text" value="{{system.fortitude}}"></label>
+  <label>Resilience <input name="system.resilience" type="text" value="{{system.resilience}}"></label>
+  <label>Movement <input name="system.movement" type="text" value="{{system.movement}}"></label>
+  <label>Tags <input name="system.tags" type="text" value="{{system.tags}}"></label>
+  <label>Quantity <input name="system.quantity" type="number" value="{{system.quantity}}"></label>
+</div>
+
+<h3>Effect</h3>
+<div>{{editor system.effect target="system.effect" button=true}}</div>
+<h3>Passive</h3>
+<div>{{editor system.passive target="system.passive" button=true}}</div>
+<h3>Special</h3>
+<div>{{editor system.special target="system.special" button=true}}</div>

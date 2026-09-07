@@ -1,0 +1,55 @@
+{
+  "_id": "2ad9eabb49584c7d",
+  "name": "Fox Finds the Gap",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Prowess",
+    "subtype": "Opener",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "Deal 2 damage."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage and it cannot gain Defense from Reactions against your next Prowess Action this turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Gain +1 Defense against the target until your next turn."
+      },
+      {
+        "n": "1",
+        "html": "Your next Prowess Action against the target this turn ignores 1 Defense."
+      }
+    ],
+    "rider": {
+      "title": "OPENER",
+      "html": "If you began this Action with no Combo and deal damage, your next Prowess Action against the target this turn may commit 1 fewer die, minimum 2.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

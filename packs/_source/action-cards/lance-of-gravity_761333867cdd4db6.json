@@ -1,0 +1,51 @@
+{
+  "_id": "761333867cdd4db6",
+  "name": "Lance of Gravity",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Space",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Channeling, Sculpting",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within 6 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 Force damage and move the target 1 unit directly away from you. If the target is <b>Displaced</b>, move it 1 additional unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Deal +1 damage."
+      },
+      {
+        "n": "2",
+        "html": "Choose one creature directly behind the target and within 2 units of it. Compare this Action against that creature; on a success, deal 1 Force damage."
+      }
+    ],
+    "rider": {
+      "title": "SPACE THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread before resolving a future Magecraft Action to increase or decrease its range by 2 units.",
+      "meta": "TYPE: SPACE · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

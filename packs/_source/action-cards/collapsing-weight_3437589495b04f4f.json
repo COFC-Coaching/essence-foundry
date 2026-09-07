@@ -1,0 +1,55 @@
+{
+  "_id": "3437589495b04f4f",
+  "name": "Collapsing Weight",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Space",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Channeling, Sculpting",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "Crush the space around the target inward.",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within 6 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Deal 2 damage."
+      },
+      {
+        "label": "1",
+        "html": "Deal +1 damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "The target cannot benefit from Cover until the start of your next turn."
+      },
+      {
+        "n": "3",
+        "html": "One creature within 1 unit of the target takes 1 damage."
+      }
+    ],
+    "rider": {
+      "title": "SPACE - THREAD",
+      "html": "Create a Space Thread. Before resolving a future damaging Magecraft Action, consume it to add 1 die to that Action.",
+      "meta": "TYPE: SPACE · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

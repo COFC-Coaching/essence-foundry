@@ -1,0 +1,51 @@
+{
+  "_id": "5a766b789d024e9b",
+  "name": "Give It to Me",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Resonance",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Imprint, Mesmerism",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A linked or allied creature within 5 units suffers damage or a normal Condition."
+      },
+      {
+        "label": "Effect",
+        "html": "You may take 1 of the damage or receive that Condition instead. If you do, the original creature gains +1 Defense until its next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One non-damage benefit from this Reaction persists until the start of your next turn."
+      },
+      {
+        "n": "1",
+        "html": "If this Reaction affects an enemy, it burns 1 die on its next hostile Action."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

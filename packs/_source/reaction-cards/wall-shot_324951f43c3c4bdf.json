@@ -1,0 +1,51 @@
+{
+  "_id": "324951f43c3c4bdf",
+  "name": "Wall Shot",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Trajectory, Precision",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature you can see within weapon range makes a ranged attack while adjacent to cover or an unattended object."
+      },
+      {
+        "label": "Effect",
+        "html": "Shoot the cover or object instead of the creature. On a success, the triggering creature suffers -1 Defense against that attack and your next Ballistics Action before your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense from cover or increase this Reaction's range by 2 units."
+      },
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense against the triggering creature if this Reaction attacks it."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

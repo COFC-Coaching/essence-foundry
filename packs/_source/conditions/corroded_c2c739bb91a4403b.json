@@ -1,0 +1,27 @@
+{
+  "_id": "c2c739bb91a4403b",
+  "name": "CORRODED",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "DAMAGE CONDITION",
+        "html": "Associated damage: <b>Acid</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "Reduce Defense bonuses granted by your equipment by 1, to a minimum total equipment bonus of 0."
+      },
+      {
+        "label": "REMOVAL",
+        "html": "Corroded remains until removed by an effect, repair, or Recovery."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "ced0a54a408e42f6",
+  "name": "Intercede, Kindly Spirit",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Calling",
+    "subtype": "Sprite",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You or an ally within 3 units is targeted by an Action."
+      },
+      {
+        "label": "Effect",
+        "html": "A Sprite flickers through the attack. The target gains +1 Defense; if the Action fails, the target may move 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Defense bonus from this Reaction by 1."
+      },
+      {
+        "n": "2",
+        "html": "If the triggering Action fails, the protected creature becomes Rallied."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

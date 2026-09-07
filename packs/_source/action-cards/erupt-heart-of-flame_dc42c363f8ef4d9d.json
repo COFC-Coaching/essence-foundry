@@ -1,0 +1,51 @@
+{
+  "_id": "dc42c363f8ef4d9d",
+  "name": "Erupt, Heart of Flame",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Elemental",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Dominion, Chorus",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Manifest a burst of elemental power in a 1-unit burst within 5 units. On a success against each creature, deal 1 Fire damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Choose one creature damaged by this Action; apply <b>Burning</b>."
+      },
+      {
+        "n": "2",
+        "html": "Create a second 1-unit burst within 2 units of the first. A creature can be affected by only one burst."
+      }
+    ],
+    "rider": {
+      "title": "ELEMENTAL — FULL MANIFESTATION",
+      "html": "If you spent at least <b>5 dice</b> on this Action, as it resolves you may spend <b>3 additional Mana</b> to fully manifest your Elemental.",
+      "meta": "CALLING SUBTYPE: ELEMENTAL · RANK 2"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

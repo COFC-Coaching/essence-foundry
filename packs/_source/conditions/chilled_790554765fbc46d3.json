@@ -1,0 +1,27 @@
+{
+  "_id": "790554765fbc46d3",
+  "name": "CHILLED",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "DAMAGE CONDITION",
+        "html": "Associated damage: <b>Cold</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "Reduce your Movement by 2 units."
+      },
+      {
+        "label": "DURATION",
+        "html": "Chilled lasts until the end of your next turn unless removed earlier."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

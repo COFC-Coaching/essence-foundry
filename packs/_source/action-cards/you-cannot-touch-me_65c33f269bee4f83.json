@@ -1,0 +1,51 @@
+{
+  "_id": "65c33f269bee4f83",
+  "name": "You Cannot Touch Me",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Psionics",
+    "subtype": "Barrier",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose yourself or one ally within 4 units. The target gains +1 Defense until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Defense bonus from this Action by 1."
+      },
+      {
+        "n": "1",
+        "html": "Reduce forced movement against the target by 1 unit until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "BARRIER — STRAIN",
+      "html": "If you gained Strain while resolving this Action, the first time the target is attacked before your next turn it gains an additional +1 Defense.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

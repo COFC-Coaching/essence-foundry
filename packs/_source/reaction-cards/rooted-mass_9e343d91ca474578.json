@@ -1,0 +1,51 @@
+{
+  "_id": "9e343d91ca474578",
+  "name": "Rooted Mass",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Titan",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Armament, Plasticity",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An effect would move you or move an adjacent ally."
+      },
+      {
+        "label": "Effect",
+        "html": "Reduce that movement by 2 units. If you are in a Titan Adaptation, you may also move the source 1 unit away from you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "If the source is within your natural weapon reach, deal 1 natural weapon damage to it after reducing the movement."
+      },
+      {
+        "n": "1",
+        "html": "Increase the reach or affected distance of this Reaction by 1 unit."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

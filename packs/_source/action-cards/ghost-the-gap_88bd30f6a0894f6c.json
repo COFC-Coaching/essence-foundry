@@ -1,0 +1,51 @@
+{
+  "_id": "88bd30f6a0894f6c",
+  "name": "Ghost the Gap",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Evasion",
+    "attr": "Resolve",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Infiltration, Observation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose yourself. Until your next turn, the first enemy that moves adjacent to you becomes Exposed."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Enemies that become Exposed from this Action cannot make Reactions caused solely by your movement this turn."
+      },
+      {
+        "n": "1",
+        "html": "When an enemy becomes Exposed from this Action, learn whether it has any unused Reactions or maintained effects."
+      }
+    ],
+    "rider": {
+      "title": "EVASION CONTINGENCY",
+      "html": "After resolving this Action, you may establish this Contingency. <b>Trigger:</b> You are targeted by an Action. <b>Effect:</b> Gain +1 Defense against that Action, then this Contingency ends.",
+      "meta": "EXPIRES: START OF YOUR NEXT TURN"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

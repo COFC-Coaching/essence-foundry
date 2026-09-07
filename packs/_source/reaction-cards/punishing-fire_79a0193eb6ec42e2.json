@@ -1,0 +1,51 @@
+{
+  "_id": "79a0193eb6ec42e2",
+  "name": "Punishing Fire",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Cadence, Penetration",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "Your Locked target willingly moves more than 2 units or uses an Action that exposes it from cover."
+      },
+      {
+        "label": "Effect",
+        "html": "Make a ranged attack against the triggering creature. On a success, deal 1 weapon damage and it burns 1 die on its next Action this turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "If this Reaction attacks, gain +1 die on your next Ballistics Action against the same creature this turn."
+      },
+      {
+        "n": "2",
+        "html": "If this Reaction deals damage, treat 1 damage as Breach."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

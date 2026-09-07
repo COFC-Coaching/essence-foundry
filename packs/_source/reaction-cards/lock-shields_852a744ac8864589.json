@@ -1,0 +1,51 @@
+{
+  "_id": "852a744ac8864589",
+  "name": "Lock Shields!",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Formation",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Tactics, Coordination",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An ally adjacent to another ally is targeted by an Action."
+      },
+      {
+        "label": "Effect",
+        "html": "The target gains +1 Defense. One adjacent ally may also shift 1 unit to remain adjacent after the Action resolves."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One affected ally may move 1 unit after the triggering effect resolves."
+      },
+      {
+        "n": "1",
+        "html": "A second eligible ally within 2 units receives one non-damage benefit of this Reaction."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

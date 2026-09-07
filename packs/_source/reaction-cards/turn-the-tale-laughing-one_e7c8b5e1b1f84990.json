@@ -1,0 +1,51 @@
+{
+  "_id": "e7c8b5e1b1f84990",
+  "name": "Turn the Tale, Laughing One",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Fey",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Accord, Dominion",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature within 5 units succeeds on a Reaction."
+      },
+      {
+        "label": "Effect",
+        "html": "Turn the moment sideways; that creature becomes Exposed after the Reaction resolves."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "You or one ally within 3 units gains +1 Defense until the start of its next turn."
+      },
+      {
+        "n": "1",
+        "html": "The triggering creature cannot make another Reaction until the start of its next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

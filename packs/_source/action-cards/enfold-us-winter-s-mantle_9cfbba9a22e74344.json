@@ -1,0 +1,51 @@
+{
+  "_id": "9cfbba9a22e74344",
+  "name": "Enfold Us, Winter's Mantle",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Elemental",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Vessel, Chorus",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Wrap yourself or one ally within 4 units in an elemental mantle. Until your next turn, the target gains +1 Defense and resistance to Cold damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After this resolves, gain +1 Defense until your next turn as the entity partially overlays you."
+      },
+      {
+        "n": "2",
+        "html": "Choose one additional ally within 2 units of the first; it gains +1 Defense until your next turn."
+      }
+    ],
+    "rider": {
+      "title": "ELEMENTAL — FULL MANIFESTATION",
+      "html": "If you spent at least <b>5 dice</b> on this Action, as it resolves you may spend <b>3 additional Mana</b> to fully manifest your Elemental.",
+      "meta": "CALLING SUBTYPE: ELEMENTAL · RANK 2"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

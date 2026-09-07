@@ -1,0 +1,51 @@
+{
+  "_id": "3f89a15836544a46",
+  "name": "Forked Zephyr",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Air",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Augmentation, Disjunction",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose a 3-unit line within 6 units. Compare this Action against each creature in the line; on a success, deal 1 Force damage and move it 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "One affected creature gains +1 die on its next Action before your next turn."
+      },
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense granted by a magical effect for this spell."
+      }
+    ],
+    "rider": {
+      "title": "AIR THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread before resolving a future Magecraft Action that moves a creature to move one affected creature 1 additional unit.",
+      "meta": "TYPE: AIR · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

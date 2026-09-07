@@ -1,0 +1,35 @@
+{
+  "_id": "d4257e162f2a417d",
+  "name": "STRAIN",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "SPECIALTY CONDITION",
+        "html": "Psionics · Self · Stackable. Strain is cumulative and remains until removed. When you use a Psionics Action or Reaction, you may gain 1 Strain to gain 1 additional Surge."
+      },
+      {
+        "label": "1–2 STRAIN",
+        "html": "No additional penalty."
+      },
+      {
+        "label": "3–4 STRAIN",
+        "html": "Each Psionics Action or Reaction burns 1 additional die."
+      },
+      {
+        "label": "5+ STRAIN",
+        "html": "After resolving a Psionics Action or Reaction, suffer 1 Psychic damage."
+      },
+      {
+        "label": "REMOVAL",
+        "html": "Strain is removed only by effects that specifically remove Strain or by the appropriate Recovery."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

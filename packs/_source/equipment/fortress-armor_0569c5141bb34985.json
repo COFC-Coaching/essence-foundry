@@ -1,0 +1,32 @@
+{
+  "_id": "0569c5141bb34985",
+  "name": "Fortress Armor",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "armor",
+    "slot": "armory",
+    "tier": null,
+    "type": "Heavy",
+    "cost": "1",
+    "range": "",
+    "effect": "",
+    "passive": "Gain 2 Resilience and reduce your base movement by 4 units.",
+    "special": "",
+    "fortitude": "",
+    "resilience": "2",
+    "movement": "-4",
+    "tags": "armor, mobility",
+    "flavor": "",
+    "reachBonus": 0,
+    "uses": null,
+    "slotCost": 1,
+    "isModular": true,
+    "quantity": 1
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

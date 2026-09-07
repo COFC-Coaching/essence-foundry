@@ -1,0 +1,51 @@
+{
+  "_id": "7ed5b1a325724b6f",
+  "name": "Colossal Reach",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Titan",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Metabolism, Plasticity",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose up to two adjacent creatures within natural weapon range. Compare this Action against each. On a success, deal 1 Bludgeoning damage. After this resolves, you may become Unstable; if you do, increase your natural weapon reach by 1 until your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore the next die you would burn because of a damage Condition before your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Choose one additional adjacent target for this Action."
+      }
+    ],
+    "rider": {
+      "title": "TITAN ADAPTATION",
+      "html": "Before resolving this Action, you may assume <b>Colossal Frame</b>. While maintained: Increase your reach by 1 unit and the distance you forcibly move creatures by 1 unit.",
+      "meta": "UPKEEP: 1 STAMINA"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

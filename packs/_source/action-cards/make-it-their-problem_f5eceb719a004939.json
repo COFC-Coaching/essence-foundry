@@ -1,0 +1,51 @@
+{
+  "_id": "f5eceb719a004939",
+  "name": "Make It Their Problem",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Reversal",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Exploitation, Improvisation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within weapon range. On a success, deal 1 weapon damage and record the Defense it used against this Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "If the target has any Condition, this Action ignores 1 Defense."
+      },
+      {
+        "n": "2",
+        "html": "Repeat one non-damage utility effect of this Action on a second eligible target."
+      }
+    ],
+    "rider": {
+      "title": "REVERSAL CONTINGENCY",
+      "html": "After resolving this Action, you may establish this Contingency. <b>Trigger:</b> The chosen creature uses a Reaction. <b>Effect:</b> It burns 1 die after that Reaction resolves.",
+      "meta": "EXPIRES: START OF YOUR NEXT TURN"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

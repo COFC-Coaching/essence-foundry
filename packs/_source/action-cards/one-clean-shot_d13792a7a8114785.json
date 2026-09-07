@@ -1,0 +1,51 @@
+{
+  "_id": "d13792a7a8114785",
+  "name": "One Clean Shot",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Execution",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Precision, Payload",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range and line of sight."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within weapon range. On a success, deal 1 weapon damage and ignore 1 Defense from equipment."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "If the primary target is Locked by you, deal +1 weapon damage."
+      },
+      {
+        "n": "1",
+        "html": "On a success, the target's equipment-granted Defense is reduced by 1 until the start of its next turn."
+      }
+    ],
+    "rider": {
+      "title": "EXECUTION",
+      "html": "If the target is Locked by you, you may end that Lock after rolling. If you do and this Action succeeds, treat 1 damage from the Action as Breach and the target becomes Exposed.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

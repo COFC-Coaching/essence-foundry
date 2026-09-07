@@ -1,0 +1,51 @@
+{
+  "_id": "e80fa0da2f6d4f6b",
+  "name": "Pattern's End",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Aether",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Reinforcement, Disjunction",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You are targeted by a supernatural Action."
+      },
+      {
+        "label": "Effect",
+        "html": "Gain +1 Defense against the triggering Action. If it is maintained by Concentration, a Rite, or a manifestation, the source also suffers -1 Defense until the start of its next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase a Defense bonus granted by this Reaction by 1."
+      },
+      {
+        "n": "2",
+        "html": "If the triggering effect is supernatural, reduce one Defense or bonus it grants by 1 for this resolution."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

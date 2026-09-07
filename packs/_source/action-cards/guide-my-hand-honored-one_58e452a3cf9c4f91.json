@@ -1,0 +1,51 @@
+{
+  "_id": "58e452a3cf9c4f91",
+  "name": "Guide My Hand, Honored One",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Ancestor",
+    "attr": "Adaptability",
+    "skill": "Calling",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Banishment, Accord",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Manifest an Ancestor's practiced strike against one creature within 2 units. On a success, deal 1 Radiant damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a success, apply <b>Revealed</b>."
+      },
+      {
+        "n": "1",
+        "html": "If the associated bond is not Broken, gain +1 die on your next Calling Action using the same subtype."
+      }
+    ],
+    "rider": {
+      "title": "ANCESTOR — FULL MANIFESTATION",
+      "html": "If you spent at least <b>5 dice</b> on this Action, as it resolves you may spend <b>3 additional Mana</b> to fully manifest your Ancestor.",
+      "meta": "CALLING SUBTYPE: ANCESTOR · RANK 2"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "d802685c1df3416d",
+  "name": "Bastion of Earth",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Earth",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Fabrication, Transmutation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Create a 1-unit stone barrier in an empty space within 4 units. It grants cover and lasts until your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Create a small persistent magical object or patch of terrain appropriate to this spell until the start of your next turn."
+      },
+      {
+        "n": "1",
+        "html": "Change one affected surface or object to a temporary material state appropriate to the spell until your next turn."
+      }
+    ],
+    "rider": {
+      "title": "EARTH THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread when you create terrain, a barrier, or an object to extend its duration through the end of your next turn.",
+      "meta": "TYPE: EARTH · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

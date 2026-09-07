@@ -1,0 +1,51 @@
+{
+  "_id": "660f1a0f4b244281",
+  "name": "The Quickened Hour",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Time",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Reinforcement, Channeling",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose yourself or one ally within 4 units. The target gains +1 die on its next Action or Reaction before your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The bonus die remains available until used or the encounter ends."
+      },
+      {
+        "n": "1",
+        "html": "The target also gains +1 Movement until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "TIME THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread after a timed effect you created would end to extend it until the end of the current turn.",
+      "meta": "TYPE: TIME · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

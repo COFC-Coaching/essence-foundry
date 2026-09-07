@@ -1,0 +1,7 @@
+{
+  "TYPES.Actor.character": "Character",
+  "TYPES.Item.action-card": "Action Card",
+  "TYPES.Item.reaction-card": "Reaction Card",
+  "TYPES.Item.condition": "Condition",
+  "TYPES.Item.equipment": "Equipment"
+}

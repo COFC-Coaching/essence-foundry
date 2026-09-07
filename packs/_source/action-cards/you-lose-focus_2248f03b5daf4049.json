@@ -1,0 +1,51 @@
+{
+  "_id": "2248f03b5daf4049",
+  "name": "You Lose Focus",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Psionics",
+    "subtype": "Fracture",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within 5 units. On a success, deal 1 Psychic damage and make it Dazed."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Deal +1 damage."
+      },
+      {
+        "n": "1",
+        "html": "Increase this card's range by 2 units."
+      }
+    ],
+    "rider": {
+      "title": "FRACTURE — STRAIN",
+      "html": "If you gained Strain while resolving this Action, the target also burns 1 die on its next Reaction.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "3850a5de1e8d467b",
+  "name": "Driving Weapon",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": null,
+    "type": "Melee, 1h",
+    "cost": "1",
+    "range": "Melee 1",
+    "effect": "Once per turn, after a successful attack with this weapon, push or pull the target 1 unit.",
+    "passive": "",
+    "special": "",
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "tags": "melee, one-handed, forced-movement",
+    "flavor": "",
+    "reachBonus": 0,
+    "uses": null,
+    "slotCost": 1,
+    "isModular": true,
+    "quantity": 1
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

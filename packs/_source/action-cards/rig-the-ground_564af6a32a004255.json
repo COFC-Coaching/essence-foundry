@@ -1,0 +1,51 @@
+{
+  "_id": "564af6a32a004255",
+  "name": "Rig the Ground",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Trap",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Improvisation, Sleight",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose a 2-unit area within 4 units. Prepare a hidden hazard there until the start of your next turn; enemies treat the area as difficult terrain."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After rolling, you may change this Action to another eligible target within 2 units of the original target."
+      },
+      {
+        "n": "1",
+        "html": "Draw, conceal, place, or interact with one small carried or unattended item as part of this Action."
+      }
+    ],
+    "rider": {
+      "title": "TRAP CONTINGENCY",
+      "html": "After resolving this Action, you may establish this Contingency. <b>Trigger:</b> An enemy enters the prepared space. <b>Effect:</b> It burns 1 die on its next Action.",
+      "meta": "EXPIRES: START OF YOUR NEXT TURN"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

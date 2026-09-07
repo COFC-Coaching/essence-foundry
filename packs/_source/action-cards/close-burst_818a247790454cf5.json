@@ -1,0 +1,51 @@
+{
+  "_id": "818a247790454cf5",
+  "name": "Close Burst",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Magecraft",
+    "subtype": "Space",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "0",
+    "expertises": "-",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "Snap a pocket of pressure outward.",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within 2 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Deal 1 damage and push the target 1 unit."
+      },
+      {
+        "label": "1",
+        "html": "Push 1 additional unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 damage."
+      }
+    ],
+    "rider": {
+      "title": "SPACE - THREAD",
+      "html": "Create a Space Thread. Before resolving a future damaging Magecraft Action, consume it to add 1 die to that Action.",
+      "meta": "TYPE: SPACE · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

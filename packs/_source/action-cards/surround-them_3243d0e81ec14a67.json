@@ -1,0 +1,51 @@
+{
+  "_id": "3243d0e81ec14a67",
+  "name": "Surround Them!",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Formation",
+    "attr": "Adaptability",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Guardianship, Discipline",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose a 2-unit line or cluster of allies within 5 units. Enemies adjacent to at least two of them suffer -1 Defense until your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One affected ally gains +1 Defense until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Remove Dazed, Concussed, or Shocked from one affected ally."
+      }
+    ],
+    "rider": {
+      "title": "FORMATION — AUTHORITY",
+      "html": "Spend this card's Authority when an enemy enters a space adjacent to two of your allies: <b>1–3</b> it suffers -1 Defense; <b>4–5</b> it becomes Exposed; <b>6+</b> it becomes Exposed and burns 1 die.",
+      "meta": "STORE ONE ROLLED RESULT; THAT RESULT IS REMOVED FROM THIS ACTION"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "2a7c3c6bacde4aa3",
+  "name": "You Will Stay There",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Projection",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Imprint, Precognition",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within 6 units. On a success, restrain its movement; it cannot voluntarily move more than 2 units until its next turn ends."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Mark one affected creature; your next Psionics Action against it gains 1 free Surge, then remove the mark."
+      },
+      {
+        "n": "1",
+        "html": "Gain +1 Defense against the next Action that targets you before your next turn."
+      }
+    ],
+    "rider": {
+      "title": "PROJECTION — STRAIN",
+      "html": "If you gained Strain while resolving this Action, the target also burns 1 die if it attempts to move before its next turn.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

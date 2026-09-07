@@ -1,0 +1,51 @@
+{
+  "_id": "465be0a2b3804df6",
+  "name": "Current of Rime",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Water",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Transmutation, Reinforcement",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose a 2-unit line within 5 units. Compare this Action against each enemy in the line; on a success, move it 1 unit and make the line difficult terrain until your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Choose one creature this Action succeeds against; make it Chilled or Corroded."
+      },
+      {
+        "n": "1",
+        "html": "The difficult terrain created by this Action lasts through the end of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "WATER THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread before resolving a future Magecraft Action to make one affected space difficult terrain until your next turn.",
+      "meta": "TYPE: WATER · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

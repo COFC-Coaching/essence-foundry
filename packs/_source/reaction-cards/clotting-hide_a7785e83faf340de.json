@@ -1,0 +1,51 @@
+{
+  "_id": "a7785e83faf340de",
+  "name": "Clotting Hide",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Bulwark",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Regeneration, Awareness",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You are targeted by an Action or would suffer forced movement."
+      },
+      {
+        "label": "Effect",
+        "html": "Gain +1 Defense against the triggering Action or reduce the forced movement by 2 units. If you are in a Bulwark Adaptation, choose both."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "After this Reaction resolves, remove Chilled, Shocked, or Concussed from yourself."
+      },
+      {
+        "n": "1",
+        "html": "Increase the Defense bonus or reaction accuracy granted by this Reaction by 1 against a creature you can perceive."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

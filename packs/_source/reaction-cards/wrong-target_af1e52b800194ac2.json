@@ -1,0 +1,51 @@
+{
+  "_id": "af1e52b800194ac2",
+  "name": "Wrong Target",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Diversion",
+    "attr": "Resolve",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Observation, Sleight",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An enemy targets you or an ally within 2 units with an Action."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose another eligible creature within 2 units of the original target. The attacker suffers -1 die unless it changes the target to that creature."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After the triggering effect resolves, learn whether its source has any unused Reactions or maintained effects."
+      },
+      {
+        "n": "1",
+        "html": "Draw, conceal, or interact with one small item as part of this Reaction."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

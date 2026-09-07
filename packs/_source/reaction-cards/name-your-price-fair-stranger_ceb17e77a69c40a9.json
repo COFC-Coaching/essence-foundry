@@ -1,0 +1,51 @@
+{
+  "_id": "ceb17e77a69c40a9",
+  "name": "Name Your Price, Fair Stranger",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Fey",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Accord, Banishment",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An ally within 5 units would gain a normal Condition."
+      },
+      {
+        "label": "Effect",
+        "html": "You may take that Condition instead; if you do, the ally becomes Rallied."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "You or one ally within 3 units gains +1 Defense until the start of its next turn."
+      },
+      {
+        "n": "2",
+        "html": "If the triggering effect is supernatural, suppress one Rank 0 maintained benefit until the end of the turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

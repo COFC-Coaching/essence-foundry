@@ -1,0 +1,51 @@
+{
+  "_id": "f1ee2fcdd0e7400d",
+  "name": "The Devil Answers",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Hex",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Sympathy, Reagents",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature affected by one of your Hex Rites deals damage."
+      },
+      {
+        "label": "Effect",
+        "html": "The triggering creature becomes Exposed. If it is Possessed, it also burns 1 die."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "A second creature linked to the original target within 3 units receives one non-damage benefit or penalty of this Reaction."
+      },
+      {
+        "n": "2",
+        "html": "Spend 1 Mana. If the triggering creature is Possessed, it burns 1 additional die; otherwise it suffers -1 Defense until its next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

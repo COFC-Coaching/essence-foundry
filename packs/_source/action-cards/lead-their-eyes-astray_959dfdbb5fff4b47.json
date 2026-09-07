@@ -1,0 +1,51 @@
+{
+  "_id": "959dfdbb5fff4b47",
+  "name": "Lead Their Eyes Astray",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Calling",
+    "subtype": "Sprite",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "A Sprite distracts one creature within 4 units. On a success, make it Exposed."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase this Action's range by 2 units."
+      },
+      {
+        "n": "2",
+        "html": "Reduce the Full Manifestation dice threshold by 1. This Surge may be used only once."
+      }
+    ],
+    "rider": {
+      "title": "SPRITE — FULL MANIFESTATION",
+      "html": "If you spent at least <b>3 dice</b> on this Action, as it resolves you may spend <b>1 additional Mana</b> to fully manifest your Sprite.",
+      "meta": "CALLING SUBTYPE: SPRITE · RANK 0"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

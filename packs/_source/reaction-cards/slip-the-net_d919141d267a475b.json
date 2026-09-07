@@ -1,0 +1,51 @@
+{
+  "_id": "d919141d267a475b",
+  "name": "Slip the Net",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Cunning",
+    "subtype": "Evasion",
+    "attr": "Resolve",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You are targeted by a close-range Action."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 2 units. If you leave the triggering Action's legal range, it loses you as a target."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement from this card by 1 unit."
+      },
+      {
+        "n": "1",
+        "html": "Gain +1 Defense until your next turn if you end adjacent to cover."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

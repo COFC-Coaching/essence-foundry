@@ -1,0 +1,51 @@
+{
+  "_id": "abe7051fbe92433a",
+  "name": "The Borrowed Second",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Time",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sculpting, Channeling",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within 5 units. On a success against Composure, reduce the maximum dice it may commit to its next Action by 1, minimum 2."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Choose one additional creature within 1 unit of the target; compare this Action against it as well."
+      },
+      {
+        "n": "2",
+        "html": "Reduce the target's maximum dice by 1 additional die for this effect, minimum 2."
+      }
+    ],
+    "rider": {
+      "title": "TIME THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread after a creature declares an Action or Reaction to give it +1 or -1 Defense against that effect.",
+      "meta": "TYPE: TIME · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

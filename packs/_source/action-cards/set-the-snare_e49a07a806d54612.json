@@ -1,0 +1,51 @@
+{
+  "_id": "e49a07a806d54612",
+  "name": "Set the Snare",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Trap",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sabotage, Improvisation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one unattended object, doorway, or 1-unit area within 4 units. Prepare it to interfere with the next creature that uses or enters it."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "When this card's Contingency triggers against a creature, that creature burns 1 die."
+      },
+      {
+        "n": "2",
+        "html": "Repeat one non-damage utility effect of this Action on a second eligible target."
+      }
+    ],
+    "rider": {
+      "title": "TRAP CONTINGENCY",
+      "html": "After resolving this Action, you may establish this Contingency. <b>Trigger:</b> A creature uses or crosses the prepared object or area. <b>Effect:</b> Compare Resolve against Fortitude; on a success, make it Exposed and stop its current movement.",
+      "meta": "EXPIRES: START OF YOUR NEXT TURN"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

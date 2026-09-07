@@ -1,0 +1,51 @@
+{
+  "_id": "309058aa4b5443b8",
+  "name": "I Act Before Thought",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Trance",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Precognition, Telepathy",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature you can perceive declares an Action that targets you."
+      },
+      {
+        "label": "Effect",
+        "html": "Gain +1 Defense against the triggering Action. You may gain 1 Strain to move 1 unit before it resolves."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After this Reaction resolves, gain +1 Defense against the next Action from the same source before your next turn."
+      },
+      {
+        "n": "1",
+        "html": "Until your next turn, you always know the triggering creature's location while it remains within 5 units."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

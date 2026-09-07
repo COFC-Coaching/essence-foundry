@@ -1,0 +1,51 @@
+{
+  "_id": "ad0e0bb738f34ac7",
+  "name": "The Closed Door",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Ritualism",
+    "subtype": "Ward",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You or an ally within 4 units is targeted by an Action."
+      },
+      {
+        "label": "Effect",
+        "html": "The target gains +1 Defense against the triggering Action. If the target is Possessed, increase this bonus by 1."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Defense bonus from this Reaction by 1."
+      },
+      {
+        "n": "2",
+        "html": "If the target is Possessed, after the triggering Action resolves you may resolve one of your Rites affecting it once without reducing remaining Echoes."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

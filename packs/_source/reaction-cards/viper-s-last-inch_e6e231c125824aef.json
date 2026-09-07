@@ -1,0 +1,51 @@
+{
+  "_id": "e6e231c125824aef",
+  "name": "Viper's Last Inch",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Finisher",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Berserking, Reaving",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A wounded creature within weapon range fails an Action or Reaction."
+      },
+      {
+        "label": "Effect",
+        "html": "Spend 2 Combo and attack the triggering creature. On a success, deal 1 weapon damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "After this Reaction resolves, you may suffer -1 Defense until your next turn to deal +1 weapon damage if this Reaction attacks."
+      },
+      {
+        "n": "2",
+        "html": "If this Reaction deals damage, deal +1 weapon damage."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

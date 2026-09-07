@@ -1,0 +1,64 @@
+{
+  "id": "essence-system",
+  "title": "The Essence System",
+  "description": "Official Foundry VTT system for The Essence System — a d10 dice-pool tabletop RPG with tactical card-driven combat.",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "14"
+  },
+  "authors": [
+    { "name": "COFC Coaching" }
+  ],
+  "esmodules": ["module/essence.mjs"],
+  "styles": ["styles/essence.css"],
+  "languages": [
+    { "lang": "en", "name": "English", "path": "lang/en.json" }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "character": {}
+    },
+    "Item": {
+      "action-card": {},
+      "reaction-card": {},
+      "condition": {},
+      "equipment": {}
+    }
+  },
+  "packs": [
+    {
+      "name": "action-cards",
+      "label": "Action Cards",
+      "path": "packs/action-cards",
+      "type": "Item",
+      "system": "essence-system"
+    },
+    {
+      "name": "reaction-cards",
+      "label": "Reaction Cards",
+      "path": "packs/reaction-cards",
+      "type": "Item",
+      "system": "essence-system"
+    },
+    {
+      "name": "conditions",
+      "label": "Conditions",
+      "path": "packs/conditions",
+      "type": "Item",
+      "system": "essence-system"
+    },
+    {
+      "name": "equipment",
+      "label": "Equipment",
+      "path": "packs/equipment",
+      "type": "Item",
+      "system": "essence-system"
+    }
+  ],
+  "primaryTokenAttribute": "resources.stamina",
+  "url": "https://github.com/COFC-Coaching/essence-foundry",
+  "manifest": "https://raw.githubusercontent.com/COFC-Coaching/essence-foundry/main/system.json",
+  "download": "https://github.com/COFC-Coaching/essence-foundry/releases/latest/download/essence-system.zip",
+  "license": "LICENSE"
+}

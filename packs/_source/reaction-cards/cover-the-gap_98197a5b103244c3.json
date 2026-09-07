@@ -1,0 +1,51 @@
+{
+  "_id": "98197a5b103244c3",
+  "name": "Cover the Gap!",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Formation",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Guardianship, Discipline",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An ally adjacent to another ally is targeted by an Action."
+      },
+      {
+        "label": "Effect",
+        "html": "The target gains +1 Defense. One adjacent ally may also shift 1 unit to remain adjacent after the Action resolves."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase a Defense bonus granted by this Reaction by 1."
+      },
+      {
+        "n": "1",
+        "html": "One affected ally may ignore the next die it would burn before its next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

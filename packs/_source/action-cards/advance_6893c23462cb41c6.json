@@ -1,0 +1,51 @@
+{
+  "_id": "6893c23462cb41c6",
+  "name": "Advance!",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Leadership",
+    "subtype": "Order",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one ally within 5 units. It may immediately move 1 unit or draw/use a simple item interaction."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One affected ally gains +1 Defense until its next turn."
+      },
+      {
+        "n": "2",
+        "html": "One affected ally becomes Rallied."
+      }
+    ],
+    "rider": {
+      "title": "ORDER — AUTHORITY",
+      "html": "Spend this card's Authority when an ally within 5 units declares an Action: <b>1–3</b> gain +1 Defense until it resolves; <b>4–5</b> also gain +1 die; <b>6+</b> gain +1 die and 1 free Surge.",
+      "meta": "STORE ONE ROLLED RESULT; THAT RESULT IS REMOVED FROM THIS ACTION"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

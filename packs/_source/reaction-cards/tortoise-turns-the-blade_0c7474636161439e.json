@@ -1,0 +1,51 @@
+{
+  "_id": "0c7474636161439e",
+  "name": "Tortoise Turns the Blade",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Prowess",
+    "subtype": "Guard",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You are targeted by a close-range Action."
+      },
+      {
+        "label": "Effect",
+        "html": "Gain +1 Defense against the triggering Action. You may spend 1 Combo to increase this bonus by 1."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase one Defense bonus from this card by 1."
+      },
+      {
+        "n": "1",
+        "html": "If you spend Combo while resolving this card, reduce that Combo cost by 1, minimum 0. This Surge may be used only once."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

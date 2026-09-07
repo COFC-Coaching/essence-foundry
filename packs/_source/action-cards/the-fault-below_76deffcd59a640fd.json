@@ -1,0 +1,51 @@
+{
+  "_id": "76deffcd59a640fd",
+  "name": "The Fault Below",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Earth",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Channeling, Transmutation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose a 2-unit line of ground within 5 units. Creatures in it compare against Fortitude; on a success, they become Prone and the line becomes difficult terrain until your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the line's length by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Choose one creature this Action succeeds against; make it Chilled or Corroded."
+      }
+    ],
+    "rider": {
+      "title": "EARTH THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread before resolving a future Magecraft Action that would knock a creature Prone or move it; increase that effect by 1.",
+      "meta": "TYPE: EARTH · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

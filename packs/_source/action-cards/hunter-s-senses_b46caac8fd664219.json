@@ -1,0 +1,51 @@
+{
+  "_id": "b46caac8fd664219",
+  "name": "Hunter's Senses",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Predator",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Armament, Metabolism",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One eligible creature within range."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within natural weapon range. On a success, deal 1 weapon damage using a natural weapon and the target cannot Disengage from you until its next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "On a success, ignore 1 Defense granted by equipment."
+      },
+      {
+        "n": "1",
+        "html": "Until your next turn, reduce damage from Burning or Bleeding by 1, minimum 0."
+      }
+    ],
+    "rider": {
+      "title": "PREDATOR ADAPTATION",
+      "html": "Before resolving this Action, you may assume <b>Apex Form</b>. While maintained: The first time each turn you damage a wounded creature, gain +1 Defense until your next turn.",
+      "meta": "UPKEEP: 1 STAMINA"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

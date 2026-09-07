@@ -1,0 +1,51 @@
+{
+  "_id": "c4f89eeb747341d1",
+  "name": "Crane Holds the Bridge",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Prowess",
+    "subtype": "Guard",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Yourself."
+      },
+      {
+        "label": "Effect",
+        "html": "Gain +1 Defense until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase one Defense bonus from this card by 1."
+      },
+      {
+        "n": "1",
+        "html": "Your next Guard Reaction before the start of your next turn may commit 1 fewer die, minimum 2."
+      }
+    ],
+    "rider": {
+      "title": "GUARD — STANCE",
+      "html": "Enter <b>Crane Stance</b>. While in this Stance, reduce forced movement against you by 1 unit. Entering another Stance replaces it; becoming Prone ends it.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

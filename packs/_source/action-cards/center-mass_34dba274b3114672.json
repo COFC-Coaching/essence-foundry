@@ -1,0 +1,51 @@
+{
+  "_id": "34dba274b3114672",
+  "name": "Center Mass",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Execution",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Precision, Flair",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range and line of sight."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within weapon range. On a success, deal 1 weapon damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense against the primary target for this Action."
+      },
+      {
+        "n": "1",
+        "html": "On a success, the target cannot make Reactions against your next Ballistics Action this turn."
+      }
+    ],
+    "rider": {
+      "title": "EXECUTION",
+      "html": "If the target is Locked by you, you may end that Lock after rolling. If you do and this Action succeeds, deal +1 weapon damage and ignore 1 Defense.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

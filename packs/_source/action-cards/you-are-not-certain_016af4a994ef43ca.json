@@ -1,0 +1,51 @@
+{
+  "_id": "016af4a994ef43ca",
+  "name": "You Are Not Certain",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Fracture",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Composure",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Telepathy, Imprint",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within 5 units. On a success, deal 1 Psychic damage, make it Dazed, and remove Rallied from it if present."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target cannot make Reactions against the next creature you designate before your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Mark one affected creature; your next Psionics Action against it gains 1 free Surge, then remove the mark."
+      }
+    ],
+    "rider": {
+      "title": "FRACTURE — STRAIN",
+      "html": "If you gained Strain while resolving this Action, the target also burns 1 die on its next Reaction.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

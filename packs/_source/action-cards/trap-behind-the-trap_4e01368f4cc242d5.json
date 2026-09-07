@@ -1,0 +1,51 @@
+{
+  "_id": "4e01368f4cc242d5",
+  "name": "Trap Behind the Trap",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Trap",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Sabotage, Sleight",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one 1-unit area within 4 units. Until your next turn, it counts as difficult terrain for enemies."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "When this card's Contingency triggers against a creature, that creature burns 1 die."
+      },
+      {
+        "n": "1",
+        "html": "Draw, conceal, place, or interact with one small carried or unattended item as part of this Action."
+      }
+    ],
+    "rider": {
+      "title": "TRAP CONTINGENCY",
+      "html": "After resolving this Action, you may establish this Contingency. <b>Trigger:</b> An enemy willingly leaves the prepared area. <b>Effect:</b> It suffers -1 Defense until the start of its next turn.",
+      "meta": "EXPIRES: START OF YOUR NEXT TURN"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

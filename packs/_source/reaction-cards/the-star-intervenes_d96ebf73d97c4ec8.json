@@ -1,0 +1,51 @@
+{
+  "_id": "d96ebf73d97c4ec8",
+  "name": "The Star Intervenes",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Ward",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Consecration, Liturgy",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You or an ally within 4 units is targeted by an Action."
+      },
+      {
+        "label": "Effect",
+        "html": "The target gains +1 Defense against the triggering Action. If the target is Possessed, increase this bonus by 1."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One ally affected by this Reaction gains +1 Defense until its next turn."
+      },
+      {
+        "n": "1",
+        "html": "If two creatures meet the Trigger simultaneously, apply this Reaction's non-damage effect to both."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

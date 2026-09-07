@@ -1,0 +1,51 @@
+{
+  "_id": "e32448f0223b40bb",
+  "name": "The Eye",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Ritualism",
+    "subtype": "Divination",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within 6 units. Learn whether it currently has unused Reactions, maintained effects, or a Specialty Condition."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase this Rite's Echo Limit by 1."
+      },
+      {
+        "n": "1",
+        "html": "Increase one range, radius, or numeric Echo effect by 1."
+      }
+    ],
+    "rider": {
+      "title": "DIVINATION RITE",
+      "html": "After resolving this Action, you may establish this Rite. <b>Trigger:</b> A creature within 5 units declares an Action. <b>Echo:</b> One ally affected by the Rite gains +1 Defense against that Action.",
+      "meta": "ECHO LIMIT: 1"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

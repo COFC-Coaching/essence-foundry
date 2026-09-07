@@ -1,0 +1,51 @@
+{
+  "_id": "ed571d4b237a4c9e",
+  "name": "Black Tortoise Faces the Flood",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Guard",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Phalanx, Skirmishing",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Yourself."
+      },
+      {
+        "label": "Effect",
+        "html": "Until the start of your next turn, the first close-range Action that targets you suffers -1 die."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "You or one adjacent ally gains +1 Defense until the start of your next turn."
+      },
+      {
+        "n": "1",
+        "html": "After this resolves, your next 2 units of movement this turn do not trigger Reactions."
+      }
+    ],
+    "rider": {
+      "title": "GUARD — STANCE",
+      "html": "Enter <b>Black Tortoise Stance</b>. While in this Stance, gain +1 Defense against the first Action that targets you each round. Entering another Stance replaces it; becoming Prone ends it.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

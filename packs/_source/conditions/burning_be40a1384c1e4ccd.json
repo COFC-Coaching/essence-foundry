@@ -1,0 +1,27 @@
+{
+  "_id": "be40a1384c1e4ccd",
+  "name": "BURNING",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "DAMAGE CONDITION",
+        "html": "Associated damage: <b>Fire</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "At the end of your turn, suffer 1 Fire damage."
+      },
+      {
+        "label": "EXTINGUISH",
+        "html": "During your turn, you may burn 2 dice to remove Burning before its damage is suffered."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

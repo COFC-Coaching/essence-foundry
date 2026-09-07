@@ -1,0 +1,51 @@
+{
+  "_id": "1ef2feddc1384f2d",
+  "name": "There Is a Wall",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Barrier",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Telekinesis, Biokinesis",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Create a 2-unit psychic barrier within 4 units. It grants cover until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase one barrier size, Defense bonus, or forced-movement reduction from this card by 1."
+      },
+      {
+        "n": "2",
+        "html": "Remove one Physical damage Condition from yourself or an ally affected by this card."
+      }
+    ],
+    "rider": {
+      "title": "BARRIER — STRAIN",
+      "html": "If you gained Strain while resolving this Action, extend the barrier by 1 unit.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

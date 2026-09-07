@@ -1,0 +1,51 @@
+{
+  "_id": "91d15d5e39944874",
+  "name": "I Go First.",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Example",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Valor, Inspiration",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose yourself. Gain +1 Defense until your next turn; one ally within 4 units may gain +1 Defense if it moves adjacent to you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "You may suffer -1 Defense until your next turn; if you do, one affected ally becomes Rallied."
+      },
+      {
+        "n": "1",
+        "html": "If an affected ally is already Rallied, it gains +1 Defense until its next turn instead."
+      }
+    ],
+    "rider": {
+      "title": "EXAMPLE — AUTHORITY",
+      "html": "Spend this card's Authority after you move toward an enemy or objective: <b>1–3</b> one ally may move 1 unit; <b>4–5</b> two allies may move 1 unit; <b>6+</b> one of them also becomes Rallied.",
+      "meta": "STORE ONE ROLLED RESULT; THAT RESULT IS REMOVED FROM THIS ACTION"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

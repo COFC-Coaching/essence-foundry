@@ -1,0 +1,51 @@
+{
+  "_id": "5cc8042de9c74c3d",
+  "name": "Predator Reflex",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Predator",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Locomotion, Metabolism",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An enemy within your natural weapon range becomes Exposed or suffers damage."
+      },
+      {
+        "label": "Effect",
+        "html": "Attack the triggering enemy. On a success, deal 1 damage using your current natural weapon."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit before or after making the attack."
+      },
+      {
+        "n": "1",
+        "html": "Ignore one die you would burn because of a damage Condition while resolving this Reaction."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

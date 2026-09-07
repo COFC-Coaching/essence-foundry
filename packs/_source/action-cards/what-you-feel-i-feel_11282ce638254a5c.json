@@ -1,0 +1,51 @@
+{
+  "_id": "11282ce638254a5c",
+  "name": "What You Feel, I Feel",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Resonance",
+    "attr": "Acuity",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Imprint, Biokinesis",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose yourself and one ally within 5 units. The first time either gains Rallied, +1 Defense, or +1 die before your next turn, the other gains the same benefit at half duration."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Mark one affected creature; the next Psionics Action you use against it gains 1 free Surge, then remove the mark."
+      },
+      {
+        "n": "2",
+        "html": "Remove one Physical damage Condition from yourself or an ally affected by this card."
+      }
+    ],
+    "rider": {
+      "title": "RESONANCE — STRAIN",
+      "html": "If you gained Strain while resolving this Action, the first shared benefit is not consumed when copied.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

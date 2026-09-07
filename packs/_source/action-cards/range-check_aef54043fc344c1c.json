@@ -1,0 +1,51 @@
+{
+  "_id": "aef54043fc344c1c",
+  "name": "Range Check",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Ballistics",
+    "subtype": "Targeting",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range and line of sight."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage. If the target is Locked by you, this Action's range increases by 3 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense from cover."
+      },
+      {
+        "n": "1",
+        "html": "Increase this Action's range by 2 units."
+      }
+    ],
+    "rider": {
+      "title": "TARGETING",
+      "html": "If the target is Locked by you and this Action succeeds, your next Ballistics Action against it this turn ignores 1 Defense from cover.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

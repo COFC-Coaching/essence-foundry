@@ -1,0 +1,51 @@
+{
+  "_id": "7e420cc125d64013",
+  "name": "Correction Shot",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Targeting",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Mobility, Flair",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "Your Locked target gains cover, leaves your weapon's normal range, or breaks line of sight during its Action."
+      },
+      {
+        "label": "Effect",
+        "html": "Do not lose your Lock because of the triggering movement or cover until the end of that creature's turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After this Reaction resolves, move 1 unit."
+      },
+      {
+        "n": "1",
+        "html": "After this Reaction resolves, your Locked target cannot make Reactions against your next Ballistics Action this turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

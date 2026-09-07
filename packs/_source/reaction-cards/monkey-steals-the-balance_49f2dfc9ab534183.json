@@ -1,0 +1,51 @@
+{
+  "_id": "49f2dfc9ab534183",
+  "name": "Monkey Steals the Balance",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Breaker",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Brawling, Grappling",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature within weapon range moves, Shoves, or attempts to Grapple you."
+      },
+      {
+        "label": "Effect",
+        "html": "Spend 1 Combo. The triggering creature stops after its current unit of movement and suffers -1 Fortitude until the end of its turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The triggering creature cannot make another Reaction against you this turn."
+      },
+      {
+        "n": "2",
+        "html": "If the triggering creature is within weapon range, move it 1 unit or knock it Prone after this Reaction resolves."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

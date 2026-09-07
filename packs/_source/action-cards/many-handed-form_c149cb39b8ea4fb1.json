@@ -1,0 +1,51 @@
+{
+  "_id": "c149cb39b8ea4fb1",
+  "name": "Many-Handed Form",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Chimera",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Armament, Integration",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One eligible creature within range."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose up to two creatures within 1 unit. Compare this Action against each. On a success, deal 1 Slashing damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Choose one creature damaged by this Action; apply <b>Bleeding</b>."
+      },
+      {
+        "n": "1",
+        "html": "If you are Unstable, ignore Unstable's restriction until this Action finishes resolving."
+      }
+    ],
+    "rider": {
+      "title": "CHIMERA ADAPTATION",
+      "html": "Before resolving this Action, you may assume <b>Many-Handed Form</b>. While maintained: You may hold or manipulate two additional small objects and gain +1 Defense against Grapples.",
+      "meta": "UPKEEP: 1 STAMINA"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "53fb62b859534e56",
+  "name": "Venom Bloom",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Chimera",
+    "attr": "Grace",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Armament, Metabolism",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One eligible creature within range."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within natural weapon range. On a success, deal 1 Acid damage and it suffers -1 Fortitude until its next turn. After this resolves, you may become Unstable; if you do, increase that Fortitude penalty to -2."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "On a success, apply <b>Corroded</b>."
+      },
+      {
+        "n": "1",
+        "html": "Until your next turn, reduce damage from Burning or Bleeding by 1, minimum 0."
+      }
+    ],
+    "rider": {
+      "title": "CHIMERA ADAPTATION",
+      "html": "Before resolving this Action, you may assume <b>Venom Form</b>. While maintained: The first creature you damage with a natural weapon each turn suffers -1 Fortitude until its next turn.",
+      "meta": "UPKEEP: 1 STAMINA"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

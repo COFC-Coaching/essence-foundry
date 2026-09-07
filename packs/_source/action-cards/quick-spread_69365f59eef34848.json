@@ -1,0 +1,51 @@
+{
+  "_id": "69365f59eef34848",
+  "name": "Quick Spread",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Ballistics",
+    "subtype": "Salvo",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "An area or group within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose a 1-unit burst within weapon range. Compare this Action against each creature in the burst. On a success, deal 1 weapon damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the area by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Choose one additional eligible target at the edge of the area."
+      }
+    ],
+    "rider": {
+      "title": "SALVO",
+      "html": "If your Locked target is in the area, you may exclude one ally from this Action's targets.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

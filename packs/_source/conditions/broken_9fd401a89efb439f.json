@@ -1,0 +1,35 @@
+{
+  "_id": "9fd401a89efb439f",
+  "name": "BROKEN",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "SPECIALTY CONDITION",
+        "html": "Calling · Bond / entity"
+      },
+      {
+        "label": "EFFECT",
+        "html": "While a Calling bond is Broken, you cannot use Calling cards associated with that bond or subtype."
+      },
+      {
+        "label": "SCOPE",
+        "html": "Broken applies only to the affected bond. Your other Calling bonds and their cards remain usable."
+      },
+      {
+        "label": "RECOVERY",
+        "html": "Broken is a lengthy failure state. It is normally repaired at the end of the Adventure or through an appropriate Recovery period."
+      },
+      {
+        "label": "REMOVAL",
+        "html": "Effects that remove ordinary Conditions do not remove Specialty Conditions unless they explicitly say so."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

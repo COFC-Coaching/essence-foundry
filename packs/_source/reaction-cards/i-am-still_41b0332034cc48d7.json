@@ -1,0 +1,51 @@
+{
+  "_id": "41b0332034cc48d7",
+  "name": "I Am Still",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Psionics",
+    "subtype": "Trance",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature you can perceive declares an Action that targets you."
+      },
+      {
+        "label": "Effect",
+        "html": "Gain +1 Defense against the triggering Action. You may gain 1 Strain to move 1 unit before it resolves."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Defense bonus from this Reaction by 1."
+      },
+      {
+        "n": "2",
+        "html": "If the triggering Action fails, remove 1 Strain after this Reaction resolves."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

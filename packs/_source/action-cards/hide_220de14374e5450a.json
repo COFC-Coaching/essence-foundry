@@ -1,0 +1,55 @@
+{
+  "_id": "220de14374e5450a",
+  "name": "Hide",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "",
+    "subtype": "",
+    "attr": "Grace",
+    "skill": "",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Requirement",
+        "html": "You are adjacent to cover, concealed terrain, or completely outside every enemy's line of sight."
+      },
+      {
+        "label": "Effect",
+        "html": "Pull or push the target up to 2 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Gain +1 Defense against ranged Actions until the start of your next turn or until you use a damaging Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move up to 2 units before or after resolving this Action."
+      },
+      {
+        "n": "1",
+        "html": "On a success, the target cannot make Reactions against your next Ballistics Action this turn."
+      }
+    ],
+    "rider": {
+      "title": "TARGETING",
+      "html": "If the target is Locked by you, your Lock persists until the end of your next turn even if the target is briefly outside line of sight.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

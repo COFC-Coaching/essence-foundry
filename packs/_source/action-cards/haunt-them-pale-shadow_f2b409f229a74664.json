@@ -1,0 +1,51 @@
+{
+  "_id": "f2b409f229a74664",
+  "name": "Haunt Them, Pale Shadow",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Phantom",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Dominion, Vessel",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Let the Phantom loom over one creature within 4 units. On a success, it suffers -1 Defense until its next turn and becomes Exposed."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a success, move the target 1 unit or prevent it from moving 1 unit on its next turn."
+      },
+      {
+        "n": "1",
+        "html": "After this resolves, gain +1 Defense until your next turn as the entity partially overlays you."
+      }
+    ],
+    "rider": {
+      "title": "PHANTOM — FULL MANIFESTATION",
+      "html": "If you spent at least <b>4 dice</b> on this Action, as it resolves you may spend <b>2 additional Mana</b> to fully manifest your Phantom.",
+      "meta": "CALLING SUBTYPE: PHANTOM · RANK 1"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

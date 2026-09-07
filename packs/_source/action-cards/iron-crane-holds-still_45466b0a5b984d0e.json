@@ -1,0 +1,51 @@
+{
+  "_id": "45466b0a5b984d0e",
+  "name": "Iron Crane Holds Still",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Guard",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Phalanx, Skirmishing",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Yourself and one adjacent ally."
+      },
+      {
+        "label": "Effect",
+        "html": "Each target gains +1 Defense until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Until your next turn, forced movement against you is reduced by 1 unit."
+      },
+      {
+        "n": "1",
+        "html": "After this resolves, your next 2 units of movement this turn do not trigger Reactions."
+      }
+    ],
+    "rider": {
+      "title": "GUARD — STANCE",
+      "html": "Enter <b>Iron Crane Stance</b>. While in this Stance and adjacent to an ally, you and adjacent allies reduce forced movement against you by 1 unit. Entering another Stance replaces it; becoming Prone ends it.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

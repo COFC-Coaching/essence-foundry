@@ -1,0 +1,51 @@
+{
+  "_id": "763746ebbe8f4591",
+  "name": "Sight Picture",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Ballistics",
+    "subtype": "Targeting",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range and line of sight."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage. Ignore 1 Defense from cover if the target is Locked by you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense from cover."
+      },
+      {
+        "n": "1",
+        "html": "Increase this Action's range by 2 units."
+      }
+    ],
+    "rider": {
+      "title": "TARGETING",
+      "html": "If the target is Locked by you, your Lock persists until the end of your next turn even if the target is briefly outside line of sight.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

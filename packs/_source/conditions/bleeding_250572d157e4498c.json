@@ -1,0 +1,31 @@
+{
+  "_id": "250572d157e4498c",
+  "name": "BLEEDING",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "DAMAGE CONDITION",
+        "html": "Associated damage: <b>Slashing</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "At the end of your turn, suffer 1 damage."
+      },
+      {
+        "label": "STANCH",
+        "html": "If you use no Action that deals damage and voluntarily move no more than 2 units during your turn, remove Bleeding before its damage is suffered."
+      },
+      {
+        "label": "REMOVAL",
+        "html": "Bleeding can also be removed by treatment, an effect, or Recovery."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

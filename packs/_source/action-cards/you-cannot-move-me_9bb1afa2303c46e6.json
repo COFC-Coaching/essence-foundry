@@ -1,0 +1,51 @@
+{
+  "_id": "9bb1afa2303c46e6",
+  "name": "You Cannot Move Me",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Barrier",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Precognition, Biokinesis",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose yourself. Until your next turn, reduce the first forced movement against you by 2 units and gain +1 Defense against Grapples."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Gain +1 Defense against the next Action that targets you before your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Remove one Physical damage Condition from yourself."
+      }
+    ],
+    "rider": {
+      "title": "BARRIER — STRAIN",
+      "html": "If you gained Strain while resolving this Action, the first enemy that enters your reach before your next turn burns 1 die.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

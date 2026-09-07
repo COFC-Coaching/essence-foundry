@@ -1,0 +1,32 @@
+{
+  "_id": "86e740852d7541b3",
+  "name": "Light Weapon",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": null,
+    "type": "Melee, 1h",
+    "cost": "1",
+    "range": "Melee 1",
+    "effect": "After resolving an attack, move 1 unit.",
+    "passive": "",
+    "special": "",
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "tags": "melee, one-handed",
+    "flavor": "",
+    "reachBonus": 0,
+    "uses": null,
+    "slotCost": 1,
+    "isModular": true,
+    "quantity": 1
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

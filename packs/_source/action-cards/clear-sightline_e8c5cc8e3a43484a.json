@@ -1,0 +1,51 @@
+{
+  "_id": "e8c5cc8e3a43484a",
+  "name": "Clear Sightline",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Targeting",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Mobility, Flair",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range and line of sight."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage. Ignore 1 Defense from cover if the target is Locked by you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move up to 2 units before or after resolving this Action."
+      },
+      {
+        "n": "1",
+        "html": "On a success, the target cannot make Reactions against your next Ballistics Action this turn."
+      }
+    ],
+    "rider": {
+      "title": "TARGETING",
+      "html": "If the target is Locked by you, your Lock persists until the end of your next turn even if the target is briefly outside line of sight.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

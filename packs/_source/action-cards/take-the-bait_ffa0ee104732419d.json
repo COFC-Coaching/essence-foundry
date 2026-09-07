@@ -1,0 +1,51 @@
+{
+  "_id": "ffa0ee104732419d",
+  "name": "Take the Bait",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Gambit",
+    "attr": "Resolve",
+    "skill": "Cunning",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Exploitation, Sabotage",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one enemy within 4 units. On a success against Composure, it gains +1 die on its next Action against you; if it uses that Action, it becomes Exposed afterward."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "If the target has any Condition, this Action ignores 1 Defense."
+      },
+      {
+        "n": "1",
+        "html": "On a success, reduce the target's equipment-granted Defense by 1 until its next turn."
+      }
+    ],
+    "rider": {
+      "title": "GAMBIT CONTINGENCY",
+      "html": "After resolving this Action, you may establish this Contingency. <b>Trigger:</b> The target ignores you and targets another creature. <b>Effect:</b> It becomes Exposed and suffers -1 Defense until its next turn.",
+      "meta": "EXPIRES: START OF YOUR NEXT TURN"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

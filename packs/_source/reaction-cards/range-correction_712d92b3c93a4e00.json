@@ -1,0 +1,51 @@
+{
+  "_id": "712d92b3c93a4e00",
+  "name": "Range Correction",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Targeting",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Trajectory, Mobility",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "Your Locked target gains cover, leaves your weapon's normal range, or breaks line of sight during its Action."
+      },
+      {
+        "label": "Effect",
+        "html": "Do not lose your Lock because of the triggering movement or cover until the end of that creature's turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense from cover or increase this Reaction's range by 2 units."
+      },
+      {
+        "n": "1",
+        "html": "After this Reaction resolves, move 1 unit."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

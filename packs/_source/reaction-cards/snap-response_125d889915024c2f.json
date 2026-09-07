@@ -1,0 +1,51 @@
+{
+  "_id": "125d889915024c2f",
+  "name": "Snap Response",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "Your Locked target willingly moves more than 2 units or uses an Action that exposes it from cover."
+      },
+      {
+        "label": "Effect",
+        "html": "Make a ranged attack against the triggering creature. On a success, deal 1 weapon damage and it burns 1 die on its next Action this turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One affected enemy suffers -1 Defense until its next turn."
+      },
+      {
+        "n": "2",
+        "html": "One affected enemy burns 1 die on its next Action."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

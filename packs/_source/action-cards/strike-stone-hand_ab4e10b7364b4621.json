@@ -1,0 +1,51 @@
+{
+  "_id": "ab4e10b7364b4621",
+  "name": "Strike, Stone Hand",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Golem",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Dominion, Anchoring",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Manifest a Golem fist against one creature within 2 units. On a success, deal 1 Bludgeoning damage and move it 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a success, move the target 1 unit or prevent it from moving 1 unit on its next turn."
+      },
+      {
+        "n": "1",
+        "html": "Increase this Action's range by 2 units. If you fully manifest through it, the manifestation also gains +1 Defense until your next turn."
+      }
+    ],
+    "rider": {
+      "title": "GOLEM — FULL MANIFESTATION",
+      "html": "If you spent at least <b>4 dice</b> on this Action, as it resolves you may spend <b>2 additional Mana</b> to fully manifest your Golem.",
+      "meta": "CALLING SUBTYPE: GOLEM · RANK 1"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "_id": "2b12cfc6d5f4429a",
+  "name": "EXPOSED",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "SPECIALTY CONDITION",
+        "html": "Cunning · Creature"
+      },
+      {
+        "label": "EFFECT",
+        "html": "When a creature makes a roll that targets or directly affects you, that creature may consume your Exposed to roll 1 additional die."
+      },
+      {
+        "label": "LIMIT",
+        "html": "Exposed cannot be consumed for a roll that does not target or directly affect the Exposed creature."
+      },
+      {
+        "label": "REMOVAL",
+        "html": "Effects that remove ordinary Conditions do not remove Specialty Conditions unless they explicitly say so."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

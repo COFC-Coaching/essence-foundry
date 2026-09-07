@@ -1,0 +1,51 @@
+{
+  "_id": "6093363fe47d4573",
+  "name": "Falling Star Ends the Duel",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Finisher",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Berserking, Grappling",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage. If the target is Prone or Exposed, deal +1 weapon damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Deal +1 weapon damage; you suffer -1 Defense until the start of your next turn."
+      },
+      {
+        "n": "1",
+        "html": "On a success, move the target 1 unit. You may move with it."
+      }
+    ],
+    "rider": {
+      "title": "FINISHER",
+      "html": "After rolling, you may spend 2 Combo. If you do, this Action ignores 1 Defense and gains +1 weapon damage on a success.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

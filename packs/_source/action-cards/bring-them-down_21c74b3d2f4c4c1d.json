@@ -1,0 +1,51 @@
+{
+  "_id": "21c74b3d2f4c4c1d",
+  "name": "Bring Them Down!",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Vow",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Valor, Provocation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one enemy within 5 units. Until your next turn, the first ally that damages it becomes Rallied."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "You may suffer -1 Defense until your next turn; if you do, one affected ally becomes Rallied."
+      },
+      {
+        "n": "1",
+        "html": "One enemy affected by this card suffers -1 Defense against the ally you designate until its next turn."
+      }
+    ],
+    "rider": {
+      "title": "VOW — AUTHORITY",
+      "html": "Spend this card's Authority when an enemy violates the Vow's declared boundary or target: <b>1–3</b> it suffers -1 Defense; <b>4–5</b> it becomes Exposed; <b>6+</b> it becomes Exposed and burns 1 die.",
+      "meta": "STORE ONE ROLLED RESULT; THAT RESULT IS REMOVED FROM THIS ACTION"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

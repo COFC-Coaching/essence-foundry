@@ -1,0 +1,51 @@
+{
+  "_id": "6161bff351754184",
+  "name": "The Sun in Iron",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Imbuement",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Consecration, Severance",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one item or unattended object within 4 units. Until your next turn, it gains a minor supernatural property appropriate to the card and counts as magical."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One ally inside, warded by, or otherwise protected by this Rite gains +1 Defense until the start of its next turn."
+      },
+      {
+        "n": "1",
+        "html": "If the Rite targets a Possessed creature, you may remove Possessed after an Echo resolves."
+      }
+    ],
+    "rider": {
+      "title": "IMBUEMENT RITE",
+      "html": "After resolving this Action, you may establish this Rite. <b>Trigger:</b> The imbued object or creature is used for a Basic Action. <b>Echo:</b> That Action gains 1 free Surge.",
+      "meta": "ECHO LIMIT: 2"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

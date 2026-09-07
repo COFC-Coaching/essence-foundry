@@ -1,0 +1,51 @@
+{
+  "_id": "76b86eadce9a4e2b",
+  "name": "Seal the Corridor",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Cadence, Penetration",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose a 3-unit line within weapon range. Compare this Action against each enemy in the line. On a success, deal 1 weapon damage; your Locked target also burns 1 die."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Choose one creature this Action succeeds against. Gain +1 die on your next Ballistics Action against it this turn."
+      },
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense granted by equipment or cover for this Action."
+      }
+    ],
+    "rider": {
+      "title": "SUPPRESSION",
+      "html": "If your Locked target is affected, it cannot make Reactions against Ballistics Actions until the start of its next turn.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

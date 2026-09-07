@@ -1,0 +1,51 @@
+{
+  "_id": "eafe7fa3b6074605",
+  "name": "Ricochet Reply",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Trajectory, Payload",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature you can see within weapon range makes a ranged attack while adjacent to cover or an unattended object."
+      },
+      {
+        "label": "Effect",
+        "html": "Make a weapon attack against the triggering creature, using its adjacent cover or object as the ricochet point. On a success, deal 1 weapon damage and ignore 1 Defense granted by cover."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 additional Defense granted by cover or increase this Reaction's range by 2 units."
+      },
+      {
+        "n": "2",
+        "html": "On a success, reduce the target's equipment-granted Defense by 1 until its next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

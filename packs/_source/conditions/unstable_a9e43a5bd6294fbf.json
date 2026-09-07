@@ -1,0 +1,31 @@
+{
+  "_id": "a9e43a5bd6294fbf",
+  "name": "UNSTABLE",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "SPECIALTY CONDITION",
+        "html": "Gestalt · Self · Binary"
+      },
+      {
+        "label": "EFFECT",
+        "html": "While Unstable, you cannot change your current Adaptation or assume a different form."
+      },
+      {
+        "label": "DURATION",
+        "html": "Remove Unstable at the end of your next turn unless an effect removes it earlier."
+      },
+      {
+        "label": "REMOVAL",
+        "html": "Effects that remove ordinary Conditions do not remove Specialty Conditions unless they explicitly say so."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

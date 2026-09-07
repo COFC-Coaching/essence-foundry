@@ -1,0 +1,51 @@
+{
+  "_id": "a2b9c0d66320467b",
+  "name": "Stand Before Them, Sentinel",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Golem",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Accord, Transference",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You or an ally within 2 units is targeted by an Action."
+      },
+      {
+        "label": "Effect",
+        "html": "A Golem aspect interposes. The target gains +2 Defense against the triggering Action, then suffers -1 Movement until its next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "You or one ally within 3 units gains +1 Defense until the start of its next turn."
+      },
+      {
+        "n": "2",
+        "html": "After this Reaction resolves, move one normal Condition between you and one willing ally within 3 units."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

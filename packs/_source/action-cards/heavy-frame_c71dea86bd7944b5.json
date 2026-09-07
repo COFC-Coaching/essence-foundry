@@ -1,0 +1,51 @@
+{
+  "_id": "c71dea86bd7944b5",
+  "name": "Heavy Frame",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Gestalt",
+    "subtype": "Titan",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within natural weapon range. On a success, deal 1 Bludgeoning damage and move it 1 unit away from you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Deal +1 damage."
+      },
+      {
+        "n": "2",
+        "html": "On a success, apply <b>Concussed</b>."
+      }
+    ],
+    "rider": {
+      "title": "TITAN ADAPTATION",
+      "html": "Before resolving this Action, you may assume <b>Heavy Frame</b>. While maintained: Increase your natural weapon reach by 1 unit; reduce your Movement by 1.",
+      "meta": "UPKEEP: 1 STAMINA"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

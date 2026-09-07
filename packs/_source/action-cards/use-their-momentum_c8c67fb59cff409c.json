@@ -1,0 +1,51 @@
+{
+  "_id": "c8c67fb59cff409c",
+  "name": "Use Their Momentum",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Reversal",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Observation, Exploitation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one enemy within 4 units. It becomes Exposed if it uses the same Action type twice before your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "When this Contingency triggers, learn whether the triggering creature has any unused Reactions or maintained effects."
+      },
+      {
+        "n": "2",
+        "html": "If the chosen creature is Exposed when this Contingency triggers, reduce its gained Defense bonus by 2 instead of 1."
+      }
+    ],
+    "rider": {
+      "title": "REVERSAL CONTINGENCY",
+      "html": "After resolving this Action, you may establish this Contingency. <b>Trigger:</b> The chosen creature gains a Defense bonus. <b>Effect:</b> Reduce that bonus by 1 for the triggering Action.",
+      "meta": "EXPIRES: START OF YOUR NEXT TURN"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "80bc6a643d6847b8",
+  "name": "Aegis of Aether",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Magecraft",
+    "subtype": "Aether",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You are targeted by a supernatural Action."
+      },
+      {
+        "label": "Effect",
+        "html": "Gain +1 Defense against the triggering Action. If it is maintained by Concentration, a Rite, or a manifestation, the source also suffers -1 Defense until the start of its next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Defense bonus from this Reaction by 1."
+      },
+      {
+        "n": "1",
+        "html": "Extend a non-Concentration effect from this spell until the end of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

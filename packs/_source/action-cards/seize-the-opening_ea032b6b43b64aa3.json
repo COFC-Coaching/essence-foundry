@@ -1,0 +1,51 @@
+{
+  "_id": "ea032b6b43b64aa3",
+  "name": "Seize the Opening!",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Order",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Tactics, Inspiration",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one ally within 5 units. It may immediately make a Basic Attack by committing its own dice normally."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Choose a second eligible ally within 2 units of the first to receive the card's non-damage effect."
+      },
+      {
+        "n": "1",
+        "html": "Make one affected ally Rallied."
+      }
+    ],
+    "rider": {
+      "title": "ORDER — AUTHORITY",
+      "html": "Spend this card's Authority when an ally attacks: <b>1–3</b> ignore 1 cover Defense; <b>4–5</b> ignore 1 Defense; <b>6+</b> ignore 1 Defense and gain 1 free Surge.",
+      "meta": "STORE ONE ROLLED RESULT; THAT RESULT IS REMOVED FROM THIS ACTION"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "ccc639c262cd49a0",
+  "name": "Crossfire",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Salvo",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Cadence, Penetration",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "An area or group within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose up to three creatures within 2 units of one another and within weapon range. Compare this Action against each. On a success, deal 1 weapon damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Choose one creature this Action succeeds against. After this resolves, you may make a Basic Shot against it by committing that Basic Shot's dice normally."
+      },
+      {
+        "n": "2",
+        "html": "If another creature or object lies directly between you and the target, the Action may affect both using the same roll."
+      }
+    ],
+    "rider": {
+      "title": "SALVO",
+      "html": "If your Locked target is among the targets, gain 1 free Surge that may only be spent on a Cadence or Payload Surge.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

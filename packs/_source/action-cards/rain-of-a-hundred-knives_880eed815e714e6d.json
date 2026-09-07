@@ -1,0 +1,51 @@
+{
+  "_id": "880eed815e714e6d",
+  "name": "Rain of a Hundred Knives",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Blitz",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Skirmishing, Reaving",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage. If you have at least 2 Combo, choose one adjacent enemy; compare this Action against it and deal 1 weapon damage on a success."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "If you moved at least 3 units before this Action, deal +1 weapon damage."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 weapon damage. If the target is already wounded, this costs 1 fewer Surge, minimum 1."
+      }
+    ],
+    "rider": {
+      "title": "BLITZ",
+      "html": "If this Action deals damage while you already have Combo, your next Prowess Action this turn gains 1 free Surge.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

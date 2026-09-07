@@ -1,0 +1,51 @@
+{
+  "_id": "9255fd25078e467f",
+  "name": "Razor Maw",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Predator",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Armament, Awareness",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One eligible creature within range."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within natural weapon range. On a success, deal 1 Piercing damage. If the creature is wounded, ignore 1 Defense."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Choose Bludgeoning, Piercing, or Slashing; this Action deals that damage type."
+      },
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense from concealment or cover for this Action."
+      }
+    ],
+    "rider": {
+      "title": "PREDATOR ADAPTATION",
+      "html": "Before resolving this Action, you may assume <b>Hunter Form</b>. While maintained: The first time each turn you attack a creature that has no adjacent ally, ignore 1 Defense.",
+      "meta": "UPKEEP: 1 STAMINA"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

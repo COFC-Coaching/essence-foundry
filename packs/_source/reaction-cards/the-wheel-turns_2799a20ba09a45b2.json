@@ -1,0 +1,51 @@
+{
+  "_id": "2799a20ba09a45b2",
+  "name": "The Wheel Turns",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Divination",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Entreaty, Liturgy",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature you can perceive declares an Action or Reaction."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one ally affected by one of your Rites. It gains +1 Defense against the triggering effect or +1 die on its next Reaction to it."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Spend 1 Mana; after this Reaction resolves, immediately resolve one of your Rites' Echoes once without reducing remaining Echoes."
+      },
+      {
+        "n": "1",
+        "html": "If two creatures meet the Trigger simultaneously, apply this Reaction's non-damage effect to both."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

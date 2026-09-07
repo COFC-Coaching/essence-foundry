@@ -1,0 +1,27 @@
+{
+  "_id": "ea58055fdf2d4ffc",
+  "name": "DAZED",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "DAMAGE CONDITION",
+        "html": "Associated damage: <b>Psychic</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "Reduce the maximum number of dice you may commit to your next Action or Reaction by 1, to a minimum of 2."
+      },
+      {
+        "label": "DURATION",
+        "html": "Remove Dazed after that Action or Reaction resolves or at the end of your next turn."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

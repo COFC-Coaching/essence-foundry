@@ -1,0 +1,51 @@
+{
+  "_id": "c2556f291c614cdf",
+  "name": "Your Thought Is Pierced",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Assault",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Mesmerism, Clairvoyance",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within 4 units. On a success, deal 1 Psychic damage and it cannot benefit from Rallied on its next Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a success, the target cannot willingly move toward you until its next turn."
+      },
+      {
+        "n": "1",
+        "html": "Ignore line of sight for one target you can otherwise locate within this card's range."
+      }
+    ],
+    "rider": {
+      "title": "ASSAULT — STRAIN",
+      "html": "If you gained Strain while resolving this Action, ignore 1 Defense against the target.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

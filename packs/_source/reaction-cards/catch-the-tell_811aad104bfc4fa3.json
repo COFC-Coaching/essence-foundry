@@ -1,0 +1,51 @@
+{
+  "_id": "811aad104bfc4fa3",
+  "name": "Catch the Tell",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Reversal",
+    "attr": "Resolve",
+    "skill": "Cunning",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Observation, Deception",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "Read the commitment as it happens.",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature you can see attacks."
+      },
+      {
+        "label": "Effect",
+        "html": "The attacking creature becomes Exposed."
+      },
+      {
+        "label": "1",
+        "html": "It also suffers -1 die on its next Action before your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "It suffers -1 Defense until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

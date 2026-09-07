@@ -1,0 +1,51 @@
+{
+  "_id": "7f43923c6c384c68",
+  "name": "Firing Solution",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Targeting",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Precision, Mobility",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range and line of sight."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage. If the target is Locked by you, ignore 1 Defense from cover and increase this Action's range by 3 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "If the primary target is Locked by you, deal +1 weapon damage."
+      },
+      {
+        "n": "2",
+        "html": "After this resolves, move up to 2 units without triggering Reactions caused by leaving cover or reach."
+      }
+    ],
+    "rider": {
+      "title": "TARGETING",
+      "html": "If the target is Locked by you and this Action succeeds, your next Ballistics Action against it this turn ignores 1 Defense from cover.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

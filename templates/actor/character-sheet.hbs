@@ -1,0 +1,111 @@
+<header class="sheet-header">
+  <img class="profile-img" src="{{actor.img}}" data-action="editImage" title="{{actor.name}}">
+  <h1><input name="name" type="text" value="{{actor.name}}"></h1>
+  <div class="header-fields">
+    <label>Species <input name="system.species" type="text" value="{{system.species}}"></label>
+    <label>Heritage <input name="system.heritage" type="text" value="{{system.heritage}}"></label>
+    <label>Distinction <input name="system.distinction" type="text" value="{{system.distinction}}"></label>
+    <label>Tier <input name="system.tier" type="number" value="{{system.tier}}" style="width:3em"></label>
+  </div>
+</header>
+
+<nav class="sheet-tabs">
+  <a data-tab="main">Main</a>
+  <a data-tab="cards">Cards</a>
+  <a data-tab="equipment">Equipment</a>
+  <a data-tab="combat">Combat</a>
+  <a data-tab="bio">Biography</a>
+</nav>
+
+<section class="tab main" data-tab="main">
+  <div class="attributes grid-9">
+    {{#each attributes as |a|}}
+      <label class="attr">{{a.label}} <input name="system.{{a.key}}" type="number" value="{{a.value}}" style="width:3em"></label>
+    {{/each}}
+  </div>
+
+  <div class="skills grid-9">
+    {{#each skills as |s|}}
+      <div class="skill">
+        <button type="button" class="skill-roll" data-action="rollSkill" data-skill="{{s.key}}">{{s.label}}: {{s.value}}</button>
+      </div>
+    {{/each}}
+  </div>
+
+  <div class="derived">
+    <div class="resource">Stamina: {{system.resources.stamina}} (current {{system.playState.currentStamina}})</div>
+    <div class="resource">Focus: {{system.resources.focus}} (current {{system.playState.currentFocus}})</div>
+    <div class="resource">Mana: {{system.resources.mana}} (current {{system.playState.currentMana}})</div>
+    <div class="defense">Fortitude: {{system.defenses.fortitude}}</div>
+    <div class="defense">Composure: {{system.defenses.composure}}</div>
+    <div class="defense">Harmony: {{system.defenses.harmony}}</div>
+  </div>
+
+  <div class="wounds">
+    <h3>Core Wounds</h3>
+    {{#each system.coreWounds as |w i|}}
+      <label><input type="checkbox" name="system.coreWounds.{{i}}.filled" {{#if w.filled}}checked{{/if}}> {{w.condition}}</label>
+    {{/each}}
+  </div>
+</section>
+
+<section class="tab cards" data-tab="cards">
+  <h3>Action Cards</h3>
+  <ul class="item-list">
+    {{#each actionCards as |item|}}
+      <li>
+        <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
+        <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
+        <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a>
+      </li>
+    {{/each}}
+  </ul>
+  <h3>Reaction Cards</h3>
+  <ul class="item-list">
+    {{#each reactionCards as |item|}}
+      <li>
+        <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
+        <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
+        <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a>
+      </li>
+    {{/each}}
+  </ul>
+  <h3>Conditions</h3>
+  <ul class="item-list">
+    {{#each conditions as |item|}}
+      <li>{{item.name}} <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a></li>
+    {{/each}}
+  </ul>
+</section>
+
+<section class="tab equipment" data-tab="equipment">
+  <ul class="item-list">
+    {{#each equipment as |item|}}
+      <li>{{item.name}} <span class="muted">({{item.system.slot}})</span>
+        <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
+        <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a>
+      </li>
+    {{/each}}
+  </ul>
+</section>
+
+<section class="tab combat" data-tab="combat">
+  <div class="combat-controls">
+    <button type="button" data-action="startCombat">Start Combat</button>
+    <button type="button" data-action="endCombat">End Combat</button>
+    <button type="button" data-action="rollInitiative">Roll Initiative</button>
+    <button type="button" data-action="startTurn">Start Turn</button>
+    <button type="button" data-action="endTurn">End Turn</button>
+  </div>
+  <div class="combat-state">
+    <p>Round: {{system.playState.combatRound}} — Turn: {{system.playState.combatTurn}}</p>
+    <p>Initiative: {{system.playState.initiativeTotal}} ({{system.playState.initiativeDice}}d10)</p>
+    <p>Action Dice: {{system.playState.actionDice}}</p>
+    <p>Reaction Dice: {{system.playState.reactionDice}}</p>
+  </div>
+</section>
+
+<section class="tab bio" data-tab="bio">
+  <label>Concept<textarea name="system.concept">{{system.concept}}</textarea></label>
+  <label>Backstory{{editor system.backstory target="system.backstory" button=true}}</label>
+</section>

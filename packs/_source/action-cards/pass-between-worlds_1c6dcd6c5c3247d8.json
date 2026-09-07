@@ -1,0 +1,51 @@
+{
+  "_id": "1c6dcd6c5c3247d8",
+  "name": "Pass Between Worlds",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Phantom",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Transference, Accord",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Partially phase yourself or one ally within 4 units. The target may move 2 units through occupied spaces or narrow gaps and gains +1 Defense during that movement."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Transfer 1 damage from one affected ally to yourself after this Action resolves."
+      },
+      {
+        "n": "1",
+        "html": "If this Action affects an ally, that ally gains +1 Defense until its next turn."
+      }
+    ],
+    "rider": {
+      "title": "PHANTOM — FULL MANIFESTATION",
+      "html": "If you spent at least <b>4 dice</b> on this Action, as it resolves you may spend <b>2 additional Mana</b> to fully manifest your Phantom.",
+      "meta": "CALLING SUBTYPE: PHANTOM · RANK 1"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

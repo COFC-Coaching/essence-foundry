@@ -1,0 +1,51 @@
+{
+  "_id": "fe431d81381040af",
+  "name": "Harden on Impact",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Bulwark",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Regeneration, Integration",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You are targeted by an Action or would suffer forced movement."
+      },
+      {
+        "label": "Effect",
+        "html": "Gain +1 Defense against the triggering Action or reduce the forced movement by 2 units. If you are in a Bulwark Adaptation, choose both."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "After this Reaction resolves, remove Chilled, Shocked, or Concussed from yourself."
+      },
+      {
+        "n": "2",
+        "html": "After this Reaction resolves, remove Unstable."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

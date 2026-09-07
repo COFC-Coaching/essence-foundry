@@ -1,0 +1,51 @@
+{
+  "_id": "8e1d992b49394104",
+  "name": "The Tower Shelters",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Ward",
+    "attr": "Presence",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Consecration, Inscription",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within 4 units. Remove Concussed, Dazed, or Shocked from it."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One ally inside, warded by, or otherwise protected by this Rite gains +1 Defense until the start of its next turn."
+      },
+      {
+        "n": "2",
+        "html": "Once before this Rite ends, you may change one named target of the Rite to another eligible target."
+      }
+    ],
+    "rider": {
+      "title": "WARD RITE",
+      "html": "After resolving this Action, you may establish this Rite. <b>Trigger:</b> The warded creature would suffer a normal Condition. <b>Echo:</b> Ignore that Condition.",
+      "meta": "ECHO LIMIT: 2"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

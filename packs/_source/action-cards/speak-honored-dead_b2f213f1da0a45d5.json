@@ -1,0 +1,51 @@
+{
+  "_id": "b2f213f1da0a45d5",
+  "name": "Speak, Honored Dead",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Ancestor",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Chorus, Transference",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Call an Ancestor's counsel for one ally within 5 units. It becomes Rallied and gains +1 Defense until its next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "If you used another Calling subtype earlier this round, gain +1 Defense until your next turn."
+      },
+      {
+        "n": "1",
+        "html": "Move 1 Stamina, Focus, or Mana between you and an affected willing ally, respecting maximums."
+      }
+    ],
+    "rider": {
+      "title": "ANCESTOR — FULL MANIFESTATION",
+      "html": "If you spent at least <b>5 dice</b> on this Action, as it resolves you may spend <b>3 additional Mana</b> to fully manifest your Ancestor.",
+      "meta": "CALLING SUBTYPE: ANCESTOR · RANK 2"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

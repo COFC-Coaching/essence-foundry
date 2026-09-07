@@ -1,0 +1,51 @@
+{
+  "_id": "1debc0ecd11c4053",
+  "name": "Tiger Breaks the Reed",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Prowess",
+    "subtype": "Breaker",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, deal 1 weapon damage and reduce the target's Defense by 1 against your next Prowess Action before your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense against the target."
+      },
+      {
+        "n": "2",
+        "html": "On a success, knock the target Prone."
+      }
+    ],
+    "rider": {
+      "title": "BREAKER",
+      "html": "Before rolling, you may spend 1 Combo to ignore 1 Defense against this Action.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "769babb788ce4ce8",
+  "name": "Veil Their Eyes, Kindly Liar",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Fey",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Chorus, Transference",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An enemy within 5 units declares an Action against an ally."
+      },
+      {
+        "label": "Effect",
+        "html": "Create a glamour. The attacker suffers -1 die unless it changes to another eligible target."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Choose a second ally within 2 units of the original ally; the attacker may change its target to either ally to avoid the penalty."
+      },
+      {
+        "n": "2",
+        "html": "After this Reaction resolves, move one normal Condition between you and one willing ally within 3 units."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

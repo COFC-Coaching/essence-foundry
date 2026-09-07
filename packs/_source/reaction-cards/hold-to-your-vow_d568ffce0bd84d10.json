@@ -1,0 +1,51 @@
+{
+  "_id": "d568ffce0bd84d10",
+  "name": "Hold to Your Vow.",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Vow",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Valor, Provocation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "An ally within 5 units would be forced to move, become Prone, or break a declared Vow condition."
+      },
+      {
+        "label": "Effect",
+        "html": "The ally may ignore 1 unit of forced movement, remain standing, or delay the Vow consequence until the end of its turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "If you become or remain a legal target of the triggering effect, one affected ally becomes Rallied."
+      },
+      {
+        "n": "1",
+        "html": "If an enemy triggered this Reaction, it becomes Exposed if it ignores you on its next Action."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

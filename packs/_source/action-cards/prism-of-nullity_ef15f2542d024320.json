@@ -1,0 +1,51 @@
+{
+  "_id": "ef15f2542d024320",
+  "name": "Prism of Nullity",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Aether",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Fabrication, Disjunction",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Create a floating aetheric sigil in a space within 4 units. The next Magecraft Action originating within 2 units of it gains +1 die, then the sigil disappears."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Create a small persistent magical object or patch of terrain appropriate to this spell until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "If this spell directly affects a maintained supernatural effect, suppress one Rank 0 or Rank 1 benefit of that effect until the end of the turn."
+      }
+    ],
+    "rider": {
+      "title": "AETHER THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread before resolving a future Magecraft Action to give it +1 die if it interacts with another supernatural effect.",
+      "meta": "TYPE: AETHER · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

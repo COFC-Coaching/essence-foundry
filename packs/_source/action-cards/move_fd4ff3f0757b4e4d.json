@@ -1,0 +1,51 @@
+{
+  "_id": "fd4ff3f0757b4e4d",
+  "name": "Move.",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Psionics",
+    "subtype": "Projection",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature or unsecured object within 6 units. On a success, move it up to 2 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the movement from this Action by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Choose one additional unsecured object within 2 units of the first; manipulate or move it as part of this Action."
+      }
+    ],
+    "rider": {
+      "title": "PROJECTION — STRAIN",
+      "html": "If you gained Strain while resolving this Action, increase its range by 2 units.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

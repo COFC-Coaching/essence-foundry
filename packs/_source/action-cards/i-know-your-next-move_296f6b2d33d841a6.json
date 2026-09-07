@@ -1,0 +1,51 @@
+{
+  "_id": "296f6b2d33d841a6",
+  "name": "I Know Your Next Move",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Trance",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Clairvoyance, Telepathy",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Enter a predictive trance until the start of your next turn. Gain +1 Defense against the first Action that targets you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore line of sight for one target you can otherwise locate within this card's range."
+      },
+      {
+        "n": "1",
+        "html": "If this effect targets one mind, it may also convey a brief thought or sensory impression."
+      }
+    ],
+    "rider": {
+      "title": "TRANCE — STRAIN",
+      "html": "If you gained Strain while resolving this Action, the Trance lasts through the end of your next turn.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

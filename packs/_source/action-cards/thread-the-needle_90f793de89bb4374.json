@@ -1,0 +1,51 @@
+{
+  "_id": "90f793de89bb4374",
+  "name": "Thread the Needle",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Trajectory, Precision",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One eligible creature within weapon range."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within weapon range. On a success, deal 1 weapon damage and it drops one non-signature held item."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense granted by cover for this Action."
+      },
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense against the primary target for this Action."
+      }
+    ],
+    "rider": {
+      "title": "TRICKSHOT",
+      "html": "If the target is Locked by you, you may shoot an object it carries or wears instead; the object is disabled until the start of its next turn.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

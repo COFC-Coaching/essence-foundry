@@ -1,0 +1,51 @@
+{
+  "_id": "de538bb3f08d400e",
+  "name": "Not This One",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Barrier",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Biokinesis, Imprint",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You or an ally within 3 units is targeted by an Action."
+      },
+      {
+        "label": "Effect",
+        "html": "The target gains +1 Defense against the triggering Action. You may gain 1 Strain to increase this bonus by 1."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Remove one Physical damage Condition from a living creature affected by this Reaction."
+      },
+      {
+        "n": "1",
+        "html": "One non-damage benefit from this Reaction persists until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

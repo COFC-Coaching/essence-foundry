@@ -1,0 +1,51 @@
+{
+  "_id": "29ca9ac1dcee422a",
+  "name": "The Moon Reveals",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Divination",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Inscription, Entreaty",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "A creature you can perceive declares an Action or Reaction."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one ally affected by one of your Rites. It gains +1 Defense against the triggering effect or +1 die on its next Reaction to it."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the range or duration of this Reaction's ritual effect by 1 unit or through the end of the turn."
+      },
+      {
+        "n": "2",
+        "html": "Spend 1 Mana; after this Reaction resolves, immediately resolve one of your Rites' Echoes once without reducing remaining Echoes."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

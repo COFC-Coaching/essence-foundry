@@ -1,0 +1,35 @@
+{
+  "_id": "131422cdb52b46fa",
+  "name": "STANCE",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "SPECIALTY CONDITION",
+        "html": "Prowess · Self · Limited 1"
+      },
+      {
+        "label": "EFFECT",
+        "html": "A named Stance grants the ongoing benefit printed by the Prowess card that established it."
+      },
+      {
+        "label": "REPLACEMENT",
+        "html": "You may maintain only one Stance. Entering a new Stance ends your current Stance."
+      },
+      {
+        "label": "BREAK",
+        "html": "Becoming Prone ends your Stance. A Stance otherwise lasts until replaced, ended by its own rules, or removed by an effect that explicitly removes a Specialty Condition."
+      },
+      {
+        "label": "REMOVAL",
+        "html": "Effects that remove ordinary Conditions do not remove Specialty Conditions unless they explicitly say so."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

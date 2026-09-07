@@ -1,0 +1,31 @@
+{
+  "_id": "16f02f213d194f14",
+  "name": "RALLIED",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "SPECIALTY CONDITION",
+        "html": "Leadership · Ally"
+      },
+      {
+        "label": "EFFECT",
+        "html": "The next time you use an Action or Reaction, roll 1 additional bonus die, then remove Rallied. This die is rolled normally and may contribute to success or generate Surges."
+      },
+      {
+        "label": "ALLY",
+        "html": "An ally never includes yourself."
+      },
+      {
+        "label": "REMOVAL",
+        "html": "Effects that remove ordinary Conditions do not remove Specialty Conditions unless they explicitly say so."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

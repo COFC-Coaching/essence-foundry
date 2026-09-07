@@ -1,0 +1,32 @@
+{
+  "_id": "463885c700494822",
+  "name": "Channeling Focus",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "tool",
+    "slot": "armory",
+    "tier": null,
+    "type": "Foci, 2h",
+    "cost": "1",
+    "range": "",
+    "effect": "",
+    "passive": "Once per turn, one action made while holding this focus gains 1 free Surge.",
+    "special": "",
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "tags": "implement, two-handed, surge",
+    "flavor": "",
+    "reachBonus": 0,
+    "uses": null,
+    "slotCost": 1,
+    "isModular": true,
+    "quantity": 1
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

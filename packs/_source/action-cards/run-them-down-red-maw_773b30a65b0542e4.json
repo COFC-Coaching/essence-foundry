@@ -1,0 +1,51 @@
+{
+  "_id": "773b30a65b0542e4",
+  "name": "Run Them Down, Red Maw",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Beast",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Dominion, Vessel",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Partially manifest the Beast in a charging strike against one creature within 3 units. On a success, deal 1 Bludgeoning damage and move it 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a success, move the target 1 unit or prevent it from moving 1 unit on its next turn."
+      },
+      {
+        "n": "1",
+        "html": "After this resolves, gain +1 Defense until your next turn as the entity partially overlays you."
+      }
+    ],
+    "rider": {
+      "title": "BEAST — FULL MANIFESTATION",
+      "html": "If you spent at least <b>4 dice</b> on this Action, as it resolves you may spend <b>2 additional Mana</b> to fully manifest your Beast.",
+      "meta": "CALLING SUBTYPE: BEAST · RANK 1"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

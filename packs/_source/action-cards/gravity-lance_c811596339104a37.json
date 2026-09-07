@@ -1,0 +1,55 @@
+{
+  "_id": "c811596339104a37",
+  "name": "Gravity Lance",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Space",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Channeling, Sculpting",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "Drive a lance of compressed gravity into the target.",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within 6 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Deal 1 damage."
+      },
+      {
+        "label": "1",
+        "html": "Deal +1 damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "If you damaged this target with a Magecraft Action since the start of your last turn, this attack ignores 1 Defense."
+      },
+      {
+        "n": "2",
+        "html": "Extend the lance through the target. Compare this Action against one additional creature within 2 units directly behind the target. On a success, that creature takes 1 damage."
+      }
+    ],
+    "rider": {
+      "title": "SPACE - THREAD",
+      "html": "Create a Space Thread. Before resolving a future Magecraft Action, consume it to increase that Action's range by 2 units, or ignore one intervening creature when determining line of effect.",
+      "meta": "TYPE: SPACE · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

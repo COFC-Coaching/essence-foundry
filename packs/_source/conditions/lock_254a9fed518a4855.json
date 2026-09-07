@@ -1,0 +1,35 @@
+{
+  "_id": "254a9fed518a4855",
+  "name": "LOCK",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "SPECIALTY CONDITION",
+        "html": "Ballistics · Creature · Source-linked"
+      },
+      {
+        "label": "ESTABLISH",
+        "html": "When declaring a Ballistics Action against a creature in line of sight, you may spend one additional die without rolling it to establish your Lock on that creature before resolving the Action."
+      },
+      {
+        "label": "LIMIT",
+        "html": "You may normally maintain one Lock. Establishing a new Lock ends your previous Lock. Different Ballistics users may each Lock the same creature independently."
+      },
+      {
+        "label": "LOSS",
+        "html": "Lose your Lock if the target remains completely outside your line of sight through the end of your turn."
+      },
+      {
+        "label": "REMOVAL",
+        "html": "Effects that remove ordinary Conditions do not remove Specialty Conditions unless they explicitly say so."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

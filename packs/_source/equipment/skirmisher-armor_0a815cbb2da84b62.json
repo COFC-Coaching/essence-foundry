@@ -1,0 +1,32 @@
+{
+  "_id": "0a815cbb2da84b62",
+  "name": "Skirmisher Armor",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "armor",
+    "slot": "armory",
+    "tier": null,
+    "type": "Light",
+    "cost": "1",
+    "range": "",
+    "effect": "After moving at least 4 units during your turn, increase Fortitude by 1 until the start of your next turn.",
+    "passive": "",
+    "special": "",
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "tags": "armor",
+    "flavor": "",
+    "reachBonus": 0,
+    "uses": null,
+    "slotCost": 1,
+    "isModular": true,
+    "quantity": 1
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

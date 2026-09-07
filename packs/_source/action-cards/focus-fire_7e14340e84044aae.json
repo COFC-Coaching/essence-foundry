@@ -1,0 +1,51 @@
+{
+  "_id": "7e14340e84044aae",
+  "name": "Focus Fire!",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Order",
+    "attr": "Adaptability",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "2",
+    "expertises": "Tactics, Coordination",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one ally within 5 units. It gains +1 die on its next Basic Attack before your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One affected ally gains +1 Defense against the next Action that targets it."
+      },
+      {
+        "n": "1",
+        "html": "Choose one additional eligible ally to receive this card's instruction."
+      }
+    ],
+    "rider": {
+      "title": "ORDER — AUTHORITY",
+      "html": "Spend this card's Authority on an ally within 5 units: <b>1–3</b> move 1 unit; <b>4–5</b> move 2 units; <b>6+</b> move 2 units and become Rallied.",
+      "meta": "STORE ONE ROLLED RESULT; THAT RESULT IS REMOVED FROM THIS ACTION"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

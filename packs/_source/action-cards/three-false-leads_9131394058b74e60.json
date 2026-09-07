@@ -1,0 +1,51 @@
+{
+  "_id": "9131394058b74e60",
+  "name": "Three False Leads",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Diversion",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "Composure",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Deception, Improvisation",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one enemy within 4 units. On a success against Composure, make it Exposed."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Choose another eligible creature; the target treats that creature as the source of this effect until the effect resolves."
+      },
+      {
+        "n": "1",
+        "html": "After rolling, you may change this Action to another eligible target within 2 units of the original target."
+      }
+    ],
+    "rider": {
+      "title": "DIVERSION CONTINGENCY",
+      "html": "After resolving this Action, you may establish this Contingency. <b>Trigger:</b> The target consumes Exposed. <b>Effect:</b> Another enemy within 2 units becomes Exposed.",
+      "meta": "EXPIRES: START OF YOUR NEXT TURN"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

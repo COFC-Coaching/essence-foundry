@@ -1,0 +1,51 @@
+{
+  "_id": "741cc318697e403a",
+  "name": "Endure, Unmoving One",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Golem",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Vessel, Transference",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You or an adjacent ally would be forcibly moved or knocked Prone."
+      },
+      {
+        "label": "Effect",
+        "html": "A Golem aspect braces the target. Reduce forced movement by 2 units or prevent Prone."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After this Reaction resolves, gain +1 Defense until your next turn."
+      },
+      {
+        "n": "2",
+        "html": "After this Reaction resolves, move one normal Condition between you and one willing ally within 3 units."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "_id": "2e3ffa3241b44767",
+  "name": "CONCENTRATION",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "sections": [
+      {
+        "label": "SPECIALTY CONDITION",
+        "html": "Magecraft · Self · Limited 1"
+      },
+      {
+        "label": "EFFECT",
+        "html": "Concentration provides no benefit by itself. It maintains the ongoing spell effect that established it."
+      },
+      {
+        "label": "REPLACEMENT",
+        "html": "Beginning a new Concentration ends the spell effect maintained by your previous Concentration."
+      },
+      {
+        "label": "BREAK",
+        "html": "Suffering a Core Wound breaks Concentration. Temporary Wounds do not break it unless an effect specifically says otherwise."
+      },
+      {
+        "label": "REMOVAL",
+        "html": "Effects that remove ordinary Conditions do not remove Specialty Conditions unless they explicitly say so."
+      }
+    ]
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

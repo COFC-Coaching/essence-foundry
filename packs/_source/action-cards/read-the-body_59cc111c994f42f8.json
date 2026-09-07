@@ -1,0 +1,51 @@
+{
+  "_id": "59cc111c994f42f8",
+  "name": "Read the Body",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Cunning",
+    "subtype": "Scheme",
+    "attr": "Resolve",
+    "skill": "Cunning",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "0",
+    "expertises": "-",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "Study the stance and catch the gap.",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "The target becomes Exposed."
+      },
+      {
+        "label": "1",
+        "html": "The target suffers -1 die on its next Action before the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "A second creature within 5 units also becomes Exposed."
+      }
+    ],
+    "rider": {
+      "title": "SCHEME - CONTINGENCY",
+      "html": "<b>Trigger:</b> The Exposed target uses a Reaction. <b>Effect:</b> It remains Exposed until the start of your next turn instead of being consumed.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

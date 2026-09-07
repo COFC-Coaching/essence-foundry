@@ -1,0 +1,51 @@
+{
+  "_id": "b240ab4cdfe14526",
+  "name": "Arc of the Tempest",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Air",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Augmentation, Disjunction",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose yourself or one ally within 4 units. Increase its Movement by 2 until your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One affected ally gains +1 Movement until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "If this spell directly affects a maintained supernatural effect, suppress one Rank 0 or Rank 1 benefit of that effect until the end of the turn."
+      }
+    ],
+    "rider": {
+      "title": "AIR THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread before resolving a future Magecraft Action to let one affected ally move 1 unit after it resolves.",
+      "meta": "TYPE: AIR · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

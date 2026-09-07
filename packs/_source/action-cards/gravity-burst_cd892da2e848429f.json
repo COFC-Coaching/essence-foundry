@@ -1,0 +1,55 @@
+{
+  "_id": "cd892da2e848429f",
+  "name": "Gravity Burst",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Space",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sculpting, Channeling",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One point within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Compare this Action against each creature within 1 unit of the chosen point. Deal 1 Physical damage to each successfully affected target."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One successfully affected creature is pushed 1 unit directly away from the chosen point."
+      },
+      {
+        "n": "2",
+        "html": "Add 1 die to the next Magecraft Action you use before the start of your next turn."
+      },
+      {
+        "n": "1",
+        "html": "Increase the affected area by 1 unit."
+      }
+    ],
+    "rider": {
+      "title": "SPACE THREAD",
+      "html": "Consume this Thread before a future Magecraft Action that targets a point. Increase the affected area of that Action by 1 unit.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "3c988dacda5f44ce",
+  "name": "Shove",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "",
+    "subtype": "",
+    "attr": "Vigor",
+    "skill": "",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within reach."
+      },
+      {
+        "label": "Effect",
+        "html": "Deal 1 damage and push the target 1 unit."
+      },
+      {
+        "label": "Effect",
+        "html": "On a success, move the target 1 unit away from you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": ""
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "_id": "c4907a22c5644563",
+  "name": "Offer the Opening",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Gambit",
+    "attr": "Resolve",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "3",
+    "expertises": "Deception, Sabotage",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one enemy within weapon range. You suffer -1 Defense against it until your next turn; on a success, deal 1 weapon damage, make it Exposed, and it gains +1 die on its next Action against you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a success, make the target Exposed."
+      },
+      {
+        "n": "1",
+        "html": "On a success, reduce the target's equipment-granted Defense by 1 until its next turn."
+      }
+    ],
+    "rider": {
+      "title": "GAMBIT CONTINGENCY",
+      "html": "After resolving this Action, you may establish this Contingency. <b>Trigger:</b> The target takes the offered attack against you. <b>Effect:</b> After it resolves, gain +1 die on your next Action against it.",
+      "meta": "EXPIRES: START OF YOUR NEXT TURN"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

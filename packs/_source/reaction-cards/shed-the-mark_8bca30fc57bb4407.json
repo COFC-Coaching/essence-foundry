@@ -1,0 +1,51 @@
+{
+  "_id": "8bca30fc57bb4407",
+  "name": "Shed the Mark",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Mimic",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Awareness, Locomotion",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You are targeted by an Action that requires line of sight."
+      },
+      {
+        "label": "Effect",
+        "html": "Gain +1 Defense against the triggering Action. If you are in a Mimic Adaptation, gain +2 Defense instead."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Defense bonus from this Reaction by 1 against a creature you can perceive."
+      },
+      {
+        "n": "1",
+        "html": "If the triggering Action fails, move 1 unit."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

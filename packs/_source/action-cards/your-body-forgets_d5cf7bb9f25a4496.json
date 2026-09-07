@@ -1,0 +1,51 @@
+{
+  "_id": "d5cf7bb9f25a4496",
+  "name": "Your Body Forgets",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Fracture",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Harmony",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Telepathy, Clairvoyance",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within 5 units. On a success, it cannot benefit from Concentration, Rallied, or a Stance until the start of its next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "On a success, make the target <b>Exposed</b>."
+      },
+      {
+        "n": "1",
+        "html": "Ignore line of sight for one target you can otherwise locate within this card's range."
+      }
+    ],
+    "rider": {
+      "title": "FRACTURE — STRAIN",
+      "html": "If you gained Strain while resolving this Action, the target also cannot gain or consume a Specialty Condition until the start of its next turn.",
+      "meta": ""
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

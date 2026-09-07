@@ -1,0 +1,51 @@
+{
+  "_id": "8c4a49a33dca439b",
+  "name": "Your First Mistake",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Cunning",
+    "subtype": "Ambush",
+    "attr": "Resolve",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature that has not acted this round within weapon range. On a success, deal 1 weapon damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 Defense against the target."
+      },
+      {
+        "n": "1",
+        "html": "On a success, make the target Exposed."
+      }
+    ],
+    "rider": {
+      "title": "AMBUSH CONTINGENCY",
+      "html": "After resolving this Action, you may establish this Contingency. <b>Trigger:</b> The target uses an Action that does not include you. <b>Effect:</b> Gain +1 die on your next Action against it before your next turn.",
+      "meta": "EXPIRES: START OF YOUR NEXT TURN"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

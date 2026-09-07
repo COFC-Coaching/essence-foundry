@@ -1,0 +1,51 @@
+{
+  "_id": "d77867ad744b4d65",
+  "name": "Close Ranks!",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Leadership",
+    "subtype": "Formation",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose up to three allies within 5 units. While at least two remain adjacent to one another, they gain +1 Defense until your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One affected ally gains +1 Defense until its next turn."
+      },
+      {
+        "n": "2",
+        "html": "One affected ally becomes Rallied."
+      }
+    ],
+    "rider": {
+      "title": "FORMATION — AUTHORITY",
+      "html": "Spend this card's Authority while two allies are adjacent: <b>1–3</b> one gains +1 Defense; <b>4–5</b> both gain +1 Defense; <b>6+</b> both gain +1 Defense and ignore 1 unit of forced movement until your next turn.",
+      "meta": "STORE ONE ROLLED RESULT; THAT RESULT IS REMOVED FROM THIS ACTION"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

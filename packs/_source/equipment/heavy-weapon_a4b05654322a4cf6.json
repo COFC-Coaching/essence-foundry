@@ -1,0 +1,32 @@
+{
+  "_id": "a4b05654322a4cf6",
+  "name": "Heavy Weapon",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": null,
+    "type": "Melee, 2h",
+    "cost": "1",
+    "range": "Melee 1",
+    "effect": "",
+    "passive": "A successful attack that rolls at least 4 dice inflicts 1 additional Wound.",
+    "special": "",
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "tags": "melee, two-handed",
+    "flavor": "",
+    "reachBonus": 0,
+    "uses": null,
+    "slotCost": 1,
+    "isModular": true,
+    "quantity": 1
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}

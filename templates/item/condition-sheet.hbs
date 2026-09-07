@@ -1,0 +1,14 @@
+<header class="sheet-header">
+  <img class="profile-img" src="{{item.img}}" data-action="editImage">
+  <h1><input name="name" type="text" value="{{item.name}}"></h1>
+</header>
+
+<h3>Sections</h3>
+<ol class="sections">
+  {{#each system.sections as |sec i|}}
+    <li>
+      <input name="system.sections.{{i}}.label" type="text" value="{{sec.label}}" placeholder="Label (e.g. EFFECT, DURATION)">
+      <div>{{editor sec.html target=(concat "system.sections." i ".html") button=true}}</div>
+    </li>
+  {{/each}}
+</ol>

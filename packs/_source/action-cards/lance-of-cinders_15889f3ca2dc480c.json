@@ -1,0 +1,51 @@
+{
+  "_id": "15889f3ca2dc480c",
+  "name": "Lance of Cinders",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Magecraft",
+    "subtype": "Fire",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "As described by the Effect."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose one creature within 6 units. On a success, deal 1 Fire damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase this spell's damage by 1."
+      },
+      {
+        "n": "2",
+        "html": "On a success, apply <b>Burning</b>."
+      }
+    ],
+    "rider": {
+      "title": "FIRE THREAD",
+      "html": "After resolving this Action, create a Thread. Consume this Thread before resolving a future Magecraft Action that deals damage to add 1 Fire damage to one affected target.",
+      "meta": "TYPE: FIRE · UNTIL CONSUMED · LIMIT 3"
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  }
+}
