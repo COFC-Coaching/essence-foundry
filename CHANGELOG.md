@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.0
+
+- Add **Bulk Import**: a second "Essence System" scene-control button (next to Create Content)
+  that lets a GM (or anyone with Foundry's "Create Items" permission) download a CSV template for
+  Combat Cards, Equipment, or Conditions, fill it out in any spreadsheet app, and upload it back
+  in. Rows are matched by name — an existing name updates that item in place, a new name creates
+  one. Verified live end-to-end for all three content types (create and update-by-name).
+
 ## 0.5.12
 
 - Fix 10 Combat Cards carrying stray, incorrect content: Hide, Disengage, Dash, Shove, Basic Shot,

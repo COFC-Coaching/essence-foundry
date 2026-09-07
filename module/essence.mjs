@@ -11,6 +11,7 @@ import {
 import EssenceCombat from "./documents/combat.mjs";
 import EssenceActor from "./documents/actor.mjs";
 import EssenceContentWizard, { canCreateContent } from "./apps/content-wizard.mjs";
+import EssenceBulkImport from "./apps/bulk-import.mjs";
 
 /**
  * Replacement for core's own `{{editor}}` Handlebars helper. That helper's `button=true` output
@@ -107,6 +108,14 @@ Hooks.on("getSceneControlButtons", (controls) => {
         icon: "fa-solid fa-plus",
         button: true,
         onChange: () => new EssenceContentWizard().render(true)
+      },
+      bulkImportContent: {
+        name: "bulkImportContent",
+        order: 2,
+        title: "Bulk Import Cards / Equipment / Conditions (CSV)",
+        icon: "fa-solid fa-file-csv",
+        button: true,
+        onChange: () => new EssenceBulkImport().render(true)
       }
     }
   };
