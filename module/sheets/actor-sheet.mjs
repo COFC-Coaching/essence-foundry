@@ -174,12 +174,62 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   }
 
   /**
-   * Quick roll from the sheet: the player picks which attribute pairs with the skill
-   * for this action, since the rules don't fix one attribute per skill (a card's own
-   * `attr` field determines that when rolling from a card instead — see #onRollItem).
+   * Prompts for how many dice to commit to a roll, bounded [min, max]. Used for Initiative
+   * (0 = Pass, up to the base Tier+5 pool) and for spending Action/Reaction Dice on a card or
+   * combat skill check — the rules let a player commit anywhere from a card's minimum up to
+   * whatever they have left in the pool, and *that* commitment is both the dice rolled and the
+   * amount deducted from the pool (see condition text like "commit 4 or more dice to a single
+   * Action"). Returns null if the dialog is dismissed without committing.
+   */
+  static async #promptDiceCount({ title, label, min, max, initial }) {
+    return new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title },
+        content: `<p>${label}</p><input type="number" name="count" value="${initial}" min="${min}" max="${max}" autofocus>`,
+        buttons: [
+          {
+            action: "commit",
+            label: "Roll",
+            default: true,
+            callback: (event, button) => {
+              const raw = Number(button.form.elements.count.value);
+              const n = Number.isFinite(raw) ? raw : initial;
+              return Math.min(max, Math.max(min, n));
+            }
+          },
+          { action: "cancel", label: "Cancel", callback: () => "essence-cancelled" }
+        ],
+        submit: (result) => resolve(result === "essence-cancelled" ? null : result)
+      }).render(true);
+    });
+  }
+
+  /**
+   * Quick roll from the sheet. During combat this spends Action Dice like a card does (player
+   * commits however many they want, up to what's left, no fixed formula). Outside combat it
+   * falls back to an open Attribute + Skill check, since there's no Action Dice pool to spend.
    */
   static async #onRollSkill(event, target) {
     const skill = target.dataset.skill;
+    const ps = this.actor.system.playState;
+
+    if (ps.combatStarted && ps.actionDice !== null) {
+      const available = ps.actionDice ?? 0;
+      if (available <= 0) {
+        ui.notifications.warn("No Action Dice remaining.");
+        return;
+      }
+      const committed = await EssenceActorSheet.#promptDiceCount({
+        title: `Roll ${skill}`,
+        label: `Commit how many Action Dice? (max ${available})`,
+        min: 1, max: available, initial: available
+      });
+      if (committed === null) return;
+      await this.actor.update({ "system.playState.actionDice": available - committed });
+      await rollEssencePool({ pool: committed, label: skill, actor: this.actor });
+      return;
+    }
+
     const attr = await new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
         window: { title: `Roll ${skill}` },
@@ -232,16 +282,41 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     });
   }
 
+  /**
+   * Using a card spends dice from the matching pool (Action for an Action Card, Reaction for a
+   * Reaction Card) — the player commits anywhere from the card's declared minimum up to whatever
+   * remains in the pool, and that commitment is the roll itself.
+   */
   static async #onRollItem(event, target) {
     const item = this.actor.items.get(target.dataset.itemId);
     if (!item) return;
     const sys = item.system;
-    const attrKey = (sys.attr || "").toLowerCase();
-    const skillKey = (sys.skill || "").toLowerCase();
-    const pool = (this.actor.system[attrKey] ?? 0) + (this.actor.system[skillKey] ?? 0);
+    const isReaction = item.type === "reaction-card";
+    const poolField = isReaction ? "reactionDice" : "actionDice";
+    const poolLabel = isReaction ? "Reaction" : "Action";
+    const available = this.actor.system.playState[poolField] ?? 0;
+    const cardMin = Math.max(1, parseInt(sys.min, 10) || 1);
+
+    if (available <= 0) {
+      ui.notifications.warn(`No ${poolLabel} Dice remaining.`);
+      return;
+    }
+    if (cardMin > available) {
+      ui.notifications.warn(`${item.name} requires at least ${cardMin} dice, but only ${available} ${poolLabel} Dice remain.`);
+      return;
+    }
+
+    const committed = await EssenceActorSheet.#promptDiceCount({
+      title: `Use ${item.name}`,
+      label: `Commit how many ${poolLabel} Dice? (min ${cardMin}, max ${available})`,
+      min: cardMin, max: available, initial: cardMin
+    });
+    if (committed === null) return;
+
     const defenseKey = (sys.defense || "").toLowerCase();
     const defense = await EssenceActorSheet.#resolveDefense(defenseKey);
-    await rollEssencePool({ pool, defense, label: item.name, actor: this.actor });
+    await this.actor.update({ [`system.playState.${poolField}`]: available - committed });
+    await rollEssencePool({ pool: committed, defense, label: item.name, actor: this.actor });
   }
 
   /**
@@ -255,6 +330,15 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       ui.notifications.warn("Start a combat encounter from the Combat Tracker first.");
       return;
     }
+
+    const base = this.actor.system.baseCombatDice;
+    const committed = await EssenceActorSheet.#promptDiceCount({
+      title: "Roll Initiative",
+      label: `Commit how many dice to Initiative? (0 = Pass, max ${base}). Whatever you don't commit here carries over as your first turn's Action Dice.`,
+      min: 0, max: base, initial: base
+    });
+    if (committed === null) return;
+
     let combatant = combat.combatants.find((c) => c.actor?.id === this.actor.id);
     if (!combatant) {
       const token = this.actor.getActiveTokens()[0];
@@ -265,19 +349,28 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       }]);
     }
 
-    const base = this.actor.system.baseCombatDice;
-    const roll = new Roll(`${base}d10`);
-    await roll.evaluate();
-    const faces = roll.terms[0].results.map((r) => r.result);
-    const total = faces.reduce((a, b) => a + b, 0);
+    let faces = [];
+    let total = 0;
+    if (committed > 0) {
+      const roll = new Roll(`${committed}d10`);
+      await roll.evaluate();
+      faces = roll.terms[0].results.map((r) => r.result);
+      total = faces.reduce((a, b) => a + b, 0);
+      await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), flavor: "Initiative" });
+    } else {
+      await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        content: `<p><strong>${this.actor.name}</strong> passes on Initiative.</p>`
+      });
+    }
+
     await this.actor.update({
-      "system.playState.initiativeDice": base,
+      "system.playState.initiativeDice": committed,
       "system.playState.initiativeFaces": faces,
       "system.playState.initiativeTotal": total,
       "system.playState.initiativeCommitted": true
     });
     await combatant.update({ initiative: total });
-    await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), flavor: "Initiative" });
   }
 
   /**
