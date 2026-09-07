@@ -37,10 +37,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     actions: {
       rollSkill: EssenceActorSheet.#onRollSkill,
       rollItem: EssenceActorSheet.#onRollItem,
-      startCombat: EssenceActorSheet.#onStartCombat,
-      endCombat: EssenceActorSheet.#onEndCombat,
       rollInitiative: EssenceActorSheet.#onRollInitiative,
-      startTurn: EssenceActorSheet.#onStartTurn,
       endTurn: EssenceActorSheet.#onEndTurn,
       itemEdit: EssenceActorSheet.#onItemEdit,
       itemDelete: EssenceActorSheet.#onItemDelete,
@@ -113,6 +110,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.actor = this.actor;
+    context.combatRound = game.combat?.round ?? null;
     const system = this.actor.system;
     context.system = system;
     context.attributeOptions = ATTRIBUTES;
@@ -246,25 +244,27 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     await rollEssencePool({ pool, defense, label: item.name, actor: this.actor });
   }
 
-  static async #onStartCombat() {
-    await this.actor.update({
-      "system.playState.combatStarted": true,
-      "system.playState.combatRound": 0,
-      "system.playState.combatTurn": "notStarted",
-      "system.playState.initiativeDice": null,
-      "system.playState.initiativeFaces": [],
-      "system.playState.initiativeTotal": null,
-      "system.playState.initiativeCommitted": false,
-      "system.playState.actionDice": null,
-      "system.playState.reactionDice": 0
-    });
-  }
-
-  static async #onEndCombat() {
-    await this.actor.update({ "system.playState.combatStarted": false, "system.playState.combatTurn": "notStarted" });
-  }
-
+  /**
+   * Rolls into Foundry's real Combat Tracker instead of a private pool: finds (or creates) this
+   * actor's Combatant in the active encounter and sets its `initiative` so the tracker sorts it
+   * correctly, alongside the same dice-face display the sheet already showed.
+   */
   static async #onRollInitiative() {
+    const combat = game.combat;
+    if (!combat) {
+      ui.notifications.warn("Start a combat encounter from the Combat Tracker first.");
+      return;
+    }
+    let combatant = combat.combatants.find((c) => c.actor?.id === this.actor.id);
+    if (!combatant) {
+      const token = this.actor.getActiveTokens()[0];
+      [combatant] = await combat.createEmbeddedDocuments("Combatant", [{
+        actorId: this.actor.id,
+        tokenId: token?.id ?? null,
+        sceneId: token?.scene?.id ?? null
+      }]);
+    }
+
     const base = this.actor.system.baseCombatDice;
     const roll = new Roll(`${base}d10`);
     await roll.evaluate();
@@ -276,22 +276,15 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       "system.playState.initiativeTotal": total,
       "system.playState.initiativeCommitted": true
     });
+    await combatant.update({ initiative: total });
     await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), flavor: "Initiative" });
   }
 
-  static async #onStartTurn() {
-    const ps = this.actor.system.playState;
-    const base = this.actor.system.baseCombatDice;
-    const round = (ps.combatRound || 0) + 1;
-    const isFirst = (ps.combatRound || 0) === 0;
-    await this.actor.update({
-      "system.playState.combatRound": round,
-      "system.playState.combatTurn": isFirst ? "first" : "active",
-      "system.playState.actionDice": base - (isFirst ? (ps.initiativeDice || 0) : 0),
-      "system.playState.reactionDice": 0
-    });
-  }
-
+  /**
+   * Converts leftover Action Dice into the Reaction pool (see EssenceCombat#_onStartTurn for the
+   * matching start-of-turn math), then advances Foundry's own tracker if it's currently this
+   * actor's turn — Start Combat/End Combat/Start Turn all now live in the native Combat Tracker.
+   */
   static async #onEndTurn() {
     const ps = this.actor.system.playState;
     const base = this.actor.system.baseCombatDice;
@@ -300,6 +293,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       "system.playState.reactionDice": base + (ps.actionDice ?? 0),
       "system.playState.actionDice": null
     });
+    if (game.combat?.combatant?.actor?.id === this.actor.id) {
+      await game.combat.nextTurn();
+    }
   }
 
   /** Clicking pip i sets the current count to i+1, or to i if that pip was already the last filled one. */

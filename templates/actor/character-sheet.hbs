@@ -149,14 +149,12 @@
   </div>
 
   <div class="combat-controls">
-    <button type="button" data-action="startCombat">Start Combat</button>
-    <button type="button" data-action="endCombat">End Combat</button>
     <button type="button" data-action="rollInitiative">Roll Initiative</button>
-    <button type="button" data-action="startTurn">Start Turn</button>
     <button type="button" data-action="endTurn">End Turn</button>
   </div>
   <div class="combat-state">
-    <p>Round: {{system.playState.combatRound}} — Turn: {{system.playState.combatTurn}} — Initiative: {{system.playState.initiativeTotal}} ({{system.playState.initiativeDice}}d10)</p>
+    <p class="muted">Start/end combat and advance rounds &amp; turns from the Combat Tracker.</p>
+    <p>Round: {{combatRound}} — Turn: {{system.playState.combatTurn}} — Initiative: {{system.playState.initiativeTotal}} ({{system.playState.initiativeDice}}d10)</p>
   </div>
 
   <h3 class="section-head">Action Cards</h3>

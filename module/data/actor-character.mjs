@@ -108,7 +108,6 @@ export default class EssenceCharacterData extends foundry.abstract.TypeDataModel
         initiativeTotal: new fields.NumberField({ integer: true, nullable: true, initial: null }),
         initiativeCommitted: new fields.BooleanField({ initial: false }),
         combatStarted: new fields.BooleanField({ initial: false }),
-        combatRound: new fields.NumberField({ integer: true, initial: 0 }),
         combatTurn: new fields.StringField({
           initial: "notStarted",
           choices: ["notStarted", "first", "active", "ended"]
