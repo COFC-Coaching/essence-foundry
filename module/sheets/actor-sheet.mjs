@@ -92,15 +92,21 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    * access, or anyone viewing while the sheet isn't editable for another reason). Lock every
    * field and action button down to match `this.isEditable` so non-owners get a visibly
    * read-only sheet instead of controls that silently fail to save.
+   *
+   * Scoped to .window-content only: this.element is the whole ApplicationV2 window, and its
+   * .window-header carries Foundry's own chrome (Close, Copy UUID, etc.), which also use
+   * data-action — querying the full element previously locked those out too, so a read-only
+   * sheet couldn't even be closed.
    */
   #applyEditable() {
     if (this.isEditable) return;
-    for (const el of this.element.querySelectorAll("input, select, textarea")) el.disabled = true;
-    for (const el of this.element.querySelectorAll('button[data-action]:not([data-action="changeTab"]), a[data-action]:not([data-action="changeTab"])')) {
+    const body = this.element.querySelector(".window-content") ?? this.element;
+    for (const el of body.querySelectorAll("input, select, textarea")) el.disabled = true;
+    for (const el of body.querySelectorAll('button[data-action]:not([data-action="changeTab"]), a[data-action]:not([data-action="changeTab"])')) {
       el.classList.add("locked");
       el.style.pointerEvents = "none";
     }
-    for (const el of this.element.querySelectorAll(".editor-edit")) el.style.display = "none";
+    for (const el of body.querySelectorAll(".editor-edit")) el.style.display = "none";
   }
 
   #applyActiveTab() {
