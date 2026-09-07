@@ -19,6 +19,11 @@
    stacking up and burying the rest of the card (Effect, Surges, Rider) far below the fold. */
 .essence .body-lines prose-mirror.editor,
 .essence .surges prose-mirror.editor { --min-height: 2.5em; }
+/* Same oversizing on item sheets' other single-purpose text fields (Equipment's Effect/Passive/
+   Special, a Card's Rider/Flavor, a Condition's Sections, a Species/Heritage/Distinction's
+   Description) — these hold a sentence or two, not a full page, so the 150px default reads as
+   mostly empty box. */
+.essence.item prose-mirror.editor { --min-height: 4em; }
 .essence .locked { opacity: 0.4; cursor: not-allowed; }
 .essence .sheet-header { display: flex; align-items: flex-start; gap: 10px; }
 .essence .profile-img { width: 64px; height: 64px; object-fit: cover; border-radius: 4px; }

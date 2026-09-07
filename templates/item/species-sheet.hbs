@@ -4,14 +4,14 @@
   <h1><input name="name" type="text" value="{{item.name}}"></h1>
 </header>
 
-<h3>Description</h3>
+<h3 class="section-head">Description</h3>
 <div>{{essenceEditor system.description target="system.description" button=true}}</div>
 
-<h3>Nature</h3>
+<h3 class="section-head">Nature</h3>
 <input name="system.nature.name" type="text" value="{{system.nature.name}}" placeholder="Nature name">
 <div>{{essenceEditor system.nature.text target="system.nature.text" button=true}}</div>
 
-<h3>{{system.adaptationLabel}}s <span class="muted">(choose {{system.adaptationCount}})</span></h3>
+<h3 class="section-head">{{system.adaptationLabel}}s <span class="muted">(choose {{system.adaptationCount}})</span></h3>
 <label>Adaptation label <input name="system.adaptationLabel" type="text" value="{{system.adaptationLabel}}"></label>
 <label>Choose count <input name="system.adaptationCount" type="number" value="{{system.adaptationCount}}" style="width:3em"></label>
 <ol class="adaptations">

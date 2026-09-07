@@ -2,6 +2,17 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.1
+
+- Fix oversized headers and excess dead space on every item sheet (Combat Cards, Equipment,
+  Conditions, Species, Heritage, Distinction). Their "Body"/"Effect"/"Sections"/"Description"-type
+  `<h3>` headers were plain, unstyled tags rendering at core's default 28px with 32px/16px margins
+  — every other header in the system already used the `.section-head` class (compact, uppercase,
+  underlined) except these; now they all match. Also shrunk item sheets' rich-text field boxes
+  from the 150px default (sized for a full Biography page) to a more honest 4em for these
+  single-purpose fields, so an empty or short Effect/Passive/Special no longer eats most of the
+  window. A card/item's full content is now visible together instead of buried under whitespace.
+
 ## 0.6.0
 
 - Add **Bulk Import**: a second "Essence System" scene-control button (next to Create Content)
