@@ -4,8 +4,15 @@
 .essence.actor .sheet-header { display: flex; align-items: flex-start; gap: 10px; }
 .essence.actor .profile-img { width: 64px; height: 64px; object-fit: cover; border-radius: 4px; }
 .essence.actor .header-main { flex: 1; }
-.essence.actor .header-main h1 { margin: 0 0 4px; }
-.essence.actor .header-main h1 input { font-size: 1.2em; width: 100%; }
+.essence.actor .header-main h1 { margin: 0 0 4px; line-height: 1; }
+.essence.actor .header-main h1 input {
+  width: 100%;
+  height: auto;
+  font-size: 28px;
+  line-height: 1.3;
+  padding: 4px 6px;
+  box-sizing: content-box;
+}
 .essence.actor .header-fields { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2px; font-size: 0.85em; }
 .essence.actor .header-fields label { display: flex; align-items: center; gap: 4px; }
 
