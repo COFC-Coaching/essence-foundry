@@ -249,19 +249,35 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   }
 
   /**
-   * Defense belongs to whoever is being targeted, never to the roller. Prefer a Foundry
-   * target if one is selected (and it's an Essence character with that Defense); otherwise
-   * ask the GM to declare it, since we don't yet have a way to resolve targeting/opposition
-   * automatically. Leaving it blank rolls open (6+ threshold) rather than guessing.
+   * Defense belongs to whoever is being targeted, never to the roller. Uses Foundry's own
+   * targeting system (game.user.targets — the same Set the core "target" tool and the T-key
+   * shortcut populate) rather than a bespoke picker, per the standing rule to prefer existing
+   * Foundry hooks/processes over custom ones where one already fits.
+   *
+   * - No targets: ask the GM to declare a single Defense (blank rolls open, 6+ threshold).
+   * - One target: use its Defense directly (falls back to the GM dialog if it isn't an
+   *   Essence actor / doesn't have that Defense).
+   * - Multiple targets: resolve every one against the same roll — returns a `targets` array
+   *   instead of a single `defense` so the chat card can show a per-target result table.
+   * @returns {Promise<{defense: number|null, targets: Array<{name:string, defense:number|null}>|null}>}
    */
-  static async #resolveDefense(defenseKey) {
-    if (!defenseKey) return null;
+  static async #resolveTargets(defenseKey) {
+    if (!defenseKey) return { defense: null, targets: null };
 
-    const target = game.user.targets.first();
-    const targetDefense = target?.actor?.system?.defenses?.[defenseKey];
-    if (typeof targetDefense === "number") return targetDefense;
+    const targeted = Array.from(game.user.targets);
 
-    return new Promise((resolve) => {
+    if (targeted.length > 1) {
+      const targets = targeted.map((t) => {
+        const d = t.actor?.system?.defenses?.[defenseKey];
+        return { name: t.actor?.name ?? t.document.name, defense: typeof d === "number" ? d : null };
+      });
+      return { defense: null, targets };
+    }
+
+    const targetDefense = targeted[0]?.actor?.system?.defenses?.[defenseKey];
+    if (typeof targetDefense === "number") return { defense: targetDefense, targets: null };
+
+    const declared = await new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
         window: { title: `Declare ${defenseKey[0].toUpperCase()}${defenseKey.slice(1)}` },
         content: `<p>No target selected. Enter the target's ${defenseKey} (leave blank to roll open):</p>
@@ -280,6 +296,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
         submit: (result) => resolve(result === "" || result === "roll" ? null : result)
       }).render(true);
     });
+    return { defense: declared, targets: null };
   }
 
   /**
@@ -314,9 +331,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     if (committed === null) return;
 
     const defenseKey = (sys.defense || "").toLowerCase();
-    const defense = await EssenceActorSheet.#resolveDefense(defenseKey);
+    const { defense, targets } = await EssenceActorSheet.#resolveTargets(defenseKey);
     await this.actor.update({ [`system.playState.${poolField}`]: available - committed });
-    await rollEssencePool({ pool: committed, defense, label: item.name, actor: this.actor, surgeOptions: sys.surges });
+    await rollEssencePool({ pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges });
   }
 
   /**

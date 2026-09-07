@@ -7,9 +7,25 @@
   </div>
   <div class="roll-summary">
     <p><strong>Pool:</strong> {{pool}}d10{{#if defense}} vs Defense {{defense}}{{/if}}</p>
-    <p><strong>Success Die:</strong> {{successDie}} —
-      {{#if succeeded}}<span class="pass">Success</span>{{else}}<span class="fail">Failure</span>{{/if}}
-    </p>
+    {{#if targets.length}}
+      <table class="target-results">
+        <thead><tr><th>Target</th><th>Defense</th><th>Result</th></tr></thead>
+        <tbody>
+          {{#each targets as |t|}}
+            <tr>
+              <td>{{t.name}}</td>
+              <td>{{#if t.defense}}{{t.defense}}{{else}}—{{/if}}</td>
+              <td>{{#if t.succeeded}}<span class="pass">Success</span>{{else}}<span class="fail">Failure</span>{{/if}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      <p class="muted">Success Die: {{successDie}}</p>
+    {{else}}
+      <p><strong>Success Die:</strong> {{successDie}} —
+        {{#if succeeded}}<span class="pass">Success</span>{{else}}<span class="fail">Failure</span>{{/if}}
+      </p>
+    {{/if}}
     {{#if surgeOptions.length}}
       <div class="surge-options">
         <p class="surges-remaining"><strong>Surges:</strong> <span class="remaining">{{surges}}</span> / {{surges}} available</p>

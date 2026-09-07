@@ -33,11 +33,15 @@ export function resolveCombatRoll(faces, defense = null) {
 }
 
 /**
- * Roll a pool of d10s for an Actor and resolve it either as a combat roll (against a
- * Defense) or as an open/non-combat pool-successes check.
+ * Roll a pool of d10s for an Actor and resolve it either as a combat roll (against one or more
+ * Defenses) or as an open/non-combat pool-successes check.
  * @param {object} options
  * @param {number} options.pool - number of d10 to roll (Attribute + Skill rank + modifiers)
- * @param {number|null} [options.defense] - opposing Defense value, for combat rolls
+ * @param {number|null} [options.defense] - single opposing Defense value, for combat rolls
+ *   against exactly one target. Ignored if `targets` is given.
+ * @param {Array<{name: string, defense: number|null}>} [options.targets] - multiple targets to
+ *   resolve the same roll against independently. The dice are only rolled once — every target
+ *   shares the same Success Die and Surge count, only pass/fail varies with each one's Defense.
  * @param {string} [options.label] - chat card title
  * @param {Actor} [options.actor] - speaker actor
  * @param {Array<{n: string, html: string}>} [options.surgeOptions] - a card's printed Surge
@@ -45,14 +49,23 @@ export function resolveCombatRoll(faces, defense = null) {
  *   options instead of just a bare Surge count. See essence.mjs's renderChatMessageHTML hook
  *   for how clicking one is handled after the message is posted.
  */
-export async function rollEssencePool({ pool, defense = null, label = "Essence Roll", actor = null, surgeOptions = [] } = {}) {
+export async function rollEssencePool({ pool, defense = null, targets = null, label = "Essence Roll", actor = null, surgeOptions = [] } = {}) {
   const n = Math.max(1, Math.floor(pool));
   const roll = new Roll(`${n}d10`);
   await roll.evaluate();
   const faces = roll.terms[0].results.map((r) => r.result);
 
-  const combat = resolveCombatRoll(faces, defense);
+  const multi = Array.isArray(targets) && targets.length > 0;
+  const combat = resolveCombatRoll(faces, multi ? null : defense);
   const poolSuccesses = countD10Successes(faces);
+
+  const targetResults = multi
+    ? targets.map((t) => ({
+        name: t.name,
+        defense: t.defense,
+        succeeded: t.defense == null ? combat.successDie >= 6 : combat.successDie >= t.defense
+      }))
+    : [];
 
   const content = await foundry.applications.handlebars.renderTemplate(
     "systems/essence-system/templates/chat/roll-card.hbs",
@@ -60,12 +73,13 @@ export async function rollEssencePool({ pool, defense = null, label = "Essence R
       label,
       faces,
       pool: n,
-      defense,
+      defense: multi ? null : defense,
       successDieIndex: combat.successDieIndex,
       successDie: combat.successDie,
       succeeded: combat.succeeded,
       surges: combat.surges,
       poolSuccesses,
+      targets: targetResults,
       surgeOptions: surgeOptions.map((opt, i) => ({ i, n: opt.n, html: opt.html }))
     }
   );
@@ -84,5 +98,5 @@ export async function rollEssencePool({ pool, defense = null, label = "Essence R
     }
   });
 
-  return { roll, faces, ...combat, poolSuccesses };
+  return { roll, faces, ...combat, poolSuccesses, targets: targetResults };
 }

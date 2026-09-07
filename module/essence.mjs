@@ -7,6 +7,7 @@ import {
   EssenceSpeciesSheet, EssenceHeritageSheet, EssenceDistinctionSheet
 } from "./sheets/item-sheet.mjs";
 import EssenceCombat from "./documents/combat.mjs";
+import EssenceActor from "./documents/actor.mjs";
 
 Hooks.once("init", () => {
   console.log("Essence System | Initializing");
@@ -20,6 +21,7 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels.heritage = EssenceHeritageData;
   CONFIG.Item.dataModels.distinction = EssenceDistinctionData;
   CONFIG.Combat.documentClass = EssenceCombat;
+  CONFIG.Actor.documentClass = EssenceActor;
 
   const { Actors, Items } = foundry.documents.collections;
   Actors.registerSheet("essence-system", EssenceActorSheet, { types: ["character"], makeDefault: true });
