@@ -260,24 +260,31 @@
     </div>
   {{/if}}
 
+  <input type="text" data-card-filter placeholder="Search Action &amp; Reaction Cards…" class="card-filter-input">
   <h3 class="section-head">Action Cards</h3>
-  <ul class="item-list">
+  <ul class="item-list card-list">
     {{#each actionCards as |item|}}
-      <li>
+      <li data-card-name="{{item.name}}">
         <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
+        <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.skill}} · {{item.system.skill}}{{/if}}{{#if item.system.cost}} · Cost {{item.system.cost}}{{/if}}{{#if item.system.tags}} · {{item.system.tags}}{{/if}}</span>
         <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
         <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a>
       </li>
+    {{else}}
+      <li class="muted">No Action Cards — drag one from the compendium.</li>
     {{/each}}
   </ul>
   <h3 class="section-head">Reaction Cards</h3>
-  <ul class="item-list">
+  <ul class="item-list card-list">
     {{#each reactionCards as |item|}}
-      <li>
+      <li data-card-name="{{item.name}}">
         <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
+        <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.skill}} · {{item.system.skill}}{{/if}}{{#if item.system.cost}} · Cost {{item.system.cost}}{{/if}}{{#if item.system.tags}} · {{item.system.tags}}{{/if}}</span>
         <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
         <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a>
       </li>
+    {{else}}
+      <li class="muted">No Reaction Cards — drag one from the compendium.</li>
     {{/each}}
   </ul>
   <h3 class="section-head">Conditions</h3>

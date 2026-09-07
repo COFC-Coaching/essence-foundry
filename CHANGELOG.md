@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.4
+
+- Add rank/skill/cost/tags metadata and a search box to the Combat tab's Action/Reaction Card
+  lists on both character and NPC sheets — previously showed name only, so choosing a card
+  mid-turn meant opening it just to check its cost. The Character Wizard already had this; now
+  the sheet you actually play from does too. Also added an empty state ("No Action Cards — drag
+  one from the compendium.") where the lists previously just rendered nothing under the header.
+
 ## 0.6.3
 
 - Give the Action/Reaction Card sheet a read view: opening a card now shows it as an actual card

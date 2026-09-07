@@ -57,6 +57,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   _onRender(context, options) {
     super._onRender(context, options);
     this.#applyEditable();
+    this.#wireCardFilter();
   }
 
   /** Mirrors EssenceActorSheet#applyEditable — see that class for why .window-content is scoped. */
@@ -68,6 +69,18 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       el.classList.add("locked");
       el.style.pointerEvents = "none";
     }
+  }
+
+  /** Mirrors EssenceActorSheet#wireCardFilter — see that class for why. */
+  #wireCardFilter() {
+    const input = this.element.querySelector("[data-card-filter]");
+    if (!input) return;
+    input.addEventListener("input", (e) => {
+      const q = e.currentTarget.value.trim().toLowerCase();
+      for (const li of this.element.querySelectorAll(".card-list li[data-card-name]")) {
+        li.hidden = !!q && !li.dataset.cardName.toLowerCase().includes(q);
+      }
+    });
   }
 
   async _prepareContext(options) {

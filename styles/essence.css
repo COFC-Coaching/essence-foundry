@@ -123,6 +123,11 @@
    room so it doesn't read as "just another icon" next to Edit. The confirmation dialog in
    #onItemDelete is the actual safety net; this is just making the danger visible before the click. */
 .essence a[data-action="itemDelete"] { color: #ef5350; margin-left: 4px; }
+/* Card list rows previously showed name only — choosing an action mid-turn meant opening the
+   card to check its cost/skill. The Wizard already surfaces this when building a hand; same
+   metadata + search here, for the hand you're actually playing from. */
+.essence .card-filter-input { width: 100%; box-sizing: border-box; margin: 4px 0 6px; }
+.essence .card-list .card-meta { flex: 1; font-size: 0.8em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .essence .condition-list { display: flex; flex-direction: column; gap: 6px; }
 .essence .condition-entry {

@@ -87,6 +87,24 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     super._onRender(context, options);
     this.#applyActiveTab();
     this.#applyEditable();
+    this.#wireCardFilter();
+  }
+
+  /**
+   * Client-side filter over the Combat tab's Action/Reaction Card lists — no re-render, no
+   * server round-trip, just hide/show <li> rows by substring match against the card's name. The
+   * Character Wizard already has search+filters over the whole compendium for building a hand;
+   * this is the same affordance for the hand you already picked, reachable mid-combat.
+   */
+  #wireCardFilter() {
+    const input = this.element.querySelector("[data-card-filter]");
+    if (!input) return;
+    input.addEventListener("input", (e) => {
+      const q = e.currentTarget.value.trim().toLowerCase();
+      for (const li of this.element.querySelectorAll(".card-list li[data-card-name]")) {
+        li.hidden = !!q && !li.dataset.cardName.toLowerCase().includes(q);
+      }
+    });
   }
 
   /**
