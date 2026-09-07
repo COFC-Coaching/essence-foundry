@@ -2,6 +2,18 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.5.12
+
+- Fix 10 Combat Cards carrying stray, incorrect content: Hide, Disengage, Dash, Shove, Basic Shot,
+  Strike, Brace, Fox Finds the Gap, Swallow Tests the Rain, and Wolf Runs the Line each had a
+  leftover duplicate "Effect" entry ahead of their real one, so their card sheet showed the wrong
+  effect text. Hide, Disengage, and Dash also carried an entirely unrelated Surge/Rider block
+  (Ballistics-flavored "TARGETING"/"SUPPRESSION" text) that doesn't belong on them. Corrected at
+  the source (the Neon database powering these packs) and verified every field now matches
+  `essence_card_playtest_250.xlsm` exactly. Equipment was deliberately left untouched — its
+  backing Neon table (`equipment_cards`) was found to be empty, a separate pre-existing issue that
+  needs its own resolution before any equipment resync.
+
 ## 0.5.11
 
 - Fix Action/Reaction Card sheets burying their own content: core's `<prose-mirror>` element

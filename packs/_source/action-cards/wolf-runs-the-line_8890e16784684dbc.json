@@ -24,10 +24,6 @@
       },
       {
         "label": "Effect",
-        "html": "Fold a wall of dense space up to 3 units long until the start of your next turn. It blocks movement and line of sight through its spaces and provides Cover."
-      },
-      {
-        "label": "Effect",
         "html": "On a success, deal 1 weapon damage. If you have at least 1 Combo, you may immediately move 1 unit after the attack."
       }
     ],

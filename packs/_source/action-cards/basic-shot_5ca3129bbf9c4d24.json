@@ -24,10 +24,6 @@
       },
       {
         "label": "Effect",
-        "html": "Fire your sidearm at it point-blank. Deal 1 Physical damage."
-      },
-      {
-        "label": "Effect",
         "html": "On a success, deal 1 weapon damage."
       }
     ],

@@ -24,26 +24,13 @@
       },
       {
         "label": "Effect",
-        "html": "Deal 1 Physical damage."
-      },
-      {
-        "label": "Effect",
         "html": "Move up to 2 units. This movement does not trigger Reactions caused solely by leaving an enemy's reach."
       }
     ],
-    "surges": [
-      {
-        "n": "2",
-        "html": "Choose one creature this Action succeeds against. After this resolves, you may make a Basic Shot against it by committing that Basic Shot's dice normally."
-      },
-      {
-        "n": "1",
-        "html": "Objects and cover affected by this Action count their Defense as 1 lower."
-      }
-    ],
+    "surges": [],
     "rider": {
-      "title": "SUPPRESSION",
-      "html": "If your Locked target is inside the affected area, the area remains threatened until your next turn; the first enemy that enters it burns 1 die.",
+      "title": "",
+      "html": "",
       "meta": ""
     }
   },

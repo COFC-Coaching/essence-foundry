@@ -24,10 +24,6 @@
       },
       {
         "label": "Effect",
-        "html": "Deal 1 damage and push the target 1 unit."
-      },
-      {
-        "label": "Effect",
         "html": "On a success, move the target 1 unit away from you."
       }
     ],

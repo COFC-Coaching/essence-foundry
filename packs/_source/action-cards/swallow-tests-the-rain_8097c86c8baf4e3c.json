@@ -24,10 +24,6 @@
       },
       {
         "label": "Effect",
-        "html": "The attacking creature becomes Exposed."
-      },
-      {
-        "label": "Effect",
         "html": "On a success, deal 1 weapon damage."
       }
     ],

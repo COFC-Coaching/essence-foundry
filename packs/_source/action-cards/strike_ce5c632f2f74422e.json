@@ -24,10 +24,6 @@
       },
       {
         "label": "Effect",
-        "html": "The target becomes Exposed."
-      },
-      {
-        "label": "Effect",
         "html": "Use an Attribute appropriate to the weapon or method. On a success, deal 1 weapon damage."
       }
     ],

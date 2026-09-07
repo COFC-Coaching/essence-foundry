@@ -24,10 +24,6 @@
       },
       {
         "label": "Effect",
-        "html": "Deal 2 damage."
-      },
-      {
-        "label": "Effect",
         "html": "On a success, deal 1 weapon damage and it cannot gain Defense from Reactions against your next Prowess Action this turn."
       }
     ],

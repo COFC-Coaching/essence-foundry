@@ -24,26 +24,13 @@
       },
       {
         "label": "Effect",
-        "html": "Deal 1 damage."
-      },
-      {
-        "label": "Effect",
         "html": "Move up to half your Movement in addition to your normal movement this turn."
       }
     ],
-    "surges": [
-      {
-        "n": "1",
-        "html": "On a success, the target suffers -1 Defense against your next Ballistics Action this turn."
-      },
-      {
-        "n": "2",
-        "html": "This Action may trace its shot around one intervening obstacle that does not completely enclose the target."
-      }
-    ],
+    "surges": [],
     "rider": {
-      "title": "TARGETING",
-      "html": "If the target is Locked by you, you may trace your next Ballistics Action against it this turn from your current position even if you move before then.",
+      "title": "",
+      "html": "",
       "meta": ""
     }
   },
