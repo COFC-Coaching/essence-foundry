@@ -204,6 +204,10 @@
 .essence .wizard-pick-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
 .essence .wizard-pick-list button { padding: 3px 8px; }
 .essence .wizard-pick-list button.chosen { background: #f9a825; color: #000; font-weight: bold; }
+/* Card/equipment names in the item-list previews (Wizard) and elsewhere — clicking opens the
+   real Item sheet, so they need to actually read as links rather than plain static text. */
+.essence a[data-action="previewItem"] { color: #f9a825; cursor: pointer; }
+.essence a[data-action="previewItem"]:hover { text-decoration: underline; }
 .essence .wizard-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .essence .wizard-scroll-list { max-height: 220px; overflow-y: auto; border: 1px solid #555; border-radius: 4px; padding: 4px 6px; }
 .essence .wizard-checklist { list-style: none; padding: 0; }

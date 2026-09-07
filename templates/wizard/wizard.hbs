@@ -138,10 +138,10 @@
         <h4>Selected</h4>
         <ul class="item-list">
           {{#each ownedActionCards as |item|}}
-            <li>{{item.name}} <span class="muted">R{{item.system.rank}}</span> <a data-action="toggleCard" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></li>
+            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}}</span> <a data-action="toggleCard" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></li>
           {{/each}}
           {{#each ownedReactionCards as |item|}}
-            <li>{{item.name}} <span class="muted">R{{item.system.rank}} · Reaction</span> <a data-action="toggleCard" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></li>
+            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}} · Reaction</span> <a data-action="toggleCard" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></li>
           {{/each}}
         </ul>
       </div>
@@ -174,7 +174,7 @@
         </div>
         <ul class="item-list wizard-scroll-list">
           {{#each browsableCards as |item|}}
-            <li>{{item.name}} <span class="muted">R{{item.system.rank}} · {{item.system.skill}}{{#if (eq item.type "reaction-card")}} · Reaction{{/if}}</span> <a data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}"><i class="fa-solid fa-plus"></i></a></li>
+            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}} · {{item.system.skill}}{{#if (eq item.type "reaction-card")}} · Reaction{{/if}}</span> <a data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}"><i class="fa-solid fa-plus"></i></a></li>
           {{else}}
             <li class="muted">No cards match these filters.</li>
           {{/each}}
@@ -258,14 +258,14 @@
     <h3 class="section-head">Signature Loadout — {{signatureUsed}} / {{signatureLimit}} slots</h3>
     <ul class="item-list">
       {{#each signatureItems as |item|}}
-        <li>{{item.name}} <a data-action="toggleEquipment" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></li>
+        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <a data-action="toggleEquipment" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></li>
       {{/each}}
     </ul>
     <h3 class="section-head">Equipment Library</h3>
     <input type="text" data-wizard-search="equipment" placeholder="Search…" value="{{equipmentSearch}}">
     <ul class="item-list wizard-scroll-list">
       {{#each browsableEquipment as |item|}}
-        <li>{{item.name}} <span class="muted">{{item.system.category}}</span> <a data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}"><i class="fa-solid fa-plus"></i></a></li>
+        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{item.system.category}}</span> <a data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}"><i class="fa-solid fa-plus"></i></a></li>
       {{/each}}
     </ul>
   {{/if}}

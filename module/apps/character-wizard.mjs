@@ -67,7 +67,8 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       adjustNonCombatRating: EssenceCharacterWizard.#onAdjustNonCombatRating,
       addPassiveFeature: EssenceCharacterWizard.#onAddPassiveFeature,
       deletePassiveFeature: EssenceCharacterWizard.#onDeletePassiveFeature,
-      toggleEquipment: EssenceCharacterWizard.#onToggleEquipment
+      toggleEquipment: EssenceCharacterWizard.#onToggleEquipment,
+      previewItem: EssenceCharacterWizard.#onPreviewItem
     }
   };
 
@@ -273,7 +274,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
   async #prepareEquipment(context) {
     const system = context.system;
     const owned = this.document.items.filter((i) => i.type === "equipment");
-    context.signatureItems = owned.filter((i) => i.system.slot === "signature").map((i) => ({ id: i.id, name: i.name, system: i.system }));
+    context.signatureItems = owned.filter((i) => i.system.slot === "signature").map((i) => ({ id: i.id, uuid: i.uuid, name: i.name, system: i.system }));
     context.signatureUsed = context.signatureItems.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
     context.signatureLimit = system.signatureEquipmentLimit;
 
@@ -326,6 +327,13 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
   static #onBack() {
     this.#step = Math.max(0, this.#step - 1);
     this.render();
+  }
+
+  /** Opens the real Item sheet (compendium source or owned copy) so players can read a card's
+   *  full text before deciding to add it, instead of judging it from a name + rank/skill tag. */
+  static async #onPreviewItem(event, target) {
+    const doc = await fromUuid(target.dataset.uuid);
+    doc?.sheet.render(true);
   }
 
   static async #onSelectOrigin(event, target) {

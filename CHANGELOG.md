@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.5.10
+
+- Make Combat Card and Equipment names clickable throughout the Character Wizard (Selected,
+  Qualifying Cards, Signature Loadout, and Equipment Library) — clicking a name now opens its real
+  Item sheet so players can read the full card/equipment text before deciding to add it, instead
+  of judging it off a bare name + rank/skill tag. Styled as an actual link (accent color, pointer
+  cursor, underline on hover) so it reads as clickable at a glance.
+
 ## 0.5.9
 
 - Add filters and a sort control to the Character Wizard's Combat Cards browser: Type (Action/
