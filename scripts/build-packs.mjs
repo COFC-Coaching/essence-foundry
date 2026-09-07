@@ -19,6 +19,47 @@ function stableId(seed) {
   return createHash("md5").update(seed).digest("hex").slice(0, 16);
 }
 
+/**
+ * Builds transferred Active Effects for an Item source doc — Foundry's own mechanism for "this
+ * owned Item changes these Actor fields while equipped/active," applied automatically by core
+ * with no custom code needed on our end. Only used for effects that are genuinely a flat,
+ * unconditional stat change (see part-iv-combat.md's Condition/Distinction text) — anything
+ * trigger-based or conditional stays as reminder text on the sheet instead (see the "Conditions"
+ * section of character-sheet.hbs), since Active Effects can't express "at the end of your turn"
+ * or "the first time you use X."
+ * @param {string} itemId
+ * @param {Array<{label: string, key: string, mode: number, value: string}>} list
+ */
+function activeEffects(itemId, list) {
+  return list.map(({ label, key, mode, value }) => {
+    const effectId = stableId(`effect:${itemId}:${key}:${label}`);
+    return {
+      _id: effectId,
+      _key: `!items.effects!${itemId}.${effectId}`,
+      name: label,
+      img: "icons/svg/upgrade.svg",
+      changes: [{ key, mode, value: String(value), priority: 20 }],
+      disabled: false,
+      transfer: true,
+      duration: {},
+      origin: null,
+      flags: {}
+    };
+  });
+}
+
+/** Foundry's Active Effect application modes — see CONST.ACTIVE_EFFECT_MODES. */
+const AE_ADD = 2;
+
+/**
+ * Only Conditions with a genuinely flat, unconditional stat change get an Active Effect; the
+ * rest (bleed/burn damage at end of turn, one-shot "next Action" penalties, etc.) are reminder
+ * text only, per part-iv-combat.md's Conditions section — see the comment on activeEffects().
+ */
+const CONDITION_EFFECTS = {
+  CHILLED: [{ label: "Chilled: Movement -2", key: "system.movement", mode: AE_ADD, value: -2 }]
+};
+
 function loadRows(file) {
   const raw = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", ".cache", file), "utf8"));
   return raw[0].rows;
@@ -65,14 +106,16 @@ function cardToItem(row, type) {
 
 function conditionToItem(row) {
   const d = row.data;
+  const _id = row.id.replace(/-/g, "").slice(0, 16);
   return {
-    _id: row.id.replace(/-/g, "").slice(0, 16),
+    _id,
     name: row.name,
     type: "condition",
     img: "icons/svg/skull.svg",
     system: {
       sections: (d.sections || []).map((s) => ({ label: s.label || "", html: s.html || "" }))
     },
+    effects: activeEffects(_id, CONDITION_EFFECTS[row.name] || []),
     folder: null,
     flags: {},
     ownership: { default: 0 }
@@ -147,8 +190,9 @@ function heritageToItem(h) {
 }
 
 function distinctionToItem(d) {
+  const _id = stableId(`distinction:${d.name}`);
   return {
-    _id: stableId(`distinction:${d.name}`),
+    _id,
     name: d.name,
     type: "distinction",
     img: "icons/svg/star.svg",
@@ -160,6 +204,10 @@ function distinctionToItem(d) {
       benefit: d.benefit,
       origin: d.origin
     },
+    // Only a flat, unconditional stat change goes here (see activeEffects()'s comment) — the
+    // rest of each Distinction's origin trait is behavioral and stays as the reminder text
+    // already shown in its Origin card on the sheet (system.origin.text above).
+    effects: activeEffects(_id, (d.effects || []).map((e) => ({ ...e, mode: AE_ADD }))),
     folder: null,
     flags: {},
     ownership: { default: 0 }

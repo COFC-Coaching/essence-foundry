@@ -288,9 +288,18 @@
     {{/each}}
   </ul>
   <h3 class="section-head">Conditions</h3>
-  <ul class="item-list">
+  <ul class="item-list condition-list">
     {{#each conditions as |item|}}
-      <li>{{item.name}} <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a></li>
+      <li class="condition-entry">
+        <div class="condition-head">
+          <strong>{{item.name}}</strong>
+          <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
+          <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a>
+        </div>
+        {{#each item.system.sections as |s|}}
+          <div class="condition-section"><span class="condition-label">{{s.label}}</span> {{{s.html}}}</div>
+        {{/each}}
+      </li>
     {{/each}}
   </ul>
 </section>

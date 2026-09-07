@@ -19,6 +19,27 @@
       }
     ]
   },
+  "effects": [
+    {
+      "_id": "42877740c2f0b258",
+      "_key": "!items.effects!790554765fbc46d3.42877740c2f0b258",
+      "name": "Chilled: Movement -2",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.movement",
+          "mode": 2,
+          "value": "-2",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    }
+  ],
   "folder": null,
   "flags": {},
   "ownership": {

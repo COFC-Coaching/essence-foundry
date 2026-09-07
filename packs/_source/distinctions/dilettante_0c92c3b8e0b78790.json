@@ -14,6 +14,65 @@
       "text": "Increase your maximum Stamina, Focus, and Mana by 5 each."
     }
   },
+  "effects": [
+    {
+      "_id": "3ac9806cc9bdec36",
+      "_key": "!items.effects!0c92c3b8e0b78790.3ac9806cc9bdec36",
+      "name": "Broad Reserves: Stamina +5",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.staminaBonus",
+          "mode": 2,
+          "value": "5",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    },
+    {
+      "_id": "b0be0f4e634e6454",
+      "_key": "!items.effects!0c92c3b8e0b78790.b0be0f4e634e6454",
+      "name": "Broad Reserves: Focus +5",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.focusBonus",
+          "mode": 2,
+          "value": "5",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    },
+    {
+      "_id": "d8c5b8606378693b",
+      "_key": "!items.effects!0c92c3b8e0b78790.d8c5b8606378693b",
+      "name": "Broad Reserves: Mana +5",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.manaBonus",
+          "mode": 2,
+          "value": "5",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    }
+  ],
   "folder": null,
   "flags": {},
   "ownership": {

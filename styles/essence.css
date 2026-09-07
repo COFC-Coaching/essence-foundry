@@ -92,6 +92,15 @@
 .essence .item-list { list-style: none; padding: 0; }
 .essence .item-list li { display: flex; align-items: center; gap: 6px; padding: 2px 0; }
 
+.essence .condition-list { display: flex; flex-direction: column; gap: 6px; }
+.essence .condition-entry {
+  display: block; border: 1px solid #a33; border-radius: 4px; padding: 4px 8px;
+  background: rgba(170, 51, 51, 0.08);
+}
+.essence .condition-head { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+.essence .condition-section { font-size: 0.85em; margin: 2px 0; }
+.essence .condition-label { font-weight: bold; text-transform: uppercase; font-size: 0.85em; opacity: 0.8; margin-right: 4px; }
+
 .essence .item-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 0.9em; }
 .essence .item-table th, .essence .item-table td { border: 1px solid #555; padding: 2px 6px; text-align: left; }
 .essence .item-table th { background: rgba(255,255,255,0.05); }

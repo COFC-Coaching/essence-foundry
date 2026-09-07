@@ -14,6 +14,27 @@
       "text": "Increase your Resilience by 1. During your first turn, Movement that brings you closer to an enemy costs half as much Movement."
     }
   },
+  "effects": [
+    {
+      "_id": "baaefb464ba48b93",
+      "_key": "!items.effects!e44b3f075eb7d7e4.baaefb464ba48b93",
+      "name": "Peak Performance: Resilience +1",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.resilience",
+          "mode": 2,
+          "value": "1",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    }
+  ],
   "folder": null,
   "flags": {},
   "ownership": {
