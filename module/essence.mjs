@@ -46,11 +46,18 @@ Hooks.once("init", () => {
 Hooks.on("deleteCombat", async (combat) => {
   if (!game.user.isActiveGM) return;
   for (const combatant of combat.combatants) {
-    if (combatant.actor?.type !== "character") continue;
-    await combatant.actor.update({
+    const actor = combatant.actor;
+    if (actor?.type !== "character") continue;
+    const update = {
       "system.playState.combatStarted": false,
       "system.playState.combatTurn": "notStarted"
-    });
+    };
+    // Everything else that happened in Combat persists (spent resources, Wounds, equipment
+    // damage — part-iv-combat.md § What Persists After Combat) except these two Specialties,
+    // which explicitly end when the Encounter ends.
+    if (actor.system.specialties?.threads?.length) update["system.specialties.threads"] = [];
+    if (actor.system.specialties?.authority?.length) update["system.specialties.authority"] = [];
+    await actor.update(update);
   }
 });
 
