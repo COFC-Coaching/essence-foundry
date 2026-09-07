@@ -40,11 +40,14 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       rollInitiative: EssenceActorSheet.#onRollInitiative,
       endTurn: EssenceActorSheet.#onEndTurn,
       burnDice: EssenceActorSheet.#onBurnDice,
+      applyDamage: EssenceActorSheet.#onApplyDamage,
       itemEdit: EssenceActorSheet.#onItemEdit,
       itemDelete: EssenceActorSheet.#onItemDelete,
       changeTab: EssenceActorSheet.#onChangeTab,
       toggleTempWound: EssenceActorSheet.#onToggleTempWound,
       toggleCoreWound: EssenceActorSheet.#onToggleCoreWound,
+      toggleDeathTrack: EssenceActorSheet.#onToggleDeathTrack,
+      toggleDeathTrackFrozen: EssenceActorSheet.#onToggleDeathTrackFrozen,
       toggleTempInfluence: EssenceActorSheet.#onToggleTempInfluence,
       toggleCoreInfluence: EssenceActorSheet.#onToggleCoreInfluence,
       addArrayRow: EssenceActorSheet.#onAddArrayRow,
@@ -154,6 +157,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
     context.keyAspects = system.keyAspects.map((value, i) => ({ value, i, n: i + 1 }));
     context.temporaryWoundPips = pips(system.playState.currentTemporaryWounds, system.temporaryWoundsAvailable);
+    context.deathTrackPips = pips(system.playState.deathTrackStep, 5);
     context.temporaryInfluencePips = pips(system.playState.currentTemporaryInfluence, system.temporaryInfluence);
     context.coreInfluenceLabels = CORE_INFLUENCE_LABELS;
 
@@ -478,9 +482,125 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
   static async #onToggleCoreWound(event, target) {
     const i = Number(target.dataset.index);
-    const coreWounds = this.actor.system.coreWounds.map((w) => ({ filled: w.filled, condition: w.condition }));
+    const coreWounds = this.actor.system.coreWounds.map((w) => ({ ...w }));
     coreWounds[i].filled = !coreWounds[i].filled;
-    await this.actor.update({ "system.coreWounds": coreWounds });
+    if (!coreWounds[i].filled) { coreWounds[i].domain = ""; coreWounds[i].severity = ""; coreWounds[i].condition = ""; }
+    await this.actor.update({ "system.coreWounds": coreWounds, "system.playState.currentCoreWounds": coreWounds.filter((w) => w.filled).length });
+  }
+
+  static async #onToggleDeathTrack(event, target) {
+    const i = Number(target.dataset.index);
+    const next = EssenceActorSheet.#onTogglePip(this.actor.system.playState.deathTrackStep, i);
+    await this.actor.update({ "system.playState.deathTrackStep": next });
+  }
+
+  static async #onToggleDeathTrackFrozen() {
+    await this.actor.update({ "system.playState.deathTrackFrozen": !this.actor.system.playState.deathTrackFrozen });
+  }
+
+  /**
+   * Applies incoming Damage per part-iv-combat.md: ordinary Damage accumulates against Resilience
+   * between the starts of the character's own Turns (reset in EssenceCombat#_onStartTurn) and only
+   * the portion beyond Resilience becomes Wounds; Breach Damage skips Resilience entirely and
+   * converts straight to Wounds. Each Wound removes a Temporary Wound if one is available, else
+   * fills the next Core Wound space in fixed severity order (Light, Light, Serious, Serious,
+   * Critical), tagged with the Damage's domain. Once all 5 Core Wounds are full, further Wounds
+   * advance the Death Track instead of creating new ones.
+   */
+  static async #onApplyDamage() {
+    const result = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: "Apply Damage" },
+        content: `
+          <label>Amount <input type="number" name="amount" value="1" min="1" autofocus></label>
+          <label>Domain
+            <select name="domain">
+              <option value="Physical">Physical</option>
+              <option value="Mental">Mental</option>
+              <option value="Spiritual">Spiritual</option>
+            </select>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;">
+            <input type="checkbox" name="breach"> Breach (bypasses Resilience)
+          </label>
+        `,
+        buttons: [{
+          action: "apply",
+          label: "Apply",
+          default: true,
+          callback: (event, button) => ({
+            amount: Math.max(1, Math.floor(Number(button.form.elements.amount.value)) || 1),
+            domain: button.form.elements.domain.value,
+            breach: button.form.elements.breach.checked
+          })
+        }],
+        submit: (result) => resolve(result === "apply" ? null : result)
+      }).render(true);
+    });
+    if (!result) return;
+
+    const sys = this.actor.system;
+    const resilience = sys.resilience ?? 0;
+    const prevAccumulated = sys.playState.accumulatedDamage ?? 0;
+
+    let wounds;
+    let newAccumulated = prevAccumulated;
+    if (result.breach) {
+      wounds = result.amount;
+    } else {
+      newAccumulated = prevAccumulated + result.amount;
+      const prevWounds = Math.max(0, prevAccumulated - resilience);
+      const newWounds = Math.max(0, newAccumulated - resilience);
+      wounds = newWounds - prevWounds;
+    }
+
+    const update = { "system.playState.accumulatedDamage": newAccumulated };
+    const log = [];
+    let becameCritical = false;
+
+    if (wounds <= 0) {
+      log.push(`Absorbed entirely by Resilience — no Wound.`);
+    } else {
+      let tempWounds = sys.playState.currentTemporaryWounds ?? 0;
+      const coreWounds = sys.coreWounds.map((w) => ({ ...w }));
+      const SEVERITY_BY_INDEX = ["Light", "Light", "Serious", "Serious", "Critical"];
+      let deathTrackStep = sys.playState.deathTrackStep ?? 0;
+
+      for (let i = 0; i < wounds; i++) {
+        if (tempWounds > 0) {
+          tempWounds -= 1;
+          log.push("1 Wound absorbed by a Temporary Wound.");
+          continue;
+        }
+        const slot = coreWounds.findIndex((w) => !w.filled);
+        if (slot === -1) {
+          deathTrackStep = Math.min(5, deathTrackStep + 1);
+          log.push("Core Wound track already full — Death Track advances instead.");
+          continue;
+        }
+        const severity = SEVERITY_BY_INDEX[slot];
+        const label = `${severity} ${result.domain} Wound`;
+        coreWounds[slot] = { filled: true, domain: result.domain, severity, condition: label };
+        log.push(`Core Wound filled: <strong>${label}</strong>.`);
+        if (slot === 4) becameCritical = true;
+      }
+
+      update["system.playState.currentTemporaryWounds"] = tempWounds;
+      update["system.coreWounds"] = coreWounds;
+      update["system.playState.currentCoreWounds"] = coreWounds.filter((w) => w.filled).length;
+      if (deathTrackStep !== (sys.playState.deathTrackStep ?? 0)) update["system.playState.deathTrackStep"] = deathTrackStep;
+    }
+
+    await this.actor.update(update);
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> takes ${result.amount} ${result.domain} Damage${result.breach ? " (Breach)" : ""}.</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+    });
+
+    if (becameCritical) {
+      ui.notifications.warn(`${this.actor.name} is Critically Wounded! The Death Track has begun.`);
+    }
   }
 
   static async #onToggleTempInfluence(event, target) {

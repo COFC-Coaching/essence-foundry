@@ -36,10 +36,29 @@ export default class EssenceCombat extends Combat {
     const ps = actor.system.playState;
     const base = actor.system.baseCombatDice;
     const isFirst = ps.combatTurn === "notStarted";
-    await actor.update({
+    const update = {
       "system.playState.combatTurn": isFirst ? "first" : "active",
       "system.playState.actionDice": base - (isFirst ? (ps.initiativeDice || 0) : 0),
-      "system.playState.reactionDice": 0
-    });
+      "system.playState.reactionDice": 0,
+      // Accumulated Damage resets at the start of each of the character's own Turns
+      // (see part-iv-combat.md § Resilience).
+      "system.playState.accumulatedDamage": 0
+    };
+
+    // While a Critical Wound remains untreated, the Death Track advances 1 step at the start of
+    // every one of the character's Turns (see part-iv-combat.md § The Death Track).
+    if (actor.system.woundState === "Critically Wounded" && !ps.deathTrackFrozen) {
+      const next = Math.min(5, (ps.deathTrackStep ?? 0) + 1);
+      update["system.playState.deathTrackStep"] = next;
+      if (next >= 5) {
+        ui.notifications.error(`${actor.name} has reached the end of the Death Track.`);
+        await ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<p><strong>${actor.name}</strong>'s Death Track has reached its final step.</p>`
+        });
+      }
+    }
+
+    await actor.update(update);
   }
 }

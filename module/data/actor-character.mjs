@@ -53,12 +53,17 @@ export default class EssenceCharacterData extends foundry.abstract.TypeDataModel
       // Harm / wound track
       resilience: new fields.NumberField({ integer: true, initial: 0 }),
       temporaryWoundsAvailable: new fields.NumberField({ integer: true, initial: 5 }),
+      // 5 spaces, filled in order: 2 Light, 2 Serious, 1 Critical (see part-iv-combat.md § Core Wounds).
+      // `condition` is a generated display label ("Light Physical Wound") — the game's own named
+      // Wound Condition reference doesn't exist in canon yet, so this stands in for it.
       coreWounds: new fields.ArrayField(
         new fields.SchemaField({
           filled: new fields.BooleanField({ initial: false }),
+          domain: new fields.StringField({ initial: "" }),
+          severity: new fields.StringField({ initial: "" }),
           condition: new fields.StringField({ initial: "" })
         }),
-        { initial: Array.from({ length: 5 }, () => ({ filled: false, condition: "" })) }
+        { initial: Array.from({ length: 5 }, () => ({ filled: false, domain: "", severity: "", condition: "" })) }
       ),
 
       // Influence (social harm), tracked separately from wounds
@@ -113,7 +118,15 @@ export default class EssenceCharacterData extends foundry.abstract.TypeDataModel
           choices: ["notStarted", "first", "active", "ended"]
         }),
         actionDice: new fields.NumberField({ integer: true, nullable: true, initial: null }),
-        reactionDice: new fields.NumberField({ integer: true, nullable: true, initial: null })
+        reactionDice: new fields.NumberField({ integer: true, nullable: true, initial: null }),
+
+        // Damage accumulates against Resilience between the starts of a character's own Turns,
+        // then resets to 0 (see part-iv-combat.md § Resilience) — reset happens in EssenceCombat#_onStartTurn.
+        accumulatedDamage: new fields.NumberField({ integer: true, initial: 0 }),
+        // Active only once the 5th Core Wound is filled (Critically Wounded). Advances 1 step at
+        // the start of each of the character's Turns while unfrozen; step 5 is death.
+        deathTrackStep: new fields.NumberField({ integer: true, initial: 0, min: 0, max: 5 }),
+        deathTrackFrozen: new fields.BooleanField({ initial: false })
       })
     };
   }
@@ -138,5 +151,13 @@ export default class EssenceCharacterData extends foundry.abstract.TypeDataModel
 
     // Base combat dice pool: Tier + 5 (see play-mode.ts)
     this.baseCombatDice = 5 + (this.tier || 0);
+
+    // Wound State depends only on how many Core Wound spaces are filled, never on any single
+    // attack's Damage (see part-iv-combat.md § Wound States).
+    const filledCoreWounds = this.coreWounds.filter((w) => w.filled).length;
+    this.woundState =
+      filledCoreWounds === 0 ? "Unharmed" :
+      filledCoreWounds <= 2 ? "Lightly Wounded" :
+      filledCoreWounds <= 4 ? "Seriously Wounded" : "Critically Wounded";
   }
 }

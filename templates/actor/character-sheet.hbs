@@ -52,7 +52,7 @@
     {{/each}}
   </div>
 
-  <h3 class="section-head">Wounds</h3>
+  <h3 class="section-head">Wounds <span class="muted">— {{system.woundState}}</span></h3>
   <div class="wounds-row">
     <div class="wound-block">
       <span class="attr-label">Resilience</span>
@@ -74,7 +74,27 @@
         {{/each}}
       </span>
     </div>
+    <div class="wound-block">
+      <button type="button" data-action="applyDamage">Apply Damage</button>
+    </div>
   </div>
+  {{#if (eq system.woundState "Critically Wounded")}}
+    <div class="wounds-row">
+      <div class="wound-block">
+        <span class="attr-label">Death Track</span>
+        <span class="pip-track">
+          {{#each deathTrackPips as |filled i|}}
+            <span class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleDeathTrack" data-index="{{i}}"></span>
+          {{/each}}
+        </span>
+      </div>
+      <div class="wound-block">
+        <label style="display:flex;align-items:center;gap:4px;">
+          <input type="checkbox" data-action="toggleDeathTrackFrozen" {{#if system.playState.deathTrackFrozen}}checked{{/if}}> Frozen
+        </label>
+      </div>
+    </div>
+  {{/if}}
 
   <h3 class="section-head">Origin <span class="muted">(drag a Species/Heritage/Distinction Item onto the sheet)</span></h3>
   <div class="origin-cards">
