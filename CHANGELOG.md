@@ -2,6 +2,15 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.5
+
+- Fix the Biography tab's Concept field clipping its own content: it was a plain 2-row `<textarea>`
+  while its siblings (Appearance/Personality/Backstory) are full rich-text boxes, and the
+  Character Wizard already treats this same `system.concept` field as rich text with its own
+  "Concept / Background" editor — the sheet was the odd one out. Switched Concept to the same
+  editor its Wizard counterpart and its Biography-tab siblings already use. Also raised General
+  Notes' minimum height (3em → 6em) since it had the identical unset-`rows` shape of bug.
+
 ## 0.6.4
 
 - Add rank/skill/cost/tags metadata and a search box to the Combat tab's Action/Reaction Card

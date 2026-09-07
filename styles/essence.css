@@ -159,7 +159,11 @@
 .essence [data-action="addArrayRow"] { margin: 4px 0 10px; }
 
 .essence .tab.bio label { display: block; margin-bottom: 8px; }
-.essence .tab.bio textarea { width: 100%; min-height: 3em; }
+/* No rows= set, so this defaults to the browser's 2-row textarea — same shape of bug the Concept
+   field had (a short box under content that needs several lines) before it moved to a rich-text
+   editor below. General Notes stays a plain textarea (scratch notes, not formatted prose), so it
+   just gets a taller floor instead. */
+.essence .tab.bio textarea { width: 100%; min-height: 6em; }
 
 /* NOTE: the roll-card's root element is <div class="essence roll-card"> — both classes on the
    SAME node. A descendant-combinator selector like ".essence .roll-card X" requires .roll-card
