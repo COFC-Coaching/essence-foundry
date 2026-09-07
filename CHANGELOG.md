@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.5.1
+
+- Fix NPC/Adversary actors failing to create at all — the new Role tag field rejected its own
+  blank default value ("role: may not be a blank string"), so `Actor.create` silently failed for
+  every NPC. Verified live: NPC actors now create, their sheet renders end-to-end (attributes,
+  skills, wounds, combat controls, item lists, GM notes), and Roll Skill / Roll Initiative work
+  through the same dice-commit flow as player characters.
+
 ## 0.5.0
 
 First release cut through the automated release pipeline. Summarizes everything shipped since
