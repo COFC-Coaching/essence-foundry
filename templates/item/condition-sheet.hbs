@@ -9,8 +9,10 @@
   {{#each system.sections as |sec i|}}
     <li>
       <input name="system.sections.{{i}}.label" type="text" value="{{sec.label}}" placeholder="Label (e.g. EFFECT, DURATION)">
+      <a data-action="deleteArrayRow" data-array="sections" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
       <div>{{essenceEditor sec.html target=(concat "system.sections." i ".html") button=true}}</div>
     </li>
   {{/each}}
 </ol>
+<button type="button" data-action="addArrayRow" data-array="sections"><i class="fa-solid fa-plus"></i> Add Section</button>
 </div>

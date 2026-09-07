@@ -1,8 +1,55 @@
 <div class="essence-sheet-root">
 <header class="sheet-header">
   <img class="profile-img" src="{{item.img}}" data-action="editImage">
-  <h1><input name="name" type="text" value="{{item.name}}"></h1>
+  <h1><input name="name" type="text" value="{{item.name}}" {{#if viewMode}}disabled{{/if}}></h1>
+  <button type="button" class="card-view-toggle" data-action="toggleCardView" title="{{#if viewMode}}Edit this card{{else}}View this card{{/if}}">
+    <i class="fa-solid {{#if viewMode}}fa-pen{{else}}fa-eye{{/if}}"></i> {{#if viewMode}}Edit{{else}}View{{/if}}
+  </button>
 </header>
+
+{{#if viewMode}}
+<div class="card-view">
+  <div class="card-view-stats">
+    {{#if system.subtype}}<span class="stat-chip">{{system.subtype}}</span>{{/if}}
+    <span class="stat-chip">Rank {{system.rank}}</span>
+    {{#if system.skill}}<span class="stat-chip">{{system.skill}}</span>{{/if}}
+    {{#if system.attr}}<span class="stat-chip">{{system.attr}}</span>{{/if}}
+    {{#if system.defense}}<span class="stat-chip">vs {{system.defense}}</span>{{/if}}
+    {{#if system.min}}<span class="stat-chip">Min {{system.min}}</span>{{/if}}
+    {{#if system.cost}}<span class="stat-chip">Cost {{system.cost}}</span>{{/if}}
+    {{#if system.tags}}<span class="stat-chip muted">{{system.tags}}</span>{{/if}}
+  </div>
+
+  {{#each system.body as |line|}}
+    {{#if line.html}}
+      <div class="card-view-line">
+        <div class="card-view-label">{{line.label}}</div>
+        <div class="card-view-text">{{{line.html}}}</div>
+      </div>
+    {{/if}}
+  {{/each}}
+
+  {{#if system.surges.length}}
+    <div class="card-view-surges">
+      {{#each system.surges as |s|}}
+        {{#if s.html}}
+          <div class="surge-option"><span class="cost">{{s.n}}</span><span class="surge-text">{{{s.html}}}</span></div>
+        {{/if}}
+      {{/each}}
+    </div>
+  {{/if}}
+
+  {{#if system.rider.html}}
+    <div class="card-view-rider">
+      {{#if system.rider.title}}<div class="card-view-rider-title">{{system.rider.title}}</div>{{/if}}
+      <div>{{{system.rider.html}}}</div>
+      {{#if system.rider.meta}}<div class="muted">{{system.rider.meta}}</div>{{/if}}
+    </div>
+  {{/if}}
+
+  {{#if system.flavor}}<div class="card-view-flavor">{{{system.flavor}}}</div>{{/if}}
+</div>
+{{else}}
 
 <div class="card-fields grid-3">
   <label>Rank <input name="system.rank" type="number" value="{{system.rank}}"></label>
@@ -20,20 +67,24 @@
   {{#each system.body as |line i|}}
     <li>
       <input name="system.body.{{i}}.label" type="text" value="{{line.label}}" placeholder="Label">
+      <a data-action="deleteArrayRow" data-array="body" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
       <div>{{essenceEditor line.html target=(concat "system.body." i ".html") button=true}}</div>
     </li>
   {{/each}}
 </ol>
+<button type="button" data-action="addArrayRow" data-array="body"><i class="fa-solid fa-plus"></i> Add Body Line</button>
 
 <h3 class="section-head">Surges</h3>
 <ol class="surges">
   {{#each system.surges as |s i|}}
     <li>
       <input name="system.surges.{{i}}.n" type="text" value="{{s.n}}" style="width:3em">
+      <a data-action="deleteArrayRow" data-array="surges" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
       <div>{{essenceEditor s.html target=(concat "system.surges." i ".html") button=true}}</div>
     </li>
   {{/each}}
 </ol>
+<button type="button" data-action="addArrayRow" data-array="surges"><i class="fa-solid fa-plus"></i> Add Surge</button>
 
 <h3 class="section-head">Rider</h3>
 <input name="system.rider.title" type="text" value="{{system.rider.title}}" placeholder="Rider title">
@@ -41,4 +92,5 @@
 
 <h3 class="section-head">Flavor</h3>
 <div>{{essenceEditor system.flavor target="system.flavor" button=true}}</div>
+{{/if}}
 </div>

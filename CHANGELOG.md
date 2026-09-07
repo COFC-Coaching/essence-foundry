@@ -2,6 +2,15 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.3
+
+- Give the Action/Reaction Card sheet a read view: opening a card now shows it as an actual card
+  (stat chips, labeled Target/Effect lines, amber Surge badges reusing the chat roll-card's own
+  styling, a bordered Rider callout) instead of dropping straight into a form of bare inputs.
+  A View/Edit toggle in the header switches into the existing edit form. Also added the missing
+  Add Body Line / Add Surge controls to the edit form, and Add Section / delete-row controls to
+  the Condition sheet, which previously had no way to add rows at all.
+
 ## 0.6.2
 
 - Add a confirmation dialog before deleting an owned Item (Action/Reaction Cards, Conditions,
