@@ -2,6 +2,17 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.7
+
+- Make every icon-only edit/delete/remove/add control keyboard-reachable and screen-reader
+  labeled: the `itemEdit`/`itemDelete`/`deleteArrayRow`/`clearOrigin`/`toggleCard`/`toggleEquipment`
+  links across the character sheet, NPC sheet, Wizard, Content Wizard, and the Card/Condition/
+  Species item sheets were plain `<a>` tags with no `href` — unlabeled to screen readers and
+  unreachable by keyboard, same class of bug as the pip toggles fixed in 0.6.6, just ~40 call
+  sites across 6 templates. Converted to real `<button>`s with descriptive `aria-label`s (e.g.
+  "Delete The Hanged Offering", "Delete expertise 2", "Remove Iron Shortsword") and reset their
+  styling in CSS so they still read as plain inline icons rather than boxed buttons.
+
 ## 0.6.6
 
 - Fix WCAG contrast failures on the system's pass/fail status colors: `#2e7d32`/`#c62828` as text

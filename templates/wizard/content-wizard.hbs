@@ -76,7 +76,7 @@
         {{#each system.body as |line i|}}
           <div class="array-row wizard-array-block">
             <input type="text" data-array="body" data-index="{{i}}" data-field="label" value="{{line.label}}" placeholder="Label (e.g. Effect)">
-            <a data-action="deleteArrayRow" data-array="body" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
+            <button type="button" data-action="deleteArrayRow" data-array="body" data-index="{{i}}" aria-label="Delete body line {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
             <textarea data-array="body" data-index="{{i}}" data-field="html" rows="2" placeholder="HTML allowed">{{line.html}}</textarea>
           </div>
         {{/each}}
@@ -90,7 +90,7 @@
         {{#each system.surges as |s i|}}
           <div class="array-row wizard-array-block">
             <input type="text" data-array="surges" data-index="{{i}}" data-field="n" value="{{s.n}}" style="width:3em" title="Surge cost">
-            <a data-action="deleteArrayRow" data-array="surges" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
+            <button type="button" data-action="deleteArrayRow" data-array="surges" data-index="{{i}}" aria-label="Delete surge {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
             <textarea data-array="surges" data-index="{{i}}" data-field="html" rows="2" placeholder="HTML allowed">{{s.html}}</textarea>
           </div>
         {{/each}}
@@ -172,7 +172,7 @@
         {{#each system.sections as |sec i|}}
           <div class="array-row wizard-array-block">
             <input type="text" data-array="sections" data-index="{{i}}" data-field="label" value="{{sec.label}}" placeholder="Label (e.g. EFFECT)">
-            <a data-action="deleteArrayRow" data-array="sections" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
+            <button type="button" data-action="deleteArrayRow" data-array="sections" data-index="{{i}}" aria-label="Delete section {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
             <textarea data-array="sections" data-index="{{i}}" data-field="html" rows="2" placeholder="HTML allowed">{{sec.html}}</textarea>
           </div>
         {{/each}}

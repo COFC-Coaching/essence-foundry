@@ -24,13 +24,13 @@
   {{#each speciesOptions as |opt|}}
     <button type="button" class="{{#if (eq opt.name ../speciesItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.species" data-id="{{opt.id}}">{{opt.name}}</button>
   {{/each}}
-  {{#if speciesItem}}<a data-action="clearOrigin" data-type="species">(clear Species)</a>{{/if}}
+  {{#if speciesItem}}<button type="button" class="link-button" data-action="clearOrigin" data-type="species">(clear Species)</button>{{/if}}
 </div>
 <div class="wizard-pick-list">
   {{#each distinctionOptions as |opt|}}
     <button type="button" class="{{#if (eq opt.name ../distinctionItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.distinctions" data-id="{{opt.id}}">{{opt.name}}</button>
   {{/each}}
-  {{#if distinctionItem}}<a data-action="clearOrigin" data-type="distinction">(clear Distinction)</a>{{/if}}
+  {{#if distinctionItem}}<button type="button" class="link-button" data-action="clearOrigin" data-type="distinction">(clear Distinction)</button>{{/if}}
 </div>
 
 <h3 class="section-head">Attributes, Resources &amp; Defenses</h3>
@@ -132,8 +132,8 @@
     <li data-card-name="{{item.name}}">
       <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
       <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.skill}} · {{item.system.skill}}{{/if}}{{#if item.system.cost}} · Cost {{item.system.cost}}{{/if}}{{#if item.system.tags}} · {{item.system.tags}}{{/if}}</span>
-      <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
-      <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a>
+      <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
+      <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button>
     </li>
   {{else}}
     <li class="muted">No Action Cards — drag one from the compendium.</li>
@@ -145,8 +145,8 @@
     <li data-card-name="{{item.name}}">
       <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
       <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.skill}} · {{item.system.skill}}{{/if}}{{#if item.system.cost}} · Cost {{item.system.cost}}{{/if}}{{#if item.system.tags}} · {{item.system.tags}}{{/if}}</span>
-      <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
-      <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a>
+      <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
+      <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button>
     </li>
   {{else}}
     <li class="muted">No Reaction Cards — drag one from the compendium.</li>
@@ -158,8 +158,8 @@
     <li class="condition-entry">
       <div class="condition-head">
         <strong>{{item.name}}</strong>
-        <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
-        <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a>
+        <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
+        <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button>
       </div>
     </li>
   {{/each}}
@@ -168,8 +168,8 @@
 <ul class="item-list">
   {{#each equipment as |item|}}
     <li>{{item.name}} <span class="muted">{{item.system.category}}</span>
-      <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
-      <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a>
+      <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
+      <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button>
     </li>
   {{/each}}
 </ul>

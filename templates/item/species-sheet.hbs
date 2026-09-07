@@ -20,7 +20,7 @@
       <label class="chosen-toggle"><input type="checkbox" name="system.adaptations.{{i}}.chosen" {{#if a.chosen}}checked{{/if}}> Chosen</label>
       <input name="system.adaptations.{{i}}.name" type="text" value="{{a.name}}" placeholder="Adaptation name">
       <div>{{essenceEditor a.text target=(concat "system.adaptations." i ".text") button=true}}</div>
-      <a data-action="deleteArrayRow" data-array="adaptations" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
+      <button type="button" data-action="deleteArrayRow" data-array="adaptations" data-index="{{i}}" aria-label="Delete adaptation {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
     </li>
   {{/each}}
 </ol>

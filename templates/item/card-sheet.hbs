@@ -67,7 +67,7 @@
   {{#each system.body as |line i|}}
     <li>
       <input name="system.body.{{i}}.label" type="text" value="{{line.label}}" placeholder="Label">
-      <a data-action="deleteArrayRow" data-array="body" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
+      <button type="button" data-action="deleteArrayRow" data-array="body" data-index="{{i}}" aria-label="Delete body line {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
       <div>{{essenceEditor line.html target=(concat "system.body." i ".html") button=true}}</div>
     </li>
   {{/each}}
@@ -79,7 +79,7 @@
   {{#each system.surges as |s i|}}
     <li>
       <input name="system.surges.{{i}}.n" type="text" value="{{s.n}}" style="width:3em">
-      <a data-action="deleteArrayRow" data-array="surges" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
+      <button type="button" data-action="deleteArrayRow" data-array="surges" data-index="{{i}}" aria-label="Delete surge {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
       <div>{{essenceEditor s.html target=(concat "system.surges." i ".html") button=true}}</div>
     </li>
   {{/each}}

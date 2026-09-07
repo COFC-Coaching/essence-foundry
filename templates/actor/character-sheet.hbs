@@ -161,7 +161,7 @@
                       <option value="{{opt}}" {{#if (eq opt e.name)}}selected{{/if}}>{{opt}}</option>
                     {{/each}}
                   </select>
-                  <a data-action="deleteArrayRow" data-array="expertises" data-index="{{e.i}}"><i class="fa-solid fa-trash"></i></a>
+                  <button type="button" data-action="deleteArrayRow" data-array="expertises" data-index="{{e.i}}" aria-label="Delete expertise {{addOne e.i}}"><i class="fa-solid fa-trash"></i></button>
                 </div>
               {{/each}}
               <button type="button" class="add-expertise" data-action="addExpertise" data-skill="{{s.key}}"><i class="fa-solid fa-plus"></i> Add Expertise</button>
@@ -267,8 +267,8 @@
       <li data-card-name="{{item.name}}">
         <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
         <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.skill}} · {{item.system.skill}}{{/if}}{{#if item.system.cost}} · Cost {{item.system.cost}}{{/if}}{{#if item.system.tags}} · {{item.system.tags}}{{/if}}</span>
-        <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
-        <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a>
+        <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
+        <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button>
       </li>
     {{else}}
       <li class="muted">No Action Cards — drag one from the compendium.</li>
@@ -280,8 +280,8 @@
       <li data-card-name="{{item.name}}">
         <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
         <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.skill}} · {{item.system.skill}}{{/if}}{{#if item.system.cost}} · Cost {{item.system.cost}}{{/if}}{{#if item.system.tags}} · {{item.system.tags}}{{/if}}</span>
-        <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
-        <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a>
+        <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
+        <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button>
       </li>
     {{else}}
       <li class="muted">No Reaction Cards — drag one from the compendium.</li>
@@ -293,8 +293,8 @@
       <li class="condition-entry">
         <div class="condition-head">
           <strong>{{item.name}}</strong>
-          <a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
-          <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a>
+          <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
+          <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button>
         </div>
         {{#each item.system.sections as |s|}}
           <div class="condition-section"><span class="condition-label">{{s.label}}</span> {{{s.html}}}</div>
@@ -313,8 +313,8 @@
       {{#each signatureEquipment as |item i|}}
         <tr>
           <td>{{i}}</td><td>{{item.name}}</td><td>{{item.category}}</td><td>{{item.effectText}}</td>
-          <td><a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
-              <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></td>
+          <td><button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
+              <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
       {{/each}}
     </tbody>
@@ -327,8 +327,8 @@
       {{#each temporaryEquipment as |item|}}
         <tr>
           <td>{{item.name}}</td><td>{{item.type}}</td><td>{{item.effectText}}</td>
-          <td><a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
-              <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></td>
+          <td><button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
+              <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
       {{/each}}
     </tbody>
@@ -341,8 +341,8 @@
       {{#each armoryEquipment as |item|}}
         <tr>
           <td>{{item.name}}</td><td>{{item.category}}</td><td>{{item.effectText}}</td>
-          <td><a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
-              <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></td>
+          <td><button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
+              <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
       {{/each}}
     </tbody>
@@ -367,7 +367,7 @@
       <div class="nc-skill-row">
         <input name="system.nonCombatSkills.{{i}}.name" type="text" value="{{s.name}}" placeholder="Skill">
         <input name="system.nonCombatSkills.{{i}}.rating" type="number" value="{{s.rating}}" style="width:3em">
-        <a data-action="deleteArrayRow" data-array="nonCombatSkills" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
+        <button type="button" data-action="deleteArrayRow" data-array="nonCombatSkills" data-index="{{i}}" aria-label="Delete skill {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
       </div>
     {{/each}}
   </div>
@@ -410,7 +410,7 @@
           <td><input name="system.passiveFeatures.{{i}}.name" type="text" value="{{f.name}}"></td>
           <td><input name="system.passiveFeatures.{{i}}.source" type="text" value="{{f.source}}"></td>
           <td>{{essenceEditor f.text target=(concat "system.passiveFeatures." i ".text") button=true}}</td>
-          <td><a data-action="deleteArrayRow" data-array="passiveFeatures" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a></td>
+          <td><button type="button" data-action="deleteArrayRow" data-array="passiveFeatures" data-index="{{i}}" aria-label="Delete feature {{addOne i}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
       {{/each}}
     </tbody>
