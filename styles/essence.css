@@ -27,6 +27,15 @@
 .essence .locked { opacity: 0.4; cursor: not-allowed; }
 .essence .sheet-header { display: flex; align-items: flex-start; gap: 10px; }
 .essence .profile-img { width: 64px; height: 64px; object-fit: cover; border-radius: 4px; }
+.essence .portrait-wrap { position: relative; flex: 0 0 auto; }
+/* The canvas Token's image is a separate field from the sheet Portrait above (see the Game
+   Master's Guide) — this button is the only in-sheet way to set it; otherwise a GM has to know
+   to find Foundry's own Prototype Token config from the Actors sidebar. */
+.essence .token-image-btn {
+  position: absolute; bottom: -4px; right: -4px; width: 22px; height: 22px; padding: 0;
+  border-radius: 50%; font-size: 0.7em; line-height: 1; background: #1b1b1b; border: 1px solid #888;
+}
+.essence .token-image-btn:hover { border-color: #f9a825; color: #f9a825; }
 .essence .header-main { flex: 1; position: relative; }
 .essence .header-main h1 { margin: 0 90px 4px 0; line-height: 1; }
 /* "Monster Creator" is wider than the Character sheet's "Wizard" button — the shared 90px

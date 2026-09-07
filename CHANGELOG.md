@@ -2,6 +2,21 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.11
+
+- Add an in-sheet way to set an Actor's canvas Token Image, on both the Character and NPC sheets:
+  a small pawn-icon button on the corner of the Portrait opens Foundry's own file picker targeting
+  `prototypeToken.texture.src` directly, instead of requiring a GM to already know Foundry's own
+  Prototype Token configuration exists. This was prompted by a report that a Monster's artwork
+  "wasn't working" as a token — the real mechanism is a Foundry-native quirk, not a bug: an Actor's
+  sheet Portrait and canvas Token Image are two separate fields, and Foundry only ever auto-copies
+  Portrait → Token Image once, the very first time a fresh Actor's Portrait is set. After that,
+  the two are edited completely independently, which reads as "broken" if you don't know it's by
+  design and there was previously no way to fix a diverged Token Image without leaving the sheet.
+- Document this in the Game Master's Guide compendium journal ("Portrait Art vs. Token Art") —
+  the two-image split, the one-time auto-copy, the new button, and why an NPC's already-placed
+  (unlinked) Tokens don't retroactively pick up a later Token Image change.
+
 ## 0.6.10
 
 - Fix the NPC sheet's name field overlapping the "Monster Creator" button: the shared header CSS

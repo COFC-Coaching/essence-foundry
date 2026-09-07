@@ -1,6 +1,9 @@
 <div class="essence-sheet-root">
 <header class="sheet-header">
-  <img class="profile-img" src="{{actor.img}}" data-action="editImage" title="{{actor.name}}">
+  <div class="portrait-wrap">
+    <img class="profile-img" src="{{actor.img}}" data-action="editImage" title="Sheet Portrait — click to change">
+    <button type="button" class="token-image-btn" data-action="editTokenImage" title="Token Image — the art shown on the canvas. Separate from the Portrait above; see the Game Master's Guide for how the two relate."><i class="fa-solid fa-chess-pawn"></i></button>
+  </div>
   <div class="header-main">
     <button type="button" class="wizard-launch" data-action="openWizard" title="Step-by-step character creation"><i class="fa-solid fa-hat-wizard"></i> Wizard</button>
     <h1><input name="name" type="text" value="{{actor.name}}"></h1>

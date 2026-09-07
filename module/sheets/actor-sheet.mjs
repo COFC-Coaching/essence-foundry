@@ -46,6 +46,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     form: { submitOnChange: true },
     actions: {
       openWizard: EssenceActorSheet.#onOpenWizard,
+      editTokenImage: EssenceActorSheet.#onEditTokenImage,
       rollSkill: EssenceActorSheet.#onRollSkill,
       rollItem: EssenceActorSheet.#onRollItem,
       rollInitiative: EssenceActorSheet.#onRollInitiative,
@@ -159,6 +160,20 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
   static #onOpenWizard() {
     new EssenceCharacterWizard(this.actor).render(true);
+  }
+
+  /** Foundry's core "editImage" action (used by the Portrait above) only ever targets `img` —
+   *  there's no built-in control for the canvas Token's own image, which lives on a completely
+   *  separate field (`prototypeToken.texture.src`) that core only auto-copies from the Portrait
+   *  once, on an Actor's very first customization. See the Game Master's Guide for the full
+   *  explanation of why the two can drift apart afterward. */
+  static #onEditTokenImage() {
+    const current = this.actor.prototypeToken.texture.src;
+    new foundry.applications.apps.FilePicker.implementation({
+      type: "image",
+      current,
+      callback: (path) => this.actor.update({ "prototypeToken.texture.src": path })
+    }).render(true);
   }
 
   async _prepareContext(options) {

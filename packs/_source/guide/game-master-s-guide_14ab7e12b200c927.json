@@ -1,0 +1,29 @@
+{
+  "_id": "14ab7e12b200c927",
+  "name": "Game Master's Guide",
+  "pages": [
+    {
+      "_id": "91cbf8b70107d673",
+      "_key": "!journal.pages!14ab7e12b200c927.91cbf8b70107d673",
+      "name": "Running a Session",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p>This page covers the GM-side workflow &mdash; setting up NPCs, running combat, and managing Conditions.</p><h2>NPCs and Adversaries</h2><p>Create an NPC the same way as a Character &mdash; from the Actors sidebar tab's <strong>Create Actor</strong> button, set Type to <strong>NPC / Adversary</strong>. NPCs use the exact same Attributes/Skills/Resources/Wounds/Combat Dice mechanics as player characters (per the rules: \"Game Masters will use those same rules when portraying adversaries\"), just without the player-facing fluff (Concept, Career, Non-Combat Skills) &mdash; instead they get a Role tag (Minion/Standard/Elite/Nemesis) and a GM Notes field for tactics reminders. Leave NPC tokens <strong>unlinked</strong> (Foundry's default) so multiple copies of the same monster track wounds independently; Character tokens are force-linked instead, since a PC should always be the one actor.</p><h2>Portrait Art vs. Token Art</h2><p>Every Actor (Character or NPC) actually has <strong>two separate images</strong>: the sheet <strong>Portrait</strong> (click the art in the sheet header) and the canvas <strong>Token Image</strong> (what shows when you place it on a scene). Foundry copies the Portrait into the Token Image automatically <strong>exactly once</strong> &mdash; the very first time you set a new Actor's Portrait away from the default placeholder. After that first time, the two are completely independent: changing the Portrait later never touches the Token Image, and vice versa. Click the small pawn-icon button on the corner of the Portrait to set the Token Image directly, without leaving the sheet. Because NPC tokens are unlinked (see above), changing an NPC's Token Image only affects tokens you place <strong>after</strong> the change &mdash; copies already sitting on a scene keep whatever art they were dropped with; drag a fresh token from the sheet to pick up the update, or right-click the placed token &rarr; <strong>Configure Token</strong> to edit it individually.</p><h2>Running Combat</h2><p>Combat is driven entirely by Foundry's own Combat Tracker &mdash; add combatants, click <strong>Begin Combat</strong>, and advance rounds/turns from there. Every entry point that rolls Initiative (the tracker's per-combatant dice icon, its Roll All and Roll NPCs buttons, and each sheet's own Roll Initiative button) opens the same dice-commit dialog and produces identical results, so it doesn't matter which one you or your players use. Ending the encounter (deleting the Combat) automatically resets each combatant's combat-state flags and clears any Threads/Authority Specialties that expire at Encounter's end.</p><h2>Conditions</h2><p>Conditions live in the <strong>Conditions</strong> compendium and are also registered as Token HUD status icons &mdash; right-click a token, open the status-effects palette, and toggle a Condition on or off directly. This adds or removes a real owned Condition Item on the actor (with whatever mechanical Active Effect the rules define, e.g. Chilled's Movement -2), exactly the same as dragging the Condition Item onto the actor's sheet by hand &mdash; use whichever is more convenient in the moment.</p><h2>Authoring New Content</h2><p>If you have Foundry's \"Create Items\" permission (or are a GM), a wand-icon scene-control button opens the <strong>Create Content</strong> wizard for authoring new Action/Reaction Cards, Equipment, and Conditions straight into the compendium, without hand-building the data model yourself.</p><h2>Compendiums</h2><p>Action Cards, Reaction Cards, Conditions, and Equipment ship pre-populated from the live Essence Rules database; Species, Heritages, and Distinctions are hand-authored; and the <strong>Combat Styles Reference</strong> journal documents every Combat Skill's Specialty mechanic in full. See the system's README for how to refresh this content from the database if the rules change.",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!journal!14ab7e12b200c927"
+}

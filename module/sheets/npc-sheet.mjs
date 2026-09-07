@@ -34,6 +34,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     form: { submitOnChange: true },
     actions: {
       openWizard: EssenceNpcSheet.#onOpenWizard,
+      editTokenImage: EssenceNpcSheet.#onEditTokenImage,
       rollSkill: EssenceNpcSheet.#onRollSkill,
       rollItem: EssenceNpcSheet.#onRollItem,
       rollInitiative: EssenceNpcSheet.#onRollInitiative,
@@ -135,6 +136,18 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
 
   static #onOpenWizard() {
     new EssenceMonsterWizard(this.actor).render(true);
+  }
+
+  /** See EssenceActorSheet#onEditTokenImage — same gap, more likely to bite here since a GM
+   *  usually sets a Monster's Portrait well after it already has copies placed on scenes;
+   *  those unlinked Tokens keep whatever art they were dropped with regardless either way. */
+  static #onEditTokenImage() {
+    const current = this.actor.prototypeToken.texture.src;
+    new foundry.applications.apps.FilePicker.implementation({
+      type: "image",
+      current,
+      callback: (path) => this.actor.update({ "prototypeToken.texture.src": path })
+    }).render(true);
   }
 
   static async #onSelectOrigin(event, target) {
