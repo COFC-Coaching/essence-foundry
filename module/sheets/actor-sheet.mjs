@@ -1,5 +1,5 @@
 import { rollEssencePool } from "../dice/essence-roll.mjs";
-import { EXPERTISE_DATABASE, SUBTYPE_DATABASE } from "../data/expertise-database.mjs";
+import { EXPERTISE_DATABASE } from "../data/expertise-database.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -26,8 +26,7 @@ function pips(value, max = PIP_MAX) {
 /** Default new-row shape for each free-length array field, keyed by the sheet's data-array value. */
 const ARRAY_ROW_DEFAULTS = {
   nonCombatSkills: { name: "", rating: 0 },
-  passiveFeatures: { name: "", source: "", text: "" },
-  expertises: { name: "", skill: "", subtypes: [] }
+  passiveFeatures: { name: "", source: "", text: "" }
 };
 
 export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
@@ -52,8 +51,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       toggleCoreInfluence: EssenceActorSheet.#onToggleCoreInfluence,
       addArrayRow: EssenceActorSheet.#onAddArrayRow,
       deleteArrayRow: EssenceActorSheet.#onDeleteArrayRow,
-      addSubtype: EssenceActorSheet.#onAddSubtype,
-      deleteSubtype: EssenceActorSheet.#onDeleteSubtype
+      addExpertise: EssenceActorSheet.#onAddExpertise
     }
   };
 
@@ -133,14 +131,16 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       skills: d.skills.map((key) => {
         const gateDistinction = SKILL_GATE[key];
         const gateOpen = !gateDistinction || distinctionItem?.system.unlocks === key;
+        const expertiseOptions = EXPERTISE_DATABASE[key] || [];
         return {
           key,
           label: key,
           value: system[key],
           pips: pips(system[key]),
+          expertiseOptions,
           expertises: system.expertises
-            .filter((e) => (e.skill || "").toLowerCase() === key)
-            .map((e) => ({ name: e.name, subtypeText: e.subtypes.filter(Boolean).join(", ") })),
+            .map((e, i) => ({ i, name: e.name, skill: e.skill }))
+            .filter((e) => (e.skill || "").toLowerCase() === key),
           gateDistinction,
           gateOpen
         };
@@ -154,14 +154,6 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     }));
 
     context.keyAspects = system.keyAspects.map((value, i) => ({ value, i, n: i + 1 }));
-    context.expertiseRows = system.expertises.map((e, i) => ({
-      i,
-      skill: e.skill,
-      name: e.name,
-      expertiseOptions: EXPERTISE_DATABASE[e.skill] || [],
-      subtypeOptions: SUBTYPE_DATABASE[e.skill] || [],
-      subtypes: e.subtypes.map((value, j) => ({ value, j }))
-    }));
     context.temporaryWoundPips = pips(system.playState.currentTemporaryWounds, system.temporaryWoundsAvailable);
     context.temporaryInfluencePips = pips(system.playState.currentTemporaryInfluence, system.temporaryInfluence);
     context.coreInfluenceLabels = CORE_INFLUENCE_LABELS;
@@ -356,18 +348,11 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     await this.actor.update({ [`system.${key}`]: rows });
   }
 
-  static async #onAddSubtype(event, target) {
-    const i = Number(target.dataset.index);
-    const expertises = this.actor.system.expertises.map((e) => ({ name: e.name, skill: e.skill, subtypes: [...e.subtypes] }));
-    expertises[i].subtypes.push("");
-    await this.actor.update({ "system.expertises": expertises });
-  }
-
-  static async #onDeleteSubtype(event, target) {
-    const i = Number(target.dataset.index);
-    const j = Number(target.dataset.subIndex);
-    const expertises = this.actor.system.expertises.map((e) => ({ name: e.name, skill: e.skill, subtypes: [...e.subtypes] }));
-    expertises[i].subtypes.splice(j, 1);
+  /** Adds a new Expertise slot nested under a specific Combat Skill's box. */
+  static async #onAddExpertise(event, target) {
+    const skill = target.dataset.skill;
+    const expertises = this.actor.system.expertises.map((e) => ({ name: e.name, skill: e.skill }));
+    expertises.push({ name: "", skill });
     await this.actor.update({ "system.expertises": expertises });
   }
 
