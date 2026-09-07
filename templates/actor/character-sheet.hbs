@@ -128,7 +128,7 @@
 {{!-- ============ COMBAT: skills, cards, dice lifecycle ============ --}}
 <section class="tab combat" data-tab="combat">
   <div class="combat-header">
-    <label>Movement <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> units</label>
+    <label>Movement <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> units{{#if system.specialties.combo}} <span class="muted">(effective {{system.totalMovement}} with Combo)</span>{{/if}}</label>
     <label>Reach <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>
     <div class="action-pool">
       <span class="attr-label">Action Dice</span> {{system.playState.actionDice}}
@@ -168,6 +168,94 @@
       </div>
     {{/each}}
   </div>
+
+  {{#if (or (gt system.prowess 0) (gt system.ballistics 0) (gt system.gestalt 0) (gt system.cunning 0) (gt system.magecraft 0) (gt system.psionics 0) (gt system.leadership 0) (gt system.ritualism 0) (gt system.calling 0))}}
+    <h3 class="section-head">Specialties</h3>
+    <div class="specialties">
+      {{#if (gt system.prowess 0)}}
+        <div class="specialty-row">
+          <span class="attr-label" title="Whenever you inflict Damage with a Prowess Action/Reaction, gain 1 Combo (max 5). Each Combo adds 1 Movement. Lose 1 if you dealt no Damage this Turn, or whenever you suffer a non-Temporary Wound.">Combo (Prowess)</span>
+          <span class="pip-track">
+            {{#each comboPips as |filled i|}}<span class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleCombo" data-index="{{i}}"></span>{{/each}}
+          </span>
+        </div>
+      {{/if}}
+      {{#if (gt system.ballistics 0)}}
+        <div class="specialty-row">
+          <span class="attr-label" title="Burn 1 die when using a Ballistics Action against a target in your line of sight to establish Lock on it. Only one Lock at a time; lost if the target leaves your line of sight through the end of your Turn.">Lock (Ballistics)</span>
+          <input type="text" name="system.specialties.lock" value="{{system.specialties.lock}}" placeholder="Locked creature…">
+          <button type="button" data-action="clearLock">Clear</button>
+        </div>
+      {{/if}}
+      {{#if (gt system.gestalt 0)}}
+        <div class="specialty-row">
+          <span class="attr-label" title="A Gestalt card's Rider may offer an Adaptation. You may maintain only one; pay its Stamina upkeep at the end of your Turn or it ends.">Adaptation (Gestalt)</span>
+          <input type="text" name="system.specialties.adaptation.name" value="{{system.specialties.adaptation.name}}" placeholder="Adaptation name…">
+          <label class="muted">Upkeep <input type="number" name="system.specialties.adaptation.upkeep" value="{{system.specialties.adaptation.upkeep}}" style="width:3em"></label>
+          <button type="button" data-action="endAdaptation">End</button>
+        </div>
+      {{/if}}
+      {{#if (gt system.cunning 0)}}
+        <div class="specialty-row">
+          <span class="attr-label" title="A Cunning card's Rider may establish a Contingency (a Trigger and an effect). Only one per Round; resolve it when the Trigger occurs. Expires at the start of your next Turn if unused.">Contingency (Cunning)</span>
+          <input type="text" name="system.specialties.contingency" value="{{system.specialties.contingency}}" placeholder="Trigger → Effect…">
+          <button type="button" data-action="clearContingency">Clear</button>
+        </div>
+      {{/if}}
+      {{#if (gt system.magecraft 0)}}
+        <div class="specialty-row specialty-row-wrap">
+          <span class="attr-label" title="Every Magecraft Action creates the fixed Thread of its subtype. Maintain up to 3; consume them for later Magecraft effects. Unused Threads end when the Encounter ends.">Threads (Magecraft)</span>
+          <div class="thread-chips">
+            {{#each threadFamilies as |family|}}
+              {{#each family.threads as |t|}}
+                <button type="button" class="thread-chip {{#if t.active}}active{{/if}}" data-action="toggleThread" data-thread="{{t.name}}" title="{{family.label}}">{{t.name}}</button>
+              {{/each}}
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
+      {{#if (gt system.psionics 0)}}
+        <div class="specialty-row">
+          <span class="attr-label" title="Gain 1 Strain to gain 1 additional Surge on a Psionics Action/Reaction. 1-2: no penalty. 3-4: each Psionics Action/Reaction burns 1 additional die. 5+: suffer 1 Psychic damage after resolving one. Removed only by effects that specifically remove it, or Recovery.">Strain (Psionics)</span>
+          <input type="number" name="system.specialties.strain" value="{{system.specialties.strain}}" style="width:3em" min="0">
+        </div>
+      {{/if}}
+      {{#if (gt system.leadership 0)}}
+        <div class="specialty-row specialty-row-wrap">
+          <span class="attr-label" title="After a Leadership Action, store one rolled result as Authority (max: half Leadership Rank, rounded up). Spend it in place of a die you'd roll/burn, or for a card's Authority effect. Ends when the Encounter ends.">Authority (Leadership, max {{authorityCap}})</span>
+          <div class="thread-chips">
+            {{#each authorityEntries as |a|}}
+              <button type="button" class="thread-chip active" data-action="removeAuthority" data-index="{{a.i}}" title="Click to spend/discard">{{a.value}}</button>
+            {{/each}}
+          </div>
+          <button type="button" data-action="addAuthority">Store Authority</button>
+        </div>
+      {{/if}}
+      {{#if (gt system.ritualism 0)}}
+        <div class="specialty-row specialty-row-wrap">
+          <span class="attr-label" title="A Ritualism card's Rider establishes a Rite (Trigger, Echo, Echo Limit). Maintain up to 3. When the Trigger occurs, resolve the Echo and reduce the Rite's remaining Echoes by 1; remove it after its final Echo.">Rites (Ritualism)</span>
+          <div class="array-rows">
+            {{#each riteEntries as |r|}}
+              <div class="array-row">
+                <input type="text" name="system.specialties.rites.{{r.i}}.trigger" value="{{r.trigger}}" placeholder="Trigger">
+                <input type="text" name="system.specialties.rites.{{r.i}}.echo" value="{{r.echo}}" placeholder="Echo">
+                <input type="number" name="system.specialties.rites.{{r.i}}.echoLimit" value="{{r.echoLimit}}" style="width:3em" min="1" title="Echo Limit">
+                <a data-action="deleteRite" data-index="{{r.i}}"><i class="fa-solid fa-trash"></i></a>
+              </div>
+            {{/each}}
+          </div>
+          <button type="button" data-action="addRite">Add Rite</button>
+        </div>
+      {{/if}}
+      {{#if (gt system.calling 0)}}
+        <div class="specialty-row">
+          <span class="attr-label" title="Full Manifestation replaces you on the battlefield with the manifestation's own combat profile and Wound Track (see its printed profile — not automated here). If the manifestation is defeated, you may become Broken, losing access to that manifestation family until the bond recovers.">Manifestation (Calling)</span>
+          <label><input type="checkbox" name="system.specialties.manifested" {{#if system.specialties.manifested}}checked{{/if}}> Fully Manifested</label>
+          <label><input type="checkbox" name="system.specialties.broken" {{#if system.specialties.broken}}checked{{/if}}> Broken</label>
+        </div>
+      {{/if}}
+    </div>
+  {{/if}}
 
   <div class="combat-controls">
     <button type="button" data-action="rollInitiative">Roll Initiative</button>

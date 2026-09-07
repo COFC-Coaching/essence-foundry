@@ -45,6 +45,12 @@ export default class EssenceCombat extends Combat {
       "system.playState.accumulatedDamage": 0
     };
 
+    // A Cunning Contingency not used by its Trigger expires at the start of the character's
+    // next Turn (see part-iv-combat.md § Contingency).
+    if (actor.system.specialties?.contingency) {
+      update["system.specialties.contingency"] = "";
+    }
+
     // While a Critical Wound remains untreated, the Death Track advances 1 step at the start of
     // every one of the character's Turns (see part-iv-combat.md § The Death Track).
     if (actor.system.woundState === "Critically Wounded" && !ps.deathTrackFrozen) {

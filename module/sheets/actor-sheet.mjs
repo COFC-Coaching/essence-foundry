@@ -19,6 +19,14 @@ const DOMAINS = [
 const SKILL_GATE = { gestalt: "Gifted", magecraft: "Arcanist", psionics: "Psyker", ritualism: "Invoker", calling: "Summoner" };
 const ORIGIN_TYPES = ["species", "heritage", "distinction"];
 
+/** Magecraft's 10 fixed subtypes, grouped by family (part-iv-combat.md § Thread Families). */
+const MAGECRAFT_THREAD_FAMILIES = [
+  { label: "Elemental", threads: ["Fire", "Water", "Earth", "Air"] },
+  { label: "Cosmic", threads: ["Time", "Space"] },
+  { label: "Perceptual", threads: ["Light", "Shadow"] },
+  { label: "Arcane", threads: ["Aether", "Chaos"] }
+];
+
 function pips(value, max = PIP_MAX) {
   return Array.from({ length: max }, (_, i) => i < value);
 }
@@ -53,7 +61,16 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       toggleCoreInfluence: EssenceActorSheet.#onToggleCoreInfluence,
       addArrayRow: EssenceActorSheet.#onAddArrayRow,
       deleteArrayRow: EssenceActorSheet.#onDeleteArrayRow,
-      addExpertise: EssenceActorSheet.#onAddExpertise
+      addExpertise: EssenceActorSheet.#onAddExpertise,
+      toggleCombo: EssenceActorSheet.#onToggleCombo,
+      clearLock: EssenceActorSheet.#onClearLock,
+      endAdaptation: EssenceActorSheet.#onEndAdaptation,
+      clearContingency: EssenceActorSheet.#onClearContingency,
+      toggleThread: EssenceActorSheet.#onToggleThread,
+      addAuthority: EssenceActorSheet.#onAddAuthority,
+      removeAuthority: EssenceActorSheet.#onRemoveAuthority,
+      addRite: EssenceActorSheet.#onAddRite,
+      deleteRite: EssenceActorSheet.#onDeleteRite
     }
   };
 
@@ -161,6 +178,15 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     context.deathTrackPips = pips(system.playState.deathTrackStep, 5);
     context.temporaryInfluencePips = pips(system.playState.currentTemporaryInfluence, system.temporaryInfluence);
     context.coreInfluenceLabels = CORE_INFLUENCE_LABELS;
+
+    context.comboPips = pips(system.specialties.combo, 5);
+    context.threadFamilies = MAGECRAFT_THREAD_FAMILIES.map((f) => ({
+      label: f.label,
+      threads: f.threads.map((t) => ({ name: t, active: system.specialties.threads.includes(t) }))
+    }));
+    context.authorityCap = Math.ceil((system.leadership ?? 0) / 2);
+    context.authorityEntries = system.specialties.authority.map((value, i) => ({ value, i }));
+    context.riteEntries = system.specialties.rites.map((r, i) => ({ ...r, i }));
 
     context.actionCards = this.actor.items.filter((i) => i.type === "action-card");
     context.reactionCards = this.actor.items.filter((i) => i.type === "reaction-card");
@@ -676,6 +702,101 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const expertises = this.actor.system.expertises.map((e) => ({ name: e.name, skill: e.skill }));
     expertises.push({ name: "", skill });
     await this.actor.update({ "system.expertises": expertises });
+  }
+
+  // ---- Combat Style Specialties (part-iv-combat.md § Combat Styles) ----
+  // All manually managed by the player, same as the rest of the sheet (Apply Damage, Burn Dice,
+  // etc. are manual too) — there's no hook that reliably knows "this Action dealt Damage" or
+  // "this is a Magecraft Action of subtype Fire" from here, so triggers stay player-driven.
+
+  /** Prowess — Combo (0-5, each point adds 1 Movement, see totalMovement in actor-character.mjs). */
+  static async #onToggleCombo(event, target) {
+    const i = Number(target.dataset.index);
+    const next = EssenceActorSheet.#onTogglePip(this.actor.system.specialties.combo, i);
+    await this.actor.update({ "system.specialties.combo": next });
+  }
+
+  /** Ballistics — Lock is free text (the Locked creature's name); establishing is just typing a new one. */
+  static async #onClearLock() {
+    await this.actor.update({ "system.specialties.lock": "" });
+  }
+
+  /** Gestalt — Adaptation name/upkeep are bound directly via form inputs; this just ends it. */
+  static async #onEndAdaptation() {
+    await this.actor.update({ "system.specialties.adaptation": { name: "", upkeep: 0 } });
+  }
+
+  /** Cunning — Contingency is free text (trigger + effect); this clears it (used or expired). */
+  static async #onClearContingency() {
+    await this.actor.update({ "system.specialties.contingency": "" });
+  }
+
+  /** Magecraft — Threads: up to 3 of the 10 fixed family names (part-iv-combat.md § Thread Families). */
+  static async #onToggleThread(event, target) {
+    const thread = target.dataset.thread;
+    const threads = [...this.actor.system.specialties.threads];
+    const i = threads.indexOf(thread);
+    if (i !== -1) {
+      threads.splice(i, 1);
+    } else {
+      if (threads.length >= 3) {
+        ui.notifications.warn("Already maintaining 3 Threads — remove one first.");
+        return;
+      }
+      threads.push(thread);
+    }
+    await this.actor.update({ "system.specialties.threads": threads });
+  }
+
+  /** Leadership — Authority: stored die results, capped at half Leadership Rank (rounded up). */
+  static async #onAddAuthority() {
+    const rank = this.actor.system.leadership ?? 0;
+    const cap = Math.ceil(rank / 2);
+    const authority = this.actor.system.specialties.authority;
+    if (authority.length >= cap) {
+      ui.notifications.warn(`Already storing the maximum Authority for your Leadership Rank (${cap}).`);
+      return;
+    }
+    const value = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: "Store Authority" },
+        content: `<label>Rolled result to store <input type="number" name="value" value="1" min="1" max="10" autofocus></label>`,
+        buttons: [{
+          action: "store",
+          label: "Store",
+          default: true,
+          callback: (event, button) => Number(button.form.elements.value.value)
+        }],
+        submit: (result) => resolve(result === "store" ? null : result)
+      }).render(true);
+    });
+    if (value === null || !Number.isFinite(value)) return;
+    await this.actor.update({ "system.specialties.authority": [...authority, value] });
+  }
+
+  static async #onRemoveAuthority(event, target) {
+    const i = Number(target.dataset.index);
+    const authority = [...this.actor.system.specialties.authority];
+    authority.splice(i, 1);
+    await this.actor.update({ "system.specialties.authority": authority });
+  }
+
+  /** Ritualism — Rites: up to 3 (trigger, Echo, Echo Limit). */
+  static async #onAddRite() {
+    const rites = this.actor.system.specialties.rites.map((r) => ({ ...r }));
+    if (rites.length >= 3) {
+      ui.notifications.warn("Already maintaining 3 Rites — remove one first.");
+      return;
+    }
+    rites.push({ trigger: "", echo: "", echoLimit: 1 });
+    await this.actor.update({ "system.specialties.rites": rites });
+  }
+
+  static async #onDeleteRite(event, target) {
+    const i = Number(target.dataset.index);
+    const rites = this.actor.system.specialties.rites.map((r) => ({ ...r }));
+    rites.splice(i, 1);
+    await this.actor.update({ "system.specialties.rites": rites });
   }
 
   static #onItemEdit(event, target) {

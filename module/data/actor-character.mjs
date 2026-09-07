@@ -96,6 +96,29 @@ export default class EssenceCharacterData extends foundry.abstract.TypeDataModel
       signatureEquipmentLimit: new fields.NumberField({ integer: true, initial: 0 }),
       armoryLimit: new fields.NumberField({ integer: true, initial: 0 }),
 
+      // One resource-tracking mechanic per Combat Style (see part-iv-combat.md § Combat Styles).
+      // These are manually managed by the player, matching how the rest of the sheet works
+      // (Apply Damage, Burn Dice, etc. are all manual too) rather than auto-triggered off rolls.
+      specialties: new fields.SchemaField({
+        combo: new fields.NumberField({ integer: true, initial: 0, min: 0, max: 5 }), // Prowess
+        lock: new fields.StringField({ initial: "" }), // Ballistics — name of the Locked creature
+        adaptation: new fields.SchemaField({ // Gestalt
+          name: new fields.StringField({ initial: "" }),
+          upkeep: new fields.NumberField({ integer: true, initial: 0, min: 0 })
+        }),
+        contingency: new fields.StringField({ initial: "" }), // Cunning — trigger + effect, free text
+        threads: new fields.ArrayField(new fields.StringField()), // Magecraft — up to 3, fixed family names
+        strain: new fields.NumberField({ integer: true, initial: 0, min: 0 }), // Psionics
+        authority: new fields.ArrayField(new fields.NumberField({ integer: true })), // Leadership — stored die results
+        rites: new fields.ArrayField(new fields.SchemaField({ // Ritualism — up to 3
+          trigger: new fields.StringField({ initial: "" }),
+          echo: new fields.StringField({ initial: "" }),
+          echoLimit: new fields.NumberField({ integer: true, initial: 1, min: 1 })
+        })),
+        manifested: new fields.BooleanField({ initial: false }), // Calling — Full Manifestation active
+        broken: new fields.BooleanField({ initial: false }) // Calling — Specialty Condition
+      }),
+
       // Play state — combat lifecycle & live resource tracking (see play-mode.ts parity notes)
       playState: new fields.SchemaField({
         revision: new fields.NumberField({ integer: true, initial: 0 }),
@@ -151,6 +174,9 @@ export default class EssenceCharacterData extends foundry.abstract.TypeDataModel
 
     // Base combat dice pool: Tier + 5 (see play-mode.ts)
     this.baseCombatDice = 5 + (this.tier || 0);
+
+    // Each point of Combo increases Movement by 1 unit (part-iv-combat.md § Combo).
+    this.totalMovement = this.movement + (this.specialties?.combo ?? 0);
 
     // Wound State depends only on how many Core Wound spaces are filled, never on any single
     // attack's Damage (see part-iv-combat.md § Wound States).

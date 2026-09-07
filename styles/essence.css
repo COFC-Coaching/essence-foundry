@@ -77,6 +77,18 @@
 .essence .combat-controls { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
 .essence .combat-state { margin-bottom: 8px; opacity: 0.85; }
 
+.essence .specialties { margin-bottom: 8px; }
+.essence .specialty-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
+.essence .specialty-row .attr-label { flex: 0 0 auto; cursor: help; border-bottom: 1px dotted #888; }
+.essence .specialty-row input[type="text"] { flex: 1; min-width: 120px; }
+.essence .specialty-row-wrap { align-items: flex-start; }
+.essence .thread-chips { display: flex; gap: 4px; flex-wrap: wrap; }
+.essence .thread-chip {
+  font-size: 0.8em; padding: 2px 8px; border-radius: 10px; border: 1px solid #888;
+  background: transparent; color: inherit; cursor: pointer;
+}
+.essence .thread-chip.active { background: #f9a825; border-color: #f9a825; color: #000; font-weight: bold; }
+
 .essence .item-list { list-style: none; padding: 0; }
 .essence .item-list li { display: flex; align-items: center; gap: 6px; padding: 2px 0; }
 
