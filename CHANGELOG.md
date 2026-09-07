@@ -2,6 +2,23 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.6
+
+- Fix WCAG contrast failures on the system's pass/fail status colors: `#2e7d32`/`#c62828` as text
+  on the sheet's dark background measured ~2.8:1 and ~1.7:1 (both well under the 4.5:1 floor) in
+  the chat roll-card's Pass/Fail text and the Wizard's validation checklist — the one place a
+  single color *is* the signal. Lifted to `#66bb6a`/`#ef5350` for text; the darker tones are
+  unchanged everywhere they're a background under white text (success-die, spent Surge badge),
+  which already passed.
+- Make the Wound/Death Track/Combo/Influence pip tracks keyboard-reachable: they were unlabeled
+  `<span>`s with no role, state, or focus support — the most-used interaction in combat was
+  mouse-only. Converted to real `<button>`s with `aria-pressed` and a descriptive `aria-label`
+  (e.g. "Core Wound 2: Serious Physical Wound"), across the character sheet, NPC sheet, and Wizard.
+- Give the character sheet's tabs `role="tab"`, `aria-selected`, and keyboard focus (`tabindex="0"`)
+  — previously plain links with no tab semantics and no way to reach them without a mouse.
+- Add a single global `:focus-visible` outline — no such rule existed anywhere in the system, so
+  every custom-painted control was invisible to keyboard focus even where it was reachable.
+
 ## 0.6.5
 
 - Fix the Biography tab's Concept field clipping its own content: it was a plain 2-row `<textarea>`

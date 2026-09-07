@@ -191,13 +191,13 @@
     <h3 class="section-head">Temporary Influence</h3>
     <span class="pip-track">
       {{#each temporaryInfluencePips as |filled i|}}
-        <span class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempInfluence" data-index="{{i}}"></span>
+        <button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempInfluence" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="Temporary Influence {{addOne i}}"></button>
       {{/each}}
     </span>
     <h3 class="section-head">Core Influence <span class="muted">(never spent by choice — new characters begin unmarked)</span></h3>
     <span class="pip-track">
       {{#each coreInfluencePips as |c i|}}
-        <span class="pip toggle {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}"></span>
+        <button type="button" class="pip toggle {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}" aria-pressed="{{c.filled}}" aria-label="Core Influence {{addOne i}}"></button>
       {{/each}}
     </span>
   {{/if}}

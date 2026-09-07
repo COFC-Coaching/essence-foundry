@@ -131,7 +131,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
   #applyActiveTab() {
     for (const link of this.element.querySelectorAll(".sheet-tabs a")) {
-      link.classList.toggle("active", link.dataset.tab === this.#activeTab);
+      const active = link.dataset.tab === this.#activeTab;
+      link.classList.toggle("active", active);
+      link.setAttribute("aria-selected", active);
     }
     for (const section of this.element.querySelectorAll("section.tab")) {
       section.classList.toggle("active", section.dataset.tab === this.#activeTab);

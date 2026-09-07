@@ -73,13 +73,13 @@
   <div class="wound-block">
     <span class="attr-label">Temporary Wounds</span>
     <span class="pip-track">
-      {{#each temporaryWoundPips as |filled i|}}<span class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempWound" data-index="{{i}}"></span>{{/each}}
+      {{#each temporaryWoundPips as |filled i|}}<button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempWound" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="Temporary Wound {{addOne i}}"></button>{{/each}}
     </span>
   </div>
   <div class="wound-block">
     <span class="attr-label">Core Wounds</span>
     <span class="pip-track">
-      {{#each system.coreWounds as |w i|}}<span class="pip toggle {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" title="{{w.condition}}"></span>{{/each}}
+      {{#each system.coreWounds as |w i|}}<button type="button" class="pip toggle {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" title="{{w.condition}}" aria-pressed="{{w.filled}}" aria-label="Core Wound {{addOne i}}{{#if w.condition}}: {{w.condition}}{{/if}}"></button>{{/each}}
     </span>
   </div>
   <div class="wound-block">
@@ -92,7 +92,7 @@
     <div class="wound-block">
       <span class="attr-label">Death Track</span>
       <span class="pip-track">
-        {{#each deathTrackPips as |filled i|}}<span class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleDeathTrack" data-index="{{i}}"></span>{{/each}}
+        {{#each deathTrackPips as |filled i|}}<button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleDeathTrack" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="Death Track Step {{addOne i}}"></button>{{/each}}
       </span>
     </div>
     <div class="wound-block">

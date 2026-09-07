@@ -72,11 +72,20 @@
 .essence .max-value { font-weight: bold; }
 
 .essence .pip-track { display: inline-flex; gap: 3px; }
+/* Wound/Death Track/Combo/Influence pips were unlabeled <span>s — mouse-only, no state exposed
+   to a screen reader, unreachable by keyboard. They're now real <button>s (aria-pressed/
+   aria-label set in the templates); this resets the browser's own button chrome (padding,
+   border, font, background) back to the pip's own circular look. */
+.essence button.pip { padding: 0; margin: 0; font: inherit; -webkit-appearance: none; appearance: none; }
 .essence .pip { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #888; display: inline-block; background: transparent; }
 .essence .pip.filled { background: #f9a825; border-color: #f9a825; }
 .essence .pip.toggle { cursor: pointer; width: 18px; height: 18px; }
 .essence .pip.labeled { width: 18px; height: 18px; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; color: #ccc; }
 .essence .pip.labeled.filled { color: #000; }
+/* No :focus-visible rule existed anywhere in the system — every custom-painted control (pips,
+   tabs, skill-roll buttons, thread chips) was keyboard-invisible even once focusable. One rule,
+   applied everywhere. */
+.essence :focus-visible { outline: 2px solid #f9a825; outline-offset: 2px; }
 
 .essence .wounds-row, .essence .influence-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 8px; }
 .essence .wound-block { display: flex; align-items: center; gap: 8px; }
@@ -183,8 +192,13 @@
 }
 .essence.roll-card .die.success-die { background: #2e7d32; color: #fff; filter: drop-shadow(0 2px 3px rgba(46,125,50,0.7)); }
 .essence.roll-card .die.surge-die { background: #f9a825; border-color: #ffca28; color: #000; }
-.essence.roll-card .pass { color: #2e7d32; font-weight: bold; }
-.essence.roll-card .fail { color: #c62828; font-weight: bold; }
+/* #2e7d32/#c62828 (this system's "success"/"fail" green/red everywhere else, e.g. the success-die
+   background) measure ~2.8:1 and ~1.7:1 as TEXT on this sheet's rgb(48,40,49) background — both
+   well under WCAG AA's 4.5:1 floor, and pass/fail here is color-only, no icon or shape backup.
+   Lifted just for text-on-dark use; the darker tones stay correct wherever they're a background
+   under white text (success-die, spent Surge cost badge), which already passes. */
+.essence.roll-card .pass { color: #66bb6a; font-weight: bold; }
+.essence.roll-card .fail { color: #ef5350; font-weight: bold; }
 .essence.roll-card .muted { opacity: 0.7; font-size: 0.9em; }
 .essence.roll-card .target-results { width: 100%; border-collapse: collapse; margin: 4px 0; font-size: 0.9em; }
 .essence.roll-card .target-results th, .essence.roll-card .target-results td { border: 1px solid #555; padding: 2px 6px; text-align: left; }
@@ -276,8 +290,8 @@
 .essence .wizard-scroll-list { max-height: 220px; overflow-y: auto; border: 1px solid #555; border-radius: 4px; padding: 4px 6px; }
 .essence .wizard-checklist { list-style: none; padding: 0; }
 .essence .wizard-checklist li { padding: 2px 0; }
-.essence .wizard-checklist li.ok { color: #2e7d32; }
-.essence .wizard-checklist li.fail { color: #c62828; }
+.essence .wizard-checklist li.ok { color: #66bb6a; }
+.essence .wizard-checklist li.fail { color: #ef5350; }
 
 .essence .wizard-array-block {
   display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px;

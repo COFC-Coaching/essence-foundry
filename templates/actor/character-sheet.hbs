@@ -17,12 +17,12 @@
   </div>
 </header>
 
-<nav class="sheet-tabs">
-  <a data-action="changeTab" data-tab="core">Core</a>
-  <a data-action="changeTab" data-tab="combat">Combat</a>
-  <a data-action="changeTab" data-tab="equipment">Equipment</a>
-  <a data-action="changeTab" data-tab="noncombat">Non-Combat</a>
-  <a data-action="changeTab" data-tab="bio">Biography</a>
+<nav class="sheet-tabs" role="tablist">
+  <a data-action="changeTab" data-tab="core" role="tab" tabindex="0">Core</a>
+  <a data-action="changeTab" data-tab="combat" role="tab" tabindex="0">Combat</a>
+  <a data-action="changeTab" data-tab="equipment" role="tab" tabindex="0">Equipment</a>
+  <a data-action="changeTab" data-tab="noncombat" role="tab" tabindex="0">Non-Combat</a>
+  <a data-action="changeTab" data-tab="bio" role="tab" tabindex="0">Biography</a>
 </nav>
 
 {{!-- ============ CORE: attributes, resources, defenses, wounds ============ --}}
@@ -63,7 +63,7 @@
       <span class="attr-label">Temporary Wounds</span>
       <span class="pip-track">
         {{#each temporaryWoundPips as |filled i|}}
-          <span class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempWound" data-index="{{i}}"></span>
+          <button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempWound" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="Temporary Wound {{addOne i}}"></button>
         {{/each}}
       </span>
     </div>
@@ -71,7 +71,7 @@
       <span class="attr-label">Core Wounds</span>
       <span class="pip-track">
         {{#each system.coreWounds as |w i|}}
-          <span class="pip toggle {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" title="{{w.condition}}"></span>
+          <button type="button" class="pip toggle {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" title="{{w.condition}}" aria-pressed="{{w.filled}}" aria-label="Core Wound {{addOne i}}{{#if w.condition}}: {{w.condition}}{{/if}}"></button>
         {{/each}}
       </span>
     </div>
@@ -86,7 +86,7 @@
         <span class="attr-label">Death Track</span>
         <span class="pip-track">
           {{#each deathTrackPips as |filled i|}}
-            <span class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleDeathTrack" data-index="{{i}}"></span>
+            <button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleDeathTrack" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="Death Track Step {{addOne i}}"></button>
           {{/each}}
         </span>
       </div>
@@ -179,7 +179,7 @@
         <div class="specialty-row">
           <span class="attr-label" title="Whenever you inflict Damage with a Prowess Action/Reaction, gain 1 Combo (max 5). Each Combo adds 1 Movement. Lose 1 if you dealt no Damage this Turn, or whenever you suffer a non-Temporary Wound.">Combo (Prowess)</span>
           <span class="pip-track">
-            {{#each comboPips as |filled i|}}<span class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleCombo" data-index="{{i}}"></span>{{/each}}
+            {{#each comboPips as |filled i|}}<button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleCombo" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="Combo {{addOne i}}"></button>{{/each}}
           </span>
         </div>
       {{/if}}
@@ -379,7 +379,7 @@
       <span class="attr-label">Temporary Influence</span>
       <span class="pip-track">
         {{#each temporaryInfluencePips as |filled i|}}
-          <span class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempInfluence" data-index="{{i}}"></span>
+          <button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempInfluence" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="Temporary Influence {{addOne i}}"></button>
         {{/each}}
       </span>
     </div>
@@ -387,7 +387,7 @@
       <span class="attr-label">Core Influence</span>
       <span class="pip-track">
         {{#each system.coreInfluence as |c i|}}
-          <span class="pip toggle labeled {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}">{{lookup ../coreInfluenceLabels i}}</span>
+          <button type="button" class="pip toggle labeled {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}" aria-pressed="{{c.filled}}">{{lookup ../coreInfluenceLabels i}}</button>
         {{/each}}
       </span>
     </div>
