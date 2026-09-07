@@ -2,6 +2,13 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.2
+
+- Add a confirmation dialog before deleting an owned Item (Action/Reaction Cards, Conditions,
+  Equipment) from a character or NPC sheet — deletion was previously immediate with no undo,
+  and the trash icon sat 6px from the roll button every card row uses every turn. Also gave
+  the delete icon a distinct danger color so it reads as destructive before the click.
+
 ## 0.6.1
 
 - Fix oversized headers and excess dead space on every item sheet (Combat Cards, Equipment,

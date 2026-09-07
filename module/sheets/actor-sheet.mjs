@@ -796,6 +796,12 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   }
 
   static async #onItemDelete(event, target) {
-    await this.actor.items.get(target.dataset.itemId)?.delete();
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (!item) return;
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: "Delete Item" },
+      content: `<p>Delete <strong>${item.name}</strong>? This cannot be undone.</p>`
+    });
+    if (confirmed) await item.delete();
   }
 }

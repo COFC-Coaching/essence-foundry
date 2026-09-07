@@ -118,6 +118,11 @@
 
 .essence .item-list { list-style: none; padding: 0; }
 .essence .item-list li { display: flex; align-items: center; gap: 6px; padding: 2px 0; }
+/* Delete is irreversible (no document undo in Foundry) and otherwise sits one icon-width from
+   the roll button every card row uses every turn — give it its own color and a little breathing
+   room so it doesn't read as "just another icon" next to Edit. The confirmation dialog in
+   #onItemDelete is the actual safety net; this is just making the danger visible before the click. */
+.essence a[data-action="itemDelete"] { color: #ef5350; margin-left: 4px; }
 
 .essence .condition-list { display: flex; flex-direction: column; gap: 6px; }
 .essence .condition-entry {
