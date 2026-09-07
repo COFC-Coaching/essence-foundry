@@ -68,6 +68,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
+    context.actor = this.actor;
     const system = this.actor.system;
     context.system = system;
     context.attributeOptions = ATTRIBUTES;
@@ -98,10 +99,17 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     context.actionCards = this.actor.items.filter((i) => i.type === "action-card");
     context.reactionCards = this.actor.items.filter((i) => i.type === "reaction-card");
     context.conditions = this.actor.items.filter((i) => i.type === "condition");
+    const equipmentView = (item) => ({
+      id: item.id,
+      name: item.name,
+      category: item.system.category,
+      type: item.system.type,
+      effectText: item.system.effect || item.system.passive || item.system.special || ""
+    });
     const equipment = this.actor.items.filter((i) => i.type === "equipment");
-    context.signatureEquipment = equipment.filter((i) => i.system.slot === "signature");
-    context.armoryEquipment = equipment.filter((i) => i.system.slot === "armory");
-    context.temporaryEquipment = equipment.filter((i) => i.system.slot === "temporary");
+    context.signatureEquipment = equipment.filter((i) => i.system.slot === "signature").map(equipmentView);
+    context.armoryEquipment = equipment.filter((i) => i.system.slot === "armory").map(equipmentView);
+    context.temporaryEquipment = equipment.filter((i) => i.system.slot === "temporary").map(equipmentView);
     return context;
   }
 

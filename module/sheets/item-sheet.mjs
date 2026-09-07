@@ -10,6 +10,7 @@ class EssenceItemSheetBase extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
+    context.item = this.item;
     context.system = this.item.system;
     return context;
   }

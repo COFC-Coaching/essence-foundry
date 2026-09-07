@@ -21,6 +21,8 @@ function loadRows(file) {
 function writeSourceDoc(packName, doc) {
   const dir = path.join(SOURCE_DIR, packName);
   fs.mkdirSync(dir, { recursive: true });
+  // Required by @foundryvtt/foundryvtt-cli's compilePack: identifies the doc's collection + id in the LevelDB key.
+  doc._key = `!items!${doc._id}`;
   fs.writeFileSync(path.join(dir, `${slugify(doc.name)}_${doc._id}.json`), JSON.stringify(doc, null, 2));
 }
 

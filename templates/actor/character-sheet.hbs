@@ -154,7 +154,7 @@
     <tbody>
       {{#each signatureEquipment as |item i|}}
         <tr>
-          <td>{{i}}</td><td>{{item.name}}</td><td>{{item.system.category}}</td><td>{{item.system.effect}}</td>
+          <td>{{i}}</td><td>{{item.name}}</td><td>{{item.category}}</td><td>{{item.effectText}}</td>
           <td><a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
               <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></td>
         </tr>
@@ -168,7 +168,7 @@
     <tbody>
       {{#each temporaryEquipment as |item|}}
         <tr>
-          <td>{{item.name}}</td><td>{{item.system.type}}</td><td>{{item.system.effect}}</td>
+          <td>{{item.name}}</td><td>{{item.type}}</td><td>{{item.effectText}}</td>
           <td><a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
               <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></td>
         </tr>
@@ -182,7 +182,7 @@
     <tbody>
       {{#each armoryEquipment as |item|}}
         <tr>
-          <td>{{item.name}}</td><td>{{item.system.category}}</td><td>{{item.system.special}}</td>
+          <td>{{item.name}}</td><td>{{item.category}}</td><td>{{item.effectText}}</td>
           <td><a data-action="itemEdit" data-item-id="{{item.id}}"><i class="fa-solid fa-pen"></i></a>
               <a data-action="itemDelete" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></td>
         </tr>
