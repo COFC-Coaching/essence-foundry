@@ -1,0 +1,42 @@
+name: Release
+
+# Fires on any tag matching v*.*.* (e.g. v0.5.0). Push a tag to cut a release — nothing else
+# to do by hand. Packs are already built and committed (see scripts/build-packs.mjs), so this
+# workflow only needs to package what's already in the repo, not rebuild content from Neon.
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify tag matches system.json version
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          MANIFEST_VERSION="$(node -p "require('./system.json').version")"
+          if [ "$TAG_VERSION" != "$MANIFEST_VERSION" ]; then
+            echo "::error::Tag v$TAG_VERSION does not match system.json version $MANIFEST_VERSION — update system.json first."
+            exit 1
+          fi
+
+      - name: Package the system
+        # system.json must sit at the ZIP ROOT (Foundry's installer unzips flat, it doesn't
+        # expect a wrapping folder) — everything Foundry actually loads at runtime, and nothing
+        # dev-only (Neon sync scripts, node_modules, CI config, package.json).
+        run: |
+          zip -r essence-system.zip \
+            system.json module templates styles lang packs LICENSE README.md \
+            -x "packs/*/LOCK"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: essence-system.zip
+          generate_release_notes: true
