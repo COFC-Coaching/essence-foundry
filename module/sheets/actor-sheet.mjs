@@ -59,11 +59,29 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     body: { template: "systems/essence-system/templates/actor/character-sheet.hbs" }
   };
 
-  #activeTab = "main";
+  #activeTab = "core";
 
   _onRender(context, options) {
     super._onRender(context, options);
     this.#applyActiveTab();
+    this.#applyEditable();
+  }
+
+  /**
+   * Foundry's form only blocks a submitted update server-side — it doesn't stop the UI from
+   * looking editable to someone without OWNER permission (e.g. a player with LIMITED/OBSERVER
+   * access, or anyone viewing while the sheet isn't editable for another reason). Lock every
+   * field and action button down to match `this.isEditable` so non-owners get a visibly
+   * read-only sheet instead of controls that silently fail to save.
+   */
+  #applyEditable() {
+    if (this.isEditable) return;
+    for (const el of this.element.querySelectorAll("input, select, textarea")) el.disabled = true;
+    for (const el of this.element.querySelectorAll('button[data-action]:not([data-action="changeTab"]), a[data-action]:not([data-action="changeTab"])')) {
+      el.classList.add("locked");
+      el.style.pointerEvents = "none";
+    }
+    for (const el of this.element.querySelectorAll(".editor-edit")) el.style.display = "none";
   }
 
   #applyActiveTab() {

@@ -23,6 +23,18 @@ class EssenceItemSheetBase extends HandlebarsApplicationMixin(ItemSheetV2) {
     return context;
   }
 
+  /** Mirrors EssenceActorSheet#applyEditable — lock the sheet down for anyone without edit permission. */
+  _onRender(context, options) {
+    super._onRender(context, options);
+    if (this.isEditable) return;
+    for (const el of this.element.querySelectorAll("input, select, textarea")) el.disabled = true;
+    for (const el of this.element.querySelectorAll("button[data-action], a[data-action]")) {
+      el.classList.add("locked");
+      el.style.pointerEvents = "none";
+    }
+    for (const el of this.element.querySelectorAll(".editor-edit")) el.style.display = "none";
+  }
+
   static async #onAddArrayRow(event, target) {
     const key = target.dataset.array;
     const rows = this.item.system[key].map((row) => foundry.utils.deepClone(row));

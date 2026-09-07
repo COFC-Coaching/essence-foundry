@@ -1,4 +1,6 @@
 .essence.actor .essence-sheet-root { display: flex; flex-direction: column; height: 100%; padding: 4px 8px; overflow-y: auto; }
+.essence input:disabled, .essence select:disabled, .essence textarea:disabled { opacity: 0.65; cursor: not-allowed; }
+.essence .locked { opacity: 0.4; cursor: not-allowed; }
 .essence.actor .sheet-header { display: flex; align-items: flex-start; gap: 10px; }
 .essence.actor .profile-img { width: 64px; height: 64px; object-fit: cover; border-radius: 4px; }
 .essence.actor .header-main { flex: 1; }
