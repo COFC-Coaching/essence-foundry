@@ -1,0 +1,104 @@
+[
+  {
+    "name": "Prowess",
+    "domain": "Physical",
+    "resource": "Stamina",
+    "specialty": "Combo",
+    "specialtyCondition": "Stance",
+    "description": "Close-quarters martial combat, physical pressure, and momentum built through successful exchanges — armed fighting, unarmed combat, grappling, aggressive movement, and defensive weapon use.",
+    "specialtyText": "Whenever you inflict at least 1 Damage with a Prowess Action or Reaction, gain 1 Combo (max 5, no more than 1 per Action/Reaction). Each Combo increases your Movement by 1 unit. Prowess cards may generate, check, preserve, spend, or convert Combo into payoffs. At the end of your Turn, lose 1 Combo if you dealt no Damage that Turn; you also lose 1 Combo whenever you suffer a non-Temporary Wound.",
+    "expertises": ["Dueling", "Berserking", "Brawling", "Grappling", "Skirmishing", "Reaving", "Phalanx"],
+    "subtypes": ["Opener", "Blitz", "Finisher", "Breaker", "Guard"]
+  },
+  {
+    "name": "Ballistics",
+    "domain": "Physical",
+    "resource": "Stamina",
+    "specialty": "Lock",
+    "specialtyCondition": "Lock",
+    "description": "Ranged combat, precision, projectile control, and sustained targeting — firearms, bows, crossbows, thrown weapons, launchers, or energy weapons.",
+    "specialtyText": "When using a Ballistics Action against a detected creature with a clear firing solution, burn 1 additional die to establish Lock on it before the Action resolves. You may maintain only one Lock at a time; establishing a new one ends the previous. A Lock ends if the target remains completely outside your line of sight through the end of your Turn.",
+    "expertises": ["Precision", "Trajectory", "Cadence", "Payload", "Mobility", "Penetration", "Flair"],
+    "subtypes": ["Targeting", "Suppression", "Trickshot", "Salvo", "Execution"]
+  },
+  {
+    "name": "Gestalt",
+    "domain": "Physical",
+    "resource": "Stamina",
+    "specialty": "Adaptation",
+    "specialtyCondition": "Unstable",
+    "description": "Supernatural transformation and deliberate physical adaptation — altering the body for weapons, armor, movement, senses, size, or regeneration suited to the current problem.",
+    "specialtyText": "A Gestalt Action's Rider may offer an Adaptation; after resolving, assume it or retain your current one. Maintain only one Adaptation at a time — assuming another ends the previous. Adaptations may carry a Stamina upkeep cost, paid at the end of your Turn or the Adaptation ends.",
+    "expertises": ["Armament", "Regeneration", "Awareness", "Locomotion", "Metabolism", "Plasticity", "Integration"],
+    "subtypes": ["Predator", "Bulwark", "Titan", "Strider", "Chimera"]
+  },
+  {
+    "name": "Cunning",
+    "domain": "Mental",
+    "resource": "Focus",
+    "specialty": "Contingency",
+    "specialtyCondition": "Exposed",
+    "description": "Preparation, deception, tactical exploitation, improvisation, traps, and technical skill — turning an opponent's own choices into part of the plan.",
+    "specialtyText": "A Cunning Action's Rider may establish a Contingency (a Trigger and an effect that resolves when it occurs). Establish only one per Round. A Contingency's resolution is not a newly declared Reaction. Unused Contingencies expire at the start of your next Turn.",
+    "expertises": ["Deception", "Infiltration", "Sabotage", "Exploitation", "Observation", "Improvisation", "Sleight"],
+    "subtypes": ["Ambush", "Trap", "Reversal", "Gambit", "Evasion"]
+  },
+  {
+    "name": "Magecraft",
+    "domain": "Mental",
+    "resource": "Focus",
+    "specialty": "Threads",
+    "specialtyCondition": "Concentration",
+    "description": "Direct shaping, release, alteration, and control of magical forces, leaving behind Threads that can strengthen or alter later spellwork.",
+    "specialtyText": "After a Magecraft Action, create the fixed Thread of its subtype (unlike other Riders, Magecraft Thread Riders never vary — every Action of a given subtype always creates the same Thread). Maintain up to 3 Threads; creating a 4th discards one existing Thread. Several Threads may be consumed on one Action when its rules permit. Unused Threads end when the Encounter ends. Ten fixed subtypes in four families: Elemental (Fire, Water, Earth, Air), Cosmic (Time, Space), Perceptual (Light, Shadow), Arcane (Aether, Chaos).",
+    "expertises": ["Channeling", "Sculpting", "Fabrication", "Transmutation", "Augmentation", "Reinforcement", "Disjunction"],
+    "subtypes": ["Fire", "Water", "Earth", "Air", "Time", "Space", "Light", "Shadow", "Aether", "Chaos"]
+  },
+  {
+    "name": "Psionics",
+    "domain": "Mental",
+    "resource": "Focus",
+    "specialty": "Strain",
+    "specialtyCondition": "Strain",
+    "description": "Supernatural force produced directly through the mind — telepathy, telekinesis, altered perception, prediction, and manipulation of bodily or cognitive processes.",
+    "specialtyText": "Whenever you use a Psionics Action or Reaction, you may gain 1 Strain to gain 1 additional Surge for it. Strain is cumulative and remains until removed. At 1-2 Strain, no penalty. At 3-4, each Psionics Action/Reaction burns 1 additional die. At 5+, suffer 1 Psychic damage after resolving a Psionics Action/Reaction. Strain is removed only by effects that specifically remove it, or by Recovery.",
+    "expertises": ["Telepathy", "Telekinesis", "Precognition", "Clairvoyance", "Imprint", "Biokinesis", "Mesmerism"],
+    "subtypes": ["Assault", "Barrier", "Projection", "Fracture", "Trance"]
+  },
+  {
+    "name": "Leadership",
+    "domain": "Spiritual",
+    "resource": "Mana",
+    "specialty": "Authority",
+    "specialtyCondition": "Rallied",
+    "description": "Battlefield command, coordination, morale, protection, and provocation — improving the effectiveness of the people around you while remaining a participant in the fight.",
+    "specialtyText": "When resolving a Leadership Action, roll all committed dice, including any that would normally have been burned unrolled. Afterward, store one rolled result on that card as Authority. Spend stored Authority in place of a die you'd roll/burn, or for a card's own Authority effect. Store Authority on a number of cards up to half your Leadership Rank, rounded up; exceeding that discards one stored Authority. Unused Authority ends when the Encounter ends.",
+    "expertises": ["Tactics", "Coordination", "Provocation", "Guardianship", "Discipline", "Inspiration", "Valor"],
+    "subtypes": ["Order", "Formation", "Standard", "Vow", "Example"]
+  },
+  {
+    "name": "Ritualism",
+    "domain": "Spiritual",
+    "resource": "Mana",
+    "specialty": "Rites",
+    "specialtyCondition": "Possessed",
+    "description": "Supernatural effects prepared and bound into creatures, objects, locations, and declared conditions — Rites whose effects occur when predicted or prepared circumstances arise.",
+    "specialtyText": "After a Ritualism Action, establish the Rite printed by its Rider (a Trigger, an Echo, and an Echo Limit). When the Trigger occurs, resolve the Echo and reduce the Rite's remaining Echoes by 1; remove the Rite after its final Echo. Maintain up to 3 Rites — establishing a 4th removes one existing Rite. Rites may trigger during any character's Turn since they were established in advance; their resolution is not a newly declared Reaction.",
+    "expertises": ["Inscription", "Reagents", "Sympathy", "Consecration", "Entreaty", "Severance", "Liturgy"],
+    "subtypes": ["Ward", "Hex", "Divination", "Imbuement", "Offering"]
+  },
+  {
+    "name": "Calling",
+    "domain": "Spiritual",
+    "resource": "Mana",
+    "specialty": "Full Manifestation",
+    "specialtyCondition": "Broken",
+    "description": "Supernatural bonds between a character and entities, forces, ancestors, spirits, monsters, or other manifested powers. Most Calling Actions channel only a portion of the entity's power (a claw, a breath, an aura, borrowed senses, and so on) without summoning a separate creature.",
+    "specialtyText": "A Calling Action's fixed Rider may offer Full Manifestation. When its printed requirements are met, pay the listed cost to bring the manifestation fully into the Encounter: it replaces the character on the battlefield, appears in the character's space, and uses its own Actions, Reactions, combat profile, and Wound Track. The character and manifestation share timing/Turn purposes unless stated otherwise. Damage while manifested applies to the manifestation's own Wound rules and persists when dismissed. If the manifestation is defeated, the bond suffers a serious disruption and the character may become Broken, losing access to that manifestation family until the bond recovers.",
+    "expertises": ["Accord", "Dominion", "Vessel", "Anchoring", "Banishment", "Chorus", "Transference"],
+    "subtypes": [
+      "Rank 0 — Familiar, Sprite", "Rank 1 — Beast, Phantom, Golem", "Rank 2 — Elemental, Ancestor, Fey",
+      "Rank 3 — Dragon, Fiend, Celestial", "Rank 4 — Abomination, Leviathan, Avatar", "Rank 5 — Outsider, Titan, Primordial"
+    ]
+  }
+]

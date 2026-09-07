@@ -1,0 +1,29 @@
+{
+  "_id": "c38f4f6b742f0fca",
+  "name": "Prowess",
+  "pages": [
+    {
+      "_id": "5fb033007b8c327e",
+      "_key": "!journal.pages!c38f4f6b742f0fca.5fb033007b8c327e",
+      "name": "Prowess",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p><strong>Domain:</strong> Physical &mdash; <strong>Resource:</strong> Stamina &mdash;\n    <strong>Specialty:</strong> Combo &mdash; <strong>Specialty Condition:</strong> Stance</p>\n    <p>Close-quarters martial combat, physical pressure, and momentum built through successful exchanges — armed fighting, unarmed combat, grappling, aggressive movement, and defensive weapon use.</p>\n    <h3>Combo</h3>\n    <p>Whenever you inflict at least 1 Damage with a Prowess Action or Reaction, gain 1 Combo (max 5, no more than 1 per Action/Reaction). Each Combo increases your Movement by 1 unit. Prowess cards may generate, check, preserve, spend, or convert Combo into payoffs. At the end of your Turn, lose 1 Combo if you dealt no Damage that Turn; you also lose 1 Combo whenever you suffer a non-Temporary Wound.</p>\n    <h3>Expertises</h3>\n    <ul><li>Dueling</li><li>Berserking</li><li>Brawling</li><li>Grappling</li><li>Skirmishing</li><li>Reaving</li><li>Phalanx</li></ul>\n    <h3>Subtypes</h3><ul><li>Opener</li><li>Blitz</li><li>Finisher</li><li>Breaker</li><li>Guard</li></ul>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!journal!c38f4f6b742f0fca"
+}

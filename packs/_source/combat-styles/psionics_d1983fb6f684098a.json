@@ -1,0 +1,29 @@
+{
+  "_id": "d1983fb6f684098a",
+  "name": "Psionics",
+  "pages": [
+    {
+      "_id": "5cc15419b673e2e2",
+      "_key": "!journal.pages!d1983fb6f684098a.5cc15419b673e2e2",
+      "name": "Psionics",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p><strong>Domain:</strong> Mental &mdash; <strong>Resource:</strong> Focus &mdash;\n    <strong>Specialty:</strong> Strain &mdash; <strong>Specialty Condition:</strong> Strain</p>\n    <p>Supernatural force produced directly through the mind — telepathy, telekinesis, altered perception, prediction, and manipulation of bodily or cognitive processes.</p>\n    <h3>Strain</h3>\n    <p>Whenever you use a Psionics Action or Reaction, you may gain 1 Strain to gain 1 additional Surge for it. Strain is cumulative and remains until removed. At 1-2 Strain, no penalty. At 3-4, each Psionics Action/Reaction burns 1 additional die. At 5+, suffer 1 Psychic damage after resolving a Psionics Action/Reaction. Strain is removed only by effects that specifically remove it, or by Recovery.</p>\n    <h3>Expertises</h3>\n    <ul><li>Telepathy</li><li>Telekinesis</li><li>Precognition</li><li>Clairvoyance</li><li>Imprint</li><li>Biokinesis</li><li>Mesmerism</li></ul>\n    <h3>Subtypes</h3><ul><li>Assault</li><li>Barrier</li><li>Projection</li><li>Fracture</li><li>Trance</li></ul>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!journal!d1983fb6f684098a"
+}

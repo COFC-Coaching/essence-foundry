@@ -1,0 +1,29 @@
+{
+  "_id": "14ee3e09578c5969",
+  "name": "Ballistics",
+  "pages": [
+    {
+      "_id": "400031dd9e838565",
+      "_key": "!journal.pages!14ee3e09578c5969.400031dd9e838565",
+      "name": "Ballistics",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p><strong>Domain:</strong> Physical &mdash; <strong>Resource:</strong> Stamina &mdash;\n    <strong>Specialty:</strong> Lock &mdash; <strong>Specialty Condition:</strong> Lock</p>\n    <p>Ranged combat, precision, projectile control, and sustained targeting — firearms, bows, crossbows, thrown weapons, launchers, or energy weapons.</p>\n    <h3>Lock</h3>\n    <p>When using a Ballistics Action against a detected creature with a clear firing solution, burn 1 additional die to establish Lock on it before the Action resolves. You may maintain only one Lock at a time; establishing a new one ends the previous. A Lock ends if the target remains completely outside your line of sight through the end of your Turn.</p>\n    <h3>Expertises</h3>\n    <ul><li>Precision</li><li>Trajectory</li><li>Cadence</li><li>Payload</li><li>Mobility</li><li>Penetration</li><li>Flair</li></ul>\n    <h3>Subtypes</h3><ul><li>Targeting</li><li>Suppression</li><li>Trickshot</li><li>Salvo</li><li>Execution</li></ul>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!journal!14ee3e09578c5969"
+}

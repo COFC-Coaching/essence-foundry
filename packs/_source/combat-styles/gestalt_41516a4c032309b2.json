@@ -1,0 +1,29 @@
+{
+  "_id": "41516a4c032309b2",
+  "name": "Gestalt",
+  "pages": [
+    {
+      "_id": "e62917512d2ccc7a",
+      "_key": "!journal.pages!41516a4c032309b2.e62917512d2ccc7a",
+      "name": "Gestalt",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p><strong>Domain:</strong> Physical &mdash; <strong>Resource:</strong> Stamina &mdash;\n    <strong>Specialty:</strong> Adaptation &mdash; <strong>Specialty Condition:</strong> Unstable</p>\n    <p>Supernatural transformation and deliberate physical adaptation — altering the body for weapons, armor, movement, senses, size, or regeneration suited to the current problem.</p>\n    <h3>Adaptation</h3>\n    <p>A Gestalt Action's Rider may offer an Adaptation; after resolving, assume it or retain your current one. Maintain only one Adaptation at a time — assuming another ends the previous. Adaptations may carry a Stamina upkeep cost, paid at the end of your Turn or the Adaptation ends.</p>\n    <h3>Expertises</h3>\n    <ul><li>Armament</li><li>Regeneration</li><li>Awareness</li><li>Locomotion</li><li>Metabolism</li><li>Plasticity</li><li>Integration</li></ul>\n    <h3>Subtypes</h3><ul><li>Predator</li><li>Bulwark</li><li>Titan</li><li>Strider</li><li>Chimera</li></ul>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!journal!41516a4c032309b2"
+}

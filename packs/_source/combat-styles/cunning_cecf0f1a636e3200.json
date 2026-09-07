@@ -1,0 +1,29 @@
+{
+  "_id": "cecf0f1a636e3200",
+  "name": "Cunning",
+  "pages": [
+    {
+      "_id": "6c8f346b6cd2cf50",
+      "_key": "!journal.pages!cecf0f1a636e3200.6c8f346b6cd2cf50",
+      "name": "Cunning",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p><strong>Domain:</strong> Mental &mdash; <strong>Resource:</strong> Focus &mdash;\n    <strong>Specialty:</strong> Contingency &mdash; <strong>Specialty Condition:</strong> Exposed</p>\n    <p>Preparation, deception, tactical exploitation, improvisation, traps, and technical skill — turning an opponent's own choices into part of the plan.</p>\n    <h3>Contingency</h3>\n    <p>A Cunning Action's Rider may establish a Contingency (a Trigger and an effect that resolves when it occurs). Establish only one per Round. A Contingency's resolution is not a newly declared Reaction. Unused Contingencies expire at the start of your next Turn.</p>\n    <h3>Expertises</h3>\n    <ul><li>Deception</li><li>Infiltration</li><li>Sabotage</li><li>Exploitation</li><li>Observation</li><li>Improvisation</li><li>Sleight</li></ul>\n    <h3>Subtypes</h3><ul><li>Ambush</li><li>Trap</li><li>Reversal</li><li>Gambit</li><li>Evasion</li></ul>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!journal!cecf0f1a636e3200"
+}

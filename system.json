@@ -78,6 +78,12 @@
       "path": "packs/distinctions",
       "type": "Item",
       "system": "essence-system"
+    },
+    {
+      "name": "combat-styles",
+      "label": "Combat Styles Reference",
+      "path": "packs/combat-styles",
+      "type": "JournalEntry"
     }
   ],
   "primaryTokenAttribute": "resources.stamina",

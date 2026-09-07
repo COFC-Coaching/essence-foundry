@@ -24,11 +24,11 @@ function loadRows(file) {
   return raw[0].rows;
 }
 
-function writeSourceDoc(packName, doc) {
+function writeSourceDoc(packName, doc, collection = "items") {
   const dir = path.join(SOURCE_DIR, packName);
   fs.mkdirSync(dir, { recursive: true });
   // Required by @foundryvtt/foundryvtt-cli's compilePack: identifies the doc's collection + id in the LevelDB key.
-  doc._key = `!items!${doc._id}`;
+  doc._key = `!${collection}!${doc._id}`;
   fs.writeFileSync(path.join(dir, `${slugify(doc.name)}_${doc._id}.json`), JSON.stringify(doc, null, 2));
 }
 
@@ -166,6 +166,40 @@ function distinctionToItem(d) {
   };
 }
 
+function combatStyleToJournal(cs) {
+  const list = (items) => `<ul>${items.map((i) => `<li>${i}</li>`).join("")}</ul>`;
+  const content = `
+    <p><strong>Domain:</strong> ${cs.domain} &mdash; <strong>Resource:</strong> ${cs.resource} &mdash;
+    <strong>Specialty:</strong> ${cs.specialty} &mdash; <strong>Specialty Condition:</strong> ${cs.specialtyCondition}</p>
+    <p>${cs.description}</p>
+    <h3>${cs.specialty}</h3>
+    <p>${cs.specialtyText}</p>
+    <h3>Expertises</h3>
+    ${list(cs.expertises)}
+    ${cs.subtypes.length ? `<h3>Subtypes</h3>${list(cs.subtypes)}` : ""}
+  `.trim();
+  const entryId = stableId(`combat-style:${cs.name}`);
+  const pageId = stableId(`combat-style-page:${cs.name}`);
+  return {
+    _id: entryId,
+    name: cs.name,
+    pages: [{
+      _id: pageId,
+      // Nested embedded docs need their own _key too (!<parentCollection>.<embeddedCollection>!<parentId>.<id>)
+      // — see @foundryvtt/foundryvtt-cli's applyHierarchy, which recurses into `pages` for a "journal" doc.
+      _key: `!journal.pages!${entryId}.${pageId}`,
+      name: cs.name,
+      type: "text",
+      title: { show: true, level: 1 },
+      text: { content, format: 1 },
+      ownership: { default: -1 }
+    }],
+    folder: null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
 function mapCategory(raw) {
   if (!raw) return "gear";
   if (raw.includes("weapon")) return "weapon";
@@ -197,14 +231,21 @@ async function main() {
   for (const h of origin.heritages) writeSourceDoc("heritages", heritageToItem(h));
   for (const d of origin.distinctions) writeSourceDoc("distinctions", distinctionToItem(d));
 
-  console.log(`Source docs written: ${actionCount} action cards, ${reactionCount} reaction cards, ${conditionCards.length} conditions, ${equipmentCards.length} equipment, ${origin.species.length} species, ${origin.heritages.length} heritages, ${origin.distinctions.length} distinctions.`);
+  const combatStyles = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "combat-styles-data.json"), "utf8"));
+  for (const cs of combatStyles) writeSourceDoc("combat-styles", combatStyleToJournal(cs), "journal");
 
-  for (const packName of ["action-cards", "reaction-cards", "conditions", "equipment", "species", "heritages", "distinctions"]) {
+  console.log(`Source docs written: ${actionCount} action cards, ${reactionCount} reaction cards, ${conditionCards.length} conditions, ${equipmentCards.length} equipment, ${origin.species.length} species, ${origin.heritages.length} heritages, ${origin.distinctions.length} distinctions, ${combatStyles.length} combat styles.`);
+
+  const packTypes = {
+    "action-cards": "Item", "reaction-cards": "Item", conditions: "Item", equipment: "Item",
+    species: "Item", heritages: "Item", distinctions: "Item", "combat-styles": "JournalEntry"
+  };
+  for (const [packName, type] of Object.entries(packTypes)) {
     const srcDir = path.join(SOURCE_DIR, packName);
     const outDir = path.join(ROOT, "packs", packName);
     if (!fs.existsSync(srcDir)) continue;
     fs.rmSync(outDir, { recursive: true, force: true });
-    await compilePack(srcDir, outDir, { type: "Item" });
+    await compilePack(srcDir, outDir, { type });
     console.log(`Packed: ${packName} -> ${outDir}`);
   }
 }

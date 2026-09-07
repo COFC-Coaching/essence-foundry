@@ -1,0 +1,29 @@
+{
+  "_id": "161501644a037d91",
+  "name": "Calling",
+  "pages": [
+    {
+      "_id": "8c7485045e3e7673",
+      "_key": "!journal.pages!161501644a037d91.8c7485045e3e7673",
+      "name": "Calling",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p><strong>Domain:</strong> Spiritual &mdash; <strong>Resource:</strong> Mana &mdash;\n    <strong>Specialty:</strong> Full Manifestation &mdash; <strong>Specialty Condition:</strong> Broken</p>\n    <p>Supernatural bonds between a character and entities, forces, ancestors, spirits, monsters, or other manifested powers. Most Calling Actions channel only a portion of the entity's power (a claw, a breath, an aura, borrowed senses, and so on) without summoning a separate creature.</p>\n    <h3>Full Manifestation</h3>\n    <p>A Calling Action's fixed Rider may offer Full Manifestation. When its printed requirements are met, pay the listed cost to bring the manifestation fully into the Encounter: it replaces the character on the battlefield, appears in the character's space, and uses its own Actions, Reactions, combat profile, and Wound Track. The character and manifestation share timing/Turn purposes unless stated otherwise. Damage while manifested applies to the manifestation's own Wound rules and persists when dismissed. If the manifestation is defeated, the bond suffers a serious disruption and the character may become Broken, losing access to that manifestation family until the bond recovers.</p>\n    <h3>Expertises</h3>\n    <ul><li>Accord</li><li>Dominion</li><li>Vessel</li><li>Anchoring</li><li>Banishment</li><li>Chorus</li><li>Transference</li></ul>\n    <h3>Subtypes</h3><ul><li>Rank 0 — Familiar, Sprite</li><li>Rank 1 — Beast, Phantom, Golem</li><li>Rank 2 — Elemental, Ancestor, Fey</li><li>Rank 3 — Dragon, Fiend, Celestial</li><li>Rank 4 — Abomination, Leviathan, Avatar</li><li>Rank 5 — Outsider, Titan, Primordial</li></ul>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!journal!161501644a037d91"
+}

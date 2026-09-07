@@ -1,0 +1,29 @@
+{
+  "_id": "a9d0bd8e2c334721",
+  "name": "Ritualism",
+  "pages": [
+    {
+      "_id": "ab4d833d442380d1",
+      "_key": "!journal.pages!a9d0bd8e2c334721.ab4d833d442380d1",
+      "name": "Ritualism",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p><strong>Domain:</strong> Spiritual &mdash; <strong>Resource:</strong> Mana &mdash;\n    <strong>Specialty:</strong> Rites &mdash; <strong>Specialty Condition:</strong> Possessed</p>\n    <p>Supernatural effects prepared and bound into creatures, objects, locations, and declared conditions — Rites whose effects occur when predicted or prepared circumstances arise.</p>\n    <h3>Rites</h3>\n    <p>After a Ritualism Action, establish the Rite printed by its Rider (a Trigger, an Echo, and an Echo Limit). When the Trigger occurs, resolve the Echo and reduce the Rite's remaining Echoes by 1; remove the Rite after its final Echo. Maintain up to 3 Rites — establishing a 4th removes one existing Rite. Rites may trigger during any character's Turn since they were established in advance; their resolution is not a newly declared Reaction.</p>\n    <h3>Expertises</h3>\n    <ul><li>Inscription</li><li>Reagents</li><li>Sympathy</li><li>Consecration</li><li>Entreaty</li><li>Severance</li><li>Liturgy</li></ul>\n    <h3>Subtypes</h3><ul><li>Ward</li><li>Hex</li><li>Divination</li><li>Imbuement</li><li>Offering</li></ul>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!journal!a9d0bd8e2c334721"
+}

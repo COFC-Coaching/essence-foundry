@@ -1,0 +1,29 @@
+{
+  "_id": "ff8ff9f9e3699477",
+  "name": "Leadership",
+  "pages": [
+    {
+      "_id": "25387fea00d28c66",
+      "_key": "!journal.pages!ff8ff9f9e3699477.25387fea00d28c66",
+      "name": "Leadership",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p><strong>Domain:</strong> Spiritual &mdash; <strong>Resource:</strong> Mana &mdash;\n    <strong>Specialty:</strong> Authority &mdash; <strong>Specialty Condition:</strong> Rallied</p>\n    <p>Battlefield command, coordination, morale, protection, and provocation — improving the effectiveness of the people around you while remaining a participant in the fight.</p>\n    <h3>Authority</h3>\n    <p>When resolving a Leadership Action, roll all committed dice, including any that would normally have been burned unrolled. Afterward, store one rolled result on that card as Authority. Spend stored Authority in place of a die you'd roll/burn, or for a card's own Authority effect. Store Authority on a number of cards up to half your Leadership Rank, rounded up; exceeding that discards one stored Authority. Unused Authority ends when the Encounter ends.</p>\n    <h3>Expertises</h3>\n    <ul><li>Tactics</li><li>Coordination</li><li>Provocation</li><li>Guardianship</li><li>Discipline</li><li>Inspiration</li><li>Valor</li></ul>\n    <h3>Subtypes</h3><ul><li>Order</li><li>Formation</li><li>Standard</li><li>Vow</li><li>Example</li></ul>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!journal!ff8ff9f9e3699477"
+}
