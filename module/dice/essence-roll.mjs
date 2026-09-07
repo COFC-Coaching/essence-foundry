@@ -40,8 +40,12 @@ export function resolveCombatRoll(faces, defense = null) {
  * @param {number|null} [options.defense] - opposing Defense value, for combat rolls
  * @param {string} [options.label] - chat card title
  * @param {Actor} [options.actor] - speaker actor
+ * @param {Array<{n: string, html: string}>} [options.surgeOptions] - a card's printed Surge
+ *   options (system.surges) — when given, the chat card renders them as clickable, spendable
+ *   options instead of just a bare Surge count. See essence.mjs's renderChatMessageHTML hook
+ *   for how clicking one is handled after the message is posted.
  */
-export async function rollEssencePool({ pool, defense = null, label = "Essence Roll", actor = null } = {}) {
+export async function rollEssencePool({ pool, defense = null, label = "Essence Roll", actor = null, surgeOptions = [] } = {}) {
   const n = Math.max(1, Math.floor(pool));
   const roll = new Roll(`${n}d10`);
   await roll.evaluate();
@@ -61,7 +65,8 @@ export async function rollEssencePool({ pool, defense = null, label = "Essence R
       successDie: combat.successDie,
       succeeded: combat.succeeded,
       surges: combat.surges,
-      poolSuccesses
+      poolSuccesses,
+      surgeOptions: surgeOptions.map((opt, i) => ({ i, n: opt.n, html: opt.html }))
     }
   );
 
@@ -69,7 +74,14 @@ export async function rollEssencePool({ pool, defense = null, label = "Essence R
     speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
     content,
     rolls: [roll],
-    sound: CONFIG.sounds.dice
+    sound: CONFIG.sounds.dice,
+    flags: {
+      "essence-system": {
+        surgesAvailable: combat.surges,
+        surgeOptions: surgeOptions.map((opt) => ({ n: opt.n, html: opt.html })),
+        spentIndices: []
+      }
+    }
   });
 
   return { roll, faces, ...combat, poolSuccesses };

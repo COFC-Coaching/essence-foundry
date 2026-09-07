@@ -51,3 +51,45 @@ Hooks.on("deleteCombat", async (combat) => {
     });
   }
 });
+
+/**
+ * Makes a card roll's chat-card Surge options actually clickable. The template renders each
+ * option baked with whatever spentIndices existed at post-time (always empty), so every render
+ * — including the first — has to reconcile the DOM against the message's *current* flags rather
+ * than trust the static `content` HTML, since flags are the persisted source of truth and get
+ * updated (not the stored content) each time someone spends or un-spends a Surge.
+ */
+Hooks.on("renderChatMessageHTML", (message, html) => {
+  const data = message.flags?.["essence-system"];
+  if (!data?.surgeOptions?.length) return;
+
+  const spent = new Set(data.spentIndices ?? []);
+  const cost = (i) => parseInt(data.surgeOptions[i]?.n, 10) || 1;
+  const spentTotal = [...spent].reduce((sum, i) => sum + cost(i), 0);
+  const remaining = data.surgesAvailable - spentTotal;
+
+  const remainingEl = html.querySelector(".surges-remaining .remaining");
+  if (remainingEl) remainingEl.textContent = remaining;
+
+  for (const btn of html.querySelectorAll(".surge-option")) {
+    // Foundry's own unlayered core CSS (a.button/button { height: var(--button-size) } and
+    // .chat-message button { height: var(--input-height) }) wins over anything in our
+    // @import ... layer(system) stylesheet for this property — even !important there loses,
+    // since unlayered !important outranks layered !important per the Cascade Layers spec.
+    // An inline !important is the one thing that reliably beats it, so size these here rather
+    // than fight the layer in CSS; without this a multi-line Surge option's text overflows its
+    // clamped 32px box onto the next chat element instead of the button growing to fit it.
+    btn.style.setProperty("height", "auto", "important");
+    btn.style.setProperty("min-height", "0", "important");
+
+    const i = Number(btn.dataset.index);
+    const isSpent = spent.has(i);
+    btn.classList.toggle("spent", isSpent);
+    btn.disabled = !isSpent && cost(i) > remaining;
+    btn.onclick = async () => {
+      const next = new Set(spent);
+      if (isSpent) next.delete(i); else next.add(i);
+      await message.update({ "flags.essence-system.spentIndices": Array.from(next) });
+    };
+  }
+});

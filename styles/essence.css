@@ -108,3 +108,24 @@
 .essence .roll-card .pass { color: #2e7d32; font-weight: bold; }
 .essence .roll-card .fail { color: #c62828; font-weight: bold; }
 .essence .roll-card .muted { opacity: 0.7; font-size: 0.9em; }
+.essence .roll-card .surge-options { margin: 6px 0; }
+.essence .roll-card .surges-remaining { margin-bottom: 4px; }
+.essence .roll-card .surge-option {
+  display: flex; gap: 6px; align-items: flex-start; width: 100%; text-align: left;
+  background: rgba(249, 168, 37, 0.12); border: 1px solid #f9a825; border-radius: 4px;
+  padding: 4px 6px; margin-bottom: 3px; cursor: pointer; color: inherit; font-size: 0.85em;
+  /* Foundry v14 loads system CSS via @import ... layer(system), which loses to ANY unlayered
+     core rule of matching selector regardless of specificity (only !important reliably wins
+     against that, since layered !important outranks unlayered normal AND unlayered !important
+     per the CSS Cascade Layers spec) — core's own `button { height: 2rem }` was clamping this
+     multi-line text to one line's worth of height and spilling it onto the next chat element. */
+  height: auto !important; min-height: 0 !important; line-height: 1.3 !important; white-space: normal !important;
+}
+.essence .roll-card .surge-option .cost {
+  flex: 0 0 auto; min-width: 1.4em; text-align: center; font-weight: bold;
+  background: #f9a825; color: #000; border-radius: 3px; padding: 1px 3px; align-self: flex-start;
+}
+.essence .roll-card .surge-option .surge-text { flex: 1; }
+.essence .roll-card .surge-option.spent { background: rgba(46, 125, 50, 0.25); border-color: #2e7d32; opacity: 0.85; }
+.essence .roll-card .surge-option.spent .cost { background: #2e7d32; color: #fff; }
+.essence .roll-card .surge-option:disabled { opacity: 0.4; cursor: not-allowed; }

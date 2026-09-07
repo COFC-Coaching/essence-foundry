@@ -316,7 +316,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const defenseKey = (sys.defense || "").toLowerCase();
     const defense = await EssenceActorSheet.#resolveDefense(defenseKey);
     await this.actor.update({ [`system.playState.${poolField}`]: available - committed });
-    await rollEssencePool({ pool: committed, defense, label: item.name, actor: this.actor });
+    await rollEssencePool({ pool: committed, defense, label: item.name, actor: this.actor, surgeOptions: sys.surges });
   }
 
   /**

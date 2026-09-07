@@ -10,7 +10,18 @@
     <p><strong>Success Die:</strong> {{successDie}} —
       {{#if succeeded}}<span class="pass">Success</span>{{else}}<span class="fail">Failure</span>{{/if}}
     </p>
-    <p><strong>Surges:</strong> {{surges}}</p>
+    {{#if surgeOptions.length}}
+      <div class="surge-options">
+        <p class="surges-remaining"><strong>Surges:</strong> <span class="remaining">{{surges}}</span> / {{surges}} available</p>
+        {{#each surgeOptions as |opt|}}
+          <button type="button" class="surge-option" data-index="{{opt.i}}" data-cost="{{opt.n}}">
+            <span class="cost">{{opt.n}}</span> <span class="surge-text">{{{opt.html}}}</span>
+          </button>
+        {{/each}}
+      </div>
+    {{else}}
+      <p><strong>Surges:</strong> {{surges}}</p>
+    {{/if}}
     <p class="muted"><strong>Open-difficulty successes (6+):</strong> {{poolSuccesses}}</p>
   </div>
 </div>
