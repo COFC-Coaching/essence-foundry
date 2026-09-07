@@ -59,6 +59,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
       wizardGoTo: EssenceMonsterWizard.#onGoTo,
       wizardNext: EssenceMonsterWizard.#onNext,
       wizardBack: EssenceMonsterWizard.#onBack,
+      wizardAccept: EssenceMonsterWizard.#onAccept,
       selectOrigin: EssenceMonsterWizard.#onSelectOrigin,
       clearOrigin: EssenceMonsterWizard.#onClearOrigin,
       setEmphasis: EssenceMonsterWizard.#onSetEmphasis,
@@ -251,6 +252,10 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
   static #onBack() {
     this.#step = Math.max(0, this.#step - 1);
     this.render();
+  }
+
+  static #onAccept() {
+    this.close();
   }
 
   static #onSetEmphasis(event, target) {

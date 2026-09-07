@@ -2,6 +2,13 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.9
+
+- Fix the Character Wizard's and Monster Creator's last step: "Next" showed disabled on Finalize
+  with no other way to close the wizard, reading as broken rather than done. The last step now
+  shows an "Accept" button instead — every choice already saves straight to the actor as you make
+  it, so Accept isn't a commit, just the explicit "I'm done" that closes back to the main sheet.
+
 ## 0.6.8
 
 - Add a Monster Creator for NPCs — a "Monster Creator" button on the NPC sheet header (next to

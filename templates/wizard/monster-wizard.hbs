@@ -222,6 +222,10 @@
   <footer class="wizard-footer">
     <button type="button" data-action="wizardBack" {{#if isFirst}}disabled{{/if}}>← Back</button>
     <span class="muted">Step {{addOne step}} of 8 — {{stepName}}</span>
-    <button type="button" data-action="wizardNext" {{#if isLast}}disabled{{/if}}>Next →</button>
+    {{#if isLast}}
+      <button type="button" data-action="wizardAccept">Accept</button>
+    {{else}}
+      <button type="button" data-action="wizardNext">Next →</button>
+    {{/if}}
   </footer>
 </div>

@@ -53,6 +53,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       wizardGoTo: EssenceCharacterWizard.#onGoTo,
       wizardNext: EssenceCharacterWizard.#onNext,
       wizardBack: EssenceCharacterWizard.#onBack,
+      wizardAccept: EssenceCharacterWizard.#onAccept,
       selectOrigin: EssenceCharacterWizard.#onSelectOrigin,
       clearOrigin: EssenceCharacterWizard.#onClearOrigin,
       adjustAttribute: EssenceCharacterWizard.#onAdjustAttribute,
@@ -327,6 +328,12 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
   static #onBack() {
     this.#step = Math.max(0, this.#step - 1);
     this.render();
+  }
+
+  /** Every choice up to here already saved directly to the actor (see class doc) — Accept isn't
+   *  a commit, just the explicit "I'm done" that closes the wizard back to the main sheet. */
+  static #onAccept() {
+    this.close();
   }
 
   /** Opens the real Item sheet (compendium source or owned copy) so players can read a card's
