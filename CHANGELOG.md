@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.5.6
+
+- Fix the Character Wizard's Concept step: Player Name, Tier, and Level (and Pronouns/Age) fell
+  out of alignment because `.wizard-row label` never got the same `display: flex` treatment the
+  actor sheet header already uses for its own Player/Tier/Level row — a wide, unstyled label
+  wrapped its input onto a second line while narrow ones happened to fit, making the row look
+  staggered. Matches the sheet header's `.header-fields label` rule now.
+
 ## 0.5.5
 
 - Fix the starting Reaction Pool at the beginning of Round 1: `EssenceCombat#_onStartRound` was
