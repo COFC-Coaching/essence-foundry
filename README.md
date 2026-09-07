@@ -5,7 +5,7 @@ tactical card-driven combat. Ports the ruleset and data model from the [Essence 
 app](https://essencesystem.com) 1:1, so rolls, derived stats, and combat-dice lifecycle behave
 identically in Foundry.
 
-## Status: v0.5.2
+## Status: v0.5.3
 
 See [CHANGELOG.md](CHANGELOG.md) for the full history. Currently working:
 
@@ -30,12 +30,12 @@ See [CHANGELOG.md](CHANGELOG.md) for the full history. Currently working:
   (minus player-only fluff), for GMs to run monsters and enemies.
 - Foundry's own Combat Tracker — the per-combatant dice icon, Roll All, and Roll NPCs — all use
   the real Essence Initiative dice-commit flow, same as the sheet's own Roll Initiative button.
+- Conditions are wired into the Token HUD's status-icon toggles — toggling one there adds/removes
+  the real Condition Item and its mechanical Active Effect, same as dragging it onto the sheet.
 
 Known gaps (see the project's own audit notes for the full list):
 - Recovery/Downtime timing and Full Manifestation's actual profile-swap aren't implemented,
   since the canonical rules for both aren't finalized yet.
-- Conditions aren't yet wired into the Token HUD's status-icon toggles (drag the Condition Item
-  onto the actor sheet instead).
 
 ## Installing in Foundry
 

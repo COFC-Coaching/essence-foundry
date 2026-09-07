@@ -2,6 +2,13 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.5.3
+
+- Wire Conditions into the Token HUD's status-icon toggles. Clicking a Condition icon there now
+  adds/removes a real owned Condition Item on the actor (with its actual mechanical Active
+  Effect where the rules define one, e.g. Chilled's Movement -2) instead of doing nothing. GMs no
+  longer have to drag the Condition Item onto the sheet by hand.
+
 ## 0.5.2
 
 - Foundry's native Combat Tracker (per-combatant dice icon, Roll All, Roll NPCs) now routes
