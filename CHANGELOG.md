@@ -2,6 +2,13 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.10
+
+- Fix the NPC sheet's name field overlapping the "Monster Creator" button: the shared header CSS
+  reserved 90px of margin for the Character sheet's "Wizard" button, but "Monster Creator" is
+  wider than that and hung over the name input's right edge. Widened the reserve to 160px for the
+  NPC sheet specifically.
+
 ## 0.6.9
 
 - Fix the Character Wizard's and Monster Creator's last step: "Next" showed disabled on Finalize
