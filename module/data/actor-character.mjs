@@ -52,17 +52,21 @@ export default class EssenceCharacterData extends foundry.abstract.TypeDataModel
 
       // Harm / wound track
       resilience: new fields.NumberField({ integer: true, initial: 0 }),
-      temporaryWoundsAvailable: new fields.NumberField({ integer: true, initial: 0 }),
+      temporaryWoundsAvailable: new fields.NumberField({ integer: true, initial: 5 }),
       coreWounds: new fields.ArrayField(
         new fields.SchemaField({
           filled: new fields.BooleanField({ initial: false }),
           condition: new fields.StringField({ initial: "" })
-        })
+        }),
+        { initial: Array.from({ length: 5 }, () => ({ filled: false, condition: "" })) }
       ),
 
       // Influence (social harm), tracked separately from wounds
-      temporaryInfluence: new fields.NumberField({ integer: true, initial: 0 }),
-      coreInfluence: new fields.ArrayField(new fields.SchemaField({ filled: new fields.BooleanField({ initial: false }) })),
+      temporaryInfluence: new fields.NumberField({ integer: true, initial: 5 }),
+      coreInfluence: new fields.ArrayField(
+        new fields.SchemaField({ filled: new fields.BooleanField({ initial: false }) }),
+        { initial: Array.from({ length: 5 }, () => ({ filled: false })) }
+      ),
 
       reach: new fields.NumberField({ integer: true, initial: 1 }),
       movement: new fields.NumberField({ integer: true, initial: 10 }),

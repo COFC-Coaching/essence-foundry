@@ -5,11 +5,24 @@ const { ActorSheetV2 } = foundry.applications.sheets;
 
 const ATTRIBUTES = ["might", "grace", "vigor", "intellect", "acuity", "resolve", "presence", "adaptability", "anima"];
 const SKILLS = ["prowess", "ballistics", "gestalt", "cunning", "magecraft", "psionics", "leadership", "ritualism", "calling"];
+const PIP_MAX = 5;
+const CORE_INFLUENCE_LABELS = ["L", "L", "S", "S", "C"];
+
+const DOMAINS = [
+  { key: "physical", label: "Physical", attrs: ["might", "grace", "vigor"], skills: ["prowess", "ballistics", "gestalt"], resource: "stamina", defense: "fortitude" },
+  { key: "mental", label: "Mental", attrs: ["intellect", "acuity", "resolve"], skills: ["cunning", "magecraft", "psionics"], resource: "focus", defense: "composure" },
+  { key: "spiritual", label: "Spiritual", attrs: ["presence", "adaptability", "anima"], skills: ["leadership", "ritualism", "calling"], resource: "mana", defense: "harmony" }
+];
+
+function pips(value, max = PIP_MAX) {
+  return Array.from({ length: max }, (_, i) => i < value);
+}
 
 export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["essence", "actor", "character"],
-    position: { width: 720, height: 780 },
+    position: { width: 760, height: 820 },
+    form: { submitOnChange: true },
     actions: {
       rollSkill: EssenceActorSheet.#onRollSkill,
       rollItem: EssenceActorSheet.#onRollItem,
@@ -20,7 +33,11 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       endTurn: EssenceActorSheet.#onEndTurn,
       itemEdit: EssenceActorSheet.#onItemEdit,
       itemDelete: EssenceActorSheet.#onItemDelete,
-      changeTab: EssenceActorSheet.#onChangeTab
+      changeTab: EssenceActorSheet.#onChangeTab,
+      toggleTempWound: EssenceActorSheet.#onToggleTempWound,
+      toggleCoreWound: EssenceActorSheet.#onToggleCoreWound,
+      toggleTempInfluence: EssenceActorSheet.#onToggleTempInfluence,
+      toggleCoreInfluence: EssenceActorSheet.#onToggleCoreInfluence
     }
   };
 
@@ -53,13 +70,38 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const context = await super._prepareContext(options);
     const system = this.actor.system;
     context.system = system;
-    context.attributes = ATTRIBUTES.map((key) => ({ key, label: key, value: system[key] }));
-    context.skills = SKILLS.map((key) => ({ key, label: key, value: system[key] }));
     context.attributeOptions = ATTRIBUTES;
+
+    context.domains = DOMAINS.map((d) => ({
+      ...d,
+      attrs: d.attrs.map((key) => ({ key, label: key, value: system[key], pips: pips(system[key]) })),
+      skills: d.skills.map((key) => ({
+        key,
+        label: key,
+        value: system[key],
+        pips: pips(system[key]),
+        expertises: system.expertises.filter((e) => (e.skill || "").toLowerCase() === key)
+      })),
+      resourceLabel: d.resource,
+      resourceField: `current${d.resource[0].toUpperCase()}${d.resource.slice(1)}`,
+      resourceCurrent: system.playState[`current${d.resource[0].toUpperCase()}${d.resource.slice(1)}`],
+      resourceMax: system.resources[d.resource],
+      defenseLabel: d.defense,
+      defenseValue: system.defenses[d.defense]
+    }));
+
+    context.keyAspects = system.keyAspects.map((value, i) => ({ value, i, n: i + 1 }));
+    context.temporaryWoundPips = pips(system.playState.currentTemporaryWounds, system.temporaryWoundsAvailable);
+    context.temporaryInfluencePips = pips(system.playState.currentTemporaryInfluence, system.temporaryInfluence);
+    context.coreInfluenceLabels = CORE_INFLUENCE_LABELS;
+
     context.actionCards = this.actor.items.filter((i) => i.type === "action-card");
     context.reactionCards = this.actor.items.filter((i) => i.type === "reaction-card");
     context.conditions = this.actor.items.filter((i) => i.type === "condition");
-    context.equipment = this.actor.items.filter((i) => i.type === "equipment");
+    const equipment = this.actor.items.filter((i) => i.type === "equipment");
+    context.signatureEquipment = equipment.filter((i) => i.system.slot === "signature");
+    context.armoryEquipment = equipment.filter((i) => i.system.slot === "armory");
+    context.temporaryEquipment = equipment.filter((i) => i.system.slot === "temporary");
     return context;
   }
 
@@ -154,6 +196,37 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       "system.playState.reactionDice": base + (ps.actionDice ?? 0),
       "system.playState.actionDice": null
     });
+  }
+
+  /** Clicking pip i sets the current count to i+1, or to i if that pip was already the last filled one. */
+  static #onTogglePip(current, index) {
+    return current === index + 1 ? index : index + 1;
+  }
+
+  static async #onToggleTempWound(event, target) {
+    const i = Number(target.dataset.index);
+    const next = EssenceActorSheet.#onTogglePip(this.actor.system.playState.currentTemporaryWounds, i);
+    await this.actor.update({ "system.playState.currentTemporaryWounds": next });
+  }
+
+  static async #onToggleCoreWound(event, target) {
+    const i = Number(target.dataset.index);
+    const coreWounds = this.actor.system.coreWounds.map((w) => ({ filled: w.filled, condition: w.condition }));
+    coreWounds[i].filled = !coreWounds[i].filled;
+    await this.actor.update({ "system.coreWounds": coreWounds });
+  }
+
+  static async #onToggleTempInfluence(event, target) {
+    const i = Number(target.dataset.index);
+    const next = EssenceActorSheet.#onTogglePip(this.actor.system.playState.currentTemporaryInfluence, i);
+    await this.actor.update({ "system.playState.currentTemporaryInfluence": next });
+  }
+
+  static async #onToggleCoreInfluence(event, target) {
+    const i = Number(target.dataset.index);
+    const coreInfluence = this.actor.system.coreInfluence.map((c) => ({ filled: c.filled }));
+    coreInfluence[i].filled = !coreInfluence[i].filled;
+    await this.actor.update({ "system.coreInfluence": coreInfluence });
   }
 
   static #onItemEdit(event, target) {

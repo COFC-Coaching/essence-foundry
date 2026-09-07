@@ -4,7 +4,8 @@ const { ItemSheetV2 } = foundry.applications.sheets;
 class EssenceItemSheetBase extends HandlebarsApplicationMixin(ItemSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["essence", "item"],
-    position: { width: 480, height: 600 }
+    position: { width: 480, height: 600 },
+    form: { submitOnChange: true }
   };
 
   async _prepareContext(options) {
