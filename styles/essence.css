@@ -3,8 +3,8 @@
 .essence .locked { opacity: 0.4; cursor: not-allowed; }
 .essence .sheet-header { display: flex; align-items: flex-start; gap: 10px; }
 .essence .profile-img { width: 64px; height: 64px; object-fit: cover; border-radius: 4px; }
-.essence .header-main { flex: 1; }
-.essence .header-main h1 { margin: 0 0 4px; line-height: 1; }
+.essence .header-main { flex: 1; position: relative; }
+.essence .header-main h1 { margin: 0 90px 4px 0; line-height: 1; }
 .essence .header-main h1 input {
   width: 100%;
   height: auto;
@@ -172,3 +172,27 @@
 .essence.roll-card .surge-option.spent { background: rgba(46, 125, 50, 0.25); border-color: #2e7d32; opacity: 0.85; }
 .essence.roll-card .surge-option.spent .cost { background: #2e7d32; color: #fff; }
 .essence.roll-card .surge-option:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ============ Character Creation Wizard ============ */
+.essence .wizard-launch { position: absolute; top: 0; right: 0; white-space: nowrap; }
+.essence-wizard-root { display: flex; flex-direction: column; height: 100%; }
+.essence .wizard-steps { display: flex; flex-wrap: wrap; gap: 2px; padding: 4px 8px; border-bottom: 1px solid #555; flex: 0 0 auto; }
+.essence .wizard-step-tab { font-size: 0.78em; padding: 3px 6px; border-radius: 3px; opacity: 0.65; cursor: pointer; white-space: nowrap; }
+.essence .wizard-step-tab.active { opacity: 1; background: rgba(249, 168, 37, 0.15); font-weight: bold; }
+.essence .wizard-body { flex: 1 1 auto; overflow-y: auto; padding: 8px 12px; }
+.essence .wizard-footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 6px 12px; border-top: 1px solid #555; flex: 0 0 auto;
+}
+.essence .wizard-row { display: flex; gap: 16px; flex-wrap: wrap; margin: 6px 0; }
+.essence .wizard-value { text-align: center; font-weight: bold; min-width: 1.5em; display: inline-block; }
+.essence .capitalize { text-transform: capitalize; }
+.essence .wizard-pick-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.essence .wizard-pick-list button { padding: 3px 8px; }
+.essence .wizard-pick-list button.chosen { background: #f9a825; color: #000; font-weight: bold; }
+.essence .wizard-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.essence .wizard-scroll-list { max-height: 220px; overflow-y: auto; border: 1px solid #555; border-radius: 4px; padding: 4px 6px; }
+.essence .wizard-checklist { list-style: none; padding: 0; }
+.essence .wizard-checklist li { padding: 2px 0; }
+.essence .wizard-checklist li.ok { color: #2e7d32; }
+.essence .wizard-checklist li.fail { color: #c62828; }

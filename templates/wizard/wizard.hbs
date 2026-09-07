@@ -1,0 +1,275 @@
+<div class="essence-wizard-root">
+  <nav class="wizard-steps">
+    {{#each steps as |s|}}
+      <a class="wizard-step-tab {{#if (eq s.i ../step)}}active{{/if}}" data-action="wizardGoTo" data-step="{{s.i}}">{{addOne s.i}}. {{s.name}}</a>
+    {{/each}}
+  </nav>
+
+  <div class="wizard-body">
+
+  {{!-- ============ STEP 1: CONCEPT ============ --}}
+  {{#if (eq step 0)}}
+    <h2>Concept</h2>
+    <p class="muted">Decide who the character is before touching any numbers. Confirm the campaign's starting Tier with your GM.</p>
+    <label>Concept / Background{{editor system.concept target="system.concept" button=true}}</label>
+    <div class="wizard-row">
+      <label>Player Name <input type="text" name="system.playerName" value="{{system.playerName}}"></label>
+      <label>Tier <input type="number" name="system.tier" value="{{system.tier}}" style="width:4em"></label>
+      <label>Level <input type="number" name="system.level" value="{{system.level}}" style="width:4em"></label>
+    </div>
+    <div class="wizard-row">
+      <label>Pronouns <input type="text" name="system.pronouns" value="{{system.pronouns}}"></label>
+      <label>Age <input type="text" name="system.age" value="{{system.age}}"></label>
+    </div>
+  {{/if}}
+
+  {{!-- ============ STEP 2: IDENTITY ============ --}}
+  {{#if (eq step 1)}}
+    <h2>Identity</h2>
+    <p class="muted">Choose a Species, Heritage, and Distinction. Base Action Pool = 5 + Tier = {{system.baseCombatDice}}.</p>
+
+    <h3 class="section-head">Species {{#if speciesItem}}— <strong>{{speciesItem.name}}</strong> <a data-action="clearOrigin" data-type="species">(clear)</a>{{/if}}</h3>
+    <ul class="wizard-pick-list">
+      {{#each speciesOptions as |opt|}}
+        <li><button type="button" class="{{#if (eq opt.name ../speciesItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.species" data-id="{{opt.id}}">{{opt.name}}</button></li>
+      {{/each}}
+    </ul>
+
+    <h3 class="section-head">Heritage {{#if heritageItem}}— <strong>{{heritageItem.name}}</strong> <a data-action="clearOrigin" data-type="heritage">(clear)</a>{{/if}}</h3>
+    <ul class="wizard-pick-list">
+      {{#each heritageOptions as |opt|}}
+        <li><button type="button" class="{{#if (eq opt.name ../heritageItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.heritages" data-id="{{opt.id}}">{{opt.name}}</button></li>
+      {{/each}}
+    </ul>
+
+    <h3 class="section-head">Distinction {{#if distinctionItem}}— <strong>{{distinctionItem.name}}</strong> <a data-action="clearOrigin" data-type="distinction">(clear)</a>{{/if}}</h3>
+    <p class="muted">Gestalt, Magecraft, Psionics, Ritualism, and Calling are gated — you can't invest Skill Points in them without the matching Distinction.</p>
+    <ul class="wizard-pick-list">
+      {{#each distinctionOptions as |opt|}}
+        <li><button type="button" class="{{#if (eq opt.name ../distinctionItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.distinctions" data-id="{{opt.id}}">{{opt.name}} <span class="muted">({{opt.system.keyCombatSkill}})</span></button></li>
+      {{/each}}
+    </ul>
+  {{/if}}
+
+  {{!-- ============ STEP 3: ATTRIBUTES ============ --}}
+  {{#if (eq step 2)}}
+    <h2>Attributes</h2>
+    <p class="muted">Distribute {{attributePool}} points across the 9 Attributes, starting at 1 each, none above 3. Points remaining: <strong>{{attributeRemaining}}</strong></p>
+    <table class="item-table">
+      <thead><tr><th>Attribute</th><th></th><th>Value</th><th></th></tr></thead>
+      <tbody>
+        {{#each attributes as |a|}}
+          <tr>
+            <td class="capitalize">{{a.key}}</td>
+            <td><button type="button" data-action="adjustAttribute" data-attr="{{a.key}}" data-delta="-1">-</button></td>
+            <td class="wizard-value">{{a.value}}</td>
+            <td><button type="button" data-action="adjustAttribute" data-attr="{{a.key}}" data-delta="1">+</button></td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <h3 class="section-head">Resources &amp; Defenses (derived)</h3>
+    <div class="wizard-row">
+      <span>Stamina {{system.resources.stamina}}</span>
+      <span>Focus {{system.resources.focus}}</span>
+      <span>Mana {{system.resources.mana}}</span>
+      <span>Fortitude {{system.defenses.fortitude}}</span>
+      <span>Composure {{system.defenses.composure}}</span>
+      <span>Harmony {{system.defenses.harmony}}</span>
+    </div>
+  {{/if}}
+
+  {{!-- ============ STEP 4: WOUNDS ============ --}}
+  {{#if (eq step 3)}}
+    <h2>Wounds</h2>
+    <p class="muted">Order never changes: Damage → Resilience → Wounds → Temporary Wounds → Core Wounds. Most characters start at 0 Resilience and 0 Temporary Wounds — gear and features grant more.</p>
+    <div class="wizard-row">
+      <label>Resilience <input type="number" name="system.resilience" value="{{system.resilience}}" style="width:4em"></label>
+      <label>Temporary Wounds Available <input type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" style="width:4em" min="0" max="5"></label>
+    </div>
+    <h3 class="section-head">Core Wounds (start empty)</h3>
+    <span class="pip-track">
+      {{#each system.coreWounds as |w|}}<span class="pip {{#if w.filled}}filled{{/if}}"></span>{{/each}}
+    </span>
+  {{/if}}
+
+  {{!-- ============ STEP 5: COMBAT SKILLS ============ --}}
+  {{#if (eq step 4)}}
+    <h2>Combat Skills</h2>
+    <p class="muted">Distribute {{skillPool}} points among the 9 Combat Skills — no Skill above Rank 2 at creation. Points remaining: <strong>{{skillRemaining}}</strong></p>
+    <table class="item-table">
+      <thead><tr><th>Skill</th><th></th><th>Rank</th><th></th></tr></thead>
+      <tbody>
+        {{#each skills as |s|}}
+          <tr class="{{#unless s.gateOpen}}gated{{/unless}}">
+            <td class="capitalize">{{s.key}} {{#unless s.gateOpen}}<span class="gate-note">(requires {{s.gateDistinction}})</span>{{/unless}}</td>
+            <td><button type="button" data-action="adjustSkill" data-skill="{{s.key}}" data-delta="-1">-</button></td>
+            <td class="wizard-value">{{s.value}}</td>
+            <td><button type="button" data-action="adjustSkill" data-skill="{{s.key}}" data-delta="1" {{#unless s.gateOpen}}disabled{{/unless}}>+</button></td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <h3 class="section-head">Expertises ({{expertiseSpent}} / {{expertiseCount}})</h3>
+    <p class="muted">Each Expertise must belong to a Skill rated at least 1. No per-skill limit — specialize or spread out.</p>
+    {{#each expertisesBySkill as |es|}}
+      <div class="specialty-row specialty-row-wrap">
+        <span class="attr-label capitalize">{{es.key}}</span>
+        <div class="thread-chips">
+          {{#each es.options as |opt|}}
+            <button type="button" class="thread-chip {{#if opt.chosen}}active{{/if}}" data-action="toggleExpertise" data-skill="{{../es.key}}" data-name="{{opt.name}}">{{opt.name}}</button>
+          {{/each}}
+        </div>
+      </div>
+    {{/each}}
+    {{#unless eligibleSkills.length}}<p class="muted">Assign at least 1 Rank to a Combat Skill above to unlock its Expertises.</p>{{/unless}}
+
+    <h3 class="section-head">Basic Combat Cards ({{ownedBasicCards.length}} / 7)</h3>
+    {{#if missingBasicCount}}
+      <button type="button" data-action="grantBasicCards">Grant Missing Basic Cards</button>
+    {{else}}
+      <p class="muted">All 7 granted.</p>
+    {{/if}}
+
+    <h3 class="section-head">Combat Cards ({{cardCount}} / {{cardLimit}})</h3>
+    <div class="wizard-two-col">
+      <div>
+        <h4>Selected</h4>
+        <ul class="item-list">
+          {{#each ownedActionCards as |item|}}
+            <li>{{item.name}} <span class="muted">R{{item.system.rank}}</span> <a data-action="toggleCard" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></li>
+          {{/each}}
+          {{#each ownedReactionCards as |item|}}
+            <li>{{item.name}} <span class="muted">R{{item.system.rank}} · Reaction</span> <a data-action="toggleCard" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></li>
+          {{/each}}
+        </ul>
+      </div>
+      <div>
+        <h4>Qualifying Cards</h4>
+        <input type="text" data-wizard-search="cards" placeholder="Search…" value="{{cardSearch}}">
+        <ul class="item-list wizard-scroll-list">
+          {{#each browsableActionCards as |item|}}
+            <li>{{item.name}} <span class="muted">R{{item.system.rank}} · {{item.system.skill}}</span> <a data-action="toggleCard" data-pack="essence-system.action-cards" data-id="{{item.id}}"><i class="fa-solid fa-plus"></i></a></li>
+          {{/each}}
+          {{#each browsableReactionCards as |item|}}
+            <li>{{item.name}} <span class="muted">R{{item.system.rank}} · {{item.system.skill}} · Reaction</span> <a data-action="toggleCard" data-pack="essence-system.reaction-cards" data-id="{{item.id}}"><i class="fa-solid fa-plus"></i></a></li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+  {{/if}}
+
+  {{!-- ============ STEP 6: INFLUENCE ============ --}}
+  {{#if (eq step 5)}}
+    <h2>Influence</h2>
+    <p class="muted">Influence folds wealth, reputation, and pull into one resource. Reach is its scale.</p>
+    <label>Reach <input type="number" name="system.reach" value="{{system.reach}}" style="width:4em"></label>
+    <h3 class="section-head">Temporary Influence</h3>
+    <span class="pip-track">
+      {{#each temporaryInfluencePips as |filled i|}}
+        <span class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempInfluence" data-index="{{i}}"></span>
+      {{/each}}
+    </span>
+    <h3 class="section-head">Core Influence <span class="muted">(never spent by choice — new characters begin unmarked)</span></h3>
+    <span class="pip-track">
+      {{#each coreInfluencePips as |c i|}}
+        <span class="pip toggle {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}"></span>
+      {{/each}}
+    </span>
+  {{/if}}
+
+  {{!-- ============ STEP 7: NON-COMBAT ============ --}}
+  {{#if (eq step 6)}}
+    <h2>Non-Combat</h2>
+    <label>Career <input type="text" name="system.career" value="{{system.career}}"></label>
+    <div class="wizard-row">
+      <label>Key Aspect 1 <input type="text" name="system.keyAspects.0" value="{{lookup system.keyAspects 0}}"></label>
+      <label>Key Aspect 2 <input type="text" name="system.keyAspects.1" value="{{lookup system.keyAspects 1}}"></label>
+      <label>Key Aspect 3 <input type="text" name="system.keyAspects.2" value="{{lookup system.keyAspects 2}}"></label>
+    </div>
+    <h3 class="section-head">Non-Combat Skills — {{nonCombatSpent}} / {{nonCombatPool}} points, max 2 each. Remaining: {{nonCombatRemaining}}</h3>
+    {{#each nonCombatEntries as |s|}}
+      <div class="nc-skill-row">
+        <input type="text" name="system.nonCombatSkills.{{s.i}}.name" value="{{s.name}}" placeholder="Skill name">
+        <button type="button" data-action="adjustNonCombatRating" data-index="{{s.i}}" data-delta="-1">-</button>
+        <span class="wizard-value">{{s.rating}}</span>
+        <button type="button" data-action="adjustNonCombatRating" data-index="{{s.i}}" data-delta="1">+</button>
+        <a data-action="deleteNonCombatSkill" data-index="{{s.i}}"><i class="fa-solid fa-trash"></i></a>
+      </div>
+    {{/each}}
+    <button type="button" data-action="addNonCombatSkill"><i class="fa-solid fa-plus"></i> Add Skill</button>
+  {{/if}}
+
+  {{!-- ============ STEP 8: PASSIVE FEATURES ============ --}}
+  {{#if (eq step 7)}}
+    <h2>Passive Features</h2>
+    <p class="muted">Species/Heritage/Distinction traits are collected automatically. Add anything else standing here (Skill Tree passives, campaign bonuses, etc.).</p>
+    <table class="item-table">
+      <thead><tr><th>Feature</th><th>Source</th><th>Description</th></tr></thead>
+      <tbody>
+        {{#each originFeatures as |f|}}
+          <tr class="origin-feature-row"><td>{{f.name}}</td><td>{{f.source}}</td><td>{{{f.text}}}</td></tr>
+        {{/each}}
+        {{#each system.passiveFeatures as |f i|}}
+          <tr>
+            <td><input name="system.passiveFeatures.{{i}}.name" type="text" value="{{f.name}}"></td>
+            <td><input name="system.passiveFeatures.{{i}}.source" type="text" value="{{f.source}}"></td>
+            <td>{{editor f.text target=(concat "system.passiveFeatures." i ".text") button=true}}</td>
+            <td><a data-action="deletePassiveFeature" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a></td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <button type="button" data-action="addPassiveFeature"><i class="fa-solid fa-plus"></i> Add Feature</button>
+  {{/if}}
+
+  {{!-- ============ STEP 9: EQUIPMENT ============ --}}
+  {{#if (eq step 8)}}
+    <h2>Equipment</h2>
+    <p class="muted">Your Signature Loadout is what you bring on this Adventure, up to your Signature Equipment Limit. The Armory fills in as you play.</p>
+    <h3 class="section-head">Signature Loadout — {{signatureUsed}} / {{signatureLimit}} slots</h3>
+    <ul class="item-list">
+      {{#each signatureItems as |item|}}
+        <li>{{item.name}} <a data-action="toggleEquipment" data-item-id="{{item.id}}"><i class="fa-solid fa-trash"></i></a></li>
+      {{/each}}
+    </ul>
+    <h3 class="section-head">Equipment Library</h3>
+    <input type="text" data-wizard-search="equipment" placeholder="Search…" value="{{equipmentSearch}}">
+    <ul class="item-list wizard-scroll-list">
+      {{#each browsableEquipment as |item|}}
+        <li>{{item.name}} <span class="muted">{{item.system.category}}</span> <a data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}"><i class="fa-solid fa-plus"></i></a></li>
+      {{/each}}
+    </ul>
+  {{/if}}
+
+  {{!-- ============ STEP 10: FINALIZE ============ --}}
+  {{#if (eq step 9)}}
+    <h2>Finalize</h2>
+    <p class="muted">Confirm final Resources, Defenses, and Base Action Pool, then check every requirement.</p>
+    <div class="wizard-row">
+      <span>Stamina {{resources.stamina}}</span>
+      <span>Focus {{resources.focus}}</span>
+      <span>Mana {{resources.mana}}</span>
+      <span>Fortitude {{defenses.fortitude}}</span>
+      <span>Composure {{defenses.composure}}</span>
+      <span>Harmony {{defenses.harmony}}</span>
+      <span>Base Action Pool {{baseCombatDice}}</span>
+    </div>
+    <h3 class="section-head">Checklist</h3>
+    <ul class="wizard-checklist">
+      {{#each checklist as |c|}}
+        <li class="{{#if c.ok}}ok{{else}}fail{{/if}}"><i class="fa-solid {{#if c.ok}}fa-check{{else}}fa-xmark{{/if}}"></i> {{c.label}}</li>
+      {{/each}}
+    </ul>
+    <p class="muted">Weaknesses are intentional. Once your GM approves the sheet, you're ready to play.</p>
+  {{/if}}
+
+  </div>
+
+  <footer class="wizard-footer">
+    <button type="button" data-action="wizardBack" {{#if isFirst}}disabled{{/if}}>← Back</button>
+    <span class="muted">Step {{addOne step}} of 10 — {{stepName}}</span>
+    <button type="button" data-action="wizardNext" {{#if isLast}}disabled{{/if}}>Next →</button>
+  </footer>
+</div>

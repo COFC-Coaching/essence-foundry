@@ -52,7 +52,10 @@ export default class EssenceCharacterData extends foundry.abstract.TypeDataModel
 
       // Harm / wound track
       resilience: new fields.NumberField({ integer: true, initial: 0 }),
-      temporaryWoundsAvailable: new fields.NumberField({ integer: true, initial: 5 }),
+      // Most characters start with 0 capacity for Temporary Wounds — gear/features grant more,
+      // up to the hard ceiling of 5 (see part-iv-combat.md § Temporary Wounds; matches the web
+      // app's defaultCharacter(), which also starts this at 0, not 5).
+      temporaryWoundsAvailable: new fields.NumberField({ integer: true, initial: 0 }),
       // 5 spaces, filled in order: 2 Light, 2 Serious, 1 Critical (see part-iv-combat.md § Core Wounds).
       // `condition` is a generated display label ("Light Physical Wound") — the game's own named
       // Wound Condition reference doesn't exist in canon yet, so this stands in for it.
@@ -92,9 +95,10 @@ export default class EssenceCharacterData extends foundry.abstract.TypeDataModel
       })),
 
       // Equipment slot limits — the items themselves are owned Items of type "equipment"
-      // with system.slot in {"signature","temporary","armory"}
-      signatureEquipmentLimit: new fields.NumberField({ integer: true, initial: 0 }),
-      armoryLimit: new fields.NumberField({ integer: true, initial: 0 }),
+      // with system.slot in {"signature","temporary","armory"}. Defaults match the web app's
+      // defaultCharacter() (4/8), not the rules text directly — there's no printed formula.
+      signatureEquipmentLimit: new fields.NumberField({ integer: true, initial: 4 }),
+      armoryLimit: new fields.NumberField({ integer: true, initial: 8 }),
 
       // One resource-tracking mechanic per Combat Style (see part-iv-combat.md § Combat Styles).
       // These are manually managed by the player, matching how the rest of the sheet works

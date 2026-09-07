@@ -32,6 +32,8 @@ Hooks.once("init", () => {
   Items.registerSheet("essence-system", EssenceSpeciesSheet, { types: ["species"], makeDefault: true });
   Items.registerSheet("essence-system", EssenceHeritageSheet, { types: ["heritage"], makeDefault: true });
   Items.registerSheet("essence-system", EssenceDistinctionSheet, { types: ["distinction"], makeDefault: true });
+
+  Handlebars.registerHelper("addOne", (n) => Number(n) + 1);
 });
 
 /**

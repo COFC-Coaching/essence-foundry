@@ -1,5 +1,7 @@
 import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { EXPERTISE_DATABASE } from "../data/expertise-database.mjs";
+import { deriveOriginFeatures } from "../data/origin-features.mjs";
+import EssenceCharacterWizard from "../apps/character-wizard.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -43,6 +45,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     position: { width: 760, height: 820 },
     form: { submitOnChange: true },
     actions: {
+      openWizard: EssenceActorSheet.#onOpenWizard,
       rollSkill: EssenceActorSheet.#onRollSkill,
       rollItem: EssenceActorSheet.#onRollItem,
       rollInitiative: EssenceActorSheet.#onRollInitiative,
@@ -135,6 +138,10 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     this.#applyActiveTab();
   }
 
+  static #onOpenWizard() {
+    new EssenceCharacterWizard(this.actor).render(true);
+  }
+
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.actor = this.actor;
@@ -155,24 +162,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // these traits — derived here rather than copied into system.passiveFeatures, so there's
     // nothing to keep in sync if the player swaps Species/Heritage/Distinction or picks
     // different Adaptations later.
-    const originFeatures = [];
-    if (speciesItem) {
-      const sp = speciesItem.system;
-      if (sp.nature?.name) originFeatures.push({ name: sp.nature.name, source: `Species: ${speciesItem.name}`, text: sp.nature.text });
-      for (const a of sp.adaptations) {
-        if (a.chosen) originFeatures.push({ name: a.name, source: `Species: ${speciesItem.name}`, text: a.text });
-      }
-    }
-    if (heritageItem) {
-      const h = heritageItem.system;
-      if (h.legacy?.name) originFeatures.push({ name: h.legacy.name, source: `Heritage: ${heritageItem.name}`, text: h.legacy.text });
-      if (h.familiarity?.name) originFeatures.push({ name: h.familiarity.name, source: `Heritage: ${heritageItem.name}`, text: h.familiarity.text });
-    }
-    if (distinctionItem) {
-      const d = distinctionItem.system;
-      if (d.origin?.name) originFeatures.push({ name: d.origin.name, source: `Distinction: ${distinctionItem.name}`, text: d.origin.text });
-    }
-    context.originFeatures = originFeatures;
+    context.originFeatures = deriveOriginFeatures({ speciesItem, heritageItem, distinctionItem });
 
     context.domains = DOMAINS.map((d) => ({
       ...d,
