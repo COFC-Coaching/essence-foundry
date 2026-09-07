@@ -1,3 +1,4 @@
+<div class="essence-sheet-root">
 <header class="sheet-header">
   <img class="profile-img" src="{{actor.img}}" data-action="editImage" title="{{actor.name}}">
   <h1><input name="name" type="text" value="{{actor.name}}"></h1>
@@ -10,11 +11,11 @@
 </header>
 
 <nav class="sheet-tabs">
-  <a data-tab="main">Main</a>
-  <a data-tab="cards">Cards</a>
-  <a data-tab="equipment">Equipment</a>
-  <a data-tab="combat">Combat</a>
-  <a data-tab="bio">Biography</a>
+  <a data-action="changeTab" data-tab="main">Main</a>
+  <a data-action="changeTab" data-tab="cards">Cards</a>
+  <a data-action="changeTab" data-tab="equipment">Equipment</a>
+  <a data-action="changeTab" data-tab="combat">Combat</a>
+  <a data-action="changeTab" data-tab="bio">Biography</a>
 </nav>
 
 <section class="tab main" data-tab="main">
@@ -109,3 +110,4 @@
   <label>Concept<textarea name="system.concept">{{system.concept}}</textarea></label>
   <label>Backstory{{editor system.backstory target="system.backstory" button=true}}</label>
 </section>
+</div>

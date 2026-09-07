@@ -19,13 +19,35 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       startTurn: EssenceActorSheet.#onStartTurn,
       endTurn: EssenceActorSheet.#onEndTurn,
       itemEdit: EssenceActorSheet.#onItemEdit,
-      itemDelete: EssenceActorSheet.#onItemDelete
+      itemDelete: EssenceActorSheet.#onItemDelete,
+      changeTab: EssenceActorSheet.#onChangeTab
     }
   };
 
   static PARTS = {
     body: { template: "systems/essence-system/templates/actor/character-sheet.hbs" }
   };
+
+  #activeTab = "main";
+
+  _onRender(context, options) {
+    super._onRender(context, options);
+    this.#applyActiveTab();
+  }
+
+  #applyActiveTab() {
+    for (const link of this.element.querySelectorAll(".sheet-tabs a")) {
+      link.classList.toggle("active", link.dataset.tab === this.#activeTab);
+    }
+    for (const section of this.element.querySelectorAll("section.tab")) {
+      section.classList.toggle("active", section.dataset.tab === this.#activeTab);
+    }
+  }
+
+  static #onChangeTab(event, target) {
+    this.#activeTab = target.dataset.tab;
+    this.#applyActiveTab();
+  }
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);

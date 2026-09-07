@@ -1,3 +1,8 @@
+.essence.actor .sheet-tabs { display: flex; gap: 12px; margin: 8px 0; border-bottom: 1px solid #666; }
+.essence.actor .sheet-tabs a { padding: 4px 8px; cursor: pointer; opacity: 0.7; }
+.essence.actor .sheet-tabs a.active { opacity: 1; border-bottom: 2px solid #f9a825; font-weight: bold; }
+.essence.actor section.tab { display: none; }
+.essence.actor section.tab.active { display: block; }
 .essence.actor .sheet-header { display: flex; align-items: center; gap: 8px; }
 .essence.actor .profile-img { width: 64px; height: 64px; object-fit: cover; }
 .essence.actor .header-fields { display: flex; gap: 8px; flex-wrap: wrap; }
