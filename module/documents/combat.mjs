@@ -106,11 +106,16 @@ export default class EssenceCombat extends Combat {
     for (const combatant of this.combatants) {
       const actor = combatant.actor;
       if (!COMBATANT_TYPES.includes(actor?.type)) continue;
+      // Before anyone's first Turn, every combatant starts with a Reaction Pool of 5 + Tier —
+      // not 0 — so combatants who act later in the round can still defend themselves before
+      // their own first Turn arrives (see part-iv-combat.md § Starting Reaction Pools). This
+      // starting pool clears normally once the combatant's own first Turn begins (_onStartTurn
+      // below always resets reactionDice to 0 there).
       await actor.update({
         "system.playState.combatStarted": true,
         "system.playState.combatTurn": "notStarted",
         "system.playState.actionDice": null,
-        "system.playState.reactionDice": 0
+        "system.playState.reactionDice": actor.system.baseCombatDice
       });
     }
   }

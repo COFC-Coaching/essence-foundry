@@ -2,6 +2,15 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.5.5
+
+- Fix the starting Reaction Pool at the beginning of Round 1: `EssenceCombat#_onStartRound` was
+  hard-setting every combatant's Reaction Dice to `0` instead of `5 + Tier`, so nobody could use a
+  Reaction Card before their own first Turn arrived — contradicting part-iv-combat.md's "Starting
+  Reaction Pools" rule, which exists specifically so combatants acting later in the first Round
+  can still defend themselves. Verified live across a 10-combatant encounter with mixed
+  character/NPC actors, varied Initiative commits, and cascading Action/Reaction Card plays.
+
 ## 0.5.4
 
 - Add an in-world **Player & GM Guide** journal compendium (two entries: Player's Guide and
