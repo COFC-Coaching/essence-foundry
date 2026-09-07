@@ -89,6 +89,12 @@
       "label": "Combat Styles Reference",
       "path": "packs/combat-styles",
       "type": "JournalEntry"
+    },
+    {
+      "name": "guide",
+      "label": "Player & GM Guide",
+      "path": "packs/guide",
+      "type": "JournalEntry"
     }
   ],
   "primaryTokenAttribute": "resources.stamina",

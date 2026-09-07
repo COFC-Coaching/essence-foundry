@@ -248,6 +248,29 @@ function combatStyleToJournal(cs) {
   };
 }
 
+function guideToJournal(guide) {
+  const entryId = stableId(`guide:${guide.name}`);
+  return {
+    _id: entryId,
+    name: guide.name,
+    pages: guide.pages.map((p) => {
+      const pageId = stableId(`guide-page:${guide.name}:${p.name}`);
+      return {
+        _id: pageId,
+        _key: `!journal.pages!${entryId}.${pageId}`,
+        name: p.name,
+        type: "text",
+        title: { show: true, level: 1 },
+        text: { content: p.content, format: 1 },
+        ownership: { default: -1 }
+      };
+    }),
+    folder: null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
 function mapCategory(raw) {
   if (!raw) return "gear";
   if (raw.includes("weapon")) return "weapon";
@@ -282,11 +305,15 @@ async function main() {
   const combatStyles = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "combat-styles-data.json"), "utf8"));
   for (const cs of combatStyles) writeSourceDoc("combat-styles", combatStyleToJournal(cs), "journal");
 
-  console.log(`Source docs written: ${actionCount} action cards, ${reactionCount} reaction cards, ${conditionCards.length} conditions, ${equipmentCards.length} equipment, ${origin.species.length} species, ${origin.heritages.length} heritages, ${origin.distinctions.length} distinctions, ${combatStyles.length} combat styles.`);
+  const guides = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "guide-data.json"), "utf8"));
+  for (const g of guides) writeSourceDoc("guide", guideToJournal(g), "journal");
+
+  console.log(`Source docs written: ${actionCount} action cards, ${reactionCount} reaction cards, ${conditionCards.length} conditions, ${equipmentCards.length} equipment, ${origin.species.length} species, ${origin.heritages.length} heritages, ${origin.distinctions.length} distinctions, ${combatStyles.length} combat styles, ${guides.length} guide entries.`);
 
   const packTypes = {
     "action-cards": "Item", "reaction-cards": "Item", conditions: "Item", equipment: "Item",
-    species: "Item", heritages: "Item", distinctions: "Item", "combat-styles": "JournalEntry"
+    species: "Item", heritages: "Item", distinctions: "Item", "combat-styles": "JournalEntry",
+    guide: "JournalEntry"
   };
   for (const [packName, type] of Object.entries(packTypes)) {
     const srcDir = path.join(SOURCE_DIR, packName);
