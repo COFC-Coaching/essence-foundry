@@ -21,7 +21,8 @@
   },
   "documentTypes": {
     "Actor": {
-      "character": {}
+      "character": {},
+      "npc": {}
     },
     "Item": {
       "action-card": {},

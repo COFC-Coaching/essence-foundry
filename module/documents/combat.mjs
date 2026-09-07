@@ -10,6 +10,10 @@
  * *before* awaiting its own round/turn update, so an async hook listener races the transition
  * instead of running before it.
  */
+// NPCs use the exact same combat mechanics as player characters (see module/data/actor-npc.mjs),
+// so both types need the same Action Dice lifecycle management here.
+const COMBATANT_TYPES = ["character", "npc"];
+
 export default class EssenceCombat extends Combat {
   /** Fires once per round, awaited before _onStartTurn. Round 1 is combat's actual start. */
   async _onStartRound(context) {
@@ -17,7 +21,7 @@ export default class EssenceCombat extends Combat {
     if (context.round !== 1) return;
     for (const combatant of this.combatants) {
       const actor = combatant.actor;
-      if (actor?.type !== "character") continue;
+      if (!COMBATANT_TYPES.includes(actor?.type)) continue;
       await actor.update({
         "system.playState.combatStarted": true,
         "system.playState.combatTurn": "notStarted",
@@ -31,7 +35,7 @@ export default class EssenceCombat extends Combat {
   async _onStartTurn(combatant, context) {
     await super._onStartTurn(combatant, context);
     const actor = combatant.actor;
-    if (actor?.type !== "character") return;
+    if (!COMBATANT_TYPES.includes(actor?.type)) return;
 
     const ps = actor.system.playState;
     const base = actor.system.baseCombatDice;

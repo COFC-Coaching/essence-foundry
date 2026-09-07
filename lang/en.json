@@ -1,5 +1,6 @@
 {
   "TYPES.Actor.character": "Character",
+  "TYPES.Actor.npc": "NPC / Adversary",
   "TYPES.Item.action-card": "Action Card",
   "TYPES.Item.reaction-card": "Reaction Card",
   "TYPES.Item.condition": "Condition",

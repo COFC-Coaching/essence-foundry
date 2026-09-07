@@ -1,7 +1,9 @@
 import EssenceCharacterData from "./data/actor-character.mjs";
+import EssenceNpcData from "./data/actor-npc.mjs";
 import { EssenceActionCardData, EssenceReactionCardData, EssenceConditionData, EssenceEquipmentData } from "./data/item-card.mjs";
 import { EssenceSpeciesData, EssenceHeritageData, EssenceDistinctionData } from "./data/item-origin.mjs";
 import EssenceActorSheet from "./sheets/actor-sheet.mjs";
+import EssenceNpcSheet from "./sheets/npc-sheet.mjs";
 import {
   EssenceCardSheet, EssenceConditionSheet, EssenceEquipmentSheet,
   EssenceSpeciesSheet, EssenceHeritageSheet, EssenceDistinctionSheet
@@ -14,6 +16,7 @@ Hooks.once("init", () => {
   console.log("Essence System | Initializing");
 
   CONFIG.Actor.dataModels.character = EssenceCharacterData;
+  CONFIG.Actor.dataModels.npc = EssenceNpcData;
   CONFIG.Item.dataModels["action-card"] = EssenceActionCardData;
   CONFIG.Item.dataModels["reaction-card"] = EssenceReactionCardData;
   CONFIG.Item.dataModels.condition = EssenceConditionData;
@@ -26,6 +29,7 @@ Hooks.once("init", () => {
 
   const { Actors, Items } = foundry.documents.collections;
   Actors.registerSheet("essence-system", EssenceActorSheet, { types: ["character"], makeDefault: true });
+  Actors.registerSheet("essence-system", EssenceNpcSheet, { types: ["npc"], makeDefault: true });
 
   Items.registerSheet("essence-system", EssenceCardSheet, { types: ["action-card", "reaction-card"], makeDefault: true });
   Items.registerSheet("essence-system", EssenceConditionSheet, { types: ["condition"], makeDefault: true });
@@ -78,7 +82,7 @@ Hooks.on("deleteCombat", async (combat) => {
   if (!game.user.isActiveGM) return;
   for (const combatant of combat.combatants) {
     const actor = combatant.actor;
-    if (actor?.type !== "character") continue;
+    if (actor?.type !== "character" && actor?.type !== "npc") continue;
     const update = {
       "system.playState.combatStarted": false,
       "system.playState.combatTurn": "notStarted"

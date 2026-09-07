@@ -187,7 +187,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       resourceLabel: d.resource,
       resourceField: `current${d.resource[0].toUpperCase()}${d.resource.slice(1)}`,
       resourceCurrent: system.playState[`current${d.resource[0].toUpperCase()}${d.resource.slice(1)}`],
-      resourceMax: system.resources[d.resource],
+      resourceMax: system.resources[d.resource].max,
       defenseLabel: d.defense,
       defenseValue: system.defenses[d.defense]
     }));
