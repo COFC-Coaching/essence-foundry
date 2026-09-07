@@ -1,6 +1,7 @@
 import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
+import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -32,6 +33,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     position: { width: 640, height: 720 },
     form: { submitOnChange: true },
     actions: {
+      openWizard: EssenceNpcSheet.#onOpenWizard,
       rollSkill: EssenceNpcSheet.#onRollSkill,
       rollItem: EssenceNpcSheet.#onRollItem,
       rollInitiative: EssenceNpcSheet.#onRollInitiative,
@@ -129,6 +131,10 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     context.distinctionOptions = distinctionPack ? (await distinctionPack.getDocuments()).sort((a, b) => a.name.localeCompare(b.name)) : [];
 
     return context;
+  }
+
+  static #onOpenWizard() {
+    new EssenceMonsterWizard(this.actor).render(true);
   }
 
   static async #onSelectOrigin(event, target) {

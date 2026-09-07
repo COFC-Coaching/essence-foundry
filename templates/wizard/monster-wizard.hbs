@@ -1,0 +1,227 @@
+<div class="essence-wizard-root">
+  <nav class="wizard-steps">
+    {{#each steps as |s|}}
+      <button type="button" class="wizard-step-tab {{#if (eq s.i ../step)}}active{{/if}}" data-action="wizardGoTo" data-step="{{s.i}}">{{addOne s.i}}. {{s.name}}</button>
+    {{/each}}
+  </nav>
+
+  <div class="wizard-body">
+
+  {{!-- ============ STEP 1: CONCEPT ============ --}}
+  {{#if (eq step 0)}}
+    <h2>Concept</h2>
+    <p class="muted">Role sets the stat budget every later step uses — pick it first. There's no
+      canonical formula for Role in the rules yet, so these are tunable defaults: Minion (fodder),
+      Standard (a real fight), Elite (a mini-boss), Nemesis (the boss).</p>
+    <div class="wizard-row">
+      <label>Role
+        <select name="system.role">
+          <option value="" {{#if (eq system.role "")}}selected{{/if}}></option>
+          <option value="Minion" {{#if (eq system.role "Minion")}}selected{{/if}}>Minion</option>
+          <option value="Standard" {{#if (eq system.role "Standard")}}selected{{/if}}>Standard</option>
+          <option value="Elite" {{#if (eq system.role "Elite")}}selected{{/if}}>Elite</option>
+          <option value="Nemesis" {{#if (eq system.role "Nemesis")}}selected{{/if}}>Nemesis</option>
+        </select>
+      </label>
+      <label>Tier <input type="number" name="system.tier" value="{{system.tier}}" style="width:4em"></label>
+      <label>Level <input type="number" name="system.level" value="{{system.level}}" style="width:4em"></label>
+    </div>
+
+    <h3 class="section-head">Domain Emphasis</h3>
+    <p class="muted">Auto-Generate leans the point-buy toward this domain's Attributes and Skills — it doesn't exclude the other two.</p>
+    <div class="wizard-row">
+      <button type="button" class="{{#if (eq emphasis "balanced")}}chosen{{/if}}" data-action="setEmphasis" data-domain="balanced">Balanced</button>
+      <button type="button" class="{{#if (eq emphasis "physical")}}chosen{{/if}}" data-action="setEmphasis" data-domain="physical">Physical</button>
+      <button type="button" class="{{#if (eq emphasis "mental")}}chosen{{/if}}" data-action="setEmphasis" data-domain="mental">Mental</button>
+      <button type="button" class="{{#if (eq emphasis "spiritual")}}chosen{{/if}}" data-action="setEmphasis" data-domain="spiritual">Spiritual</button>
+    </div>
+
+    <h3 class="section-head">Budget — {{#if system.role}}{{system.role}}{{else}}Standard (default){{/if}}</h3>
+    <div class="wizard-row">
+      <span>{{budget.attributePool}} Attribute pts (max {{budget.attributeMax}})</span>
+      <span>{{budget.skillPool}} Skill pts (max {{budget.skillMax}})</span>
+      <span>{{budget.actionCards}} Action / {{budget.reactionCards}} Reaction Cards</span>
+      <span>{{budget.equipmentCount}} Equipment</span>
+    </div>
+
+    <button type="button" class="wizard-generate" data-action="autoGenerate"><i class="fa-solid fa-dice-d20"></i> Auto-Generate Stat Block</button>
+    <p class="muted">Fills Attributes, Combat Skills, Resilience, Temporary Wounds, Combat Cards, and Equipment from the budget above. Safe to run again — it overwrites, doesn't add.</p>
+
+    <h3 class="section-head">GM Notes</h3>
+    {{essenceEditor system.gmNotes target="system.gmNotes" button=true}}
+  {{/if}}
+
+  {{!-- ============ STEP 2: ORIGIN ============ --}}
+  {{#if (eq step 1)}}
+    <h2>Origin</h2>
+    <p class="muted">Optional — a Species or Distinction can grant passive features and unlock a gated Combat Skill.</p>
+
+    <h3 class="section-head">Species {{#if speciesItem}}— <strong>{{speciesItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="species">(clear)</button>{{/if}}</h3>
+    <ul class="wizard-pick-list">
+      {{#each speciesOptions as |opt|}}
+        <li><button type="button" class="{{#if (eq opt.name ../speciesItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.species" data-id="{{opt.id}}">{{opt.name}}</button></li>
+      {{/each}}
+    </ul>
+
+    <h3 class="section-head">Distinction {{#if distinctionItem}}— <strong>{{distinctionItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="distinction">(clear)</button>{{/if}}</h3>
+    <p class="muted">Gestalt, Magecraft, Psionics, Ritualism, and Calling are gated — a matching Distinction is required to put points in them.</p>
+    <ul class="wizard-pick-list">
+      {{#each distinctionOptions as |opt|}}
+        <li><button type="button" class="{{#if (eq opt.name ../distinctionItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.distinctions" data-id="{{opt.id}}">{{opt.name}} <span class="muted">({{opt.system.keyCombatSkill}})</span></button></li>
+      {{/each}}
+    </ul>
+  {{/if}}
+
+  {{!-- ============ STEP 3: ATTRIBUTES ============ --}}
+  {{#if (eq step 2)}}
+    <h2>Attributes</h2>
+    <p class="muted">Distribute {{attributePool}} points across the 9 Attributes, starting at 1 each, none above {{budget.attributeMax}}. Points remaining: <strong>{{attributeRemaining}}</strong></p>
+    <button type="button" data-action="rerollAttributes"><i class="fa-solid fa-dice"></i> Reroll Attributes</button>
+    <table class="item-table">
+      <thead><tr><th>Attribute</th><th></th><th>Value</th><th></th></tr></thead>
+      <tbody>
+        {{#each attributes as |a|}}
+          <tr>
+            <td class="capitalize">{{a.key}}</td>
+            <td><button type="button" data-action="adjustAttribute" data-attr="{{a.key}}" data-delta="-1">-</button></td>
+            <td class="wizard-value">{{a.value}}</td>
+            <td><button type="button" data-action="adjustAttribute" data-attr="{{a.key}}" data-delta="1">+</button></td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <h3 class="section-head">Resources &amp; Defenses (derived)</h3>
+    <div class="wizard-row">
+      <span>Stamina {{system.resources.stamina.max}}</span>
+      <span>Focus {{system.resources.focus.max}}</span>
+      <span>Mana {{system.resources.mana.max}}</span>
+      <span>Fortitude {{system.defenses.fortitude}}</span>
+      <span>Composure {{system.defenses.composure}}</span>
+      <span>Harmony {{system.defenses.harmony}}</span>
+    </div>
+  {{/if}}
+
+  {{!-- ============ STEP 4: COMBAT SKILLS ============ --}}
+  {{#if (eq step 3)}}
+    <h2>Combat Skills</h2>
+    <p class="muted">Distribute {{skillPool}} points among the 9 Combat Skills, none above Rank {{budget.skillMax}}. Points remaining: <strong>{{skillRemaining}}</strong></p>
+    <button type="button" data-action="rerollSkills"><i class="fa-solid fa-dice"></i> Reroll Skills</button>
+    <table class="item-table">
+      <thead><tr><th>Skill</th><th></th><th>Rank</th><th></th></tr></thead>
+      <tbody>
+        {{#each skills as |s|}}
+          <tr class="{{#unless s.gateOpen}}gated{{/unless}}">
+            <td class="capitalize">{{s.key}} {{#unless s.gateOpen}}<span class="gate-note">(requires {{s.gateDistinction}})</span>{{/unless}}</td>
+            <td><button type="button" data-action="adjustSkill" data-skill="{{s.key}}" data-delta="-1">-</button></td>
+            <td class="wizard-value">{{s.value}}</td>
+            <td><button type="button" data-action="adjustSkill" data-skill="{{s.key}}" data-delta="1" {{#unless s.gateOpen}}disabled{{/unless}}>+</button></td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{/if}}
+
+  {{!-- ============ STEP 5: WOUNDS ============ --}}
+  {{#if (eq step 4)}}
+    <h2>Wounds</h2>
+    <p class="muted">Order never changes: Damage → Resilience → Wounds → Temporary Wounds → Core Wounds. Auto-Generate sets these from the Role budget; adjust freely.</p>
+    <div class="wizard-row">
+      <label>Resilience <input type="number" name="system.resilience" value="{{system.resilience}}" style="width:4em"></label>
+      <label>Temporary Wounds Available <input type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" style="width:4em" min="0" max="5"></label>
+    </div>
+    <h3 class="section-head">Core Wounds (start empty)</h3>
+    <span class="pip-track">
+      {{#each system.coreWounds as |w|}}<span class="pip {{#if w.filled}}filled{{/if}}"></span>{{/each}}
+    </span>
+  {{/if}}
+
+  {{!-- ============ STEP 6: COMBAT CARDS ============ --}}
+  {{#if (eq step 5)}}
+    <h2>Combat Cards</h2>
+    <p class="muted">Role budget: {{actionCardBudget}} Action / {{reactionCardBudget}} Reaction.</p>
+    <button type="button" data-action="rerollCards"><i class="fa-solid fa-dice"></i> Reroll Cards</button>
+    <div class="wizard-two-col">
+      <div>
+        <h4>Action Cards ({{ownedActionCards.length}} / {{actionCardBudget}})</h4>
+        <ul class="item-list">
+          {{#each ownedActionCards as |item|}}
+            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}}{{#if item.system.skill}} · {{item.system.skill}}{{/if}}</span> <button type="button" data-action="toggleCard" data-item-id="{{item.id}}" aria-label="Remove {{item.name}}"><i class="fa-solid fa-trash"></i></button></li>
+          {{else}}
+            <li class="muted">None yet.</li>
+          {{/each}}
+        </ul>
+        <h4>Reaction Cards ({{ownedReactionCards.length}} / {{reactionCardBudget}})</h4>
+        <ul class="item-list">
+          {{#each ownedReactionCards as |item|}}
+            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}}{{#if item.system.skill}} · {{item.system.skill}}{{/if}}</span> <button type="button" data-action="toggleCard" data-item-id="{{item.id}}" aria-label="Remove {{item.name}}"><i class="fa-solid fa-trash"></i></button></li>
+          {{else}}
+            <li class="muted">None yet.</li>
+          {{/each}}
+        </ul>
+      </div>
+      <div>
+        <h4>Qualifying Cards</h4>
+        <input type="text" data-wizard-search="cards" placeholder="Search…" value="{{cardSearch}}">
+        <ul class="item-list wizard-scroll-list">
+          {{#each browsableCards as |item|}}
+            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}} · {{item.system.skill}}{{#if (eq item.type "reaction-card")}} · Reaction{{/if}}</span> <button type="button" data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}" aria-label="Add {{item.name}}"><i class="fa-solid fa-plus"></i></button></li>
+          {{else}}
+            <li class="muted">No cards match.</li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+  {{/if}}
+
+  {{!-- ============ STEP 7: EQUIPMENT ============ --}}
+  {{#if (eq step 6)}}
+    <h2>Equipment</h2>
+    <p class="muted">Role budget: {{equipmentBudget}} items.</p>
+    <button type="button" data-action="rerollEquipment"><i class="fa-solid fa-dice"></i> Reroll Equipment</button>
+    <h3 class="section-head">Loadout — {{equipmentItems.length}} / {{equipmentBudget}}</h3>
+    <ul class="item-list">
+      {{#each equipmentItems as |item|}}
+        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <button type="button" data-action="toggleEquipment" data-item-id="{{item.id}}" aria-label="Remove {{item.name}}"><i class="fa-solid fa-trash"></i></button></li>
+      {{else}}
+        <li class="muted">None yet.</li>
+      {{/each}}
+    </ul>
+    <h3 class="section-head">Equipment Library</h3>
+    <input type="text" data-wizard-search="equipment" placeholder="Search…" value="{{equipmentSearch}}">
+    <ul class="item-list wizard-scroll-list">
+      {{#each browsableEquipment as |item|}}
+        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{item.system.category}}</span> <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" aria-label="Add {{item.name}}"><i class="fa-solid fa-plus"></i></button></li>
+      {{/each}}
+    </ul>
+  {{/if}}
+
+  {{!-- ============ STEP 8: FINALIZE ============ --}}
+  {{#if (eq step 7)}}
+    <h2>Finalize</h2>
+    <p class="muted">{{actor.name}} — {{#if system.role}}{{system.role}}{{else}}Standard{{/if}}, Tier {{system.tier}}, Level {{system.level}}.</p>
+    <div class="wizard-row">
+      <span>Stamina {{resources.stamina.max}}</span>
+      <span>Focus {{resources.focus.max}}</span>
+      <span>Mana {{resources.mana.max}}</span>
+      <span>Fortitude {{defenses.fortitude}}</span>
+      <span>Composure {{defenses.composure}}</span>
+      <span>Harmony {{defenses.harmony}}</span>
+      <span>Base Action Pool {{baseCombatDice}}</span>
+    </div>
+    <div class="wizard-row">
+      <span>Resilience {{system.resilience}}</span>
+      <span>Temporary Wounds {{system.temporaryWoundsAvailable}}</span>
+      <span>Combat Cards {{cardCount}}</span>
+      <span>Equipment {{equipmentCount}}</span>
+    </div>
+    <p class="muted">No hard requirements to check here — an NPC is playable at any point. Close this wizard and open the NPC sheet whenever it's ready.</p>
+  {{/if}}
+
+  </div>
+
+  <footer class="wizard-footer">
+    <button type="button" data-action="wizardBack" {{#if isFirst}}disabled{{/if}}>← Back</button>
+    <span class="muted">Step {{addOne step}} of 8 — {{stepName}}</span>
+    <button type="button" data-action="wizardNext" {{#if isLast}}disabled{{/if}}>Next →</button>
+  </footer>
+</div>

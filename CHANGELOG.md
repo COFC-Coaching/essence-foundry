@@ -2,6 +2,26 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.8
+
+- Add a Monster Creator for NPCs — a "Monster Creator" button on the NPC sheet header (next to
+  Role/Tier/Level) opens a Character-Wizard-style step-by-step flow (Concept, Origin, Attributes,
+  Combat Skills, Wounds, Combat Cards, Equipment, Finalize), trimmed to what the NPC sheet
+  actually exposes (no Non-Combat Skills, Influence, Expertises, or Passive Features).
+- The Role tag (Minion/Standard/Elite/Nemesis) had no mechanical effect anywhere in the system —
+  it was purely a GM-facing label. Added a homebrew, tunable budget table per Role
+  (`module/data/monster-budgets.mjs`: Attribute/Skill point pools and caps, Resilience scaling by
+  Tier, Temporary Wounds, and Action/Reaction Card and Equipment counts) since nothing canonical
+  exists to match. Every manual +/- and card/equipment pick in the wizard is capped to that Role's
+  budget.
+- Added a one-button "Auto-Generate Stat Block" that rolls a full NPC from the Role budget:
+  weighted-random Attribute and Skill point-buy (leaning toward a chosen Physical/Mental/Spiritual
+  Domain Emphasis without excluding the others), Resilience/Temporary Wounds/Equipment Limit set
+  directly from the budget, then Combat Cards and Equipment picked at random — weighted toward
+  whichever Skills the roll landed on, so a Nemesis that rolled high Ritualism tends to get
+  Ritualism cards. Reroll buttons on each step (Attributes/Skills/Cards/Equipment) redo just that
+  part; every result stays hand-editable afterward exactly like the rest of the wizard.
+
 ## 0.6.7
 
 - Make every icon-only edit/delete/remove/add control keyboard-reachable and screen-reader

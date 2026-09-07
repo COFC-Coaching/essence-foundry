@@ -308,6 +308,14 @@
 .essence .wizard-checklist li { padding: 2px 0; }
 .essence .wizard-checklist li.ok { color: #66bb6a; }
 .essence .wizard-checklist li.fail { color: #ef5350; }
+/* Domain Emphasis buttons (Monster Creator) reuse the same "chosen" look as Origin picks,
+   just outside .wizard-pick-list since they sit in a plain .wizard-row. */
+.essence .wizard-row button.chosen { background: #f9a825; color: #000; font-weight: bold; }
+.essence .wizard-generate {
+  display: block; width: 100%; margin: 8px 0; padding: 8px; font-size: 1em; font-weight: bold;
+  background: rgba(249, 168, 37, 0.15); border-color: #f9a825; color: #f9a825;
+}
+.essence .wizard-generate:hover { background: rgba(249, 168, 37, 0.3); }
 
 .essence .wizard-array-block {
   display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px;
