@@ -97,29 +97,18 @@
     </div>
   {{/if}}
 
-  <h3 class="section-head">Origin <span class="muted">(drag a Species/Heritage/Distinction Item onto the sheet)</span></h3>
+  <h3 class="section-head">Origin <span class="muted">(drag a Species/Heritage/Distinction Item onto the sheet — traits appear under Non-Combat &gt; General Features &amp; Benefits)</span></h3>
   <div class="origin-cards">
     <div class="origin-card">
       <div class="origin-card-head">Species: {{#if speciesItem}}{{speciesItem.name}}{{else}}<em>none</em>{{/if}}</div>
-      {{#if speciesItem}}
-        <div class="origin-trait"><strong>{{speciesItem.system.nature.name}}</strong> {{{speciesItem.system.nature.text}}}</div>
-        {{#each speciesItem.system.adaptations as |a|}}
-          {{#if a.chosen}}<div class="origin-trait"><strong>{{a.name}}</strong> {{{a.text}}}</div>{{/if}}
-        {{/each}}
-      {{/if}}
     </div>
     <div class="origin-card">
       <div class="origin-card-head">Heritage: {{#if heritageItem}}{{heritageItem.name}}{{else}}<em>none</em>{{/if}}</div>
-      {{#if heritageItem}}
-        <div class="origin-trait"><strong>{{heritageItem.system.legacy.name}}</strong> {{{heritageItem.system.legacy.text}}}</div>
-        <div class="origin-trait"><strong>{{heritageItem.system.familiarity.name}}</strong> {{{heritageItem.system.familiarity.text}}}</div>
-      {{/if}}
     </div>
     <div class="origin-card">
       <div class="origin-card-head">Distinction: {{#if distinctionItem}}{{distinctionItem.name}}{{else}}<em>none</em>{{/if}}</div>
       {{#if distinctionItem}}
         <div class="origin-trait">Key Skill: {{distinctionItem.system.keyCombatSkill}} · Primary Attribute: {{distinctionItem.system.primaryAttr}}</div>
-        <div class="origin-trait"><strong>{{distinctionItem.system.origin.name}}</strong> {{{distinctionItem.system.origin.text}}}</div>
       {{/if}}
     </div>
   </div>
