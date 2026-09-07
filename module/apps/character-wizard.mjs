@@ -211,7 +211,9 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       const required = (cardSystem.expertises || "").split(",").map((s) => s.trim()).filter(Boolean);
       if (!required.length) return true;
       const have = system.expertises.filter((e) => e.skill === skill).map((e) => e.name);
-      return cardSystem.expertisesMode === "all" ? required.every((e) => have.includes(e)) : required.some((e) => have.includes(e));
+      const matched = required.filter((e) => have.includes(e)).length;
+      // schema only defines "any" (>=1 of the listed) and "any2" (>=2) — there's no "all".
+      return matched >= (cardSystem.expertisesMode === "any2" ? 2 : 1);
     };
 
     const toBrowserEntry = (doc) => ({ id: doc.id, uuid: doc.uuid, name: doc.name, system: doc.system });

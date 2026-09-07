@@ -1,0 +1,202 @@
+<div class="essence-wizard-root">
+  {{#if typeConfig}}
+    <nav class="wizard-steps">
+      {{#each typeConfig.steps as |name i|}}
+        <span class="wizard-step-tab {{#if (eq i ../step)}}active{{/if}}">{{addOne i}}. {{name}}</span>
+      {{/each}}
+    </nav>
+  {{/if}}
+
+  <div class="wizard-body">
+
+  {{#unless canCreate}}
+    <p class="muted">You don't have permission to create content. Ask your GM to grant Foundry's "Create Items" permission (Configure Settings &gt; Configure Permissions), or have them create it for you.</p>
+  {{/unless}}
+
+  {{#unless doc}}
+    <h2>Create Content</h2>
+    <p class="muted">Choose what you're creating and give it a name. It's saved straight into the shared compendium.</p>
+    <div class="wizard-pick-list">
+      {{#each typeOptions as |opt|}}
+        <button type="button" class="{{#if (eq opt.key ../type)}}chosen{{/if}}" data-action="chooseType" data-type="{{opt.key}}" {{#unless ../canCreate}}disabled{{/unless}}>{{opt.label}}</button>
+      {{/each}}
+    </div>
+    {{#if type}}
+      <label>Name <input type="text" data-field="name" placeholder="Card/Item name" {{#unless canCreate}}disabled{{/unless}}></label>
+      <button type="button" data-action="createDraft" {{#unless canCreate}}disabled{{/unless}}>Create &amp; Continue →</button>
+    {{/if}}
+  {{/unless}}
+
+  {{#if doc}}
+    <h2>{{stepName}}</h2>
+
+    {{!-- ============ CARD steps (action-card / reaction-card) ============ --}}
+    {{#if (eq step 1)}}
+      {{#if (or (eq type "action-card") (eq type "reaction-card"))}}
+        <div class="wizard-row">
+          <label>Name <input type="text" data-field="name" value="{{doc.name}}"></label>
+        </div>
+        <div class="wizard-row">
+          <label>Domain
+            <select data-field="system.domain">
+              <option value="physical" {{#if (eq system.domain "physical")}}selected{{/if}}>physical</option>
+              <option value="mental" {{#if (eq system.domain "mental")}}selected{{/if}}>mental</option>
+              <option value="spiritual" {{#if (eq system.domain "spiritual")}}selected{{/if}}>spiritual</option>
+            </select>
+          </label>
+          <label>Rank <input type="number" data-field="system.rank" value="{{system.rank}}" style="width:4em" min="0" max="5"></label>
+          <label>Combat Style <input type="text" data-field="system.style" value="{{system.style}}" placeholder="blank = Basic card"></label>
+          <label>Subtype <input type="text" data-field="system.subtype" value="{{system.subtype}}"></label>
+        </div>
+        <div class="wizard-row">
+          <label>Attribute <input type="text" data-field="system.attr" value="{{system.attr}}"></label>
+          <label>Skill <input type="text" data-field="system.skill" value="{{system.skill}}"></label>
+          <label>Defense <input type="text" data-field="system.defense" value="{{system.defense}}" placeholder="Fortitude/Composure/Harmony"></label>
+        </div>
+        <div class="wizard-row">
+          <label>Min Dice <input type="text" data-field="system.min" value="{{system.min}}" style="width:5em"></label>
+          <label>Cost <input type="text" data-field="system.cost" value="{{system.cost}}" style="width:5em"></label>
+          <label>Tags <input type="text" data-field="system.tags" value="{{system.tags}}"></label>
+        </div>
+        <div class="wizard-row">
+          <label>Expertises (comma-separated) <input type="text" data-field="system.expertises" value="{{system.expertises}}"></label>
+          <label>Expertise Mode
+            <select data-field="system.expertisesMode">
+              <option value="any" {{#if (eq system.expertisesMode "any")}}selected{{/if}}>any 1 of them</option>
+              <option value="any2" {{#if (eq system.expertisesMode "any2")}}selected{{/if}}>any 2 of them</option>
+            </select>
+          </label>
+        </div>
+      {{/if}}
+    {{/if}}
+
+    {{#if (eq step 2)}}
+      {{#if (or (eq type "action-card") (eq type "reaction-card"))}}
+        <p class="muted">The card's printed effect, one labeled paragraph per row (e.g. Target, Effect, Range).</p>
+        {{#each system.body as |line i|}}
+          <div class="array-row wizard-array-block">
+            <input type="text" data-array="body" data-index="{{i}}" data-field="label" value="{{line.label}}" placeholder="Label (e.g. Effect)">
+            <a data-action="deleteArrayRow" data-array="body" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
+            <textarea data-array="body" data-index="{{i}}" data-field="html" rows="2" placeholder="HTML allowed">{{line.html}}</textarea>
+          </div>
+        {{/each}}
+        <button type="button" data-action="addArrayRow" data-array="body"><i class="fa-solid fa-plus"></i> Add Body Line</button>
+      {{/if}}
+    {{/if}}
+
+    {{#if (eq step 3)}}
+      {{#if (or (eq type "action-card") (eq type "reaction-card"))}}
+        <h3 class="section-head">Surges</h3>
+        {{#each system.surges as |s i|}}
+          <div class="array-row wizard-array-block">
+            <input type="text" data-array="surges" data-index="{{i}}" data-field="n" value="{{s.n}}" style="width:3em" title="Surge cost">
+            <a data-action="deleteArrayRow" data-array="surges" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
+            <textarea data-array="surges" data-index="{{i}}" data-field="html" rows="2" placeholder="HTML allowed">{{s.html}}</textarea>
+          </div>
+        {{/each}}
+        <button type="button" data-action="addArrayRow" data-array="surges"><i class="fa-solid fa-plus"></i> Add Surge</button>
+
+        <h3 class="section-head">Rider</h3>
+        <input type="text" data-field="system.rider.title" value="{{system.rider.title}}" placeholder="Rider title">
+        <textarea data-field="system.rider.html" rows="2" placeholder="HTML allowed">{{system.rider.html}}</textarea>
+
+        <h3 class="section-head">Flavor</h3>
+        <textarea data-field="system.flavor" rows="2" placeholder="Flavor text (HTML allowed)">{{system.flavor}}</textarea>
+      {{/if}}
+    {{/if}}
+
+    {{!-- ============ EQUIPMENT steps ============ --}}
+    {{#if (eq step 1)}}
+      {{#if (eq type "equipment")}}
+        <div class="wizard-row">
+          <label>Name <input type="text" data-field="name" value="{{doc.name}}"></label>
+        </div>
+        <div class="wizard-row">
+          <label>Category
+            <select data-field="system.category">
+              <option value="weapon" {{#if (eq system.category "weapon")}}selected{{/if}}>weapon</option>
+              <option value="armor" {{#if (eq system.category "armor")}}selected{{/if}}>armor</option>
+              <option value="tool" {{#if (eq system.category "tool")}}selected{{/if}}>tool</option>
+              <option value="gear" {{#if (eq system.category "gear")}}selected{{/if}}>gear</option>
+            </select>
+          </label>
+          <label>Slot
+            <select data-field="system.slot">
+              <option value="signature" {{#if (eq system.slot "signature")}}selected{{/if}}>signature</option>
+              <option value="temporary" {{#if (eq system.slot "temporary")}}selected{{/if}}>temporary</option>
+              <option value="armory" {{#if (eq system.slot "armory")}}selected{{/if}}>armory</option>
+            </select>
+          </label>
+          <label>Tier <input type="number" data-field="system.tier" value="{{system.tier}}" style="width:4em" min="1" max="5"></label>
+          <label>Type <input type="text" data-field="system.type" value="{{system.type}}"></label>
+        </div>
+        <div class="wizard-row">
+          <label>Cost <input type="text" data-field="system.cost" value="{{system.cost}}" style="width:5em"></label>
+          <label>Range <input type="text" data-field="system.range" value="{{system.range}}"></label>
+          <label>Slot Cost <input type="number" data-field="system.slotCost" value="{{system.slotCost}}" style="width:4em"></label>
+          <label>Quantity <input type="number" data-field="system.quantity" value="{{system.quantity}}" style="width:4em"></label>
+        </div>
+        <div class="wizard-row">
+          <label>Fortitude <input type="text" data-field="system.fortitude" value="{{system.fortitude}}" style="width:5em"></label>
+          <label>Resilience <input type="text" data-field="system.resilience" value="{{system.resilience}}" style="width:5em"></label>
+          <label>Movement <input type="text" data-field="system.movement" value="{{system.movement}}" style="width:5em"></label>
+          <label>Reach Bonus <input type="number" data-field="system.reachBonus" value="{{system.reachBonus}}" style="width:4em"></label>
+        </div>
+        <div class="wizard-row">
+          <label>Tags <input type="text" data-field="system.tags" value="{{system.tags}}"></label>
+          <label><input type="checkbox" data-field="system.isModular" {{#if system.isModular}}checked{{/if}}> Modular</label>
+        </div>
+      {{/if}}
+    {{/if}}
+
+    {{#if (eq step 2)}}
+      {{#if (eq type "equipment")}}
+        <h3 class="section-head">Effect</h3>
+        <textarea data-field="system.effect" rows="2" placeholder="HTML allowed">{{system.effect}}</textarea>
+        <h3 class="section-head">Passive</h3>
+        <textarea data-field="system.passive" rows="2" placeholder="HTML allowed">{{system.passive}}</textarea>
+        <h3 class="section-head">Special</h3>
+        <textarea data-field="system.special" rows="2" placeholder="HTML allowed">{{system.special}}</textarea>
+        <h3 class="section-head">Flavor</h3>
+        <textarea data-field="system.flavor" rows="2" placeholder="HTML allowed">{{system.flavor}}</textarea>
+      {{/if}}
+    {{/if}}
+
+    {{!-- ============ CONDITION steps ============ --}}
+    {{#if (eq step 1)}}
+      {{#if (eq type "condition")}}
+        <div class="wizard-row">
+          <label>Name <input type="text" data-field="name" value="{{doc.name}}"></label>
+        </div>
+        <p class="muted">One row per labeled section (e.g. EFFECT, DURATION, REMOVAL) — matches how existing Conditions read on the sheet.</p>
+        {{#each system.sections as |sec i|}}
+          <div class="array-row wizard-array-block">
+            <input type="text" data-array="sections" data-index="{{i}}" data-field="label" value="{{sec.label}}" placeholder="Label (e.g. EFFECT)">
+            <a data-action="deleteArrayRow" data-array="sections" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
+            <textarea data-array="sections" data-index="{{i}}" data-field="html" rows="2" placeholder="HTML allowed">{{sec.html}}</textarea>
+          </div>
+        {{/each}}
+        <button type="button" data-action="addArrayRow" data-array="sections"><i class="fa-solid fa-plus"></i> Add Section</button>
+      {{/if}}
+    {{/if}}
+
+    {{!-- ============ DONE ============ --}}
+    {{#if isLast}}
+      <p><strong>{{doc.name}}</strong> has been created in the {{typeConfig.label}} compendium.</p>
+      <div class="wizard-row">
+        <button type="button" data-action="openInCompendium">Open Full Sheet</button>
+        <button type="button" data-action="createAnother">Create Another</button>
+      </div>
+    {{/if}}
+  {{/if}}
+
+  </div>
+
+  {{#if doc}}
+    <footer class="wizard-footer">
+      <button type="button" data-action="wizardBack" {{#if (eq step 1)}}disabled{{/if}}>← Back</button>
+      <span class="muted">Step {{addOne step}} of {{typeConfig.steps.length}} — {{stepName}}</span>
+      <button type="button" data-action="wizardNext" {{#if isLast}}disabled{{/if}}>Next →</button>
+    </footer>
+  {{/if}}
+</div>

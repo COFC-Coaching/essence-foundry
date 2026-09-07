@@ -8,6 +8,7 @@ import {
 } from "./sheets/item-sheet.mjs";
 import EssenceCombat from "./documents/combat.mjs";
 import EssenceActor from "./documents/actor.mjs";
+import EssenceContentWizard, { canCreateContent } from "./apps/content-wizard.mjs";
 
 Hooks.once("init", () => {
   console.log("Essence System | Initializing");
@@ -34,6 +35,34 @@ Hooks.once("init", () => {
   Items.registerSheet("essence-system", EssenceDistinctionSheet, { types: ["distinction"], makeDefault: true });
 
   Handlebars.registerHelper("addOne", (n) => Number(n) + 1);
+});
+
+/**
+ * Adds a "Create Content" scene-control button that opens the Action/Reaction Card, Equipment,
+ * and Condition creation wizard — gated by Foundry's own assignable "Create Items" permission
+ * (World Settings > Configure Permissions), not just game.user.isGM, so a GM can delegate content
+ * authoring to trusted players without giving them full GM access. Uses a `button: true` tool
+ * (the same pattern as Lighting's Day/Night/Reset buttons) since this fires an action immediately
+ * rather than switching into an interaction mode.
+ */
+Hooks.on("getSceneControlButtons", (controls) => {
+  if (!canCreateContent()) return;
+  controls.essenceContent = {
+    name: "essenceContent",
+    order: 100,
+    title: "Essence System",
+    icon: "fa-solid fa-wand-magic-sparkles",
+    tools: {
+      createContent: {
+        name: "createContent",
+        order: 1,
+        title: "Create Card / Equipment / Condition",
+        icon: "fa-solid fa-plus",
+        button: true,
+        onChange: () => new EssenceContentWizard().render(true)
+      }
+    }
+  };
 });
 
 /**

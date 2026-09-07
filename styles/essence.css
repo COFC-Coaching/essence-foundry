@@ -196,3 +196,11 @@
 .essence .wizard-checklist li { padding: 2px 0; }
 .essence .wizard-checklist li.ok { color: #2e7d32; }
 .essence .wizard-checklist li.fail { color: #c62828; }
+
+.essence .wizard-array-block {
+  display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px;
+  border: 1px solid #555; border-radius: 4px; padding: 6px; margin-bottom: 6px;
+}
+.essence .wizard-array-block input[type="text"] { flex: 0 0 auto; min-width: 140px; }
+.essence .wizard-array-block textarea { flex: 1 1 100%; resize: vertical; }
+.essence .wizard-body textarea { width: 100%; box-sizing: border-box; }
