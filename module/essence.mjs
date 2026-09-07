@@ -12,6 +12,25 @@ import EssenceCombat from "./documents/combat.mjs";
 import EssenceActor from "./documents/actor.mjs";
 import EssenceContentWizard, { canCreateContent } from "./apps/content-wizard.mjs";
 
+/**
+ * Replacement for core's own `{{editor}}` Handlebars helper. That helper's `button=true` output
+ * is plain `<div class="editor"><a class="editor-edit">…` markup that only becomes clickable via
+ * FormApplication#_activateEditor (jQuery `activateListeners`, the legacy V1 sheet API) — every
+ * sheet in this system is ApplicationV2/DocumentSheetV2-based and never gets that wiring, so every
+ * rich-text field's edit button was inert (see e.g. the Character Wizard's Concept/Background, or
+ * the actor sheet's Biography tab). `<prose-mirror>` is a real, self-activating, form-associated
+ * custom element Foundry core already registers — it needs no JS glue at all, and its native
+ * `change` event is exactly what these sheets' existing `submitOnChange: true` form config already
+ * listens for, so saving works the same way every other named input already does.
+ */
+function essenceEditorHelper(content, options) {
+  const { target, button = false } = options.hash;
+  const value = foundry.utils.escapeHTML(content ?? "");
+  const attrs = [`class="editor"`, `name="${foundry.utils.escapeHTML(target)}"`, button ? "toggled" : "", `value="${value}"`]
+    .filter(Boolean).join(" ");
+  return new Handlebars.SafeString(`<prose-mirror ${attrs}>${content ?? ""}</prose-mirror>`);
+}
+
 Hooks.once("init", () => {
   console.log("Essence System | Initializing");
 
@@ -39,6 +58,7 @@ Hooks.once("init", () => {
   Items.registerSheet("essence-system", EssenceDistinctionSheet, { types: ["distinction"], makeDefault: true });
 
   Handlebars.registerHelper("addOne", (n) => Number(n) + 1);
+  Handlebars.registerHelper("essenceEditor", essenceEditorHelper);
 });
 
 /**

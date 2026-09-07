@@ -402,7 +402,7 @@
         <tr>
           <td><input name="system.passiveFeatures.{{i}}.name" type="text" value="{{f.name}}"></td>
           <td><input name="system.passiveFeatures.{{i}}.source" type="text" value="{{f.source}}"></td>
-          <td>{{editor f.text target=(concat "system.passiveFeatures." i ".text") button=true}}</td>
+          <td>{{essenceEditor f.text target=(concat "system.passiveFeatures." i ".text") button=true}}</td>
           <td><a data-action="deleteArrayRow" data-array="passiveFeatures" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a></td>
         </tr>
       {{/each}}
@@ -414,9 +414,9 @@
 {{!-- ============ BIOGRAPHY ============ --}}
 <section class="tab bio" data-tab="bio">
   <label>Concept<textarea name="system.concept">{{system.concept}}</textarea></label>
-  <label>Appearance{{editor system.appearance target="system.appearance" button=true}}</label>
-  <label>Personality{{editor system.personality target="system.personality" button=true}}</label>
-  <label>Backstory{{editor system.backstory target="system.backstory" button=true}}</label>
+  <label>Appearance{{essenceEditor system.appearance target="system.appearance" button=true}}</label>
+  <label>Personality{{essenceEditor system.personality target="system.personality" button=true}}</label>
+  <label>Backstory{{essenceEditor system.backstory target="system.backstory" button=true}}</label>
   <label>General Notes<textarea name="system.playState.sessionNotes">{{system.playState.sessionNotes}}</textarea></label>
 </section>
 </div>

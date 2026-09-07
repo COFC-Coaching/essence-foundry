@@ -9,7 +9,7 @@
   {{#each system.sections as |sec i|}}
     <li>
       <input name="system.sections.{{i}}.label" type="text" value="{{sec.label}}" placeholder="Label (e.g. EFFECT, DURATION)">
-      <div>{{editor sec.html target=(concat "system.sections." i ".html") button=true}}</div>
+      <div>{{essenceEditor sec.html target=(concat "system.sections." i ".html") button=true}}</div>
     </li>
   {{/each}}
 </ol>

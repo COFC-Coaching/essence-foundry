@@ -63,12 +63,11 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   #applyEditable() {
     if (this.isEditable) return;
     const body = this.element.querySelector(".window-content") ?? this.element;
-    for (const el of body.querySelectorAll("input, select, textarea")) el.disabled = true;
+    for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) el.disabled = true;
     for (const el of body.querySelectorAll("button[data-action], a[data-action]")) {
       el.classList.add("locked");
       el.style.pointerEvents = "none";
     }
-    for (const el of body.querySelectorAll(".editor-edit")) el.style.display = "none";
   }
 
   async _prepareContext(options) {

@@ -34,12 +34,11 @@ class EssenceItemSheetBase extends HandlebarsApplicationMixin(ItemSheetV2) {
     super._onRender(context, options);
     if (this.isEditable) return;
     const body = this.element.querySelector(".window-content") ?? this.element;
-    for (const el of body.querySelectorAll("input, select, textarea")) el.disabled = true;
+    for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) el.disabled = true;
     for (const el of body.querySelectorAll("button[data-action], a[data-action]")) {
       el.classList.add("locked");
       el.style.pointerEvents = "none";
     }
-    for (const el of body.querySelectorAll(".editor-edit")) el.style.display = "none";
   }
 
   static async #onAddArrayRow(event, target) {

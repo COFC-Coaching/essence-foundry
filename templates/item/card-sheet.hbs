@@ -27,7 +27,7 @@
   {{#each system.body as |line i|}}
     <li>
       <input name="system.body.{{i}}.label" type="text" value="{{line.label}}" placeholder="Label">
-      <div>{{editor line.html target=(concat "system.body." i ".html") button=true}}</div>
+      <div>{{essenceEditor line.html target=(concat "system.body." i ".html") button=true}}</div>
     </li>
   {{/each}}
 </ol>
@@ -37,15 +37,15 @@
   {{#each system.surges as |s i|}}
     <li>
       <input name="system.surges.{{i}}.n" type="text" value="{{s.n}}" style="width:3em">
-      <div>{{editor s.html target=(concat "system.surges." i ".html") button=true}}</div>
+      <div>{{essenceEditor s.html target=(concat "system.surges." i ".html") button=true}}</div>
     </li>
   {{/each}}
 </ol>
 
 <h3>Rider</h3>
 <input name="system.rider.title" type="text" value="{{system.rider.title}}" placeholder="Rider title">
-<div>{{editor system.rider.html target="system.rider.html" button=true}}</div>
+<div>{{essenceEditor system.rider.html target="system.rider.html" button=true}}</div>
 
 <h3>Flavor</h3>
-<div>{{editor system.flavor target="system.flavor" button=true}}</div>
+<div>{{essenceEditor system.flavor target="system.flavor" button=true}}</div>
 </div>

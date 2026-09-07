@@ -2,6 +2,21 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.5.7
+
+- Fix every rich-text field's Edit button being completely inert system-wide: the Character
+  Wizard's Concept/Background, the actor sheet's Biography tab (Appearance/Personality/Backstory)
+  and Passive Feature text, the NPC sheet's GM Notes, and every Combat Card/Condition/Equipment/
+  Species/Heritage/Distinction item sheet's HTML fields. Core's `{{editor button=true}}` Handlebars
+  helper outputs a plain `<a class="editor-edit">` that only becomes clickable through
+  `FormApplication#_activateEditor`, a legacy V1-sheet API our ApplicationV2/DocumentSheetV2 sheets
+  never had — so every one of those buttons did nothing. Replaced it system-wide with a new
+  `essenceEditor` helper that emits Foundry's real `<prose-mirror>` custom element instead (a
+  self-activating, form-associated element core already registers — no bespoke JS needed, and it
+  saves through the same `submitOnChange` form handling every other field already uses). Verified
+  live: typed and saved actual content through the Wizard's Concept field and the actor sheet's
+  Biography tab.
+
 ## 0.5.6
 
 - Fix the Character Wizard's Concept step: Player Name, Tier, and Level (and Pronouns/Age) fell

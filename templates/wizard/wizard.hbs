@@ -11,7 +11,7 @@
   {{#if (eq step 0)}}
     <h2>Concept</h2>
     <p class="muted">Decide who the character is before touching any numbers. Confirm the campaign's starting Tier with your GM.</p>
-    <label>Concept / Background{{editor system.concept target="system.concept" button=true}}</label>
+    <label>Concept / Background{{essenceEditor system.concept target="system.concept" button=true}}</label>
     <div class="wizard-row">
       <label>Player Name <input type="text" name="system.playerName" value="{{system.playerName}}"></label>
       <label>Tier <input type="number" name="system.tier" value="{{system.tier}}" style="width:4em"></label>
@@ -219,7 +219,7 @@
           <tr>
             <td><input name="system.passiveFeatures.{{i}}.name" type="text" value="{{f.name}}"></td>
             <td><input name="system.passiveFeatures.{{i}}.source" type="text" value="{{f.source}}"></td>
-            <td>{{editor f.text target=(concat "system.passiveFeatures." i ".text") button=true}}</td>
+            <td>{{essenceEditor f.text target=(concat "system.passiveFeatures." i ".text") button=true}}</td>
             <td><a data-action="deletePassiveFeature" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a></td>
           </tr>
         {{/each}}

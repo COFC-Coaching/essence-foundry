@@ -104,12 +104,11 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   #applyEditable() {
     if (this.isEditable) return;
     const body = this.element.querySelector(".window-content") ?? this.element;
-    for (const el of body.querySelectorAll("input, select, textarea")) el.disabled = true;
+    for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) el.disabled = true;
     for (const el of body.querySelectorAll('button[data-action]:not([data-action="changeTab"]), a[data-action]:not([data-action="changeTab"])')) {
       el.classList.add("locked");
       el.style.pointerEvents = "none";
     }
-    for (const el of body.querySelectorAll(".editor-edit")) el.style.display = "none";
   }
 
   #applyActiveTab() {
