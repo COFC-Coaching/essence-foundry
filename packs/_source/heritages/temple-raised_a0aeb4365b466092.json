@@ -1,0 +1,23 @@
+{
+  "_id": "a0aeb4365b466092",
+  "name": "Temple Raised",
+  "type": "heritage",
+  "img": "icons/svg/house.svg",
+  "system": {
+    "description": "Raised within a temple, monastery, shrine, religious family, or institution whose doctrine and observances shaped daily life.",
+    "legacy": {
+      "name": "Sacred Trust",
+      "text": "The first time each adventure you would take Influence Damage, you may reduce that damage to 0. This protection does not prevent Influence Breach."
+    },
+    "familiarity": {
+      "name": "Sacred Practice",
+      "text": "You recognize common symbols, rituals, offices, doctrinal divisions, and forms of address used by established religious institutions. You can identify when a public observance differs from accepted practice, though you do not automatically know the reason."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!a0aeb4365b466092"
+}

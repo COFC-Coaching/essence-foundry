@@ -1,0 +1,64 @@
+{
+  "_id": "a79bfb4d2d1ac3c4",
+  "name": "Deathless",
+  "type": "species",
+  "img": "icons/svg/wing.svg",
+  "system": {
+    "description": "Characters who continue to exist after ordinary biological life has ended, or are sustained between life and death. May depend upon necromancy, spiritual force, hunger, memory, shadow, or unfinished purpose.",
+    "nature": {
+      "name": "Deathless Nature",
+      "text": "You do not need to breathe or eat and do not sleep in the ordinary manner. Ordinary biological diseases and poisons do not affect you, though you must still rest and recover normally. When your Critical Wound activates the Death Track, increase its starting value by 1. Sense: Low-Light Vision."
+    },
+    "adaptationLabel": "Deathless Adaptation",
+    "adaptationCount": 1,
+    "adaptations": [
+      {
+        "name": "Borrowed Life",
+        "text": "After one minute of preparation, you may imitate the visible signs of life, including warmth, breathing, coloration, and a heartbeat. Ordinary observation cannot identify you as Deathless, though deliberate medical or supernatural examination may reveal your nature.",
+        "chosen": false
+      },
+      {
+        "name": "Detached Scout",
+        "text": "You may detach a small sensory part of your body (an eye, hand, tooth, or fragment of bone) and perceive through it while it remains within 5 units. It cannot move on its own, and you lose the corresponding Sense or function from your main body while it is detached.",
+        "chosen": false
+      },
+      {
+        "name": "Grave Sense",
+        "text": "You detect whether creatures within 3 units are living, dead, Deathless, or artificially animated. Ordinary visual concealment does not block this Sense, though sealed barriers do.",
+        "chosen": false
+      },
+      {
+        "name": "Shadowed Soul",
+        "text": "The first time each turn you enter dim light or darkness, move 1 additional unit without spending Movement.",
+        "chosen": false
+      },
+      {
+        "name": "Spectral Flexibility",
+        "text": "You may move through spaces occupied by other creatures and pass through narrow openings that can accommodate your equipment. You cannot end your movement in an occupied space or pass through solid walls and sealed barriers.",
+        "chosen": false
+      },
+      {
+        "name": "Stitched Form",
+        "text": "You possess an additional arm, skeletal limb, tendril, or other appendage. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Signature Equipment Limit, and the limb does not grant additional Actions.",
+        "chosen": false
+      },
+      {
+        "name": "Uncanny Stillness",
+        "text": "You can remain motionless indefinitely and display no involuntary signs of life. While Hidden and motionless, ordinary visual observation does not reveal you unless someone performs a deliberate search.",
+        "chosen": false
+      },
+      {
+        "name": "Unyielding Remains",
+        "text": "The first time each adventure a Wound Condition would reduce your Movement, disable a limb, or impair one of your Senses, ignore that portion of the condition until the end of the current scene.",
+        "chosen": false
+      }
+    ],
+    "subspecies": []
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!a79bfb4d2d1ac3c4"
+}

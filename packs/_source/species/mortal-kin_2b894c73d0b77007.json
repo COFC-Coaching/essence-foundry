@@ -1,0 +1,69 @@
+{
+  "_id": "2b894c73d0b77007",
+  "name": "Mortal-Kin",
+  "type": "species",
+  "img": "icons/svg/wing.svg",
+  "system": {
+    "description": "Naturally born peoples — humans, smallfolk, giant-blooded peoples, orcish and goblinoid peoples, and other broadly mortal lineages. They vary dramatically in stature, proportions, endurance, and sensory ability.",
+    "nature": {
+      "name": "Adaptive Physiology",
+      "text": "Choose two Mortal Adaptations."
+    },
+    "adaptationLabel": "Mortal Adaptation",
+    "adaptationCount": 2,
+    "adaptations": [
+      {
+        "name": "Compact Frame",
+        "text": "You may move through spaces occupied by substantially larger creatures, though you cannot end your movement in an occupied space. You can also pass through narrow openings and comfortably use spaces designed for creatures roughly half your height, provided your equipment fits.",
+        "chosen": false
+      },
+      {
+        "name": "Hardy",
+        "text": "Ordinary environmental exposure takes three times as long to affect you. The first time each adventure an ordinary environmental hazard would cause you Damage, reduce that Damage to 0. This does not prevent Breach.",
+        "chosen": false
+      },
+      {
+        "name": "Keen",
+        "text": "Choose two special Senses: low-light vision, keen hearing, or keen scent. Within 2 units, creatures and objects cannot remain Hidden from you when the chosen Sense could reasonably detect them and no sealed barrier blocks it.",
+        "chosen": false
+      },
+      {
+        "name": "Long-Limbed",
+        "text": "You may reach, retrieve, manipulate, or operate unattended objects up to 1 unit farther away than normal. This does not increase the range of attacks, Reactions, Combat Cards, or other effects targeting creatures.",
+        "chosen": false
+      },
+      {
+        "name": "Powerful Build",
+        "text": "You count as substantially larger when lifting, carrying, pushing, dragging, or breaking ordinary objects. You may carry one willing or incapacitated character without reducing your Movement, provided their total size and equipment are within what your body could reasonably support.",
+        "chosen": false
+      },
+      {
+        "name": "Stout",
+        "text": "Reduce involuntary movement against you by 2 units, to a minimum of 0. Ordinary wind, currents, unstable footing, and similar environmental forces must be severe before they can move or knock you down.",
+        "chosen": false
+      },
+      {
+        "name": "Sure-Footed",
+        "text": "Ignore the first 2 units of difficult terrain you cross during each turn. You can maintain your footing on ordinary narrow, uneven, or unstable surfaces without special assistance.",
+        "chosen": false
+      },
+      {
+        "name": "Swift",
+        "text": "Increase your Movement to 12 units.",
+        "chosen": false
+      },
+      {
+        "name": "Tireless",
+        "text": "Ordinary travel and sustained physical labor take three times as long to cause exhaustion or similar consequences. The first time each adventure fatigue or lack of rest would impose a condition or cause Damage, ignore that consequence.",
+        "chosen": false
+      }
+    ],
+    "subspecies": []
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2b894c73d0b77007"
+}

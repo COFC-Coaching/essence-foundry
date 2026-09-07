@@ -1,0 +1,23 @@
+{
+  "_id": "b822ad36c281d6a8",
+  "name": "Frontier Household",
+  "type": "heritage",
+  "img": "icons/svg/house.svg",
+  "system": {
+    "description": "Grew up in an isolated settlement, border territory, remote colony, or community that could not depend upon immediate aid from outside.",
+    "legacy": {
+      "name": "Prepared Cache",
+      "text": "You may reveal that you previously packed, purchased, or concealed one ordinary non-combat item appropriate to the current environment (Availability ≤ Reach; not a weapon, armor, Focus, relic, or combat consumable). It becomes Temporary Equipment. First use each adventure is free; each additional use causes 1 Influence Breach."
+    },
+    "familiarity": {
+      "name": "Borderland Vigilance",
+      "text": "You recognize how isolated communities organize alarms, food stores, shelters, escape routes, and defensive positions. You can identify practical vulnerabilities and signs that a community expects attack, shortage, or abandonment."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b822ad36c281d6a8"
+}

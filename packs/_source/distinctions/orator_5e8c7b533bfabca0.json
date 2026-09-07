@@ -1,0 +1,23 @@
+{
+  "_id": "5e8c7b533bfabca0",
+  "name": "Orator",
+  "type": "distinction",
+  "img": "icons/svg/star.svg",
+  "system": {
+    "description": "Battlefield commanders, officers, champions, performers, and leaders whose presence changes how others fight. They issue orders, provoke enemies, raise standards, and lead through personal action.",
+    "keyCombatSkill": "Leadership",
+    "primaryAttr": "Presence",
+    "unlocks": "",
+    "benefit": "Gain one additional Leadership Expertise and two additional Leadership Action Cards. If acquired later: instead increase Leadership to a minimum of 2 pips, then gain one additional Leadership Expertise and four additional Leadership Action Cards.",
+    "origin": {
+      "name": "Commanding Authority",
+      "text": "Whenever you would store Authority, you may choose up to two results rolled for that Leadership action and store both. When you spend that Authority, choose which stored result is used, then discard both."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5e8c7b533bfabca0"
+}

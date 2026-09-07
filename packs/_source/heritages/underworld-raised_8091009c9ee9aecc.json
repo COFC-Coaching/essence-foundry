@@ -1,0 +1,23 @@
+{
+  "_id": "8091009c9ee9aecc",
+  "name": "Underworld Raised",
+  "type": "heritage",
+  "img": "icons/svg/house.svg",
+  "system": {
+    "description": "Grew up among crowded streets, informal shelters, smugglers, thieves, fences, and people who survived outside official systems.",
+    "legacy": {
+      "name": "Fence's Cache",
+      "text": "At the end of each adventure, you may preserve one Temporary Item instead of discarding it (your Cached Item). When you have access to a black market or fence, you may exchange it for another Temporary Item of equal or lower Availability (cannot exceed your Reach)."
+    },
+    "familiarity": {
+      "name": "Quiet Rules",
+      "text": "You recognize territorial signs, protection arrangements, false storefronts, informal shelters, hidden markets, secondary routes, and the people who actually control illicit trade. You know how to find a discreet intermediary, safe meeting place, or overlooked refuge without presenting yourself as an obvious victim or agent of authority."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!8091009c9ee9aecc"
+}

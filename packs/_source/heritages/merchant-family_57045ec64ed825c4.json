@@ -1,0 +1,23 @@
+{
+  "_id": "57045ec64ed825c4",
+  "name": "Merchant Family",
+  "type": "heritage",
+  "img": "icons/svg/house.svg",
+  "system": {
+    "description": "Raised around shops, caravans, counting houses, warehouses, or family ventures in which every possession had a cost and every relationship had practical value.",
+    "legacy": {
+      "name": "Family Ledger",
+      "text": "At the beginning of each adventure, gain 1 Temporary Influence, up to your normal maximum. Any Temporary Influence granted by this Legacy that remains at the end of the adventure is lost."
+    },
+    "familiarity": {
+      "name": "Commercial Networks",
+      "text": "You recognize guild marks, shipping labels, trade conventions, common commercial deceptions, and signs of shortage or surplus. In a settlement with an established market, you can identify the brokers, wholesalers, guild representatives, and other people through whom serious business is conducted."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!57045ec64ed825c4"
+}

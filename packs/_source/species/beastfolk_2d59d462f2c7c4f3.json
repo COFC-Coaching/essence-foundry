@@ -1,0 +1,64 @@
+{
+  "_id": "2d59d462f2c7c4f3",
+  "name": "Beastfolk",
+  "type": "species",
+  "img": "icons/svg/wing.svg",
+  "system": {
+    "description": "Sapient peoples whose defining physical qualities are drawn from animals — mammals, birds, reptiles, insects, or combinations. Choose an animal or group that informs appearance and traits.",
+    "nature": {
+      "name": "Heightened Instincts",
+      "text": "Choose a narrow special Sense appropriate to your lineage (low-light vision, keen hearing, keen scent, heat perception, or vibration sense). Within 2 units, creatures and objects cannot remain Hidden from you when that Sense could reasonably detect them and no sealed barrier blocks it. You may also follow fresh trails using that Sense without specialized equipment."
+    },
+    "adaptationLabel": "Beastfolk Adaptation",
+    "adaptationCount": 1,
+    "adaptations": [
+      {
+        "name": "Burrower",
+        "text": "Gain Burrow 5 through loose soil, sand, snow, or similarly workable material. You cannot burrow through solid stone, worked flooring, or reinforced structures.",
+        "chosen": false
+      },
+      {
+        "name": "Climber",
+        "text": "Gain Climb 10. When a surface can support you, you may remain secured to it without using your hands.",
+        "chosen": false
+      },
+      {
+        "name": "Glider",
+        "text": "While falling, you may glide using your full Movement and may Dash normally. You cannot gain height through this Adaptation or remain airborne without descending.",
+        "chosen": false
+      },
+      {
+        "name": "Natural Armament",
+        "text": "Choose claws, horns, fangs, a tail, mandibles, or another natural weapon. It counts as a basic one-handed weapon, does not count against your Signature Equipment Limit, and cannot be disarmed. You must leave one hand or equivalent limb free while using it.",
+        "chosen": false
+      },
+      {
+        "name": "Prehensile Limb",
+        "text": "You possess a tail, trunk, secondary arm, or similar limb. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Signature Equipment Limit, and the limb does not grant additional Actions.",
+        "chosen": false
+      },
+      {
+        "name": "Quadrupedal Frame",
+        "text": "Increase your Movement to 12 while no more than one of your hands is occupied. You also count as substantially larger when carrying riders, dragging loads, or resisting effects that would knock you down.",
+        "chosen": false
+      },
+      {
+        "name": "Shell or Hide",
+        "text": "Reduce involuntary movement against you by 1 unit. The first time each adventure an ordinary environmental hazard would cause you Damage, reduce that Damage to 0.",
+        "chosen": false
+      },
+      {
+        "name": "Swimmer",
+        "text": "Gain Swim 10 and increase the amount of time you can remain underwater to ten times the normal duration. This does not allow you to breathe underwater.",
+        "chosen": false
+      }
+    ],
+    "subspecies": []
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2d59d462f2c7c4f3"
+}

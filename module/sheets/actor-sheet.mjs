@@ -14,9 +14,20 @@ const DOMAINS = [
   { key: "spiritual", label: "Spiritual", attrs: ["presence", "adaptability", "anima"], skills: ["leadership", "ritualism", "calling"], resource: "mana", defense: "harmony" }
 ];
 
+/** Gated combat skills can only be raised above 0 with the matching Distinction attached. */
+const SKILL_GATE = { gestalt: "Gifted", magecraft: "Arcanist", psionics: "Psyker", ritualism: "Invoker", calling: "Summoner" };
+const ORIGIN_TYPES = ["species", "heritage", "distinction"];
+
 function pips(value, max = PIP_MAX) {
   return Array.from({ length: max }, (_, i) => i < value);
 }
+
+/** Default new-row shape for each free-length array field, keyed by the sheet's data-array value. */
+const ARRAY_ROW_DEFAULTS = {
+  nonCombatSkills: { name: "", rating: 0 },
+  passiveFeatures: { name: "", source: "", text: "" },
+  expertises: { name: "", skill: "" }
+};
 
 export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
@@ -37,7 +48,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       toggleTempWound: EssenceActorSheet.#onToggleTempWound,
       toggleCoreWound: EssenceActorSheet.#onToggleCoreWound,
       toggleTempInfluence: EssenceActorSheet.#onToggleTempInfluence,
-      toggleCoreInfluence: EssenceActorSheet.#onToggleCoreInfluence
+      toggleCoreInfluence: EssenceActorSheet.#onToggleCoreInfluence,
+      addArrayRow: EssenceActorSheet.#onAddArrayRow,
+      deleteArrayRow: EssenceActorSheet.#onDeleteArrayRow
     }
   };
 
@@ -61,6 +74,18 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     }
   }
 
+  /** A character has exactly one Species/Heritage/Distinction — dropping a new one replaces the old. */
+  async _onDropItem(event, item) {
+    const created = await super._onDropItem(event, item);
+    if (created && ORIGIN_TYPES.includes(created.type)) {
+      const stale = this.actor.items.filter((i) => i.type === created.type && i.id !== created.id);
+      if (stale.length) await this.actor.deleteEmbeddedDocuments("Item", stale.map((i) => i.id));
+      const field = created.type === "distinction" ? "distinction" : created.type;
+      await this.actor.update({ [`system.${field}`]: created.name });
+    }
+    return created;
+  }
+
   static #onChangeTab(event, target) {
     this.#activeTab = target.dataset.tab;
     this.#applyActiveTab();
@@ -72,17 +97,31 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const system = this.actor.system;
     context.system = system;
     context.attributeOptions = ATTRIBUTES;
+    context.skillOptions = SKILLS;
+
+    const distinctionItem = this.actor.items.find((i) => i.type === "distinction");
+    const speciesItem = this.actor.items.find((i) => i.type === "species");
+    const heritageItem = this.actor.items.find((i) => i.type === "heritage");
+    context.distinctionItem = distinctionItem;
+    context.speciesItem = speciesItem;
+    context.heritageItem = heritageItem;
 
     context.domains = DOMAINS.map((d) => ({
       ...d,
       attrs: d.attrs.map((key) => ({ key, label: key, value: system[key], pips: pips(system[key]) })),
-      skills: d.skills.map((key) => ({
-        key,
-        label: key,
-        value: system[key],
-        pips: pips(system[key]),
-        expertises: system.expertises.filter((e) => (e.skill || "").toLowerCase() === key)
-      })),
+      skills: d.skills.map((key) => {
+        const gateDistinction = SKILL_GATE[key];
+        const gateOpen = !gateDistinction || distinctionItem?.system.unlocks === key;
+        return {
+          key,
+          label: key,
+          value: system[key],
+          pips: pips(system[key]),
+          expertises: system.expertises.filter((e) => (e.skill || "").toLowerCase() === key),
+          gateDistinction,
+          gateOpen
+        };
+      }),
       resourceLabel: d.resource,
       resourceField: `current${d.resource[0].toUpperCase()}${d.resource.slice(1)}`,
       resourceCurrent: system.playState[`current${d.resource[0].toUpperCase()}${d.resource.slice(1)}`],
@@ -269,6 +308,21 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const coreInfluence = this.actor.system.coreInfluence.map((c) => ({ filled: c.filled }));
     coreInfluence[i].filled = !coreInfluence[i].filled;
     await this.actor.update({ "system.coreInfluence": coreInfluence });
+  }
+
+  static async #onAddArrayRow(event, target) {
+    const key = target.dataset.array;
+    const rows = this.actor.system[key].map((row) => foundry.utils.deepClone(row));
+    rows.push(foundry.utils.deepClone(ARRAY_ROW_DEFAULTS[key]));
+    await this.actor.update({ [`system.${key}`]: rows });
+  }
+
+  static async #onDeleteArrayRow(event, target) {
+    const key = target.dataset.array;
+    const i = Number(target.dataset.index);
+    const rows = this.actor.system[key].map((row) => foundry.utils.deepClone(row));
+    rows.splice(i, 1);
+    await this.actor.update({ [`system.${key}`]: rows });
   }
 
   static #onItemEdit(event, target) {

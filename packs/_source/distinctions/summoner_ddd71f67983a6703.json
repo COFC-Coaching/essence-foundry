@@ -1,0 +1,23 @@
+{
+  "_id": "ddd71f67983a6703",
+  "name": "Summoner",
+  "type": "distinction",
+  "img": "icons/svg/star.svg",
+  "system": {
+    "description": "Conduits who forge bonds with entities, forces, or powers beyond the material world. They channel bonds into healing and support, then allow a summoned entity to fully manifest.",
+    "keyCombatSkill": "Calling",
+    "primaryAttr": "Anima",
+    "unlocks": "calling",
+    "benefit": "Gain access to the Calling Combat Skill. If acquired later: gain access to Calling, gain 2 pips in it, then gain one additional Calling Expertise and two additional Calling Action Cards.",
+    "origin": {
+      "name": "Greater Manifestation",
+      "text": "Full Manifestations cost one fewer die than normal, to a minimum cost of 2 dice."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ddd71f67983a6703"
+}

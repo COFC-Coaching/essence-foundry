@@ -1,0 +1,59 @@
+{
+  "_id": "53dd04dea88be473",
+  "name": "Feyborn",
+  "type": "species",
+  "img": "icons/svg/wing.svg",
+  "system": {
+    "description": "Beings whose bodies and spirits are intertwined with glamour, dreams, emotion, living nature, or shadow. Includes woodland peoples, fair folk, winged sprites, horned revelers, embodied nature spirits, dreamborn beings, and changelings.",
+    "nature": {
+      "name": "Between Places",
+      "text": "You may move through spaces occupied by other creatures, though you cannot end your movement in an occupied space. Choose one Feyborn Adaptation."
+    },
+    "adaptationLabel": "Feyborn Adaptation",
+    "adaptationCount": 1,
+    "adaptations": [
+      {
+        "name": "Dreamtouched",
+        "text": "You remain aware of your surroundings while resting. The first time each scene an effect alters your perception, memory, dreams, or emotions, you immediately recognize that an outside influence is affecting you, even if you cannot identify its source or prevent its effects.",
+        "chosen": false
+      },
+      {
+        "name": "Glamour",
+        "text": "After one minute of concentration, you may assume a different appearance within your general size and body plan. You may alter your apparent lineage, age, coloration, voice, scent, clothing, and similar details. Ordinary observation cannot identify the Glamour as false, though touch, deliberate examination, and supernatural Senses may reveal inconsistencies.",
+        "chosen": false
+      },
+      {
+        "name": "Glimmerwing",
+        "text": "You possess wings or another supernatural means of controlled descent. While falling, you may glide using your full Movement and may Dash normally. You cannot gain height through this Adaptation or remain airborne without descending.",
+        "chosen": false
+      },
+      {
+        "name": "Greenstep",
+        "text": "Natural vegetation, undergrowth, mud, roots, and similar natural terrain do not count as difficult terrain for you. You also gain Climb 5 when climbing living plants or natural rock.",
+        "chosen": false
+      },
+      {
+        "name": "Gloamstep",
+        "text": "Gain low-light vision. The first time each turn you enter dim light, darkness, or substantial shadow, move 1 additional unit without spending Movement.",
+        "chosen": false
+      },
+      {
+        "name": "Veiled Presence",
+        "text": "You may suppress the visible and sensory signs of your supernatural nature. While suppressed, ordinary magical or spiritual detection recognizes that you are alive but does not automatically identify you as Feyborn. Direct examination or an effect specifically designed to reveal Species may still expose you.",
+        "chosen": false
+      },
+      {
+        "name": "Wild Escape",
+        "text": "The first time each scene another creature would prevent your movement, restrain you, or reduce your Movement to 0, you may immediately move 1 unit after that effect resolves. This movement cannot pass through a solid barrier.",
+        "chosen": false
+      }
+    ],
+    "subspecies": []
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!53dd04dea88be473"
+}

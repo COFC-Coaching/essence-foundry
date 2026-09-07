@@ -1,0 +1,23 @@
+{
+  "_id": "0c92c3b8e0b78790",
+  "name": "Dilettante",
+  "type": "distinction",
+  "img": "icons/svg/star.svg",
+  "system": {
+    "description": "Characters defined by breadth and versatility rather than a single overwhelming specialty. They keep several strong options ready and adapt to what the situation requires. Unlocks no restricted skill. May only be selected at character creation.",
+    "keyCombatSkill": "None",
+    "primaryAttr": "Any",
+    "unlocks": "",
+    "benefit": "Whenever you gain a pip in a Combat Skill, also gain one Action Card of that Rank or lower for that Combat Skill.",
+    "origin": {
+      "name": "Broad Reserves",
+      "text": "Increase your maximum Stamina, Focus, and Mana by 5 each."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!0c92c3b8e0b78790"
+}

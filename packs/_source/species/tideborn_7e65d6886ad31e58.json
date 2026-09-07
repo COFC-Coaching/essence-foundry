@@ -1,0 +1,59 @@
+{
+  "_id": "7e65d6886ad31e58",
+  "name": "Tideborn",
+  "type": "species",
+  "img": "icons/svg/wing.svg",
+  "system": {
+    "description": "Aquatic and amphibious peoples adapted to oceans, rivers, swamps, reefs, flooded caverns, and other submerged environments. May resemble fish, amphibians, marine mammals, cephalopods, crustaceans, or aquatic reptiles.",
+    "nature": {
+      "name": "Amphibious Body",
+      "text": "Gain Swim 10. You can breathe both air and water and function normally while submerged. Ordinary water pressure, currents, and temperature within habitable depths do not impair you."
+    },
+    "adaptationLabel": "Tideborn Adaptation",
+    "adaptationCount": 1,
+    "adaptations": [
+      {
+        "name": "Adhesive Limbs",
+        "text": "Gain Climb 10 through suckers, gripping pads, hooked limbs, or a similar adaptation. You may remain secured to a surface without using your hands.",
+        "chosen": false
+      },
+      {
+        "name": "Bioluminescence",
+        "text": "You may produce or suppress light from your body. By touching a creature or object, you may leave a luminous mark that remains until the end of the scene or until deliberately removed. Ordinary darkness does not conceal a marked target.",
+        "chosen": false
+      },
+      {
+        "name": "Echolocation",
+        "text": "Within 3 units, visual darkness, smoke, and similar visual concealment do not prevent you from perceiving shapes and movement. Echolocation does not reveal color, writing, or fine visual detail and is blocked by effects that prevent sound.",
+        "chosen": false
+      },
+      {
+        "name": "Electric Sense",
+        "text": "While submerged, you detect living creatures within 3 units through the electrical activity of their bodies. This reveals their approximate location even through visual concealment, but not their identity or condition.",
+        "chosen": false
+      },
+      {
+        "name": "Flexible Body",
+        "text": "You can pass through narrow openings that can accommodate your equipment and may move through spaces occupied by other creatures. You cannot end your movement in an occupied space or pass through sealed barriers.",
+        "chosen": false
+      },
+      {
+        "name": "Ink Cloud",
+        "text": "Once per scene while submerged, create a 1-unit area of opaque ink adjacent to you. Ordinary sight cannot pass through the area. The cloud remains until the start of your next turn or until dispersed by a strong current.",
+        "chosen": false
+      },
+      {
+        "name": "Jet Propulsion",
+        "text": "Increase your Swim Movement to 12. The first time you Dash while swimming during each turn, move 1 additional unit.",
+        "chosen": false
+      }
+    ],
+    "subspecies": []
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!7e65d6886ad31e58"
+}

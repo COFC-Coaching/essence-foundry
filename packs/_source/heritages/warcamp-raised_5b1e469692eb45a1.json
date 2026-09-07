@@ -1,0 +1,23 @@
+{
+  "_id": "5b1e469692eb45a1",
+  "name": "Warcamp Raised",
+  "type": "heritage",
+  "img": "icons/svg/house.svg",
+  "system": {
+    "description": "Raised among soldiers, camp followers, quartermasters, healers, and families that traveled with an army or lived around a permanent garrison.",
+    "legacy": {
+      "name": "Quartermaster's Due",
+      "text": "You may select one Main-Hand, Off-Hand, or Armor item whose Availability is no more than 1 higher than your Reach. It still counts against your Signature Equipment Limit. You may replace it at the end of an adventure or during significant downtime."
+    },
+    "familiarity": {
+      "name": "Camp Discipline",
+      "text": "You recognize common military ranks, unit markings, signals, supply arrangements, watch rotations, and camp layouts. You can move through an organized military position without disrupting operations and know how to approach the proper person for supplies, information, or an audience. This grants no military rank or authority."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5b1e469692eb45a1"
+}

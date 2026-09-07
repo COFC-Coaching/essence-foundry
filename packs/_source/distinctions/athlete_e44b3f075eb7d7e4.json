@@ -1,0 +1,23 @@
+{
+  "_id": "e44b3f075eb7d7e4",
+  "name": "Athlete",
+  "type": "distinction",
+  "img": "icons/svg/star.svg",
+  "system": {
+    "description": "Combatants who have pushed their physical capabilities through discipline, experience, or relentless conditioning — brawlers, duelists, soldiers, martial artists, bodyguards.",
+    "keyCombatSkill": "Prowess",
+    "primaryAttr": "Vigor",
+    "unlocks": "",
+    "benefit": "Gain one additional Prowess Expertise and two additional Prowess Action Cards. If acquired later: instead increase Prowess to a minimum of 2 pips, then gain one additional Prowess Expertise and four additional Prowess Action Cards.",
+    "origin": {
+      "name": "Peak Performance",
+      "text": "Increase your Resilience by 1. During your first turn, Movement that brings you closer to an enemy costs half as much Movement."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e44b3f075eb7d7e4"
+}

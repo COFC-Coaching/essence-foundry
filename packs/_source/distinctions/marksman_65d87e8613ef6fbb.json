@@ -1,0 +1,23 @@
+{
+  "_id": "65d87e8613ef6fbb",
+  "name": "Marksman",
+  "type": "distinction",
+  "img": "icons/svg/star.svg",
+  "system": {
+    "description": "Combatants who project force accurately across the battlefield — archers, snipers, gunslingers, siege specialists, and anyone who relies on distance, precision, and careful target selection.",
+    "keyCombatSkill": "Ballistics",
+    "primaryAttr": "Grace",
+    "unlocks": "",
+    "benefit": "Gain one additional Ballistics Expertise and two additional Ballistics Action Cards. If acquired later: instead increase Ballistics to a minimum of 2 pips, then gain one additional Ballistics Expertise and four additional Ballistics Action Cards.",
+    "origin": {
+      "name": "Split Focus",
+      "text": "You may maintain two Locks at once. If you would establish a Lock on a third creature, choose which existing Lock ends."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!65d87e8613ef6fbb"
+}

@@ -1,0 +1,44 @@
+{
+  "_id": "92b91c3444a1c0af",
+  "name": "Planarborn",
+  "type": "species",
+  "img": "icons/svg/wing.svg",
+  "system": {
+    "description": "Peoples fundamentally shaped by an elemental, celestial, infernal, astral, or void force. Choose an Origin (Earth, Stone, Metal, Crystal, Flame, Water, Air, Frost, Storm, Celestial, Infernal, Astral, Void, or similar).",
+    "nature": {
+      "name": "Planar Attunement",
+      "text": "Ordinary environmental exposure directly associated with your Origin does not harm you. You immediately recognize significant manifestations of that Origin and can sense a concealed concentration within 2 units, provided it is not contained behind a sealed supernatural barrier. This does not protect you from attacks or other hostile effects. Choose one Planarborn Adaptation."
+    },
+    "adaptationLabel": "Planarborn Adaptation",
+    "adaptationCount": 1,
+    "adaptations": [
+      {
+        "name": "Aegis of Origin",
+        "text": "Gain one narrow Resistance associated with your Origin. The Resistance must be approved by the GM and cannot apply to an overly broad category of Damage.",
+        "chosen": false
+      },
+      {
+        "name": "Dense Form",
+        "text": "Reduce involuntary movement against you by 1 unit. You also count as substantially larger when lifting, carrying, pushing, or resisting ordinary environmental forces.",
+        "chosen": false
+      },
+      {
+        "name": "Shaper",
+        "text": "Once per turn, you may manipulate a small amount of ordinary material or energy associated with your Origin in an adjacent unoccupied space. You may create or remove 1 unit of difficult terrain, produce a simple shape, or cause a comparable environmental change. You may maintain only one altered space at a time.",
+        "chosen": false
+      },
+      {
+        "name": "Planar Vessel",
+        "text": "Once per adventure, when you would spend the final point of one of your Resources, retain 1 point instead. The Resource must be chosen when you select this Adaptation and should reflect your Origin.",
+        "chosen": false
+      }
+    ],
+    "subspecies": []
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!92b91c3444a1c0af"
+}

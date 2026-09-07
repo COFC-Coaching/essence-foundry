@@ -1,0 +1,59 @@
+{
+  "_id": "950c81c7d3ef419b",
+  "name": "Dragonkin",
+  "type": "species",
+  "img": "icons/svg/wing.svg",
+  "system": {
+    "description": "Peoples descended from dragons, created in their image, or shaped by draconic power. Choose a Draconic Lineage: Flame, Frost, Storm, Stone, Venom, Radiance, Shadow, or similar.",
+    "nature": {
+      "name": "Draconic Core",
+      "text": "Ordinary environmental exposure associated with your Draconic Lineage does not harm you. You may project a brief, harmless manifestation of your Lineage up to 1 unit away (ignite or extinguish tinder, chill or warm a small object, scatter loose material, produce light, create a sharp sound, or cause another comparable environmental effect). Sense: Low-Light Vision."
+    },
+    "adaptationLabel": "Dragonkin Adaptation",
+    "adaptationCount": 1,
+    "adaptations": [
+      {
+        "name": "Burrowing Claws",
+        "text": "Gain Burrow 5 through loose earth, sand, snow, or similarly workable material.",
+        "chosen": false
+      },
+      {
+        "name": "Draconic Armament",
+        "text": "Choose claws, horns, fangs, or a tail as a natural weapon. It counts as a basic one-handed weapon, does not count against your Signature Equipment Limit, and cannot be disarmed. You must leave one hand or equivalent limb free while using it.",
+        "chosen": false
+      },
+      {
+        "name": "Hoard Sense",
+        "text": "After handling an object for one minute, you may claim it as part of your hoard. While it remains within the same region, you know its general direction and whether it is moving. You may have only one claimed object at a time. You can also identify an examined object's primary material, general quality, and whether it is an obvious imitation.",
+        "chosen": false
+      },
+      {
+        "name": "Lineage Scales",
+        "text": "The first time each scene you take Damage from a source directly associated with your Draconic Lineage, reduce that Damage by 1. This protection does not prevent Breach.",
+        "chosen": false
+      },
+      {
+        "name": "Tail Balance",
+        "text": "Ignore the first unit of difficult terrain you cross each turn and reduce involuntary movement against you by 1 unit.",
+        "chosen": false
+      },
+      {
+        "name": "True Breath",
+        "text": "Once per scene, release your Draconic Lineage in a 2-unit cone. You may make the affected spaces difficult terrain, clear ordinary smoke or loose material from them, or create an appropriate visual obstruction until the start of your next turn. This Adaptation does not directly cause Damage.",
+        "chosen": false
+      },
+      {
+        "name": "Wings",
+        "text": "While falling, you may glide using your full Movement and may Dash normally. You cannot gain height through this Adaptation or remain airborne without descending.",
+        "chosen": false
+      }
+    ],
+    "subspecies": []
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!950c81c7d3ef419b"
+}

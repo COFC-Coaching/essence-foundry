@@ -36,8 +36,16 @@
 .essence.actor .wounds-row, .essence.actor .influence-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 8px; }
 .essence.actor .wound-block { display: flex; align-items: center; gap: 8px; }
 
+.essence.actor .origin-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
+.essence.actor .origin-card { border: 1px solid #555; border-radius: 4px; padding: 6px 8px; font-size: 0.85em; }
+.essence.actor .origin-card-head { font-weight: bold; margin-bottom: 4px; }
+.essence.actor .origin-trait { margin-bottom: 4px; opacity: 0.9; }
+.essence.actor .origin-trait strong { display: block; }
+
 .essence.actor .combat-header { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
 .essence.actor .skill-box { border: 1px solid #555; border-radius: 4px; padding: 4px 6px; margin-bottom: 6px; }
+.essence.actor .skill-box.gated { opacity: 0.6; border-style: dashed; }
+.essence.actor .gate-note { font-size: 0.75em; color: #e0a020; padding-left: 4px; }
 .essence.actor .skill-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
 .essence.actor .skill-roll { flex: 1; text-align: left; text-transform: capitalize; background: none; border: none; color: inherit; cursor: pointer; }
 .essence.actor .expertise-line { font-size: 0.8em; opacity: 0.8; padding-left: 4px; border-left: 2px solid #555; margin-top: 2px; }
@@ -58,8 +66,12 @@
 .essence.actor .key-aspects-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
 .essence.actor .key-aspects-row label { display: flex; flex-direction: column; gap: 2px; }
 .essence.actor .key-aspects-row input { width: 100%; }
-.essence.actor .nc-skill-row { display: flex; gap: 6px; }
+.essence.actor .nc-skill-row { display: flex; gap: 6px; align-items: center; margin-bottom: 2px; }
 .essence.actor .nc-skill-row input[type="text"] { flex: 1; }
+.essence.actor .array-rows { margin-bottom: 8px; }
+.essence.actor .array-row { display: flex; gap: 6px; align-items: center; margin-bottom: 2px; }
+.essence.actor .array-row input[type="text"] { flex: 1; }
+.essence.actor [data-action="addArrayRow"] { margin: 4px 0 10px; }
 
 .essence.actor .tab.bio label { display: block; margin-bottom: 8px; }
 .essence.actor .tab.bio textarea { width: 100%; min-height: 3em; }

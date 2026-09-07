@@ -75,6 +75,33 @@
       </span>
     </div>
   </div>
+
+  <h3 class="section-head">Origin <span class="muted">(drag a Species/Heritage/Distinction Item onto the sheet)</span></h3>
+  <div class="origin-cards">
+    <div class="origin-card">
+      <div class="origin-card-head">Species: {{#if speciesItem}}{{speciesItem.name}}{{else}}<em>none</em>{{/if}}</div>
+      {{#if speciesItem}}
+        <div class="origin-trait"><strong>{{speciesItem.system.nature.name}}</strong> {{{speciesItem.system.nature.text}}}</div>
+        {{#each speciesItem.system.adaptations as |a|}}
+          {{#if a.chosen}}<div class="origin-trait"><strong>{{a.name}}</strong> {{{a.text}}}</div>{{/if}}
+        {{/each}}
+      {{/if}}
+    </div>
+    <div class="origin-card">
+      <div class="origin-card-head">Heritage: {{#if heritageItem}}{{heritageItem.name}}{{else}}<em>none</em>{{/if}}</div>
+      {{#if heritageItem}}
+        <div class="origin-trait"><strong>{{heritageItem.system.legacy.name}}</strong> {{{heritageItem.system.legacy.text}}}</div>
+        <div class="origin-trait"><strong>{{heritageItem.system.familiarity.name}}</strong> {{{heritageItem.system.familiarity.text}}}</div>
+      {{/if}}
+    </div>
+    <div class="origin-card">
+      <div class="origin-card-head">Distinction: {{#if distinctionItem}}{{distinctionItem.name}}{{else}}<em>none</em>{{/if}}</div>
+      {{#if distinctionItem}}
+        <div class="origin-trait">Key Skill: {{distinctionItem.system.keyCombatSkill}} · Primary Attribute: {{distinctionItem.system.primaryAttr}}</div>
+        <div class="origin-trait"><strong>{{distinctionItem.system.origin.name}}</strong> {{{distinctionItem.system.origin.text}}}</div>
+      {{/if}}
+    </div>
+  </div>
 </section>
 
 {{!-- ============ COMBAT: skills, cards, dice lifecycle ============ --}}
@@ -93,18 +120,36 @@
     {{#each domains as |d|}}
       <div class="domain domain-{{d.key}}">
         {{#each d.skills as |s|}}
-          <div class="skill-box">
+          <div class="skill-box {{#unless s.gateOpen}}gated{{/unless}}">
             <div class="skill-head">
               <button type="button" class="skill-roll" data-action="rollSkill" data-skill="{{s.key}}">{{s.label}}</button>
               <span class="pip-track">
                 {{#each s.pips as |filled|}}<span class="pip {{#if filled}}filled{{/if}}"></span>{{/each}}
               </span>
             </div>
+            {{#unless s.gateOpen}}<div class="gate-note"><i class="fa-solid fa-lock"></i> Requires {{s.gateDistinction}} Distinction</div>{{/unless}}
             {{#each s.expertises as |e|}}<div class="expertise-line">{{e.name}}</div>{{/each}}
           </div>
         {{/each}}
       </div>
     {{/each}}
+  </div>
+
+  <h3 class="section-head">Expertises</h3>
+  <div class="array-rows">
+    {{#each system.expertises as |e i|}}
+      <div class="array-row">
+        <input name="system.expertises.{{i}}.name" type="text" value="{{e.name}}" placeholder="Expertise name">
+        <select name="system.expertises.{{i}}.skill">
+          <option value="">(skill)</option>
+          {{#each ../skillOptions as |sk|}}
+            <option value="{{sk}}" {{#if (eq sk e.skill)}}selected{{/if}}>{{sk}}</option>
+          {{/each}}
+        </select>
+        <a data-action="deleteArrayRow" data-array="expertises" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
+      </div>
+    {{/each}}
+    <button type="button" data-action="addArrayRow" data-array="expertises"><i class="fa-solid fa-plus"></i> Add Expertise</button>
   </div>
 
   <div class="combat-controls">
@@ -209,9 +254,11 @@
       <div class="nc-skill-row">
         <input name="system.nonCombatSkills.{{i}}.name" type="text" value="{{s.name}}" placeholder="Skill">
         <input name="system.nonCombatSkills.{{i}}.rating" type="number" value="{{s.rating}}" style="width:3em">
+        <a data-action="deleteArrayRow" data-array="nonCombatSkills" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
       </div>
     {{/each}}
   </div>
+  <button type="button" data-action="addArrayRow" data-array="nonCombatSkills"><i class="fa-solid fa-plus"></i> Add Skill</button>
 
   <h3 class="section-head">Influence</h3>
   <div class="influence-row">
@@ -235,13 +282,19 @@
 
   <h3 class="section-head">General Features &amp; Benefits</h3>
   <table class="item-table">
-    <thead><tr><th>Feature</th><th>Source</th><th>Description</th></tr></thead>
+    <thead><tr><th>Feature</th><th>Source</th><th>Description</th><th></th></tr></thead>
     <tbody>
-      {{#each system.passiveFeatures as |f|}}
-        <tr><td>{{f.name}}</td><td>{{f.source}}</td><td>{{{f.text}}}</td></tr>
+      {{#each system.passiveFeatures as |f i|}}
+        <tr>
+          <td><input name="system.passiveFeatures.{{i}}.name" type="text" value="{{f.name}}"></td>
+          <td><input name="system.passiveFeatures.{{i}}.source" type="text" value="{{f.source}}"></td>
+          <td>{{editor f.text target=(concat "system.passiveFeatures." i ".text") button=true}}</td>
+          <td><a data-action="deleteArrayRow" data-array="passiveFeatures" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a></td>
+        </tr>
       {{/each}}
     </tbody>
   </table>
+  <button type="button" data-action="addArrayRow" data-array="passiveFeatures"><i class="fa-solid fa-plus"></i> Add Feature</button>
 </section>
 
 {{!-- ============ BIOGRAPHY ============ --}}

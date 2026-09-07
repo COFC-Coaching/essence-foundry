@@ -23,7 +23,10 @@
       "action-card": {},
       "reaction-card": {},
       "condition": {},
-      "equipment": {}
+      "equipment": {},
+      "species": {},
+      "heritage": {},
+      "distinction": {}
     }
   },
   "packs": [
@@ -52,6 +55,27 @@
       "name": "equipment",
       "label": "Equipment",
       "path": "packs/equipment",
+      "type": "Item",
+      "system": "essence-system"
+    },
+    {
+      "name": "species",
+      "label": "Species",
+      "path": "packs/species",
+      "type": "Item",
+      "system": "essence-system"
+    },
+    {
+      "name": "heritages",
+      "label": "Heritages",
+      "path": "packs/heritages",
+      "type": "Item",
+      "system": "essence-system"
+    },
+    {
+      "name": "distinctions",
+      "label": "Distinctions",
+      "path": "packs/distinctions",
       "type": "Item",
       "system": "essence-system"
     }

@@ -1,0 +1,23 @@
+{
+  "_id": "67d9b6f9e466d352",
+  "name": "Strategist",
+  "type": "distinction",
+  "img": "icons/svg/star.svg",
+  "system": {
+    "description": "Problem-solvers, infiltrators, engineers, field medics, tacticians, and manipulators who win by understanding what is likely to happen before it occurs.",
+    "keyCombatSkill": "Cunning",
+    "primaryAttr": "Resolve",
+    "unlocks": "",
+    "benefit": "Gain one additional Cunning Expertise and two additional Cunning Action Cards. If acquired later: instead increase Cunning to a minimum of 2 pips, then gain one additional Cunning Expertise and four additional Cunning Action Cards.",
+    "origin": {
+      "name": "Branching Plans",
+      "text": "You may establish a second Contingency each round. You may still trigger only one Contingency per round."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!67d9b6f9e466d352"
+}

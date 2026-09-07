@@ -1,0 +1,23 @@
+{
+  "_id": "2ac32156e44cb306",
+  "name": "Artisan Household",
+  "type": "heritage",
+  "img": "icons/svg/house.svg",
+  "system": {
+    "description": "Grew up in a smithy, workshop, mill, studio, construction yard, or another household centered on skilled production.",
+    "legacy": {
+      "name": "Inherited Tools",
+      "text": "Choose one ordinary toolkit during character creation. It does not count against your Signature Equipment Limit. You may replace it at the end of any adventure or during significant downtime."
+    },
+    "familiarity": {
+      "name": "Workshop Rhythm",
+      "text": "You recognize common materials, construction methods, maker's marks, rushed workmanship, and obvious substitutions. You understand workshop hierarchy and can approach laborers, apprentices, and craftspeople without behaving like an intrusive outsider."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2ac32156e44cb306"
+}

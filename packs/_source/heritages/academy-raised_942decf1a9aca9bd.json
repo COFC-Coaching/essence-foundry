@@ -1,0 +1,23 @@
+{
+  "_id": "942decf1a9aca9bd",
+  "name": "Academy Raised",
+  "type": "heritage",
+  "img": "icons/svg/house.svg",
+  "system": {
+    "description": "Raised among tutors, books, archives, laboratories, or institutions devoted to formal study and the preservation of knowledge.",
+    "legacy": {
+      "name": "Formal Education",
+      "text": "Gain 1 additional Non-Combat Skill Point during character creation. This point cannot raise a Skill above the normal starting limit."
+    },
+    "familiarity": {
+      "name": "Institutional Literacy",
+      "text": "You understand academic organization, citation, archival procedure, and the politics of formal scholarship. You can recognize obvious censorship, deliberate omissions, and records written to satisfy institutional expectations. You know how to identify the proper archive, specialist, or department when seeking information."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!942decf1a9aca9bd"
+}

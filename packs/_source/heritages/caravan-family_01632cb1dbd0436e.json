@@ -1,0 +1,23 @@
+{
+  "_id": "01632cb1dbd0436e",
+  "name": "Caravan Family",
+  "type": "heritage",
+  "img": "icons/svg/house.svg",
+  "system": {
+    "description": "Raised among traders, performers, pilgrims, nomads, couriers, or traveling families for whom roads and temporary camps were home.",
+    "legacy": {
+      "name": "Lessons of the Road",
+      "text": "At the beginning of each adventure, choose one Non-Combat Skill you do not possess. Treat that Skill as Rank 1 until the end of the adventure."
+    },
+    "familiarity": {
+      "name": "Road Lore",
+      "text": "You recognize traveler marks, route warnings, regional accents, common road hazards, and signs that a path is less safe than it appears. In an unfamiliar settlement, you can quickly locate places where outsiders arrange passage, seek work, exchange news, and trade informal favors."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!01632cb1dbd0436e"
+}

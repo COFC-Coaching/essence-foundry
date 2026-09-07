@@ -1,0 +1,23 @@
+{
+  "_id": "5ab8c39c060f1883",
+  "name": "Arcanist",
+  "type": "distinction",
+  "img": "icons/svg/star.svg",
+  "system": {
+    "description": "Characters who approach supernatural power as a system that can be studied, constructed, and refined. Their actions create magical components that interact with later actions, building increasingly complex effects.",
+    "keyCombatSkill": "Magecraft",
+    "primaryAttr": "Acuity",
+    "unlocks": "magecraft",
+    "benefit": "Gain access to the Magecraft Combat Skill. If acquired later: gain access to Magecraft, gain 2 pips in it, then gain one additional Magecraft Expertise and two additional Magecraft Action Cards.",
+    "origin": {
+      "name": "Elemental Versatility",
+      "text": "The first time you use an Action Card of a given element during an encounter, gain one additional Surge for that action."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5ab8c39c060f1883"
+}

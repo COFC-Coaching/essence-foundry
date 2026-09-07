@@ -1,0 +1,23 @@
+{
+  "_id": "3922a9daeac8f39a",
+  "name": "Invoker",
+  "type": "distinction",
+  "img": "icons/svg/star.svg",
+  "system": {
+    "description": "Characters who prepare supernatural effects that bind power into creatures, objects, locations, and declared conditions — layering Wards, Hexes, Rites, and other effects across the battlefield.",
+    "keyCombatSkill": "Ritualism",
+    "primaryAttr": "Adaptability",
+    "unlocks": "ritualism",
+    "benefit": "Gain access to the Ritualism Combat Skill. If acquired later: gain access to Ritualism, gain 2 pips in it, then gain one additional Ritualism Expertise and two additional Ritualism Action Cards.",
+    "origin": {
+      "name": "Final Echo",
+      "text": "You may maintain one additional Rite. Once per round, when you remove one of your Rites to establish another, you may resolve the removed Rite's Echo once before removing it. Ignore its Trigger and choose any valid target or area."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!3922a9daeac8f39a"
+}

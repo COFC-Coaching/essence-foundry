@@ -1,0 +1,64 @@
+{
+  "_id": "2d7443150058c95f",
+  "name": "Constructs",
+  "type": "species",
+  "img": "icons/svg/wing.svg",
+  "system": {
+    "description": "Artificial peoples created through machinery, magic, alchemy, or craftsmanship. Bodies may be metal, stone, wood, ceramic, crystal, synthetic flesh, or other designed materials. The chosen Module may be replaced during significant downtime.",
+    "nature": {
+      "name": "Artificial Nature",
+      "text": "You do not need to breathe or eat and do not sleep in the ordinary manner. Ordinary biological diseases and poisons do not affect you, though you must still rest and recover normally."
+    },
+    "adaptationLabel": "Construct Module",
+    "adaptationCount": 1,
+    "adaptations": [
+      {
+        "name": "Alternate Chassis",
+        "text": "Gain Climb 10 or Swim 10 through a body specifically designed for that form of Movement.",
+        "chosen": false
+      },
+      {
+        "name": "Anchor Mode",
+        "text": "At the end of your turn, you may anchor yourself to a stable surface. While anchored, your Movement is 0 and involuntary movement against you is reduced to 0. You may release the anchor at the start of your turn.",
+        "chosen": false
+      },
+      {
+        "name": "Integrated Tool",
+        "text": "Choose one ordinary Non-Combat toolkit and incorporate it into your body. It does not count against your Signature Equipment Limit, cannot be disarmed, and remains available whenever the relevant parts of your body are functional.",
+        "chosen": false
+      },
+      {
+        "name": "Internal Compartment",
+        "text": "Choose one small Other Equipment item with a cost of 1 whose Availability does not exceed your Reach. While installed inside your body, it does not count against your Signature Equipment Limit and is not discovered through casual observation. You may replace it during significant downtime.",
+        "chosen": false
+      },
+      {
+        "name": "Redundant Systems",
+        "text": "The first time each adventure a Wound Condition or other effect would disable one of your limbs, Senses, or Movement modes, that function remains available until the end of the current scene.",
+        "chosen": false
+      },
+      {
+        "name": "Reinforced Frame",
+        "text": "Reduce involuntary movement against you by 1 unit. If you have not moved during the current turn, reduce it by 2 units instead.",
+        "chosen": false
+      },
+      {
+        "name": "Sensor Suite",
+        "text": "Choose two special Senses (low-light vision, keen hearing, heat perception, vibration sense, or another narrow Sense approved by the GM). Within 2 units, creatures and objects cannot remain Hidden from you when one of those Senses could reasonably detect them.",
+        "chosen": false
+      },
+      {
+        "name": "Utility Limb",
+        "text": "You possess an additional arm, tool mount, cable, or similar mechanism. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Signature Equipment Limit, and the limb does not grant additional Actions.",
+        "chosen": false
+      }
+    ],
+    "subspecies": []
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2d7443150058c95f"
+}

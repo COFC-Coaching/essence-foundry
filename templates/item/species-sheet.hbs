@@ -1,0 +1,28 @@
+<div class="essence-sheet-root">
+<header class="sheet-header">
+  <img class="profile-img" src="{{item.img}}" data-action="editImage">
+  <h1><input name="name" type="text" value="{{item.name}}"></h1>
+</header>
+
+<h3>Description</h3>
+<div>{{editor system.description target="system.description" button=true}}</div>
+
+<h3>Nature</h3>
+<input name="system.nature.name" type="text" value="{{system.nature.name}}" placeholder="Nature name">
+<div>{{editor system.nature.text target="system.nature.text" button=true}}</div>
+
+<h3>{{system.adaptationLabel}}s <span class="muted">(choose {{system.adaptationCount}})</span></h3>
+<label>Adaptation label <input name="system.adaptationLabel" type="text" value="{{system.adaptationLabel}}"></label>
+<label>Choose count <input name="system.adaptationCount" type="number" value="{{system.adaptationCount}}" style="width:3em"></label>
+<ol class="adaptations">
+  {{#each system.adaptations as |a i|}}
+    <li>
+      <label class="chosen-toggle"><input type="checkbox" name="system.adaptations.{{i}}.chosen" {{#if a.chosen}}checked{{/if}}> Chosen</label>
+      <input name="system.adaptations.{{i}}.name" type="text" value="{{a.name}}" placeholder="Adaptation name">
+      <div>{{editor a.text target=(concat "system.adaptations." i ".text") button=true}}</div>
+      <a data-action="deleteArrayRow" data-array="adaptations" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a>
+    </li>
+  {{/each}}
+</ol>
+<button type="button" data-action="addArrayRow" data-array="adaptations"><i class="fa-solid fa-plus"></i> Add Adaptation</button>
+</div>

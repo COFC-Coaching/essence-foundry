@@ -1,0 +1,23 @@
+{
+  "_id": "77c99a14b6c0e8e8",
+  "name": "Psyker",
+  "type": "distinction",
+  "img": "icons/svg/star.svg",
+  "system": {
+    "description": "Characters whose minds operate beyond ordinary limits. Abilities may manifest as telekinetic force, mental influence, expanded perception, projected thought, or other expressions of focused consciousness.",
+    "keyCombatSkill": "Psionics",
+    "primaryAttr": "Intellect",
+    "unlocks": "psionics",
+    "benefit": "Gain access to the Psionics Combat Skill. If acquired later: gain access to Psionics, gain 2 pips in it, then gain one additional Psionics Expertise and two additional Psionics Action Cards.",
+    "origin": {
+      "name": "Sacrificial Power",
+      "text": "You may spend Temporary Wounds as though they were dice when using Psionics Actions or Reactions."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!77c99a14b6c0e8e8"
+}

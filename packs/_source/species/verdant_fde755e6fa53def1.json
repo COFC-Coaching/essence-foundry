@@ -1,0 +1,64 @@
+{
+  "_id": "fde755e6fa53def1",
+  "name": "Verdant",
+  "type": "species",
+  "img": "icons/svg/wing.svg",
+  "system": {
+    "description": "Living plants, fungal colonies, coral-like organisms, animated wood, or other beings whose bodies grow rather than develop as ordinary flesh.",
+    "nature": {
+      "name": "Rooted Life",
+      "text": "You do not require conventional food; choose an appropriate source of nourishment (sunlight, water, minerals, decay, or organic matter). At the end of your turn, you may become Rooted while in contact with a stable surface. While Rooted, your Movement is 0 and involuntary movement against you is reduced by 2 units. You may cease being Rooted at the start of your turn."
+    },
+    "adaptationLabel": "Verdant Adaptation",
+    "adaptationCount": 1,
+    "adaptations": [
+      {
+        "name": "Barked Form",
+        "text": "While Rooted, increase your Resilience by 1. This bonus ends immediately when you cease being Rooted.",
+        "chosen": false
+      },
+      {
+        "name": "Blooming",
+        "text": "At the beginning of each adventure, produce one simple organic Temporary Item with Availability 1 (food, medicine ingredients, resin, fiber, dye, light-producing growth, or a similar nonweapon item). It decays or becomes unusable at the end of the adventure.",
+        "chosen": false
+      },
+      {
+        "name": "Mycelial Sense",
+        "text": "While touching natural soil, connected roots, or fungal growth, you detect the movement and approximate location of creatures touching the same surface within 3 units. Visual concealment does not prevent this detection.",
+        "chosen": false
+      },
+      {
+        "name": "Photosynthetic Reserve",
+        "text": "Once per adventure, after spending at least ten minutes in contact with your chosen source of nourishment, recover 1 point of one Resource.",
+        "chosen": false
+      },
+      {
+        "name": "Regrowth",
+        "text": "The first time each adventure a Wound Condition or other effect would disable one of your limbs or Senses, that limb or Sense remains functional until the end of the current scene. Minor lost body parts regrow during recovery.",
+        "chosen": false
+      },
+      {
+        "name": "Spore Cloud",
+        "text": "Once per scene, create a 1-unit area of spores, pollen, or drifting growth adjacent to you. The area blocks ordinary sight until the start of your next turn.",
+        "chosen": false
+      },
+      {
+        "name": "Symbiotic Growth",
+        "text": "You possess an additional vine, tendril, branch, or symbiotic organism. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Signature Equipment Limit, and the growth does not grant additional Actions.",
+        "chosen": false
+      },
+      {
+        "name": "Vine-Limbed",
+        "text": "Gain Climb 10. You may remain secured to a suitable surface without using your hands.",
+        "chosen": false
+      }
+    ],
+    "subspecies": []
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!fde755e6fa53def1"
+}

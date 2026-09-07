@@ -1,0 +1,23 @@
+{
+  "_id": "e02a728e908baa81",
+  "name": "Noble Household",
+  "type": "heritage",
+  "img": "icons/svg/house.svg",
+  "system": {
+    "description": "Born or raised within a titled family, political dynasty, landed household, or another lineage whose name carries recognized social weight.",
+    "legacy": {
+      "name": "Letters of Standing",
+      "text": "When dealing with an established institution (merchant guild, government office, temple, academy, military command), treat your Reach as 1 higher and gain 1 Temporary Influence usable only during that scene. The first use each adventure is free; each additional use causes 1 Influence Breach."
+    },
+    "familiarity": {
+      "name": "Unspoken Precedence",
+      "text": "You understand formal etiquette, inheritance, favors, veiled insults, and the difference between official title and practical authority. In elite gatherings you can recognize who holds informal influence and when an apparently polite gesture carries political meaning."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e02a728e908baa81"
+}

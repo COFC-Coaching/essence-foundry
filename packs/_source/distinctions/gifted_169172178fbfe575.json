@@ -1,0 +1,23 @@
+{
+  "_id": "169172178fbfe575",
+  "name": "Gifted",
+  "type": "distinction",
+  "img": "icons/svg/star.svg",
+  "system": {
+    "description": "Characters whose capabilities are part of what they are rather than something learned. They unleash these qualities through powerful transformations, quickly shifting form to fill whatever role is needed.",
+    "keyCombatSkill": "Gestalt",
+    "primaryAttr": "Might",
+    "unlocks": "gestalt",
+    "benefit": "Gain access to the Gestalt Combat Skill. If acquired later: gain access to Gestalt, gain 2 pips in it, then gain one additional Gestalt Expertise and two additional Gestalt Action Cards.",
+    "origin": {
+      "name": "Efficient Transformation",
+      "text": "Reduce the Stamina cost of transformation upkeep by 1, to a minimum of 1."
+    }
+  },
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!169172178fbfe575"
+}
