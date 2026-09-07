@@ -13,7 +13,7 @@ export default class EssenceNpcData extends EssenceCombatantData {
   static defineSchema() {
     return {
       ...super.defineSchema(),
-      role: new fields.StringField({ initial: "", choices: ["", "Minion", "Standard", "Elite", "Nemesis"] }),
+      role: new fields.StringField({ initial: "", blank: true, choices: ["", "Minion", "Standard", "Elite", "Nemesis"] }),
       gmNotes: new fields.HTMLField({ initial: "" })
     };
   }
