@@ -52,7 +52,12 @@
 .essence.actor .item-table th, .essence.actor .item-table td { border: 1px solid #555; padding: 2px 6px; text-align: left; }
 .essence.actor .item-table th { background: rgba(255,255,255,0.05); }
 
-.essence.actor .career-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.essence.actor .career-row { margin-bottom: 8px; }
+.essence.actor .career-row label { display: flex; flex-direction: column; gap: 2px; }
+.essence.actor .career-row input { width: 100%; }
+.essence.actor .key-aspects-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
+.essence.actor .key-aspects-row label { display: flex; flex-direction: column; gap: 2px; }
+.essence.actor .key-aspects-row input { width: 100%; }
 .essence.actor .nc-skill-row { display: flex; gap: 6px; }
 .essence.actor .nc-skill-row input[type="text"] { flex: 1; }
 

@@ -196,6 +196,8 @@
   <h3 class="section-head">Career &amp; Key Aspects</h3>
   <div class="career-row">
     <label>Career <input name="system.career" type="text" value="{{system.career}}"></label>
+  </div>
+  <div class="key-aspects-row">
     {{#each keyAspects as |aspect|}}
       <label>Key Aspect {{aspect.n}}<input name="system.keyAspects.{{aspect.i}}" type="text" value="{{aspect.value}}"></label>
     {{/each}}
