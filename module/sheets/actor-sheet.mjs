@@ -138,6 +138,40 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     await rollEssencePool({ pool, label: `${attr} + ${skill}`, actor: this.actor });
   }
 
+  /**
+   * Defense belongs to whoever is being targeted, never to the roller. Prefer a Foundry
+   * target if one is selected (and it's an Essence character with that Defense); otherwise
+   * ask the GM to declare it, since we don't yet have a way to resolve targeting/opposition
+   * automatically. Leaving it blank rolls open (6+ threshold) rather than guessing.
+   */
+  static async #resolveDefense(defenseKey) {
+    if (!defenseKey) return null;
+
+    const target = game.user.targets.first();
+    const targetDefense = target?.actor?.system?.defenses?.[defenseKey];
+    if (typeof targetDefense === "number") return targetDefense;
+
+    return new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: `Declare ${defenseKey[0].toUpperCase()}${defenseKey.slice(1)}` },
+        content: `<p>No target selected. Enter the target's ${defenseKey} (leave blank to roll open):</p>
+          <input type="number" name="defense" autofocus>`,
+        buttons: [{
+          action: "roll",
+          label: "Roll",
+          default: true,
+          // DialogV2 falls back to the button's own `action` ("roll") whenever a callback
+          // returns null/undefined, so an empty string (not null) means "roll open".
+          callback: (event, button) => {
+            const val = button.form.elements.defense.value;
+            return val === "" ? "" : Number(val);
+          }
+        }],
+        submit: (result) => resolve(result === "" || result === "roll" ? null : result)
+      }).render(true);
+    });
+  }
+
   static async #onRollItem(event, target) {
     const item = this.actor.items.get(target.dataset.itemId);
     if (!item) return;
@@ -146,7 +180,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const skillKey = (sys.skill || "").toLowerCase();
     const pool = (this.actor.system[attrKey] ?? 0) + (this.actor.system[skillKey] ?? 0);
     const defenseKey = (sys.defense || "").toLowerCase();
-    const defense = this.actor.system.defenses?.[defenseKey] ?? null;
+    const defense = await EssenceActorSheet.#resolveDefense(defenseKey);
     await rollEssencePool({ pool, defense, label: item.name, actor: this.actor });
   }
 
