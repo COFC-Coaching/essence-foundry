@@ -2,6 +2,12 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.5.4
+
+- Add an in-world **Player & GM Guide** journal compendium (two entries: Player's Guide and
+  Game Master's Guide) covering the sheet, dice-commit rolls, wounds, combat, NPCs, Conditions,
+  and content authoring — the first in-world onboarding material for new players and GMs.
+
 ## 0.5.3
 
 - Wire Conditions into the Token HUD's status-icon toggles. Clicking a Condition icon there now
