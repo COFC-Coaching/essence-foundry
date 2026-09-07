@@ -117,12 +117,18 @@
 {{!-- ============ COMBAT: skills, cards, dice lifecycle ============ --}}
 <section class="tab combat" data-tab="combat">
   <div class="combat-header">
-    <label>Movement <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> units{{#if system.specialties.combo}} <span class="muted">(effective {{system.totalMovement}} with Combo)</span>{{/if}}</label>
-    <label>Reach <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>
-    <div class="action-pool">
-      <span class="attr-label">Action Dice</span> {{system.playState.actionDice}}
-      &nbsp;|&nbsp;
-      <span class="attr-label">Reaction Dice</span> {{system.playState.reactionDice}}
+    <div class="combat-header-left">
+      <label>Movement <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> units{{#if system.specialties.combo}} <span class="muted">(effective {{system.totalMovement}} with Combo)</span>{{/if}}</label>
+      <label>Reach <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>
+      <div class="action-pool">
+        <span class="attr-label">Action Dice</span> {{system.playState.actionDice}}
+        &nbsp;|&nbsp;
+        <span class="attr-label">Reaction Dice</span> {{system.playState.reactionDice}}
+      </div>
+    </div>
+    <div class="combat-state">
+      <p>Round: {{combatRound}} — Turn: {{system.playState.combatTurn}} — Initiative: {{system.playState.initiativeTotal}} ({{system.playState.initiativeDice}}d10)</p>
+      <p class="muted">Start/end combat and advance rounds &amp; turns from the Combat Tracker.</p>
     </div>
   </div>
 
@@ -250,10 +256,6 @@
     <button type="button" data-action="rollInitiative">Roll Initiative</button>
     <button type="button" data-action="endTurn">End Turn</button>
     <button type="button" data-action="burnDice">Burn Dice</button>
-  </div>
-  <div class="combat-state">
-    <p class="muted">Start/end combat and advance rounds &amp; turns from the Combat Tracker.</p>
-    <p>Round: {{combatRound}} — Turn: {{system.playState.combatTurn}} — Initiative: {{system.playState.initiativeTotal}} ({{system.playState.initiativeDice}}d10)</p>
   </div>
 
   <h3 class="section-head">Action Cards</h3>

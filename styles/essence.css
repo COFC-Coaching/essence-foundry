@@ -63,7 +63,8 @@
 .essence .origin-trait { margin-bottom: 4px; opacity: 0.9; }
 .essence .origin-trait strong { display: block; }
 
-.essence .combat-header { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
+.essence .combat-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 6px; }
+.essence .combat-header-left { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; flex: 1 1 auto; min-width: 0; }
 .essence .skill-box { border: 1px solid #555; border-radius: 4px; padding: 4px 6px; margin-bottom: 6px; }
 .essence .skill-box.gated { opacity: 0.6; border-style: dashed; }
 .essence .gate-note { font-size: 0.75em; color: #e0a020; padding-left: 4px; }
@@ -75,7 +76,8 @@
 .essence .add-expertise { font-size: 0.8em; padding: 2px 6px; margin-top: 2px; }
 
 .essence .combat-controls { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
-.essence .combat-state { margin-bottom: 8px; opacity: 0.85; }
+.essence .combat-state { text-align: right; opacity: 0.85; font-size: 0.85em; flex: 0 1 auto; margin-left: auto; max-width: 220px; }
+.essence .combat-state p { margin: 0 0 2px; }
 
 .essence .specialties { margin-bottom: 8px; }
 .essence .specialty-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
