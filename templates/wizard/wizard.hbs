@@ -118,7 +118,7 @@
         <span class="attr-label capitalize">{{es.key}}</span>
         <div class="thread-chips">
           {{#each es.options as |opt|}}
-            <button type="button" class="thread-chip {{#if opt.chosen}}active{{/if}}" data-action="toggleExpertise" data-skill="{{../es.key}}" data-name="{{opt.name}}">{{opt.name}}</button>
+            <button type="button" class="thread-chip {{#if opt.chosen}}active{{/if}}" data-action="toggleExpertise" data-skill="{{es.key}}" data-name="{{opt.name}}">{{opt.name}}</button>
           {{/each}}
         </div>
       </div>
@@ -193,7 +193,11 @@
       <div class="nc-skill-row">
         <input type="text" name="system.nonCombatSkills.{{s.i}}.name" value="{{s.name}}" placeholder="Skill name">
         <button type="button" data-action="adjustNonCombatRating" data-index="{{s.i}}" data-delta="-1">-</button>
-        <span class="wizard-value">{{s.rating}}</span>
+        {{!-- Must be a real named input, not a <span> — a submit-on-change form collects every
+             system.nonCombatSkills.*.* input present and reconstructs the whole array from just
+             those, so any sub-field only ever rendered as a span gets silently reset to its
+             schema default the next time ANY field in the form changes. --}}
+        <input type="number" class="wizard-value" name="system.nonCombatSkills.{{s.i}}.rating" value="{{s.rating}}" readonly style="width:3em">
         <button type="button" data-action="adjustNonCombatRating" data-index="{{s.i}}" data-delta="1">+</button>
         <a data-action="deleteNonCombatSkill" data-index="{{s.i}}"><i class="fa-solid fa-trash"></i></a>
       </div>
