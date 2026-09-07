@@ -1,11 +1,11 @@
-.essence.actor .essence-sheet-root { display: flex; flex-direction: column; height: 100%; padding: 4px 8px; overflow-y: auto; }
+.essence .essence-sheet-root { display: flex; flex-direction: column; height: 100%; padding: 4px 8px; overflow-y: auto; }
 .essence input:disabled, .essence select:disabled, .essence textarea:disabled { opacity: 0.65; cursor: not-allowed; }
 .essence .locked { opacity: 0.4; cursor: not-allowed; }
-.essence.actor .sheet-header { display: flex; align-items: flex-start; gap: 10px; }
-.essence.actor .profile-img { width: 64px; height: 64px; object-fit: cover; border-radius: 4px; }
-.essence.actor .header-main { flex: 1; }
-.essence.actor .header-main h1 { margin: 0 0 4px; line-height: 1; }
-.essence.actor .header-main h1 input {
+.essence .sheet-header { display: flex; align-items: flex-start; gap: 10px; }
+.essence .profile-img { width: 64px; height: 64px; object-fit: cover; border-radius: 4px; }
+.essence .header-main { flex: 1; }
+.essence .header-main h1 { margin: 0 0 4px; line-height: 1; }
+.essence .header-main h1 input {
   width: 100%;
   height: auto;
   font-size: 28px;
@@ -13,81 +13,93 @@
   padding: 4px 6px;
   box-sizing: content-box;
 }
-.essence.actor .header-fields { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2px; font-size: 0.85em; }
-.essence.actor .header-fields label { display: flex; align-items: center; gap: 4px; }
+.essence .header-fields { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2px; font-size: 0.85em; }
+.essence .header-fields label { display: flex; align-items: center; gap: 4px; }
 
-.essence.actor .sheet-tabs { display: flex; gap: 12px; margin: 8px 0; border-bottom: 1px solid #666; flex: 0 0 auto; }
-.essence.actor .sheet-tabs a { padding: 4px 8px; cursor: pointer; opacity: 0.7; }
-.essence.actor .sheet-tabs a.active { opacity: 1; border-bottom: 2px solid #f9a825; font-weight: bold; }
-.essence.actor section.tab { display: none; }
-.essence.actor section.tab.active { display: block; }
+/* Item sheets (card/condition/equipment/species/heritage/distinction) put the name <h1>
+   directly in .sheet-header rather than inside .header-main — same sizing fix applies. */
+.essence.item .sheet-header h1 { flex: 1; margin: 0; line-height: 1; }
+.essence.item .sheet-header h1 input {
+  width: 100%;
+  height: auto;
+  font-size: 24px;
+  line-height: 1.3;
+  padding: 4px 6px;
+  box-sizing: content-box;
+}
 
-.essence.actor .section-head { margin: 10px 0 4px; padding-bottom: 2px; border-bottom: 1px solid #555; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.05em; }
-.essence.actor .muted { opacity: 0.7; font-weight: normal; text-transform: none; }
+.essence .sheet-tabs { display: flex; gap: 12px; margin: 8px 0; border-bottom: 1px solid #666; flex: 0 0 auto; }
+.essence .sheet-tabs a { padding: 4px 8px; cursor: pointer; opacity: 0.7; }
+.essence .sheet-tabs a.active { opacity: 1; border-bottom: 2px solid #f9a825; font-weight: bold; }
+.essence section.tab { display: none; }
+.essence section.tab.active { display: block; }
 
-.essence.actor .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.essence.actor .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 16px; }
+.essence .section-head { margin: 10px 0 4px; padding-bottom: 2px; border-bottom: 1px solid #555; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.05em; }
+.essence .muted { opacity: 0.7; font-weight: normal; text-transform: none; }
 
-.essence.actor .domain { border: 1px solid #555; border-radius: 4px; padding: 6px 8px; }
-.essence.actor .domain h4 { margin: 0 0 4px; text-align: center; }
-.essence.actor .attr-row, .essence.actor .resource-row, .essence.actor .defense-row { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
-.essence.actor .attr-label { flex: 0 0 80px; text-transform: capitalize; }
-.essence.actor .attr-input, .essence.actor .current-input { width: 3em; }
-.essence.actor .max-value { font-weight: bold; }
+.essence .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.essence .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 16px; }
 
-.essence.actor .pip-track { display: inline-flex; gap: 3px; }
-.essence.actor .pip { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #888; display: inline-block; background: transparent; }
-.essence.actor .pip.filled { background: #f9a825; border-color: #f9a825; }
-.essence.actor .pip.toggle { cursor: pointer; width: 18px; height: 18px; }
-.essence.actor .pip.labeled { width: 18px; height: 18px; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; color: #ccc; }
-.essence.actor .pip.labeled.filled { color: #000; }
+.essence .domain { border: 1px solid #555; border-radius: 4px; padding: 6px 8px; }
+.essence .domain h4 { margin: 0 0 4px; text-align: center; }
+.essence .attr-row, .essence .resource-row, .essence .defense-row { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+.essence .attr-label { flex: 0 0 80px; text-transform: capitalize; }
+.essence .attr-input, .essence .current-input { width: 3em; }
+.essence .max-value { font-weight: bold; }
 
-.essence.actor .wounds-row, .essence.actor .influence-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 8px; }
-.essence.actor .wound-block { display: flex; align-items: center; gap: 8px; }
+.essence .pip-track { display: inline-flex; gap: 3px; }
+.essence .pip { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #888; display: inline-block; background: transparent; }
+.essence .pip.filled { background: #f9a825; border-color: #f9a825; }
+.essence .pip.toggle { cursor: pointer; width: 18px; height: 18px; }
+.essence .pip.labeled { width: 18px; height: 18px; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; color: #ccc; }
+.essence .pip.labeled.filled { color: #000; }
 
-.essence.actor .origin-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
-.essence.actor .origin-card { border: 1px solid #555; border-radius: 4px; padding: 6px 8px; font-size: 0.85em; }
-.essence.actor .origin-card-head { font-weight: bold; margin-bottom: 4px; }
-.essence.actor .origin-trait { margin-bottom: 4px; opacity: 0.9; }
-.essence.actor .origin-trait strong { display: block; }
+.essence .wounds-row, .essence .influence-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 8px; }
+.essence .wound-block { display: flex; align-items: center; gap: 8px; }
 
-.essence.actor .combat-header { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
-.essence.actor .skill-box { border: 1px solid #555; border-radius: 4px; padding: 4px 6px; margin-bottom: 6px; }
-.essence.actor .skill-box.gated { opacity: 0.6; border-style: dashed; }
-.essence.actor .gate-note { font-size: 0.75em; color: #e0a020; padding-left: 4px; }
-.essence.actor .skill-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-.essence.actor .skill-roll { flex: 1; text-align: left; text-transform: capitalize; background: none; border: none; color: inherit; cursor: pointer; }
-.essence.actor .skill-expertises { margin-top: 4px; padding-left: 4px; border-left: 2px solid #555; }
-.essence.actor .expertise-row { display: flex; gap: 6px; align-items: center; margin-bottom: 2px; }
-.essence.actor .expertise-row select { flex: 1; font-size: 0.85em; }
-.essence.actor .add-expertise { font-size: 0.8em; padding: 2px 6px; margin-top: 2px; }
+.essence .origin-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
+.essence .origin-card { border: 1px solid #555; border-radius: 4px; padding: 6px 8px; font-size: 0.85em; }
+.essence .origin-card-head { font-weight: bold; margin-bottom: 4px; }
+.essence .origin-trait { margin-bottom: 4px; opacity: 0.9; }
+.essence .origin-trait strong { display: block; }
 
-.essence.actor .combat-controls { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
-.essence.actor .combat-state { margin-bottom: 8px; opacity: 0.85; }
+.essence .combat-header { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
+.essence .skill-box { border: 1px solid #555; border-radius: 4px; padding: 4px 6px; margin-bottom: 6px; }
+.essence .skill-box.gated { opacity: 0.6; border-style: dashed; }
+.essence .gate-note { font-size: 0.75em; color: #e0a020; padding-left: 4px; }
+.essence .skill-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.essence .skill-roll { flex: 1; text-align: left; text-transform: capitalize; background: none; border: none; color: inherit; cursor: pointer; }
+.essence .skill-expertises { margin-top: 4px; padding-left: 4px; border-left: 2px solid #555; }
+.essence .expertise-row { display: flex; gap: 6px; align-items: center; margin-bottom: 2px; }
+.essence .expertise-row select { flex: 1; font-size: 0.85em; }
+.essence .add-expertise { font-size: 0.8em; padding: 2px 6px; margin-top: 2px; }
 
-.essence.actor .item-list { list-style: none; padding: 0; }
-.essence.actor .item-list li { display: flex; align-items: center; gap: 6px; padding: 2px 0; }
+.essence .combat-controls { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+.essence .combat-state { margin-bottom: 8px; opacity: 0.85; }
 
-.essence.actor .item-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 0.9em; }
-.essence.actor .item-table th, .essence.actor .item-table td { border: 1px solid #555; padding: 2px 6px; text-align: left; }
-.essence.actor .item-table th { background: rgba(255,255,255,0.05); }
+.essence .item-list { list-style: none; padding: 0; }
+.essence .item-list li { display: flex; align-items: center; gap: 6px; padding: 2px 0; }
 
-.essence.actor .career-row { margin-bottom: 8px; }
-.essence.actor .career-row label { display: flex; flex-direction: column; gap: 2px; }
-.essence.actor .career-row input { width: 100%; }
-.essence.actor .key-aspects-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
-.essence.actor .key-aspects-row label { display: flex; flex-direction: column; gap: 2px; }
-.essence.actor .key-aspects-row input { width: 100%; }
-.essence.actor .nc-skill-row { display: flex; gap: 6px; align-items: center; margin-bottom: 2px; }
-.essence.actor .nc-skill-row input[type="text"] { flex: 1; }
-.essence.actor .array-rows { margin-bottom: 8px; }
-.essence.actor .array-row { display: flex; gap: 6px; align-items: center; margin-bottom: 2px; }
-.essence.actor .array-row input[type="text"] { flex: 1; }
-.essence.actor .array-row select { flex: 1; }
-.essence.actor [data-action="addArrayRow"] { margin: 4px 0 10px; }
+.essence .item-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 0.9em; }
+.essence .item-table th, .essence .item-table td { border: 1px solid #555; padding: 2px 6px; text-align: left; }
+.essence .item-table th { background: rgba(255,255,255,0.05); }
 
-.essence.actor .tab.bio label { display: block; margin-bottom: 8px; }
-.essence.actor .tab.bio textarea { width: 100%; min-height: 3em; }
+.essence .career-row { margin-bottom: 8px; }
+.essence .career-row label { display: flex; flex-direction: column; gap: 2px; }
+.essence .career-row input { width: 100%; }
+.essence .key-aspects-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
+.essence .key-aspects-row label { display: flex; flex-direction: column; gap: 2px; }
+.essence .key-aspects-row input { width: 100%; }
+.essence .nc-skill-row { display: flex; gap: 6px; align-items: center; margin-bottom: 2px; }
+.essence .nc-skill-row input[type="text"] { flex: 1; }
+.essence .array-rows { margin-bottom: 8px; }
+.essence .array-row { display: flex; gap: 6px; align-items: center; margin-bottom: 2px; }
+.essence .array-row input[type="text"] { flex: 1; }
+.essence .array-row select { flex: 1; }
+.essence [data-action="addArrayRow"] { margin: 4px 0 10px; }
+
+.essence .tab.bio label { display: block; margin-bottom: 8px; }
+.essence .tab.bio textarea { width: 100%; min-height: 3em; }
 
 .essence .roll-card .dice-faces { display: flex; gap: 4px; flex-wrap: wrap; margin: 4px 0; }
 .essence .roll-card .die { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border: 1px solid #888; border-radius: 4px; }
