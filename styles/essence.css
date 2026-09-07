@@ -12,7 +12,13 @@
   padding: 4px 6px;
   box-sizing: border-box;
 }
-.essence prose-mirror.editor .editor-content { min-height: 4em; }
+/* Core sets a blanket --min-height: 150px on every <prose-mirror> (the CSS var its own
+   `.prosemirror, prose-mirror { min-height: var(--min-height) }` rule reads) — fine for a full
+   Biography/Concept field, but for per-row card fields (Body lines, Surges) that's 150px of empty
+   space under a single short sentence like a Body line's "Target", with several such rows
+   stacking up and burying the rest of the card (Effect, Surges, Rider) far below the fold. */
+.essence .body-lines prose-mirror.editor,
+.essence .surges prose-mirror.editor { --min-height: 2.5em; }
 .essence .locked { opacity: 0.4; cursor: not-allowed; }
 .essence .sheet-header { display: flex; align-items: flex-start; gap: 10px; }
 .essence .profile-img { width: 64px; height: 64px; object-fit: cover; border-radius: 4px; }

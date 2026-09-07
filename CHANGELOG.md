@@ -2,6 +2,18 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.5.11
+
+- Fix Action/Reaction Card sheets burying their own content: core's `<prose-mirror>` element
+  defaults to a 150px min-height meant for a full Biography-style field, but a card's Body/Surges
+  are several short one-line entries stacked in a list — each one ate 150px of empty space, so a
+  card with 2+ Body lines pushed its "Effect" line (and everything after it: Surges, Rider) far
+  below the fold. Shrunk those specifically to a compact 2.5em. The card *data* was always correct
+  underneath — this was purely a display bug hiding it.
+- Remove the Domain field from the Action/Reaction Card sheet — not a field GMs/players edit or
+  reference per-card; it's already established this isn't a meaningful axis for browsing cards
+  either (see 0.5.9's dropped Domain filter).
+
 ## 0.5.10
 
 - Make Combat Card and Equipment names clickable throughout the Character Wizard (Selected,

@@ -5,13 +5,6 @@
 </header>
 
 <div class="card-fields grid-3">
-  <label>Domain
-    <select name="system.domain">
-      <option value="physical" {{#if (eq system.domain "physical")}}selected{{/if}}>physical</option>
-      <option value="mental" {{#if (eq system.domain "mental")}}selected{{/if}}>mental</option>
-      <option value="spiritual" {{#if (eq system.domain "spiritual")}}selected{{/if}}>spiritual</option>
-    </select>
-  </label>
   <label>Rank <input name="system.rank" type="number" value="{{system.rank}}"></label>
   <label>Subtype <input name="system.subtype" type="text" value="{{system.subtype}}"></label>
   <label>Attribute <input name="system.attr" type="text" value="{{system.attr}}"></label>
