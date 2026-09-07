@@ -2,6 +2,12 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.5.9
+
+- Add filters and a sort control to the Character Wizard's Combat Cards browser: Type (Action/
+  Reaction/All), Skill, and Sort (Rank/Name/Skill). Action and Reaction Cards now list together in
+  one combined, filterable list instead of two separate unfilterable ones.
+
 ## 0.5.8
 
 - Give rich-text (`<prose-mirror>`) fields — Concept/Background, Biography, GM Notes, Passive

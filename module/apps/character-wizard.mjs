@@ -77,6 +77,9 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
 
   #step = 0;
   #cardSearch = "";
+  #cardTypeFilter = "all";
+  #cardSkillFilter = "all";
+  #cardSort = "rank";
   #equipmentSearch = "";
   #refocusSearch = null;
 
@@ -95,6 +98,9 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     // caret position have to be restored manually or every keystroke would kick focus out.
     this.#wireSearch("cards", (v) => { this.#cardSearch = v; });
     this.#wireSearch("equipment", (v) => { this.#equipmentSearch = v; });
+    this.#wireSelect("cardType", (v) => { this.#cardTypeFilter = v; });
+    this.#wireSelect("cardSkill", (v) => { this.#cardSkillFilter = v; });
+    this.#wireSelect("cardSort", (v) => { this.#cardSort = v; });
   }
 
   #wireSearch(key, setter) {
@@ -110,6 +116,17 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       input.setSelectionRange(input.value.length, input.value.length);
       this.#refocusSearch = null;
     }
+  }
+
+  /** Filter/sort dropdowns for the card browser — plain <select> elements, not data-action, since
+   *  they need "change" not "click" and don't need focus restored across re-render like search. */
+  #wireSelect(key, setter) {
+    const select = this.element.querySelector(`[data-wizard-select="${key}"]`);
+    if (!select) return;
+    select.addEventListener("change", (e) => {
+      setter(e.currentTarget.value);
+      this.render();
+    });
   }
 
   async _prepareContext(options) {
@@ -216,18 +233,31 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       return matched >= (cardSystem.expertisesMode === "any2" ? 2 : 1);
     };
 
-    const toBrowserEntry = (doc) => ({ id: doc.id, uuid: doc.uuid, name: doc.name, system: doc.system });
-    context.browsableActionCards = actionPack
-      .filter((d) => !isBasicCard(d.system) && !ownedNames.has(d.name) && qualifies(d.system))
-      .filter((d) => !search || d.name.toLowerCase().includes(search))
-      .sort((a, b) => a.system.rank - b.system.rank || a.name.localeCompare(b.name))
-      .map(toBrowserEntry);
-    context.browsableReactionCards = reactionPack
-      .filter((d) => !isBasicCard(d.system) && !ownedNames.has(d.name) && qualifies(d.system))
-      .filter((d) => !search || d.name.toLowerCase().includes(search))
-      .sort((a, b) => a.system.rank - b.system.rank || a.name.localeCompare(b.name))
-      .map(toBrowserEntry);
+    const toBrowserEntry = (type) => (doc) =>
+      ({ id: doc.id, uuid: doc.uuid, name: doc.name, system: doc.system, type, pack: `essence-system.${type}s` });
+
+    let combined = [
+      ...actionPack.filter((d) => !isBasicCard(d.system) && !ownedNames.has(d.name) && qualifies(d.system)).map(toBrowserEntry("action-card")),
+      ...reactionPack.filter((d) => !isBasicCard(d.system) && !ownedNames.has(d.name) && qualifies(d.system)).map(toBrowserEntry("reaction-card"))
+    ];
+
+    if (search) combined = combined.filter((c) => c.name.toLowerCase().includes(search));
+    if (this.#cardTypeFilter !== "all") combined = combined.filter((c) => c.type === this.#cardTypeFilter);
+    if (this.#cardSkillFilter !== "all") combined = combined.filter((c) => (c.system.skill || "").toLowerCase() === this.#cardSkillFilter);
+
+    const sorters = {
+      rank: (a, b) => a.system.rank - b.system.rank || a.name.localeCompare(b.name),
+      name: (a, b) => a.name.localeCompare(b.name),
+      skill: (a, b) => (a.system.skill || "").localeCompare(b.system.skill || "") || a.name.localeCompare(b.name)
+    };
+    combined.sort(sorters[this.#cardSort] ?? sorters.rank);
+
+    context.browsableCards = combined;
     context.cardSearch = this.#cardSearch;
+    context.cardTypeFilter = this.#cardTypeFilter;
+    context.cardSkillFilter = this.#cardSkillFilter;
+    context.cardSort = this.#cardSort;
+    context.cardSkillOptions = SKILLS;
     context.missingBasicCount = 7 - context.ownedBasicCards.length;
   }
 

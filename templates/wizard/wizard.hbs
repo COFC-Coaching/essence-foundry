@@ -148,12 +148,35 @@
       <div>
         <h4>Qualifying Cards</h4>
         <input type="text" data-wizard-search="cards" placeholder="Search…" value="{{cardSearch}}">
+        <div class="wizard-row wizard-card-filters">
+          <label>Type
+            <select data-wizard-select="cardType">
+              <option value="all" {{#if (eq cardTypeFilter "all")}}selected{{/if}}>All</option>
+              <option value="action-card" {{#if (eq cardTypeFilter "action-card")}}selected{{/if}}>Action</option>
+              <option value="reaction-card" {{#if (eq cardTypeFilter "reaction-card")}}selected{{/if}}>Reaction</option>
+            </select>
+          </label>
+          <label>Skill
+            <select data-wizard-select="cardSkill">
+              <option value="all" {{#if (eq cardSkillFilter "all")}}selected{{/if}}>All</option>
+              {{#each cardSkillOptions as |sk|}}
+                <option value="{{sk}}" {{#if (eq ../cardSkillFilter sk)}}selected{{/if}} class="capitalize">{{sk}}</option>
+              {{/each}}
+            </select>
+          </label>
+          <label>Sort
+            <select data-wizard-select="cardSort">
+              <option value="rank" {{#if (eq cardSort "rank")}}selected{{/if}}>Rank</option>
+              <option value="name" {{#if (eq cardSort "name")}}selected{{/if}}>Name</option>
+              <option value="skill" {{#if (eq cardSort "skill")}}selected{{/if}}>Skill</option>
+            </select>
+          </label>
+        </div>
         <ul class="item-list wizard-scroll-list">
-          {{#each browsableActionCards as |item|}}
-            <li>{{item.name}} <span class="muted">R{{item.system.rank}} · {{item.system.skill}}</span> <a data-action="toggleCard" data-pack="essence-system.action-cards" data-id="{{item.id}}"><i class="fa-solid fa-plus"></i></a></li>
-          {{/each}}
-          {{#each browsableReactionCards as |item|}}
-            <li>{{item.name}} <span class="muted">R{{item.system.rank}} · {{item.system.skill}} · Reaction</span> <a data-action="toggleCard" data-pack="essence-system.reaction-cards" data-id="{{item.id}}"><i class="fa-solid fa-plus"></i></a></li>
+          {{#each browsableCards as |item|}}
+            <li>{{item.name}} <span class="muted">R{{item.system.rank}} · {{item.system.skill}}{{#if (eq item.type "reaction-card")}} · Reaction{{/if}}</span> <a data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}"><i class="fa-solid fa-plus"></i></a></li>
+          {{else}}
+            <li class="muted">No cards match these filters.</li>
           {{/each}}
         </ul>
       </div>
