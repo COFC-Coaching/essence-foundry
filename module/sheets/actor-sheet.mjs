@@ -1,4 +1,5 @@
 import { rollEssencePool } from "../dice/essence-roll.mjs";
+import { EXPERTISE_DATABASE, SUBTYPE_DATABASE } from "../data/expertise-database.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -26,7 +27,7 @@ function pips(value, max = PIP_MAX) {
 const ARRAY_ROW_DEFAULTS = {
   nonCombatSkills: { name: "", rating: 0 },
   passiveFeatures: { name: "", source: "", text: "" },
-  expertises: { name: "", skill: "" }
+  expertises: { name: "", skill: "", subtype: "" }
 };
 
 export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
@@ -131,6 +132,14 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     }));
 
     context.keyAspects = system.keyAspects.map((value, i) => ({ value, i, n: i + 1 }));
+    context.expertiseRows = system.expertises.map((e, i) => ({
+      i,
+      skill: e.skill,
+      name: e.name,
+      subtype: e.subtype,
+      expertiseOptions: EXPERTISE_DATABASE[e.skill] || [],
+      subtypeOptions: SUBTYPE_DATABASE[e.skill] || []
+    }));
     context.temporaryWoundPips = pips(system.playState.currentTemporaryWounds, system.temporaryWoundsAvailable);
     context.temporaryInfluencePips = pips(system.playState.currentTemporaryInfluence, system.temporaryInfluence);
     context.coreInfluenceLabels = CORE_INFLUENCE_LABELS;
