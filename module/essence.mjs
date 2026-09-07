@@ -42,6 +42,29 @@ Hooks.once("init", () => {
 });
 
 /**
+ * Registers every Condition in the compendium as a Token HUD status-icon toggle. Kept out of
+ * "init" because it needs the compendium's index, which isn't available that early; "ready" is
+ * also before any player can open a Token HUD, so there's no risk of missing an interaction.
+ * Each entry's `id` is slugified from the Condition's name (stable across a "Refresh compendium
+ * content" re-import, unlike the compendium document's own _id) and carries `essenceConditionUuid`
+ * so EssenceActor#toggleStatusEffect (module/documents/actor.mjs) knows which real Item to apply.
+ */
+Hooks.once("ready", async () => {
+  const pack = game.packs.get("essence-system.conditions");
+  if (!pack) return;
+  const index = await pack.getIndex({ fields: ["img"] });
+  for (const entry of index) {
+    const slug = entry.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    CONFIG.statusEffects.push({
+      id: `essence-${slug}`,
+      name: entry.name,
+      img: entry.img || "icons/svg/skull.svg",
+      essenceConditionUuid: entry.uuid
+    });
+  }
+});
+
+/**
  * Adds a "Create Content" scene-control button that opens the Action/Reaction Card, Equipment,
  * and Condition creation wizard — gated by Foundry's own assignable "Create Items" permission
  * (World Settings > Configure Permissions), not just game.user.isGM, so a GM can delegate content
