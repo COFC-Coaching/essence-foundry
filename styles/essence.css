@@ -104,6 +104,8 @@
 .essence .item-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 0.9em; }
 .essence .item-table th, .essence .item-table td { border: 1px solid #555; padding: 2px 6px; text-align: left; }
 .essence .item-table th { background: rgba(255,255,255,0.05); }
+.essence .item-table .origin-feature-row { background: rgba(249, 168, 37, 0.06); }
+.essence .item-table .origin-feature-row td:first-child { font-weight: bold; }
 
 .essence .career-row { margin-bottom: 8px; }
 .essence .career-row label { display: flex; flex-direction: column; gap: 2px; }

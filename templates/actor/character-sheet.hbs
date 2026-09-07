@@ -397,6 +397,14 @@
   <table class="item-table">
     <thead><tr><th>Feature</th><th>Source</th><th>Description</th><th></th></tr></thead>
     <tbody>
+      {{#each originFeatures as |f|}}
+        <tr class="origin-feature-row" title="From this character's Species/Heritage/Distinction — edit it on that Item, not here.">
+          <td>{{f.name}}</td>
+          <td>{{f.source}}</td>
+          <td>{{{f.text}}}</td>
+          <td></td>
+        </tr>
+      {{/each}}
       {{#each system.passiveFeatures as |f i|}}
         <tr>
           <td><input name="system.passiveFeatures.{{i}}.name" type="text" value="{{f.name}}"></td>

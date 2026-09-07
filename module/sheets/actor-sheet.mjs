@@ -151,6 +151,29 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     context.speciesItem = speciesItem;
     context.heritageItem = heritageItem;
 
+    // The Species/Heritage/Distinction Origin cards are each item's own source of truth for
+    // these traits — derived here rather than copied into system.passiveFeatures, so there's
+    // nothing to keep in sync if the player swaps Species/Heritage/Distinction or picks
+    // different Adaptations later.
+    const originFeatures = [];
+    if (speciesItem) {
+      const sp = speciesItem.system;
+      if (sp.nature?.name) originFeatures.push({ name: sp.nature.name, source: `Species: ${speciesItem.name}`, text: sp.nature.text });
+      for (const a of sp.adaptations) {
+        if (a.chosen) originFeatures.push({ name: a.name, source: `Species: ${speciesItem.name}`, text: a.text });
+      }
+    }
+    if (heritageItem) {
+      const h = heritageItem.system;
+      if (h.legacy?.name) originFeatures.push({ name: h.legacy.name, source: `Heritage: ${heritageItem.name}`, text: h.legacy.text });
+      if (h.familiarity?.name) originFeatures.push({ name: h.familiarity.name, source: `Heritage: ${heritageItem.name}`, text: h.familiarity.text });
+    }
+    if (distinctionItem) {
+      const d = distinctionItem.system;
+      if (d.origin?.name) originFeatures.push({ name: d.origin.name, source: `Distinction: ${distinctionItem.name}`, text: d.origin.text });
+    }
+    context.originFeatures = originFeatures;
+
     context.domains = DOMAINS.map((d) => ({
       ...d,
       attrs: d.attrs.map((key) => ({ key, label: key, value: system[key], pips: pips(system[key]) })),
