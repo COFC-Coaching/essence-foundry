@@ -41,6 +41,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       endTurn: EssenceActorSheet.#onEndTurn,
       burnDice: EssenceActorSheet.#onBurnDice,
       applyDamage: EssenceActorSheet.#onApplyDamage,
+      recoverWound: EssenceActorSheet.#onRecoverWound,
       itemEdit: EssenceActorSheet.#onItemEdit,
       itemDelete: EssenceActorSheet.#onItemDelete,
       changeTab: EssenceActorSheet.#onChangeTab,
@@ -601,6 +602,44 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     if (becameCritical) {
       ui.notifications.warn(`${this.actor.name} is Critically Wounded! The Death Track has begun.`);
     }
+  }
+
+  /**
+   * Core Wounds recover in reverse order — the most severe currently marked Wound must be
+   * recovered before a less severe one beneath it (part-iv-combat.md § Recovering Core Wounds).
+   * Recovering removes that Wound's Condition. Part VII (Downtime) doesn't yet specify recovery
+   * timing/treatment procedures in canon, so this is a manual GM-triggered action representing
+   * "this Wound has now been recovered," not an automatic timer.
+   */
+  static async #onRecoverWound() {
+    const coreWounds = this.actor.system.coreWounds.map((w) => ({ ...w }));
+    let slot = -1;
+    for (let i = coreWounds.length - 1; i >= 0; i--) {
+      if (coreWounds[i].filled) { slot = i; break; }
+    }
+    if (slot === -1) {
+      ui.notifications.warn(`${this.actor.name} has no Core Wounds to recover.`);
+      return;
+    }
+
+    const recovered = coreWounds[slot];
+    coreWounds[slot] = { filled: false, domain: "", severity: "", condition: "" };
+
+    const update = {
+      "system.coreWounds": coreWounds,
+      "system.playState.currentCoreWounds": coreWounds.filter((w) => w.filled).length
+    };
+    // The Death Track only runs while the Critical Wound remains untreated — recovering it ends the countdown.
+    if (slot === 4) {
+      update["system.playState.deathTrackStep"] = 0;
+      update["system.playState.deathTrackFrozen"] = false;
+    }
+
+    await this.actor.update(update);
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> recovers from their <strong>${recovered.condition}</strong>.</p>`
+    });
   }
 
   static async #onToggleTempInfluence(event, target) {
