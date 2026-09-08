@@ -2,6 +2,13 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.17
+
+- Add an Owner/GM-only edit-lock toggle (small lock icon, top-left of the portrait) to both the
+  Character and NPC sheets. Every raw field is now locked by default, even for the Owner/GM, as a
+  safety rail against accidental mid-session edits; Roll/Apply Damage/End Turn/Burn Dice and the
+  Wound/Death Track/Combo/Influence pip toggles always keep working regardless of the lock.
+
 ## 0.6.16
 
 - Remove the Player name field from the character sheet header — Foundry's own player/owner
