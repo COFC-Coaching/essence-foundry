@@ -2,6 +2,16 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.22
+
+- Using a Card with a Cost now automatically deducts that amount from the matching resource pool
+  (Stamina/Focus/Mana) in the same update as the Action/Reaction Dice spend, instead of requiring
+  a manual adjustment.
+- Add +/- stepper buttons next to Stamina, Focus, and Mana on the Character and NPC sheets so
+  players can adjust their current value without unlocking the sheet.
+- Fix the NPC sheet's current-resource number input using the wrong field name
+  (`currentstamina` instead of `currentStamina`), which silently discarded manual edits.
+
 ## 0.6.21
 
 - Card view: the Commitment line now shows which resource pool a Cost draws from (e.g. "Cost 2
