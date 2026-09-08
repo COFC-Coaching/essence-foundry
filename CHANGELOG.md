@@ -2,6 +2,11 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.16
+
+- Remove the Player name field from the character sheet header — Foundry's own player/owner
+  assignment already covers this, so it was redundant.
+
 ## 0.6.15
 
 - Split universal no-Skill cards (Hide, Disengage, Shove, Basic Shot, Dash, Strike, Brace) into
