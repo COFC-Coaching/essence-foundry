@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.18
+
+- Fix Expertise selection silently wiping its own skill association and vanishing from the sheet.
+  Picking a name from a newly-added Expertise's dropdown reset its skill to blank (a Foundry
+  ArrayField sub-field update quirk), which made it disappear from that skill's list even though
+  it still existed on the actor. Expertises are now added and edited through a safe read-modify-
+  write of the whole array, matching the pattern used everywhere else on the sheet.
+
 ## 0.6.17
 
 - Add an Owner/GM-only edit-lock toggle (small lock icon, top-left of the portrait) to both the
