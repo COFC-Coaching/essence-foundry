@@ -2,6 +2,7 @@ import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
+import { capitalize } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -103,11 +104,11 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
 
     context.domains = DOMAINS.map((d) => ({
       ...d,
-      attrs: d.attrs.map((key) => ({ key, label: key, value: system[key] })),
+      attrs: d.attrs.map((key) => ({ key, label: capitalize(key), value: system[key] })),
       skills: d.skills.map((key) => {
         const gateDistinction = SKILL_GATE[key];
         const gateOpen = !gateDistinction || distinctionItem?.system.unlocks === key;
-        return { key, label: key, value: system[key], pips: pips(system[key]), gateDistinction, gateOpen };
+        return { key, label: capitalize(key), value: system[key], pips: pips(system[key]), gateDistinction, gateOpen };
       }),
       resourceLabel: d.resource,
       resourceCurrent: system.playState[`current${d.resource[0].toUpperCase()}${d.resource.slice(1)}`],
@@ -230,20 +231,20 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
         return;
       }
       const committed = await EssenceNpcSheet.#promptDiceCount({
-        title: `Roll ${skill}`,
+        title: `Roll ${capitalize(skill)}`,
         label: `Commit how many Action Dice? (max ${available})`,
         min: 1, max: available, initial: available
       });
       if (committed === null) return;
       await this.actor.update({ "system.playState.actionDice": available - committed });
-      await rollEssencePool({ pool: committed, label: skill, actor: this.actor });
+      await rollEssencePool({ pool: committed, label: capitalize(skill), actor: this.actor });
       return;
     }
 
     const attr = await new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
-        window: { title: `Roll ${skill}` },
-        content: `<select name="attr">${ATTRIBUTES.map((a) => `<option value="${a}">${a}</option>`).join("")}</select>`,
+        window: { title: `Roll ${capitalize(skill)}` },
+        content: `<select name="attr">${ATTRIBUTES.map((a) => `<option value="${a}">${capitalize(a)}</option>`).join("")}</select>`,
         buttons: [{
           action: "roll",
           label: "Roll",
@@ -255,7 +256,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     });
     if (!attr) return;
     const pool = (this.actor.system[attr] ?? 0) + (this.actor.system[skill] ?? 0);
-    await rollEssencePool({ pool, label: `${attr} + ${skill}`, actor: this.actor });
+    await rollEssencePool({ pool, label: `${capitalize(attr)} + ${capitalize(skill)}`, actor: this.actor });
   }
 
   static async #onRollItem(event, target) {

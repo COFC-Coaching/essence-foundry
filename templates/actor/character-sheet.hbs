@@ -137,8 +137,7 @@
         <button type="button" data-action="burnDice">Burn Dice</button>
       </div>
       <div class="combat-state">
-        <p>Round: {{combatRound}} — Turn: {{system.playState.combatTurn}} — Initiative: {{system.playState.initiativeTotal}} ({{system.playState.initiativeDice}}d10)</p>
-        <p class="muted">Start/end combat and advance rounds &amp; turns from the Combat Tracker.</p>
+        <p>Round {{combatRound}} — {{turnLabel system.playState.combatTurn}} — Initiative {{system.playState.initiativeTotal}} ({{system.playState.initiativeDice}}d10)</p>
       </div>
     </div>
   </div>

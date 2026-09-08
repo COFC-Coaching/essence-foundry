@@ -1,6 +1,7 @@
 import { EXPERTISE_DATABASE } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
+import { capitalize } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { DocumentSheetV2 } = foundry.applications.api;
@@ -180,7 +181,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     context.attributePool = ATTRIBUTE_POOL;
     context.attributeSpent = spent;
     context.attributeRemaining = ATTRIBUTE_POOL - spent;
-    context.attributes = ATTRIBUTES.map((key) => ({ key, label: key, value: system[key] }));
+    context.attributes = ATTRIBUTES.map((key) => ({ key, label: capitalize(key), value: system[key] }));
   }
 
   async #prepareCombatSkills(context, distinctionItem) {
@@ -192,7 +193,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     context.skills = SKILLS.map((key) => {
       const gateDistinction = SKILL_GATE[key];
       const gateOpen = !gateDistinction || distinctionItem?.system.unlocks === key;
-      return { key, label: key, value: system[key], gateDistinction, gateOpen };
+      return { key, label: capitalize(key), value: system[key], gateDistinction, gateOpen };
     });
 
     context.expertiseCount = EXPERTISE_COUNT;

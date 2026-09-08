@@ -12,6 +12,10 @@ import EssenceCombat from "./documents/combat.mjs";
 import EssenceActor from "./documents/actor.mjs";
 import EssenceContentWizard, { canCreateContent } from "./apps/content-wizard.mjs";
 import EssenceBulkImport from "./apps/bulk-import.mjs";
+import { capitalize } from "./utils.mjs";
+
+/** Foundry combat's own enum values, given a display label a player should actually see. */
+const TURN_LABELS = { notStarted: "Not Started", first: "First Turn", active: "Active", ended: "Ended" };
 
 /**
  * Replacement for core's own `{{editor}}` Handlebars helper. That helper's `button=true` output
@@ -60,6 +64,8 @@ Hooks.once("init", () => {
 
   Handlebars.registerHelper("addOne", (n) => Number(n) + 1);
   Handlebars.registerHelper("essenceEditor", essenceEditorHelper);
+  Handlebars.registerHelper("capitalize", capitalize);
+  Handlebars.registerHelper("turnLabel", (turn) => TURN_LABELS[turn] ?? capitalize(turn ?? ""));
 });
 
 /**

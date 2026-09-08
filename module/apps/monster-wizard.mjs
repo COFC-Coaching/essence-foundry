@@ -1,5 +1,6 @@
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import { getRoleBudget } from "../data/monster-budgets.mjs";
+import { capitalize } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { DocumentSheetV2 } = foundry.applications.api;
@@ -160,7 +161,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     context.attributePool = context.budget.attributePool;
     context.attributeSpent = spent;
     context.attributeRemaining = context.budget.attributePool - spent;
-    context.attributes = ATTRIBUTES.map((key) => ({ key, label: key, value: system[key] }));
+    context.attributes = ATTRIBUTES.map((key) => ({ key, label: capitalize(key), value: system[key] }));
   }
 
   #prepareCombatSkills(context, distinctionItem) {
@@ -172,7 +173,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     context.skills = SKILLS.map((key) => {
       const gateDistinction = SKILL_GATE[key];
       const gateOpen = !gateDistinction || distinctionItem?.system.unlocks === key;
-      return { key, label: key, value: system[key], gateDistinction, gateOpen };
+      return { key, label: capitalize(key), value: system[key], gateDistinction, gateOpen };
     });
   }
 
