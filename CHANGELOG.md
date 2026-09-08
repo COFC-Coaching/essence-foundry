@@ -2,6 +2,12 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.14
+
+- Add 13 Equipment items that were in the design spreadsheet but missing from the compendium:
+  Balanced Armor, Stable/Shaping/Reservoir Focus, Heavy Shield, Armored Gauntlet, Ward Talisman,
+  Ritual Censer, and Infiltration/Disguise/Survival/Investigation/Engineering Kit.
+
 ## 0.6.13
 
 - Capitalize Attribute/Skill labels everywhere a lowercase data key was being shown directly as
