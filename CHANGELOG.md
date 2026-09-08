@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.15
+
+- Split universal no-Skill cards (Hide, Disengage, Shove, Basic Shot, Dash, Strike, Brace) into
+  their own "Basic Actions"/"Basic Reactions" row of horizontal quick-roll buttons above the
+  skill-gated Action/Reaction Card lists, on both the Character and NPC sheets.
+- Action/Reaction Card rows now show a one-line summary of their Effect text, a Sort control
+  (Name/Skill/Cost/Rank), and the search box now matches summary text too, not just the name.
+
 ## 0.6.14
 
 - Add 13 Equipment items that were in the design spreadsheet but missing from the compendium:
