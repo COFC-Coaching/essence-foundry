@@ -64,14 +64,18 @@
 
 /* Item sheets (card/condition/equipment/species/heritage/distinction) put the name <h1>
    directly in .sheet-header rather than inside .header-main — same sizing fix applies. */
-.essence.item .sheet-header h1 { flex: 1; margin: 0; line-height: 1; }
+/* min-width: 0 overrides a flex item's default min-width: auto (= its content's intrinsic
+   width) — without it, a long name can't actually shrink to fit and instead overflows onto the
+   Edit/View button next to it. The name's own font-size already shrinks with length (see
+   fitTitleSize in module/utils.mjs); this just lets the box follow suit. */
+.essence.item .sheet-header h1 { flex: 1; min-width: 0; margin: 0; line-height: 1; }
 .essence.item .sheet-header h1 input {
   width: 100%;
   height: auto;
-  font-size: 24px;
   line-height: 1.3;
   padding: 4px 6px;
   box-sizing: content-box;
+  text-overflow: ellipsis;
 }
 
 .essence .sheet-tabs { display: flex; gap: 12px; margin: 8px 0; border-bottom: 1px solid #666; flex: 0 0 auto; }

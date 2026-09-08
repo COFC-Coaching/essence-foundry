@@ -3,6 +3,18 @@ export function capitalize(str) {
   return str ? str[0].toUpperCase() + str.slice(1) : str;
 }
 
+/**
+ * A title font-size (px) that shrinks as `text` gets longer, so a long item name doesn't overlap
+ * a fixed-width sibling button next to it (e.g. a Card's name field next to its Edit/View toggle)
+ * instead of just clipping or overflowing at a fixed size. Purely length-based — cheap and good
+ * enough for a name field, not a substitute for actually measuring rendered text width.
+ */
+export function fitTitleSize(text, { max = 24, min = 14, startAt = 10, rate = 0.7 } = {}) {
+  const len = (text || "").length;
+  if (len <= startAt) return max;
+  return Math.max(min, Math.round(max - (len - startAt) * rate));
+}
+
 /** Strips tags for a plain-text preview; card body/rider fields are stored as HTMLFields. */
 export function stripHtml(html) {
   return (html || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
