@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.13
+
+- Capitalize Attribute/Skill labels everywhere a lowercase data key was being shown directly as
+  its own display label — domain boxes, the Roll dialog's title and Attribute dropdown, the
+  "Might + Prowess" chat roll label, and both wizards' Attribute/Skill steps.
+- Clean up the Combat tab's status line: dropped an internal-sounding dev note and replaced the
+  raw "Turn: notStarted" enum value with a real label ("Not Started" / "First Turn" / etc.).
+
 ## 0.6.12
 
 - Add a "Role Budget System" page to the Game Master's Guide compendium journal, documenting the
