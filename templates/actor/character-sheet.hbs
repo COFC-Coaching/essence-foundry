@@ -1,6 +1,11 @@
 <div class="essence-sheet-root">
 <header class="sheet-header">
   <div class="portrait-wrap">
+    {{#if isEditable}}
+      <button type="button" class="edit-lock-btn" data-action="toggleEditLock" aria-pressed="{{editUnlocked}}" title="{{#if editUnlocked}}Sheet unlocked — click to lock Attributes/Skills/build fields again{{else}}Sheet locked — click to edit Attributes/Skills/build fields{{/if}}">
+        <i class="fa-solid {{#if editUnlocked}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
+      </button>
+    {{/if}}
     <img class="profile-img" src="{{actor.img}}" data-action="editImage" title="Sheet Portrait — click to change">
     <button type="button" class="token-image-btn" data-action="editTokenImage" title="Token Image — the art shown on the canvas. Separate from the Portrait above; see the Game Master's Guide for how the two relate."><i class="fa-solid fa-chess-pawn"></i></button>
   </div>

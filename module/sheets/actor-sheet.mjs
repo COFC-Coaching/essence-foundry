@@ -48,6 +48,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     actions: {
       openWizard: EssenceActorSheet.#onOpenWizard,
       editTokenImage: EssenceActorSheet.#onEditTokenImage,
+      toggleEditLock: EssenceActorSheet.#onToggleEditLock,
       rollSkill: EssenceActorSheet.#onRollSkill,
       rollItem: EssenceActorSheet.#onRollItem,
       rollInitiative: EssenceActorSheet.#onRollInitiative,
@@ -84,6 +85,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   };
 
   #activeTab = "core";
+  /** Sheet-wide safety lock — see #applyEditable. Resets to locked every time the sheet is
+   *  reopened; not persisted, since it's a "let me fix this right now" switch, not a setting. */
+  #editUnlocked = false;
 
   _onRender(context, options) {
     super._onRender(context, options);
@@ -139,15 +143,32 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    * .window-header carries Foundry's own chrome (Close, Copy UUID, etc.), which also use
    * data-action — querying the full element previously locked those out too, so a read-only
    * sheet couldn't even be closed.
+   *
+   * For an Owner/GM, every raw field (Attributes, Skills, Tier/Level, Origin, resource pools,
+   * Biography, etc.) is *also* locked by default — a safety rail against fat-fingering a build
+   * value mid-session — until the header's lock toggle opens it back up (#onToggleEditLock).
+   * Action buttons (Roll, Apply Damage, End Turn, and the Wound/Combo/Influence pip toggles used
+   * constantly during combat) are never touched by that lock, only by the isEditable branch above,
+   * so ordinary play is never blocked by forgetting to unlock the sheet.
    */
   #applyEditable() {
-    if (this.isEditable) return;
     const body = this.element.querySelector(".window-content") ?? this.element;
-    for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) el.disabled = true;
-    for (const el of body.querySelectorAll('button[data-action]:not([data-action="changeTab"]), a[data-action]:not([data-action="changeTab"])')) {
-      el.classList.add("locked");
-      el.style.pointerEvents = "none";
+    if (!this.isEditable) {
+      for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) el.disabled = true;
+      for (const el of body.querySelectorAll('button[data-action]:not([data-action="changeTab"]), a[data-action]:not([data-action="changeTab"])')) {
+        el.classList.add("locked");
+        el.style.pointerEvents = "none";
+      }
+      return;
     }
+    if (this.#editUnlocked) return;
+    for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) el.disabled = true;
+  }
+
+  /** Owner/GM-only safety-lock toggle — see #applyEditable for what it does and doesn't affect. */
+  static #onToggleEditLock() {
+    this.#editUnlocked = !this.#editUnlocked;
+    this.render();
   }
 
   #applyActiveTab() {
@@ -199,6 +220,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.actor = this.actor;
+    context.isEditable = this.isEditable;
+    context.editUnlocked = this.#editUnlocked;
     context.combatRound = game.combat?.round ?? null;
     const system = this.actor.system;
     context.system = system;

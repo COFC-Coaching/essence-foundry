@@ -36,6 +36,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     actions: {
       openWizard: EssenceNpcSheet.#onOpenWizard,
       editTokenImage: EssenceNpcSheet.#onEditTokenImage,
+      toggleEditLock: EssenceNpcSheet.#onToggleEditLock,
       rollSkill: EssenceNpcSheet.#onRollSkill,
       rollItem: EssenceNpcSheet.#onRollItem,
       rollInitiative: EssenceNpcSheet.#onRollInitiative,
@@ -58,21 +59,34 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     body: { template: "systems/essence-system/templates/actor/npc-sheet.hbs" }
   };
 
+  /** Sheet-wide safety lock — see EssenceActorSheet#applyEditable for the full rationale. */
+  #editUnlocked = false;
+
   _onRender(context, options) {
     super._onRender(context, options);
     this.#applyEditable();
     this.#wireCardControls();
   }
 
-  /** Mirrors EssenceActorSheet#applyEditable — see that class for why .window-content is scoped. */
+  /** Mirrors EssenceActorSheet#applyEditable — see that class for why .window-content is scoped
+   *  and why the default-locked-for-owners behavior never touches action buttons. */
   #applyEditable() {
-    if (this.isEditable) return;
     const body = this.element.querySelector(".window-content") ?? this.element;
-    for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) el.disabled = true;
-    for (const el of body.querySelectorAll("button[data-action], a[data-action]")) {
-      el.classList.add("locked");
-      el.style.pointerEvents = "none";
+    if (!this.isEditable) {
+      for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) el.disabled = true;
+      for (const el of body.querySelectorAll("button[data-action], a[data-action]")) {
+        el.classList.add("locked");
+        el.style.pointerEvents = "none";
+      }
+      return;
     }
+    if (this.#editUnlocked) return;
+    for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) el.disabled = true;
+  }
+
+  static #onToggleEditLock() {
+    this.#editUnlocked = !this.#editUnlocked;
+    this.render();
   }
 
   /** Mirrors EssenceActorSheet#wireCardControls — see that class for why. */
@@ -107,6 +121,8 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.actor = this.actor;
+    context.isEditable = this.isEditable;
+    context.editUnlocked = this.#editUnlocked;
     context.combatRound = game.combat?.round ?? null;
     const system = this.actor.system;
     context.system = system;
