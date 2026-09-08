@@ -12,7 +12,7 @@ import EssenceCombat from "./documents/combat.mjs";
 import EssenceActor from "./documents/actor.mjs";
 import EssenceContentWizard, { canCreateContent } from "./apps/content-wizard.mjs";
 import EssenceBulkImport from "./apps/bulk-import.mjs";
-import { capitalize, fitTitleSize } from "./utils.mjs";
+import { capitalize, fitTitleSize, domainResource } from "./utils.mjs";
 
 /** Foundry combat's own enum values, given a display label a player should actually see. */
 const TURN_LABELS = { notStarted: "Not Started", first: "First Turn", active: "Active", ended: "Ended" };
@@ -67,6 +67,7 @@ Hooks.once("init", () => {
   Handlebars.registerHelper("capitalize", capitalize);
   Handlebars.registerHelper("turnLabel", (turn) => TURN_LABELS[turn] ?? capitalize(turn ?? ""));
   Handlebars.registerHelper("fitTitleSize", (text, options) => fitTitleSize(text, options.hash));
+  Handlebars.registerHelper("domainResource", domainResource);
 });
 
 /**

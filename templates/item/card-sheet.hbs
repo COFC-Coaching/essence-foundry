@@ -16,7 +16,7 @@
 
   <div class="card-view-infogrid">
     <div><span class="card-view-statlabel">Rank</span><span>{{system.rank}}</span></div>
-    {{#if system.min}}<div><span class="card-view-statlabel">Commitment</span><span>Dice {{system.min}}+{{#if system.cost}} · Cost {{system.cost}}{{/if}}</span></div>{{/if}}
+    {{#if system.min}}<div><span class="card-view-statlabel">Commitment</span><span>Dice {{system.min}}+{{#if system.cost}} · Cost {{system.cost}} {{domainResource system.domain}}{{/if}}</span></div>{{/if}}
     {{#if system.attr}}<div><span class="card-view-statlabel">Attribute</span><span>{{system.attr}}</span></div>{{/if}}
     {{#if system.defense}}<div><span class="card-view-statlabel">Defense</span><span>{{system.defense}}</span></div>{{/if}}
   </div>

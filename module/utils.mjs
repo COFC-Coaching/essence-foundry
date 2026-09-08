@@ -15,6 +15,13 @@ export function fitTitleSize(text, { max = 24, min = 14, startAt = 10, rate = 0.
   return Math.max(min, Math.round(max - (len - startAt) * rate));
 }
 
+/** A card's Domain determines which resource pool its Cost is paid from — see the Domain/
+ *  Resource/Defense grouping used throughout the sheet (actor-sheet.mjs's DOMAINS constant). */
+const DOMAIN_RESOURCE = { physical: "Stamina", mental: "Focus", spiritual: "Mana" };
+export function domainResource(domain) {
+  return DOMAIN_RESOURCE[domain] ?? "";
+}
+
 /** Strips tags for a plain-text preview; card body/rider fields are stored as HTMLFields. */
 export function stripHtml(html) {
   return (html || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
