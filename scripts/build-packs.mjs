@@ -156,6 +156,45 @@ function equipmentToItem(row) {
   };
 }
 
+/**
+ * Hand-authored Equipment not yet in the Neon "Essence" database (see scripts/extra-equipment-data.json)
+ * — same _id-stability approach as species/heritages/distinctions, so these survive a full
+ * `node scripts/build-packs.mjs` re-run even though they don't come from raw-equipment-cards.json.
+ */
+function extraEquipmentToItem(e) {
+  const _id = stableId(`equipment:${e.name}`);
+  return {
+    _id,
+    name: e.name,
+    type: "equipment",
+    img: "icons/svg/item-bag.svg",
+    system: {
+      category: mapCategory(e.category),
+      slot: "armory",
+      tier: e.tier ?? null,
+      type: e.type || "",
+      cost: String(e.cost ?? ""),
+      range: e.range || "",
+      effect: e.effect || "",
+      passive: e.passive || "",
+      special: e.special || "",
+      fortitude: String(e.fortitude ?? ""),
+      resilience: String(e.resilience ?? ""),
+      movement: String(e.movement ?? ""),
+      tags: e.tags || "",
+      flavor: e.flavor || "",
+      reachBonus: 0,
+      uses: e.uses ?? null,
+      slotCost: 1,
+      isModular: !!e.isModular,
+      quantity: 1
+    },
+    folder: null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
 function speciesToItem(s) {
   return {
     _id: stableId(`species:${s.name}`),
@@ -297,6 +336,9 @@ async function main() {
   const equipmentCards = loadRows("raw-equipment-cards.json");
   for (const row of equipmentCards) writeSourceDoc("equipment", equipmentToItem(row));
 
+  const extraEquipment = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "extra-equipment-data.json"), "utf8"));
+  for (const e of extraEquipment) writeSourceDoc("equipment", extraEquipmentToItem(e));
+
   const origin = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "origin-data.json"), "utf8"));
   for (const s of origin.species) writeSourceDoc("species", speciesToItem(s));
   for (const h of origin.heritages) writeSourceDoc("heritages", heritageToItem(h));
@@ -308,7 +350,7 @@ async function main() {
   const guides = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "guide-data.json"), "utf8"));
   for (const g of guides) writeSourceDoc("guide", guideToJournal(g), "journal");
 
-  console.log(`Source docs written: ${actionCount} action cards, ${reactionCount} reaction cards, ${conditionCards.length} conditions, ${equipmentCards.length} equipment, ${origin.species.length} species, ${origin.heritages.length} heritages, ${origin.distinctions.length} distinctions, ${combatStyles.length} combat styles, ${guides.length} guide entries.`);
+  console.log(`Source docs written: ${actionCount} action cards, ${reactionCount} reaction cards, ${conditionCards.length} conditions, ${equipmentCards.length + extraEquipment.length} equipment, ${origin.species.length} species, ${origin.heritages.length} heritages, ${origin.distinctions.length} distinctions, ${combatStyles.length} combat styles, ${guides.length} guide entries.`);
 
   const packTypes = {
     "action-cards": "Item", "reaction-cards": "Item", conditions: "Item", equipment: "Item",

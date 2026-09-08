@@ -1,27 +1,27 @@
 {
-  "_id": "fb84ad5347824dd5",
-  "name": "Light Shield",
+  "_id": "cfa30b39b51d2098",
+  "name": "Survival Kit",
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
     "category": "tool",
     "slot": "armory",
     "tier": null,
-    "type": "Off-Hand",
+    "type": "Passive",
     "cost": "1",
     "range": "",
     "effect": "",
-    "passive": "When you use a reaction that increases Fortitude, increase Fortitude by an additional 1.",
+    "passive": "You carry the equipment needed to navigate, establish shelter, and endure ordinary environmental hazards.",
     "special": "",
     "fortitude": "",
     "resilience": "",
     "movement": "",
-    "tags": "guard",
+    "tags": "toolkit",
     "flavor": "",
     "reachBonus": 0,
     "uses": null,
     "slotCost": 1,
-    "isModular": true,
+    "isModular": false,
     "quantity": 1
   },
   "folder": null,
@@ -29,6 +29,5 @@
   "ownership": {
     "default": 0
   },
-  "effects": [],
-  "_key": "!items!fb84ad5347824dd5"
+  "_key": "!items!cfa30b39b51d2098"
 }

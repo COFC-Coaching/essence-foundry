@@ -1,22 +1,22 @@
 {
-  "_id": "fb84ad5347824dd5",
-  "name": "Light Shield",
+  "_id": "85390069ffb14d7c",
+  "name": "Shaping Focus",
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
     "category": "tool",
     "slot": "armory",
     "tier": null,
-    "type": "Off-Hand",
+    "type": "Foci, 1h",
     "cost": "1",
     "range": "",
     "effect": "",
-    "passive": "When you use a reaction that increases Fortitude, increase Fortitude by an additional 1.",
+    "passive": "Once per turn, exclude one target from one of your area attacks.",
     "special": "",
     "fortitude": "",
     "resilience": "",
     "movement": "",
-    "tags": "guard",
+    "tags": "implement, one-handed",
     "flavor": "",
     "reachBonus": 0,
     "uses": null,
@@ -29,6 +29,5 @@
   "ownership": {
     "default": 0
   },
-  "effects": [],
-  "_key": "!items!fb84ad5347824dd5"
+  "_key": "!items!85390069ffb14d7c"
 }

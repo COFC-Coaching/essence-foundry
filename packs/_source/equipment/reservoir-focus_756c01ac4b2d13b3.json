@@ -1,22 +1,22 @@
 {
-  "_id": "fb84ad5347824dd5",
-  "name": "Light Shield",
+  "_id": "756c01ac4b2d13b3",
+  "name": "Reservoir Focus",
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
     "category": "tool",
     "slot": "armory",
     "tier": null,
-    "type": "Off-Hand",
+    "type": "Foci, 2h",
     "cost": "1",
     "range": "",
     "effect": "",
-    "passive": "When you use a reaction that increases Fortitude, increase Fortitude by an additional 1.",
+    "passive": "At the start of your first turn each combat, add 2 dice to your Action Pool.",
     "special": "",
     "fortitude": "",
     "resilience": "",
     "movement": "",
-    "tags": "guard",
+    "tags": "implement, two-handed",
     "flavor": "",
     "reachBonus": 0,
     "uses": null,
@@ -29,6 +29,5 @@
   "ownership": {
     "default": 0
   },
-  "effects": [],
-  "_key": "!items!fb84ad5347824dd5"
+  "_key": "!items!756c01ac4b2d13b3"
 }

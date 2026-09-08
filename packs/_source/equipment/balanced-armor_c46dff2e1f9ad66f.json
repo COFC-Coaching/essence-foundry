@@ -1,22 +1,22 @@
 {
-  "_id": "fb84ad5347824dd5",
-  "name": "Light Shield",
+  "_id": "c46dff2e1f9ad66f",
+  "name": "Balanced Armor",
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "category": "tool",
+    "category": "armor",
     "slot": "armory",
     "tier": null,
-    "type": "Off-Hand",
+    "type": "Medium",
     "cost": "1",
     "range": "",
     "effect": "",
-    "passive": "When you use a reaction that increases Fortitude, increase Fortitude by an additional 1.",
+    "passive": "Gain 1 Resilience and 1 Temporary Wound at the start of combat. Remove that Temporary Wound at the end of combat.",
     "special": "",
     "fortitude": "",
-    "resilience": "",
+    "resilience": "1",
     "movement": "",
-    "tags": "guard",
+    "tags": "armor",
     "flavor": "",
     "reachBonus": 0,
     "uses": null,
@@ -29,6 +29,5 @@
   "ownership": {
     "default": 0
   },
-  "effects": [],
-  "_key": "!items!fb84ad5347824dd5"
+  "_key": "!items!c46dff2e1f9ad66f"
 }
