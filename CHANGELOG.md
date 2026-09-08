@@ -2,6 +2,17 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.20
+
+- Fix 10 Action/Reaction Cards whose cheapest Surge was miscategorized as a plain Body line
+  instead of a real Surge, making it render unlabeled and inconsistently styled next to its
+  cost-2/3 siblings. Normalized in the build pipeline so a future database re-sync won't
+  reintroduce it.
+- Redesign the Card read view closer to the rules' own card-anatomy reference: framed in a
+  bordered card box, Style | Subtype and Expertises lines, a labeled Rank/Commitment/Attribute/
+  Defense grid, and a proper "Surges" section heading.
+- Sort Basic Actions/Basic Reactions alphabetically on the Character and NPC sheets.
+
 ## 0.6.19
 
 - Move the edit-lock toggle from the portrait's corner to a labeled Locked/Unlocked button
