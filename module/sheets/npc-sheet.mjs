@@ -2,7 +2,7 @@ import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
-import { capitalize } from "../utils.mjs";
+import { capitalize, cardSummary } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -61,7 +61,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   _onRender(context, options) {
     super._onRender(context, options);
     this.#applyEditable();
-    this.#wireCardFilter();
+    this.#wireCardControls();
   }
 
   /** Mirrors EssenceActorSheet#applyEditable — see that class for why .window-content is scoped. */
@@ -75,16 +75,33 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     }
   }
 
-  /** Mirrors EssenceActorSheet#wireCardFilter — see that class for why. */
-  #wireCardFilter() {
+  /** Mirrors EssenceActorSheet#wireCardControls — see that class for why. */
+  #wireCardControls() {
     const input = this.element.querySelector("[data-card-filter]");
-    if (!input) return;
-    input.addEventListener("input", (e) => {
+    input?.addEventListener("input", (e) => {
       const q = e.currentTarget.value.trim().toLowerCase();
       for (const li of this.element.querySelectorAll(".card-list li[data-card-name]")) {
-        li.hidden = !!q && !li.dataset.cardName.toLowerCase().includes(q);
+        const haystack = `${li.dataset.cardName} ${li.dataset.cardSummary ?? ""}`.toLowerCase();
+        li.hidden = !!q && !haystack.includes(q);
       }
     });
+
+    for (const select of this.element.querySelectorAll("[data-card-sort]")) {
+      select.addEventListener("change", () => {
+        const list = this.element.querySelector(`.card-list[data-card-list="${select.dataset.cardSort}"]`);
+        if (!list) return;
+        const key = select.value;
+        const prop = `card${capitalize(key)}`;
+        const rows = [...list.querySelectorAll("li[data-card-name]")];
+        rows.sort((a, b) => {
+          if (key === "cost" || key === "rank") {
+            return (Number(a.dataset[prop]) || 0) - (Number(b.dataset[prop]) || 0);
+          }
+          return (a.dataset[prop] ?? "").localeCompare(b.dataset[prop] ?? "");
+        });
+        for (const row of rows) list.appendChild(row);
+      });
+    }
   }
 
   async _prepareContext(options) {
@@ -120,8 +137,14 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     context.temporaryWoundPips = pips(system.playState.currentTemporaryWounds, system.temporaryWoundsAvailable);
     context.deathTrackPips = pips(system.playState.deathTrackStep, 5);
 
-    context.actionCards = this.actor.items.filter((i) => i.type === "action-card");
-    context.reactionCards = this.actor.items.filter((i) => i.type === "reaction-card");
+    // See EssenceActorSheet#_prepareContext — same Basic Actions/Reactions split for NPCs.
+    const cardView = (item) => ({ id: item.id, name: item.name, system: item.system, summary: cardSummary(item.system) });
+    const allActionCards = this.actor.items.filter((i) => i.type === "action-card");
+    const allReactionCards = this.actor.items.filter((i) => i.type === "reaction-card");
+    context.basicActionCards = allActionCards.filter((i) => !i.system.skill).map(cardView);
+    context.actionCards = allActionCards.filter((i) => i.system.skill).map(cardView);
+    context.basicReactionCards = allReactionCards.filter((i) => !i.system.skill).map(cardView);
+    context.reactionCards = allReactionCards.filter((i) => i.system.skill).map(cardView);
     context.conditions = this.actor.items.filter((i) => i.type === "condition");
     context.equipment = this.actor.items.filter((i) => i.type === "equipment");
 

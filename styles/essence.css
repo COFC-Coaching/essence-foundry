@@ -164,7 +164,20 @@
    card to check its cost/skill. The Wizard already surfaces this when building a hand; same
    metadata + search here, for the hand you're actually playing from. */
 .essence .card-filter-input { width: 100%; box-sizing: border-box; margin: 4px 0 6px; }
+.essence .card-list li { flex-direction: column; align-items: stretch; gap: 2px; }
+.essence .card-list .card-row-top { display: flex; align-items: center; gap: 6px; }
 .essence .card-list .card-meta { flex: 1; font-size: 0.8em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* There's a full sheet-width of empty space next to a card's name/meta — put the card's own
+   Effect text there instead of making a GM/player reopen it mid-turn just to check what it does. */
+.essence .card-list .card-summary { margin: 0 0 4px; font-size: 0.8em; font-style: italic; }
+/* Universal actions (Hide, Strike, Brace, ...) have no Combat Skill, so they'd otherwise be
+   scattered through the skill-gated hand below with no cost/skill metadata to sort or scan by —
+   pull them into their own always-available row of quick-roll buttons instead. */
+.essence .basic-action-grid { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 10px; }
+.essence .basic-action-btn { padding: 4px 10px; }
+.essence .card-section-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.essence .card-section-head .section-head { flex: 1; margin: 10px 0 4px; }
+.essence [data-card-sort] { font-size: 0.8em; }
 
 .essence .condition-list { display: flex; flex-direction: column; gap: 6px; }
 .essence .condition-entry {

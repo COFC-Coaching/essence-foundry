@@ -263,32 +263,75 @@
   {{/if}}
 
   <input type="text" data-card-filter placeholder="Search Action &amp; Reaction Cards…" class="card-filter-input">
-  <h3 class="section-head">Action Cards</h3>
-  <ul class="item-list card-list">
+
+  <h3 class="section-head">Basic Actions</h3>
+  <div class="basic-action-grid">
+    {{#each basicActionCards as |item|}}
+      <button type="button" class="basic-action-btn" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
+    {{else}}
+      <span class="muted">No Basic Actions — drag Hide, Strike, etc. from the compendium.</span>
+    {{/each}}
+  </div>
+
+  <div class="card-section-head">
+    <h3 class="section-head">Action Cards</h3>
+    <select data-card-sort="action">
+      <option value="name">Sort: Name</option>
+      <option value="skill">Sort: Skill</option>
+      <option value="cost">Sort: Cost</option>
+      <option value="rank">Sort: Rank</option>
+    </select>
+  </div>
+  <ul class="item-list card-list" data-card-list="action">
     {{#each actionCards as |item|}}
-      <li data-card-name="{{item.name}}">
-        <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
-        <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.skill}} · {{item.system.skill}}{{/if}}{{#if item.system.cost}} · Cost {{item.system.cost}}{{/if}}{{#if item.system.tags}} · {{item.system.tags}}{{/if}}</span>
-        <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
-        <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button>
+      <li data-card-name="{{item.name}}" data-card-skill="{{item.system.skill}}" data-card-cost="{{item.system.cost}}" data-card-rank="{{item.system.rank}}" data-card-summary="{{item.summary}}">
+        <div class="card-row-top">
+          <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
+          <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.skill}} · {{capitalize item.system.skill}}{{/if}}{{#if item.system.cost}} · Cost {{item.system.cost}}{{/if}}{{#if item.system.tags}} · {{item.system.tags}}{{/if}}</span>
+          <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
+          <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        {{#if item.summary}}<p class="card-summary muted">{{item.summary}}</p>{{/if}}
       </li>
     {{else}}
       <li class="muted">No Action Cards — drag one from the compendium.</li>
     {{/each}}
   </ul>
-  <h3 class="section-head">Reaction Cards</h3>
-  <ul class="item-list card-list">
+
+  <h3 class="section-head">Basic Reactions</h3>
+  <div class="basic-action-grid">
+    {{#each basicReactionCards as |item|}}
+      <button type="button" class="basic-action-btn" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
+    {{else}}
+      <span class="muted">No Basic Reactions — drag Brace, etc. from the compendium.</span>
+    {{/each}}
+  </div>
+
+  <div class="card-section-head">
+    <h3 class="section-head">Reaction Cards</h3>
+    <select data-card-sort="reaction">
+      <option value="name">Sort: Name</option>
+      <option value="skill">Sort: Skill</option>
+      <option value="cost">Sort: Cost</option>
+      <option value="rank">Sort: Rank</option>
+    </select>
+  </div>
+  <ul class="item-list card-list" data-card-list="reaction">
     {{#each reactionCards as |item|}}
-      <li data-card-name="{{item.name}}">
-        <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
-        <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.skill}} · {{item.system.skill}}{{/if}}{{#if item.system.cost}} · Cost {{item.system.cost}}{{/if}}{{#if item.system.tags}} · {{item.system.tags}}{{/if}}</span>
-        <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
-        <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button>
+      <li data-card-name="{{item.name}}" data-card-skill="{{item.system.skill}}" data-card-cost="{{item.system.cost}}" data-card-rank="{{item.system.rank}}" data-card-summary="{{item.summary}}">
+        <div class="card-row-top">
+          <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
+          <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.skill}} · {{capitalize item.system.skill}}{{/if}}{{#if item.system.cost}} · Cost {{item.system.cost}}{{/if}}{{#if item.system.tags}} · {{item.system.tags}}{{/if}}</span>
+          <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
+          <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        {{#if item.summary}}<p class="card-summary muted">{{item.summary}}</p>{{/if}}
       </li>
     {{else}}
       <li class="muted">No Reaction Cards — drag one from the compendium.</li>
     {{/each}}
   </ul>
+
   <h3 class="section-head">Conditions</h3>
   <ul class="item-list condition-list">
     {{#each conditions as |item|}}

@@ -2,7 +2,7 @@ import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { EXPERTISE_DATABASE } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
-import { capitalize } from "../utils.mjs";
+import { capitalize, cardSummary } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -89,24 +89,43 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     super._onRender(context, options);
     this.#applyActiveTab();
     this.#applyEditable();
-    this.#wireCardFilter();
+    this.#wireCardControls();
   }
 
   /**
-   * Client-side filter over the Combat tab's Action/Reaction Card lists — no re-render, no
-   * server round-trip, just hide/show <li> rows by substring match against the card's name. The
-   * Character Wizard already has search+filters over the whole compendium for building a hand;
-   * this is the same affordance for the hand you already picked, reachable mid-combat.
+   * Client-side filter + sort over the Combat tab's Action/Reaction Card lists — no re-render, no
+   * server round-trip. Filtering hides/shows <li> rows by substring match against the card's name
+   * or its summary text; sorting reorders the actual DOM nodes by a data-card-* attribute stamped
+   * on each row. The Character Wizard already has search+filters over the whole compendium for
+   * building a hand; this is the same affordance for the hand you already picked, reachable
+   * mid-combat.
    */
-  #wireCardFilter() {
+  #wireCardControls() {
     const input = this.element.querySelector("[data-card-filter]");
-    if (!input) return;
-    input.addEventListener("input", (e) => {
+    input?.addEventListener("input", (e) => {
       const q = e.currentTarget.value.trim().toLowerCase();
       for (const li of this.element.querySelectorAll(".card-list li[data-card-name]")) {
-        li.hidden = !!q && !li.dataset.cardName.toLowerCase().includes(q);
+        const haystack = `${li.dataset.cardName} ${li.dataset.cardSummary ?? ""}`.toLowerCase();
+        li.hidden = !!q && !haystack.includes(q);
       }
     });
+
+    for (const select of this.element.querySelectorAll("[data-card-sort]")) {
+      select.addEventListener("change", () => {
+        const list = this.element.querySelector(`.card-list[data-card-list="${select.dataset.cardSort}"]`);
+        if (!list) return;
+        const key = select.value;
+        const rows = [...list.querySelectorAll("li[data-card-name]")];
+        const prop = `card${capitalize(key)}`;
+        rows.sort((a, b) => {
+          if (key === "cost" || key === "rank") {
+            return (Number(a.dataset[prop]) || 0) - (Number(b.dataset[prop]) || 0);
+          }
+          return (a.dataset[prop] ?? "").localeCompare(b.dataset[prop] ?? "");
+        });
+        for (const row of rows) list.appendChild(row);
+      });
+    }
   }
 
   /**
@@ -242,8 +261,16 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     context.authorityEntries = system.specialties.authority.map((value, i) => ({ value, i }));
     context.riteEntries = system.specialties.rites.map((r, i) => ({ ...r, i }));
 
-    context.actionCards = this.actor.items.filter((i) => i.type === "action-card");
-    context.reactionCards = this.actor.items.filter((i) => i.type === "reaction-card");
+    // Universal actions everyone can use (Hide, Strike, Brace, ...) are just Action/Reaction Cards
+    // with no Combat Skill set — split those into their own "Basic" row of quick-access buttons
+    // above the skill-gated hand instead of burying them in the same list.
+    const cardView = (item) => ({ id: item.id, name: item.name, system: item.system, summary: cardSummary(item.system) });
+    const allActionCards = this.actor.items.filter((i) => i.type === "action-card");
+    const allReactionCards = this.actor.items.filter((i) => i.type === "reaction-card");
+    context.basicActionCards = allActionCards.filter((i) => !i.system.skill).map(cardView);
+    context.actionCards = allActionCards.filter((i) => i.system.skill).map(cardView);
+    context.basicReactionCards = allReactionCards.filter((i) => !i.system.skill).map(cardView);
+    context.reactionCards = allReactionCards.filter((i) => i.system.skill).map(cardView);
     context.conditions = this.actor.items.filter((i) => i.type === "condition");
     const equipmentView = (item) => ({
       id: item.id,
