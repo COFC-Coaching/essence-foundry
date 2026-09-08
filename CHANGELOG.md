@@ -2,6 +2,13 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.21
+
+- Card view: the Commitment line now shows which resource pool a Cost draws from (e.g. "Cost 2
+  Focus"), derived from the card's Domain, matching the rules' own card-anatomy reference.
+- Card view: the name shrinks its font size as it gets longer instead of overflowing onto the
+  Edit/View button next to it.
+
 ## 0.6.20
 
 - Fix 10 Action/Reaction Cards whose cheapest Surge was miscategorized as a plain Body line
