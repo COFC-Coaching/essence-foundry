@@ -94,6 +94,27 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     this.#applyActiveTab();
     this.#applyEditable();
     this.#wireCardControls();
+    this.#wireExpertiseSelects();
+  }
+
+  /**
+   * An Expertise's name <select> used to submit as `system.expertises.{i}.name` and rely on
+   * Foundry's own form-submission path to merge it into the array — but ArrayField sub-fields
+   * don't merge that way: the update silently replaced the whole array element, wiping its
+   * `skill` back to the schema default ("") and making the Expertise vanish from every skill's
+   * list (it's filtered by `skill` in _prepareContext). Read-modify-write the whole array in JS
+   * instead, the same safe pattern #onAddExpertise/#onAddRite/etc. already use elsewhere.
+   */
+  #wireExpertiseSelects() {
+    for (const select of this.element.querySelectorAll(".expertise-name-select")) {
+      select.addEventListener("change", async (event) => {
+        const i = Number(event.currentTarget.dataset.index);
+        const expertises = this.actor.system.expertises.map((e) => ({ name: e.name, skill: e.skill }));
+        if (!expertises[i]) return;
+        expertises[i].name = event.currentTarget.value;
+        await this.actor.update({ "system.expertises": expertises });
+      });
+    }
   }
 
   /**

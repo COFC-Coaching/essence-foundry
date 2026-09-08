@@ -161,7 +161,7 @@
             <div class="skill-expertises">
               {{#each s.expertises as |e|}}
                 <div class="expertise-row">
-                  <select name="system.expertises.{{e.i}}.name">
+                  <select class="expertise-name-select" data-index="{{e.i}}">
                     <option value="">Expertise…</option>
                     {{#each ../expertiseOptions as |opt|}}
                       <option value="{{opt}}" {{#if (eq opt e.name)}}selected{{/if}}>{{opt}}</option>
