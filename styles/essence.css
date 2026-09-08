@@ -36,27 +36,27 @@
   border-radius: 50%; font-size: 0.7em; line-height: 1; background: #1b1b1b; border: 1px solid #888;
 }
 .essence .token-image-btn:hover { border-color: #f9a825; color: #f9a825; }
-/* Owner/GM-only safety-lock toggle for the whole sheet's raw fields (Attributes, Skills, Tier/
-   Level, Origin, resource pools, Biography, etc.) — see EssenceActorSheet#applyEditable. Sits at
-   the portrait's top-left corner, mirroring the Token Image button's bottom-right placement. */
-.essence .edit-lock-btn {
-  position: absolute; top: -4px; left: -4px; width: 22px; height: 22px; padding: 0;
-  border-radius: 50%; font-size: 0.7em; line-height: 1; background: #1b1b1b; border: 1px solid #888;
-  color: #ef5350;
-}
+.essence .header-main { flex: 1; position: relative; }
+/* Wizard/Monster Creator and the Owner/GM-only safety-lock toggle (see
+   EssenceActorSheet#applyEditable) stack in the header's top-right corner instead of overlapping
+   the portrait — the lock used to sit on the portrait's corner, which read as part of the image
+   rather than a sheet-wide control. */
+.essence .header-actions { position: absolute; top: 0; right: 0; display: flex; flex-direction: column; align-items: stretch; gap: 4px; }
+.essence .header-actions .wizard-launch, .essence .header-actions .edit-lock-btn { position: static; white-space: nowrap; }
+.essence .edit-lock-btn { color: #ef5350; }
 .essence .edit-lock-btn[aria-pressed="true"] { color: #66bb6a; }
 .essence .edit-lock-btn:hover { border-color: #f9a825; color: #f9a825; }
-.essence .header-main { flex: 1; position: relative; }
-.essence .header-main h1 { margin: 0 90px 4px 0; line-height: 1; }
-/* "Monster Creator" is wider than the Character sheet's "Wizard" button — the shared 90px
-   reserve (sized for "Wizard") let it overlap the name input's right edge. */
-.essence.npc .header-main h1 { margin-right: 160px; }
+.essence .header-main h1 { margin: 0 100px 4px 0; line-height: 1; }
+/* "Monster Creator" is wider than the Character sheet's "Wizard" button — the shared reserve
+   (sized for "Wizard") let it overlap the name input's right edge. */
+.essence.npc .header-main h1 { margin-right: 170px; }
 .essence .header-main h1 input {
-  width: 100%;
+  width: auto;
+  max-width: 320px;
   height: auto;
-  font-size: 28px;
+  font-size: 20px;
   line-height: 1.3;
-  padding: 4px 6px;
+  padding: 3px 6px;
   box-sizing: content-box;
 }
 .essence .header-fields { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2px; font-size: 0.85em; }
@@ -316,7 +316,6 @@
 .essence .card-view-flavor { font-style: italic; opacity: 0.8; margin-top: 10px; }
 
 /* ============ Character Creation Wizard ============ */
-.essence .wizard-launch { position: absolute; top: 0; right: 0; white-space: nowrap; }
 .essence-wizard-root { display: flex; flex-direction: column; height: 100%; }
 .essence .wizard-steps { display: flex; flex-wrap: wrap; gap: 2px; padding: 4px 8px; border-bottom: 1px solid #555; flex: 0 0 auto; }
 .essence .wizard-step-tab { font-size: 0.78em; padding: 3px 6px; border-radius: 3px; opacity: 0.65; cursor: pointer; white-space: nowrap; }

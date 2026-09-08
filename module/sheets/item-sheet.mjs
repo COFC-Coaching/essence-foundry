@@ -106,6 +106,14 @@ export class EssenceCardSheet extends EssenceItemSheetBase {
     this.#viewMode = !this.#viewMode;
     this.render();
   }
+
+  /** Used by the actor sheet's dedicated "eye" View button — forces the read view open even if
+   *  this session had previously left the sheet toggled onto the edit form (#viewMode otherwise
+   *  persists per sheet instance for the rest of the session, per the class comment above). */
+  renderAsView(options) {
+    this.#viewMode = true;
+    return this.render({ force: true, ...options });
+  }
 }
 
 export class EssenceConditionSheet extends EssenceItemSheetBase {

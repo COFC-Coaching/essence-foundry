@@ -48,6 +48,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       toggleCoreWound: EssenceNpcSheet.#onToggleCoreWound,
       toggleDeathTrack: EssenceNpcSheet.#onToggleDeathTrack,
       toggleDeathTrackFrozen: EssenceNpcSheet.#onToggleDeathTrackFrozen,
+      itemView: EssenceNpcSheet.#onItemView,
       itemEdit: EssenceNpcSheet.#onItemEdit,
       itemDelete: EssenceNpcSheet.#onItemDelete,
       selectOrigin: EssenceNpcSheet.#onSelectOrigin,
@@ -558,6 +559,13 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content: `<p><strong>${this.actor.name}</strong> recovers from their <strong>${recovered.condition}</strong>.</p>`
     });
+  }
+
+  /** See EssenceActorSheet#onItemView — same "eye" View button, same reasoning. */
+  static #onItemView(event, target) {
+    const sheet = this.actor.items.get(target.dataset.itemId)?.sheet;
+    if (sheet?.renderAsView) sheet.renderAsView();
+    else sheet?.render(true);
   }
 
   static #onItemEdit(event, target) {

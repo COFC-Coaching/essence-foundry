@@ -1,16 +1,18 @@
 <div class="essence-sheet-root">
 <header class="sheet-header">
   <div class="portrait-wrap">
-    {{#if isEditable}}
-      <button type="button" class="edit-lock-btn" data-action="toggleEditLock" aria-pressed="{{editUnlocked}}" title="{{#if editUnlocked}}Sheet unlocked — click to lock Attributes/Skills/build fields again{{else}}Sheet locked — click to edit Attributes/Skills/build fields{{/if}}">
-        <i class="fa-solid {{#if editUnlocked}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
-      </button>
-    {{/if}}
     <img class="profile-img" src="{{actor.img}}" data-action="editImage" title="Sheet Portrait — click to change">
     <button type="button" class="token-image-btn" data-action="editTokenImage" title="Token Image — the art shown on the canvas. Separate from the Portrait above; see the Game Master's Guide for how the two relate."><i class="fa-solid fa-chess-pawn"></i></button>
   </div>
   <div class="header-main">
-    <button type="button" class="wizard-launch" data-action="openWizard" title="Auto-generate or hand-build a stat block"><i class="fa-solid fa-dragon"></i> Monster Creator</button>
+    <div class="header-actions">
+      <button type="button" class="wizard-launch" data-action="openWizard" title="Auto-generate or hand-build a stat block"><i class="fa-solid fa-dragon"></i> Monster Creator</button>
+      {{#if isEditable}}
+        <button type="button" class="edit-lock-btn" data-action="toggleEditLock" aria-pressed="{{editUnlocked}}" title="{{#if editUnlocked}}Sheet unlocked — click to lock Attributes/Skills/build fields again{{else}}Sheet locked — click to edit Attributes/Skills/build fields{{/if}}">
+          <i class="fa-solid {{#if editUnlocked}}fa-lock-open{{else}}fa-lock{{/if}}"></i> {{#if editUnlocked}}Unlocked{{else}}Locked{{/if}}
+        </button>
+      {{/if}}
+    </div>
     <h1><input name="name" type="text" value="{{actor.name}}"></h1>
     <div class="header-fields">
       <label>Role
@@ -160,6 +162,7 @@
       <div class="card-row-top">
         <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
         <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.skill}} · {{capitalize item.system.skill}}{{/if}}{{#if item.system.cost}} · Cost {{item.system.cost}}{{/if}}{{#if item.system.tags}} · {{item.system.tags}}{{/if}}</span>
+        <button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="View {{item.name}}"><i class="fa-solid fa-eye"></i></button>
         <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
         <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button>
       </div>
@@ -194,6 +197,7 @@
       <div class="card-row-top">
         <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
         <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.skill}} · {{capitalize item.system.skill}}{{/if}}{{#if item.system.cost}} · Cost {{item.system.cost}}{{/if}}{{#if item.system.tags}} · {{item.system.tags}}{{/if}}</span>
+        <button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="View {{item.name}}"><i class="fa-solid fa-eye"></i></button>
         <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
         <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button>
       </div>

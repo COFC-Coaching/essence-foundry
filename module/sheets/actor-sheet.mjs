@@ -56,6 +56,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       burnDice: EssenceActorSheet.#onBurnDice,
       applyDamage: EssenceActorSheet.#onApplyDamage,
       recoverWound: EssenceActorSheet.#onRecoverWound,
+      itemView: EssenceActorSheet.#onItemView,
       itemEdit: EssenceActorSheet.#onItemEdit,
       itemDelete: EssenceActorSheet.#onItemDelete,
       changeTab: EssenceActorSheet.#onChangeTab,
@@ -896,6 +897,14 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const rites = this.actor.system.specialties.rites.map((r) => ({ ...r }));
     rites.splice(i, 1);
     await this.actor.update({ "system.specialties.rites": rites });
+  }
+
+  /** Opens a Card in its read view — same sheet as Edit, just guaranteed to land on the
+   *  formatted view instead of whatever form/view state a prior session left it in. */
+  static #onItemView(event, target) {
+    const sheet = this.actor.items.get(target.dataset.itemId)?.sheet;
+    if (sheet?.renderAsView) sheet.renderAsView();
+    else sheet?.render(true);
   }
 
   static #onItemEdit(event, target) {
