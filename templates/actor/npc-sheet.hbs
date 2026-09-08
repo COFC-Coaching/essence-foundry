@@ -52,7 +52,13 @@
       {{#each d.attrs as |a|}}
         <div class="attr-row"><span class="attr-label">{{a.label}}</span><input class="attr-input" type="number" name="system.{{a.key}}" value="{{a.value}}"></div>
       {{/each}}
-      <div class="resource-row"><span class="attr-label">{{d.resourceLabel}}</span><input class="current-input" type="number" name="system.playState.current{{d.resourceLabel}}" value="{{d.resourceCurrent}}"> / <span class="max-value">{{d.resourceMax}}</span></div>
+      <div class="resource-row">
+        <span class="attr-label">{{d.resourceLabel}}</span>
+        <button type="button" class="resource-step" data-action="adjustResource" data-field="{{d.resourceField}}" data-delta="-1" aria-label="Decrease {{d.resourceLabel}}">−</button>
+        <input class="current-input" type="number" name="system.playState.{{d.resourceField}}" value="{{d.resourceCurrent}}">
+        <button type="button" class="resource-step" data-action="adjustResource" data-field="{{d.resourceField}}" data-delta="1" aria-label="Increase {{d.resourceLabel}}">+</button>
+        / <span class="max-value">{{d.resourceMax}}</span>
+      </div>
       <div class="defense-row"><span class="attr-label">{{d.defenseLabel}}</span><span class="max-value">{{d.defenseValue}}</span></div>
     </div>
   {{/each}}

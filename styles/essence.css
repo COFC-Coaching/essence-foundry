@@ -96,6 +96,14 @@
 .essence .attr-label { flex: 0 0 80px; text-transform: capitalize; }
 .essence .attr-input, .essence .current-input { width: 3em; }
 .essence .max-value { font-weight: bold; }
+/* Quick +/- for a resource's current value — a plain action button, so it (unlike the number
+   input next to it) always works even while the sheet's safety lock is on; see
+   EssenceActorSheet#onAdjustResource. */
+.essence .resource-step {
+  width: 1.4em; height: 1.4em; padding: 0; line-height: 1; border-radius: 3px;
+  background: rgba(255,255,255,0.06); border: 1px solid #666;
+}
+.essence .resource-step:hover { border-color: #f9a825; color: #f9a825; }
 
 .essence .pip-track { display: inline-flex; gap: 3px; }
 /* Wound/Death Track/Combo/Influence pips were unlabeled <span>s — mouse-only, no state exposed

@@ -2,7 +2,7 @@ import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { EXPERTISE_DATABASE } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
-import { capitalize, cardSummary } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -56,6 +56,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       burnDice: EssenceActorSheet.#onBurnDice,
       applyDamage: EssenceActorSheet.#onApplyDamage,
       recoverWound: EssenceActorSheet.#onRecoverWound,
+      adjustResource: EssenceActorSheet.#onAdjustResource,
       itemView: EssenceActorSheet.#onItemView,
       itemEdit: EssenceActorSheet.#onItemEdit,
       itemDelete: EssenceActorSheet.#onItemDelete,
@@ -491,8 +492,39 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
     const defenseKey = (sys.defense || "").toLowerCase();
     const { defense, targets } = await EssenceActorSheet.#resolveTargets(defenseKey);
-    await this.actor.update({ [`system.playState.${poolField}`]: available - committed });
+    const update = { [`system.playState.${poolField}`]: available - committed };
+
+    // A card's printed Cost is paid from its Domain's resource pool (Physical/Mental/Spiritual ->
+    // Stamina/Focus/Mana) on top of the Action/Reaction Dice spent above — see the rules' own
+    // card-anatomy reference ("Dice 2+ | 1 Stamina"). Deducted automatically so a player doesn't
+    // have to remember to also hand-adjust the resource themselves every time.
+    const cost = Number(sys.cost) || 0;
+    if (cost > 0) {
+      const resKey = domainResource(sys.domain).toLowerCase();
+      if (resKey) {
+        const current = this.actor.system.resources[resKey].value;
+        update[`system.playState.current${capitalize(resKey)}`] = Math.max(0, current - cost);
+        if (cost > current) {
+          ui.notifications.warn(`${item.name} costs ${cost} ${capitalize(resKey)}, but ${this.actor.name} only has ${current} remaining.`);
+        }
+      }
+    }
+
+    await this.actor.update(update);
     await rollEssencePool({ pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges });
+  }
+
+  /** Owner/GM/player quick-adjust for the Stamina/Focus/Mana current-value trackers — a plain
+   *  +/- button pair so a player can spend/recover a resource without needing to unlock the
+   *  sheet's safety lock (see #applyEditable; action buttons are always exempt from it). */
+  static async #onAdjustResource(event, target) {
+    const field = target.dataset.field; // e.g. "currentStamina"
+    const delta = Number(target.dataset.delta) || 0;
+    const resKey = field.replace(/^current/, "").toLowerCase();
+    const resource = this.actor.system.resources[resKey];
+    if (!resource) return;
+    const next = Math.min(resource.max, Math.max(0, resource.value + delta));
+    await this.actor.update({ [`system.playState.${field}`]: next });
   }
 
   /**

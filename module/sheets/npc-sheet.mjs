@@ -2,7 +2,7 @@ import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
-import { capitalize, cardSummary } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -44,6 +44,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       burnDice: EssenceNpcSheet.#onBurnDice,
       applyDamage: EssenceNpcSheet.#onApplyDamage,
       recoverWound: EssenceNpcSheet.#onRecoverWound,
+      adjustResource: EssenceNpcSheet.#onAdjustResource,
       toggleTempWound: EssenceNpcSheet.#onToggleTempWound,
       toggleCoreWound: EssenceNpcSheet.#onToggleCoreWound,
       toggleDeathTrack: EssenceNpcSheet.#onToggleDeathTrack,
@@ -145,6 +146,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
         return { key, label: capitalize(key), value: system[key], pips: pips(system[key]), gateDistinction, gateOpen };
       }),
       resourceLabel: d.resource,
+      resourceField: `current${d.resource[0].toUpperCase()}${d.resource.slice(1)}`,
       resourceCurrent: system.playState[`current${d.resource[0].toUpperCase()}${d.resource.slice(1)}`],
       resourceMax: system.resources[d.resource].max,
       defenseLabel: d.defense,
@@ -328,8 +330,35 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
 
     const defenseKey = (sys.defense || "").toLowerCase();
     const { defense, targets } = await EssenceNpcSheet.#resolveTargets(defenseKey);
-    await this.actor.update({ [`system.playState.${poolField}`]: available - committed });
+    const update = { [`system.playState.${poolField}`]: available - committed };
+
+    // See EssenceActorSheet#onRollItem — a card's printed Cost is paid from its Domain's
+    // resource pool on top of the Action/Reaction Dice spent above.
+    const cost = Number(sys.cost) || 0;
+    if (cost > 0) {
+      const resKey = domainResource(sys.domain).toLowerCase();
+      if (resKey) {
+        const current = this.actor.system.resources[resKey].value;
+        update[`system.playState.current${capitalize(resKey)}`] = Math.max(0, current - cost);
+        if (cost > current) {
+          ui.notifications.warn(`${item.name} costs ${cost} ${capitalize(resKey)}, but ${this.actor.name} only has ${current} remaining.`);
+        }
+      }
+    }
+
+    await this.actor.update(update);
     await rollEssencePool({ pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges });
+  }
+
+  /** See EssenceActorSheet#onAdjustResource — same +/- quick-adjust, same reasoning. */
+  static async #onAdjustResource(event, target) {
+    const field = target.dataset.field;
+    const delta = Number(target.dataset.delta) || 0;
+    const resKey = field.replace(/^current/, "").toLowerCase();
+    const resource = this.actor.system.resources[resKey];
+    if (!resource) return;
+    const next = Math.min(resource.max, Math.max(0, resource.value + delta));
+    await this.actor.update({ [`system.playState.${field}`]: next });
   }
 
   static async #onRollInitiative() {
