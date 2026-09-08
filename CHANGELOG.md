@@ -2,6 +2,15 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.19
+
+- Move the edit-lock toggle from the portrait's corner to a labeled Locked/Unlocked button
+  stacked under the Wizard/Monster Creator button, and shrink the oversized full-width name field
+  down to a sane size.
+- Add an "eye" View button next to Edit/Delete on every Action/Reaction Card row (Character and
+  NPC sheets) that always opens the card's formatted read view, regardless of what edit/view state
+  a previous session left that card's sheet in.
+
 ## 0.6.18
 
 - Fix Expertise selection silently wiping its own skill association and vanishing from the sheet.
