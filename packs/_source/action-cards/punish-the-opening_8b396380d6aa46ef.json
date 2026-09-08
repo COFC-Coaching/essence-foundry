@@ -25,13 +25,13 @@
       {
         "label": "Effect",
         "html": "Deal 1 Physical damage."
-      },
-      {
-        "label": "1",
-        "html": "Deal +1 damage."
       }
     ],
     "surges": [
+      {
+        "n": "1",
+        "html": "Deal +1 damage."
+      },
       {
         "n": "1",
         "html": "The target suffers -1 Defense until the start of your next turn."

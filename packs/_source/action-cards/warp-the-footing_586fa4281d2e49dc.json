@@ -25,13 +25,13 @@
       {
         "label": "Effect",
         "html": "Pull or push the target up to 2 units."
-      },
-      {
-        "label": "1",
-        "html": "Move the target 1 additional unit."
       }
     ],
     "surges": [
+      {
+        "n": "1",
+        "html": "Move the target 1 additional unit."
+      },
       {
         "n": "2",
         "html": "The ground the target occupied becomes difficult until the start of your next turn. Movement through it costs 1 additional per unit."

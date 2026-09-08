@@ -25,13 +25,13 @@
       {
         "label": "Effect",
         "html": "The target gains +1 Defense against the triggering attack."
-      },
-      {
-        "label": "1",
-        "html": "Increase the Defense bonus by 1."
       }
     ],
     "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Defense bonus by 1."
+      },
       {
         "n": "2",
         "html": "After the attack resolves, push the attacker 1 unit if within 3 units."

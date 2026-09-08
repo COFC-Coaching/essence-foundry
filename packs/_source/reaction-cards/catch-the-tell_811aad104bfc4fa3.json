@@ -25,13 +25,13 @@
       {
         "label": "Effect",
         "html": "The attacking creature becomes Exposed."
-      },
-      {
-        "label": "1",
-        "html": "It also suffers -1 die on its next Action before your next turn."
       }
     ],
     "surges": [
+      {
+        "n": "1",
+        "html": "It also suffers -1 die on its next Action before your next turn."
+      },
       {
         "n": "2",
         "html": "It suffers -1 Defense until the start of your next turn."

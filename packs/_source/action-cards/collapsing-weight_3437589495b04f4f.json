@@ -25,13 +25,13 @@
       {
         "label": "Effect",
         "html": "Deal 2 damage."
-      },
-      {
-        "label": "1",
-        "html": "Deal +1 damage."
       }
     ],
     "surges": [
+      {
+        "n": "1",
+        "html": "Deal +1 damage."
+      },
       {
         "n": "2",
         "html": "The target cannot benefit from Cover until the start of your next turn."

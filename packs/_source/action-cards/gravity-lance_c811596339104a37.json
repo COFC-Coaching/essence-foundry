@@ -25,13 +25,13 @@
       {
         "label": "Effect",
         "html": "Deal 1 damage."
-      },
-      {
-        "label": "1",
-        "html": "Deal +1 damage."
       }
     ],
     "surges": [
+      {
+        "n": "1",
+        "html": "Deal +1 damage."
+      },
       {
         "n": "1",
         "html": "If you damaged this target with a Magecraft Action since the start of your last turn, this attack ignores 1 Defense."

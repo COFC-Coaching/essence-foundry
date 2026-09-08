@@ -25,13 +25,13 @@
       {
         "label": "Effect",
         "html": "The target becomes Exposed."
-      },
-      {
-        "label": "1",
-        "html": "The target suffers -1 die on its next Action before the start of your next turn."
       }
     ],
     "surges": [
+      {
+        "n": "1",
+        "html": "The target suffers -1 die on its next Action before the start of your next turn."
+      },
       {
         "n": "2",
         "html": "A second creature within 5 units also becomes Exposed."

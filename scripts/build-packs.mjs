@@ -73,8 +73,28 @@ function writeSourceDoc(packName, doc, collection = "items") {
   fs.writeFileSync(path.join(dir, `${slugify(doc.name)}_${doc._id}.json`), JSON.stringify(doc, null, 2));
 }
 
+/**
+ * The Neon "Essence" database's card builder stores each card's cheapest (cost-1) Surge as a
+ * plain Body line with a bare numeric label ("1") instead of a real Surges-array entry — every
+ * other Surge (cost 2+) comes through correctly. Confirmed across 10 cards during a compendium
+ * audit (Collapsing Weight, Warp the Footing, Read the Body, Close Burst, Punish the Opening,
+ * Dividing Wall, Gravity Lance, Catch the Tell, Warp Aside, Snap Shot) — this is a source-data
+ * quirk in every one of them, not a one-off typo, so it's normalized here rather than hand-fixed
+ * per card (which a future Neon re-sync would just reintroduce).
+ */
+function extractMisplacedSurges(body, surges) {
+  const extracted = [];
+  const cleanBody = [];
+  for (const line of body || []) {
+    if (/^\d+$/.test((line.label || "").trim())) extracted.push({ n: line.label.trim(), html: line.html || "" });
+    else cleanBody.push(line);
+  }
+  return { body: cleanBody, surges: [...extracted, ...(surges || [])] };
+}
+
 function cardToItem(row, type) {
   const d = row.data;
+  const { body, surges } = extractMisplacedSurges(d.body, d.surges);
   return {
     _id: row.id.replace(/-/g, "").slice(0, 16),
     name: row.name,
@@ -94,8 +114,8 @@ function cardToItem(row, type) {
       expertisesMode: d.expertises_mode || "any",
       tags: d.tags || "",
       flavor: d.flavor || "",
-      body: (d.body || []).map((b) => ({ label: b.label || "", html: b.html || "" })),
-      surges: (d.surges || []).map((s) => ({ n: String(s.n ?? "1"), html: s.html || "" })),
+      body: body.map((b) => ({ label: b.label || "", html: b.html || "" })),
+      surges: surges.map((s) => ({ n: String(s.n ?? "1"), html: s.html || "" })),
       rider: { title: d.rider?.title || "", html: d.rider?.html || "", meta: d.rider?.meta || "" }
     },
     folder: null,

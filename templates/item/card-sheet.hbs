@@ -9,16 +9,18 @@
 
 {{#if viewMode}}
 <div class="card-view">
-  <div class="card-view-stats">
-    {{#if system.subtype}}<span class="stat-chip">{{system.subtype}}</span>{{/if}}
-    <span class="stat-chip">Rank {{system.rank}}</span>
-    {{#if system.skill}}<span class="stat-chip">{{system.skill}}</span>{{/if}}
-    {{#if system.attr}}<span class="stat-chip">{{system.attr}}</span>{{/if}}
-    {{#if system.defense}}<span class="stat-chip">vs {{system.defense}}</span>{{/if}}
-    {{#if system.min}}<span class="stat-chip">Min {{system.min}}</span>{{/if}}
-    {{#if system.cost}}<span class="stat-chip">Cost {{system.cost}}</span>{{/if}}
-    {{#if system.tags}}<span class="stat-chip muted">{{system.tags}}</span>{{/if}}
+  {{#if system.skill}}
+    <div class="card-view-style-row">{{capitalize system.skill}}{{#if system.subtype}} <span class="card-view-subtype">| {{system.subtype}}</span>{{/if}}</div>
+  {{/if}}
+  {{#if system.expertises}}<div class="card-view-expertises">{{system.expertises}}</div>{{/if}}
+
+  <div class="card-view-infogrid">
+    <div><span class="card-view-statlabel">Rank</span><span>{{system.rank}}</span></div>
+    {{#if system.min}}<div><span class="card-view-statlabel">Commitment</span><span>Dice {{system.min}}+{{#if system.cost}} · Cost {{system.cost}}{{/if}}</span></div>{{/if}}
+    {{#if system.attr}}<div><span class="card-view-statlabel">Attribute</span><span>{{system.attr}}</span></div>{{/if}}
+    {{#if system.defense}}<div><span class="card-view-statlabel">Defense</span><span>{{system.defense}}</span></div>{{/if}}
   </div>
+  {{#if system.tags}}<div class="card-view-tags muted">{{system.tags}}</div>{{/if}}
 
   {{#each system.body as |line|}}
     {{#if line.html}}
@@ -30,6 +32,7 @@
   {{/each}}
 
   {{#if system.surges.length}}
+    <div class="card-view-label">Surges</div>
     <div class="card-view-surges">
       {{#each system.surges as |s|}}
         {{#if s.html}}

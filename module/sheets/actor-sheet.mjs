@@ -312,9 +312,10 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const cardView = (item) => ({ id: item.id, name: item.name, system: item.system, summary: cardSummary(item.system) });
     const allActionCards = this.actor.items.filter((i) => i.type === "action-card");
     const allReactionCards = this.actor.items.filter((i) => i.type === "reaction-card");
-    context.basicActionCards = allActionCards.filter((i) => !i.system.skill).map(cardView);
+    const byName = (a, b) => a.name.localeCompare(b.name);
+    context.basicActionCards = allActionCards.filter((i) => !i.system.skill).map(cardView).sort(byName);
     context.actionCards = allActionCards.filter((i) => i.system.skill).map(cardView);
-    context.basicReactionCards = allReactionCards.filter((i) => !i.system.skill).map(cardView);
+    context.basicReactionCards = allReactionCards.filter((i) => !i.system.skill).map(cardView).sort(byName);
     context.reactionCards = allReactionCards.filter((i) => i.system.skill).map(cardView);
     context.conditions = this.actor.items.filter((i) => i.type === "condition");
     const equipmentView = (item) => ({

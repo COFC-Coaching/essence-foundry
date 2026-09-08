@@ -25,13 +25,13 @@
       {
         "label": "Effect",
         "html": "Fold a wall of dense space up to 3 units long until the start of your next turn. It blocks movement and line of sight through its spaces and provides Cover."
-      },
-      {
-        "label": "1",
-        "html": "Extend the wall 1 unit."
       }
     ],
     "surges": [
+      {
+        "n": "1",
+        "html": "Extend the wall 1 unit."
+      },
       {
         "n": "2",
         "html": "A creature the wall would form on top of is pushed 1 unit to the nearest open space."

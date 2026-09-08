@@ -25,13 +25,13 @@
       {
         "label": "Effect",
         "html": "Deal 1 damage and push the target 1 unit."
-      },
-      {
-        "label": "1",
-        "html": "Push 1 additional unit."
       }
     ],
     "surges": [
+      {
+        "n": "1",
+        "html": "Push 1 additional unit."
+      },
       {
         "n": "2",
         "html": "Deal +1 damage."

@@ -285,12 +285,23 @@
   background: rgba(249, 168, 37, 0.12); border: 1px solid #f9a825; color: #f9a825;
 }
 .essence .card-view-toggle:hover { background: rgba(249, 168, 37, 0.22); }
-.essence .card-view-stats { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 12px; }
-.essence .card-view .stat-chip {
-  background: rgba(255,255,255,0.06); border: 1px solid #555; border-radius: 12px;
-  padding: 2px 10px; font-size: 0.85em; text-transform: capitalize;
+/* Framed like a physical card — a bordered box separate from the rest of the sheet chrome,
+   closer to how the rules' own card-anatomy reference presents one. */
+.essence .card-view {
+  border: 1px solid #666; border-radius: 8px; padding: 10px 12px; background: rgba(0,0,0,0.15);
 }
-.essence .card-view .stat-chip.muted { border-style: dashed; }
+.essence .card-view-style-row { font-weight: bold; text-transform: uppercase; letter-spacing: 0.03em; font-size: 1.05em; }
+.essence .card-view-subtype { font-weight: normal; opacity: 0.8; text-transform: none; }
+.essence .card-view-expertises { font-size: 0.85em; opacity: 0.8; margin-bottom: 6px; }
+.essence .card-view-infogrid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; margin: 8px 0;
+  border: 1px solid #555; border-radius: 4px; padding: 6px 10px; background: rgba(255,255,255,0.03);
+}
+.essence .card-view-infogrid > div { display: flex; flex-direction: column; }
+.essence .card-view-statlabel {
+  font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.65;
+}
+.essence .card-view-tags { font-size: 0.8em; text-transform: capitalize; margin-bottom: 6px; }
 .essence .card-view-line { margin-bottom: 10px; }
 .essence .card-view-label {
   font-weight: bold; text-transform: uppercase; font-size: 0.75em; letter-spacing: 0.05em;

@@ -25,13 +25,13 @@
       {
         "label": "Effect",
         "html": "Fire your sidearm at it point-blank. Deal 1 Physical damage."
-      },
-      {
-        "label": "1",
-        "html": "The creature suffers -1 die on its next attack before the start of your next turn."
       }
     ],
     "surges": [
+      {
+        "n": "1",
+        "html": "The creature suffers -1 die on its next attack before the start of your next turn."
+      },
       {
         "n": "2",
         "html": "Deal +1 damage."
