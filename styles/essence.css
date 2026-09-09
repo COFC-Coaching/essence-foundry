@@ -4,26 +4,49 @@
 /* Give rich-text (<prose-mirror>) fields the same visible box our text inputs already have —
    core's own ProseMirror styling is transparent by default (meant to blend into document-style
    pages), which on this system's dark sheet backgrounds left no visual cue that a writable field
-   was even there. */
+   was even there.
+   The outer <prose-mirror> background alone isn't enough: core's own menu bar and the actual
+   editable .ProseMirror content area both sit on top of it with no background of their own, so
+   they end up the exact same flat color as each other and as the surrounding box — no visible
+   toolbar/content boundary, which read as "the field is broken" even when typing worked. Menu and
+   content each get their own explicit background/text-color below instead of inheriting one
+   shared color. */
 .essence prose-mirror.editor {
-  background: rgb(48, 40, 49);
+  background: rgb(30, 25, 27);
   border: 1px solid #555;
   border-radius: 4px;
   padding: 4px 6px;
   box-sizing: border-box;
 }
+.essence prose-mirror.editor menu {
+  background: rgb(58, 48, 59);
+  border: 1px solid #666;
+}
+.essence prose-mirror.editor .editor-content.ProseMirror {
+  background: rgb(48, 40, 49);
+  color: #eee;
+  padding: 4px 6px;
+  border-radius: 3px;
+}
+.essence prose-mirror.editor .editor-content.ProseMirror p { color: #eee; }
 /* Core sets a blanket --min-height: 150px on every <prose-mirror> (the CSS var its own
    `.prosemirror, prose-mirror { min-height: var(--min-height) }` rule reads) — fine for a full
    Biography/Concept field, but for per-row card fields (Body lines, Surges) that's 150px of empty
    space under a single short sentence like a Body line's "Target", with several such rows
-   stacking up and burying the rest of the card (Effect, Surges, Rider) far below the fold. */
+   stacking up and burying the rest of the card (Effect, Surges, Rider) far below the fold.
+   Core's own layout splits this height between a fixed-height `menu` (toolbar) row and the actual
+   `.editor-content` (contenteditable) area — an earlier value here (2.5em / 4em) left so little
+   room after the ~42px toolbar that the editable area measured single-digit pixels tall and was
+   effectively both invisible and unclickable ("can't type in these fields"), even though the field
+   itself worked. These need enough height for the toolbar PLUS a genuinely usable content area,
+   not just enough to avoid a big empty box. */
 .essence .body-lines prose-mirror.editor,
-.essence .surges prose-mirror.editor { --min-height: 2.5em; }
-/* Same oversizing on item sheets' other single-purpose text fields (Equipment's Effect/Passive/
-   Special, a Card's Rider/Flavor, a Condition's Sections, a Species/Heritage/Distinction's
+.essence .surges prose-mirror.editor { --min-height: 5em; }
+/* Same oversizing concern on item sheets' other single-purpose text fields (Equipment's Effect/
+   Passive/Special, a Card's Rider/Flavor, a Condition's Sections, a Species/Heritage/Distinction's
    Description) — these hold a sentence or two, not a full page, so the 150px default reads as
-   mostly empty box. */
-.essence.item prose-mirror.editor { --min-height: 4em; }
+   mostly empty box, but they still need real room for the toolbar + a typable area under it. */
+.essence.item prose-mirror.editor { --min-height: 8em; }
 .essence .locked { opacity: 0.4; cursor: not-allowed; }
 .essence .sheet-header { display: flex; align-items: flex-start; gap: 10px; }
 .essence .profile-img { width: 64px; height: 64px; object-fit: cover; border-radius: 4px; }
@@ -255,6 +278,11 @@
 }
 .essence.roll-card .die.success-die { background: #2e7d32; color: #fff; filter: drop-shadow(0 2px 3px rgba(46,125,50,0.7)); }
 .essence.roll-card .die.surge-die { background: #f9a825; border-color: #ffca28; color: #000; }
+/* Success and Surge are independent checks on the same die (see resolveCombatRoll) — a die can be
+   both at once, so this combined rule (3 class selectors, naturally higher specificity than either
+   single-state rule above regardless of source order) keeps the success green as the base but adds
+   the surge-gold ring, instead of one state silently hiding the other. */
+.essence.roll-card .die.success-die.surge-die { background: #2e7d32; border-color: #ffca28; border-width: 2px; color: #fff; }
 /* #2e7d32/#c62828 (this system's "success"/"fail" green/red everywhere else, e.g. the success-die
    background) measure ~2.8:1 and ~1.7:1 as TEXT on this sheet's rgb(48,40,49) background — both
    well under WCAG AA's 4.5:1 floor, and pass/fail here is color-only, no icon or shape backup.
@@ -338,6 +366,50 @@
 .essence .card-view-rider-title { font-weight: bold; text-transform: uppercase; font-size: 0.8em; letter-spacing: 0.05em; margin-bottom: 3px; }
 .essence .card-view-flavor { font-style: italic; opacity: 0.8; margin-top: 10px; }
 
+/* ============ Condition/Equipment/Chassis/Fitting/Augment sheets: read view ============
+   Same read-first/edit-toggle mechanism as the amber Action/Reaction Card block above
+   (EssenceItemSheetBase now owns it), but each Item type gets its own accent color so the 5
+   types stay visually distinguishable from each other and from Combat Cards at a glance. Only
+   the border/frame and section-label colors are overridden per type — everything else (layout,
+   infogrid, surge-badge-adjacent styling) reuses the shared .card-view* rules above as-is. */
+
+/* Condition — #c62828, reusing this system's existing danger/fail red intentionally. */
+.essence .card-view-toggle.condition-view-toggle {
+  background: rgba(198, 40, 40, 0.12); border-color: #c62828; color: #ef9a9a;
+}
+.essence .card-view-toggle.condition-view-toggle:hover { background: rgba(198, 40, 40, 0.22); }
+.essence .condition-view { border-color: #c62828; }
+.essence .condition-view .card-view-label { color: #ef5350; }
+/* Rules' own printed-card convention: "the first section is boxed and shaded." */
+.essence .condition-view-section-primary {
+  border: 1px solid #c62828; border-radius: 4px; padding: 6px 8px; background: rgba(198, 40, 40, 0.12);
+}
+
+/* Equipment (including Toolkits/Consumable Kits) — #42a5f5, steel blue. */
+.essence .card-view-toggle.equipment-view-toggle {
+  background: rgba(66, 165, 245, 0.12); border-color: #42a5f5; color: #90caf9;
+}
+.essence .card-view-toggle.equipment-view-toggle:hover { background: rgba(66, 165, 245, 0.22); }
+.essence .equipment-view { border-color: #42a5f5; }
+.essence .equipment-view .card-view-label { color: #42a5f5; }
+
+/* Chassis — #8d6e63 (bronze/structural) and Fitting — #26a69a (teal), sharing one sheet/template
+   but branching on item.type via the .component-view-chassis/.component-view-fitting modifier. */
+.essence .card-view-toggle.component-view-toggle { background: rgba(141, 110, 99, 0.12); border-color: #8d6e63; color: #bcaaa4; }
+.essence .card-view-toggle.component-view-toggle:hover { background: rgba(141, 110, 99, 0.22); }
+.essence .component-view-chassis { border-color: #8d6e63; }
+.essence .component-view-chassis .card-view-label { color: #a1887f; }
+.essence .component-view-fitting { border-color: #26a69a; }
+.essence .component-view-fitting .card-view-label { color: #4db6ac; }
+
+/* Augment — #ab47bc (violet), "should feel like treasure." */
+.essence .card-view-toggle.augment-view-toggle {
+  background: rgba(171, 71, 188, 0.12); border-color: #ab47bc; color: #ce93d8;
+}
+.essence .card-view-toggle.augment-view-toggle:hover { background: rgba(171, 71, 188, 0.22); }
+.essence .augment-view { border-color: #ab47bc; }
+.essence .augment-view .card-view-label { color: #ce93d8; }
+
 /* ============ Character Creation Wizard ============ */
 .essence-wizard-root { display: flex; flex-direction: column; height: 100%; }
 .essence .wizard-steps { display: flex; flex-wrap: wrap; gap: 2px; padding: 4px 8px; border-bottom: 1px solid #555; flex: 0 0 auto; }
@@ -352,6 +424,12 @@
 .essence .wizard-row label { display: flex; align-items: center; gap: 4px; }
 .essence .wizard-value { text-align: center; font-weight: bold; min-width: 1.5em; display: inline-block; }
 .essence .capitalize { text-transform: capitalize; }
+/* Collapsed-by-default disclosure for fields most users never touch (e.g. Equipment's Reach
+   Exception, normally set automatically by the Item Grants system) — a plain <details>/<summary>
+   rather than a always-expanded section with paragraph exposition in front of every item. */
+.essence .advanced-section { margin-top: 8px; }
+.essence .advanced-section summary { cursor: pointer; color: #ccc; font-size: 0.9em; padding: 2px 0; }
+.essence .advanced-section[open] summary { margin-bottom: 4px; }
 .essence .wizard-pick-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
 .essence .wizard-pick-list button { padding: 3px 8px; }
 .essence .wizard-pick-list button.chosen { background: #f9a825; color: #000; font-weight: bold; }
@@ -373,6 +451,47 @@
   background: rgba(249, 168, 37, 0.15); border-color: #f9a825; color: #f9a825;
 }
 .essence .wizard-generate:hover { background: rgba(249, 168, 37, 0.3); }
+/* Wizard's inline Species Nature/Adaptation picker (character-wizard.mjs, Identity step) — replaces
+   the old "(open — choose Adaptations here)" link out to the Species Item's own authoring sheet. */
+.essence .wizard-origin-picker { border: 1px solid #555; border-radius: 4px; padding: 6px 10px; margin: 6px 0 12px; }
+.essence .wizard-origin-text { font-size: 0.9em; color: #ccc; margin: 2px 0 4px; }
+.essence .wizard-adaptation-list { list-style: none; padding: 0; margin: 0; }
+.essence .wizard-adaptation-row { border-top: 1px solid #444; padding: 6px 0; }
+.essence .wizard-adaptation-row:first-child { border-top: none; }
+.essence .wizard-adaptation-row .chosen-toggle { display: flex; align-items: center; gap: 6px; }
+.essence .wizard-subchoice { margin: 4px 0 2px 1.4em; padding: 4px 8px; background: rgba(249, 168, 37, 0.08); border-radius: 4px; }
+.essence .wizard-subchoice .subchoice-option { display: inline-flex; align-items: center; gap: 4px; margin-right: 12px; }
+
+/* Content Wizard's type picker and Bulk Import's template picker — a grid of icon+label cards
+   instead of a row of plain small buttons, and colored to match each type's own "card" identity
+   elsewhere in the system (Condition/Equipment/Chassis/Fitting/Augment card-view border colors)
+   so the picker reads as connected to the rest of the UI rather than a generic settings form. */
+.essence .content-type-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; margin-bottom: 10px; }
+/* Foundry core sets a blanket `button { height: var(--button-size); min-height: var(--button-size) }`
+   (foundry2.css) sized for a single line of text — without an explicit override here, that fixed
+   ~2em height crushed this column layout's icon+label into overlapping the same few pixels instead
+   of stacking, which is what actually produced the "monstrosity" (icon and text drawn on top of
+   each other) rather than any flex-direction mistake. */
+.essence .content-type-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  height: auto; min-height: 72px;
+  padding: 12px 8px; border: 1px solid #555; border-radius: 6px; background: rgba(255,255,255,0.03);
+}
+.essence .content-type-card img { width: 32px; height: 32px; object-fit: contain; flex: 0 0 auto; }
+.essence .content-type-card span { font-size: 0.85em; text-align: center; line-height: 1.2; }
+.essence .content-type-card:hover:not(:disabled) { background: rgba(255,255,255,0.08); }
+.essence .content-type-card.chosen { background: rgba(249, 168, 37, 0.15); border-color: #f9a825; font-weight: bold; }
+.essence .content-type-action-card, .essence .content-type-reaction-card { border-left: 3px solid #f9a825; }
+.essence .content-type-equipment { border-left: 3px solid #42a5f5; }
+.essence .content-type-condition { border-left: 3px solid #c62828; }
+.essence .content-type-chassis { border-left: 3px solid #a1887f; }
+.essence .content-type-fitting { border-left: 3px solid #4db6ac; }
+.essence .content-type-augment { border-left: 3px solid #ab47bc; }
+.essence .csv-upload {
+  display: block; margin: 10px 0; padding: 12px; border: 1px dashed #777; border-radius: 6px;
+  text-align: center; background: rgba(255,255,255,0.03);
+}
+.essence .csv-upload input[type="file"] { display: block; margin: 6px auto 0; }
 
 .essence .wizard-array-block {
   display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px;

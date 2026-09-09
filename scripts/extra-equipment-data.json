@@ -57,7 +57,7 @@
   },
   {
     "name": "Heavy Shield",
-    "category": "guard",
+    "category": "shield",
     "type": "Off-Hand",
     "cost": "1",
     "effect": "",
@@ -71,7 +71,7 @@
   },
   {
     "name": "Armored Gauntlet",
-    "category": "guard",
+    "category": "shield",
     "type": "Off-Hand",
     "cost": "1",
     "effect": "",
@@ -85,7 +85,7 @@
   },
   {
     "name": "Ward Talisman",
-    "category": "guard",
+    "category": "shield",
     "type": "Off-Hand",
     "cost": "1",
     "effect": "",
@@ -99,7 +99,7 @@
   },
   {
     "name": "Ritual Censer",
-    "category": "guard",
+    "category": "shield",
     "type": "Off-Hand",
     "cost": "1",
     "effect": "",

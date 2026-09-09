@@ -7,7 +7,20 @@
     "description": "Sapient peoples whose defining physical qualities are drawn from animals — mammals, birds, reptiles, insects, or combinations. Choose an animal or group that informs appearance and traits.",
     "nature": {
       "name": "Heightened Instincts",
-      "text": "Choose a narrow special Sense appropriate to your lineage (low-light vision, keen hearing, keen scent, heat perception, or vibration sense). Within 2 units, creatures and objects cannot remain Hidden from you when that Sense could reasonably detect them and no sealed barrier blocks it. You may also follow fresh trails using that Sense without specialized equipment."
+      "text": "Choose a narrow special Sense appropriate to your lineage (low-light vision, keen hearing, keen scent, heat perception, or vibration sense). Within 2 units, creatures and objects cannot remain Hidden from you when that Sense could reasonably detect them and no sealed barrier blocks it. You may also follow fresh trails using that Sense without specialized equipment.",
+      "subChoice": {
+        "label": "Sense",
+        "type": "fixed",
+        "options": [
+          "Low-Light Vision",
+          "Keen Hearing",
+          "Keen Scent",
+          "Heat Perception",
+          "Vibration Sense",
+          "Other (GM-approved)"
+        ],
+        "count": 1
+      }
     },
     "adaptationLabel": "Beastfolk Adaptation",
     "adaptationCount": 1,
@@ -30,7 +43,20 @@
       {
         "name": "Natural Armament",
         "text": "Choose claws, horns, fangs, a tail, mandibles, or another natural weapon. It counts as a basic one-handed weapon, does not count against your Signature Equipment Limit, and cannot be disarmed. You must leave one hand or equivalent limb free while using it.",
-        "chosen": false
+        "chosen": false,
+        "subChoice": {
+          "label": "Natural Weapon",
+          "type": "fixed",
+          "options": [
+            "Claws",
+            "Horns",
+            "Fangs",
+            "Tail",
+            "Mandibles",
+            "Other (GM-approved)"
+          ],
+          "count": 1
+        }
       },
       {
         "name": "Prehensile Limb",

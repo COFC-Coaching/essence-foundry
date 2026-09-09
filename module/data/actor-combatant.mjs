@@ -65,14 +65,50 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
         { initial: Array.from({ length: 5 }, () => ({ filled: false, domain: "", severity: "", condition: "" })) }
       ),
 
-      // Influence (social harm), tracked separately from wounds
+      // Influence (social harm), tracked separately from wounds but shaped identically — 5 spaces,
+      // filled in order: 2 Light, 2 Serious, 1 Critical (see part-v-social-encounters.md § Core
+      // Influence, which uses "the same five-box severity track as Core Wounds"). `condition` is a
+      // generated display label ("Light Injury"), the Influence equivalent of a Wound Condition —
+      // same canon gap: no named mechanical effect per severity exists yet, so this is descriptive only.
       temporaryInfluence: new fields.NumberField({ integer: true, initial: 5 }),
       coreInfluence: new fields.ArrayField(
-        new fields.SchemaField({ filled: new fields.BooleanField({ initial: false }) }),
-        { initial: Array.from({ length: 5 }, () => ({ filled: false })) }
+        new fields.SchemaField({
+          filled: new fields.BooleanField({ initial: false }),
+          severity: new fields.StringField({ initial: "" }),
+          condition: new fields.StringField({ initial: "" })
+        }),
+        { initial: Array.from({ length: 5 }, () => ({ filled: false, severity: "", condition: "" })) }
       ),
 
+      // Reach is an economic/social scale stat — "the scale across which their wealth,
+      // reputation, and connections remain meaningful" (part-ii-character-creation.md § Reach,
+      // recorded alongside the Influence tracks in Step 6) — not a combat stat, despite living in
+      // this shared combatant schema alongside Movement. It's manually GM-awarded, not a computed
+      // formula (Tier only "helps determine what... the character can reasonably access"
+      // narratively; there's no printed Reach = f(Tier) formula). The field stays here rather than
+      // moving to EssenceCharacterData because NPCs use it too (equipment gating applies to both
+      // sheets) — this session only relocated where it's *displayed* (Non-Combat/Influence area,
+      // not the Combat tab), not the schema.
       reach: new fields.NumberField({ integer: true, initial: 1 }),
+      // Generic "Adventure-Limited Reach Trigger" mechanic (part-ii-character-creation.md §§ Noble
+      // Household "Letters of Standing" and Frontier Household "Prepared Cache" — both grant a
+      // free-first-use-then-1-Influence-Breach temporary Reach boost. Underworld Raised's "Fence's
+      // Cache" also references Reach but has no Adventure-limit/Breach cost in the current text, so
+      // it's a plain Reach-gated exchange, not one of these triggers — don't add it here. See
+      // part-iii-playing-the-game.md § Adventure-Limited Abilities for the general "resets at
+      // Adventure end" pattern these two share). One entry per granted triggered
+      // ability rather than bespoke per-Heritage fields/buttons, since more Heritages/Species will
+      // likely add more of these as content grows. `active` drives the live Reach bonus (see
+      // `effectiveReach` below); `usedThisAdventure` gates the free-vs-Breach cost and is cleared
+      // only by an explicit "reset for new adventure" sheet action (this project has no automated
+      // Adventure-boundary concept — matches how Wound/Influence recovery are all manual too).
+      reachTriggers: new fields.ArrayField(new fields.SchemaField({
+        name: new fields.StringField({ initial: "" }),         // e.g. "Letters of Standing"
+        tempBonus: new fields.NumberField({ integer: true, initial: 1 }),        // Reach boost while active
+        tempInfluenceGrant: new fields.NumberField({ integer: true, initial: 0 }), // Temp Influence granted on activation
+        usedThisAdventure: new fields.BooleanField({ initial: false }),
+        active: new fields.BooleanField({ initial: false })
+      })),
       movement: new fields.NumberField({ integer: true, initial: 10 }),
       senses: new fields.ArrayField(new fields.StringField()),
 
@@ -139,6 +175,17 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
         actionDice: new fields.NumberField({ integer: true, nullable: true, initial: null }),
         reactionDice: new fields.NumberField({ integer: true, nullable: true, initial: null }),
 
+        // "One Reaction per Action" (part-iv-combat.md § One Reaction per Action) is fundamentally
+        // about a specific triggering Action, which this system has no persistent record of — a
+        // card use is just a dice roll plus a chat message, not a trackable "Action instance." This
+        // is therefore an approximate soft check, not real trigger enforcement: it remembers which
+        // Combat round + whose Turn was active the last time THIS actor used a Reaction, and warns
+        // (never blocks) if they try to use another Reaction while that same Turn is still active —
+        // a reasonable proxy since most single Turns only present one or a few genuinely distinct
+        // triggers. See EssenceActorSheet#onRollItem for where this is checked/updated.
+        lastReactionRound: new fields.NumberField({ integer: true, nullable: true, initial: null }),
+        lastReactionCombatantId: new fields.StringField({ initial: "" }),
+
         // Damage accumulates against Resilience between the starts of a character's own Turns,
         // then resets to 0 (see part-iv-combat.md § Resilience) — reset happens in EssenceCombat#_onStartTurn.
         accumulatedDamage: new fields.NumberField({ integer: true, initial: 0 }),
@@ -181,6 +228,14 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
     // Each point of Combo increases Movement by 1 unit (part-iv-combat.md § Combo).
     this.totalMovement = this.movement + (this.specialties?.combo ?? 0);
 
+    // Reach as actually usable right now for equipment-gating purposes: base Reach plus any
+    // currently-active Adventure-Limited Reach Triggers (Letters of Standing et al. treat Reach as
+    // "1 higher" only "for the current Scene" — see reachTriggers above). Equipment tier checks and
+    // the sheet's Signature Equipment header both read this, never the raw `reach` field directly.
+    this.effectiveReach = this.reach + (this.reachTriggers ?? [])
+      .filter((t) => t.active)
+      .reduce((sum, t) => sum + (t.tempBonus || 0), 0);
+
     // Wound State depends only on how many Core Wound spaces are filled, never on any single
     // attack's Damage (see part-iv-combat.md § Wound States).
     const filledCoreWounds = this.coreWounds.filter((w) => w.filled).length;
@@ -188,5 +243,14 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
       filledCoreWounds === 0 ? "Unharmed" :
       filledCoreWounds <= 2 ? "Lightly Wounded" :
       filledCoreWounds <= 4 ? "Seriously Wounded" : "Critically Wounded";
+
+    // Standing reads off the Core Influence track the same way Wound State reads off Core Wounds —
+    // same box counts (2 Light/2 Serious/1 Critical), same count-based thresholds (see
+    // part-v-social-encounters.md § Standing by Injury State).
+    const filledCoreInfluence = this.coreInfluence.filter((c) => c.filled).length;
+    this.standing =
+      filledCoreInfluence === 0 ? "Undamaged" :
+      filledCoreInfluence <= 2 ? "Light Injury" :
+      filledCoreInfluence <= 4 ? "Serious Injury" : "Critical Injury";
   }
 }

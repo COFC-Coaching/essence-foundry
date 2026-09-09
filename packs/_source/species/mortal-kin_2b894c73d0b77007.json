@@ -25,7 +25,17 @@
       {
         "name": "Keen",
         "text": "Choose two special Senses: low-light vision, keen hearing, or keen scent. Within 2 units, creatures and objects cannot remain Hidden from you when the chosen Sense could reasonably detect them and no sealed barrier blocks it.",
-        "chosen": false
+        "chosen": false,
+        "subChoice": {
+          "label": "Senses",
+          "type": "fixed",
+          "options": [
+            "Low-Light Vision",
+            "Keen Hearing",
+            "Keen Scent"
+          ],
+          "count": 2
+        }
       },
       {
         "name": "Long-Limbed",

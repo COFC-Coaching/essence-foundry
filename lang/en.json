@@ -7,5 +7,8 @@
   "TYPES.Item.equipment": "Equipment",
   "TYPES.Item.species": "Species",
   "TYPES.Item.heritage": "Heritage",
-  "TYPES.Item.distinction": "Distinction"
+  "TYPES.Item.distinction": "Distinction",
+  "TYPES.Item.chassis": "Chassis",
+  "TYPES.Item.fitting": "Fitting",
+  "TYPES.Item.augment": "Augment"
 }

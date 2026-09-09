@@ -15,7 +15,16 @@
       {
         "name": "Alternate Chassis",
         "text": "Gain Climb 10 or Swim 10 through a body specifically designed for that form of Movement.",
-        "chosen": false
+        "chosen": false,
+        "subChoice": {
+          "label": "Movement Mode",
+          "type": "fixed",
+          "options": [
+            "Climb 10",
+            "Swim 10"
+          ],
+          "count": 1
+        }
       },
       {
         "name": "Anchor Mode",
@@ -25,12 +34,24 @@
       {
         "name": "Integrated Tool",
         "text": "Choose one ordinary Non-Combat toolkit and incorporate it into your body. It does not count against your Signature Equipment Limit, cannot be disarmed, and remains available whenever the relevant parts of your body are functional.",
-        "chosen": false
+        "chosen": false,
+        "subChoice": {
+          "label": "Toolkit",
+          "type": "free",
+          "options": [],
+          "count": 1
+        }
       },
       {
         "name": "Internal Compartment",
         "text": "Choose one small Other Equipment item with a cost of 1 whose Availability does not exceed your Reach. While installed inside your body, it does not count against your Signature Equipment Limit and is not discovered through casual observation. You may replace it during significant downtime.",
-        "chosen": false
+        "chosen": false,
+        "subChoice": {
+          "label": "Equipment Item",
+          "type": "free",
+          "options": [],
+          "count": 1
+        }
       },
       {
         "name": "Redundant Systems",
@@ -45,7 +66,19 @@
       {
         "name": "Sensor Suite",
         "text": "Choose two special Senses (low-light vision, keen hearing, heat perception, vibration sense, or another narrow Sense approved by the GM). Within 2 units, creatures and objects cannot remain Hidden from you when one of those Senses could reasonably detect them.",
-        "chosen": false
+        "chosen": false,
+        "subChoice": {
+          "label": "Senses",
+          "type": "fixed",
+          "options": [
+            "Low-Light Vision",
+            "Keen Hearing",
+            "Heat Perception",
+            "Vibration Sense",
+            "Other (GM-approved)"
+          ],
+          "count": 2
+        }
       },
       {
         "name": "Utility Limb",

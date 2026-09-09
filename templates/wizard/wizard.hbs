@@ -35,6 +35,68 @@
       {{/each}}
     </ul>
 
+    {{!-- Inline Adaptation picker — replaces the old link out to the Species Item's own GM-
+         authoring sheet. Resets automatically on Species switch since selectOrigin deletes the
+         stale embedded Item and creates a fresh copy from the compendium (see origin-select.mjs). --}}
+    {{#if speciesItem}}
+      <div class="wizard-origin-picker">
+        <h4 class="section-head">{{speciesItem.system.nature.name}} <span class="muted">(Nature — always active)</span></h4>
+        <div class="wizard-origin-text">{{{speciesItem.system.nature.text}}}</div>
+        {{#if (eq speciesItem.system.nature.subChoice.type "fixed")}}
+          <div class="wizard-subchoice">
+            <span class="muted">{{speciesItem.system.nature.subChoice.label}} ({{speciesItem.system.nature.subChoice.selected.length}} / {{speciesItem.system.nature.subChoice.count}} chosen)</span>
+            {{#each natureSubChoiceOptions as |opt|}}
+              <label class="subchoice-option">
+                <input type="checkbox" data-action="toggleSubChoiceOption" data-scope="nature" data-option="{{opt.value}}"
+                  {{#if opt.checked}}checked{{/if}} {{#if opt.disabled}}disabled{{/if}}>
+                {{opt.value}}
+              </label>
+            {{/each}}
+          </div>
+        {{else if (eq speciesItem.system.nature.subChoice.type "free")}}
+          <div class="wizard-subchoice">
+            <label>{{speciesItem.system.nature.subChoice.label}}
+              <input type="text" class="subchoice-free-text" data-path="nature" value="{{lookup speciesItem.system.nature.subChoice.selected 0}}" placeholder="Describe your {{speciesItem.system.nature.subChoice.label}}">
+            </label>
+          </div>
+        {{/if}}
+
+        <h4 class="section-head">{{speciesItem.system.adaptationLabel}}s <span class="muted">({{adaptationChosenCount}} / {{adaptationCap}} chosen)</span></h4>
+        <ol class="wizard-adaptation-list">
+          {{#each adaptationRows as |a|}}
+            <li class="wizard-adaptation-row">
+              <label class="chosen-toggle">
+                <input type="checkbox" data-action="toggleAdaptationChosen" data-index="{{a.i}}"
+                  {{#if a.chosen}}checked{{else if (gte ../adaptationChosenCount ../adaptationCap)}}disabled{{/if}}>
+                <strong>{{a.name}}</strong>
+              </label>
+              <div class="wizard-origin-text">{{{a.text}}}</div>
+              {{#if a.chosen}}
+                {{#if (eq a.subChoice.type "fixed")}}
+                  <div class="wizard-subchoice">
+                    <span class="muted">{{a.subChoice.label}} ({{a.subChoice.selected.length}} / {{a.subChoice.count}} chosen)</span>
+                    {{#each a.subChoiceOptions as |opt|}}
+                      <label class="subchoice-option">
+                        <input type="checkbox" data-action="toggleSubChoiceOption" data-scope="adaptation" data-index="{{a.i}}" data-option="{{opt.value}}"
+                          {{#if opt.checked}}checked{{/if}} {{#if opt.disabled}}disabled{{/if}}>
+                        {{opt.value}}
+                      </label>
+                    {{/each}}
+                  </div>
+                {{else if (eq a.subChoice.type "free")}}
+                  <div class="wizard-subchoice">
+                    <label>{{a.subChoice.label}}
+                      <input type="text" class="subchoice-free-text" data-path="adaptations.{{a.i}}" value="{{lookup a.subChoice.selected 0}}" placeholder="Describe your {{a.subChoice.label}}">
+                    </label>
+                  </div>
+                {{/if}}
+              {{/if}}
+            </li>
+          {{/each}}
+        </ol>
+      </div>
+    {{/if}}
+
     <h3 class="section-head">Heritage {{#if heritageItem}}— <strong>{{heritageItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="heritage">(clear)</button>{{/if}}</h3>
     <ul class="wizard-pick-list">
       {{#each heritageOptions as |opt|}}
@@ -164,6 +226,14 @@
               {{/each}}
             </select>
           </label>
+          <label>Subtype
+            <select data-wizard-select="cardSubtype">
+              <option value="all" {{#if (eq cardSubtypeFilter "all")}}selected{{/if}}>All</option>
+              {{#each cardSubtypeOptions as |st|}}
+                <option value="{{st}}" {{#if (eq ../cardSubtypeFilter st)}}selected{{/if}}>{{st}}</option>
+              {{/each}}
+            </select>
+          </label>
           <label>Sort
             <select data-wizard-select="cardSort">
               <option value="rank" {{#if (eq cardSort "rank")}}selected{{/if}}>Rank</option>
@@ -174,7 +244,7 @@
         </div>
         <ul class="item-list wizard-scroll-list">
           {{#each browsableCards as |item|}}
-            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}} · {{item.system.skill}}{{#if (eq item.type "reaction-card")}} · Reaction{{/if}}</span> <button type="button" data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}" aria-label="Add {{item.name}}"><i class="fa-solid fa-plus"></i></button></li>
+            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}} · {{item.system.skill}}{{#if item.system.subtype}} · {{item.system.subtype}}{{/if}}{{#if (eq item.type "reaction-card")}} · Reaction{{/if}}</span> <button type="button" data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}" aria-label="Add {{item.name}}"><i class="fa-solid fa-plus"></i></button></li>
           {{else}}
             <li class="muted">No cards match these filters.</li>
           {{/each}}
@@ -255,17 +325,48 @@
   {{#if (eq step 8)}}
     <h2>Equipment</h2>
     <p class="muted">Your Signature Loadout is what you bring on this Adventure, up to your Signature Equipment Limit. The Armory fills in as you play.</p>
-    <h3 class="section-head">Signature Loadout — {{signatureUsed}} / {{signatureLimit}} slots</h3>
+    <h3 class="section-head">Signature Loadout — {{signatureUsed}} / {{signatureLimit}} slots &middot; Reach {{reach}}</h3>
     <ul class="item-list">
       {{#each signatureItems as |item|}}
-        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <button type="button" data-action="toggleEquipment" data-item-id="{{item.id}}" aria-label="Remove {{item.name}}"><i class="fa-solid fa-trash"></i></button></li>
+        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">Reach {{item.system.cost}}</span>
+          {{#if item.overReach}}<span class="muted reach-warning" title="Reach cost exceeds your current Reach. Non-blocking."><i class="fa-solid fa-triangle-exclamation"></i></span>{{/if}}
+          <button type="button" data-action="toggleEquipment" data-item-id="{{item.id}}" aria-label="Remove {{item.name}}"><i class="fa-solid fa-trash"></i></button></li>
       {{/each}}
     </ul>
+
+    {{#if itemGrants.length}}
+      <h3 class="section-head">Item Grants <span class="muted">(Quartermaster's Due, Internal Compartment, ...)</span></h3>
+      <ul class="item-list">
+        {{#each itemGrants as |grant|}}
+          <li>
+            <strong>{{grant.sourceName}}</strong>
+            {{#if grant.grantedItem}}
+              — <a data-action="previewItem" data-uuid="{{grant.grantedItem.uuid}}">{{grant.grantedItem.name}}</a>
+              <button type="button" data-action="chooseGrantedItem" data-grant-source="{{grant.sourceName}}">Replace</button>
+            {{else}}
+              <span class="muted">— not yet chosen</span>
+              <button type="button" data-action="chooseGrantedItem" data-grant-source="{{grant.sourceName}}">Choose Item</button>
+            {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+    {{/if}}
+
     <h3 class="section-head">Equipment Library</h3>
     <input type="text" data-wizard-search="equipment" placeholder="Search…" value="{{equipmentSearch}}">
+    <div class="wizard-row wizard-card-filters">
+      <label>Group
+        <select data-wizard-select="equipmentCategory">
+          <option value="all" {{#if (eq equipmentCategoryFilter "all")}}selected{{/if}}>All</option>
+          {{#each equipmentCategoryOptions as |opt|}}
+            <option value="{{opt.value}}" {{#if (eq ../equipmentCategoryFilter opt.value)}}selected{{/if}}>{{opt.label}}</option>
+          {{/each}}
+        </select>
+      </label>
+    </div>
     <ul class="item-list wizard-scroll-list">
       {{#each browsableEquipment as |item|}}
-        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{item.system.category}}</span> <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" aria-label="Add {{item.name}}"><i class="fa-solid fa-plus"></i></button></li>
+        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{equipmentCategoryLabel item.system.category}} &middot; Reach {{item.system.cost}}</span> <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" aria-label="Add {{item.name}}"><i class="fa-solid fa-plus"></i></button></li>
       {{/each}}
     </ul>
   {{/if}}

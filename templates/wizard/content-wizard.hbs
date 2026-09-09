@@ -16,9 +16,12 @@
   {{#unless doc}}
     <h2>Create Content</h2>
     <p class="muted">Choose what you're creating and give it a name. It's saved straight into the shared compendium.</p>
-    <div class="wizard-pick-list">
+    <div class="content-type-grid">
       {{#each typeOptions as |opt|}}
-        <button type="button" class="{{#if (eq opt.key ../type)}}chosen{{/if}}" data-action="chooseType" data-type="{{opt.key}}" {{#unless ../canCreate}}disabled{{/unless}}>{{opt.label}}</button>
+        <button type="button" class="content-type-card content-type-{{opt.key}} {{#if (eq opt.key ../type)}}chosen{{/if}}" data-action="chooseType" data-type="{{opt.key}}" {{#unless ../canCreate}}disabled{{/unless}}>
+          <img src="{{opt.img}}" alt="">
+          <span>{{opt.label}}</span>
+        </button>
       {{/each}}
     </div>
     {{#if type}}
@@ -114,38 +117,47 @@
         <div class="wizard-row">
           <label>Category
             <select data-field="system.category">
-              <option value="weapon" {{#if (eq system.category "weapon")}}selected{{/if}}>weapon</option>
-              <option value="armor" {{#if (eq system.category "armor")}}selected{{/if}}>armor</option>
-              <option value="tool" {{#if (eq system.category "tool")}}selected{{/if}}>tool</option>
-              <option value="gear" {{#if (eq system.category "gear")}}selected{{/if}}>gear</option>
-            </select>
-          </label>
-          <label>Slot
-            <select data-field="system.slot">
-              <option value="signature" {{#if (eq system.slot "signature")}}selected{{/if}}>signature</option>
-              <option value="temporary" {{#if (eq system.slot "temporary")}}selected{{/if}}>temporary</option>
-              <option value="armory" {{#if (eq system.slot "armory")}}selected{{/if}}>armory</option>
+              {{#each categoryOptions as |opt|}}
+                <option value="{{opt.value}}" {{#if (eq ../system.category opt.value)}}selected{{/if}}>{{opt.label}}</option>
+              {{/each}}
             </select>
           </label>
           <label>Tier <input type="number" data-field="system.tier" value="{{system.tier}}" style="width:4em" min="1" max="5"></label>
-          <label>Type <input type="text" data-field="system.type" value="{{system.type}}"></label>
+          <label>Reach <input type="text" data-field="system.cost" value="{{system.cost}}" style="width:5em"></label>
         </div>
-        <div class="wizard-row">
-          <label>Cost <input type="text" data-field="system.cost" value="{{system.cost}}" style="width:5em"></label>
-          <label>Range <input type="text" data-field="system.range" value="{{system.range}}"></label>
-          <label>Slot Cost <input type="number" data-field="system.slotCost" value="{{system.slotCost}}" style="width:4em"></label>
-          <label>Quantity <input type="number" data-field="system.quantity" value="{{system.quantity}}" style="width:4em"></label>
-        </div>
-        <div class="wizard-row">
-          <label>Fortitude <input type="text" data-field="system.fortitude" value="{{system.fortitude}}" style="width:5em"></label>
-          <label>Resilience <input type="text" data-field="system.resilience" value="{{system.resilience}}" style="width:5em"></label>
-          <label>Movement <input type="text" data-field="system.movement" value="{{system.movement}}" style="width:5em"></label>
-          <label>Reach Bonus <input type="number" data-field="system.reachBonus" value="{{system.reachBonus}}" style="width:4em"></label>
-        </div>
+        {{#if isWornCategory}}
+          <div class="wizard-row">
+            <label>Type <input type="text" data-field="system.type" value="{{system.type}}"></label>
+            <label>Range <input type="text" data-field="system.range" value="{{system.range}}"></label>
+            <label><input type="checkbox" data-field="system.isModular" {{#if system.isModular}}checked{{/if}}> Modular</label>
+          </div>
+          <div class="wizard-row">
+            <label>Fortitude <input type="text" data-field="system.fortitude" value="{{system.fortitude}}" style="width:5em"></label>
+            <label>Resilience <input type="text" data-field="system.resilience" value="{{system.resilience}}" style="width:5em"></label>
+            <label>Movement <input type="text" data-field="system.movement" value="{{system.movement}}" style="width:5em"></label>
+            <label>Reach Bonus <input type="number" data-field="system.reachBonus" value="{{system.reachBonus}}" style="width:4em"></label>
+          </div>
+        {{/if}}
+        {{#if isGear}}
+          <div class="wizard-row">
+            <label>Uses <input type="number" data-field="system.uses" value="{{system.uses}}" style="width:4em" placeholder="unlimited"></label>
+          </div>
+        {{/if}}
         <div class="wizard-row">
           <label>Tags <input type="text" data-field="system.tags" value="{{system.tags}}"></label>
-          <label><input type="checkbox" data-field="system.isModular" {{#if system.isModular}}checked{{/if}}> Modular</label>
         </div>
+        {{#if isConsumableKit}}
+          <p class="muted">One row per granted Equipment Card — each has its own Uses, refreshing at end of Adventure.</p>
+          {{#each system.equipmentCards as |c i|}}
+            <div class="array-row wizard-array-block">
+              <input type="text" data-array="equipmentCards" data-index="{{i}}" data-field="name" value="{{c.name}}" placeholder="Card name">
+              <input type="number" data-array="equipmentCards" data-index="{{i}}" data-field="uses" value="{{c.uses}}" style="width:4em" placeholder="Uses">
+              <button type="button" data-action="deleteArrayRow" data-array="equipmentCards" data-index="{{i}}" aria-label="Delete card {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
+              <textarea data-array="equipmentCards" data-index="{{i}}" data-field="effect" rows="2" placeholder="HTML allowed">{{c.effect}}</textarea>
+            </div>
+          {{/each}}
+          <button type="button" data-action="addArrayRow" data-array="equipmentCards"><i class="fa-solid fa-plus"></i> Add Equipment Card</button>
+        {{/if}}
       {{/if}}
     {{/if}}
 
@@ -177,6 +189,163 @@
           </div>
         {{/each}}
         <button type="button" data-action="addArrayRow" data-array="sections"><i class="fa-solid fa-plus"></i> Add Section</button>
+      {{/if}}
+    {{/if}}
+
+    {{!-- ============ CHASSIS steps ============ --}}
+    {{#if (eq step 1)}}
+      {{#if (eq type "chassis")}}
+        <div class="wizard-row">
+          <label>Name <input type="text" data-field="name" value="{{doc.name}}"></label>
+        </div>
+        <div class="wizard-row">
+          <label>Category
+            <select data-field="system.category">
+              <option value="weapon" {{#if (eq system.category "weapon")}}selected{{/if}}>weapon (Striker)</option>
+              <option value="ranged" {{#if (eq system.category "ranged")}}selected{{/if}}>ranged (Launcher)</option>
+              <option value="armor" {{#if (eq system.category "armor")}}selected{{/if}}>armor (Shell)</option>
+              <option value="shield" {{#if (eq system.category "shield")}}selected{{/if}}>shield (Shield)</option>
+              <option value="implement" {{#if (eq system.category "implement")}}selected{{/if}}>implement (Focus)</option>
+            </select>
+          </label>
+          <label>Slot
+            <select data-field="system.slot">
+              <option value="signature" {{#if (eq system.slot "signature")}}selected{{/if}}>signature</option>
+              <option value="temporary" {{#if (eq system.slot "temporary")}}selected{{/if}}>temporary</option>
+              <option value="armory" {{#if (eq system.slot "armory")}}selected{{/if}}>armory</option>
+            </select>
+          </label>
+          <label>Tier <input type="number" data-field="system.tier" value="{{system.tier}}" style="width:4em" min="1" max="5"></label>
+        </div>
+        <div class="wizard-row">
+          <label>Fortitude <input type="text" data-field="system.fortitude" value="{{system.fortitude}}" style="width:5em" placeholder="e.g. +2"></label>
+          <label>Resilience <input type="text" data-field="system.resilience" value="{{system.resilience}}" style="width:5em" placeholder="e.g. +1"></label>
+          <label>Movement <input type="text" data-field="system.movement" value="{{system.movement}}" style="width:5em" placeholder="e.g. -1"></label>
+          <label>Compatible Fitting Category <input type="text" data-field="system.compatibleFittingCategory" value="{{system.compatibleFittingCategory}}" placeholder="e.g. Handling, Payload, Rigging, Interface"></label>
+        </div>
+      {{/if}}
+    {{/if}}
+
+    {{#if (eq step 2)}}
+      {{#if (eq type "chassis")}}
+        <p class="muted">Every Chassis has at least 1 Mount (§ Augment Mounts). Set "Linked with" to another Mount's number to pair them as a Linked Mount, or leave blank for an independent Mount.</p>
+        {{#each system.mounts as |m i|}}
+          <div class="array-row wizard-array-block">
+            <span class="mount-index">Mount {{addOne i}}</span>
+            <input type="number" data-array="mounts" data-index="{{i}}" data-field="linkedWith" value="{{m.linkedWith}}" style="width:6em" min="0" placeholder="linked mount #">
+            <button type="button" data-action="deleteArrayRow" data-array="mounts" data-index="{{i}}" aria-label="Delete Mount {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        {{/each}}
+        <button type="button" data-action="addArrayRow" data-array="mounts"><i class="fa-solid fa-plus"></i> Add Mount</button>
+      {{/if}}
+    {{/if}}
+
+    {{#if (eq step 3)}}
+      {{#if (eq type "chassis")}}
+        <h3 class="section-head">Effect</h3>
+        <textarea data-field="system.effect" rows="2" placeholder="HTML allowed">{{system.effect}}</textarea>
+        <h3 class="section-head">Passive</h3>
+        <textarea data-field="system.passive" rows="2" placeholder="HTML allowed">{{system.passive}}</textarea>
+        <h3 class="section-head">Special</h3>
+        <textarea data-field="system.special" rows="2" placeholder="HTML allowed">{{system.special}}</textarea>
+        <h3 class="section-head">Flavor</h3>
+        <textarea data-field="system.flavor" rows="2" placeholder="HTML allowed">{{system.flavor}}</textarea>
+      {{/if}}
+    {{/if}}
+
+    {{!-- ============ FITTING steps ============ --}}
+    {{#if (eq step 1)}}
+      {{#if (eq type "fitting")}}
+        <div class="wizard-row">
+          <label>Name <input type="text" data-field="name" value="{{doc.name}}"></label>
+        </div>
+        <div class="wizard-row">
+          <label>Category
+            <select data-field="system.category">
+              <option value="weapon" {{#if (eq system.category "weapon")}}selected{{/if}}>weapon (Handling)</option>
+              <option value="ranged" {{#if (eq system.category "ranged")}}selected{{/if}}>ranged (Payload)</option>
+              <option value="armor" {{#if (eq system.category "armor")}}selected{{/if}}>armor (Rigging)</option>
+              <option value="shield" {{#if (eq system.category "shield")}}selected{{/if}}>shield (Handling)</option>
+              <option value="implement" {{#if (eq system.category "implement")}}selected{{/if}}>implement (Interface)</option>
+            </select>
+          </label>
+          <label>Slot
+            <select data-field="system.slot">
+              <option value="signature" {{#if (eq system.slot "signature")}}selected{{/if}}>signature</option>
+              <option value="temporary" {{#if (eq system.slot "temporary")}}selected{{/if}}>temporary</option>
+              <option value="armory" {{#if (eq system.slot "armory")}}selected{{/if}}>armory</option>
+            </select>
+          </label>
+          <label>Tier <input type="number" data-field="system.tier" value="{{system.tier}}" style="width:4em" min="1" max="5"></label>
+        </div>
+        <div class="wizard-row">
+          <label>Fortitude <input type="text" data-field="system.fortitude" value="{{system.fortitude}}" style="width:5em" placeholder="e.g. +2"></label>
+          <label>Resilience <input type="text" data-field="system.resilience" value="{{system.resilience}}" style="width:5em" placeholder="e.g. +1"></label>
+          <label>Movement <input type="text" data-field="system.movement" value="{{system.movement}}" style="width:5em" placeholder="e.g. -1"></label>
+        </div>
+        <div class="wizard-row">
+          <label>Handedness
+            <select data-field="system.handedness">
+              <option value="" {{#if (eq system.handedness "")}}selected{{/if}}>—</option>
+              <option value="one-handed" {{#if (eq system.handedness "one-handed")}}selected{{/if}}>one-handed</option>
+              <option value="two-handed" {{#if (eq system.handedness "two-handed")}}selected{{/if}}>two-handed</option>
+            </select>
+          </label>
+          <label>Range Modifier <input type="text" data-field="system.rangeModifier" value="{{system.rangeModifier}}"></label>
+          <label>Reconfigure Category
+            <select data-field="system.reconfigureCategory">
+              <option value="simple" {{#if (eq system.reconfigureCategory "simple")}}selected{{/if}}>Simple (1 Action die)</option>
+              <option value="structural" {{#if (eq system.reconfigureCategory "structural")}}selected{{/if}}>Structural (3 Action dice)</option>
+            </select>
+          </label>
+          <label>Reconfigure Cost Override <input type="number" data-field="system.reconfigureCostOverride" value="{{system.reconfigureCostOverride}}" style="width:5em" min="0" placeholder="printed override, if any"></label>
+        </div>
+      {{/if}}
+    {{/if}}
+
+    {{#if (eq step 2)}}
+      {{#if (eq type "fitting")}}
+        <h3 class="section-head">Effect</h3>
+        <textarea data-field="system.effect" rows="2" placeholder="HTML allowed">{{system.effect}}</textarea>
+        <h3 class="section-head">Passive</h3>
+        <textarea data-field="system.passive" rows="2" placeholder="HTML allowed">{{system.passive}}</textarea>
+        <h3 class="section-head">Special</h3>
+        <textarea data-field="system.special" rows="2" placeholder="HTML allowed">{{system.special}}</textarea>
+        <h3 class="section-head">Flavor</h3>
+        <textarea data-field="system.flavor" rows="2" placeholder="HTML allowed">{{system.flavor}}</textarea>
+      {{/if}}
+    {{/if}}
+
+    {{!-- ============ AUGMENT steps ============ --}}
+    {{#if (eq step 1)}}
+      {{#if (eq type "augment")}}
+        <div class="wizard-row">
+          <label>Name <input type="text" data-field="name" value="{{doc.name}}"></label>
+        </div>
+        <div class="wizard-row">
+          <label>Kind
+            <select data-field="system.kind">
+              <option value="function" {{#if (eq system.kind "function")}}selected{{/if}}>Function</option>
+              <option value="support" {{#if (eq system.kind "support")}}selected{{/if}}>Support</option>
+            </select>
+          </label>
+          <label>Compatibility <input type="text" data-field="system.compatibility" value="{{system.compatibility}}" placeholder="e.g. Any, Weapon, Requires Tier 3+ Chassis"></label>
+        </div>
+        {{#if (eq system.kind "function")}}
+          <div class="wizard-row">
+            <label>Uses <input type="number" data-field="system.uses" value="{{system.uses}}" style="width:4em" min="0"></label>
+            <label>Uses Remaining <input type="number" data-field="system.usesRemaining" value="{{system.usesRemaining}}" style="width:4em" min="0"></label>
+          </div>
+        {{/if}}
+      {{/if}}
+    {{/if}}
+
+    {{#if (eq step 2)}}
+      {{#if (eq type "augment")}}
+        <h3 class="section-head">Effect</h3>
+        <textarea data-field="system.effect" rows="2" placeholder="HTML allowed">{{system.effect}}</textarea>
+        <h3 class="section-head">Flavor</h3>
+        <textarea data-field="system.flavor" rows="2" placeholder="HTML allowed">{{system.flavor}}</textarea>
       {{/if}}
     {{/if}}
 

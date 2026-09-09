@@ -1,14 +1,16 @@
 import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
+import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
-import { capitalize, cardSummary, domainResource } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, resetAdventureUses, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 
 const ATTRIBUTES = ["might", "grace", "vigor", "intellect", "acuity", "resolve", "presence", "adaptability", "anima"];
 const SKILL_GATE = { gestalt: "Gifted", magecraft: "Arcanist", psionics: "Psyker", ritualism: "Invoker", calling: "Summoner" };
+const CORE_INFLUENCE_LABELS = ["L", "L", "S", "S", "C"];
 
 const DOMAINS = [
   { key: "physical", label: "Physical", attrs: ["might", "grace", "vigor"], skills: ["prowess", "ballistics", "gestalt"], resource: "stamina", defense: "fortitude" },
@@ -49,11 +51,23 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       toggleCoreWound: EssenceNpcSheet.#onToggleCoreWound,
       toggleDeathTrack: EssenceNpcSheet.#onToggleDeathTrack,
       toggleDeathTrackFrozen: EssenceNpcSheet.#onToggleDeathTrackFrozen,
+      toggleTempInfluence: EssenceNpcSheet.#onToggleTempInfluence,
+      toggleCoreInfluence: EssenceNpcSheet.#onToggleCoreInfluence,
+      applyInfluenceInjury: EssenceNpcSheet.#onApplyInfluenceInjury,
+      recoverInfluenceInjury: EssenceNpcSheet.#onRecoverInfluenceInjury,
+      spendInfluenceForSlot: EssenceNpcSheet.#onSpendInfluenceForSlot,
+      contributeToGoal: EssenceNpcSheet.#onContributeToGoal,
+      addReachTrigger: EssenceNpcSheet.#onAddReachTrigger,
+      deleteReachTrigger: EssenceNpcSheet.#onDeleteReachTrigger,
+      activateReachTrigger: EssenceNpcSheet.#onActivateReachTrigger,
+      deactivateReachTrigger: EssenceNpcSheet.#onDeactivateReachTrigger,
+      resetAdventureUses: EssenceNpcSheet.#onResetAdventureUses,
       itemView: EssenceNpcSheet.#onItemView,
       itemEdit: EssenceNpcSheet.#onItemEdit,
       itemDelete: EssenceNpcSheet.#onItemDelete,
       selectOrigin: EssenceNpcSheet.#onSelectOrigin,
-      clearOrigin: EssenceNpcSheet.#onClearOrigin
+      clearOrigin: EssenceNpcSheet.#onClearOrigin,
+      chooseGrantedItem: EssenceNpcSheet.#onChooseGrantedItem
     }
   };
 
@@ -155,6 +169,10 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
 
     context.temporaryWoundPips = pips(system.playState.currentTemporaryWounds, system.temporaryWoundsAvailable);
     context.deathTrackPips = pips(system.playState.deathTrackStep, 5);
+    context.temporaryInfluencePips = pips(system.playState.currentTemporaryInfluence, system.temporaryInfluence);
+    context.coreInfluenceLabels = CORE_INFLUENCE_LABELS;
+    // See EssenceActorSheet#_prepareContext — same Adventure-Limited Reach Trigger mapping.
+    context.reachTriggers = system.reachTriggers.map((t, i) => ({ ...t, i }));
 
     // See EssenceActorSheet#_prepareContext — same Basic Actions/Reactions split for NPCs.
     const cardView = (item) => ({ id: item.id, name: item.name, system: item.system, summary: cardSummary(item.system) });
@@ -166,7 +184,29 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     context.basicReactionCards = allReactionCards.filter((i) => !i.system.skill).map(cardView).sort(byName);
     context.reactionCards = allReactionCards.filter((i) => i.system.skill).map(cardView);
     context.conditions = this.actor.items.filter((i) => i.type === "condition");
-    context.equipment = this.actor.items.filter((i) => i.type === "equipment");
+
+    // Split by slot + show usage against the limit, same as EssenceActorSheet — see that class's
+    // _prepareContext comment for why Component assignment UI lives on the equipment Item's own
+    // sheet instead of being duplicated here.
+    // See EssenceActorSheet#_prepareContext for the full Reach-gating reasoning (computeReachGate()
+    // in utils.mjs) — same soft, non-blocking over-Reach flag here, reading effectiveReach (base
+    // Reach + any active Reach Triggers) rather than raw system.reach.
+    const equipmentView = (item) => {
+      const { reachCost, exceptionSource, overReach } = computeReachGate(item.system, system.effectiveReach);
+      return { id: item.id, name: item.name, system: item.system, reachCost, exceptionSource, overReach };
+    };
+    const equipment = this.actor.items.filter((i) => i.type === "equipment");
+    context.signatureEquipment = equipment.filter((i) => i.system.slot === "signature").map(equipmentView);
+    context.armoryEquipment = equipment.filter((i) => i.system.slot === "armory");
+    context.temporaryEquipment = equipment.filter((i) => i.system.slot === "temporary");
+    context.signatureUsed = computeSlotUsage(this.actor.items, "signature");
+    context.armoryUsed = computeSlotUsage(this.actor.items, "armory");
+    context.signatureOverLimit = Math.max(0, Math.floor(context.signatureUsed) - system.signatureEquipmentLimit);
+    context.itemGrants = deriveActiveGrants({ speciesItem, heritageItem }, equipment);
+    context.componentItems = this.actor.items
+      .filter((i) => ["chassis", "fitting", "augment"].includes(i.type))
+      .map((i) => ({ id: i.id, name: i.name, type: i.type, category: i.system.category ?? "", slot: i.system.slot ?? "", tier: i.system.tier ?? null }))
+      .sort((a, b) => a.type.localeCompare(b.type) || a.name.localeCompare(b.name));
 
     const speciesPack = game.packs.get("essence-system.species");
     const heritagePack = game.packs.get("essence-system.heritages");
@@ -321,6 +361,8 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       return;
     }
 
+    if (isReaction) EssenceNpcSheet.#warnIfLikelySecondReaction(this.actor);
+
     const committed = await EssenceNpcSheet.#promptDiceCount({
       title: `Use ${item.name}`,
       label: `Commit how many ${poolLabel} Dice? (min ${cardMin}, max ${available})`,
@@ -346,8 +388,25 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       }
     }
 
+    if (isReaction && game.combat) {
+      update["system.playState.lastReactionRound"] = game.combat.round;
+      update["system.playState.lastReactionCombatantId"] = game.combat.combatant?.id ?? "";
+    }
+
     await this.actor.update(update);
-    await rollEssencePool({ pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges });
+    const bonusSurges = hasMastery(sys, this.actor.system.expertises) ? 1 : 0;
+    await rollEssencePool({ pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges });
+  }
+
+  /** See EssenceActorSheet#warnIfLikelySecondReaction — same approximate check, same reasoning. */
+  static #warnIfLikelySecondReaction(actor) {
+    if (!game.combat) return;
+    const ps = actor.system.playState;
+    const sameRound = ps.lastReactionRound === game.combat.round;
+    const sameActiveCombatant = ps.lastReactionCombatantId && ps.lastReactionCombatantId === game.combat.combatant?.id;
+    if (sameRound && sameActiveCombatant) {
+      ui.notifications.warn(`${actor.name} already used a Reaction during this Turn. Only one Reaction per Action is normally allowed — if this is responding to a different Action, this is fine to ignore.`);
+    }
   }
 
   /** See EssenceActorSheet#onAdjustResource — same +/- quick-adjust, same reasoning. */
@@ -591,6 +650,298 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     });
   }
 
+  /** See EssenceActorSheet#onToggleTempInfluence/#onToggleCoreInfluence/#onApplyInfluenceInjury/
+   *  #onRecoverInfluenceInjury — same Influence flow, same reasoning. */
+  static async #onToggleTempInfluence(event, target) {
+    const i = Number(target.dataset.index);
+    const next = EssenceNpcSheet.#onTogglePip(this.actor.system.playState.currentTemporaryInfluence, i);
+    await this.actor.update({ "system.playState.currentTemporaryInfluence": next });
+  }
+
+  static async #onToggleCoreInfluence(event, target) {
+    const i = Number(target.dataset.index);
+    const coreInfluence = this.actor.system.coreInfluence.map((c) => ({ ...c }));
+    coreInfluence[i].filled = !coreInfluence[i].filled;
+    if (coreInfluence[i].filled) {
+      const severity = SEVERITY_BY_INDEX[i];
+      coreInfluence[i].severity = severity;
+      coreInfluence[i].condition = `${severity} Injury`;
+    } else {
+      coreInfluence[i].severity = "";
+      coreInfluence[i].condition = "";
+    }
+    await this.actor.update({ "system.coreInfluence": coreInfluence });
+  }
+
+  static async #onApplyInfluenceInjury() {
+    const result = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: "Apply Influence Injury" },
+        content: `
+          <label>Injuries <input type="number" name="amount" value="1" min="1" autofocus></label>
+          <label style="display:flex;align-items:center;gap:6px;">
+            <input type="checkbox" name="voluntary"> Voluntary (skip Temporary Influence, mark Core Influence directly)
+          </label>
+        `,
+        buttons: [{
+          action: "apply",
+          label: "Apply",
+          default: true,
+          callback: (event, button) => ({
+            amount: Math.max(1, Math.floor(Number(button.form.elements.amount.value)) || 1),
+            voluntary: button.form.elements.voluntary.checked
+          })
+        }],
+        submit: (result) => resolve(result === "apply" ? null : result)
+      }).render(true);
+    });
+    if (!result) return;
+
+    const sys = this.actor.system;
+    let tempInfluence = sys.playState.currentTemporaryInfluence ?? 0;
+    const coreInfluence = sys.coreInfluence.map((c) => ({ ...c }));
+    const log = [];
+    let becameCritical = false;
+
+    for (let i = 0; i < result.amount; i++) {
+      if (!result.voluntary && tempInfluence > 0) {
+        tempInfluence -= 1;
+        log.push("1 Injury absorbed by a Temporary Influence slot.");
+        continue;
+      }
+      const slot = coreInfluence.findIndex((c) => !c.filled);
+      if (slot === -1) {
+        log.push("Core Influence track already full — the GM adjudicates any further consequence.");
+        continue;
+      }
+      const severity = SEVERITY_BY_INDEX[slot];
+      const condition = `${severity} Injury`;
+      coreInfluence[slot] = { filled: true, severity, condition };
+      log.push(`Core Influence filled: <strong>${condition}</strong> (recovers in ${INFLUENCE_RECOVERY_TIME[severity]}).`);
+      if (slot === 4) becameCritical = true;
+    }
+
+    await this.actor.update({
+      "system.playState.currentTemporaryInfluence": tempInfluence,
+      "system.coreInfluence": coreInfluence
+    });
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> takes ${result.amount} Influence ${result.amount === 1 ? "Injury" : "Injuries"}${result.voluntary ? " (Voluntary)" : ""}.</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+    });
+
+    if (becameCritical) {
+      ui.notifications.warn(`${this.actor.name} has taken a Critical Influence Injury! This must be actively addressed in the fiction before recovery begins.`);
+    }
+  }
+
+  static async #onRecoverInfluenceInjury() {
+    const coreInfluence = this.actor.system.coreInfluence.map((c) => ({ ...c }));
+    let slot = -1;
+    for (let i = coreInfluence.length - 1; i >= 0; i--) {
+      if (coreInfluence[i].filled) { slot = i; break; }
+    }
+    if (slot === -1) {
+      ui.notifications.warn(`${this.actor.name} has no Core Influence Injuries to recover.`);
+      return;
+    }
+
+    const recovered = coreInfluence[slot];
+    coreInfluence[slot] = { filled: false, severity: "", condition: "" };
+    await this.actor.update({ "system.coreInfluence": coreInfluence });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> recovers from their <strong>${recovered.condition}</strong>.</p>`
+    });
+  }
+
+  /** See EssenceActorSheet#onSpendInfluenceForSlot — same rule, same reasoning. */
+  static async #onSpendInfluenceForSlot() {
+    const sys = this.actor.system;
+    const max = sys.temporaryInfluence ?? 5;
+    const current = sys.playState.currentTemporaryInfluence ?? 0;
+    if (current >= max) {
+      ui.notifications.warn(`${this.actor.name} has no open Temporary Influence slots left to spend.`);
+      return;
+    }
+    await this.actor.update({ "system.playState.currentTemporaryInfluence": current + 1 });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> spends 1 Temporary Influence to prepare an additional Signature slot beyond their normal limit.</p>`
+    });
+  }
+
+  /** See EssenceActorSheet#onContributeToGoal — same rule, same reasoning. */
+  static async #onContributeToGoal() {
+    const result = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: "Contribute to Shared Goal" },
+        content: `
+          <label>Shared Goal <input type="text" name="goal" placeholder="e.g. Rebuilding the Guildhall" autofocus></label>
+          <label style="display:flex;align-items:center;gap:6px;">
+            <input type="checkbox" name="narrative"> Narrative only (no Temporary Influence spent, no cost)
+          </label>
+          <label>Temporary Influence Slots to Spend <input type="number" name="amount" value="1" min="1"></label>
+        `,
+        buttons: [{
+          action: "contribute",
+          label: "Contribute",
+          default: true,
+          callback: (event, button) => ({
+            goal: button.form.elements.goal.value.trim(),
+            narrative: button.form.elements.narrative.checked,
+            amount: Math.max(1, Math.floor(Number(button.form.elements.amount.value)) || 1)
+          })
+        }],
+        submit: (result) => resolve(result === "contribute" ? null : result)
+      }).render(true);
+    });
+    if (!result) return;
+
+    const goalLabel = result.goal || "a shared goal";
+
+    if (result.narrative) {
+      await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        content: `<p><strong>${this.actor.name}</strong> contributes to <strong>${goalLabel}</strong> narratively (labor, connections, or information) — no Temporary Influence spent, no Injury risked.</p>`
+      });
+      return;
+    }
+
+    const sys = this.actor.system;
+    let tempInfluence = sys.playState.currentTemporaryInfluence ?? 0;
+    const coreInfluence = sys.coreInfluence.map((c) => ({ ...c }));
+    const log = [];
+    let becameCritical = false;
+
+    for (let i = 0; i < result.amount; i++) {
+      if (tempInfluence > 0) {
+        tempInfluence -= 1;
+        log.push("1 slot absorbed by a Temporary Influence slot.");
+        continue;
+      }
+      const slot = coreInfluence.findIndex((c) => !c.filled);
+      if (slot === -1) {
+        log.push("Core Influence track already full — the GM adjudicates any further consequence.");
+        continue;
+      }
+      const severity = SEVERITY_BY_INDEX[slot];
+      const condition = `${severity} Injury`;
+      coreInfluence[slot] = { filled: true, severity, condition };
+      log.push(`Core Influence filled: <strong>${condition}</strong> (recovers in ${INFLUENCE_RECOVERY_TIME[severity]}).`);
+      if (slot === 4) becameCritical = true;
+    }
+
+    await this.actor.update({
+      "system.playState.currentTemporaryInfluence": tempInfluence,
+      "system.coreInfluence": coreInfluence
+    });
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> contributes ${result.amount} Temporary Influence ${result.amount === 1 ? "slot" : "slots"} to <strong>${goalLabel}</strong>.</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+    });
+
+    if (becameCritical) {
+      ui.notifications.warn(`${this.actor.name} has taken a Critical Influence Injury contributing to "${goalLabel}"! This must be actively addressed in the fiction before recovery begins.`);
+    }
+  }
+
+  /** See EssenceActorSheet's identically-named private methods for the full Adventure-Limited
+   *  Reach Trigger reasoning — this NPC sheet has no generic addArrayRow/deleteArrayRow action
+   *  (unlike the character sheet), so Add/Delete get their own small dedicated handlers instead. */
+  static async #onAddReachTrigger() {
+    const triggers = this.actor.system.reachTriggers.map((t) => ({ ...t }));
+    triggers.push({ name: "", tempBonus: 1, tempInfluenceGrant: 0, usedThisAdventure: false, active: false });
+    await this.actor.update({ "system.reachTriggers": triggers });
+  }
+
+  static async #onDeleteReachTrigger(event, target) {
+    const i = Number(target.dataset.index);
+    const triggers = this.actor.system.reachTriggers.map((t) => ({ ...t }));
+    triggers.splice(i, 1);
+    await this.actor.update({ "system.reachTriggers": triggers });
+  }
+
+  /** See EssenceActorSheet#onActivateReachTrigger — identical mechanic, duplicated per this
+   *  project's actor-sheet/npc-sheet convention rather than shared across sheet classes. */
+  static async #onActivateReachTrigger(event, target) {
+    const i = Number(target.dataset.index);
+    const triggers = this.actor.system.reachTriggers.map((t) => ({ ...t }));
+    const trigger = triggers[i];
+    if (!trigger) return;
+
+    const wasFree = !trigger.usedThisAdventure;
+    trigger.usedThisAdventure = true;
+    trigger.active = true;
+
+    const maxTemp = this.actor.system.temporaryInfluence ?? 5;
+    let tempInfluence = this.actor.system.playState.currentTemporaryInfluence ?? 0;
+    const coreInfluence = this.actor.system.coreInfluence.map((c) => ({ ...c }));
+    const log = [];
+
+    if (trigger.tempInfluenceGrant) {
+      tempInfluence = Math.min(maxTemp, tempInfluence + trigger.tempInfluenceGrant);
+      log.push(`Grants ${trigger.tempInfluenceGrant} Temporary Influence usable only this Scene (capped at normal max).`);
+    }
+
+    let becameCritical = false;
+    if (!wasFree) {
+      for (let n = 0; n < 1; n++) {
+        if (tempInfluence > 0) {
+          tempInfluence -= 1;
+          log.push("Additional use this Adventure — 1 Breach absorbed by a Temporary Influence slot.");
+          continue;
+        }
+        const slot = coreInfluence.findIndex((c) => !c.filled);
+        if (slot === -1) {
+          log.push("Additional use this Adventure — Core Influence track already full, GM adjudicates.");
+          continue;
+        }
+        const severity = SEVERITY_BY_INDEX[slot];
+        const condition = `${severity} Injury`;
+        coreInfluence[slot] = { filled: true, severity, condition };
+        log.push(`Additional use this Adventure — Core Influence filled: <strong>${condition}</strong> (recovers in ${INFLUENCE_RECOVERY_TIME[severity]}).`);
+        if (slot === 4) becameCritical = true;
+      }
+    } else {
+      log.push("First use this Adventure — free.");
+    }
+
+    await this.actor.update({
+      "system.reachTriggers": triggers,
+      "system.playState.currentTemporaryInfluence": tempInfluence,
+      "system.coreInfluence": coreInfluence
+    });
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> activates <strong>${trigger.name || "a Reach Trigger"}</strong> (Reach +${trigger.tempBonus} for the current Scene).</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+    });
+
+    if (becameCritical) {
+      ui.notifications.warn(`${this.actor.name} has taken a Critical Influence Injury from Influence Breach! This must be actively addressed in the fiction before recovery begins.`);
+    }
+  }
+
+  static async #onDeactivateReachTrigger(event, target) {
+    const i = Number(target.dataset.index);
+    const triggers = this.actor.system.reachTriggers.map((t) => ({ ...t }));
+    if (!triggers[i]) return;
+    triggers[i].active = false;
+    await this.actor.update({ "system.reachTriggers": triggers });
+  }
+
+  /** See EssenceActorSheet#onResetAdventureUses / resetAdventureUses() in utils.mjs. */
+  static async #onResetAdventureUses() {
+    await resetAdventureUses(this.actor);
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> resets Reach Triggers, Augment Uses, and Equipment Card Uses for a new Adventure.</p>`
+    });
+  }
+
   /** See EssenceActorSheet#onItemView — same "eye" View button, same reasoning. */
   static #onItemView(event, target) {
     const sheet = this.actor.items.get(target.dataset.itemId)?.sheet;
@@ -610,5 +961,49 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       content: `<p>Delete <strong>${item.name}</strong>? This cannot be undone.</p>`
     });
     if (confirmed) await item.delete();
+  }
+
+  /** See EssenceActorSheet#onChooseGrantedItem for the full reasoning — identical behavior here:
+   *  pulls eligible items from the actor's own owned Equipment, not the shared compendium. */
+  static async #onChooseGrantedItem(event, target) {
+    const sourceName = target.dataset.grantSource;
+    const grant = ITEM_GRANT_REGISTRY[sourceName];
+    if (!grant) return;
+
+    const reach = this.actor.system.effectiveReach;
+    const owned = this.actor.items.filter((i) => i.type === "equipment" && i.system.reachExceptionSource !== sourceName);
+    const eligible = owned.filter((i) => equipmentMatchesGrant(i.system, grant) && reachQualifiesForGrant(i.system, grant, reach));
+    if (!eligible.length) {
+      ui.notifications.warn(`No item in this NPC's Inventory currently qualifies for ${sourceName}.`);
+      return;
+    }
+
+    const chosenId = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: `Choose Item — ${sourceName}` },
+        content: `<label>Item
+          <select name="itemId">${eligible.map((i) => `<option value="${i.id}">${i.name} (Reach ${i.system.cost || 0})</option>`).join("")}</select>
+        </label>`,
+        buttons: [{
+          action: "choose",
+          label: "Choose",
+          default: true,
+          callback: (ev, button) => button.form.elements.itemId.value
+        }],
+        submit: (result) => resolve(result ?? null)
+      }).render(true);
+    });
+    if (!chosenId) return;
+
+    const previous = this.actor.items.filter((i) => i.type === "equipment" && i.system.reachExceptionSource === sourceName);
+    for (const p of previous) await p.update({ "system.reachExceptionSource": "", "system.reachExceptionMargin": 0, "system.slotCost": 1 });
+
+    const chosen = this.actor.items.get(chosenId);
+    await chosen.update({
+      "system.slot": "signature",
+      "system.reachExceptionSource": sourceName,
+      "system.reachExceptionMargin": grant.reachMargin,
+      "system.slotCost": grant.countsAgainstLimit ? 1 : 0
+    });
   }
 }

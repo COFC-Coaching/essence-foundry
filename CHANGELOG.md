@@ -2,6 +2,386 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.42
+
+A full pass on live feedback that the Equipment sheet, Item Creation Wizard, and Bulk Import were
+cluttered, inconsistent, and in places genuinely broken.
+
+- **Equipment's Category and Kind merged into one field.** Having two overlapping dropdowns
+  ("Category: weapon/armor/tool/gear" and "Kind: standard/toolkit/consumable-kit") to describe
+  what one item fundamentally is was exactly the kind of unnecessary complexity flagged — `kind`
+  is gone; `category` now has 7 direct choices: Weapon, Armor, Shield, Implement, Toolkit,
+  Consumable Kit, Gear. Everywhere the old 4-category scheme was hardcoded (folders, the Wizard's
+  Group filter, `mapCategory()` in build-packs.mjs, the Bulk Import CSV, Item Grants' matchers)
+  updated to match. A shared `EQUIPMENT_CATEGORY_LABELS` map (item-card.mjs) and a new
+  `equipmentCategoryLabel` Handlebars helper give every dropdown and every display value the same
+  properly-capitalized label ("Consumable Kit," not "Consumable-kit" or "consumable-kit") instead
+  of each template inventing its own casing.
+- **The Equipment sheet now only shows fields relevant to what's being made** — Type/Range/
+  Fortitude/Resilience/Movement/Reach Bonus/Modular only for the four worn/wielded categories;
+  Uses only for Gear; Quantity only for Gear/Consumable Kit; a Toolkit shows nothing beyond the
+  basics. The Slot field (Signature/Temporary/Armory) only appears once the item is owned by an
+  Actor — a compendium template has no Slot to set. Reach Exception (normally set automatically by
+  the Item Grants system) moved behind a collapsed "Advanced" disclosure instead of always-expanded
+  paragraph text in front of every item.
+- **Modular Assembly on an unowned item** (a compendium template being authored, not yet on a
+  character) no longer dead-ends with "save this onto an Actor first" — it shows a plain free-text
+  field for Chassis/Fitting/Augments instead, until real compendium-level Component linking exists.
+- **Fixed rich-text (Effect/Passive/Special/Flavor, etc.) fields being unusable** — the toolbar and
+  the actual typing area were the same flat color with no visual boundary, AND (found while fixing
+  the color issue) the fixed height budget those fields were given left only ~8px for the actual
+  typable area once the toolbar rendered, making them both look broken and functionally almost
+  impossible to click into. Both fixed in essence.css: toolbar and content now have distinct
+  backgrounds, and the height budget is large enough for both.
+- **The Item Creation Wizard and Bulk Import's type/template pickers** were a row of plain small
+  buttons with no visual identity — replaced with an icon grid, each card colored to match that
+  type's own card-view border color elsewhere in the system (gold for Cards, blue for Equipment,
+  red for Conditions, brown/teal/purple for Chassis/Fitting/Augment). (A first pass at this
+  overlapped the icon and label text because Foundry core's blanket `button` CSS forces a small
+  fixed height meant for a single line of text — fixed by giving these cards an explicit height.)
+- **Bulk Import now has a separate CSV template per content type** instead of one combined
+  "Combat Cards" template covering both Action and Reaction Cards via a `kind` column a GM had to
+  know to fill in correctly — Action Cards and Reaction Cards are now separate downloads. Chassis,
+  Fittings, and Augments — fully supported one-at-a-time in the Item Creation Wizard — previously
+  had no Bulk Import template at all; all three now do. The near-duplicated create-or-update loop
+  that used to exist once per type is now one generic loop driven by each template's own
+  `pack`/`type`/`img`/`toSystem` config.
+- Fixed Chassis/Fitting/Augment items showing a raw, undefined-looking `TYPES.Item.augment`-style
+  string as their sheet title — `lang/en.json` never had label entries for these three item types
+  (added when they were originally built), so Foundry fell back to displaying the raw
+  localization key. Added the missing entries.
+- **Slot and Quantity are no longer part of authoring an Equipment/Chassis/Fitting template** —
+  both are properties of an owned COPY of an item (which Signature/Temporary/Armory slot it's
+  carried in; how many you happen to have), assigned once a player actually acquires it, not
+  properties of the template itself. Removed from the Equipment sheet's edit form and Bulk
+  Import's CSV templates entirely for unowned/compendium items; both still appear (and only
+  appear) once the item is actually owned by an Actor.
+
+- **Fixed Quartermaster's Due (and every Item Grant) matching almost nothing.** The grant matcher
+  required an exact `system.type` of "Main-Hand" or "Off-Hand," but that's not a real value this
+  system's Equipment ever stores — `type` is free descriptive text ("Ranged, 1h", "Foci, 2h",
+  "Off-Hand," "Medium," "Passive" for Toolkits/Kits), so the matcher almost never matched real
+  gear. Reworked `item-grants.mjs`'s matcher to key off `category` (weapon/armor, or tool-but-not-
+  "Passive" to include held Implements/Off-Hand items while excluding actual Toolkits) instead of
+  a `type` string that doesn't exist as a controlled vocabulary anywhere in this system's content.
+  Since the picker in `actor-sheet.mjs`/`npc-sheet.mjs`/`character-wizard.mjs` all call the same
+  shared `equipmentMatchesGrant()`, this one fix corrects all three.
+
+## 0.6.40
+
+Fixes from a design-doc review of the Chassis/Fitting/Augment modular equipment system against
+the printed rules' actual terminology and the Toolkit/Consumable Kit split.
+
+- Renamed the Chassis/Fitting `category` value `"guard"` to `"shield"` (`item-component.mjs`) —
+  the printed rules call this category "Shield," not "Guard."
+- Added `CHASSIS_LABELS`/`FITTING_LABELS` (`item-component.mjs`) — the printed rules use a
+  different in-fiction term for "Chassis" and "Fitting" per category (Striker/Handling for Melee,
+  Launcher/Payload for Ranged, Shell/Rigging for Armor, Shield/Handling for Shields, Focus/
+  Interface for Magical Implements). Every sheet that shows a Chassis/Fitting now uses the correct
+  term instead of the generic word: the Chassis/Fitting item's own header and category dropdown
+  (`component-sheet.hbs`), the Equipment sheet's Modular Assembly section (`equipment-sheet.hbs`),
+  and the Item Creation Wizard's Chassis/Fitting steps (`content-wizard.hbs`, previously also still
+  showing the stale "Cost" label instead of "Reach" — missed in the earlier Reach/Tier correction).
+- Added the Toolkit / Consumable Kit distinction the rules actually describe (previously both were
+  just generic `equipment` with one flat, editable-nowhere `uses` field): `EssenceEquipmentData`
+  gets a `kind` field (`"standard" | "toolkit" | "consumable-kit"`, independent of `category`) and
+  an `equipmentCards` array (name/effect/Uses per card) for Consumable Kits. The equipment sheet,
+  Item Creation Wizard, and bulk-import CSV template all respect `kind`: a Toolkit shows no Uses
+  field at all; a Consumable Kit shows an Equipment Cards list editor instead of the single flat
+  Uses field; "standard" behaves as before (including a newly-added editable Uses field, which the
+  sheet was previously missing entirely — display-only in view mode, no way to set it in edit mode).
+- `resetAdventureUses()` (new shared function in `utils.mjs`, replacing the Reach-Trigger-only
+  `#onResetReachTriggersAdventure` in both actor sheets): the "Reset All for New Adventure" button
+  now also refreshes every owned Function Augment's `usesRemaining` and every Consumable Kit's
+  Equipment Card `usesRemaining` back to their `uses` max — previously nothing reset either of
+  those at all, a silent gap since Function Augments already had Uses tracking with no way to
+  refill it short of manually editing the field.
+- `#onDeleteMount` (`item-sheet.mjs`) now refuses to remove a Chassis's last Mount — "a Chassis
+  must have at least one Augment Mount" was previously unenforced.
+- Fixed a stale doc comment on `EssenceEquipmentData.reachExceptionSource` (`item-card.mjs`) still
+  describing the pre-0.6.37 "Reach-vs-Tier(Availability)" model.
+
+- Equipment compendium now groups into Folders instead of one flat list: Weapon/Armor/Tool/Gear by
+  `category` (same `writeCategoryFolders()` approach 0.6.x's Action/Reaction Card folders already
+  use, just keyed differently), plus Chassis/Fitting/Augment folders. Those three used to be their
+  own separate, always-empty compendium packs (there's no pre-authored content for them — players
+  build their own via the modular equipment system) — folded into "equipment" as folders instead,
+  so a GM authoring one via the Item Creation Wizard has one shared library, not four mostly-empty
+  compendium tabs. The Item Creation Wizard (content-wizard.mjs) now creates all of Equipment/
+  Chassis/Fitting/Augment into that one pack, auto-assigning the right folder (fixed for Chassis/
+  Fitting/Augment, tracking the Category field live for Equipment).
+- Added a generic "Item Grant" mechanic (`module/data/item-grants.mjs`) for the family of Heritage
+  Legacies and Species Adaptations that let a character designate a specific Equipment item they
+  already own as a standing benefit — Warcamp Raised's "Quartermaster's Due" (Main-Hand/Off-Hand/
+  Armor, Reach+1, counts against Signature Limit), Constructs' "Internal Compartment" (any cost-1
+  item, doesn't count) and "Integrated Tool" (any toolkit, doesn't count), Craftfolk's "Inherited
+  Tools" (any toolkit, doesn't count). One data-driven registry entry per named feature rather than
+  bespoke code per feature, and auto-detected from the actor's actual Heritage Legacy name / chosen
+  Species Adaptation names (no separate "this actor has this grant" flag to keep in sync) — the
+  fulfilling item, if chosen, is identified by the same `reachExceptionSource` field the
+  Reach-gating exception already uses, so there's no new persisted actor state at all. A "Choose
+  Item"/"Replace" button (Character sheet, NPC sheet, and Character Wizard's Equipment step) opens
+  a DialogV2 listing only the character's own owned Equipment that satisfies that grant's type/
+  Reach rule — deliberately the character's Inventory, not the shared compendium (an early version
+  browsed the compendium instead and it surfaced a random grab-bag of every setting's equipment
+  with no relevance to the character being played) — and tags the pick with the Reach exception +
+  slot cost automatically instead of requiring the player to type them onto the item by hand.
+- `computeSlotUsage()` (utils.mjs) now reads an equipment item's own `system.slotCost` instead of
+  hardcoding 1 per Signature/Armory item — needed so an Item Grant that "doesn't count against your
+  Signature Equipment Limit" actually doesn't. `character-wizard.mjs`'s own slot-usage math already
+  did this; `actor-sheet.mjs`/`npc-sheet.mjs` did not, which was an existing inconsistency this
+  fixes as a side effect.
+
+## 0.6.37
+
+- **Correction to 0.6.36's Reach-gating work**: that release wrongly read Equipment's
+  `system.tier` field as the Reach gate ("Tier (Availability)"). Per the owner's authoritative
+  reference (now saved verbatim at `design/reach-and-economy.md`), Reach is not a price or a
+  spend value — it's a character's tier of economic *access*, and the field that actually carries
+  an item's Reach requirement is the pre-existing `system.cost` (a StringField, documented in
+  `bulk-import.mjs`'s own CSV docs as the item's Reach cost to acquire/use). `system.tier` is an
+  unrelated field — the Chassis/Fitting/Component sophistication rating for the modular assembly
+  system — and was never the right thing to check.
+  - Reverted every "Tier (Availability)" label back to plain "Tier" (Equipment sheet's edit form
+    and card-view).
+  - Relabeled `system.cost`'s field/column as "Reach" everywhere it's shown or edited (Equipment
+    sheet, Character/NPC Signature Equipment tables, Wizard's Signature Loadout and Equipment
+    Library browser).
+  - Added `computeReachGate()` to `module/utils.mjs` — parses `system.cost` (empty string = no
+    stated Reach requirement, not 0) and applies any `reachExceptionSource`/`reachExceptionMargin`
+    — and switched `actor-sheet.mjs`, `npc-sheet.mjs`, and `character-wizard.mjs`'s over-Reach
+    warning logic to use it instead of reading `system.tier`.
+  - The Components & Augments table's use of `system.tier` (Chassis/Fitting/Component
+    sophistication) was correct in 0.6.36 and is unchanged.
+
+## 0.6.36
+
+- Reach was displayed on the Combat tab next to Movement, styled as a combat stat — but
+  part-ii-character-creation.md defines it as an economic/social stat ("the scale across which
+  wealth, reputation, and connections remain meaningful"), recorded alongside the Influence tracks.
+  Moved the Reach display/input to the Non-Combat tab's Influence section on both the Character and
+  NPC sheets (the Wizard already had it correctly placed in its Influence step). Schema field
+  (`system.reach`) is unchanged — this was a display-location fix only.
+- Equipment's `system.tier` field is now also labeled "Tier (Availability)" on the Equipment
+  sheet's edit form and card-view, and the Character/NPC sheet's Signature Equipment header now
+  shows the actor's current Reach and soft-flags (a non-blocking warning icon, never a hard block)
+  any Signature item whose Tier exceeds it — matching part-ii-character-creation.md's repeated
+  "availability does not exceed your Reach" rule, read against `system.tier` rather than a new
+  field (part-viii-equipment-and-items.md never uses the word "Availability" and defines Tier as
+  the same underlying concept). Same flag added to the Character Wizard's Equipment step.
+- Added `reachExceptionSource`/`reachExceptionMargin` to Equipment (`item-card.mjs`) so a player can
+  manually flag one specific item as permanently exempt from the Reach warning up to a stated
+  margin (Warcamp Raised's "Quartermaster's Due" allows Tier up to Reach+1; Constructs' "Internal
+  Compartment" allows exactly Reach). Edit-form only, not shown in card-view.
+- Added a generic "Adventure-Limited Reach Trigger" mechanic (`reachTriggers` on the actor,
+  `system.effectiveReach` derived field) covering Noble Household's "Letters of Standing" and
+  Frontier Household's "Prepared Cache" — a temporary per-Scene Reach boost, manually
+  activated/deactivated (no automated Scene boundary), with the first use each Adventure free and
+  each additional use applying 1 Influence Breach through the same Temp→Core Influence mechanic
+  Influence Injuries already use. A manual "Reset All for New Adventure" action clears every
+  trigger's used flag, matching how Wound/Influence recovery are all manual here too. Underworld
+  Raised's "Fence's Cache" was checked against this brief's assumption that it shared the pattern —
+  it doesn't (see build-history): the current rules text gates it only by narrative access to a
+  black market, with no Adventure limit or Breach cost, so it's a different (item-swap) mechanic
+  not built this session.
+
+## 0.6.35
+
+- Character Wizard's Identity step gets a real inline Species Adaptation picker, replacing the
+  "(open — choose Adaptations here)" link that sent players out to the Species Item's own
+  GM-authoring sheet. Nature and each Adaptation now render directly in the wizard with a capped
+  "X / N chosen" checkbox picker, mirroring the Combat Skills/Non-Combat steps' point-pool headers.
+- Added a nested "sub-choice" schema to Species Nature and Adaptations (`item-origin.mjs`) for
+  traits that bury a second choice in their own rules text — e.g. Mortal-Kin's Keen ("choose two
+  Senses") or Dragonkin's Nature ("choose a Draconic Lineage"). Fixed-list sub-choices render as
+  capped checkboxes; free-text ones (rules using "such as"/open wording) render as a plain text
+  input. Encoded every sub-choice found in a full audit of part-ii-character-creation.md's Species
+  section into `scripts/origin-data.json`; `build-packs.mjs`'s `speciesToItem()` now passes the new
+  field through. The Species authoring sheet (`species-sheet.hbs`) gained matching fields so a GM
+  can define a sub-choice when authoring a new Species.
+- `deriveOriginFeatures()` now appends a chosen sub-choice's selected value(s) to the feature's text
+  (e.g. " (Senses: Keen Hearing, Low-Light Vision)") so the Character sheet's General Features table
+  shows which Senses/Lineage/etc. were actually picked, not just that the trait was chosen.
+
+## 0.6.34
+
+- Character Wizard's Equipment step: the "Equipment Library" browser now has a Group filter
+  (weapon/armor/tool/gear — Equipment's `system.category`), alongside its existing Search, matching
+  the filter pattern already used on the Combat Skills step's Qualifying Cards browser.
+
+## 0.6.33
+
+- Fix the Character Wizard "jerking to the top" every time a Card or piece of Equipment was picked
+  (or a filter changed): adding/removing an item re-renders the whole wizard, which always resets
+  scroll position to 0 — now both the step's own scroll area and the inner Qualifying
+  Cards/Equipment Library list remember and restore their scroll position across every re-render,
+  the same way search-box focus was already preserved.
+- Species Items were unreachable from both the Character sheet and the Character Wizard — there
+  was no way to actually open a chosen Species to pick its Adaptations (e.g. Mortal-Kin's "choose
+  2" Hardy/Keen/etc.), only to select which Species to use. "Species: X" (and Heritage/Distinction)
+  on the Character sheet's Origin section, and "Species — X" in the Wizard's Identity step, are now
+  clickable and open that Item's own sheet. Also added the same link to the NPC sheet, which had
+  the same gap.
+
+## 0.6.32
+
+- Character Wizard's Combat Skills step: the "Qualifying Cards" browser now has a Subtype filter
+  alongside the existing Type/Skill/Sort ones, nested under Skill the same way Combat Card sheets'
+  own Subtype dropdown is (choosing a Skill resets Subtype back to "All" since each Skill has its
+  own fixed 7). With no Skill chosen, Subtype offers the full union across all Skills instead of
+  being empty, so browsing "every Opener" or "every Space card" regardless of Skill still works.
+  Each card row in the list now also shows its Subtype, not just Rank/Skill.
+
+## 0.6.31
+
+- Action Cards and Reaction Cards now browse grouped into Folders by Combat Skill (Prowess,
+  Ballistics, Gestalt, Cunning, Magecraft, Psionics, Leadership, Ritualism, Calling, plus a
+  "Basic" folder for skill-less universal cards) instead of one flat 194/67-item list per pack.
+  `scripts/build-packs.mjs` now writes real Folder documents (`writeCombatSkillFolders()`) into
+  each of the two packs separately (Foundry Folders belong to exactly one pack, so the 10 folders
+  are duplicated once per pack) and assigns each card's `folder` field by its `system.skill`.
+  Also added a reusable `--only=pack-a,pack-b` flag to the build script so a change scoped to a
+  couple of packs doesn't force-recompile every other pack in the system.
+- Condition, Equipment (including Toolkits/Consumable Kits), Chassis, Fitting, and Augment sheets
+  now default to the same read-first "card" view Action/Reaction Cards already had, with a toggle
+  into the existing edit form. The read/edit toggle mechanism itself (`_viewMode` field,
+  `toggleCardView` action, the `_toggleDisabled` override, `renderAsView()`) moved from
+  `EssenceCardSheet` up into the shared `EssenceItemSheetBase` so every Item sheet gets it for
+  free. Each type gets its own accent color so they stay visually distinct: Condition `#c62828`
+  (this system's existing danger/fail red), Equipment `#42a5f5` (steel blue), Chassis `#8d6e63`
+  (bronze), Fitting `#26a69a` (teal), Augment `#ab47bc` (violet).
+- The Item Creation Wizard (`content-wizard.mjs`) can now create Chassis, Fitting, and Augment
+  Items — added in the same Phase 3 session as everything else but never wired into the wizard's
+  `TYPE_CONFIG`, so a GM previously had no step-by-step way to author one outside a compendium's
+  own bare "Create Item" button. Also fixed the wizard's generic array-row field handler to
+  coerce number-typed inputs (needed for Chassis Mounts' nullable `linkedWith` field) instead of
+  writing raw strings, which would have silently turned a blank "unlink" into Mount 0.
+
+## 0.6.30
+
+- **Rule change**: Surges are now earned independently of the Success Die/Defense check — every
+  die in the pool showing 6+ grants 1 Surge, INCLUDING the Success Die itself if it qualifies.
+  Previously the Success Die never earned its own Surge even at 6+, only the other dice did.
+  (`resolveCombatRoll` in `essence-roll.mjs`; the chat card's dice display now shows a die as both
+  green (Success) and gold-ringed (Surge) at once when it's both, instead of the old either/or.)
+- Fix a live bug found while verifying Phase 1 in-app: Combat Card sheets' new Skill/Subtype
+  dropdowns (added in 0.6.26) assumed `system.skill` was stored lowercase, but every existing card
+  actually stores it capitalized ("Magecraft"). This made the Skill dropdown show as unset and
+  Subtype's real option list come up empty on every card that already had a Skill set. Fixed by
+  normalizing the SUBTYPE_DATABASE lookup instead of the stored data — `COMBAT_SKILLS` values are
+  now capitalized to match, and a new `subtypesForSkill()` helper lowercases before indexing.
+
+## 0.6.29
+
+- Plain (non-modular) `equipment` Items' Fortitude/Resilience/Movement/Reach Bonus fields now
+  actually apply to the actor — previously nothing in the codebase read them at all, so equipping
+  "+2 Fortitude" armor did nothing mechanically. Delivered via a real, transferred ActiveEffect
+  (`module/data/equipment-effects.mjs`) kept in sync on item create/update, enabled only while the
+  item's Slot is Signature — Armory/Temporary gear you own but aren't carrying doesn't affect your
+  stats. Chassis/Fitting bonuses on assembled modular items are unaffected by this and remain
+  display-only (see equipment-features.mjs) since they have no standalone existence as an
+  actor-owned Item for Foundry's transfer mechanism to attach to.
+- Add an approximate "one Reaction per Action" soft warning (part-iv-combat.md § One Reaction per
+  Action): using a Reaction Card now warns (never blocks) if the same actor already used a Reaction
+  during the currently-active combatant's Turn this round. This is explicitly NOT real
+  trigger-tracking — the system has no concept of a specific "Action instance" a Reaction responds
+  to, so this is a same-Turn proxy, not a same-Action check, and says so in its own warning text.
+
+## 0.6.28
+
+- Add "Contribute to Shared Goal" (part-v-social-encounters.md § Collaborative Influence Pooling)
+  on both the Character and NPC sheets: prompts for a shared-goal label, an optional
+  narrative-only/no-cost toggle, and how many Temporary Influence slots to spend, then runs the
+  same Temp→Core Influence overextension logic as Apply Influence Injury, posting a chat message
+  tagged with the goal name. Deliberately per-actor rather than a cross-actor "pooling" window —
+  the rules explicitly reject tracking a single pooled number ("the combined effort... is what the
+  GM weighs..., not a single pooled number"), so a per-character contribution button matches the
+  rule better than inventing new multi-actor UI would.
+
+## 0.6.27
+
+- Connect Influence to the Signature Limit overage rule (part-viii-equipment-and-items.md §
+  Bringing More Than Your Signature Limit): both the Character and NPC sheets now show a note and
+  a "Spend Influence for Extra Slot" button whenever prepared Signature Equipment exceeds
+  `signatureEquipmentLimit` by at least one full slot, spending 1 Temporary Influence per click.
+  Manual and trust-based like every other Apply/Spend action on this sheet — going over the limit
+  was never blocked and still isn't; this only gives the overage a resolution path instead of no
+  path at all.
+
+## 0.6.26
+
+- **Revert** the 0.6.23 `SUBTYPE_DATABASE` "fix." That change corrected the table against the V5
+  rulebook's Part X Appendix A, but the user has since confirmed the web app's `essence-options.ts`
+  (the actual Expertise & Subtype spreadsheet) is the canonical source, not the rulebook appendix —
+  and it matches the pre-0.6.23 values exactly. Appendix A itself appears to be stale/draft content
+  and still needs a follow-up correction in the wiki; that wasn't done here.
+- Card sheets: Skill and Subtype are now `<select>` dropdowns instead of free text, and Subtype is
+  nested under the selected Skill — each Combat Skill has its own fixed set of 7 (e.g. Cunning:
+  Ambush, Diversion, Evasion, Gambit, Reversal, Trap, plus one more; see `SUBTYPE_DATABASE`).
+  Changing Skill clears Subtype if the stored value isn't valid for the new Skill, in the same
+  update (both fields have to change atomically, or Subtype's re-rendered options wouldn't even
+  include the stale value). This was `SUBTYPE_DATABASE`'s first real consumer — previously nothing
+  in the codebase read it at all.
+
+- Add the Chassis/Fitting/Augment modular equipment system (part-viii-equipment-and-items.md §
+  Modular Equipment through § Reconfiguring Equipment). Three new Item sub-types — `chassis`,
+  `fitting`, `augment` — with their own compendium packs, sheets, and (for Chassis) an Augment
+  Mounts editor including Linked Mount pairing. `equipment` gained `chassisItemId`/`fittingItemId`/
+  `mounts` fields so a weapon/ranged/armor/guard/implement Item can become the assembled result of
+  a Chassis + Fitting + installed Augments; Toolkits and Consumable Kits are unaffected and stay
+  non-modular, and no existing Equipment compendium entry was changed.
+- Add `deriveEquipmentStats()` (`module/data/equipment-features.mjs`, mirrors
+  `origin-features.mjs`'s pattern): resolves an assembled item's Chassis/Fitting to sum their
+  Fortitude/Resilience/Movement bonuses, resolves each Mount's installed Augment, and applies Link
+  On/Off semantics (a linked-and-on Support modifies its paired Function instead of the Chassis).
+  Display-only, same as every other derived-feature list on this sheet — nothing here is written
+  back into the actor's own combat stats.
+- Add Armory/Signature capacity accounting, previously entirely unenforced despite
+  `armoryLimit`/`signatureEquipmentLimit` existing on the actor schema: `computeSlotUsage()`
+  (`module/utils.mjs`) counts a complete `equipment` item at 1 slot, a loose (unassembled)
+  `chassis`/`fitting` at ½ slot, and an `augment` at 0 slots always. Both the Character and NPC
+  sheets now show "used / limit" next to the Signature and Armory headers, and the NPC sheet's
+  previously-flat Equipment list is now split into Signature/Temporary/Armory sections to match the
+  Character sheet.
+- Add Chassis/Fitting assignment and Augment/Mount management directly on the equipment Item's own
+  sheet (assigning a Component is free, matching "if you have the Components... you do it"), plus
+  two dice-cost reconfiguration actions — "Pay Fitting Reconfigure Cost" (1 Action die Simple / 3
+  Structural, or the specific Fitting's own override) and "Pay Augment Swap Cost" (1 Action die) —
+  and a free Link On/Off toggle for Linked Mounts. Chose to put this UI on the equipment sheet
+  itself rather than duplicate it into both `actor-sheet.mjs` and `npc-sheet.mjs`, since it's a
+  property of the Item, not of which actor sheet has it open.
+- Register `chassis`/`fittings`/`augments` in `scripts/build-packs.mjs`'s `packTypes` map (it
+  listed every other pack but not these three, so the new empty `packs/_source/*` directories
+  would have silently never compiled) and compile the three new packs — empty for now, ready for
+  content authoring later.
+
+## 0.6.24
+
+- Add the Core Influence flow: `coreInfluence` entries now carry `severity`/`condition` like
+  `coreWounds` does, filled in the same fixed 5-slot Light/Light/Serious/Serious/Critical order.
+  New "Apply Influence Injury" / "Recover Influence" buttons on both the Character and NPC sheets
+  mirror "Apply Damage" / "Recover Wound" — an Injury spends an open Temporary Influence slot first
+  (or skips straight to Core Influence if "Voluntary" is checked), and a reference note shows each
+  severity's recovery time (Light 1 day / Serious 1 week / Critical 1 month) — manual/GM-triggered,
+  same as Wound recovery, not an automated clock.
+- Add a Standing display (`system.standing`: Undamaged / Light Injury / Serious Injury / Critical
+  Injury), derived from how many Core Influence spaces are filled — same count-based thresholds as
+  Wound State reads off Core Wounds.
+- NPCs previously had no Influence UI at all despite the schema supporting it (only Character
+  sheets did) — added the full Temporary/Core Influence section to the NPC sheet too, matching how
+  Wounds already work identically on both sheet types.
+
+## 0.6.23
+
+- Add Mastery: using a Card grants 1 free Surge (flat, non-stacking) when the rolling character
+  possesses more of the card's listed Expertises than it requires. Applies on both the Character
+  and NPC sheets' card-roll flow; shown as a note on the roll's chat card.
+- Fix `SUBTYPE_DATABASE` in `expertise-database.mjs`: several skills' Action Subtypes didn't match
+  the rulebook's Appendix A reference (wrong names and/or missing entries — e.g. Prowess was
+  missing "Chain" and "Maneuver" and listed a nonexistent "Guard"). Corrected all 9 skills against
+  the V5 rulebook. This data isn't wired into any UI yet, so this is a data-accuracy fix, not a
+  behavior change.
+
 ## 0.6.22
 
 - Using a Card with a Cost now automatically deducts that amount from the matching resource pool

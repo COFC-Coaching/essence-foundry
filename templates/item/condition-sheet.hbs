@@ -1,9 +1,26 @@
 <div class="essence-sheet-root">
 <header class="sheet-header">
   <img class="profile-img" src="{{item.img}}" data-action="editImage">
-  <h1><input name="name" type="text" value="{{item.name}}"></h1>
+  <h1><input name="name" type="text" value="{{item.name}}" {{#if viewMode}}disabled{{/if}}></h1>
+  <button type="button" class="card-view-toggle condition-view-toggle" data-action="toggleCardView" title="{{#if viewMode}}Edit this condition{{else}}View this condition{{/if}}">
+    <i class="fa-solid {{#if viewMode}}fa-pen{{else}}fa-eye{{/if}}"></i> {{#if viewMode}}Edit{{else}}View{{/if}}
+  </button>
 </header>
 
+{{#if viewMode}}
+<div class="card-view condition-view">
+  {{#each system.sections as |sec i|}}
+    {{#if sec.html}}
+      {{!-- Rules' own printed-card convention: the first section is boxed and shaded. --}}
+      <div class="card-view-line condition-view-section {{#if (eq i 0)}}condition-view-section-primary{{/if}}">
+        {{#if sec.label}}<div class="card-view-label">{{sec.label}}</div>{{/if}}
+        <div class="card-view-text">{{{sec.html}}}</div>
+      </div>
+    {{/if}}
+  {{/each}}
+  {{#unless system.sections.length}}<p class="muted">No sections yet.</p>{{/unless}}
+</div>
+{{else}}
 <h3 class="section-head">Sections</h3>
 <ol class="sections">
   {{#each system.sections as |sec i|}}
@@ -15,4 +32,5 @@
   {{/each}}
 </ol>
 <button type="button" data-action="addArrayRow" data-array="sections"><i class="fa-solid fa-plus"></i> Add Section</button>
+{{/if}}
 </div>

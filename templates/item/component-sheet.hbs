@@ -1,0 +1,140 @@
+<div class="essence-sheet-root">
+<header class="sheet-header">
+  <img class="profile-img" src="{{item.img}}" data-action="editImage">
+  <h1><input name="name" type="text" value="{{item.name}}" {{#if viewMode}}disabled{{/if}}></h1>
+  <button type="button" class="card-view-toggle component-view-toggle" data-action="toggleCardView" title="{{#if viewMode}}Edit this component{{else}}View this component{{/if}}">
+    <i class="fa-solid {{#if viewMode}}fa-pen{{else}}fa-eye{{/if}}"></i> {{#if viewMode}}Edit{{else}}View{{/if}}
+  </button>
+</header>
+
+{{#if viewMode}}
+<div class="card-view component-view component-view-{{item.type}}">
+  <div class="card-view-infogrid">
+    <div><span class="card-view-statlabel">{{componentLabel}} Category</span><span>{{system.category}}</span></div>
+    <div><span class="card-view-statlabel">Slot</span><span>{{system.slot}}</span></div>
+    <div><span class="card-view-statlabel">Tier</span><span>{{system.tier}}</span></div>
+    {{#if system.fortitude}}<div><span class="card-view-statlabel">Fortitude</span><span>{{system.fortitude}}</span></div>{{/if}}
+    {{#if system.resilience}}<div><span class="card-view-statlabel">Resilience</span><span>{{system.resilience}}</span></div>{{/if}}
+    {{#if system.movement}}<div><span class="card-view-statlabel">Movement</span><span>{{system.movement}}</span></div>{{/if}}
+    {{#if (eq item.type "chassis")}}
+      {{#if system.compatibleFittingCategory}}<div><span class="card-view-statlabel">Compatible Fitting</span><span>{{system.compatibleFittingCategory}}</span></div>{{/if}}
+    {{else}}
+      {{#if system.handedness}}<div><span class="card-view-statlabel">Handedness</span><span>{{system.handedness}}</span></div>{{/if}}
+      {{#if system.rangeModifier}}<div><span class="card-view-statlabel">Range Modifier</span><span>{{system.rangeModifier}}</span></div>{{/if}}
+      <div><span class="card-view-statlabel">Reconfigure</span><span>{{system.reconfigureCategory}}{{#if system.reconfigureCostOverride}} (override: {{system.reconfigureCostOverride}}){{/if}}</span></div>
+    {{/if}}
+  </div>
+
+  {{#if (eq item.type "chassis")}}
+    <div class="card-view-label">Augment Mounts</div>
+    <div class="card-view-text">
+      {{#each system.mounts as |m i|}}
+        Mount {{addOne i}}{{#if m.linkedWith}} (Linked with Mount {{addOne m.linkedWith}}){{/if}}{{#unless @last}}, {{/unless}}
+      {{/each}}
+    </div>
+  {{/if}}
+
+  {{#if system.grantsEquipmentCard}}<div class="card-view-tags muted">Grants Equipment Card</div>{{/if}}
+
+  {{#if system.effect}}
+    <div class="card-view-line">
+      <div class="card-view-label">Effect</div>
+      <div class="card-view-text">{{{system.effect}}}</div>
+    </div>
+  {{/if}}
+  {{#if system.passive}}
+    <div class="card-view-line">
+      <div class="card-view-label">Passive</div>
+      <div class="card-view-text">{{{system.passive}}}</div>
+    </div>
+  {{/if}}
+  {{#if system.special}}
+    <div class="card-view-line">
+      <div class="card-view-label">Special</div>
+      <div class="card-view-text">{{{system.special}}}</div>
+    </div>
+  {{/if}}
+
+  {{#if system.flavor}}<div class="card-view-flavor">{{{system.flavor}}}</div>{{/if}}
+</div>
+{{else}}
+
+<div class="equipment-fields grid-3">
+  <label>{{componentLabel}} Category
+    <select name="system.category">
+      {{#each categoryOptions as |opt|}}
+        <option value="{{opt.category}}" {{#if (eq ../system.category opt.category)}}selected{{/if}}>{{opt.label}}</option>
+      {{/each}}
+    </select>
+  </label>
+  <label>Slot
+    <select name="system.slot">
+      <option value="signature" {{#if (eq system.slot "signature")}}selected{{/if}}>signature</option>
+      <option value="temporary" {{#if (eq system.slot "temporary")}}selected{{/if}}>temporary</option>
+      <option value="armory" {{#if (eq system.slot "armory")}}selected{{/if}}>armory</option>
+    </select>
+  </label>
+  <label>Tier <input name="system.tier" type="number" min="1" max="5" value="{{system.tier}}"></label>
+  <label>Fortitude <input name="system.fortitude" type="text" value="{{system.fortitude}}" placeholder="e.g. +2"></label>
+  <label>Resilience <input name="system.resilience" type="text" value="{{system.resilience}}" placeholder="e.g. +1"></label>
+  <label>Movement <input name="system.movement" type="text" value="{{system.movement}}" placeholder="e.g. -1"></label>
+  <label class="chosen-toggle"><input type="checkbox" name="system.grantsEquipmentCard" {{#if system.grantsEquipmentCard}}checked{{/if}}> Grants Equipment Card</label>
+</div>
+
+{{#if (eq item.type "chassis")}}
+  <h3 class="section-head">{{componentLabel}} Details</h3>
+  <div class="equipment-fields grid-2">
+    <label>Compatible Fitting Category <input name="system.compatibleFittingCategory" type="text" value="{{system.compatibleFittingCategory}}" placeholder="e.g. Handling, Payload, Rigging, Interface"></label>
+  </div>
+
+  <h3 class="section-head">Augment Mounts <span class="muted">(every {{componentLabel}} has at least 1)</span></h3>
+  <ol class="mounts">
+    {{#each system.mounts as |m i|}}
+      <li>
+        <span class="mount-index">Mount {{addOne i}}</span>
+        <label>Linked with
+          <select class="mount-linked-select" data-index="{{i}}">
+            <option value="" {{#unless m.linkedWith}}selected{{/unless}}>— none —</option>
+            {{#each ../system.mounts as |other j|}}
+              {{#unless (eq j i)}}
+                <option value="{{j}}" {{#if (eq m.linkedWith j)}}selected{{/if}}>Mount {{addOne j}}</option>
+              {{/unless}}
+            {{/each}}
+          </select>
+        </label>
+        <button type="button" data-action="deleteMount" data-index="{{i}}" aria-label="Delete Mount {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
+      </li>
+    {{/each}}
+  </ol>
+  <button type="button" data-action="addMount"><i class="fa-solid fa-plus"></i> Add Mount</button>
+{{else}}
+  <h3 class="section-head">{{componentLabel}} Details</h3>
+  <div class="equipment-fields grid-2">
+    <label>Handedness
+      <select name="system.handedness">
+        <option value="" {{#if (eq system.handedness "")}}selected{{/if}}>—</option>
+        <option value="one-handed" {{#if (eq system.handedness "one-handed")}}selected{{/if}}>one-handed</option>
+        <option value="two-handed" {{#if (eq system.handedness "two-handed")}}selected{{/if}}>two-handed</option>
+      </select>
+    </label>
+    <label>Range Modifier <input name="system.rangeModifier" type="text" value="{{system.rangeModifier}}"></label>
+    <label>Reconfigure Category
+      <select name="system.reconfigureCategory">
+        <option value="simple" {{#if (eq system.reconfigureCategory "simple")}}selected{{/if}}>Simple (1 Action die)</option>
+        <option value="structural" {{#if (eq system.reconfigureCategory "structural")}}selected{{/if}}>Structural (3 Action dice)</option>
+      </select>
+    </label>
+    <label>Reconfigure Cost Override <input name="system.reconfigureCostOverride" type="number" min="0" value="{{system.reconfigureCostOverride}}" placeholder="printed override, if any"></label>
+  </div>
+{{/if}}
+
+<h3 class="section-head">Effect</h3>
+<div>{{essenceEditor system.effect target="system.effect" button=true}}</div>
+<h3 class="section-head">Passive</h3>
+<div>{{essenceEditor system.passive target="system.passive" button=true}}</div>
+<h3 class="section-head">Special</h3>
+<div>{{essenceEditor system.special target="system.special" button=true}}</div>
+<h3 class="section-head">Flavor</h3>
+<div>{{essenceEditor system.flavor target="system.flavor" button=true}}</div>
+{{/if}}
+</div>

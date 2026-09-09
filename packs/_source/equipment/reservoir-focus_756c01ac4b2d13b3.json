@@ -4,7 +4,7 @@
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "category": "tool",
+    "category": "implement",
     "slot": "armory",
     "tier": null,
     "type": "Foci, 2h",
@@ -24,7 +24,7 @@
     "isModular": true,
     "quantity": 1
   },
-  "folder": null,
+  "folder": "9c762be068db02ea",
   "flags": {},
   "ownership": {
     "default": 0

@@ -1,8 +1,9 @@
 import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { EXPERTISE_DATABASE } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
+import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
-import { capitalize, cardSummary, domainResource } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, resetAdventureUses, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -37,7 +38,8 @@ function pips(value, max = PIP_MAX) {
 /** Default new-row shape for each free-length array field, keyed by the sheet's data-array value. */
 const ARRAY_ROW_DEFAULTS = {
   nonCombatSkills: { name: "", rating: 0 },
-  passiveFeatures: { name: "", source: "", text: "" }
+  passiveFeatures: { name: "", source: "", text: "" },
+  reachTriggers: { name: "", tempBonus: 1, tempInfluenceGrant: 0, usedThisAdventure: false, active: false }
 };
 
 export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
@@ -67,6 +69,10 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       toggleDeathTrackFrozen: EssenceActorSheet.#onToggleDeathTrackFrozen,
       toggleTempInfluence: EssenceActorSheet.#onToggleTempInfluence,
       toggleCoreInfluence: EssenceActorSheet.#onToggleCoreInfluence,
+      applyInfluenceInjury: EssenceActorSheet.#onApplyInfluenceInjury,
+      recoverInfluenceInjury: EssenceActorSheet.#onRecoverInfluenceInjury,
+      spendInfluenceForSlot: EssenceActorSheet.#onSpendInfluenceForSlot,
+      contributeToGoal: EssenceActorSheet.#onContributeToGoal,
       addArrayRow: EssenceActorSheet.#onAddArrayRow,
       deleteArrayRow: EssenceActorSheet.#onDeleteArrayRow,
       addExpertise: EssenceActorSheet.#onAddExpertise,
@@ -78,7 +84,11 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       addAuthority: EssenceActorSheet.#onAddAuthority,
       removeAuthority: EssenceActorSheet.#onRemoveAuthority,
       addRite: EssenceActorSheet.#onAddRite,
-      deleteRite: EssenceActorSheet.#onDeleteRite
+      deleteRite: EssenceActorSheet.#onDeleteRite,
+      activateReachTrigger: EssenceActorSheet.#onActivateReachTrigger,
+      deactivateReachTrigger: EssenceActorSheet.#onDeactivateReachTrigger,
+      resetAdventureUses: EssenceActorSheet.#onResetAdventureUses,
+      chooseGrantedItem: EssenceActorSheet.#onChooseGrantedItem
     }
   };
 
@@ -297,6 +307,10 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     context.deathTrackPips = pips(system.playState.deathTrackStep, 5);
     context.temporaryInfluencePips = pips(system.playState.currentTemporaryInfluence, system.temporaryInfluence);
     context.coreInfluenceLabels = CORE_INFLUENCE_LABELS;
+    // Adventure-Limited Reach Triggers (Letters of Standing et al. — see reachTriggers' schema
+    // comment in actor-combatant.mjs). effectiveReach already folds in every `active` trigger's
+    // tempBonus; exposed again here bare so the template doesn't need to reach through `system.`.
+    context.reachTriggers = system.reachTriggers.map((t, i) => ({ ...t, i }));
 
     context.comboPips = pips(system.specialties.combo, 5);
     context.threadFamilies = MAGECRAFT_THREAD_FAMILIES.map((f) => ({
@@ -319,17 +333,59 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     context.basicReactionCards = allReactionCards.filter((i) => !i.system.skill).map(cardView).sort(byName);
     context.reactionCards = allReactionCards.filter((i) => i.system.skill).map(cardView);
     context.conditions = this.actor.items.filter((i) => i.type === "condition");
-    const equipmentView = (item) => ({
-      id: item.id,
-      name: item.name,
-      category: item.system.category,
-      type: item.system.type,
-      effectText: item.system.effect || item.system.passive || item.system.special || ""
-    });
+    // Reach gating (see computeReachGate() in utils.mjs and design/reach-and-economy.md): an
+    // equipment Item's `system.cost` field IS its Reach requirement — unrelated to `system.tier`,
+    // which is a Chassis/Fitting/Component sophistication rating for the modular assembly system
+    // (see the componentItems mapping below). Soft warning only, per this project's non-blocking
+    // convention — never prevents assigning the item, just flags it. A non-empty
+    // reachExceptionSource (Quartermaster's Due, Internal Compartment, ...) raises the allowed
+    // ceiling by that feature's own stated margin instead of suppressing the check outright.
+    const equipmentView = (item) => {
+      const { reachCost, exceptionSource, overReach } = computeReachGate(item.system, system.effectiveReach);
+      return {
+        id: item.id,
+        name: item.name,
+        category: item.system.category,
+        type: item.system.type,
+        reachCost,
+        exceptionSource,
+        overReach,
+        effectText: item.system.effect || item.system.passive || item.system.special || ""
+      };
+    };
     const equipment = this.actor.items.filter((i) => i.type === "equipment");
     context.signatureEquipment = equipment.filter((i) => i.system.slot === "signature").map(equipmentView);
     context.armoryEquipment = equipment.filter((i) => i.system.slot === "armory").map(equipmentView);
     context.temporaryEquipment = equipment.filter((i) => i.system.slot === "temporary").map(equipmentView);
+
+    // Armory/Signature capacity accounting (part-viii-equipment-and-items.md § Armory and
+    // Signature Capacity) — previously nothing read armoryLimit/signatureEquipmentLimit against
+    // actual usage at all; see computeSlotUsage's own doc comment for the ½-slot Component rule.
+    context.signatureUsed = computeSlotUsage(this.actor.items, "signature");
+    context.armoryUsed = computeSlotUsage(this.actor.items, "armory");
+    // § Bringing More Than Your Signature Limit — "spend 1 Temporary Influence for each additional
+    // FULL Signature slot you prepare beyond your normal limit." Floored: a lone ½-slot spare
+    // Component sitting over the line isn't itself "a full slot," so it doesn't trigger this on
+    // its own — only whole-slot overage does.
+    context.signatureOverLimit = Math.max(0, Math.floor(context.signatureUsed) - system.signatureEquipmentLimit);
+
+    // Item Grants (Quartermaster's Due, Internal Compartment, ...) — see item-grants.mjs. Detected
+    // from the actor's Heritage Legacy / chosen Species Adaptations, not a separate persisted list,
+    // so nothing here goes stale if the player swaps Heritage/Species or un-chooses an Adaptation.
+    context.itemGrants = deriveActiveGrants({ speciesItem, heritageItem }, equipment);
+
+    // Chassis/Fitting/Augment are their own embedded Item sub-types (design/chassis-fitting-
+    // augment-system.md), not fields nested in `equipment` — list them here so a spare Component
+    // sitting loose in the Armory is actually visible somewhere on the sheet. Assigning one to a
+    // specific equipment Item (chassisItemId/fittingItemId/mounts) is done from that equipment
+    // Item's own sheet (see EssenceEquipmentSheet in item-sheet.mjs) rather than duplicated here,
+    // to avoid adding to the actor-sheet/npc-sheet duplication debt build-history already flags —
+    // the assignment UI is fundamentally a property of the equipment Item, not of which actor
+    // sheet happens to have it open.
+    context.componentItems = this.actor.items
+      .filter((i) => ["chassis", "fitting", "augment"].includes(i.type))
+      .map((i) => ({ id: i.id, name: i.name, type: i.type, category: i.system.category ?? "", slot: i.system.slot ?? "", tier: i.system.tier ?? null }))
+      .sort((a, b) => a.type.localeCompare(b.type) || a.name.localeCompare(b.name));
     return context;
   }
 
@@ -483,6 +539,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       return;
     }
 
+    if (isReaction) EssenceActorSheet.#warnIfLikelySecondReaction(this.actor);
+
     const committed = await EssenceActorSheet.#promptDiceCount({
       title: `Use ${item.name}`,
       label: `Commit how many ${poolLabel} Dice? (min ${cardMin}, max ${available})`,
@@ -510,8 +568,30 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       }
     }
 
+    if (isReaction && game.combat) {
+      update["system.playState.lastReactionRound"] = game.combat.round;
+      update["system.playState.lastReactionCombatantId"] = game.combat.combatant?.id ?? "";
+    }
+
     await this.actor.update(update);
-    await rollEssencePool({ pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges });
+    const bonusSurges = hasMastery(sys, this.actor.system.expertises) ? 1 : 0;
+    await rollEssencePool({ pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges });
+  }
+
+  /**
+   * Soft "one Reaction per Action" nudge — see the schema comment on lastReactionRound/
+   * lastReactionCombatantId in actor-combatant.mjs for why this is approximate. Fires before the
+   * dice-commit dialog opens rather than after, so the warning is visible while the player still
+   * has the choice to cancel (the dialog can still be canceled after seeing it).
+   */
+  static #warnIfLikelySecondReaction(actor) {
+    if (!game.combat) return; // no active encounter — nothing to compare against
+    const ps = actor.system.playState;
+    const sameRound = ps.lastReactionRound === game.combat.round;
+    const sameActiveCombatant = ps.lastReactionCombatantId && ps.lastReactionCombatantId === game.combat.combatant?.id;
+    if (sameRound && sameActiveCombatant) {
+      ui.notifications.warn(`${actor.name} already used a Reaction during this Turn. Only one Reaction per Action is normally allowed — if this is responding to a different Action, this is fine to ignore.`);
+    }
   }
 
   /** Owner/GM/player quick-adjust for the Stamina/Focus/Mana current-value trackers — a plain
@@ -809,9 +889,343 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
   static async #onToggleCoreInfluence(event, target) {
     const i = Number(target.dataset.index);
-    const coreInfluence = this.actor.system.coreInfluence.map((c) => ({ filled: c.filled }));
+    const coreInfluence = this.actor.system.coreInfluence.map((c) => ({ ...c }));
     coreInfluence[i].filled = !coreInfluence[i].filled;
+    if (coreInfluence[i].filled) {
+      const severity = SEVERITY_BY_INDEX[i];
+      coreInfluence[i].severity = severity;
+      coreInfluence[i].condition = `${severity} Injury`;
+    } else {
+      coreInfluence[i].severity = "";
+      coreInfluence[i].condition = "";
+    }
     await this.actor.update({ "system.coreInfluence": coreInfluence });
+  }
+
+  /**
+   * Applies Influence harm per part-v-social-encounters.md § Influence: each Injury first spends a
+   * Temporary Influence slot if one is open (mirrors how a Temporary Wound absorbs a Wound before
+   * Core Wounds are touched); once Temporary Influence is exhausted — or the "Voluntary" box is
+   * checked, representing choosing to force a play beyond your means straight away — the Injury
+   * fills the next Core Influence space in fixed severity order (Light, Light, Serious, Serious,
+   * Critical). There is no accumulation/Resilience step here (unlike Damage): Influence has no
+   * numeric buffer to absorb into, only discrete slots.
+   */
+  static async #onApplyInfluenceInjury() {
+    const result = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: "Apply Influence Injury" },
+        content: `
+          <label>Injuries <input type="number" name="amount" value="1" min="1" autofocus></label>
+          <label style="display:flex;align-items:center;gap:6px;">
+            <input type="checkbox" name="voluntary"> Voluntary (skip Temporary Influence, mark Core Influence directly)
+          </label>
+        `,
+        buttons: [{
+          action: "apply",
+          label: "Apply",
+          default: true,
+          callback: (event, button) => ({
+            amount: Math.max(1, Math.floor(Number(button.form.elements.amount.value)) || 1),
+            voluntary: button.form.elements.voluntary.checked
+          })
+        }],
+        submit: (result) => resolve(result === "apply" ? null : result)
+      }).render(true);
+    });
+    if (!result) return;
+
+    const sys = this.actor.system;
+    let tempInfluence = sys.playState.currentTemporaryInfluence ?? 0;
+    const coreInfluence = sys.coreInfluence.map((c) => ({ ...c }));
+    const log = [];
+    let becameCritical = false;
+
+    for (let i = 0; i < result.amount; i++) {
+      if (!result.voluntary && tempInfluence > 0) {
+        tempInfluence -= 1;
+        log.push("1 Injury absorbed by a Temporary Influence slot.");
+        continue;
+      }
+      const slot = coreInfluence.findIndex((c) => !c.filled);
+      if (slot === -1) {
+        log.push("Core Influence track already full — the GM adjudicates any further consequence.");
+        continue;
+      }
+      const severity = SEVERITY_BY_INDEX[slot];
+      const condition = `${severity} Injury`;
+      coreInfluence[slot] = { filled: true, severity, condition };
+      log.push(`Core Influence filled: <strong>${condition}</strong> (recovers in ${INFLUENCE_RECOVERY_TIME[severity]}).`);
+      if (slot === 4) becameCritical = true;
+    }
+
+    await this.actor.update({
+      "system.playState.currentTemporaryInfluence": tempInfluence,
+      "system.coreInfluence": coreInfluence
+    });
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> takes ${result.amount} Influence ${result.amount === 1 ? "Injury" : "Injuries"}${result.voluntary ? " (Voluntary)" : ""}.</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+    });
+
+    if (becameCritical) {
+      ui.notifications.warn(`${this.actor.name} has taken a Critical Influence Injury! This must be actively addressed in the fiction before recovery begins.`);
+    }
+  }
+
+  /**
+   * part-v-social-encounters.md § Collaborative Influence Pooling: several characters contribute
+   * Temporary Influence toward one shared goal (funding a guildhall, uniting a fractured kingdom),
+   * each "proportional to their Character Tier" — no universal fixed cost, no single pooled total
+   * the system tracks ("the combined effort, mechanical and narrative, is what the GM weighs...
+   * not a single pooled number"). A contribution beyond what a character's Temporary Influence can
+   * absorb takes a Core Influence Injury the same way any other overextension does — so this reuses
+   * #onApplyInfluenceInjury's exact Temp→Core spend logic, just labeled with the shared goal and
+   * postable as pure narrative support at zero cost. Deliberately actor-scoped rather than a
+   * cross-actor "pooling" window — see the design discussion in this session: the rules explicitly
+   * reject a single pooled number, so a per-character contribution button posting to shared chat is
+   * a more faithful (and much smaller) fit than inventing new multi-actor UI.
+   */
+  static async #onContributeToGoal() {
+    const result = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: "Contribute to Shared Goal" },
+        content: `
+          <label>Shared Goal <input type="text" name="goal" placeholder="e.g. Rebuilding the Guildhall" autofocus></label>
+          <label style="display:flex;align-items:center;gap:6px;">
+            <input type="checkbox" name="narrative"> Narrative only (no Temporary Influence spent, no cost)
+          </label>
+          <label>Temporary Influence Slots to Spend <input type="number" name="amount" value="1" min="1"></label>
+        `,
+        buttons: [{
+          action: "contribute",
+          label: "Contribute",
+          default: true,
+          callback: (event, button) => ({
+            goal: button.form.elements.goal.value.trim(),
+            narrative: button.form.elements.narrative.checked,
+            amount: Math.max(1, Math.floor(Number(button.form.elements.amount.value)) || 1)
+          })
+        }],
+        submit: (result) => resolve(result === "contribute" ? null : result)
+      }).render(true);
+    });
+    if (!result) return;
+
+    const goalLabel = result.goal || "a shared goal";
+
+    if (result.narrative) {
+      await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        content: `<p><strong>${this.actor.name}</strong> contributes to <strong>${goalLabel}</strong> narratively (labor, connections, or information) — no Temporary Influence spent, no Injury risked.</p>`
+      });
+      return;
+    }
+
+    const sys = this.actor.system;
+    let tempInfluence = sys.playState.currentTemporaryInfluence ?? 0;
+    const coreInfluence = sys.coreInfluence.map((c) => ({ ...c }));
+    const log = [];
+    let becameCritical = false;
+
+    for (let i = 0; i < result.amount; i++) {
+      if (tempInfluence > 0) {
+        tempInfluence -= 1;
+        log.push("1 slot absorbed by a Temporary Influence slot.");
+        continue;
+      }
+      const slot = coreInfluence.findIndex((c) => !c.filled);
+      if (slot === -1) {
+        log.push("Core Influence track already full — the GM adjudicates any further consequence.");
+        continue;
+      }
+      const severity = SEVERITY_BY_INDEX[slot];
+      const condition = `${severity} Injury`;
+      coreInfluence[slot] = { filled: true, severity, condition };
+      log.push(`Core Influence filled: <strong>${condition}</strong> (recovers in ${INFLUENCE_RECOVERY_TIME[severity]}).`);
+      if (slot === 4) becameCritical = true;
+    }
+
+    await this.actor.update({
+      "system.playState.currentTemporaryInfluence": tempInfluence,
+      "system.coreInfluence": coreInfluence
+    });
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> contributes ${result.amount} Temporary Influence ${result.amount === 1 ? "slot" : "slots"} to <strong>${goalLabel}</strong>.</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+    });
+
+    if (becameCritical) {
+      ui.notifications.warn(`${this.actor.name} has taken a Critical Influence Injury contributing to "${goalLabel}"! This must be actively addressed in the fiction before recovery begins.`);
+    }
+  }
+
+  /** Core Influence recovers in reverse order — same convention as #onRecoverWound — and is a
+   *  manual GM-triggered action representing "this Injury's recovery time has passed," not an
+   *  automatic timer (see INFLUENCE_RECOVERY_TIME for the reference durations by severity). */
+  static async #onRecoverInfluenceInjury() {
+    const coreInfluence = this.actor.system.coreInfluence.map((c) => ({ ...c }));
+    let slot = -1;
+    for (let i = coreInfluence.length - 1; i >= 0; i--) {
+      if (coreInfluence[i].filled) { slot = i; break; }
+    }
+    if (slot === -1) {
+      ui.notifications.warn(`${this.actor.name} has no Core Influence Injuries to recover.`);
+      return;
+    }
+
+    const recovered = coreInfluence[slot];
+    coreInfluence[slot] = { filled: false, severity: "", condition: "" };
+    await this.actor.update({ "system.coreInfluence": coreInfluence });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> recovers from their <strong>${recovered.condition}</strong>.</p>`
+    });
+  }
+
+  /**
+   * part-viii-equipment-and-items.md § Bringing More Than Your Signature Limit: "spend 1 Temporary
+   * Influence for each additional full Signature slot you prepare beyond your normal limit." A
+   * manual, trust-based action — like every other Apply/Spend button on this sheet — rather than a
+   * hard block on assigning equipment past the limit; the sheet shows the overage (see
+   * signatureOverLimit in _prepareContext) but doesn't prevent it, matching the rules' own framing
+   * of Signature Limit as "a normal operating limit, not an absolute prohibition."
+   */
+  static async #onSpendInfluenceForSlot() {
+    const sys = this.actor.system;
+    const max = sys.temporaryInfluence ?? 5;
+    const current = sys.playState.currentTemporaryInfluence ?? 0;
+    if (current >= max) {
+      ui.notifications.warn(`${this.actor.name} has no open Temporary Influence slots left to spend.`);
+      return;
+    }
+    await this.actor.update({ "system.playState.currentTemporaryInfluence": current + 1 });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> spends 1 Temporary Influence to prepare an additional Signature slot beyond their normal limit.</p>`
+    });
+  }
+
+  /**
+   * Shared Temp→Core Influence overextension spend. #onApplyInfluenceInjury and #onContributeToGoal
+   * above already duplicate this same ~15-line block once each (a deliberate call in an earlier
+   * session, per build-history, following this project's general "duplicate small logic across
+   * sheets rather than force a shared abstraction" convention) — a third near-identical copy for
+   * Reach Triggers is where that stops paying for itself, so this factors it out instead. Existing
+   * callers are left untouched (lower risk than refactoring already-verified code); only the new
+   * Reach Trigger action below uses this. Returns the updated values plus a chat-log array and
+   * critical flag, matching what the two inline copies already compute.
+   */
+  static #computeInfluenceOverextension(actor, amount) {
+    let tempInfluence = actor.system.playState.currentTemporaryInfluence ?? 0;
+    const coreInfluence = actor.system.coreInfluence.map((c) => ({ ...c }));
+    const log = [];
+    let becameCritical = false;
+    for (let i = 0; i < amount; i++) {
+      if (tempInfluence > 0) {
+        tempInfluence -= 1;
+        log.push("1 Breach absorbed by a Temporary Influence slot.");
+        continue;
+      }
+      const slot = coreInfluence.findIndex((c) => !c.filled);
+      if (slot === -1) {
+        log.push("Core Influence track already full — the GM adjudicates any further consequence.");
+        continue;
+      }
+      const severity = SEVERITY_BY_INDEX[slot];
+      const condition = `${severity} Injury`;
+      coreInfluence[slot] = { filled: true, severity, condition };
+      log.push(`Core Influence filled: <strong>${condition}</strong> (recovers in ${INFLUENCE_RECOVERY_TIME[severity]}).`);
+      if (slot === 4) becameCritical = true;
+    }
+    return { tempInfluence, coreInfluence, log, becameCritical };
+  }
+
+  /**
+   * Generic "Adventure-Limited Reach Trigger" activation (part-ii-character-creation.md §§ Noble
+   * Household "Letters of Standing" and Frontier Household "Prepared Cache" — Underworld Raised's
+   * "Fence's Cache" also references Reach but has no Adventure-limit/Breach cost in the current
+   * text, so it doesn't belong here; part-iii-playing-the-game.md § Adventure-Limited Abilities for
+   * the shared "resets when the Adventure ends" framing). First use each Adventure is free: marks
+   * usedThisAdventure and turns the trigger active (folding tempBonus into effectiveReach) and
+   * grants tempInfluenceGrant Temporary Influence, capped at the normal max. Every use after the
+   * first still grants the same boost/Influence, but also applies 1 Influence Breach through the
+   * same overextension mechanic Influence Injuries already use — "Breach" per the rules text, not
+   * a full Injury dialog, since the cost here is fixed at exactly 1, unlike Apply Influence Injury's
+   * player-chosen amount.
+   */
+  static async #onActivateReachTrigger(event, target) {
+    const i = Number(target.dataset.index);
+    const triggers = this.actor.system.reachTriggers.map((t) => ({ ...t }));
+    const trigger = triggers[i];
+    if (!trigger) return;
+
+    const wasFree = !trigger.usedThisAdventure;
+    trigger.usedThisAdventure = true;
+    trigger.active = true;
+
+    const maxTemp = this.actor.system.temporaryInfluence ?? 5;
+    let tempInfluence = this.actor.system.playState.currentTemporaryInfluence ?? 0;
+    let coreInfluence = this.actor.system.coreInfluence;
+    const log = [];
+
+    if (trigger.tempInfluenceGrant) {
+      tempInfluence = Math.min(maxTemp, tempInfluence + trigger.tempInfluenceGrant);
+      log.push(`Grants ${trigger.tempInfluenceGrant} Temporary Influence usable only this Scene (capped at normal max).`);
+    }
+
+    let becameCritical = false;
+    if (!wasFree) {
+      const overextension = EssenceActorSheet.#computeInfluenceOverextension(
+        { system: { playState: { currentTemporaryInfluence: tempInfluence }, coreInfluence } },
+        1
+      );
+      tempInfluence = overextension.tempInfluence;
+      coreInfluence = overextension.coreInfluence;
+      becameCritical = overextension.becameCritical;
+      log.push(...overextension.log.map((l) => `Additional use this Adventure — ${l}`));
+    } else {
+      log.push("First use this Adventure — free.");
+    }
+
+    await this.actor.update({
+      "system.reachTriggers": triggers,
+      "system.playState.currentTemporaryInfluence": tempInfluence,
+      "system.coreInfluence": coreInfluence
+    });
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> activates <strong>${trigger.name || "a Reach Trigger"}</strong> (Reach +${trigger.tempBonus} for the current Scene).</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+    });
+
+    if (becameCritical) {
+      ui.notifications.warn(`${this.actor.name} has taken a Critical Influence Injury from Influence Breach! This must be actively addressed in the fiction before recovery begins.`);
+    }
+  }
+
+  /** Ends the Scene for one active Reach Trigger — clears its temporary Reach boost. Manual, like
+   *  everything else in this system's lifecycle tracking; there's no automated Scene boundary. */
+  static async #onDeactivateReachTrigger(event, target) {
+    const i = Number(target.dataset.index);
+    const triggers = this.actor.system.reachTriggers.map((t) => ({ ...t }));
+    if (!triggers[i]) return;
+    triggers[i].active = false;
+    await this.actor.update({ "system.reachTriggers": triggers });
+  }
+
+  /** See resetAdventureUses() in utils.mjs for what this actually resets (Reach Triggers, Function
+   *  Augment Uses, Consumable Kit Equipment Card Uses) — a GM/player-driven action, matching how
+   *  Death Track/Wound recovery are also all manual here rather than tied to any automatic
+   *  Adventure-boundary detection this system doesn't have. */
+  static async #onResetAdventureUses() {
+    await resetAdventureUses(this.actor);
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> resets Reach Triggers, Augment Uses, and Equipment Card Uses for a new Adventure.</p>`
+    });
   }
 
   static async #onAddArrayRow(event, target) {
@@ -952,5 +1366,61 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       content: `<p>Delete <strong>${item.name}</strong>? This cannot be undone.</p>`
     });
     if (confirmed) await item.delete();
+  }
+
+  /**
+   * Lets the player fulfill (or replace) an Item Grant — Quartermaster's Due, Internal
+   * Compartment, ... (see item-grants.mjs) — by tagging one Equipment item the character already
+   * owns as that grant's exception. Deliberately pulls from the actor's own Inventory rather than
+   * browsing the shared Equipment compendium: the compendium is a big shared reference library
+   * (any setting's full weapon/armor roster), not "what my character actually has," and offering
+   * the whole thing here produced an irrelevant grab-bag unrelated to the character being played —
+   * Quartermaster's Due is about which of YOUR things counts as the exception, not conjuring a new
+   * item from thin air. A plain `<select>` is enough UI since the eligible set (this character's
+   * owned Equipment matching the grant's matchers/Reach rule) is always small, matching this
+   * sheet's existing DialogV2 pattern for short choices (see e.g. #onApplyDamage).
+   */
+  static async #onChooseGrantedItem(event, target) {
+    const sourceName = target.dataset.grantSource;
+    const grant = ITEM_GRANT_REGISTRY[sourceName];
+    if (!grant) return;
+
+    const reach = this.actor.system.effectiveReach;
+    const owned = this.actor.items.filter((i) => i.type === "equipment" && i.system.reachExceptionSource !== sourceName);
+    const eligible = owned.filter((i) => equipmentMatchesGrant(i.system, grant) && reachQualifiesForGrant(i.system, grant, reach));
+    if (!eligible.length) {
+      ui.notifications.warn(`No item in your Inventory currently qualifies for ${sourceName}.`);
+      return;
+    }
+
+    const chosenId = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: `Choose Item — ${sourceName}` },
+        content: `<label>Item
+          <select name="itemId">${eligible.map((i) => `<option value="${i.id}">${i.name} (Reach ${i.system.cost || 0})</option>`).join("")}</select>
+        </label>`,
+        buttons: [{
+          action: "choose",
+          label: "Choose",
+          default: true,
+          callback: (ev, button) => button.form.elements.itemId.value
+        }],
+        submit: (result) => resolve(result ?? null)
+      }).render(true);
+    });
+    if (!chosenId) return;
+
+    // Replacing (part-ii-character-creation.md's "you may replace it...") clears the exception off
+    // whichever item held it before, rather than deleting anything — it's still a normal owned item.
+    const previous = this.actor.items.filter((i) => i.type === "equipment" && i.system.reachExceptionSource === sourceName);
+    for (const p of previous) await p.update({ "system.reachExceptionSource": "", "system.reachExceptionMargin": 0, "system.slotCost": 1 });
+
+    const chosen = this.actor.items.get(chosenId);
+    await chosen.update({
+      "system.slot": "signature",
+      "system.reachExceptionSource": sourceName,
+      "system.reachExceptionMargin": grant.reachMargin,
+      "system.slotCost": grant.countsAgainstLimit ? 1 : 0
+    });
   }
 }

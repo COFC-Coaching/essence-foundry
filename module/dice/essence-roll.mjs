@@ -10,8 +10,13 @@ export function countD10Successes(faces) {
 }
 
 /**
- * Card/combat resolution: the highest die is the Success Die. It succeeds if it meets or
- * beats the target Defense. Every other die showing 6+ grants 1 Surge (no doubling on a 10).
+ * Card/combat resolution: the highest die is the Success Die. It succeeds if it meets or beats
+ * the target Defense — that check is entirely separate from Surges. Every die in the pool showing
+ * 6+ grants 1 Surge (no doubling on a 10), INCLUDING the Success Die itself if it qualifies —
+ * hitting/missing and earning Surges are independent passes over the same dice, not
+ * mutually exclusive (2026-09-08 rule change: the Success Die previously never earned its own
+ * Surge even at 6+; the user confirmed Surges are earned "separately" from the Defense check, so
+ * every qualifying die counts now, full stop).
  * @param {number[]} faces
  * @param {number|null} defense
  */
@@ -25,10 +30,7 @@ export function resolveCombatRoll(faces, defense = null) {
   }
   const successDie = faces[successDieIndex];
   const succeeded = defense == null ? successDie >= 6 : successDie >= defense;
-  let surges = 0;
-  faces.forEach((f, i) => {
-    if (i !== successDieIndex && f >= 6) surges += 1;
-  });
+  const surges = faces.reduce((sum, f) => sum + (f >= 6 ? 1 : 0), 0);
   return { successDieIndex, successDie, succeeded, surges };
 }
 
@@ -48,8 +50,10 @@ export function resolveCombatRoll(faces, defense = null) {
  *   options (system.surges) — when given, the chat card renders them as clickable, spendable
  *   options instead of just a bare Surge count. See essence.mjs's renderChatMessageHTML hook
  *   for how clicking one is handled after the message is posted.
+ * @param {number} [options.bonusSurges] - flat Surges added on top of the dice result before
+ *   spending — currently only Mastery (see utils.mjs's hasMastery), always 0 or 1.
  */
-export async function rollEssencePool({ pool, defense = null, targets = null, label = "Essence Roll", actor = null, surgeOptions = [] } = {}) {
+export async function rollEssencePool({ pool, defense = null, targets = null, label = "Essence Roll", actor = null, surgeOptions = [], bonusSurges = 0 } = {}) {
   const n = Math.max(1, Math.floor(pool));
   const roll = new Roll(`${n}d10`);
   await roll.evaluate();
@@ -57,6 +61,7 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
 
   const multi = Array.isArray(targets) && targets.length > 0;
   const combat = resolveCombatRoll(faces, multi ? null : defense);
+  combat.surges += bonusSurges;
   const poolSuccesses = countD10Successes(faces);
 
   const targetResults = multi
@@ -80,7 +85,8 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
       surges: combat.surges,
       poolSuccesses,
       targets: targetResults,
-      surgeOptions: surgeOptions.map((opt, i) => ({ i, n: opt.n, html: opt.html }))
+      surgeOptions: surgeOptions.map((opt, i) => ({ i, n: opt.n, html: opt.html })),
+      bonusSurges
     }
   );
 

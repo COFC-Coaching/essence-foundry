@@ -7,7 +7,13 @@
     "description": "Peoples descended from dragons, created in their image, or shaped by draconic power. Choose a Draconic Lineage: Flame, Frost, Storm, Stone, Venom, Radiance, Shadow, or similar.",
     "nature": {
       "name": "Draconic Core",
-      "text": "Ordinary environmental exposure associated with your Draconic Lineage does not harm you. You may project a brief, harmless manifestation of your Lineage up to 1 unit away (ignite or extinguish tinder, chill or warm a small object, scatter loose material, produce light, create a sharp sound, or cause another comparable environmental effect). Sense: Low-Light Vision."
+      "text": "Ordinary environmental exposure associated with your Draconic Lineage does not harm you. You may project a brief, harmless manifestation of your Lineage up to 1 unit away (ignite or extinguish tinder, chill or warm a small object, scatter loose material, produce light, create a sharp sound, or cause another comparable environmental effect). Sense: Low-Light Vision.",
+      "subChoice": {
+        "label": "Draconic Lineage",
+        "type": "free",
+        "options": [],
+        "count": 1
+      }
     },
     "adaptationLabel": "Dragonkin Adaptation",
     "adaptationCount": 1,
@@ -20,7 +26,18 @@
       {
         "name": "Draconic Armament",
         "text": "Choose claws, horns, fangs, or a tail as a natural weapon. It counts as a basic one-handed weapon, does not count against your Signature Equipment Limit, and cannot be disarmed. You must leave one hand or equivalent limb free while using it.",
-        "chosen": false
+        "chosen": false,
+        "subChoice": {
+          "label": "Natural Weapon",
+          "type": "fixed",
+          "options": [
+            "Claws",
+            "Horns",
+            "Fangs",
+            "Tail"
+          ],
+          "count": 1
+        }
       },
       {
         "name": "Hoard Sense",

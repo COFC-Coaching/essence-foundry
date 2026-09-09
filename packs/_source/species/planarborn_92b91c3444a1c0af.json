@@ -7,7 +7,13 @@
     "description": "Peoples fundamentally shaped by an elemental, celestial, infernal, astral, or void force. Choose an Origin (Earth, Stone, Metal, Crystal, Flame, Water, Air, Frost, Storm, Celestial, Infernal, Astral, Void, or similar).",
     "nature": {
       "name": "Planar Attunement",
-      "text": "Ordinary environmental exposure directly associated with your Origin does not harm you. You immediately recognize significant manifestations of that Origin and can sense a concealed concentration within 2 units, provided it is not contained behind a sealed supernatural barrier. This does not protect you from attacks or other hostile effects. Choose one Planarborn Adaptation."
+      "text": "Ordinary environmental exposure directly associated with your Origin does not harm you. You immediately recognize significant manifestations of that Origin and can sense a concealed concentration within 2 units, provided it is not contained behind a sealed supernatural barrier. This does not protect you from attacks or other hostile effects. Choose one Planarborn Adaptation.",
+      "subChoice": {
+        "label": "Origin",
+        "type": "free",
+        "options": [],
+        "count": 1
+      }
     },
     "adaptationLabel": "Planarborn Adaptation",
     "adaptationCount": 1,
@@ -15,7 +21,13 @@
       {
         "name": "Aegis of Origin",
         "text": "Gain one narrow Resistance associated with your Origin. The Resistance must be approved by the GM and cannot apply to an overly broad category of Damage.",
-        "chosen": false
+        "chosen": false,
+        "subChoice": {
+          "label": "Resistance",
+          "type": "free",
+          "options": [],
+          "count": 1
+        }
       },
       {
         "name": "Dense Form",
@@ -30,7 +42,17 @@
       {
         "name": "Planar Vessel",
         "text": "Once per adventure, when you would spend the final point of one of your Resources, retain 1 point instead. The Resource must be chosen when you select this Adaptation and should reflect your Origin.",
-        "chosen": false
+        "chosen": false,
+        "subChoice": {
+          "label": "Resource",
+          "type": "fixed",
+          "options": [
+            "Stamina",
+            "Focus",
+            "Mana"
+          ],
+          "count": 1
+        }
       }
     ],
     "subspecies": []

@@ -1,7 +1,8 @@
-import { EXPERTISE_DATABASE } from "../data/expertise-database.mjs";
+import { EXPERTISE_DATABASE, SUBTYPE_DATABASE } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
-import { capitalize } from "../utils.mjs";
+import { capitalize, computeReachGate } from "../utils.mjs";
+import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { DocumentSheetV2 } = foundry.applications.api;
@@ -70,7 +71,10 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       addPassiveFeature: EssenceCharacterWizard.#onAddPassiveFeature,
       deletePassiveFeature: EssenceCharacterWizard.#onDeletePassiveFeature,
       toggleEquipment: EssenceCharacterWizard.#onToggleEquipment,
-      previewItem: EssenceCharacterWizard.#onPreviewItem
+      previewItem: EssenceCharacterWizard.#onPreviewItem,
+      toggleAdaptationChosen: EssenceCharacterWizard.#onToggleAdaptationChosen,
+      toggleSubChoiceOption: EssenceCharacterWizard.#onToggleSubChoiceOption,
+      chooseGrantedItem: EssenceCharacterWizard.#onChooseGrantedItem
     }
   };
 
@@ -82,9 +86,16 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
   #cardSearch = "";
   #cardTypeFilter = "all";
   #cardSkillFilter = "all";
+  #cardSubtypeFilter = "all";
   #cardSort = "rank";
   #equipmentSearch = "";
+  #equipmentCategoryFilter = "all";
   #refocusSearch = null;
+  /** Last known scrollTop of the current step's `.wizard-body` (the whole step's content area)
+   *  and its inner `.wizard-scroll-list` (Qualifying Cards / Equipment Library), each keyed by
+   *  step index — see #wireScrollList for why this exists. */
+  #bodyScrollTop = {};
+  #listScrollTop = {};
 
   constructor(actor, options = {}) {
     super({ ...options, document: actor });
@@ -101,9 +112,60 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     // caret position have to be restored manually or every keystroke would kick focus out.
     this.#wireSearch("cards", (v) => { this.#cardSearch = v; });
     this.#wireSearch("equipment", (v) => { this.#equipmentSearch = v; });
+    this.#wireSelect("equipmentCategory", (v) => { this.#equipmentCategoryFilter = v; });
     this.#wireSelect("cardType", (v) => { this.#cardTypeFilter = v; });
-    this.#wireSelect("cardSkill", (v) => { this.#cardSkillFilter = v; });
+    // Subtype is nested under Skill (each Skill has its own fixed 7 — see SUBTYPE_DATABASE), so
+    // changing Skill resets a no-longer-relevant Subtype selection back to "all" rather than
+    // silently filtering against a subtype that may not even exist for the new Skill.
+    this.#wireSelect("cardSkill", (v) => { this.#cardSkillFilter = v; this.#cardSubtypeFilter = "all"; });
+    this.#wireSelect("cardSubtype", (v) => { this.#cardSubtypeFilter = v; });
     this.#wireSelect("cardSort", (v) => { this.#cardSort = v; });
+    this.#wireScrollList();
+    this.#wireSubChoiceText();
+  }
+
+  /**
+   * Free-text sub-choice inputs (Nature or an Adaptation's "type: free" sub-choice, e.g. Dragonkin's
+   * Draconic Lineage) write to the embedded Species Item, not `this.document` (the Actor) — plain
+   * submitOnChange only serializes fields under the wizard's own bound document, so these need a
+   * manual "change" listener and an explicit speciesItem.update(), same reasoning as #wireSelect.
+   */
+  #wireSubChoiceText() {
+    const speciesItem = this.document.items.find((i) => i.type === "species");
+    if (!speciesItem) return;
+    for (const el of this.element.querySelectorAll(".subchoice-free-text")) {
+      el.addEventListener("change", async (event) => {
+        const path = event.currentTarget.dataset.path; // "nature" or "adaptations.<i>"
+        const value = event.currentTarget.value.trim();
+        await speciesItem.update({ [`system.${path}.subChoice.selected`]: value ? [value] : [] });
+      });
+    }
+  }
+
+  /**
+   * Adding/removing a Card or Equipment item (and changing any of the filters above) re-renders
+   * the whole sheet, because `this.document` (the Actor) changed and Foundry's own DocumentSheetV2
+   * auto-refreshes on that — same reason search focus needs manual restoration in #wireSearch. A
+   * freshly-rendered element always starts at scrollTop 0, so without this, picking a card near
+   * the bottom of a long Qualifying Cards / Equipment Library list (or scrolled partway down a
+   * tall step like Combat Skills) yanks the view back to the very top on every single pick —
+   * exactly the "jerking up" the user reported. There are two independent scroll containers to
+   * restore: `.wizard-body` (the whole step's content area) and, on steps that have one, the
+   * inner `.wizard-scroll-list`. Both are kept live via their own 'scroll' listener so the
+   * remembered position is always current no matter which action (card toggle, equipment toggle,
+   * filter change, search) triggers the next re-render.
+   */
+  #wireScrollList() {
+    const body = this.element.querySelector(".wizard-body");
+    if (body) {
+      body.scrollTop = this.#bodyScrollTop[this.#step] ?? 0;
+      body.addEventListener("scroll", () => { this.#bodyScrollTop[this.#step] = body.scrollTop; });
+    }
+    const list = this.element.querySelector(".wizard-scroll-list");
+    if (list) {
+      list.scrollTop = this.#listScrollTop[this.#step] ?? 0;
+      list.addEventListener("scroll", () => { this.#listScrollTop[this.#step] = list.scrollTop; });
+    }
   }
 
   #wireSearch(key, setter) {
@@ -173,6 +235,32 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     context.speciesOptions = species.sort((a, b) => a.name.localeCompare(b.name));
     context.heritageOptions = heritages.sort((a, b) => a.name.localeCompare(b.name));
     context.distinctionOptions = distinctions.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Inline Adaptation picker (replaces the old "(open — choose Adaptations here)" link that sent
+    // players to the Species Item's own GM-authoring sheet — see build-history). Adaptation rows
+    // carry their own index so the toggle/sub-choice actions below know which array entry to write.
+    // Fixed-list sub-choice options are precomputed with their checked/disabled state here rather
+    // than via an "includes" Handlebars helper (this project has none registered, and core Foundry
+    // doesn't provide one either — see essence.mjs's registerHelper calls).
+    if (speciesItem) {
+      const sp = speciesItem.system;
+      const buildSubChoiceOptions = (subChoice) => {
+        const selected = subChoice.selected ?? [];
+        return (subChoice.options ?? []).map((opt) => ({
+          value: opt,
+          checked: selected.includes(opt),
+          disabled: !selected.includes(opt) && selected.length >= subChoice.count
+        }));
+      };
+      context.natureSubChoiceOptions = sp.nature.subChoice?.type === "fixed" ? buildSubChoiceOptions(sp.nature.subChoice) : [];
+      context.adaptationRows = sp.adaptations.map((a, i) => ({
+        ...a,
+        i,
+        subChoiceOptions: a.subChoice?.type === "fixed" ? buildSubChoiceOptions(a.subChoice) : []
+      }));
+      context.adaptationChosenCount = sp.adaptations.filter((a) => a.chosen).length;
+      context.adaptationCap = sp.adaptationCount;
+    }
   }
 
   #prepareAttributes(context) {
@@ -247,6 +335,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     if (search) combined = combined.filter((c) => c.name.toLowerCase().includes(search));
     if (this.#cardTypeFilter !== "all") combined = combined.filter((c) => c.type === this.#cardTypeFilter);
     if (this.#cardSkillFilter !== "all") combined = combined.filter((c) => (c.system.skill || "").toLowerCase() === this.#cardSkillFilter);
+    if (this.#cardSubtypeFilter !== "all") combined = combined.filter((c) => c.system.subtype === this.#cardSubtypeFilter);
 
     const sorters = {
       rank: (a, b) => a.system.rank - b.system.rank || a.name.localeCompare(b.name),
@@ -259,8 +348,19 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     context.cardSearch = this.#cardSearch;
     context.cardTypeFilter = this.#cardTypeFilter;
     context.cardSkillFilter = this.#cardSkillFilter;
+    context.cardSubtypeFilter = this.#cardSubtypeFilter;
     context.cardSort = this.#cardSort;
     context.cardSkillOptions = SKILLS;
+    // Subtype options are scoped to whichever Skill is currently filtered — SUBTYPE_DATABASE's
+    // keys are already lowercase, matching #cardSkillFilter's own stored casing (unlike
+    // system.skill on a card document, which is capitalized — see item-sheet.mjs's
+    // subtypesForSkill() for that unrelated gotcha; #cardSkillFilter never touches that value).
+    // With no Skill chosen, offer the union of every skill's subtypes rather than hiding the
+    // filter entirely, since browsing by Subtype alone (e.g. every "Opener" across all Skills) is
+    // a reasonable thing to want.
+    context.cardSubtypeOptions = this.#cardSkillFilter !== "all"
+      ? (SUBTYPE_DATABASE[this.#cardSkillFilter] ?? [])
+      : [...new Set(Object.values(SUBTYPE_DATABASE).flat())].sort();
     context.missingBasicCount = 7 - context.ownedBasicCards.length;
   }
 
@@ -276,19 +376,44 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
   async #prepareEquipment(context) {
     const system = context.system;
     const owned = this.document.items.filter((i) => i.type === "equipment");
-    context.signatureItems = owned.filter((i) => i.system.slot === "signature").map((i) => ({ id: i.id, uuid: i.uuid, name: i.name, system: i.system }));
+    // See EssenceActorSheet#_prepareContext for the full Reach-gating reasoning (computeReachGate()
+    // in utils.mjs). Soft, non-blocking flag only — the Wizard still lets you add an over-Reach
+    // item, same as the character sheet does.
+    context.reach = system.effectiveReach ?? system.reach;
+    context.signatureItems = owned.filter((i) => i.system.slot === "signature").map((i) => ({
+      id: i.id,
+      uuid: i.uuid,
+      name: i.name,
+      system: i.system,
+      overReach: computeReachGate(i.system, context.reach).overReach
+    }));
     context.signatureUsed = context.signatureItems.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
     context.signatureLimit = system.signatureEquipmentLimit;
+    // Item Grants (Quartermaster's Due, Internal Compartment, ...) — see item-grants.mjs and
+    // EssenceActorSheet#_prepareContext for the full reasoning.
+    context.itemGrants = deriveActiveGrants({ speciesItem: context.speciesItem, heritageItem: context.heritageItem }, owned);
 
     const pack = await (game.packs.get("essence-system.equipment")?.getDocuments() ?? []);
     const ownedNames = new Set(owned.map((i) => i.name));
     const search = this.#equipmentSearch.trim().toLowerCase();
+    // Chassis/Fitting/Augment share this pack as folders (see build-packs.mjs's
+    // COMPONENT_TYPES_FOR_FOLDERS) — this browser is Equipment-only, so exclude them explicitly
+    // rather than relying on their differently-shaped `system` data to just happen not to match.
     context.browsableEquipment = pack
+      .filter((d) => d.type === "equipment")
       .filter((d) => !ownedNames.has(d.name))
       .filter((d) => !search || d.name.toLowerCase().includes(search))
+      .filter((d) => this.#equipmentCategoryFilter === "all" || d.system.category === this.#equipmentCategoryFilter)
       .sort((a, b) => a.name.localeCompare(b.name))
       .map((d) => ({ id: d.id, uuid: d.uuid, name: d.name, system: d.system }));
     context.equipmentSearch = this.#equipmentSearch;
+    // Equipment's "group" is its Category (weapon/armor/shield/implement/toolkit/consumable-kit/
+    // gear — see EssenceEquipmentData's schema in item-card.mjs). Offered as a fixed list rather
+    // than derived from the pack's actual categories in use, so the filter's own option order/
+    // labels stay stable even if a given category happens to have zero items in the compendium at
+    // some point.
+    context.equipmentCategoryFilter = this.#equipmentCategoryFilter;
+    context.equipmentCategoryOptions = ["weapon", "armor", "shield", "implement", "toolkit", "consumable-kit", "gear"];
   }
 
   #prepareFinalize(context, speciesItem, heritageItem, distinctionItem) {
@@ -352,6 +477,73 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
 
   static async #onClearOrigin(event, target) {
     await clearOriginItem(this.document, target.dataset.type);
+  }
+
+  /**
+   * Inline Adaptation checkbox, capped at `adaptationCount` (mirrors #onToggleExpertise's
+   * capped-array shape). Writes the whole `adaptations` array back to the embedded Species Item —
+   * same read-modify-write pattern as EssenceItemSheetBase#onAddArrayRow/#onDeleteArrayRow
+   * (item-sheet.mjs) and this file's own #onToggleCoreInfluence, just targeting speciesItem instead
+   * of the Actor.
+   */
+  static async #onToggleAdaptationChosen(event, target) {
+    const speciesItem = this.document.items.find((i) => i.type === "species");
+    if (!speciesItem) return;
+    const i = Number(target.dataset.index);
+    const adaptations = speciesItem.system.adaptations.map((a) => foundry.utils.deepClone(a));
+    const row = adaptations[i];
+    if (!row) return;
+    if (!row.chosen) {
+      const chosenCount = adaptations.filter((a) => a.chosen).length;
+      if (chosenCount >= speciesItem.system.adaptationCount) {
+        ui.notifications.warn(`Already chosen ${speciesItem.system.adaptationCount} ${speciesItem.system.adaptationLabel}(s) — remove one first.`);
+        return;
+      }
+    }
+    row.chosen = !row.chosen;
+    await speciesItem.update({ "system.adaptations": adaptations });
+  }
+
+  /**
+   * Fixed-list sub-choice checkbox (e.g. Keen's three named Senses), shared between Nature and any
+   * Adaptation via `data-scope` ("nature" | "adaptation") + `data-index` (adaptation rows only).
+   * Capped at the sub-choice's own `count`, same disable-once-full convention as Combat Cards'
+   * CARD_LIMIT and #onToggleAdaptationChosen above — this is a clean single-purpose picker, not a
+   * combat action, so the brief calls for disabling further checkboxes rather than just warning.
+   */
+  static async #onToggleSubChoiceOption(event, target) {
+    const speciesItem = this.document.items.find((i) => i.type === "species");
+    if (!speciesItem) return;
+    const option = target.dataset.option;
+
+    const applySelection = (subChoice) => {
+      const selected = [...(subChoice.selected ?? [])];
+      const idx = selected.indexOf(option);
+      if (idx !== -1) {
+        selected.splice(idx, 1);
+      } else {
+        if (selected.length >= subChoice.count) {
+          ui.notifications.warn(`Already chosen ${subChoice.count} ${subChoice.label || "option(s)"}.`);
+          return null;
+        }
+        selected.push(option);
+      }
+      return selected;
+    };
+
+    if (target.dataset.scope === "nature") {
+      const selected = applySelection(speciesItem.system.nature.subChoice);
+      if (selected) await speciesItem.update({ "system.nature.subChoice.selected": selected });
+    } else {
+      const i = Number(target.dataset.index);
+      const adaptations = speciesItem.system.adaptations.map((a) => foundry.utils.deepClone(a));
+      const row = adaptations[i];
+      if (!row) return;
+      const selected = applySelection(row.subChoice);
+      if (!selected) return;
+      row.subChoice.selected = selected;
+      await speciesItem.update({ "system.adaptations": adaptations });
+    }
   }
 
   static async #onAdjustAttribute(event, target) {
@@ -498,5 +690,50 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const data = sourceItem.toObject();
     data.system.slot = "signature";
     await this.document.createEmbeddedDocuments("Item", [data]);
+  }
+
+  /** See EssenceActorSheet#onChooseGrantedItem for the full reasoning — identical behavior here,
+   *  just targeting this.document (the Actor being built) instead of this.actor: pulls eligible
+   *  items from the character's own Equipment step choices, not the shared compendium. */
+  static async #onChooseGrantedItem(event, target) {
+    const sourceName = target.dataset.grantSource;
+    const grant = ITEM_GRANT_REGISTRY[sourceName];
+    if (!grant) return;
+
+    const reach = this.document.system.effectiveReach;
+    const owned = this.document.items.filter((i) => i.type === "equipment" && i.system.reachExceptionSource !== sourceName);
+    const eligible = owned.filter((i) => equipmentMatchesGrant(i.system, grant) && reachQualifiesForGrant(i.system, grant, reach));
+    if (!eligible.length) {
+      ui.notifications.warn(`No item in your Equipment step choices currently qualifies for ${sourceName}.`);
+      return;
+    }
+
+    const chosenId = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: `Choose Item — ${sourceName}` },
+        content: `<label>Item
+          <select name="itemId">${eligible.map((i) => `<option value="${i.id}">${i.name} (Reach ${i.system.cost || 0})</option>`).join("")}</select>
+        </label>`,
+        buttons: [{
+          action: "choose",
+          label: "Choose",
+          default: true,
+          callback: (ev, button) => button.form.elements.itemId.value
+        }],
+        submit: (result) => resolve(result ?? null)
+      }).render(true);
+    });
+    if (!chosenId) return;
+
+    const previous = this.document.items.filter((i) => i.type === "equipment" && i.system.reachExceptionSource === sourceName);
+    for (const p of previous) await p.update({ "system.reachExceptionSource": "", "system.reachExceptionMargin": 0, "system.slotCost": 1 });
+
+    const chosen = this.document.items.get(chosenId);
+    await chosen.update({
+      "system.slot": "signature",
+      "system.reachExceptionSource": sourceName,
+      "system.reachExceptionMargin": grant.reachMargin,
+      "system.slotCost": grant.countsAgainstLimit ? 1 : 0
+    });
   }
 }

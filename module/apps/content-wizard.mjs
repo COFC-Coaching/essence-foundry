@@ -1,6 +1,11 @@
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ApplicationV2 } = foundry.applications.api;
 
+import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
+
+/** Categories eligible for modular assembly (matches CHASSIS_LABELS/FITTING_LABELS's own keys in item-component.mjs). */
+const MODULAR_EQUIPMENT_CATEGORIES = ["weapon", "armor", "shield", "implement"];
+
 /** Which compendium each content type is authored into, and what the default new-row shape is per array field. */
 const TYPE_CONFIG = {
   "action-card": {
@@ -16,12 +21,39 @@ const TYPE_CONFIG = {
   equipment: {
     label: "Equipment", pack: "essence-system.equipment", img: "icons/svg/item-bag.svg",
     steps: ["Type & Name", "Details", "Description", "Done"],
-    arrayDefaults: {}
+    // Consumable Kit only (part-viii-equipment-and-items.md § Consumable Kits) — see item-card.mjs's
+    // `equipmentCards` field and EssenceEquipmentSheet's identical editor for owned items.
+    arrayDefaults: { equipmentCards: { name: "", effect: "", uses: null, usesRemaining: null } },
+    // Folder tracks system.category (Weapon/Armor/Tool/Gear — see build-packs.mjs's
+    // writeCategoryFolders) rather than a fixed name, kept in sync as the Details step's Category
+    // field changes — see #syncCategoryFolder().
+    folderBy: "system.category"
   },
   condition: {
     label: "Condition", pack: "essence-system.conditions", img: "icons/svg/skull.svg",
     steps: ["Type & Name", "Sections", "Done"],
     arrayDefaults: { sections: { label: "", html: "" } }
+  },
+  chassis: {
+    label: "Chassis", pack: "essence-system.equipment", img: "icons/svg/shield.svg",
+    steps: ["Type & Name", "Details", "Mounts", "Description", "Done"],
+    arrayDefaults: { mounts: { linkedWith: null } },
+    // Chassis/Fitting/Augment used to be their own separate (always-empty) compendium packs —
+    // folded into "equipment" as folders instead (see build-packs.mjs's COMPONENT_TYPES_FOR_FOLDERS)
+    // so a GM authoring reusable Components has one shared library, not four mostly-empty tabs.
+    folder: "Chassis"
+  },
+  fitting: {
+    label: "Fitting", pack: "essence-system.equipment", img: "icons/svg/item-bag.svg",
+    steps: ["Type & Name", "Details", "Description", "Done"],
+    arrayDefaults: {},
+    folder: "Fitting"
+  },
+  augment: {
+    label: "Augment", pack: "essence-system.equipment", img: "icons/svg/upgrade.svg",
+    steps: ["Type & Name", "Details", "Description", "Done"],
+    arrayDefaults: {},
+    folder: "Augment"
   }
 };
 
@@ -89,13 +121,20 @@ export default class EssenceContentWizard extends HandlebarsApplicationMixin(App
     const context = await super._prepareContext(options);
     context.type = this.#type;
     context.typeConfig = this.#type ? TYPE_CONFIG[this.#type] : null;
-    context.typeOptions = Object.entries(TYPE_CONFIG).map(([key, cfg]) => ({ key, label: cfg.label }));
+    context.typeOptions = Object.entries(TYPE_CONFIG).map(([key, cfg]) => ({ key, label: cfg.label, img: cfg.img }));
     context.doc = this.#doc;
     context.system = this.#doc?.system;
     context.step = this.#step;
     context.stepName = context.typeConfig?.steps[this.#step] ?? "Type & Name";
     context.isLast = context.typeConfig ? this.#step === context.typeConfig.steps.length - 1 : false;
     context.canCreate = canCreateContent();
+    if (this.#type === "equipment") {
+      context.categoryOptions = Object.entries(EQUIPMENT_CATEGORY_LABELS).map(([value, label]) => ({ value, label }));
+      context.isWornCategory = MODULAR_EQUIPMENT_CATEGORIES.includes(context.system?.category);
+      context.isToolkit = context.system?.category === "toolkit";
+      context.isConsumableKit = context.system?.category === "consumable-kit";
+      context.isGear = context.system?.category === "gear";
+    }
     return context;
   }
 
@@ -118,6 +157,22 @@ export default class EssenceContentWizard extends HandlebarsApplicationMixin(App
     if (el.type === "checkbox") value = el.checked;
     else if (el.type === "number") value = value === "" ? null : Number(value);
     this.#queueUpdate(() => this.#doc.update({ [el.dataset.field]: value }));
+    const cfg = TYPE_CONFIG[this.#type];
+    if (cfg.folderBy === el.dataset.field) this.#syncCategoryFolder(value);
+  }
+
+  /**
+   * Keeps an Equipment draft's Folder in sync with its Category field (see TYPE_CONFIG.equipment's
+   * `folderBy`) — Weapon/Armor/Tool/Gear are the same folders build-packs.mjs's
+   * writeCategoryFolders() seeds ahead of time, so a GM-authored item lands in the same folder
+   * group a pre-loaded one with that Category would.
+   */
+  async #syncCategoryFolder(category) {
+    const cfg = TYPE_CONFIG[this.#type];
+    const pack = game.packs.get(cfg.pack);
+    const folderName = category ? category[0].toUpperCase() + category.slice(1) : null;
+    const folder = folderName ? pack.folders.find((f) => f.name === folderName) : null;
+    await this.#doc.update({ folder: folder?.id ?? null });
   }
 
   #onArrayFieldChange(event) {
@@ -130,7 +185,10 @@ export default class EssenceContentWizard extends HandlebarsApplicationMixin(App
     const key = el.dataset.array;
     const i = Number(el.dataset.index);
     const field = el.dataset.field;
-    const value = el.value;
+    // Every pre-existing array row field (body/surges/sections) is a plain StringField, so a raw
+    // el.value always worked. Chassis's new mounts[].linkedWith is a nullable NumberField — an
+    // unconverted "" would otherwise coerce to 0 on save instead of null, wrongly linking Mount 0.
+    const value = el.type === "number" ? (el.value === "" ? null : Number(el.value)) : el.value;
     this.#queueUpdate(() => {
       const rows = this.#doc.system[key].map((r) => ({ ...r }));
       rows[i][field] = value;
@@ -164,7 +222,11 @@ export default class EssenceContentWizard extends HandlebarsApplicationMixin(App
     // shipped reference content) — creating or updating documents inside a locked compendium is
     // refused outright, GM or not, until it's unlocked.
     if (pack.locked) await pack.configure({ locked: false });
-    const [doc] = await Item.createDocuments([{ name, type: this.#type, img: cfg.img }], { pack: pack.collection });
+    // Fixed-folder types (Chassis/Fitting/Augment) get sorted immediately; category-tracking types
+    // (Equipment) start unfoldered until the Details step's Category field is set — see
+    // #syncCategoryFolder().
+    const folder = cfg.folder ? pack.folders.find((f) => f.name === cfg.folder) : null;
+    const [doc] = await Item.createDocuments([{ name, type: this.#type, img: cfg.img, folder: folder?.id ?? null }], { pack: pack.collection });
     this.#doc = doc;
     this.#step = 1;
     this.render();

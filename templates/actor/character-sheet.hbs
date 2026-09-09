@@ -110,16 +110,16 @@
     </div>
   {{/if}}
 
-  <h3 class="section-head">Origin <span class="muted">(drag a Species/Heritage/Distinction Item onto the sheet — traits appear under Non-Combat &gt; General Features &amp; Benefits)</span></h3>
+  <h3 class="section-head">Origin <span class="muted">(drag a Species/Heritage/Distinction Item onto the sheet, or click a name below to open it — e.g. to choose a Species' Adaptations. Traits appear under Non-Combat &gt; General Features &amp; Benefits once chosen)</span></h3>
   <div class="origin-cards">
     <div class="origin-card">
-      <div class="origin-card-head">Species: {{#if speciesItem}}{{speciesItem.name}}{{else}}<em>none</em>{{/if}}</div>
+      <div class="origin-card-head">Species: {{#if speciesItem}}<a data-action="itemEdit" data-item-id="{{speciesItem.id}}">{{speciesItem.name}}</a>{{else}}<em>none</em>{{/if}}</div>
     </div>
     <div class="origin-card">
-      <div class="origin-card-head">Heritage: {{#if heritageItem}}{{heritageItem.name}}{{else}}<em>none</em>{{/if}}</div>
+      <div class="origin-card-head">Heritage: {{#if heritageItem}}<a data-action="itemEdit" data-item-id="{{heritageItem.id}}">{{heritageItem.name}}</a>{{else}}<em>none</em>{{/if}}</div>
     </div>
     <div class="origin-card">
-      <div class="origin-card-head">Distinction: {{#if distinctionItem}}{{distinctionItem.name}}{{else}}<em>none</em>{{/if}}</div>
+      <div class="origin-card-head">Distinction: {{#if distinctionItem}}<a data-action="itemEdit" data-item-id="{{distinctionItem.id}}">{{distinctionItem.name}}</a>{{else}}<em>none</em>{{/if}}</div>
       {{#if distinctionItem}}
         <div class="origin-trait">Key Skill: {{distinctionItem.system.keyCombatSkill}} · Primary Attribute: {{distinctionItem.system.primaryAttr}}</div>
       {{/if}}
@@ -132,7 +132,6 @@
   <div class="combat-header">
     <div class="combat-header-left">
       <label>Movement <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> units{{#if system.specialties.combo}} <span class="muted">(effective {{system.totalMovement}} with Combo)</span>{{/if}}</label>
-      <label>Reach <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>
       <div class="action-pool">
         <span class="attr-label">Action Dice</span> {{system.playState.actionDice}}
         &nbsp;|&nbsp;
@@ -362,19 +361,47 @@
 
 {{!-- ============ EQUIPMENT: signature / temporary / armory ============ --}}
 <section class="tab equipment" data-tab="equipment">
-  <h3 class="section-head">Signature Equipment <span class="muted">(Limit {{system.signatureEquipmentLimit}})</span></h3>
+  <h3 class="section-head">Signature Equipment <span class="muted">({{signatureUsed}} / {{system.signatureEquipmentLimit}}) &middot; Reach {{system.effectiveReach}}</span></h3>
+  {{#if (gt signatureOverLimit 0)}}
+    <p class="muted signature-overlimit-note">Over your Signature Limit by {{signatureOverLimit}} full slot{{#if (gt signatureOverLimit 1)}}s{{/if}} — spend 1 Temporary Influence per extra slot to cover it. <button type="button" data-action="spendInfluenceForSlot">Spend Influence for Extra Slot</button></p>
+  {{/if}}
   <table class="item-table">
-    <thead><tr><th>#</th><th>Item</th><th>Category</th><th>Effect</th><th></th></tr></thead>
+    <thead><tr><th>#</th><th>Item</th><th>Category</th><th>Reach</th><th>Effect</th><th></th></tr></thead>
     <tbody>
       {{#each signatureEquipment as |item i|}}
         <tr>
-          <td>{{i}}</td><td>{{item.name}}</td><td>{{item.category}}</td><td>{{item.effectText}}</td>
+          <td>{{i}}</td><td>{{item.name}}</td><td>{{equipmentCategoryLabel item.category}}</td>
+          <td>
+            {{item.reachCost}}
+            {{#if item.overReach}}
+              <span class="muted reach-warning" title="{{#if item.exceptionSource}}Exceeds Reach even with the {{item.exceptionSource}} exception's allowed margin.{{else}}Reach cost exceeds this character's current Reach. Non-blocking.{{/if}}"><i class="fa-solid fa-triangle-exclamation"></i></span>
+            {{/if}}
+          </td>
+          <td>{{item.effectText}}</td>
           <td><button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
               <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
       {{/each}}
     </tbody>
   </table>
+
+  {{#if itemGrants.length}}
+    <h3 class="section-head">Item Grants <span class="muted">(Quartermaster's Due, Internal Compartment, ...)</span></h3>
+    <ul class="item-list">
+      {{#each itemGrants as |grant|}}
+        <li>
+          <strong>{{grant.sourceName}}</strong>
+          {{#if grant.grantedItem}}
+            — <a data-action="itemView" data-item-id="{{grant.grantedItem.id}}">{{grant.grantedItem.name}}</a>
+            <button type="button" data-action="chooseGrantedItem" data-grant-source="{{grant.sourceName}}">Replace</button>
+          {{else}}
+            <span class="muted">— not yet chosen</span>
+            <button type="button" data-action="chooseGrantedItem" data-grant-source="{{grant.sourceName}}">Choose Item</button>
+          {{/if}}
+        </li>
+      {{/each}}
+    </ul>
+  {{/if}}
 
   <h3 class="section-head">Temporary Items</h3>
   <table class="item-table">
@@ -390,19 +417,34 @@
     </tbody>
   </table>
 
-  <h3 class="section-head">Armory <span class="muted">(Limit {{system.armoryLimit}})</span></h3>
+  <h3 class="section-head">Armory <span class="muted">({{armoryUsed}} / {{system.armoryLimit}})</span></h3>
   <table class="item-table">
     <thead><tr><th>Item</th><th>Category</th><th>Notes</th><th></th></tr></thead>
     <tbody>
       {{#each armoryEquipment as |item|}}
         <tr>
-          <td>{{item.name}}</td><td>{{item.category}}</td><td>{{item.effectText}}</td>
+          <td>{{item.name}}</td><td>{{equipmentCategoryLabel item.category}}</td><td>{{item.effectText}}</td>
           <td><button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="Edit {{item.name}}"><i class="fa-solid fa-pen"></i></button>
               <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="Delete {{item.name}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
       {{/each}}
     </tbody>
   </table>
+
+  <h3 class="section-head">Components &amp; Augments <span class="muted">(loose Chassis/Fittings cost ½ slot each; Augments cost 0 — see Reach and Reconfiguring Equipment)</span></h3>
+  <table class="item-table">
+    <thead><tr><th>Item</th><th>Type</th><th>Category</th><th>Slot</th><th>Tier</th><th></th></tr></thead>
+    <tbody>
+      {{#each componentItems as |c|}}
+        <tr>
+          <td>{{c.name}}</td><td>{{capitalize c.type}}</td><td>{{c.category}}</td><td>{{capitalize c.slot}}</td><td>{{c.tier}}</td>
+          <td><button type="button" data-action="itemEdit" data-item-id="{{c.id}}" aria-label="Edit {{c.name}}"><i class="fa-solid fa-pen"></i></button>
+              <button type="button" data-action="itemDelete" data-item-id="{{c.id}}" aria-label="Delete {{c.name}}"><i class="fa-solid fa-trash"></i></button></td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <p class="muted">To assemble a modular item, open a weapon/armor/guard/implement Equipment card's own sheet (Edit) and use its Chassis/Fitting/Mount fields — assigning a Component there also spends any applicable Reconfiguration cost.</p>
 </section>
 
 {{!-- ============ NON-COMBAT: career, skills, influence, features ============ --}}
@@ -429,7 +471,7 @@
   </div>
   <button type="button" data-action="addArrayRow" data-array="nonCombatSkills"><i class="fa-solid fa-plus"></i> Add Skill</button>
 
-  <h3 class="section-head">Influence</h3>
+  <h3 class="section-head">Influence <span class="muted">— {{system.standing}}</span></h3>
   <div class="influence-row">
     <div class="wound-block">
       <span class="attr-label">Temporary Influence</span>
@@ -443,11 +485,54 @@
       <span class="attr-label">Core Influence</span>
       <span class="pip-track">
         {{#each system.coreInfluence as |c i|}}
-          <button type="button" class="pip toggle labeled {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}" aria-pressed="{{c.filled}}">{{lookup ../coreInfluenceLabels i}}</button>
+          <button type="button" class="pip toggle labeled {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}" title="{{c.condition}}" aria-pressed="{{c.filled}}" aria-label="Core Influence {{addOne i}}{{#if c.condition}}: {{c.condition}}{{/if}}">{{lookup ../coreInfluenceLabels i}}</button>
         {{/each}}
       </span>
     </div>
+    <div class="wound-block">
+      <button type="button" data-action="applyInfluenceInjury">Apply Influence Injury</button>
+      <button type="button" data-action="recoverInfluenceInjury">Recover Influence</button>
+      <button type="button" data-action="contributeToGoal">Contribute to Shared Goal</button>
+    </div>
   </div>
+  <p class="muted influence-recovery-note">Recovery: Light — 1 day &middot; Serious — 1 week &middot; Critical — 1 month.</p>
+
+  <h3 class="section-head">Reach</h3>
+  <p class="muted">The scale across which your wealth, reputation, and connections remain meaningful — gates what Availability/Tier of Signature Equipment you can carry (see Equipment tab). Manually GM-awarded, not a computed formula.</p>
+  <div class="influence-row">
+    <div class="wound-block">
+      <label>Reach <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>
+      {{#if (gt system.effectiveReach system.reach)}}
+        <span class="muted">(effective {{system.effectiveReach}} with active Reach Triggers)</span>
+      {{/if}}
+    </div>
+  </div>
+
+  {{#if reachTriggers.length}}
+    <h4 class="section-subhead">Adventure-Limited Reach Triggers <span class="muted">(Letters of Standing, Fence's Cache, Prepared Cache, ...)</span></h4>
+    <table class="item-table">
+      <thead><tr><th>Name</th><th>Reach +</th><th>Temp Influence</th><th>Used this Adventure</th><th>Active</th><th></th></tr></thead>
+      <tbody>
+        {{#each reachTriggers as |t|}}
+          <tr>
+            <td><input name="system.reachTriggers.{{t.i}}.name" type="text" value="{{t.name}}" placeholder="e.g. Letters of Standing"></td>
+            <td><input name="system.reachTriggers.{{t.i}}.tempBonus" type="number" value="{{t.tempBonus}}" style="width:3em"></td>
+            <td><input name="system.reachTriggers.{{t.i}}.tempInfluenceGrant" type="number" value="{{t.tempInfluenceGrant}}" style="width:3em"></td>
+            <td>{{#if t.usedThisAdventure}}Yes{{else}}No{{/if}}</td>
+            <td>{{#if t.active}}Active{{else}}—{{/if}}</td>
+            <td>
+              <button type="button" data-action="activateReachTrigger" data-index="{{t.i}}">Activate</button>
+              <button type="button" data-action="deactivateReachTrigger" data-index="{{t.i}}" {{#unless t.active}}disabled{{/unless}}>End Scene</button>
+              <button type="button" data-action="deleteArrayRow" data-array="reachTriggers" data-index="{{t.i}}" aria-label="Delete {{t.name}}"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{/if}}
+  <button type="button" data-action="addArrayRow" data-array="reachTriggers"><i class="fa-solid fa-plus"></i> Add Reach Trigger</button>
+  <button type="button" data-action="resetAdventureUses" title="Also resets every owned Function Augment's Uses and every Consumable Kit's Equipment Card Uses">Reset All for New Adventure</button>
+  <p class="muted">First use of each Reach Trigger per Adventure is free; each additional use applies 1 Influence Breach (Temp Influence first, then Core Influence, same as Apply Influence Injury).</p>
 
   <h3 class="section-head">General Features &amp; Benefits</h3>
   <table class="item-table">

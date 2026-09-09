@@ -4,26 +4,38 @@ const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ApplicationV2 } = foundry.applications.api;
 
 /**
- * One CSV template per content type. `columns` is the exact header row (and column order) of
- * both the downloadable template and whatever a GM uploads — an uploaded file's header row is
- * matched against these names, not position, so reordered/extra columns still work as long as
- * every name here is present. `example` is the one illustrative data row baked into the
- * downloaded template (see the xlsx skill's convention: a template file needs a legend + one
- * realistic example row).
+ * One CSV template per content TYPE — not per pack, and not lumped together (a single "Combat
+ * Cards" template with a `kind` column used to cover both Action and Reaction Cards; a GM filling
+ * it out had to know that "kind" existed and what to put there, and got a template header row
+ * that was really two different cards' worth of columns interleaved). Every content type the
+ * single-item Item Creation Wizard supports (content-wizard.mjs's TYPE_CONFIG) now has its own
+ * matching template here, with only the columns relevant to that type — Chassis/Fitting/Augment
+ * previously had no Bulk Import template at all despite being fully supported one-at-a-time.
+ *
+ * `columns` is the exact header row (and column order) of both the downloadable template and
+ * whatever a GM uploads — an uploaded file's header row is matched against these names, not
+ * position, so reordered/extra columns still work as long as every name here is present.
+ * `example` is the one illustrative data row baked into the downloaded template. `pack`/`type`/
+ * `img`/`toSystem` drive the shared #runImportFor() below — one generic create-or-update loop
+ * instead of a near-identical branch repeated per type.
  */
 const TEMPLATES = {
-  cards: {
-    label: "Combat Cards (Action + Reaction)",
-    filename: "essence-combat-cards-template.csv",
+  "action-card": {
+    label: "Action Cards",
+    filename: "essence-action-cards-template.csv",
+    pack: "essence-system.action-cards",
+    type: "action-card",
+    img: "icons/svg/card-hand.svg",
+    toSystem: cardRowToSystem,
     columns: [
-      "kind", "name", "domain", "rank", "style", "subtype", "attr", "skill", "defense", "min",
+      "name", "domain", "rank", "style", "subtype", "attr", "skill", "defense", "min",
       "cost", "expertises", "expertises_mode", "tags", "flavor",
       "target_label", "target_html", "effect_label", "effect_html",
       "surge1_n", "surge1_html", "surge2_n", "surge2_html",
       "rider_title", "rider_html", "rider_meta"
     ],
     example: {
-      kind: "action", name: "Example Strike", domain: "physical", rank: "0", style: "Prowess",
+      name: "Example Strike", domain: "physical", rank: "0", style: "Prowess",
       subtype: "Opener", attr: "Vigor", skill: "Prowess", defense: "Fortitude", min: "2", cost: "",
       expertises: "", expertises_mode: "any", tags: "", flavor: "",
       target_label: "Target", target_html: "One creature within weapon range.",
@@ -32,24 +44,65 @@ const TEMPLATES = {
       rider_title: "", rider_html: "", rider_meta: ""
     }
   },
+  "reaction-card": {
+    label: "Reaction Cards",
+    filename: "essence-reaction-cards-template.csv",
+    pack: "essence-system.reaction-cards",
+    type: "reaction-card",
+    img: "icons/svg/card-hand.svg",
+    toSystem: cardRowToSystem,
+    columns: [
+      "name", "domain", "rank", "style", "subtype", "attr", "skill", "defense", "min",
+      "cost", "expertises", "expertises_mode", "tags", "flavor",
+      "target_label", "target_html", "effect_label", "effect_html",
+      "surge1_n", "surge1_html", "surge2_n", "surge2_html",
+      "rider_title", "rider_html", "rider_meta"
+    ],
+    example: {
+      name: "Example Parry", domain: "physical", rank: "0", style: "Prowess",
+      subtype: "", attr: "Grace", skill: "Prowess", defense: "Fortitude", min: "2", cost: "",
+      expertises: "", expertises_mode: "any", tags: "", flavor: "",
+      target_label: "Target", target_html: "One attacker targeting you in melee range.",
+      effect_label: "Effect", effect_html: "Reduce the incoming hit's severity by one step.",
+      surge1_n: "1", surge1_html: "Reposition 1 unit.", surge2_n: "", surge2_html: "",
+      rider_title: "", rider_html: "", rider_meta: ""
+    }
+  },
   equipment: {
     label: "Equipment",
     filename: "essence-equipment-template.csv",
+    pack: "essence-system.equipment",
+    type: "equipment",
+    img: "icons/svg/item-bag.svg",
+    toSystem: equipmentRowToSystem,
     columns: [
-      "name", "category", "slot", "tier", "type", "cost", "range", "effect", "passive", "special",
+      "name", "category", "tier", "type", "cost", "range", "effect", "passive", "special",
       "fortitude", "resilience", "movement", "tags", "flavor", "reachBonus", "uses", "slotCost",
-      "isModular", "quantity"
+      "isModular"
     ],
+    // No `slot` or `quantity` column — both are properties of an owned COPY of an item (which
+    // Signature/Temporary/Armory slot it's carried in; how many you happen to have), assigned once
+    // a player actually acquires it, not properties of the template being authored here. `category`
+    // (weapon/armor/shield/implement/toolkit/consumable-kit/gear — see item-card.mjs) is what this
+    // item fundamentally is; a Toolkit never has Uses regardless of what this row's `uses` column
+    // says. A Consumable Kit's actual granted Equipment Cards are richer than a flat CSV row
+    // supports well (each needs its own name/effect/Uses), so authoring those stays on the Item
+    // Creation Wizard/item sheet — this template can only mark a row `category: consumable-kit`,
+    // not populate its cards.
     example: {
-      name: "Example Blade", category: "weapon", slot: "armory", tier: "1", type: "Melee, 1h",
+      name: "Example Blade", category: "weapon", tier: "1", type: "Melee, 1h",
       cost: "1", range: "reach", effect: "On a hit, deal 1 weapon damage.", passive: "", special: "",
       fortitude: "", resilience: "", movement: "", tags: "melee", flavor: "", reachBonus: "0",
-      uses: "", slotCost: "1", isModular: "false", quantity: "1"
+      uses: "", slotCost: "1", isModular: "false"
     }
   },
-  conditions: {
+  condition: {
     label: "Conditions",
     filename: "essence-conditions-template.csv",
+    pack: "essence-system.conditions",
+    type: "condition",
+    img: "icons/svg/skull.svg",
+    toSystem: conditionRowToSystem,
     columns: [
       "name", "section1_label", "section1_html", "section2_label", "section2_html",
       "section3_label", "section3_html"
@@ -57,6 +110,59 @@ const TEMPLATES = {
     example: {
       name: "Example Condition", section1_label: "EFFECT", section1_html: "Movement -1.",
       section2_label: "DURATION", section2_html: "Until treated.", section3_label: "", section3_html: ""
+    }
+  },
+  chassis: {
+    label: "Chassis",
+    filename: "essence-chassis-template.csv",
+    pack: "essence-system.equipment",
+    type: "chassis",
+    img: "icons/svg/shield.svg",
+    toSystem: componentRowToSystem,
+    columns: [
+      "name", "category", "tier", "fortitude", "resilience", "movement", "effect",
+      "passive", "special", "flavor", "grantsEquipmentCard", "compatibleFittingCategory", "mountCount"
+    ],
+    // No `slot` column — which Signature/Temporary/Armory slot a Component sits in is assigned
+    // once a player actually owns it, not a property of the template. `mountCount` creates that
+    // many independent Mounts (§ Augment Mounts) — a Linked Mount pair is a rarer, more specific
+    // shape not worth CSV-izing; add one after import via the item sheet.
+    example: {
+      name: "Edge Striker", category: "weapon", tier: "2", fortitude: "", resilience: "",
+      movement: "", effect: "", passive: "", special: "", flavor: "", grantsEquipmentCard: "false",
+      compatibleFittingCategory: "Handling", mountCount: "2"
+    }
+  },
+  fitting: {
+    label: "Fittings",
+    filename: "essence-fittings-template.csv",
+    pack: "essence-system.equipment",
+    type: "fitting",
+    img: "icons/svg/item-bag.svg",
+    toSystem: componentRowToSystem,
+    columns: [
+      "name", "category", "tier", "fortitude", "resilience", "movement", "effect",
+      "passive", "special", "flavor", "grantsEquipmentCard", "handedness", "rangeModifier",
+      "reconfigureCategory", "reconfigureCostOverride"
+    ],
+    example: {
+      name: "Swift Handling", category: "weapon", tier: "1", fortitude: "", resilience: "",
+      movement: "", effect: "", passive: "One-handed, positioning bonus.", special: "", flavor: "",
+      grantsEquipmentCard: "false", handedness: "one-handed", rangeModifier: "",
+      reconfigureCategory: "simple", reconfigureCostOverride: ""
+    }
+  },
+  augment: {
+    label: "Augments",
+    filename: "essence-augments-template.csv",
+    pack: "essence-system.equipment",
+    type: "augment",
+    img: "icons/svg/upgrade.svg",
+    toSystem: augmentRowToSystem,
+    columns: ["name", "kind", "compatibility", "uses", "effect", "flavor"],
+    example: {
+      name: "Rapid Draw", kind: "function", compatibility: "Any", uses: "2",
+      effect: "Equipment Action — draw and attack without additional action economy cost.", flavor: ""
     }
   }
 };
@@ -144,10 +250,16 @@ function cardRowToSystem(row) {
   };
 }
 
+const EQUIPMENT_CATEGORIES = ["weapon", "armor", "shield", "implement", "toolkit", "consumable-kit", "gear"];
+
+/** No `slot`/`quantity` here — both are per-owned-copy properties (which Signature/Temporary/
+ *  Armory slot it's carried in; how many you own) assigned once a player acquires the item, not
+ *  properties of the template being authored/imported. Omitting them from the returned object
+ *  means an update() leaves an existing item's own slot/quantity untouched, and a newly-created
+ *  item just gets the schema's defaults (armory / 1). */
 function equipmentRowToSystem(row) {
   return {
-    category: row.category || "gear",
-    slot: row.slot || "armory",
+    category: EQUIPMENT_CATEGORIES.includes(row.category) ? row.category : "gear",
     tier: row.tier ? Number(row.tier) : null,
     type: row.type || "",
     cost: row.cost || "",
@@ -163,8 +275,7 @@ function equipmentRowToSystem(row) {
     reachBonus: Number(row.reachBonus) || 0,
     uses: row.uses ? Number(row.uses) : null,
     slotCost: row.slotCost ? Number(row.slotCost) : 1,
-    isModular: /^(true|1|yes)$/i.test(row.isModular || ""),
-    quantity: row.quantity ? Number(row.quantity) : 1
+    isModular: /^(true|1|yes)$/i.test(row.isModular || "")
   };
 }
 
@@ -177,9 +288,50 @@ function conditionRowToSystem(row) {
   return { sections };
 }
 
+const COMPONENT_CATEGORIES = ["weapon", "ranged", "armor", "shield", "implement"];
+
+/** Shared by both Chassis and Fitting rows — see EssenceComponentData in item-component.mjs. No
+ *  `slot` column, same reasoning as equipmentRowToSystem — which slot a Component sits in is
+ *  assigned once a player owns it. `mountCount` (Chassis only; ignored for Fitting rows, which
+ *  have no Mounts) creates that many independent Mounts — see the "chassis" template's own column
+ *  comment for why Linked pairs aren't CSV-able here. */
+function componentRowToSystem(row) {
+  return {
+    category: COMPONENT_CATEGORIES.includes(row.category) ? row.category : "weapon",
+    tier: row.tier ? Math.min(5, Math.max(1, Number(row.tier))) : 1,
+    fortitude: row.fortitude || "",
+    resilience: row.resilience || "",
+    movement: row.movement || "",
+    effect: row.effect || "",
+    passive: row.passive || "",
+    special: row.special || "",
+    flavor: row.flavor || "",
+    grantsEquipmentCard: /^(true|1|yes)$/i.test(row.grantsEquipmentCard || ""),
+    ...("mountCount" in row
+      ? { mounts: Array.from({ length: Math.max(1, Number(row.mountCount) || 1) }, () => ({ linkedWith: null })) }
+      : {}),
+    ...("compatibleFittingCategory" in row ? { compatibleFittingCategory: row.compatibleFittingCategory || "" } : {}),
+    ...("handedness" in row ? { handedness: ["one-handed", "two-handed"].includes(row.handedness) ? row.handedness : "" } : {}),
+    ...("rangeModifier" in row ? { rangeModifier: row.rangeModifier || "" } : {}),
+    ...("reconfigureCategory" in row ? { reconfigureCategory: row.reconfigureCategory === "structural" ? "structural" : "simple" } : {}),
+    ...("reconfigureCostOverride" in row ? { reconfigureCostOverride: row.reconfigureCostOverride ? Number(row.reconfigureCostOverride) : null } : {})
+  };
+}
+
+function augmentRowToSystem(row) {
+  return {
+    kind: row.kind === "support" ? "support" : "function",
+    compatibility: row.compatibility || "Any",
+    uses: row.uses ? Number(row.uses) : null,
+    effect: row.effect || "",
+    flavor: row.flavor || ""
+  };
+}
+
 /**
- * Bulk-creates or bulk-updates (matched by name, case-sensitive) Combat Cards, Equipment, or
- * Conditions from an uploaded CSV, using the same downloadable-template pattern as any other
+ * Bulk-creates or bulk-updates (matched by name, case-sensitive) any of the content types in
+ * TEMPLATES above — Action Cards, Reaction Cards, Equipment, Conditions, Chassis, Fittings,
+ * Augments — from an uploaded CSV, using the same downloadable-template pattern as any other
  * spreadsheet-driven content pipeline: download the template, fill it out in Excel/Sheets/etc.,
  * export as CSV, upload here. Existing items are updated in place (their _id and any fields the
  * template doesn't cover are preserved); new names are created fresh.
@@ -208,7 +360,7 @@ export default class EssenceBulkImport extends HandlebarsApplicationMixin(Applic
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    context.templates = Object.entries(TEMPLATES).map(([key, cfg]) => ({ key, label: cfg.label }));
+    context.templates = Object.entries(TEMPLATES).map(([key, cfg]) => ({ key, label: cfg.label, img: cfg.img }));
     context.templateKey = this.#templateKey;
     context.templateConfig = this.#templateKey ? TEMPLATES[this.#templateKey] : null;
     context.fileName = this.#fileName;
@@ -264,6 +416,15 @@ export default class EssenceBulkImport extends HandlebarsApplicationMixin(Applic
     this.render();
   }
 
+  /**
+   * One generic create-or-update loop shared by every template — each TEMPLATES entry supplies
+   * which pack, which Item `type`, a default `img`, and its own `toSystem` row-mapper, so this
+   * doesn't need a per-type branch the way it used to (three near-identical blocks that would
+   * have become seven once Chassis/Fitting/Augment were added the same way).
+   * Chassis/Fitting/Augment share the Equipment pack as folders (build-packs.mjs's
+   * COMPONENT_TYPES_FOR_FOLDERS) — matching existing docs by name is scoped to this template's own
+   * `type` so a same-named Equipment/Chassis/Fitting/Augment never gets mistaken for each other.
+   */
   static async #onRunImport() {
     if (!canCreateContent()) {
       ui.notifications.error("You don't have permission to create content (Foundry's \"Create Items\" permission).");
@@ -271,81 +432,25 @@ export default class EssenceBulkImport extends HandlebarsApplicationMixin(Applic
     }
     if (!this.#parsed?.records?.length) return;
 
-    const key = this.#templateKey;
+    const cfg = TEMPLATES[this.#templateKey];
+    const pack = game.packs.get(cfg.pack);
+    const unlocked = await EssenceBulkImport.#unlockAll([pack]);
+    const existing = (await pack.getDocuments()).filter((d) => d.type === cfg.type);
     const errors = [];
     let created = 0, updated = 0;
 
-    if (key === "cards") {
-      const packs = {
-        action: game.packs.get("essence-system.action-cards"),
-        reaction: game.packs.get("essence-system.reaction-cards")
-      };
-      const unlocked = await EssenceBulkImport.#unlockAll(Object.values(packs));
-      const existing = {
-        action: await packs.action.getDocuments(),
-        reaction: await packs.reaction.getDocuments()
-      };
-      for (const [i, row] of this.#parsed.records.entries()) {
-        const kind = (row.kind || "").toLowerCase();
-        if (kind !== "action" && kind !== "reaction") {
-          errors.push({ row: i + 2, message: `kind must be "action" or "reaction", got "${row.kind}"` });
-          continue;
-        }
-        if (!row.name) { errors.push({ row: i + 2, message: "missing name" }); continue; }
-        const type = kind === "action" ? "action-card" : "reaction-card";
-        const pack = packs[kind];
-        const match = existing[kind].find((d) => d.name === row.name);
-        const system = cardRowToSystem(row);
-        if (match) { await match.update({ system }); updated++; }
-        else {
-          const [doc] = await Item.createDocuments(
-            [{ name: row.name, type, img: "icons/svg/card-hand.svg", system }],
-            { pack: pack.collection }
-          );
-          existing[kind].push(doc);
-          created++;
-        }
+    for (const [i, row] of this.#parsed.records.entries()) {
+      if (!row.name) { errors.push({ row: i + 2, message: "missing name" }); continue; }
+      const system = cfg.toSystem(row);
+      const match = existing.find((d) => d.name === row.name);
+      if (match) { await match.update({ system }); updated++; }
+      else {
+        const [doc] = await Item.createDocuments([{ name: row.name, type: cfg.type, img: cfg.img, system }], { pack: pack.collection });
+        existing.push(doc);
+        created++;
       }
-      await EssenceBulkImport.#restoreLocks(unlocked);
-    } else if (key === "equipment") {
-      const pack = game.packs.get("essence-system.equipment");
-      const unlocked = await EssenceBulkImport.#unlockAll([pack]);
-      const existing = await pack.getDocuments();
-      for (const [i, row] of this.#parsed.records.entries()) {
-        if (!row.name) { errors.push({ row: i + 2, message: "missing name" }); continue; }
-        const system = equipmentRowToSystem(row);
-        const match = existing.find((d) => d.name === row.name);
-        if (match) { await match.update({ system }); updated++; }
-        else {
-          const [doc] = await Item.createDocuments(
-            [{ name: row.name, type: "equipment", img: "icons/svg/item-bag.svg", system }],
-            { pack: pack.collection }
-          );
-          existing.push(doc);
-          created++;
-        }
-      }
-      await EssenceBulkImport.#restoreLocks(unlocked);
-    } else if (key === "conditions") {
-      const pack = game.packs.get("essence-system.conditions");
-      const unlocked = await EssenceBulkImport.#unlockAll([pack]);
-      const existing = await pack.getDocuments();
-      for (const [i, row] of this.#parsed.records.entries()) {
-        if (!row.name) { errors.push({ row: i + 2, message: "missing name" }); continue; }
-        const system = conditionRowToSystem(row);
-        const match = existing.find((d) => d.name === row.name);
-        if (match) { await match.update({ system }); updated++; }
-        else {
-          const [doc] = await Item.createDocuments(
-            [{ name: row.name, type: "condition", img: "icons/svg/skull.svg", system }],
-            { pack: pack.collection }
-          );
-          existing.push(doc);
-          created++;
-        }
-      }
-      await EssenceBulkImport.#restoreLocks(unlocked);
     }
+    await EssenceBulkImport.#restoreLocks(unlocked);
 
     this.#results = { created, updated, errors };
     this.render();

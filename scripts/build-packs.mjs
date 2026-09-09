@@ -74,6 +74,81 @@ function writeSourceDoc(packName, doc, collection = "items") {
 }
 
 /**
+ * The 9 Combat Skills, same fixed set item-sheet.mjs's COMBAT_SKILLS uses (capitalized, matching
+ * how system.skill is actually stored on every card — see that file's comment on the casing
+ * gotcha found during the Phase 1 live-verification pass; don't reintroduce a lowercase mismatch
+ * here).
+ */
+const COMBAT_SKILLS_FOR_FOLDERS = ["Prowess", "Ballistics", "Gestalt", "Cunning", "Magecraft", "Psionics", "Leadership", "Ritualism", "Calling"];
+/** Folder for skill-less universal cards (Hide, Strike, Brace, etc. — system.skill === ""). */
+const BASIC_FOLDER_NAME = "Basic";
+
+/**
+ * Writes one Folder document per Combat Skill (plus "Basic") into the given pack, so
+ * action-cards/reaction-cards browse grouped by skill in the compendium sidebar instead of as one
+ * flat 194/67-item list. Foundry Folders belong to exactly one pack — they can't be shared across
+ * action-cards and reaction-cards even though the skill names repeat — so this is called once per
+ * pack and returns that pack's own skill-name -> folder-_id map for cardToItem to assign.
+ * stableId() keeps folder ids deterministic across re-runs so they don't churn for no reason.
+ * Minimal Folder source-doc shape per Foundry v14's schema: `type` here is the type of documents
+ * the folder contains ("Item"), not the folder's own document type.
+ */
+function writeCombatSkillFolders(packName) {
+  const map = {};
+  for (const skill of [...COMBAT_SKILLS_FOR_FOLDERS, BASIC_FOLDER_NAME]) {
+    const _id = stableId(`folder:${packName}:${skill}`);
+    writeSourceDoc(packName, {
+      _id,
+      name: skill,
+      type: "Item",
+      folder: null,
+      sorting: "a",
+      color: null,
+      flags: {}
+    }, "folders");
+    map[skill] = _id;
+  }
+  return map;
+}
+
+/** The 4 Equipment categories mapCategory() ever produces — order controls folder sort. */
+const EQUIPMENT_CATEGORIES_FOR_FOLDERS = ["weapon", "armor", "shield", "implement", "toolkit", "consumable-kit", "gear"];
+/**
+ * Chassis/Fitting/Augment used to be their own separate (always-empty — there's no pre-authored
+ * content for them, players build their own via the modular equipment system) compendium packs;
+ * folded into "equipment" as three more top-level folders instead, so a GM authoring a reusable
+ * Chassis/Fitting/Augment template via the Item Creation Wizard (content-wizard.mjs) has one
+ * shared library instead of four mostly-empty compendium tabs. These never collide with
+ * EQUIPMENT_CATEGORIES_FOR_FOLDERS's values since mapCategory() never returns them.
+ */
+const COMPONENT_TYPES_FOR_FOLDERS = ["chassis", "fitting", "augment"];
+
+/**
+ * Same purpose as writeCombatSkillFolders but keyed by Equipment's `category` field (weapon/armor/
+ * shield/implement/toolkit/consumable-kit/gear — see item-card.mjs) instead of Combat Skill —
+ * Equipment has no skill of its own. Folder names are capitalized (each hyphenated word, e.g.
+ * "Consumable Kit") for display even though the stored category values stay lowercase/hyphenated.
+ */
+function writeCategoryFolders(packName, categories) {
+  const map = {};
+  for (const category of categories) {
+    const _id = stableId(`folder:${packName}:${category}`);
+    const name = category.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");
+    writeSourceDoc(packName, {
+      _id,
+      name,
+      type: "Item",
+      folder: null,
+      sorting: "a",
+      color: null,
+      flags: {}
+    }, "folders");
+    map[category] = _id;
+  }
+  return map;
+}
+
+/**
  * The Neon "Essence" database's card builder stores each card's cheapest (cost-1) Surge as a
  * plain Body line with a bare numeric label ("1") instead of a real Surges-array entry — every
  * other Surge (cost 2+) comes through correctly. Confirmed across 10 cards during a compendium
@@ -92,9 +167,10 @@ function extractMisplacedSurges(body, surges) {
   return { body: cleanBody, surges: [...extracted, ...(surges || [])] };
 }
 
-function cardToItem(row, type) {
+function cardToItem(row, type, folderMap) {
   const d = row.data;
   const { body, surges } = extractMisplacedSurges(d.body, d.surges);
+  const skill = d.skill || row.skill || "";
   return {
     _id: row.id.replace(/-/g, "").slice(0, 16),
     name: row.name,
@@ -106,7 +182,7 @@ function cardToItem(row, type) {
       style: d.style || "",
       subtype: d.subtype || "",
       attr: d.attr || "",
-      skill: d.skill || row.skill || "",
+      skill,
       defense: d.defense || "",
       min: String(d.min ?? ""),
       cost: String(d.cost ?? ""),
@@ -118,7 +194,9 @@ function cardToItem(row, type) {
       surges: surges.map((s) => ({ n: String(s.n ?? "1"), html: s.html || "" })),
       rider: { title: d.rider?.title || "", html: d.rider?.html || "", meta: d.rider?.meta || "" }
     },
-    folder: null,
+    // Grouped by Combat Skill in the compendium sidebar (see writeCombatSkillFolders) — skill-less
+    // universal cards (Hide, Strike, Brace, etc.) fall into the "Basic" folder.
+    folder: folderMap ? (folderMap[skill] ?? folderMap[BASIC_FOLDER_NAME] ?? null) : null,
     flags: {},
     ownership: { default: 0 }
   };
@@ -142,15 +220,16 @@ function conditionToItem(row) {
   };
 }
 
-function equipmentToItem(row) {
+function equipmentToItem(row, folderMap) {
   const d = row.data;
+  const category = mapCategory(row.category || d.category);
   return {
     _id: row.id.replace(/-/g, "").slice(0, 16),
     name: row.name,
     type: "equipment",
     img: "icons/svg/item-bag.svg",
     system: {
-      category: mapCategory(row.category || d.category),
+      category,
       slot: "armory",
       tier: d.tier ?? null,
       type: d.type || "",
@@ -170,7 +249,9 @@ function equipmentToItem(row) {
       isModular: !!d.isModular,
       quantity: 1
     },
-    folder: null,
+    // Grouped by category in the compendium sidebar (see writeCategoryFolders) — Equipment has no
+    // Combat Skill of its own to group by like Action/Reaction Cards do.
+    folder: folderMap ? (folderMap[category] ?? null) : null,
     flags: {},
     ownership: { default: 0 }
   };
@@ -181,15 +262,16 @@ function equipmentToItem(row) {
  * — same _id-stability approach as species/heritages/distinctions, so these survive a full
  * `node scripts/build-packs.mjs` re-run even though they don't come from raw-equipment-cards.json.
  */
-function extraEquipmentToItem(e) {
+function extraEquipmentToItem(e, folderMap) {
   const _id = stableId(`equipment:${e.name}`);
+  const category = mapCategory(e.category);
   return {
     _id,
     name: e.name,
     type: "equipment",
     img: "icons/svg/item-bag.svg",
     system: {
-      category: mapCategory(e.category),
+      category,
       slot: "armory",
       tier: e.tier ?? null,
       type: e.type || "",
@@ -209,7 +291,7 @@ function extraEquipmentToItem(e) {
       isModular: !!e.isModular,
       quantity: 1
     },
-    folder: null,
+    folder: folderMap ? (folderMap[category] ?? null) : null,
     flags: {},
     ownership: { default: 0 }
   };
@@ -226,7 +308,11 @@ function speciesToItem(s) {
       nature: s.nature,
       adaptationLabel: s.adaptationLabel,
       adaptationCount: s.adaptationCount,
-      adaptations: s.adaptations.map((a) => ({ name: a.name, text: a.text, chosen: false })),
+      // subChoice passed through verbatim when present (see item-origin.mjs's subChoiceField()) —
+      // defaults to {label:"",type:"none",options:[],count:1,selected:[]} via the schema itself
+      // when an adaptation's origin-data.json entry has no subChoice at all, so omitting it here
+      // for adaptations without one is safe.
+      adaptations: s.adaptations.map((a) => ({ name: a.name, text: a.text, chosen: false, ...(a.subChoice ? { subChoice: a.subChoice } : {}) })),
       subspecies: s.subspecies || []
     },
     folder: null,
@@ -330,54 +416,102 @@ function guideToJournal(guide) {
   };
 }
 
+/** Maps a raw source-data category string onto EssenceEquipmentData's `category` enum
+ *  (weapon/armor/shield/implement/toolkit/consumable-kit/gear — see item-card.mjs). */
 function mapCategory(raw) {
   if (!raw) return "gear";
   if (raw.includes("weapon")) return "weapon";
   if (raw === "armor") return "armor";
-  if (raw === "implement" || raw === "guard" || raw === "toolkit") return "tool";
+  if (raw === "guard" || raw === "shield") return "shield";
+  if (raw === "implement") return "implement";
+  if (raw === "toolkit") return "toolkit";
+  if (raw === "consumable-kit") return "consumable-kit";
   return "gear";
 }
 
-async function main() {
-  fs.rmSync(SOURCE_DIR, { recursive: true, force: true });
+/**
+ * `--only=pack-a,pack-b` scopes a run to just those pack(s) — both which source docs get written
+ * and which packs get recompiled — leaving every other pack's `_source` and compiled LevelDB store
+ * untouched. Added for the action-cards/reaction-cards Folder-grouping change so a re-run doesn't
+ * unnecessarily rewrite unrelated packs (species/equipment/etc.) that happen to share this script.
+ * Omit the flag to build everything, exactly as before.
+ */
+const ONLY = process.argv.slice(2).find((a) => a.startsWith("--only="))?.slice("--only=".length).split(",") ?? null;
+const wants = (packName) => !ONLY || ONLY.includes(packName);
 
-  const combatCards = loadRows("raw-combat-cards.json");
-  let actionCount = 0, reactionCount = 0;
-  for (const row of combatCards) {
-    const type = row.kind === "reaction" ? "reaction-card" : "action-card";
-    const pack = row.kind === "reaction" ? "reaction-cards" : "action-cards";
-    writeSourceDoc(pack, cardToItem(row, type));
-    if (type === "action-card") actionCount++; else reactionCount++;
+async function main() {
+  if (ONLY) {
+    for (const packName of ONLY) fs.rmSync(path.join(SOURCE_DIR, packName), { recursive: true, force: true });
+  } else {
+    fs.rmSync(SOURCE_DIR, { recursive: true, force: true });
   }
 
-  const conditionCards = loadRows("raw-condition-cards.json");
-  for (const row of conditionCards) writeSourceDoc("conditions", conditionToItem(row));
+  let actionCount = 0, reactionCount = 0, conditionCount = 0, equipmentCount = 0;
+  let speciesCount = 0, heritageCount = 0, distinctionCount = 0, styleCount = 0, guideCount = 0;
 
-  const equipmentCards = loadRows("raw-equipment-cards.json");
-  for (const row of equipmentCards) writeSourceDoc("equipment", equipmentToItem(row));
+  if (wants("action-cards") || wants("reaction-cards")) {
+    const actionCardFolders = writeCombatSkillFolders("action-cards");
+    const reactionCardFolders = writeCombatSkillFolders("reaction-cards");
 
-  const extraEquipment = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "extra-equipment-data.json"), "utf8"));
-  for (const e of extraEquipment) writeSourceDoc("equipment", extraEquipmentToItem(e));
+    const combatCards = loadRows("raw-combat-cards.json");
+    for (const row of combatCards) {
+      const type = row.kind === "reaction" ? "reaction-card" : "action-card";
+      const pack = row.kind === "reaction" ? "reaction-cards" : "action-cards";
+      const folderMap = row.kind === "reaction" ? reactionCardFolders : actionCardFolders;
+      writeSourceDoc(pack, cardToItem(row, type, folderMap));
+      if (type === "action-card") actionCount++; else reactionCount++;
+    }
+  }
 
-  const origin = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "origin-data.json"), "utf8"));
-  for (const s of origin.species) writeSourceDoc("species", speciesToItem(s));
-  for (const h of origin.heritages) writeSourceDoc("heritages", heritageToItem(h));
-  for (const d of origin.distinctions) writeSourceDoc("distinctions", distinctionToItem(d));
+  if (wants("conditions")) {
+    const conditionCards = loadRows("raw-condition-cards.json");
+    for (const row of conditionCards) writeSourceDoc("conditions", conditionToItem(row));
+    conditionCount = conditionCards.length;
+  }
 
-  const combatStyles = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "combat-styles-data.json"), "utf8"));
-  for (const cs of combatStyles) writeSourceDoc("combat-styles", combatStyleToJournal(cs), "journal");
+  if (wants("equipment")) {
+    const equipmentFolders = writeCategoryFolders("equipment", EQUIPMENT_CATEGORIES_FOR_FOLDERS);
+    // Chassis/Fitting/Augment folders (see COMPONENT_TYPES_FOR_FOLDERS) — no source data writes
+    // any items into them here since there's no pre-authored content for those types; they exist
+    // so a GM-authored one (via content-wizard.mjs) has somewhere to land.
+    writeCategoryFolders("equipment", COMPONENT_TYPES_FOR_FOLDERS);
 
-  const guides = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "guide-data.json"), "utf8"));
-  for (const g of guides) writeSourceDoc("guide", guideToJournal(g), "journal");
+    const equipmentCards = loadRows("raw-equipment-cards.json");
+    for (const row of equipmentCards) writeSourceDoc("equipment", equipmentToItem(row, equipmentFolders));
 
-  console.log(`Source docs written: ${actionCount} action cards, ${reactionCount} reaction cards, ${conditionCards.length} conditions, ${equipmentCards.length + extraEquipment.length} equipment, ${origin.species.length} species, ${origin.heritages.length} heritages, ${origin.distinctions.length} distinctions, ${combatStyles.length} combat styles, ${guides.length} guide entries.`);
+    const extraEquipment = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "extra-equipment-data.json"), "utf8"));
+    for (const e of extraEquipment) writeSourceDoc("equipment", extraEquipmentToItem(e, equipmentFolders));
+    equipmentCount = equipmentCards.length + extraEquipment.length;
+  }
+
+  if (wants("species") || wants("heritages") || wants("distinctions")) {
+    const origin = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "origin-data.json"), "utf8"));
+    if (wants("species")) { for (const s of origin.species) writeSourceDoc("species", speciesToItem(s)); speciesCount = origin.species.length; }
+    if (wants("heritages")) { for (const h of origin.heritages) writeSourceDoc("heritages", heritageToItem(h)); heritageCount = origin.heritages.length; }
+    if (wants("distinctions")) { for (const d of origin.distinctions) writeSourceDoc("distinctions", distinctionToItem(d)); distinctionCount = origin.distinctions.length; }
+  }
+
+  if (wants("combat-styles")) {
+    const combatStyles = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "combat-styles-data.json"), "utf8"));
+    for (const cs of combatStyles) writeSourceDoc("combat-styles", combatStyleToJournal(cs), "journal");
+    styleCount = combatStyles.length;
+  }
+
+  if (wants("guide")) {
+    const guides = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "guide-data.json"), "utf8"));
+    for (const g of guides) writeSourceDoc("guide", guideToJournal(g), "journal");
+    guideCount = guides.length;
+  }
+
+  console.log(`Source docs written: ${actionCount} action cards, ${reactionCount} reaction cards, ${conditionCount} conditions, ${equipmentCount} equipment, ${speciesCount} species, ${heritageCount} heritages, ${distinctionCount} distinctions, ${styleCount} combat styles, ${guideCount} guide entries.`);
 
   const packTypes = {
     "action-cards": "Item", "reaction-cards": "Item", conditions: "Item", equipment: "Item",
-    species: "Item", heritages: "Item", distinctions: "Item", "combat-styles": "JournalEntry",
-    guide: "JournalEntry"
+    species: "Item", heritages: "Item", distinctions: "Item",
+    "combat-styles": "JournalEntry", guide: "JournalEntry"
   };
   for (const [packName, type] of Object.entries(packTypes)) {
+    if (!wants(packName)) continue;
     const srcDir = path.join(SOURCE_DIR, packName);
     const outDir = path.join(ROOT, "packs", packName);
     if (!fs.existsSync(srcDir)) continue;

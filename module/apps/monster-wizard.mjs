@@ -223,7 +223,10 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     const pack = await (game.packs.get("essence-system.equipment")?.getDocuments() ?? []);
     const ownedNames = new Set(owned.map((i) => i.name));
     const search = this.#equipmentSearch.trim().toLowerCase();
+    // Chassis/Fitting/Augment share this pack as folders (build-packs.mjs's
+    // COMPONENT_TYPES_FOR_FOLDERS) — this browser is Equipment-only.
     context.browsableEquipment = pack
+      .filter((d) => d.type === "equipment")
       .filter((d) => !ownedNames.has(d.name))
       .filter((d) => !search || d.name.toLowerCase().includes(search))
       .sort((a, b) => a.name.localeCompare(b.name))
@@ -444,7 +447,10 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     const existing = document.items.filter((i) => i.type === "equipment");
     if (existing.length) await document.deleteEmbeddedDocuments("Item", existing.map((i) => i.id));
 
-    const pack = await (game.packs.get("essence-system.equipment")?.getDocuments() ?? []);
+    // Chassis/Fitting/Augment share this pack as folders (build-packs.mjs's
+    // COMPONENT_TYPES_FOR_FOLDERS) — filter to type "equipment" so a random roll never hands an
+    // NPC a spare Component instead of a real Equipment item.
+    const pack = (await (game.packs.get("essence-system.equipment")?.getDocuments() ?? [])).filter((d) => d.type === "equipment");
     const choices = pickRandom(pack, budget.equipmentCount);
     if (choices.length) await document.createEmbeddedDocuments("Item", choices.map((d) => d.toObject()));
   }

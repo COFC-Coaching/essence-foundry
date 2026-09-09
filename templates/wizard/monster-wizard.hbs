@@ -190,7 +190,7 @@
     <input type="text" data-wizard-search="equipment" placeholder="Search…" value="{{equipmentSearch}}">
     <ul class="item-list wizard-scroll-list">
       {{#each browsableEquipment as |item|}}
-        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{item.system.category}}</span> <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" aria-label="Add {{item.name}}"><i class="fa-solid fa-plus"></i></button></li>
+        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{equipmentCategoryLabel item.system.category}}</span> <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" aria-label="Add {{item.name}}"><i class="fa-solid fa-plus"></i></button></li>
       {{/each}}
     </ul>
   {{/if}}

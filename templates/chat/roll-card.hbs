@@ -2,7 +2,11 @@
   <h3>{{label}}</h3>
   <div class="dice-faces">
     {{#each faces as |face i|}}
-      <span class="die {{#if (eq i ../successDieIndex)}}success-die{{else if (gte face 6)}}surge-die{{/if}}">{{face}}</span>
+      {{!-- Success and Surge are independent checks on the same die — the Success Die shows both
+           classes when it's also 6+, instead of the old either/or (see essence-roll.mjs's
+           resolveCombatRoll for the 2026-09-08 rule change: the Success Die now earns its own
+           Surge too, not just the other dice). --}}
+      <span class="die {{#if (eq i ../successDieIndex)}}success-die{{/if}} {{#if (gte face 6)}}surge-die{{/if}}">{{face}}</span>
     {{/each}}
   </div>
   <div class="roll-summary">
@@ -25,6 +29,9 @@
       <p><strong>Success Die:</strong> {{successDie}} —
         {{#if succeeded}}<span class="pass">Success</span>{{else}}<span class="fail">Failure</span>{{/if}}
       </p>
+    {{/if}}
+    {{#if bonusSurges}}
+      <p class="muted mastery-note"><strong>Mastery:</strong> +{{bonusSurges}} free Surge</p>
     {{/if}}
     {{#if surgeOptions.length}}
       <div class="surge-options">

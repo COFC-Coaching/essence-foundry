@@ -56,9 +56,23 @@
 
 <div class="card-fields grid-3">
   <label>Rank <input name="system.rank" type="number" value="{{system.rank}}"></label>
-  <label>Subtype <input name="system.subtype" type="text" value="{{system.subtype}}"></label>
+  <label>Subtype
+    <select name="system.subtype">
+      <option value="" {{#unless system.subtype}}selected{{/unless}}>—</option>
+      {{#each subtypeOptions as |st|}}
+        <option value="{{st}}" {{#if (eq st ../system.subtype)}}selected{{/if}}>{{st}}</option>
+      {{/each}}
+    </select>
+  </label>
   <label>Attribute <input name="system.attr" type="text" value="{{system.attr}}"></label>
-  <label>Skill <input name="system.skill" type="text" value="{{system.skill}}"></label>
+  <label>Skill
+    <select class="skill-select">
+      <option value="" {{#unless system.skill}}selected{{/unless}}>— Basic/Universal —</option>
+      {{#each skillOptions as |s|}}
+        <option value="{{s.key}}" {{#if (eq s.key ../system.skill)}}selected{{/if}}>{{s.label}}</option>
+      {{/each}}
+    </select>
+  </label>
   <label>Defense <input name="system.defense" type="text" value="{{system.defense}}"></label>
   <label>Min Dice <input name="system.min" type="text" value="{{system.min}}"></label>
   <label>Cost <input name="system.cost" type="text" value="{{system.cost}}"></label>

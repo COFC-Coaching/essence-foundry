@@ -1,18 +1,21 @@
 import EssenceCharacterData from "./data/actor-character.mjs";
 import EssenceNpcData from "./data/actor-npc.mjs";
-import { EssenceActionCardData, EssenceReactionCardData, EssenceConditionData, EssenceEquipmentData } from "./data/item-card.mjs";
+import { EssenceActionCardData, EssenceReactionCardData, EssenceConditionData, EssenceEquipmentData, EQUIPMENT_CATEGORY_LABELS } from "./data/item-card.mjs";
 import { EssenceSpeciesData, EssenceHeritageData, EssenceDistinctionData } from "./data/item-origin.mjs";
+import { EssenceChassisData, EssenceFittingData, EssenceAugmentData } from "./data/item-component.mjs";
 import EssenceActorSheet from "./sheets/actor-sheet.mjs";
 import EssenceNpcSheet from "./sheets/npc-sheet.mjs";
 import {
   EssenceCardSheet, EssenceConditionSheet, EssenceEquipmentSheet,
-  EssenceSpeciesSheet, EssenceHeritageSheet, EssenceDistinctionSheet
+  EssenceSpeciesSheet, EssenceHeritageSheet, EssenceDistinctionSheet,
+  EssenceComponentSheet, EssenceAugmentSheet
 } from "./sheets/item-sheet.mjs";
 import EssenceCombat from "./documents/combat.mjs";
 import EssenceActor from "./documents/actor.mjs";
 import EssenceContentWizard, { canCreateContent } from "./apps/content-wizard.mjs";
 import EssenceBulkImport from "./apps/bulk-import.mjs";
 import { capitalize, fitTitleSize, domainResource } from "./utils.mjs";
+import { syncEquipmentEffect } from "./data/equipment-effects.mjs";
 
 /** Foundry combat's own enum values, given a display label a player should actually see. */
 const TURN_LABELS = { notStarted: "Not Started", first: "First Turn", active: "Active", ended: "Ended" };
@@ -48,6 +51,9 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels.species = EssenceSpeciesData;
   CONFIG.Item.dataModels.heritage = EssenceHeritageData;
   CONFIG.Item.dataModels.distinction = EssenceDistinctionData;
+  CONFIG.Item.dataModels.chassis = EssenceChassisData;
+  CONFIG.Item.dataModels.fitting = EssenceFittingData;
+  CONFIG.Item.dataModels.augment = EssenceAugmentData;
   CONFIG.Combat.documentClass = EssenceCombat;
   CONFIG.Actor.documentClass = EssenceActor;
 
@@ -61,10 +67,17 @@ Hooks.once("init", () => {
   Items.registerSheet("essence-system", EssenceSpeciesSheet, { types: ["species"], makeDefault: true });
   Items.registerSheet("essence-system", EssenceHeritageSheet, { types: ["heritage"], makeDefault: true });
   Items.registerSheet("essence-system", EssenceDistinctionSheet, { types: ["distinction"], makeDefault: true });
+  Items.registerSheet("essence-system", EssenceComponentSheet, { types: ["chassis", "fitting"], makeDefault: true });
+  Items.registerSheet("essence-system", EssenceAugmentSheet, { types: ["augment"], makeDefault: true });
 
   Handlebars.registerHelper("addOne", (n) => Number(n) + 1);
   Handlebars.registerHelper("essenceEditor", essenceEditorHelper);
   Handlebars.registerHelper("capitalize", capitalize);
+  // Equipment's `category` is stored lowercase/hyphenated ("consumable-kit") — a plain capitalize
+  // or CSS text-transform only capitalizes the first letter, leaving "Consumable-kit." Any
+  // template showing a category display value should use this instead for a properly-capitalized
+  // multi-word label ("Consumable Kit") consistent everywhere it appears.
+  Handlebars.registerHelper("equipmentCategoryLabel", (category) => EQUIPMENT_CATEGORY_LABELS[category] ?? capitalize(category ?? ""));
   Handlebars.registerHelper("turnLabel", (turn) => TURN_LABELS[turn] ?? capitalize(turn ?? ""));
   Handlebars.registerHelper("fitTitleSize", (text, options) => fitTitleSize(text, options.hash));
   Handlebars.registerHelper("domainResource", domainResource);
@@ -154,6 +167,22 @@ Hooks.on("deleteCombat", async (combat) => {
     if (actor.system.specialties?.authority?.length) update["system.specialties.authority"] = [];
     await actor.update(update);
   }
+});
+
+/**
+ * Keeps an `equipment` Item's transferred "Equipment Bonus" ActiveEffect in sync with its own
+ * Fortitude/Resilience/Movement/Reach fields and its `slot` (see equipment-effects.mjs for why
+ * this uses Foundry's native transfer instead of the sheet's usual hand-summed derived data).
+ * `createItem` covers a brand-new equipment Item; `updateItem` re-syncs only when a field the
+ * effect actually depends on changed, so editing something unrelated (a Toolkit's flavor text,
+ * say) doesn't trigger a redundant effect rebuild on every keystroke-driven autosave.
+ */
+Hooks.on("createItem", (item) => syncEquipmentEffect(item));
+Hooks.on("updateItem", (item, changes) => {
+  const sys = changes.system;
+  if (!sys) return;
+  const relevant = ["fortitude", "resilience", "movement", "reachBonus", "slot"];
+  if (relevant.some((key) => sys[key] !== undefined)) syncEquipmentEffect(item);
 });
 
 /**

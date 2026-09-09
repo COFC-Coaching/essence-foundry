@@ -10,6 +10,21 @@
 <h3 class="section-head">Nature</h3>
 <input name="system.nature.name" type="text" value="{{system.nature.name}}" placeholder="Nature name">
 <div>{{essenceEditor system.nature.text target="system.nature.text" button=true}}</div>
+<fieldset class="subchoice-editor">
+  <legend>Nested sub-choice (optional — e.g. "choose two Senses" buried in this trait's own text)</legend>
+  <label>Label <input name="system.nature.subChoice.label" type="text" value="{{system.nature.subChoice.label}}" placeholder="e.g. Senses, Lineage"></label>
+  <label>Type
+    <select name="system.nature.subChoice.type">
+      <option value="none" {{#if (eq system.nature.subChoice.type "none")}}selected{{/if}}>None</option>
+      <option value="fixed" {{#if (eq system.nature.subChoice.type "fixed")}}selected{{/if}}>Fixed list</option>
+      <option value="free" {{#if (eq system.nature.subChoice.type "free")}}selected{{/if}}>Free text</option>
+    </select>
+  </label>
+  <label>Count <input name="system.nature.subChoice.count" type="number" value="{{system.nature.subChoice.count}}" style="width:3em" min="1"></label>
+  <label>Fixed options (comma-separated)
+    <input class="subchoice-options-field" data-path="nature" type="text" value="{{natureOptionsText}}" placeholder="e.g. Low-Light Vision, Keen Hearing, Keen Scent">
+  </label>
+</fieldset>
 
 <h3 class="section-head">{{system.adaptationLabel}}s <span class="muted">(choose {{system.adaptationCount}})</span></h3>
 <label>Adaptation label <input name="system.adaptationLabel" type="text" value="{{system.adaptationLabel}}"></label>
@@ -20,6 +35,21 @@
       <label class="chosen-toggle"><input type="checkbox" name="system.adaptations.{{i}}.chosen" {{#if a.chosen}}checked{{/if}}> Chosen</label>
       <input name="system.adaptations.{{i}}.name" type="text" value="{{a.name}}" placeholder="Adaptation name">
       <div>{{essenceEditor a.text target=(concat "system.adaptations." i ".text") button=true}}</div>
+      <fieldset class="subchoice-editor">
+        <legend>Nested sub-choice (optional)</legend>
+        <label>Label <input name="system.adaptations.{{i}}.subChoice.label" type="text" value="{{a.subChoice.label}}" placeholder="e.g. Senses, Weapon"></label>
+        <label>Type
+          <select name="system.adaptations.{{i}}.subChoice.type">
+            <option value="none" {{#if (eq a.subChoice.type "none")}}selected{{/if}}>None</option>
+            <option value="fixed" {{#if (eq a.subChoice.type "fixed")}}selected{{/if}}>Fixed list</option>
+            <option value="free" {{#if (eq a.subChoice.type "free")}}selected{{/if}}>Free text</option>
+          </select>
+        </label>
+        <label>Count <input name="system.adaptations.{{i}}.subChoice.count" type="number" value="{{a.subChoice.count}}" style="width:3em" min="1"></label>
+        <label>Fixed options (comma-separated)
+          <input class="subchoice-options-field" data-path="adaptations.{{i}}" type="text" value="{{lookup ../adaptationOptionsText i}}" placeholder="e.g. Claws, Horns, Fangs">
+        </label>
+      </fieldset>
       <button type="button" data-action="deleteArrayRow" data-array="adaptations" data-index="{{i}}" aria-label="Delete adaptation {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
     </li>
   {{/each}}

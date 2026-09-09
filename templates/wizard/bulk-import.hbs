@@ -8,9 +8,12 @@
   {{#unless templateConfig}}
     <h2>Bulk Import</h2>
     <p class="muted">Download a CSV template, fill it out (Excel, Google Sheets, or any spreadsheet app that exports CSV), then upload it here. Matching by name: a row whose name already exists in the compendium updates that item in place; a new name creates a new one.</p>
-    <div class="wizard-pick-list">
+    <div class="content-type-grid">
       {{#each templates as |t|}}
-        <button type="button" data-action="chooseTemplate" data-key="{{t.key}}" {{#unless ../canCreate}}disabled{{/unless}}>{{t.label}}</button>
+        <button type="button" class="content-type-card content-type-{{t.key}}" data-action="chooseTemplate" data-key="{{t.key}}" {{#unless ../canCreate}}disabled{{/unless}}>
+          <img src="{{t.img}}" alt="">
+          <span>{{t.label}}</span>
+        </button>
       {{/each}}
     </div>
   {{/unless}}
@@ -25,7 +28,7 @@
 
     <p class="muted">Columns: {{#each templateConfig.columns}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
 
-    <label>Upload filled-in CSV
+    <label class="csv-upload">Upload filled-in CSV
       <input type="file" accept=".csv,text/csv" data-role="file-input" {{#unless canCreate}}disabled{{/unless}}>
     </label>
 
@@ -37,7 +40,7 @@
       <p>{{parsed.records.length}} row(s) found.</p>
       <ul class="item-list wizard-scroll-list">
         {{#each parsed.records as |r i|}}
-          <li>Row {{addOne i}}: <strong>{{r.name}}</strong>{{#if r.kind}} ({{r.kind}}){{/if}}</li>
+          <li>Row {{addOne i}}: <strong>{{r.name}}</strong></li>
         {{/each}}
       </ul>
       <button type="button" data-action="runImport" {{#unless canCreate}}disabled{{/unless}}>Import {{parsed.records.length}} Row(s)</button>

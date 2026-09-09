@@ -4,7 +4,7 @@
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "category": "tool",
+    "category": "toolkit",
     "slot": "armory",
     "tier": null,
     "type": "Passive",
@@ -24,7 +24,7 @@
     "isModular": false,
     "quantity": 1
   },
-  "folder": null,
+  "folder": "1ea4ede42a0af5a5",
   "flags": {},
   "ownership": {
     "default": 0
