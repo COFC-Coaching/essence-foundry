@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{let f='';try{let o=JSON.parse(d);f=(o.tool_input&&o.tool_input.file_path)||(o.tool_response&&o.tool_response.filePath)||'';}catch(e){}if(/\\.mjs$/.test(f)){const{execFileSync}=require('child_process');try{execFileSync('node',['--check',f],{stdio:'inherit'});}catch(e){process.exit(1);}}})\"",
+            "statusMessage": "node --check on edited .mjs file"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{let c='';try{let o=JSON.parse(d);c=(o.tool_input&&o.tool_input.command)||'';}catch(e){}if(c.includes('build-packs.mjs')){console.log(JSON.stringify({hookSpecificOutput:{hookEventName:'PreToolUse',permissionDecision:'ask',permissionDecisionReason:'build-packs.mjs rewrites packs/_source and recompiles packs/*. Foundry holds an exclusive LOCK on each pack while a world is running, and compilePack() fails with EPERM/EBUSY if a live Foundry process still holds it (this has happened before - see build-history). Confirm no Foundry world using this system is currently running, or that it was shut down via game.shutDown()/Return to Setup, before proceeding.'}}));}})\"",
+            "statusMessage": "Checking for build-packs.mjs / Foundry pack lock risk"
+          }
+        ]
+      }
+    ]
+  }
+}
