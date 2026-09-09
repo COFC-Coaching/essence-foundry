@@ -1470,3 +1470,29 @@ Synced the Surge "Rolling Open" documentation gap noted above during this same s
 same section to the `essence-system` repo's `part-iv-combat.md` (canonical source) and the
 `essence-foundry.wiki` mirror's `Part-IV-Combat-Encounters.md`, using the new `sync-rules-docs`
 skill built earlier this session for exactly this kind of drift.
+
+### 2026-09-09 — Sheet Portrait uneditable for Owners: missing `data-edit="img"` everywhere
+
+A player reported being unable to change their own character's portrait despite owning the actor,
+worried it was a custom permission restriction. It wasn't — Foundry's own core `editImage` action
+(the handler behind every `data-action="editImage"` element) reads `target.dataset.edit` to know
+which document field to write the picked image path to; without that attribute the click either
+no-ops or throws depending on Foundry's exact version behavior. Checked every sheet template in
+the system (`grep -rl 'data-action="editImage"' templates/`) and found **all 10** — both Actor
+sheets (`character-sheet.hbs`, `npc-sheet.hbs`) and all 8 Item sheets — had the `data-action` but
+never the required `data-edit="img"`, present since the initial scaffold (`81518f9`). Confirmed
+this wasn't a JS/permissions problem: `#applyEditable()` in `actor-sheet.mjs` (the safety-lock
+feature from v0.6.17) only ever disables `input, select, textarea, prose-mirror` and
+`button/a[data-action]` elements — `<img>` was never in scope, and `editImage` is a core-provided
+action (per the existing comment on `#onEditTokenImage`, which explains the separate Token Image
+button exists precisely because core's `editImage` only ever targets a document's own `img` field,
+implying core's default handler was always assumed to be doing the real work here — it just never
+had the attribute it needed to actually do it). Fixed by adding `data-edit="img"` to all 10
+templates; no JS changes needed. v0.6.45, see CHANGELOG.md.
+
+Worth flagging for future sessions: this is the same *shape* of bug as the recurring "bare data
+keys shown directly as UI labels" and "field-name casing mismatches" patterns already tracked in
+[Recurring bug patterns](#recurring-bug-patterns-and-lessons-learned) — a required attribute/field
+name silently missing from markup, invisible until someone actually clicks the affected control.
+Worth an audit of other `data-action`-only elements across the templates for a similar missing
+`data-*` companion attribute the core handler expects.

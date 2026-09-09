@@ -2,6 +2,19 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.45
+
+**Fixed the Sheet Portrait not being clickable/editable anywhere in the system** — every sheet's
+portrait `<img>` (both Actor sheets and all 8 Item sheets) carried `data-action="editImage"` but
+was missing Foundry's own required `data-edit="img"` attribute, which Foundry's core `editImage`
+handler needs to know which document field to update. This wasn't a custom permission restriction
+on Owners — it was a piece of Foundry's own convention missing from the markup, present since the
+initial scaffold. Fixed by adding `data-edit="img"` to all 10 sheet templates
+(`character-sheet.hbs`, `npc-sheet.hbs`, and the 8 Item sheets under `templates/item/`). No JS
+changes needed — `editImage` is a core-provided action (see the existing comment on
+`#onEditTokenImage` in `actor-sheet.mjs`, which explains why the separate Token Image button exists
+precisely *because* core's `editImage` only ever targets a document's own `img` field).
+
 ## 0.6.44
 
 **Restored 23 equipment items that a prior sync had silently wiped from the compendium**, and

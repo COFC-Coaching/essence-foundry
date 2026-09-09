@@ -1,6 +1,6 @@
 <div class="essence-sheet-root">
 <header class="sheet-header">
-  <img class="profile-img" src="{{item.img}}" data-action="editImage">
+  <img class="profile-img" src="{{item.img}}" data-edit="img" data-action="editImage">
   <h1><input name="name" type="text" value="{{item.name}}" style="font-size: {{fitTitleSize item.name max=24 min=14 startAt=12}}px" {{#if viewMode}}disabled{{/if}}></h1>
   <button type="button" class="card-view-toggle" data-action="toggleCardView" title="{{#if viewMode}}Edit this card{{else}}View this card{{/if}}">
     <i class="fa-solid {{#if viewMode}}fa-pen{{else}}fa-eye{{/if}}"></i> {{#if viewMode}}Edit{{else}}View{{/if}}
