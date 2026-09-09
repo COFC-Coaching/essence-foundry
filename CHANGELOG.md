@@ -2,6 +2,25 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.43
+
+**Surge rule reverted/clarified: Surges are counted AFTER the Defense check, from the Success
+Die's leftovers.** This reverses the 2026-09-08 change (which had every 6+ die, including the
+Success Die, earn a Surge). The correct ordering, per the user: the highest die (the Success Die)
+is spent meeting Defense; only the OTHER dice showing 6+ grant a Surge. Example: rolling 8, 6, 6
+against Defense 5 — the 8 succeeds against Defense and earns no Surge of its own, but both 6s do
+(2 Surges), not 3. `resolveCombatRoll()` in `module/dice/essence-roll.mjs` excludes
+`successDieIndex` from the Surge sum again; the chat card's dice-face styling and its
+`.success-die.surge-die` combined CSS rule (now dead, since the two states can't co-occur) were
+updated to match.
+
+Also addressed a related gap the user flagged in the same request: **rolling "open"** (the
+dice-commit dialog's own "leave blank to roll open" option, when a target's Defense isn't known or
+hasn't been declared) now shows the dice-derived Surge count as a candidate for the GM to confirm
+rather than as an automatic, spendable total — `rollEssencePool()` computes an `openRoll` flag
+(`!multi && defense == null`) and the roll card swaps the normal Surge/spend UI for a plain note
+when it's set.
+
 ## 0.6.42
 
 A full pass on live feedback that the Equipment sheet, Item Creation Wizard, and Bulk Import were

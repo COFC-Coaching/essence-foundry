@@ -10,13 +10,18 @@ export function countD10Successes(faces) {
 }
 
 /**
- * Card/combat resolution: the highest die is the Success Die. It succeeds if it meets or beats
- * the target Defense — that check is entirely separate from Surges. Every die in the pool showing
- * 6+ grants 1 Surge (no doubling on a 10), INCLUDING the Success Die itself if it qualifies —
- * hitting/missing and earning Surges are independent passes over the same dice, not
- * mutually exclusive (2026-09-08 rule change: the Success Die previously never earned its own
- * Surge even at 6+; the user confirmed Surges are earned "separately" from the Defense check, so
- * every qualifying die counts now, full stop).
+ * Card/combat resolution: the highest die is the Success Die, and it alone determines pass/fail
+ * against the target Defense. Surges are counted AFTER that Defense check, from the dice left
+ * over — the Success Die itself never earns a Surge, even when it's 6+, because it was already
+ * spent meeting Defense. Only the OTHER dice showing 6+ grant 1 Surge each (no doubling on a 10).
+ * (2026-09-09 rule change, reverting the 2026-09-08 change: the user clarified the ordering is
+ * "successes come after the Defense has been met" — e.g. a Success Die of 8 against a lower
+ * Defense doesn't itself count as a Surge; only remaining dice at 6+ do.)
+ *
+ * When `defense` is null on a single-target roll (the player rolled "open" because no Defense was
+ * targeted/declared), this function still returns a candidate Surge count from the dice, but that
+ * count is NOT authoritative — the caller (rollEssencePool) flags the roll as `openRoll` so the
+ * chat card presents it as the GM's call rather than a spendable total.
  * @param {number[]} faces
  * @param {number|null} defense
  */
@@ -30,7 +35,7 @@ export function resolveCombatRoll(faces, defense = null) {
   }
   const successDie = faces[successDieIndex];
   const succeeded = defense == null ? successDie >= 6 : successDie >= defense;
-  const surges = faces.reduce((sum, f) => sum + (f >= 6 ? 1 : 0), 0);
+  const surges = faces.reduce((sum, f, i) => sum + (i !== successDieIndex && f >= 6 ? 1 : 0), 0);
   return { successDieIndex, successDie, succeeded, surges };
 }
 
@@ -60,6 +65,10 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
   const faces = roll.terms[0].results.map((r) => r.result);
 
   const multi = Array.isArray(targets) && targets.length > 0;
+  // "Open" roll: no Defense was targeted or declared (the dice-commit dialog's own "leave blank to
+  // roll open" option) — the dice-derived Surge count is only a candidate for the GM to confirm,
+  // per the 2026-09-09 rule clarification, not an authoritative total.
+  const openRoll = !multi && defense == null;
   const combat = resolveCombatRoll(faces, multi ? null : defense);
   combat.surges += bonusSurges;
   const poolSuccesses = countD10Successes(faces);
@@ -83,6 +92,7 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
       successDie: combat.successDie,
       succeeded: combat.succeeded,
       surges: combat.surges,
+      openRoll,
       poolSuccesses,
       targets: targetResults,
       surgeOptions: surgeOptions.map((opt, i) => ({ i, n: opt.n, html: opt.html })),

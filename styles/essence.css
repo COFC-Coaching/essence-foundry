@@ -278,11 +278,9 @@
 }
 .essence.roll-card .die.success-die { background: #2e7d32; color: #fff; filter: drop-shadow(0 2px 3px rgba(46,125,50,0.7)); }
 .essence.roll-card .die.surge-die { background: #f9a825; border-color: #ffca28; color: #000; }
-/* Success and Surge are independent checks on the same die (see resolveCombatRoll) — a die can be
-   both at once, so this combined rule (3 class selectors, naturally higher specificity than either
-   single-state rule above regardless of source order) keeps the success green as the base but adds
-   the surge-gold ring, instead of one state silently hiding the other. */
-.essence.roll-card .die.success-die.surge-die { background: #2e7d32; border-color: #ffca28; border-width: 2px; color: #fff; }
+/* No .success-die.surge-die combined rule: since the 2026-09-09 rule change, Surges are counted
+   AFTER the Defense check and the Success Die is excluded from that count (see resolveCombatRoll),
+   so a die is never both classes at once — success-die and surge-die are mutually exclusive now. */
 /* #2e7d32/#c62828 (this system's "success"/"fail" green/red everywhere else, e.g. the success-die
    background) measure ~2.8:1 and ~1.7:1 as TEXT on this sheet's rgb(48,40,49) background — both
    well under WCAG AA's 4.5:1 floor, and pass/fail here is color-only, no icon or shape backup.

@@ -2,7 +2,7 @@
   "id": "essence-system",
   "title": "The Essence System",
   "description": "Official Foundry VTT system for The Essence System — a d10 dice-pool tabletop RPG with tactical card-driven combat.",
-  "version": "0.6.42",
+  "version": "0.6.43",
   "compatibility": {
     "minimum": "12",
     "verified": "14"

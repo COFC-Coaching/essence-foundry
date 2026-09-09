@@ -1391,3 +1391,31 @@ with (it authors straight into the compendium, never onto an Actor) but still ha
 field, removed for the same reason. Verified live: a fresh unowned compendium item shows neither
 field in view or edit mode; Caelon Voss's owned Reinforced Armor still shows both, populated,
 right where they belong.
+
+### 2026-09-09 — Surge rule reverted: Success Die excluded from Surge count again
+
+The 2026-09-08 "every 6+ die including the Success Die earns a Surge" change (see that date's
+entry above) was itself wrong — the user clarified the actual ordering is "successes come AFTER
+the Defense has been met": the Success Die is spent meeting Defense, and only the OTHER dice
+showing 6+ grant a Surge. Worked example given: 8, 6, 6 against Defense 5 — the 8 succeeds and
+earns no Surge, only the two 6s do (2 Surges, not 3). Reverted `resolveCombatRoll()`
+(`module/dice/essence-roll.mjs`) to exclude `successDieIndex` from the Surge sum, updated its
+doc comment and `roll-card.hbs`'s dice-face styling (a die can no longer be both `success-die` and
+`surge-die`, so the CSS's now-dead 3-class combined rule in `essence.css` was removed rather than
+left to bit-rot). v0.6.43, see CHANGELOG.md.
+
+**New, not previously modeled**: an "open" roll — the dice-commit dialog's existing "leave blank
+to roll open" option, when a target's Defense isn't known or hasn't been declared — should not
+auto-resolve a spendable Surge total, since there's no Defense to count "after." `rollEssencePool()`
+now computes `openRoll = !multi && defense == null` and the chat card swaps the normal Surge/spend
+UI for a plain "GM decides" note listing the candidate 6+ dice, instead of presenting a number the
+system can't actually justify. This only applies to single-target rolls with no declared Defense —
+multi-target rolls still have per-target Defenses even though the shared roll's own `defense` param
+is null for a different reason (each target is resolved independently), so `openRoll` explicitly
+excludes the `multi` case.
+
+**Not done this session** (raised in the same request but out of scope for the code fix): the
+canonical rules documentation for this mechanic lives in the `essence-system` repo (rules-reference
+site + GitHub wiki, per the 2026-09-08 V5 rulebook sync entry above), not in this repo — updating
+the prose there needs to happen as a follow-up in that repo/session, this one only fixed the
+Foundry-side dice engine and its own chat-card copy.
