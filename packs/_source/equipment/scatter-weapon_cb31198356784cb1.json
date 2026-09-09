@@ -1,0 +1,33 @@
+{
+  "_id": "cb31198356784cb1",
+  "name": "Scatter Weapon",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": null,
+    "type": "Ranged, 2h",
+    "cost": "1",
+    "range": "Ranged 4",
+    "effect": "Once per turn, when using a single-target action, include all other valid targets within 1 unit of the initial target.",
+    "passive": "",
+    "special": "",
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "tags": "ranged, two-handed",
+    "flavor": "",
+    "reachBonus": 0,
+    "uses": null,
+    "slotCost": 1,
+    "isModular": true,
+    "quantity": 1
+  },
+  "folder": "ef758c06f501d588",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!cb31198356784cb1"
+}

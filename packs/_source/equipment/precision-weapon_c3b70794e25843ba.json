@@ -1,22 +1,22 @@
 {
-  "_id": "0f5a4ed08f91778b",
-  "name": "Ward Talisman",
+  "_id": "c3b70794e25843ba",
+  "name": "Precision Weapon",
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "category": "shield",
+    "category": "weapon",
     "slot": "armory",
     "tier": null,
-    "type": "Off-Hand",
+    "type": "Ranged, 2h",
     "cost": "1",
-    "range": "",
+    "range": "Ranged 12",
     "effect": "",
-    "passive": "When you use a reaction that increases Composure, increase Composure by an additional 1.",
+    "passive": "Attacks with this weapon ignore cover.",
     "special": "",
     "fortitude": "",
     "resilience": "",
     "movement": "",
-    "tags": "guard",
+    "tags": "ranged, two-handed",
     "flavor": "",
     "reachBonus": 0,
     "uses": null,
@@ -24,10 +24,10 @@
     "isModular": true,
     "quantity": 1
   },
-  "folder": "dd24e9a5eb05c4ae",
+  "folder": "ef758c06f501d588",
   "flags": {},
   "ownership": {
     "default": 0
   },
-  "_key": "!items!0f5a4ed08f91778b"
+  "_key": "!items!c3b70794e25843ba"
 }

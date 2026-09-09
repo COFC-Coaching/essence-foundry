@@ -1,22 +1,22 @@
 {
-  "_id": "0f5a4ed08f91778b",
-  "name": "Ward Talisman",
+  "_id": "12b89af03bf04f1b",
+  "name": "Power Focus",
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "category": "shield",
+    "category": "implement",
     "slot": "armory",
     "tier": null,
-    "type": "Off-Hand",
+    "type": "Foci, 1h",
     "cost": "1",
     "range": "",
     "effect": "",
-    "passive": "When you use a reaction that increases Composure, increase Composure by an additional 1.",
+    "passive": "Once per turn, reduce a resource cost by 1.",
     "special": "",
     "fortitude": "",
     "resilience": "",
     "movement": "",
-    "tags": "guard",
+    "tags": "implement, one-handed",
     "flavor": "",
     "reachBonus": 0,
     "uses": null,
@@ -24,10 +24,10 @@
     "isModular": true,
     "quantity": 1
   },
-  "folder": "dd24e9a5eb05c4ae",
+  "folder": "9c762be068db02ea",
   "flags": {},
   "ownership": {
     "default": 0
   },
-  "_key": "!items!0f5a4ed08f91778b"
+  "_key": "!items!12b89af03bf04f1b"
 }

@@ -1,0 +1,33 @@
+{
+  "_id": "2470877e8915496f",
+  "name": "Rapid Weapon",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": null,
+    "type": "Ranged, 2h",
+    "cost": "1",
+    "range": "Ranged 8",
+    "effect": "Once per turn, after rolling at least 4 dice on an attack with this weapon, reroll any number of dice showing 3 or lower.",
+    "passive": "",
+    "special": "",
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "tags": "ranged, two-handed",
+    "flavor": "",
+    "reachBonus": 0,
+    "uses": null,
+    "slotCost": 1,
+    "isModular": true,
+    "quantity": 1
+  },
+  "folder": "ef758c06f501d588",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2470877e8915496f"
+}

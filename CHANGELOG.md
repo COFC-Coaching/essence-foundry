@@ -2,6 +2,33 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.44
+
+**Restored 23 equipment items that a prior sync had silently wiped from the compendium**, and
+fixed 4 more that were miscategorized as a result of the same incident. The 2026-09-08 "bulk
+catch-up" commit (`200d261`) that pushed a long stretch of local-only work to GitHub ran
+`fetch-from-neon.mjs` against the Neon Postgres project's `staging` branch — which has 0 rows in
+`equipment_cards` — instead of `production` (23 rows), exactly the cache-staleness risk flagged
+as a known gap after the v0.6.14 near-miss. The empty fetch silently dropped every DB-sourced
+equipment item on the next `build-packs.mjs` run, leaving only the 13 hand-authored items (all 23
+missing items — weapons, armor, shields, packs — simply weren't there to browse or Bulk Import
+from). Re-fetched from the correct `production` branch and rebuilt the `equipment` pack
+(`node scripts/build-packs.mjs --only=equipment`); all 23 items came back under their original
+stable IDs. While rebuilding, 4 hand-authored items (Heavy Shield, Armored Gauntlet, Ward Talisman,
+Ritual Censer) that had been showing as `gear` turned out to already be correctly tagged `shield`
+in their source (`scripts/extra-equipment-data.json`) — the stale `gear` value in the shipped
+compendium was a leftover from the same incident, not a source-data bug, and is now corrected too.
+
+**Fixed the Character Creation Wizard's Equipment "Group" filter doing nothing.** Its dropdown
+options were being built as a bare array of category strings
+(`["weapon","armor",...]`) instead of `{value, label}` objects, so every `<option>` below "All"
+rendered with an empty value and no visible label — selecting one silently matched nothing.
+`character-wizard.mjs` now builds `equipmentCategoryOptions` from `EQUIPMENT_CATEGORY_LABELS`
+(`Object.entries(...).map(([value, label]) => ({value, label}))`), the same pattern
+`content-wizard.mjs` and `item-sheet.mjs` already used — this was in fact the exact pattern
+`item-card.mjs`'s own doc comment on `EQUIPMENT_CATEGORY_LABELS` says the Wizard's Group filter
+should use, just never applied there.
+
 ## 0.6.43
 
 **Surge rule reverted/clarified: Surges are counted AFTER the Defense check, from the Success

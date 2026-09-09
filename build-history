@@ -1418,4 +1418,55 @@ excludes the `multi` case.
 canonical rules documentation for this mechanic lives in the `essence-system` repo (rules-reference
 site + GitHub wiki, per the 2026-09-08 V5 rulebook sync entry above), not in this repo — updating
 the prose there needs to happen as a follow-up in that repo/session, this one only fixed the
-Foundry-side dice engine and its own chat-card copy.
+Foundry-side dice engine and its own chat-card copy. (Done in a later session the same day — see
+below.)
+
+### 2026-09-09 — Neon cache-staleness gap #3 actually happened: 23 equipment items restored
+
+A GM reported the Character Wizard's Equipment Library missing most equipment and its category
+filter doing nothing (screenshot of the Wizard's Equipment step showing a near-empty Group
+dropdown). Root cause, once traced: the 2026-09-08 `200d261` "bulk catch-up" commit — which pushed
+a long stretch of local-only work (v0.6.23–v0.6.42) to GitHub in one squashed commit — had run
+`fetch-from-neon.mjs` against the `.env.api` default DATABASE_URL, which points at the Neon
+project's `staging` branch. `staging`'s `equipment_cards` table has **0 rows** (confirmed live via
+the Neon MCP tools now connected to this session); `production` has the real 23. The empty fetch
+silently overwrote `scripts/.cache/raw-equipment-cards.json` with nothing, and the same commit's
+`build-packs.mjs` run then wiped all 23 DB-sourced equipment items from `packs/_source/equipment/`
+on top of the unrelated category-folder/Compendium-Folders work it was actually trying to ship —
+leaving only the 13 hand-authored items (from `scripts/extra-equipment-data.json`) behind. This is
+**exactly** the risk flagged as Known Gap #3 after the v0.6.14 near-miss, materializing for real
+this time, unnoticed for over a day because nothing sanity-checks cache row counts before a
+rebuild is treated as authoritative — that gap is still open, now with a second real incident on
+record. Fixed by re-running `fetch-from-neon.mjs` with `DATABASE_URL` explicitly pointed at the
+`production` branch's connection string (never touching `.env.api` itself, since that's the web
+app's own file and staging may be pointed there for that app's own reasons unrelated to this repo)
+and rebuilding with `node scripts/build-packs.mjs --only=equipment`. All 23 items came back under
+their original `stableId()`-derived ids, since that hashing is deterministic and unaffected by the
+cache gap.
+
+**A second, related bug surfaced by the same rebuild**: 4 hand-authored items (Heavy Shield,
+Armored Gauntlet, Ward Talisman, Ritual Censer — all "guard"-tagged Off-Hand items that function as
+shields) were shipping as `category: "gear"` even though `extra-equipment-data.json`'s own source
+data has always said `"shield"`. This wasn't a source-data bug (item #4 in
+[Recurring bug patterns](#recurring-bug-patterns-and-lessons-learned) above) — it was stale shipped
+output from the same `200d261` incident that never got corrected by a full rebuild until now. Worth
+noting for future "miscategorized in the compendium" reports: check whether the *source* data
+(`extra-equipment-data.json`, or the Neon row) is actually right before assuming it's a build-script
+mapping bug — this one wasn't.
+
+**Also fixed in the same pass, found from the same screenshot**: the Character Wizard's Equipment
+step Group filter (`#prepareEquipment` in `character-wizard.mjs`) built its dropdown options as a
+bare array of category strings (`["weapon", "armor", ...]`) instead of `{value, label}` objects —
+`wizard.hbs`'s `{{#each equipmentCategoryOptions as |opt|}}` then read `opt.value`/`opt.label` off
+a string primitive, both `undefined`, so every option below "All" rendered with an empty value and
+blank label. Selecting one of those blank rows silently filtered to nothing, which read exactly
+like "the filter isn't working." Fixed by building the options from `EQUIPMENT_CATEGORY_LABELS`
+the same way `content-wizard.mjs` and `item-sheet.mjs` already do — notably, `item-card.mjs`'s own
+doc comment on `EQUIPMENT_CATEGORY_LABELS` already named "the Character Wizard's Equipment Group
+filter" as a consumer that should use this map; it just never actually got wired up when the
+category/kind merge (v0.6.42) touched everywhere else. v0.6.44, see CHANGELOG.md.
+
+Synced the Surge "Rolling Open" documentation gap noted above during this same session: added the
+same section to the `essence-system` repo's `part-iv-combat.md` (canonical source) and the
+`essence-foundry.wiki` mirror's `Part-IV-Combat-Encounters.md`, using the new `sync-rules-docs`
+skill built earlier this session for exactly this kind of drift.

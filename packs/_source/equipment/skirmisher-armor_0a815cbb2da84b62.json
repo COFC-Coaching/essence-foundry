@@ -1,22 +1,22 @@
 {
-  "_id": "0f5a4ed08f91778b",
-  "name": "Ward Talisman",
+  "_id": "0a815cbb2da84b62",
+  "name": "Skirmisher Armor",
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "category": "shield",
+    "category": "armor",
     "slot": "armory",
     "tier": null,
-    "type": "Off-Hand",
+    "type": "Light",
     "cost": "1",
     "range": "",
-    "effect": "",
-    "passive": "When you use a reaction that increases Composure, increase Composure by an additional 1.",
+    "effect": "After moving at least 4 units during your turn, increase Fortitude by 1 until the start of your next turn.",
+    "passive": "",
     "special": "",
     "fortitude": "",
     "resilience": "",
     "movement": "",
-    "tags": "guard",
+    "tags": "armor",
     "flavor": "",
     "reachBonus": 0,
     "uses": null,
@@ -24,10 +24,10 @@
     "isModular": true,
     "quantity": 1
   },
-  "folder": "dd24e9a5eb05c4ae",
+  "folder": "2d534fdc6e6c897a",
   "flags": {},
   "ownership": {
     "default": 0
   },
-  "_key": "!items!0f5a4ed08f91778b"
+  "_key": "!items!0a815cbb2da84b62"
 }

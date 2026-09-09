@@ -1,6 +1,6 @@
 {
-  "_id": "0f5a4ed08f91778b",
-  "name": "Ward Talisman",
+  "_id": "fb84ad5347824dd5",
+  "name": "Light Shield",
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
@@ -11,7 +11,7 @@
     "cost": "1",
     "range": "",
     "effect": "",
-    "passive": "When you use a reaction that increases Composure, increase Composure by an additional 1.",
+    "passive": "When you use a reaction that increases Fortitude, increase Fortitude by an additional 1.",
     "special": "",
     "fortitude": "",
     "resilience": "",
@@ -29,5 +29,5 @@
   "ownership": {
     "default": 0
   },
-  "_key": "!items!0f5a4ed08f91778b"
+  "_key": "!items!fb84ad5347824dd5"
 }

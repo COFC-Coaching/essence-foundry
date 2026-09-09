@@ -1,33 +1,33 @@
 {
-  "_id": "0f5a4ed08f91778b",
-  "name": "Ward Talisman",
+  "_id": "d477f112e8c5471f",
+  "name": "Explosives Pack",
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "category": "shield",
+    "category": "consumable-kit",
     "slot": "armory",
     "tier": null,
-    "type": "Off-Hand",
+    "type": "Consumable",
     "cost": "1",
     "range": "",
-    "effect": "",
-    "passive": "When you use a reaction that increases Composure, increase Composure by an additional 1.",
+    "effect": "Gain the 'Explosives' Action Card. Each use of the card consumes 1 charge.",
+    "passive": "",
     "special": "",
     "fortitude": "",
     "resilience": "",
     "movement": "",
-    "tags": "guard",
+    "tags": "consumable",
     "flavor": "",
     "reachBonus": 0,
-    "uses": null,
+    "uses": 3,
     "slotCost": 1,
-    "isModular": true,
+    "isModular": false,
     "quantity": 1
   },
-  "folder": "dd24e9a5eb05c4ae",
+  "folder": "ce2bb523a719e8fc",
   "flags": {},
   "ownership": {
     "default": 0
   },
-  "_key": "!items!0f5a4ed08f91778b"
+  "_key": "!items!d477f112e8c5471f"
 }

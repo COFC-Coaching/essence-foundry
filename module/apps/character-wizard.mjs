@@ -3,6 +3,7 @@ import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import { capitalize, computeReachGate } from "../utils.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
+import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { DocumentSheetV2 } = foundry.applications.api;
@@ -413,7 +414,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     // labels stay stable even if a given category happens to have zero items in the compendium at
     // some point.
     context.equipmentCategoryFilter = this.#equipmentCategoryFilter;
-    context.equipmentCategoryOptions = ["weapon", "armor", "shield", "implement", "toolkit", "consumable-kit", "gear"];
+    context.equipmentCategoryOptions = Object.entries(EQUIPMENT_CATEGORY_LABELS).map(([value, label]) => ({ value, label }));
   }
 
   #prepareFinalize(context, speciesItem, heritageItem, distinctionItem) {

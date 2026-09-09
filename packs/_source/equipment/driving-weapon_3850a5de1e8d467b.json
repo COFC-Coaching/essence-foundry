@@ -1,22 +1,22 @@
 {
-  "_id": "0f5a4ed08f91778b",
-  "name": "Ward Talisman",
+  "_id": "3850a5de1e8d467b",
+  "name": "Driving Weapon",
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "category": "shield",
+    "category": "weapon",
     "slot": "armory",
     "tier": null,
-    "type": "Off-Hand",
+    "type": "Melee, 1h",
     "cost": "1",
-    "range": "",
-    "effect": "",
-    "passive": "When you use a reaction that increases Composure, increase Composure by an additional 1.",
+    "range": "Melee 1",
+    "effect": "Once per turn, after a successful attack with this weapon, push or pull the target 1 unit.",
+    "passive": "",
     "special": "",
     "fortitude": "",
     "resilience": "",
     "movement": "",
-    "tags": "guard",
+    "tags": "melee, one-handed, forced-movement",
     "flavor": "",
     "reachBonus": 0,
     "uses": null,
@@ -24,10 +24,10 @@
     "isModular": true,
     "quantity": 1
   },
-  "folder": "dd24e9a5eb05c4ae",
+  "folder": "ef758c06f501d588",
   "flags": {},
   "ownership": {
     "default": 0
   },
-  "_key": "!items!0f5a4ed08f91778b"
+  "_key": "!items!3850a5de1e8d467b"
 }
