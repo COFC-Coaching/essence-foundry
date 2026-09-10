@@ -28,7 +28,7 @@
     <h2>{{localize "ESSENCE.Wizard.Character.Identity"}}</h2>
     <p class="muted">{{localize "ESSENCE.Wizard.Character.IdentityHint" pool=system.baseCombatDice}}</p>
 
-    <h3 class="section-head">{{localize "ESSENCE.Item.Species"}} {{#if speciesItem}}— <strong>{{speciesItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="species">({{localize "ESSENCE.Common.Clear"}})</button>{{/if}}</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Item.SpeciesLabel"}} {{#if speciesItem}}— <strong>{{speciesItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="species">({{localize "ESSENCE.Common.Clear"}})</button>{{/if}}</h3>
     <ul class="wizard-pick-list">
       {{#each speciesOptions as |opt|}}
         <li><button type="button" class="{{#if (eq opt.name ../speciesItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.species" data-id="{{opt.id}}">{{opt.name}}</button></li>
@@ -97,14 +97,14 @@
       </div>
     {{/if}}
 
-    <h3 class="section-head">{{localize "ESSENCE.Item.Heritage"}} {{#if heritageItem}}— <strong>{{heritageItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="heritage">({{localize "ESSENCE.Common.Clear"}})</button>{{/if}}</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Item.HeritageLabel"}} {{#if heritageItem}}— <strong>{{heritageItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="heritage">({{localize "ESSENCE.Common.Clear"}})</button>{{/if}}</h3>
     <ul class="wizard-pick-list">
       {{#each heritageOptions as |opt|}}
         <li><button type="button" class="{{#if (eq opt.name ../heritageItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.heritages" data-id="{{opt.id}}">{{opt.name}}</button></li>
       {{/each}}
     </ul>
 
-    <h3 class="section-head">{{localize "ESSENCE.Item.Distinction"}} {{#if distinctionItem}}— <strong>{{distinctionItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="distinction">({{localize "ESSENCE.Common.Clear"}})</button>{{/if}}</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Item.DistinctionLabel"}} {{#if distinctionItem}}— <strong>{{distinctionItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="distinction">({{localize "ESSENCE.Common.Clear"}})</button>{{/if}}</h3>
     <p class="muted">{{localize "ESSENCE.Wizard.Character.GatedSkillsHint"}}</p>
     <ul class="wizard-pick-list">
       {{#each distinctionOptions as |opt|}}
@@ -323,7 +323,7 @@
 
   {{!-- ============ STEP 9: EQUIPMENT ============ --}}
   {{#if (eq step 8)}}
-    <h2>{{localize "ESSENCE.Item.Equipment"}}</h2>
+    <h2>{{localize "ESSENCE.Item.EquipmentLabel"}}</h2>
     <p class="muted">{{localize "ESSENCE.Wizard.Character.EquipmentHint"}}</p>
     <h3 class="section-head">{{localize "ESSENCE.Wizard.SignatureLoadout" used=signatureUsed limit=signatureLimit reach=reach}}</h3>
     <ul class="item-list">

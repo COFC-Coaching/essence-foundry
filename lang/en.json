@@ -266,10 +266,10 @@
   "ESSENCE.Chat.OpenRollNotePlural": "{surges} candidate dice at 6+ (excluding the Success Die) — Defense wasn't declared, so the GM decides how many actually count.",
   "ESSENCE.Chat.OpenDifficultySuccesses": "Open-difficulty successes (6+)",
 
-  "ESSENCE.Item.Species": "Species",
-  "ESSENCE.Item.Heritage": "Heritage",
-  "ESSENCE.Item.Distinction": "Distinction",
-  "ESSENCE.Item.Equipment": "Equipment",
+  "ESSENCE.Item.SpeciesLabel": "Species",
+  "ESSENCE.Item.HeritageLabel": "Heritage",
+  "ESSENCE.Item.DistinctionLabel": "Distinction",
+  "ESSENCE.Item.EquipmentLabel": "Equipment",
   "ESSENCE.Item.ActionCard": "Action Cards",
   "ESSENCE.Item.ReactionCard": "Reaction Cards",
 
@@ -503,7 +503,7 @@
   "ESSENCE.Settings.RoleBudgets.Title": "Monster Role Budgets",
   "ESSENCE.Settings.RoleBudgets.MenuLabel": "Configure Role Budgets",
   "ESSENCE.Settings.RoleBudgets.Hint": "Tune the homebrew stat budgets the Monster Creator uses to auto-fill a Role (Minion/Standard/Elite/Nemesis).",
-  "ESSENCE.Settings.RoleBudgets.Field": "Field",
+  "ESSENCE.Settings.RoleBudgets.FieldLabel": "Field",
   "ESSENCE.Settings.RoleBudgets.ResetDefaults": "Reset to Defaults",
   "ESSENCE.Settings.RoleBudgets.Field.attributePool": "Attribute Points",
   "ESSENCE.Settings.RoleBudgets.Field.attributeMax": "Attribute Max",

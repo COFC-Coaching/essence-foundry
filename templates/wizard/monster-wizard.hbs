@@ -54,14 +54,14 @@
     <h2>{{localize "ESSENCE.Wizard.Monster.Origin"}}</h2>
     <p class="muted">{{localize "ESSENCE.Wizard.Monster.OriginHint"}}</p>
 
-    <h3 class="section-head">{{localize "ESSENCE.Item.Species"}} {{#if speciesItem}}— <strong>{{speciesItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="species">({{localize "ESSENCE.Common.Clear"}})</button>{{/if}}</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Item.SpeciesLabel"}} {{#if speciesItem}}— <strong>{{speciesItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="species">({{localize "ESSENCE.Common.Clear"}})</button>{{/if}}</h3>
     <ul class="wizard-pick-list">
       {{#each speciesOptions as |opt|}}
         <li><button type="button" class="{{#if (eq opt.name ../speciesItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.species" data-id="{{opt.id}}">{{opt.name}}</button></li>
       {{/each}}
     </ul>
 
-    <h3 class="section-head">{{localize "ESSENCE.Item.Distinction"}} {{#if distinctionItem}}— <strong>{{distinctionItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="distinction">({{localize "ESSENCE.Common.Clear"}})</button>{{/if}}</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Item.DistinctionLabel"}} {{#if distinctionItem}}— <strong>{{distinctionItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="distinction">({{localize "ESSENCE.Common.Clear"}})</button>{{/if}}</h3>
     <p class="muted">{{localize "ESSENCE.Wizard.Monster.GatedSkillsHint"}}</p>
     <ul class="wizard-pick-list">
       {{#each distinctionOptions as |opt|}}
@@ -173,7 +173,7 @@
 
   {{!-- ============ STEP 7: EQUIPMENT ============ --}}
   {{#if (eq step 6)}}
-    <h2>{{localize "ESSENCE.Item.Equipment"}}</h2>
+    <h2>{{localize "ESSENCE.Item.EquipmentLabel"}}</h2>
     <p class="muted">{{localize "ESSENCE.Wizard.Monster.RoleBudgetItems" n=equipmentBudget}}</p>
     <button type="button" data-action="rerollEquipment"><i class="fa-solid fa-dice"></i> {{localize "ESSENCE.Wizard.Monster.RerollEquipment"}}</button>
     <h3 class="section-head">{{localize "ESSENCE.Wizard.Loadout"}} — {{equipmentItems.length}} / {{equipmentBudget}}</h3>
@@ -210,7 +210,7 @@
       <span>{{localize "ESSENCE.Common.Resilience"}} {{system.resilience}}</span>
       <span>{{localize "ESSENCE.Common.TemporaryWounds"}} {{system.temporaryWoundsAvailable}}</span>
       <span>{{localize "ESSENCE.Common.CombatCards"}} {{cardCount}}</span>
-      <span>{{localize "ESSENCE.Item.Equipment"}} {{equipmentCount}}</span>
+      <span>{{localize "ESSENCE.Item.EquipmentLabel"}} {{equipmentCount}}</span>
     </div>
     <p class="muted">{{localize "ESSENCE.Wizard.Monster.FinalizeHint"}}</p>
   {{/if}}

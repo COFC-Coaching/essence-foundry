@@ -2,6 +2,22 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.47
+
+**Fixed a critical bug introduced in 0.6.46: every localized string on every sheet rendered as its
+raw key instead of real text** (e.g. "ESSENCE.Common.Tier" instead of "Tier"), including the window
+title's document-type label — confirmed by a user on a genuinely fresh Foundry instance/world, not
+a caching artifact. Root cause: Foundry expands `lang/en.json`'s flat dotted keys into a nested
+object tree, so a key cannot be both a leaf string value AND a namespace prefix for other keys.
+Five keys were both: `"ESSENCE.Item.Species": "Species"` alongside `"ESSENCE.Item.Species.Nature"`,
+`.NatureNamePlaceholder`, etc. (and the same shape for `Item.Heritage`, `Item.Distinction`,
+`Item.Equipment`, and `Settings.RoleBudgets.Field`) — the tree-expansion step throws on that
+collision, which aborted loading the *entire* language file, so even pre-existing keys untouched by
+0.6.46 (like `TYPES.Actor.character`) broke too. Renamed the 5 colliding leaf keys to a
+non-colliding `*Label` form (e.g. `ESSENCE.Item.SpeciesLabel`) and updated their 12 call sites.
+Script-verified zero remaining structural collisions across all 532 keys, zero missing/stale
+references, and re-ran the full key-coverage + brace-balance validation from 0.6.46's pass.
+
 ## 0.6.46
 
 **Full localization pass — every hardcoded UI string routed through `lang/en.json`.** Following a

@@ -1557,3 +1557,52 @@ mirrors (`system.species`/`heritage`/`distinction`), not links. Not restored thi
 Items can still be opened by dragging them onto the sheet again or from the world's Items directory.
 
 v0.6.46, see CHANGELOG.md.
+
+### 2026-09-09 — 0.6.46 broke localization entirely: leaf/namespace key collisions
+
+The user installed v0.6.46 fresh (new local Foundry instance, brand-new Actor — explicitly not a
+caching artifact, and confirmed via a full app restart that still reproduced it) and every sheet
+showed raw localization keys instead of text — "ESSENCE.Common.Tier" instead of "Tier", and
+critically also the window title's `TYPES.Actor.character`, a key that predates this session
+entirely and had never broken before. That second detail was the important clue: a single missing
+*key* only breaks that one string (Foundry's `Localization#localize` falls back to returning the
+raw key when a lookup misses) — but *every* key breaking, including old ones, means the language
+file never loaded into `game.i18n` at all.
+
+Verified the shipped release zip's `lang/en.json` directly (downloaded and parsed it) — valid,
+532 entries, both flagged keys resolved correctly in isolation. Verified the user's actual local
+Foundry install directory on this same machine
+(`C:\Users\shane\AppData\Local\FoundryVTT\Data\systems\essence-system`) — also fine, matching the
+release exactly, version `0.6.46` correctly installed. So the *file* was never the problem; the
+question became why Foundry's own loader would reject a syntactically-valid JSON file.
+
+Root cause, found by simulating Foundry's own loading behavior rather than just re-validating JSON
+syntax: Foundry doesn't store `lang/en.json`'s keys as a flat dictionary — it expands each dotted
+key into a nested object tree (`"A.B.C": "x"` becomes `translations.A.B.C = "x"`), the same
+convention `TYPES.Actor.character` has always relied on. That expansion throws when a key is
+*simultaneously* a leaf string value and a prefix namespace another key needs to nest under.
+0.6.46 introduced exactly that shape 5 times: `"ESSENCE.Item.Equipment": "Equipment"` (used as the
+Equipment tab label) sat right alongside 28 other keys like `"ESSENCE.Item.Equipment.Reach"` that
+need `ESSENCE.Item.Equipment` to be an *object*, not a string — same collision for `Item.Species`
+(14 conflicts), `Item.Heritage` (4), `Item.Distinction` (7), and `Settings.RoleBudgets.Field` (10,
+the dynamic per-field labels in the Role Budgets settings app). The tree-expansion step throwing
+mid-file aborts the *whole* file load, which is why unrelated, pre-existing keys broke too — a
+single bad key doesn't fail gracefully in isolation, it takes the entire language pack down with
+it. Wrote a small script (`keys.some(o => o !== k && o.startsWith(k + '.'))`) to exhaustively
+detect every such collision across all 532 keys rather than trusting a manual re-scan, confirming
+exactly these 5 and no others.
+
+**Fix**: renamed the 5 colliding leaf keys to a non-colliding `*Label` suffix
+(`ESSENCE.Item.EquipmentLabel`, `SpeciesLabel`, `HeritageLabel`, `DistinctionLabel`,
+`Settings.RoleBudgets.FieldLabel`) and updated their 12 template call sites. Re-ran the full
+validation suite from the 0.6.46 session (key-coverage diff, now also checking for zero remaining
+structural collisions, brace-balance) before shipping. v0.6.47, see CHANGELOG.md.
+
+**New standing lesson worth remembering for any future localization work in this system**: a
+Foundry `lang/*.json` key must never be both a leaf and a prefix of another key. When adding a
+"type label" key alongside a namespace of related keys for that same type (e.g. wanting both "the
+word Equipment" and "Equipment.Reach", "Equipment.Armory", etc.), the bare/shortest name needs its
+own distinguishing suffix (`*Label`, `*Name`) — it can never be the literal shared prefix. Given
+how catastrophically this fails (whole-file load abort, not a graceful single-key fallback), a
+"check for collisions" step is worth adding to any future bulk key-authoring pass before shipping,
+not just JSON-syntax validation.
