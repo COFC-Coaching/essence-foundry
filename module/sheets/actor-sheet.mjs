@@ -3,7 +3,7 @@ import { EXPERTISE_DATABASE } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, resetAdventureUses, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, resetAdventureUses, resolveEquipmentDropSlot, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -47,6 +47,11 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     classes: ["essence", "actor", "character"],
     position: { width: 760, height: 820 },
     form: { submitOnChange: true },
+    // Scoped to .draggable-row rather than a bare [data-item-id] selector, since plenty of other
+    // elements on this sheet (Edit/Delete buttons on card rows, condition entries, etc.) also carry
+    // data-item-id without being meant to drag — only the Equipment tab's Signature/Temporary/
+    // Armory rows opt in.
+    dragDrop: [{ dragSelector: ".draggable-row", dropSelector: null }],
     actions: {
       openWizard: EssenceActorSheet.#onOpenWizard,
       editTokenImage: EssenceActorSheet.#onEditTokenImage,
@@ -215,8 +220,33 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     }
   }
 
-  /** A character has exactly one Species/Heritage/Distinction — dropping a new one replaces the old. */
+  /**
+   * A character has exactly one Species/Heritage/Distinction — dropping a new one replaces the old.
+   *
+   * Also handles the Equipment tab's Signature/Temporary/Armory drop zones (see
+   * `resolveEquipmentDropSlot` in utils.mjs): dropping a NEW equipment Item (from a compendium, the
+   * world Items directory, or another actor) into one of those zones creates it and sets its
+   * `system.slot` to match; dragging an equipment Item this actor ALREADY owns into a different zone
+   * just reassigns its slot in place — a real move, not a duplicate. Foundry's own default
+   * `_onDropItem` treats a drop of an already-owned item as a same-list reorder, which isn't
+   * meaningful for three separate slot categories, so that case is handled directly instead of
+   * calling super().
+   */
   async _onDropItem(event, item) {
+    const dropSlot = resolveEquipmentDropSlot(event);
+
+    if (item.type === "equipment" && dropSlot) {
+      if (item.actor?.id === this.actor.id) {
+        if (item.system.slot !== dropSlot) await item.update({ "system.slot": dropSlot });
+        return item;
+      }
+      const created = await super._onDropItem(event, item);
+      if (created?.type === "equipment" && created.system.slot !== dropSlot) {
+        await created.update({ "system.slot": dropSlot });
+      }
+      return created;
+    }
+
     const created = await super._onDropItem(event, item);
     if (created && ORIGIN_TYPES.includes(created.type)) {
       const stale = this.actor.items.filter((i) => i.type === created.type && i.id !== created.id);
@@ -225,6 +255,16 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       await this.actor.update({ [`system.${field}`]: created.name });
     }
     return created;
+  }
+
+  /** Populates the drag payload for the Equipment tab's draggable rows (see dragDrop in
+   *  DEFAULT_OPTIONS) — Foundry's Document#toDragData() is the standard {type, uuid} shape every
+   *  drop target (including this sheet's own zones, and any other actor's sheet) already expects. */
+  _onDragStart(event) {
+    const itemId = event.currentTarget.dataset.itemId;
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+    event.dataTransfer.setData("text/plain", JSON.stringify(item.toDragData()));
   }
 
   static #onChangeTab(event, target) {

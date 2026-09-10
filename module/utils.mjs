@@ -165,3 +165,15 @@ export function cardSummary(system, max = 140) {
   if (!text) return "";
   return text.length > max ? `${text.slice(0, max - 1)}…` : text;
 }
+
+/**
+ * The Equipment tab's Signature/Temporary/Armory sections are each wrapped in a `data-drop-slot`
+ * container (see character-sheet.hbs/npc-sheet.hbs) purely so a drop landing inside one can tell
+ * which section it landed in — Foundry has no native concept of these three areas, since
+ * `system.slot` is this system's own schema field, not a core one. Returns the target slot value
+ * ("signature"/"temporary"/"armory") or null if the drop didn't land inside one of those sections
+ * (e.g. dropped on the Components & Augments table, or a blank part of the tab).
+ */
+export function resolveEquipmentDropSlot(event) {
+  return event.target?.closest?.("[data-drop-slot]")?.dataset.dropSlot ?? null;
+}

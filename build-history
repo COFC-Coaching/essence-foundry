@@ -1606,3 +1606,53 @@ own distinguishing suffix (`*Label`, `*Name`) — it can never be the literal sh
 how catastrophically this fails (whole-file load abort, not a graceful single-key fallback), a
 "check for collisions" step is worth adding to any future bulk key-authoring pass before shipping,
 not just JSON-syntax validation.
+
+### 2026-09-09 — Drag-and-drop for Equipment slots (Signature/Temporary/Armory)
+
+User request: drag equipment from a compendium/Items directory into a specific slot section, and
+drag an already-owned item between sections to move it (e.g. a Sidearm from Signature into
+Armory), plus the same for Temporary Items. Pushed back gently on the framing ("these are existing
+features of Foundry, should be easy") with the actual split: Foundry's embedded-item drop/creation
+and `Document#toDragData()` drag-payload plumbing are indeed all native and already did the heavy
+lifting — what's missing is that Signature/Temporary/Armory is this system's own `system.slot`
+schema field, which Foundry has no native concept of, so nothing tells it which of the three
+sections a drop landed in.
+
+Added `data-drop-slot="signature|temporary|armory"` wrapper containers around each section in both
+`character-sheet.hbs` and `npc-sheet.hbs`, and a small pure helper `resolveEquipmentDropSlot(event)`
+in `utils.mjs` (`event.target.closest("[data-drop-slot]")`) shared by both sheets rather than
+duplicating the DOM query — the one place in this drop this session deliberately broke from the
+project's usual actor-sheet/npc-sheet copy-paste convention (tracked debt item #2), since the logic
+is a pure one-line lookup with zero sheet-specific state, worth sharing even without a full
+`module/sheets/shared.mjs` extraction.
+
+`_onDropItem` (already overridden in `actor-sheet.mjs` for the Species/Heritage/Distinction
+1-per-actor rule; newly added to `npc-sheet.mjs`, which had none before) now branches on
+`item.type === "equipment"` + a detected drop slot: if the item is already owned by this same
+actor, it's a same-actor slot reassignment (`item.update({"system.slot": dropSlot})`, no call to
+`super()` at all — Foundry's default behavior for dropping an already-owned item is a same-list
+*reorder*, which doesn't mean anything across three separate slot categories, so that path is
+skipped entirely rather than fought against); otherwise `super._onDropItem()` creates the item
+normally (compendium/world Items directory/another actor) and a follow-up `update()` sets its slot
+to match the zone it landed in.
+
+Drag-*out* needed its own wiring too — nothing on either sheet was draggable before this (confirmed
+via `grep`, zero `dragDrop`/`draggable` hits anywhere in the codebase prior to this session). Added
+`dragDrop: [{ dragSelector: ".draggable-row", dropSelector: null }]` to both sheets'
+`DEFAULT_OPTIONS` and a matching `_onDragStart(event)` override that looks up the row's
+`data-item-id` and sets `event.dataTransfer` from `item.toDragData()`. Deliberately scoped to a new
+`.draggable-row` class rather than a bare `[data-item-id]` selector — that attribute already
+appears throughout both templates on Edit/Delete buttons, condition entries, card rows, etc., none
+of which should suddenly become drag sources.
+
+**Not verified live** — no Foundry dev server available in this environment, so this was checked
+with `node --check` (all touched `.mjs`) and a `{{#`/`{{/` brace-balance count (all touched `.hbs`)
+only, the same limitation already on record for the Phase 3 (Chassis/Fitting/Augment) session. The
+riskiest unverified assumption: that Foundry's `ActorSheetV2`/`DocumentSheetV2` base class actually
+wires `dragDrop`-configured selectors to call `this._onDragStart`/routes drops through the existing
+`this._onDropItem` override without additional binding code in `_onRender` — this matches the
+documented, widely-used community-system convention, and drops onto the sheet already demonstrably
+worked before this session (per the earlier Foundry-native audit) without any `dragDrop` config
+declared, which is consistent with drop-acceptance being unconditional and only drag-*start*
+requiring the selector — but this reasoning hasn't been confirmed against an actual running client.
+Flagged as the first thing to check in a live pass. v0.6.48, see CHANGELOG.md.

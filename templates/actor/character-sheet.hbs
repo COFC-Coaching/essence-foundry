@@ -345,6 +345,7 @@
 
 {{!-- ============ EQUIPMENT: signature / temporary / armory ============ --}}
 <section class="tab equipment" data-tab="equipment">
+  <div class="equipment-drop-zone" data-drop-slot="signature">
   <h3 class="section-head">{{localize "ESSENCE.Sheet.SignatureEquipment"}} <span class="muted">({{signatureUsed}} / {{system.signatureEquipmentLimit}}) &middot; {{localize "ESSENCE.Item.Equipment.Reach"}} {{system.effectiveReach}}</span></h3>
   {{#if (gt signatureOverLimit 0)}}
     <p class="muted signature-overlimit-note">{{#if (gt signatureOverLimit 1)}}{{localize "ESSENCE.Sheet.OverSignatureLimitPlural" n=signatureOverLimit}}{{else}}{{localize "ESSENCE.Sheet.OverSignatureLimitSingular" n=signatureOverLimit}}{{/if}} <button type="button" data-action="spendInfluenceForSlot">{{localize "ESSENCE.Sheet.SpendInfluenceForExtraSlot"}}</button></p>
@@ -353,7 +354,7 @@
     <thead><tr><th>#</th><th>{{localize "ESSENCE.Common.Item"}}</th><th>{{localize "ESSENCE.Common.Category"}}</th><th>{{localize "ESSENCE.Item.Equipment.Reach"}}</th><th>{{localize "ESSENCE.Common.Effect"}}</th><th></th></tr></thead>
     <tbody>
       {{#each signatureEquipment as |item i|}}
-        <tr>
+        <tr class="draggable-row" draggable="true" data-item-id="{{item.id}}">
           <td>{{i}}</td><td>{{item.name}}</td><td>{{equipmentCategoryLabel item.category}}</td>
           <td>
             {{item.reachCost}}
@@ -368,6 +369,7 @@
       {{/each}}
     </tbody>
   </table>
+  </div>
 
   {{#if itemGrants.length}}
     <h3 class="section-head">{{localize "ESSENCE.Sheet.ItemGrants"}} <span class="muted">{{localize "ESSENCE.Sheet.ItemGrantsExamples"}}</span></h3>
@@ -387,12 +389,13 @@
     </ul>
   {{/if}}
 
+  <div class="equipment-drop-zone" data-drop-slot="temporary">
   <h3 class="section-head">{{localize "ESSENCE.Sheet.TemporaryItems"}}</h3>
   <table class="item-table">
     <thead><tr><th>{{localize "ESSENCE.Common.Item"}}</th><th>{{localize "ESSENCE.Common.Type"}}</th><th>{{localize "ESSENCE.Common.Effect"}}</th><th></th></tr></thead>
     <tbody>
       {{#each temporaryEquipment as |item|}}
-        <tr>
+        <tr class="draggable-row" draggable="true" data-item-id="{{item.id}}">
           <td>{{item.name}}</td><td>{{item.type}}</td><td>{{item.effectText}}</td>
           <td><button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
               <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></td>
@@ -400,13 +403,15 @@
       {{/each}}
     </tbody>
   </table>
+  </div>
 
+  <div class="equipment-drop-zone" data-drop-slot="armory">
   <h3 class="section-head">{{localize "ESSENCE.Item.Equipment.Armory"}} <span class="muted">({{armoryUsed}} / {{system.armoryLimit}})</span></h3>
   <table class="item-table">
     <thead><tr><th>{{localize "ESSENCE.Common.Item"}}</th><th>{{localize "ESSENCE.Common.Category"}}</th><th>{{localize "ESSENCE.Common.Notes"}}</th><th></th></tr></thead>
     <tbody>
       {{#each armoryEquipment as |item|}}
-        <tr>
+        <tr class="draggable-row" draggable="true" data-item-id="{{item.id}}">
           <td>{{item.name}}</td><td>{{equipmentCategoryLabel item.category}}</td><td>{{item.effectText}}</td>
           <td><button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
               <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></td>
@@ -414,6 +419,7 @@
       {{/each}}
     </tbody>
   </table>
+  </div>
 
   <h3 class="section-head">{{localize "ESSENCE.Sheet.ComponentsAugments"}} <span class="muted">{{localize "ESSENCE.Character.ComponentsAugmentsHint"}}</span></h3>
   <table class="item-table">

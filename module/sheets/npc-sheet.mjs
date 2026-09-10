@@ -3,7 +3,7 @@ import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, resetAdventureUses, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, resetAdventureUses, resolveEquipmentDropSlot, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -35,6 +35,9 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     classes: ["essence", "actor", "npc"],
     position: { width: 640, height: 720 },
     form: { submitOnChange: true },
+    // Scoped to .draggable-row rather than a bare [data-item-id] selector — see the matching
+    // comment in actor-sheet.mjs's DEFAULT_OPTIONS.
+    dragDrop: [{ dragSelector: ".draggable-row", dropSelector: null }],
     actions: {
       openWizard: EssenceNpcSheet.#onOpenWizard,
       editTokenImage: EssenceNpcSheet.#onEditTokenImage,
@@ -82,6 +85,31 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     super._onRender(context, options);
     this.#applyEditable();
     this.#wireCardControls();
+  }
+
+  /** Equipment tab Signature/Temporary/Armory drop zones — see the matching, more fully commented
+   *  override in actor-sheet.mjs; identical behavior here. */
+  async _onDropItem(event, item) {
+    const dropSlot = resolveEquipmentDropSlot(event);
+    if (item.type !== "equipment" || !dropSlot) return super._onDropItem(event, item);
+
+    if (item.actor?.id === this.actor.id) {
+      if (item.system.slot !== dropSlot) await item.update({ "system.slot": dropSlot });
+      return item;
+    }
+    const created = await super._onDropItem(event, item);
+    if (created?.type === "equipment" && created.system.slot !== dropSlot) {
+      await created.update({ "system.slot": dropSlot });
+    }
+    return created;
+  }
+
+  /** See the matching override in actor-sheet.mjs. */
+  _onDragStart(event) {
+    const itemId = event.currentTarget.dataset.itemId;
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+    event.dataTransfer.setData("text/plain", JSON.stringify(item.toDragData()));
   }
 
   /** Mirrors EssenceActorSheet#applyEditable — see that class for why .window-content is scoped

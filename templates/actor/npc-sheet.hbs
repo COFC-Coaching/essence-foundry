@@ -281,13 +281,14 @@
     </li>
   {{/each}}
 </ul>
+<div class="equipment-drop-zone" data-drop-slot="signature">
 <h3 class="section-head">{{localize "ESSENCE.Sheet.SignatureEquipment"}} <span class="muted">({{signatureUsed}} / {{system.signatureEquipmentLimit}}) &middot; {{localize "ESSENCE.Item.Equipment.Reach"}} {{system.effectiveReach}}</span></h3>
 {{#if (gt signatureOverLimit 0)}}
   <p class="muted signature-overlimit-note">{{#if (gt signatureOverLimit 1)}}{{localize "ESSENCE.Sheet.OverSignatureLimitPlural" n=signatureOverLimit}}{{else}}{{localize "ESSENCE.Sheet.OverSignatureLimitSingular" n=signatureOverLimit}}{{/if}} <button type="button" data-action="spendInfluenceForSlot">{{localize "ESSENCE.Sheet.SpendInfluenceForExtraSlot"}}</button></p>
 {{/if}}
 <ul class="item-list">
   {{#each signatureEquipment as |item|}}
-    <li>{{item.name}} <span class="muted">{{equipmentCategoryLabel item.system.category}} &middot; {{localize "ESSENCE.Item.Equipment.Reach"}} {{item.reachCost}}</span>
+    <li class="draggable-row" draggable="true" data-item-id="{{item.id}}">{{item.name}} <span class="muted">{{equipmentCategoryLabel item.system.category}} &middot; {{localize "ESSENCE.Item.Equipment.Reach"}} {{item.reachCost}}</span>
       {{#if item.overReach}}
         <span class="muted reach-warning" title="{{#if item.exceptionSource}}{{localize 'ESSENCE.Sheet.ExceedsReachException' source=item.exceptionSource}}{{else}}{{localize 'ESSENCE.Sheet.ExceedsReachNpc'}}{{/if}}"><i class="fa-solid fa-triangle-exclamation"></i></span>
       {{/if}}
@@ -296,6 +297,7 @@
     </li>
   {{/each}}
 </ul>
+</div>
 
 {{#if itemGrants.length}}
   <h3 class="section-head">{{localize "ESSENCE.Sheet.ItemGrants"}} <span class="muted">{{localize "ESSENCE.Sheet.ItemGrantsExamples"}}</span></h3>
@@ -315,25 +317,29 @@
   </ul>
 {{/if}}
 
+<div class="equipment-drop-zone" data-drop-slot="temporary">
 <h3 class="section-head">{{localize "ESSENCE.Sheet.TemporaryItems"}}</h3>
 <ul class="item-list">
   {{#each temporaryEquipment as |item|}}
-    <li>{{item.name}} <span class="muted">{{equipmentCategoryLabel item.system.category}}</span>
+    <li class="draggable-row" draggable="true" data-item-id="{{item.id}}">{{item.name}} <span class="muted">{{equipmentCategoryLabel item.system.category}}</span>
       <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
       <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button>
     </li>
   {{/each}}
 </ul>
+</div>
 
+<div class="equipment-drop-zone" data-drop-slot="armory">
 <h3 class="section-head">{{localize "ESSENCE.Item.Equipment.Armory"}} <span class="muted">({{armoryUsed}} / {{system.armoryLimit}})</span></h3>
 <ul class="item-list">
   {{#each armoryEquipment as |item|}}
-    <li>{{item.name}} <span class="muted">{{equipmentCategoryLabel item.system.category}}</span>
+    <li class="draggable-row" draggable="true" data-item-id="{{item.id}}">{{item.name}} <span class="muted">{{equipmentCategoryLabel item.system.category}}</span>
       <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
       <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button>
     </li>
   {{/each}}
 </ul>
+</div>
 
 <h3 class="section-head">{{localize "ESSENCE.Sheet.ComponentsAugments"}} <span class="muted">{{localize "ESSENCE.Sheet.ComponentsAugmentsHint"}}</span></h3>
 <ul class="item-list">

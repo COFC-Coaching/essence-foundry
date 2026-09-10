@@ -2,6 +2,33 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.48
+
+**Drag-and-drop for the Equipment tab's Signature/Temporary/Armory sections.** Previously the only
+way to add equipment from a compendium or the world Items directory was via the Content Wizard/
+Bulk Import, and the only way to move an owned item between slots was opening its own sheet and
+changing the Slot dropdown by hand. Foundry already provides the drag/drop plumbing (embedded-item
+creation on drop, drag payload via `Document#toDragData()`) — what was missing was telling Foundry
+*which* of the three slot sections a drop landed in, since Signature/Temporary/Armory is this
+system's own schema field (`system.slot`), not something Foundry has a native concept of.
+
+- Dragging an equipment Item from a compendium, the Items directory, or another actor onto one of
+  the three sections now creates it with that section's slot already set.
+- Dragging an equipment Item this actor already owns from one section to another (e.g. a Sidearm
+  from Signature into Armory) reassigns its slot directly — a real move, not a duplicate copy.
+  Foundry's default drop handling treats a drop of an already-owned item as a same-list reorder,
+  which isn't meaningful across three separate slot categories, so this case is handled explicitly
+  instead of falling through to the default.
+- Applies to both the Character and NPC sheets.
+
+**Not verified against a live Foundry client this session** (no dev server available in this
+environment) — every `.mjs` file was checked with `node --check` and every touched `.hbs` template
+with a `{{#`/`{{/` brace-balance count, matching this project's own established practice for
+Foundry-dependent behavior that can't be exercised outside a real client (see the Phase 3 design
+doc implementation entry in build-history for precedent). Worth a live pass — dragging between
+zones, dragging in from a compendium, and confirming `.draggable-row`'s dragstart payload actually
+resolves correctly — before treating this as fully confirmed working.
+
 ## 0.6.47
 
 **Fixed a critical bug introduced in 0.6.46: every localized string on every sheet rendered as its

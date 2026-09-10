@@ -238,6 +238,12 @@
 .essence .item-table th { background: rgba(255,255,255,0.05); }
 .essence .item-table .origin-feature-row { background: rgba(249, 168, 37, 0.06); }
 .essence .item-table .origin-feature-row td:first-child { font-weight: bold; }
+/* Equipment tab's Signature/Temporary/Armory drop zones (see resolveEquipmentDropSlot in
+   utils.mjs) — draggable-row is both the drag source (existing owned items, to move between zones)
+   and, via its parent .equipment-drop-zone, the drop target for new items from a compendium/the
+   Items directory. */
+.essence .draggable-row { cursor: grab; }
+.essence .draggable-row:active { cursor: grabbing; }
 
 .essence .career-row { margin-bottom: 8px; }
 .essence .career-row label { display: flex; flex-direction: column; gap: 2px; }
