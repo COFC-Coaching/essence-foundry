@@ -497,7 +497,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     if (!row.chosen) {
       const chosenCount = adaptations.filter((a) => a.chosen).length;
       if (chosenCount >= speciesItem.system.adaptationCount) {
-        ui.notifications.warn(`Already chosen ${speciesItem.system.adaptationCount} ${speciesItem.system.adaptationLabel}(s) — remove one first.`);
+        ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyChosenAdaptations", { count: speciesItem.system.adaptationCount, label: speciesItem.system.adaptationLabel }));
         return;
       }
     }
@@ -524,7 +524,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
         selected.splice(idx, 1);
       } else {
         if (selected.length >= subChoice.count) {
-          ui.notifications.warn(`Already chosen ${subChoice.count} ${subChoice.label || "option(s)"}.`);
+          ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyChosenSubChoice", { count: subChoice.count, label: subChoice.label || game.i18n.localize("ESSENCE.Notify.OptionsFallback") }));
           return null;
         }
         selected.push(option);
@@ -581,7 +581,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       expertises.splice(i, 1);
     } else {
       if (expertises.length >= EXPERTISE_COUNT) {
-        ui.notifications.warn(`Already chosen ${EXPERTISE_COUNT} Expertises — remove one first.`);
+        ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyChosenExpertises", { count: EXPERTISE_COUNT }));
         return;
       }
       expertises.push({ name, skill });
@@ -611,7 +611,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     if (!sourceItem) return;
     const nonBasicCount = this.document.items.filter((i) => (i.type === "action-card" || i.type === "reaction-card") && !isBasicCard(i.system)).length;
     if (nonBasicCount >= CARD_LIMIT) {
-      ui.notifications.warn(`Already chosen ${CARD_LIMIT} Combat Cards — remove one first.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyChosenCombatCards", { count: CARD_LIMIT }));
       return;
     }
     await this.document.createEmbeddedDocuments("Item", [sourceItem.toObject()]);
@@ -685,7 +685,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const used = owned.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
     const cost = sourceItem.system.slotCost || 1;
     if (used + cost > this.document.system.signatureEquipmentLimit) {
-      ui.notifications.warn("Adding this would exceed your Signature Equipment Limit.");
+      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ExceedsSignatureLimit"));
       return;
     }
     const data = sourceItem.toObject();
@@ -705,7 +705,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const owned = this.document.items.filter((i) => i.type === "equipment" && i.system.reachExceptionSource !== sourceName);
     const eligible = owned.filter((i) => equipmentMatchesGrant(i.system, grant) && reachQualifiesForGrant(i.system, grant, reach));
     if (!eligible.length) {
-      ui.notifications.warn(`No item in your Equipment step choices currently qualifies for ${sourceName}.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoQualifyingEquipmentChoice", { source: sourceName }));
       return;
     }
 

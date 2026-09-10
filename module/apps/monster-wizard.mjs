@@ -324,7 +324,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     const count = owned.filter((i) => i.type === sourceItem.type).length;
     const limit = isReaction ? budget.reactionCards : budget.actionCards;
     if (count >= limit) {
-      ui.notifications.warn(`Already at this Role's ${isReaction ? "Reaction" : "Action"} Card budget (${limit}) — remove one first, or raise it by hand.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyAtCardBudget", { type: isReaction ? game.i18n.localize("ESSENCE.Common.Reaction") : game.i18n.localize("ESSENCE.Common.Action"), limit }));
       return;
     }
     await this.document.createEmbeddedDocuments("Item", [sourceItem.toObject()]);
@@ -342,7 +342,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     const budget = getRoleBudget(this.document.system.role);
     const count = this.document.items.filter((i) => i.type === "equipment").length;
     if (count >= budget.equipmentCount) {
-      ui.notifications.warn(`Already at this Role's Equipment budget (${budget.equipmentCount}) — remove one first, or raise it by hand.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyAtEquipmentBudget", { budget: budget.equipmentCount }));
       return;
     }
     await this.document.createEmbeddedDocuments("Item", [sourceItem.toObject()]);
@@ -471,7 +471,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     });
     await this.#rollCards();
     await this.#rollEquipment();
-    ui.notifications.info(`${document.name}: stat block generated from the ${document.system.role || "Standard"} budget.`);
+    ui.notifications.info(game.i18n.format("ESSENCE.Notify.StatBlockGenerated", { name: document.name, role: document.system.role || game.i18n.localize("ESSENCE.Item.Monster.RoleStandard") }));
     this.render();
   }
 }

@@ -2,8 +2,8 @@
 <header class="sheet-header">
   <img class="profile-img" src="{{item.img}}" data-edit="img" data-action="editImage">
   <h1><input name="name" type="text" value="{{item.name}}" {{#if viewMode}}disabled{{/if}}></h1>
-  <button type="button" class="card-view-toggle condition-view-toggle" data-action="toggleCardView" title="{{#if viewMode}}Edit this condition{{else}}View this condition{{/if}}">
-    <i class="fa-solid {{#if viewMode}}fa-pen{{else}}fa-eye{{/if}}"></i> {{#if viewMode}}Edit{{else}}View{{/if}}
+  <button type="button" class="card-view-toggle condition-view-toggle" data-action="toggleCardView" title="{{#if viewMode}}{{localize 'ESSENCE.Common.EditThisItem'}}{{else}}{{localize 'ESSENCE.Common.ViewThisItem'}}{{/if}}">
+    <i class="fa-solid {{#if viewMode}}fa-pen{{else}}fa-eye{{/if}}"></i> {{#if viewMode}}{{localize "ESSENCE.Common.Edit"}}{{else}}{{localize "ESSENCE.Common.View"}}{{/if}}
   </button>
 </header>
 
@@ -18,19 +18,19 @@
       </div>
     {{/if}}
   {{/each}}
-  {{#unless system.sections.length}}<p class="muted">No sections yet.</p>{{/unless}}
+  {{#unless system.sections.length}}<p class="muted">{{localize "ESSENCE.Item.Condition.NoSectionsYet"}}</p>{{/unless}}
 </div>
 {{else}}
-<h3 class="section-head">Sections</h3>
+<h3 class="section-head">{{localize "ESSENCE.Item.Condition.Sections"}}</h3>
 <ol class="sections">
   {{#each system.sections as |sec i|}}
     <li>
-      <input name="system.sections.{{i}}.label" type="text" value="{{sec.label}}" placeholder="Label (e.g. EFFECT, DURATION)">
-      <button type="button" data-action="deleteArrayRow" data-array="sections" data-index="{{i}}" aria-label="Delete section {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
+      <input name="system.sections.{{i}}.label" type="text" value="{{sec.label}}" placeholder="{{localize 'ESSENCE.Item.Condition.SectionLabelPlaceholder'}}">
+      <button type="button" data-action="deleteArrayRow" data-array="sections" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Item.Condition.DeleteSectionAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button>
       <div>{{essenceEditor sec.html target=(concat "system.sections." i ".html") button=true}}</div>
     </li>
   {{/each}}
 </ol>
-<button type="button" data-action="addArrayRow" data-array="sections"><i class="fa-solid fa-plus"></i> Add Section</button>
+<button type="button" data-action="addArrayRow" data-array="sections"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Item.Condition.AddSection"}}</button>
 {{/if}}
 </div>

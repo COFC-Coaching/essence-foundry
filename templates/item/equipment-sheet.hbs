@@ -2,40 +2,40 @@
 <header class="sheet-header">
   <img class="profile-img" src="{{item.img}}" data-edit="img" data-action="editImage">
   <h1><input name="name" type="text" value="{{item.name}}" {{#if viewMode}}disabled{{/if}}></h1>
-  <button type="button" class="card-view-toggle equipment-view-toggle" data-action="toggleCardView" title="{{#if viewMode}}Edit this item{{else}}View this item{{/if}}">
-    <i class="fa-solid {{#if viewMode}}fa-pen{{else}}fa-eye{{/if}}"></i> {{#if viewMode}}Edit{{else}}View{{/if}}
+  <button type="button" class="card-view-toggle equipment-view-toggle" data-action="toggleCardView" title="{{#if viewMode}}{{localize 'ESSENCE.Common.EditThisItem'}}{{else}}{{localize 'ESSENCE.Common.ViewThisItem'}}{{/if}}">
+    <i class="fa-solid {{#if viewMode}}fa-pen{{else}}fa-eye{{/if}}"></i> {{#if viewMode}}{{localize "ESSENCE.Common.Edit"}}{{else}}{{localize "ESSENCE.Common.View"}}{{/if}}
   </button>
 </header>
 
 {{#if viewMode}}
 <div class="card-view equipment-view">
   <div class="card-view-infogrid">
-    <div><span class="card-view-statlabel">Category</span><span>{{equipmentCategoryLabel system.category}}</span></div>
-    {{#if item.actor}}<div><span class="card-view-statlabel">Slot</span><span>{{capitalize system.slot}}</span></div>{{/if}}
-    {{#if system.tier}}<div><span class="card-view-statlabel">Tier</span><span>{{system.tier}}</span></div>{{/if}}
-    {{#if system.cost}}<div><span class="card-view-statlabel">Reach</span><span>{{system.cost}}</span></div>{{/if}}
+    <div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Category"}}</span><span>{{equipmentCategoryLabel system.category}}</span></div>
+    {{#if item.actor}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Slot"}}</span><span>{{capitalize system.slot}}</span></div>{{/if}}
+    {{#if system.tier}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Tier"}}</span><span>{{system.tier}}</span></div>{{/if}}
+    {{#if system.cost}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Item.Equipment.Reach"}}</span><span>{{system.cost}}</span></div>{{/if}}
     {{#if isWornCategory}}
-      {{#if system.type}}<div><span class="card-view-statlabel">Type</span><span>{{system.type}}</span></div>{{/if}}
-      {{#if system.range}}<div><span class="card-view-statlabel">Range</span><span>{{system.range}}</span></div>{{/if}}
-      {{#if system.fortitude}}<div><span class="card-view-statlabel">Fortitude</span><span>{{system.fortitude}}</span></div>{{/if}}
-      {{#if system.resilience}}<div><span class="card-view-statlabel">Resilience</span><span>{{system.resilience}}</span></div>{{/if}}
-      {{#if system.movement}}<div><span class="card-view-statlabel">Movement</span><span>{{system.movement}}</span></div>{{/if}}
-      {{#if system.reachBonus}}<div><span class="card-view-statlabel">Reach Bonus</span><span>{{system.reachBonus}}</span></div>{{/if}}
+      {{#if system.type}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Type"}}</span><span>{{system.type}}</span></div>{{/if}}
+      {{#if system.range}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Range"}}</span><span>{{system.range}}</span></div>{{/if}}
+      {{#if system.fortitude}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Fortitude"}}</span><span>{{system.fortitude}}</span></div>{{/if}}
+      {{#if system.resilience}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Resilience"}}</span><span>{{system.resilience}}</span></div>{{/if}}
+      {{#if system.movement}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Movement"}}</span><span>{{system.movement}}</span></div>{{/if}}
+      {{#if system.reachBonus}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Item.Equipment.ReachBonus"}}</span><span>{{system.reachBonus}}</span></div>{{/if}}
     {{/if}}
     {{#if isGear}}
-      {{#if system.uses}}<div><span class="card-view-statlabel">Uses</span><span>{{system.uses}}</span></div>{{/if}}
+      {{#if system.uses}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Uses"}}</span><span>{{system.uses}}</span></div>{{/if}}
     {{/if}}
-    {{#if item.actor}}<div><span class="card-view-statlabel">Quantity</span><span>{{system.quantity}}</span></div>{{/if}}
+    {{#if item.actor}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Quantity"}}</span><span>{{system.quantity}}</span></div>{{/if}}
   </div>
   {{#if system.tags}}<div class="card-view-tags muted">{{system.tags}}</div>{{/if}}
 
   {{#if isConsumableKit}}
     {{#if system.equipmentCards.length}}
       <div class="card-view-line">
-        <div class="card-view-label">Equipment Cards</div>
+        <div class="card-view-label">{{localize "ESSENCE.Item.Equipment.EquipmentCards"}}</div>
         <ul>
           {{#each system.equipmentCards as |c|}}
-            <li><strong>{{c.name}}</strong>{{#if c.uses}} (Uses {{c.usesRemaining}}/{{c.uses}}){{/if}} — {{{c.effect}}}</li>
+            <li><strong>{{c.name}}</strong>{{#if c.uses}} ({{localize "ESSENCE.Common.UsesFraction" remaining=c.usesRemaining total=c.uses}}){{/if}} — {{{c.effect}}}</li>
           {{/each}}
         </ul>
       </div>
@@ -44,19 +44,19 @@
 
   {{#if system.effect}}
     <div class="card-view-line">
-      <div class="card-view-label">Effect</div>
+      <div class="card-view-label">{{localize "ESSENCE.Common.Effect"}}</div>
       <div class="card-view-text">{{{system.effect}}}</div>
     </div>
   {{/if}}
   {{#if system.passive}}
     <div class="card-view-line">
-      <div class="card-view-label">Passive</div>
+      <div class="card-view-label">{{localize "ESSENCE.Common.Passive"}}</div>
       <div class="card-view-text">{{{system.passive}}}</div>
     </div>
   {{/if}}
   {{#if system.special}}
     <div class="card-view-line">
-      <div class="card-view-label">Special</div>
+      <div class="card-view-label">{{localize "ESSENCE.Common.Special"}}</div>
       <div class="card-view-text">{{{system.special}}}</div>
     </div>
   {{/if}}
@@ -66,74 +66,74 @@
 {{else}}
 
 <div class="equipment-fields grid-3">
-  <label>Category
+  <label>{{localize "ESSENCE.Common.Category"}}
     <select name="system.category">
       {{#each categoryOptions as |opt|}}
         <option value="{{opt.value}}" {{#if (eq ../system.category opt.value)}}selected{{/if}}>{{opt.label}}</option>
       {{/each}}
     </select>
   </label>
-  <label>Tier <input name="system.tier" type="number" value="{{system.tier}}"></label>
-  <label>Reach <input name="system.cost" type="text" value="{{system.cost}}"></label>
+  <label>{{localize "ESSENCE.Common.Tier"}} <input name="system.tier" type="number" value="{{system.tier}}"></label>
+  <label>{{localize "ESSENCE.Item.Equipment.Reach"}} <input name="system.cost" type="text" value="{{system.cost}}"></label>
   {{#if item.actor}}
-    <label>Slot
+    <label>{{localize "ESSENCE.Common.Slot"}}
       <select name="system.slot">
-        <option value="signature" {{#if (eq system.slot "signature")}}selected{{/if}}>Signature</option>
-        <option value="temporary" {{#if (eq system.slot "temporary")}}selected{{/if}}>Temporary</option>
-        <option value="armory" {{#if (eq system.slot "armory")}}selected{{/if}}>Armory</option>
+        <option value="signature" {{#if (eq system.slot "signature")}}selected{{/if}}>{{localize "ESSENCE.Item.Equipment.Signature"}}</option>
+        <option value="temporary" {{#if (eq system.slot "temporary")}}selected{{/if}}>{{localize "ESSENCE.Item.Equipment.Temporary"}}</option>
+        <option value="armory" {{#if (eq system.slot "armory")}}selected{{/if}}>{{localize "ESSENCE.Item.Equipment.Armory"}}</option>
       </select>
     </label>
-    <label>Quantity <input name="system.quantity" type="number" value="{{system.quantity}}"></label>
+    <label>{{localize "ESSENCE.Common.Quantity"}} <input name="system.quantity" type="number" value="{{system.quantity}}"></label>
   {{/if}}
 </div>
 
 {{#if isWornCategory}}
   <div class="equipment-fields grid-3">
-    <label>Type <input name="system.type" type="text" value="{{system.type}}"></label>
-    <label>Range <input name="system.range" type="text" value="{{system.range}}"></label>
-    <label class="chosen-toggle"><input type="checkbox" name="system.isModular" {{#if system.isModular}}checked{{/if}}> Modular (Chassis + Fitting + Augments)</label>
-    <label>Fortitude <input name="system.fortitude" type="text" value="{{system.fortitude}}" placeholder="e.g. +2"></label>
-    <label>Resilience <input name="system.resilience" type="text" value="{{system.resilience}}" placeholder="e.g. +1"></label>
-    <label>Movement <input name="system.movement" type="text" value="{{system.movement}}" placeholder="e.g. -1"></label>
-    <label>Reach Bonus <span class="muted" title="A bonus to the character's Reach itself — not to be confused with this item's own Reach cost above.">
+    <label>{{localize "ESSENCE.Common.Type"}} <input name="system.type" type="text" value="{{system.type}}"></label>
+    <label>{{localize "ESSENCE.Common.Range"}} <input name="system.range" type="text" value="{{system.range}}"></label>
+    <label class="chosen-toggle"><input type="checkbox" name="system.isModular" {{#if system.isModular}}checked{{/if}}> {{localize "ESSENCE.Item.Equipment.Modular"}}</label>
+    <label>{{localize "ESSENCE.Common.Fortitude"}} <input name="system.fortitude" type="text" value="{{system.fortitude}}" placeholder="e.g. +2"></label>
+    <label>{{localize "ESSENCE.Common.Resilience"}} <input name="system.resilience" type="text" value="{{system.resilience}}" placeholder="e.g. +1"></label>
+    <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="text" value="{{system.movement}}" placeholder="e.g. -1"></label>
+    <label>{{localize "ESSENCE.Item.Equipment.ReachBonus"}} <span class="muted" title="{{localize 'ESSENCE.Item.Equipment.ReachBonusTooltip'}}">
       <input name="system.reachBonus" type="number" value="{{system.reachBonus}}">
     </span></label>
   </div>
-  <p class="muted">Fortitude/Resilience/Movement/Reach Bonus apply to the character automatically while this item is in the <strong>Signature</strong> slot (via a transferred Active Effect) — Armory and Temporary items you own but aren't carrying for the Adventure don't affect your active stats.</p>
+  <p class="muted">{{localize "ESSENCE.Item.Equipment.SignatureBonusHint"}}</p>
 {{/if}}
 
 {{#if isGear}}
   <div class="equipment-fields grid-3">
-    <label>Uses <input name="system.uses" type="number" value="{{system.uses}}" placeholder="leave blank for unlimited"></label>
+    <label>{{localize "ESSENCE.Common.Uses"}} <input name="system.uses" type="number" value="{{system.uses}}" placeholder="{{localize 'ESSENCE.Common.LeaveBlankUnlimited'}}"></label>
   </div>
 {{/if}}
 
 {{#if isConsumableKit}}
-<h3 class="section-head">Equipment Cards <span class="muted">(each card's Uses refresh at end of Adventure)</span></h3>
+<h3 class="section-head">{{localize "ESSENCE.Item.Equipment.EquipmentCards"}} <span class="muted">{{localize "ESSENCE.Item.Equipment.UsesRefreshHint"}}</span></h3>
 <ol class="equipment-cards">
   {{#each system.equipmentCards as |c i|}}
     <li class="equipment-card-row">
       <div class="equipment-fields grid-3">
-        <label>Name <input data-array="equipmentCards" data-index="{{i}}" data-field="name" type="text" value="{{c.name}}"></label>
-        <label>Uses <input data-array="equipmentCards" data-index="{{i}}" data-field="uses" type="number" value="{{c.uses}}" placeholder="leave blank for unlimited"></label>
-        <label>Uses Remaining <input data-array="equipmentCards" data-index="{{i}}" data-field="usesRemaining" type="number" value="{{c.usesRemaining}}"></label>
+        <label>{{localize "ESSENCE.Common.Name"}} <input data-array="equipmentCards" data-index="{{i}}" data-field="name" type="text" value="{{c.name}}"></label>
+        <label>{{localize "ESSENCE.Common.Uses"}} <input data-array="equipmentCards" data-index="{{i}}" data-field="uses" type="number" value="{{c.uses}}" placeholder="{{localize 'ESSENCE.Common.LeaveBlankUnlimited'}}"></label>
+        <label>{{localize "ESSENCE.Item.Equipment.UsesRemaining"}} <input data-array="equipmentCards" data-index="{{i}}" data-field="usesRemaining" type="number" value="{{c.usesRemaining}}"></label>
       </div>
-      <label>Effect <textarea data-array="equipmentCards" data-index="{{i}}" data-field="effect">{{c.effect}}</textarea></label>
-      <button type="button" data-action="deleteEquipmentCard" data-index="{{i}}" aria-label="Delete {{c.name}}"><i class="fa-solid fa-trash"></i></button>
+      <label>{{localize "ESSENCE.Common.Effect"}} <textarea data-array="equipmentCards" data-index="{{i}}" data-field="effect">{{c.effect}}</textarea></label>
+      <button type="button" data-action="deleteEquipmentCard" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=c.name}}"><i class="fa-solid fa-trash"></i></button>
     </li>
   {{/each}}
 </ol>
-<button type="button" data-action="addEquipmentCard"><i class="fa-solid fa-plus"></i> Add Equipment Card</button>
+<button type="button" data-action="addEquipmentCard"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Item.Equipment.AddEquipmentCard"}}</button>
 {{/if}}
 
 {{#if isWornCategory}}
   {{#if system.isModular}}
-  <h3 class="section-head">Modular Assembly</h3>
+  <h3 class="section-head">{{localize "ESSENCE.Item.Equipment.ModularAssembly"}}</h3>
   {{#if item.actor}}
     <div class="equipment-fields grid-2">
       <label>{{chassisLabel}}
         <select class="chassis-select">
-          <option value="">— none —</option>
+          <option value="">— {{localize "ESSENCE.Common.None"}} —</option>
           {{#each chassisOptions as |c|}}
             <option value="{{c.id}}" {{#if (eq c.id ../system.chassisItemId)}}selected{{/if}}>{{c.name}} (T{{c.system.tier}})</option>
           {{/each}}
@@ -141,28 +141,28 @@
       </label>
       <label>{{fittingLabel}}
         <select class="fitting-select">
-          <option value="">— none —</option>
+          <option value="">— {{localize "ESSENCE.Common.None"}} —</option>
           {{#each fittingOptions as |f|}}
             <option value="{{f.id}}" {{#if (eq f.id ../system.fittingItemId)}}selected{{/if}}>{{f.name}} (T{{f.system.tier}})</option>
           {{/each}}
         </select>
       </label>
     </div>
-    <p class="muted">Assigning a {{chassisLabel}}/{{fittingLabel}} above is free. Use the buttons below only when the change happens formally during an Adventure and should spend its Action Dice cost.</p>
-    <button type="button" data-action="reconfigureFittingCost"><i class="fa-solid fa-dice"></i> Pay {{fittingLabel}} Reconfigure Cost ({{#if stats.fitting}}{{#if stats.fitting.system.reconfigureCostOverride}}{{stats.fitting.system.reconfigureCostOverride}}{{else}}{{#if (eq stats.fitting.system.reconfigureCategory "structural")}}3{{else}}1{{/if}}{{/if}}{{else}}1{{/if}} Action {{#if (eq stats.fitting.system.reconfigureCategory "structural")}}Dice{{else}}Die{{/if}})</button>
+    <p class="muted">{{localize "ESSENCE.Item.Equipment.AssignFreeHint" chassisLabel=chassisLabel fittingLabel=fittingLabel}}</p>
+    <button type="button" data-action="reconfigureFittingCost"><i class="fa-solid fa-dice"></i> {{localize "ESSENCE.Common.Pay"}} {{fittingLabel}} {{localize "ESSENCE.Item.Component.Reconfigure"}} {{localize "ESSENCE.Item.Equipment.CostSuffix"}} ({{#if stats.fitting}}{{#if stats.fitting.system.reconfigureCostOverride}}{{stats.fitting.system.reconfigureCostOverride}}{{else}}{{#if (eq stats.fitting.system.reconfigureCategory "structural")}}3{{else}}1{{/if}}{{/if}}{{else}}1{{/if}} {{#if (eq stats.fitting.system.reconfigureCategory "structural")}}{{localize "ESSENCE.Item.Equipment.ActionDice"}}{{else}}{{localize "ESSENCE.Item.Equipment.ActionDie"}}{{/if}})</button>
 
     {{#if stats.chassis}}
-      <h4>Derived from {{chassisLabel}}/{{fittingLabel}}</h4>
-      <p>Fortitude {{stats.fortitude}} · Resilience {{stats.resilience}} · Movement {{stats.movement}}</p>
+      <h4>{{localize "ESSENCE.Item.Equipment.DerivedFrom" chassisLabel=chassisLabel fittingLabel=fittingLabel}}</h4>
+      <p>{{localize "ESSENCE.Common.Fortitude"}} {{stats.fortitude}} · {{localize "ESSENCE.Common.Resilience"}} {{stats.resilience}} · {{localize "ESSENCE.Common.Movement"}} {{stats.movement}}</p>
 
-      <h4>Augment Mounts</h4>
+      <h4>{{localize "ESSENCE.Item.Component.AugmentMounts"}}</h4>
       <ol class="mounts">
         {{#each stats.mountDisplay as |m|}}
           <li>
-            <span class="mount-index">Mount {{addOne m.index}}{{#if m.isLinked}} (Linked with Mount {{addOne m.linkedWith}}){{/if}}</span>
-            <label>Augment
+            <span class="mount-index">{{localize "ESSENCE.Item.Component.Mount" n=(addOne m.index)}}{{#if m.isLinked}} ({{localize "ESSENCE.Item.Component.LinkedWithMount" n=(addOne m.linkedWith)}}){{/if}}</span>
+            <label>{{localize "ESSENCE.Item.Equipment.Augment"}}
               <select class="mount-augment-select" data-mount-index="{{m.index}}">
-                <option value="">— empty —</option>
+                <option value="">— {{localize "ESSENCE.Common.Empty"}} —</option>
                 {{#each ../augmentOptions as |a|}}
                   <option value="{{a.id}}" {{#if (eq a.id m.augment.id)}}selected{{/if}}>{{a.name}} ({{a.system.kind}})</option>
                 {{/each}}
@@ -170,47 +170,47 @@
             </label>
             {{#if m.isLinked}}
               <button type="button" data-action="toggleMountLink" data-mount-index="{{m.index}}">
-                Link {{#if m.linkOn}}On{{else}}Off{{/if}}
+                {{localize "ESSENCE.Item.Equipment.Link"}} {{#if m.linkOn}}{{localize "ESSENCE.Common.On"}}{{else}}{{localize "ESSENCE.Common.Off"}}{{/if}}
               </button>
             {{/if}}
-            <button type="button" data-action="swapAugmentCost"><i class="fa-solid fa-dice"></i> Pay Augment Swap Cost (1 Action Die)</button>
+            <button type="button" data-action="swapAugmentCost"><i class="fa-solid fa-dice"></i> {{localize "ESSENCE.Item.Equipment.PayAugmentSwapCost"}}</button>
           </li>
         {{/each}}
       </ol>
 
       {{#if stats.grantedCards.length}}
-        <h4>Granted Equipment Cards</h4>
+        <h4>{{localize "ESSENCE.Item.Equipment.GrantedEquipmentCards"}}</h4>
         <ul>
           {{#each stats.grantedCards as |g|}}
-            <li><strong>{{g.source}}</strong>{{#if g.uses}} (Uses {{g.usesRemaining}}/{{g.uses}}){{/if}} — {{{g.effect}}}</li>
+            <li><strong>{{g.source}}</strong>{{#if g.uses}} ({{localize "ESSENCE.Common.UsesFraction" remaining=g.usesRemaining total=g.uses}}){{/if}} — {{{g.effect}}}</li>
           {{/each}}
         </ul>
       {{/if}}
     {{/if}}
   {{else}}
-    <label>Chassis / Fitting / Augments <span class="muted">(free text for now — real linking becomes available once this item is owned by a character)</span>
+    <label>{{localize "ESSENCE.Item.Equipment.ChassisFittingAugments"}} <span class="muted">{{localize "ESSENCE.Item.Equipment.FreeTextHint"}}</span>
       <textarea name="system.modularNotes" rows="2" placeholder="e.g. Chassis: Edge Striker T2, Fitting: Swift Handling T1, Augments: Whetstone Edge, Rapid Draw">{{system.modularNotes}}</textarea>
     </label>
   {{/if}}
   {{/if}}
 {{/if}}
 
-<h3 class="section-head">Effect</h3>
+<h3 class="section-head">{{localize "ESSENCE.Common.Effect"}}</h3>
 <div>{{essenceEditor system.effect target="system.effect" button=true}}</div>
-<h3 class="section-head">Passive</h3>
+<h3 class="section-head">{{localize "ESSENCE.Common.Passive"}}</h3>
 <div>{{essenceEditor system.passive target="system.passive" button=true}}</div>
-<h3 class="section-head">Special</h3>
+<h3 class="section-head">{{localize "ESSENCE.Common.Special"}}</h3>
 <div>{{essenceEditor system.special target="system.special" button=true}}</div>
-<h3 class="section-head">Flavor</h3>
+<h3 class="section-head">{{localize "ESSENCE.Common.Flavor"}}</h3>
 <div>{{essenceEditor system.flavor target="system.flavor" button=true}}</div>
-<label>Tags <input name="system.tags" type="text" value="{{system.tags}}"></label>
+<label>{{localize "ESSENCE.Common.Tags"}} <input name="system.tags" type="text" value="{{system.tags}}"></label>
 
 <details class="advanced-section">
-  <summary>Advanced: Reach Exception</summary>
-  <p class="muted">Leave blank — this is normally set automatically by the Item Grants system (Quartermaster's Due, Internal Compartment) when a player uses "Choose Item" on their character sheet. Only fill this in by hand for a one-off manual exception.</p>
+  <summary>{{localize "ESSENCE.Item.Equipment.AdvancedReachException"}}</summary>
+  <p class="muted">{{localize "ESSENCE.Item.Equipment.ReachExceptionHint"}}</p>
   <div class="equipment-fields grid-3">
-    <label>Exception Source <input name="system.reachExceptionSource" type="text" value="{{system.reachExceptionSource}}" placeholder="e.g. Quartermaster's Due"></label>
-    <label>Allowed Margin Over Reach <input name="system.reachExceptionMargin" type="number" value="{{system.reachExceptionMargin}}" min="0"></label>
+    <label>{{localize "ESSENCE.Item.Equipment.ExceptionSource"}} <input name="system.reachExceptionSource" type="text" value="{{system.reachExceptionSource}}" placeholder="e.g. Quartermaster's Due"></label>
+    <label>{{localize "ESSENCE.Item.Equipment.AllowedMargin"}} <input name="system.reachExceptionMargin" type="number" value="{{system.reachExceptionMargin}}" min="0"></label>
   </div>
 </details>
 {{/if}}

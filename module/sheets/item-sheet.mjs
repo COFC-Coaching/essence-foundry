@@ -350,12 +350,12 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
   static async #onSwapAugmentCost() {
     const actor = this.item.actor;
     if (!actor) {
-      ui.notifications.warn("This item isn't owned by an Actor — no Action Dice pool to burn from.");
+      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.NotOwnedNoActionDicePool"));
       return;
     }
     const available = actor.system.playState.actionDice ?? 0;
     if (available < 1) {
-      ui.notifications.warn("No Action Dice remaining to spend on an Augment swap.");
+      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.NoActionDiceForAugmentSwap"));
       return;
     }
     await actor.update({ "system.playState.actionDice": available - 1 });
@@ -376,14 +376,14 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
   static async #onReconfigureFittingCost() {
     const actor = this.item.actor;
     if (!actor) {
-      ui.notifications.warn("This item isn't owned by an Actor — no Action Dice pool to burn from.");
+      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.NotOwnedNoActionDicePool"));
       return;
     }
     const fitting = this.item.system.fittingItemId ? actor.items.get(this.item.system.fittingItemId) : null;
     const cost = fitting?.system.reconfigureCostOverride ?? (fitting?.system.reconfigureCategory === "structural" ? 3 : 1);
     const available = actor.system.playState.actionDice ?? 0;
     if (available < cost) {
-      ui.notifications.warn(`Changing this Fitting costs ${cost} Action ${cost === 1 ? "Die" : "Dice"}, but only ${available} remain.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.FittingChangeCost", { cost, unit: cost === 1 ? game.i18n.localize("ESSENCE.Item.Equipment.ActionDie") : game.i18n.localize("ESSENCE.Item.Equipment.ActionDice"), available }));
       return;
     }
     await actor.update({ "system.playState.actionDice": available - cost });
@@ -527,7 +527,7 @@ export class EssenceComponentSheet extends EssenceItemSheetBase {
     // unlike the soft over-Reach flags elsewhere, a Chassis with 0 Mounts isn't a valid Chassis at
     // all, so there's nothing useful to do with it if allowed.
     if (mounts.length <= 1) {
-      ui.notifications.warn("A Chassis must have at least one Augment Mount.");
+      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ChassisNeedsMount"));
       return;
     }
     const i = Number(target.dataset.index);

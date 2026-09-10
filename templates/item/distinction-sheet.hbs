@@ -5,18 +5,18 @@
 </header>
 
 <div class="card-fields grid-3">
-  <label>Key Combat Skill <input name="system.keyCombatSkill" type="text" value="{{system.keyCombatSkill}}"></label>
-  <label>Primary Attribute <input name="system.primaryAttr" type="text" value="{{system.primaryAttr}}"></label>
-  <label>Unlocks Skill <input name="system.unlocks" type="text" value="{{system.unlocks}}" placeholder="e.g. magecraft (blank if none)"></label>
+  <label>{{localize "ESSENCE.Item.Distinction.KeyCombatSkill"}} <input name="system.keyCombatSkill" type="text" value="{{system.keyCombatSkill}}"></label>
+  <label>{{localize "ESSENCE.Item.Distinction.PrimaryAttribute"}} <input name="system.primaryAttr" type="text" value="{{system.primaryAttr}}"></label>
+  <label>{{localize "ESSENCE.Item.Distinction.UnlocksSkill"}} <input name="system.unlocks" type="text" value="{{system.unlocks}}" placeholder="{{localize 'ESSENCE.Item.Distinction.UnlocksSkillPlaceholder'}}"></label>
 </div>
 
-<h3 class="section-head">Description</h3>
+<h3 class="section-head">{{localize "ESSENCE.Common.Description"}}</h3>
 <div>{{essenceEditor system.description target="system.description" button=true}}</div>
 
-<h3 class="section-head">Benefit</h3>
+<h3 class="section-head">{{localize "ESSENCE.Item.Distinction.Benefit"}}</h3>
 <div>{{essenceEditor system.benefit target="system.benefit" button=true}}</div>
 
-<h3 class="section-head">Origin Benefit</h3>
-<input name="system.origin.name" type="text" value="{{system.origin.name}}" placeholder="Origin benefit name">
+<h3 class="section-head">{{localize "ESSENCE.Item.Distinction.OriginBenefit"}}</h3>
+<input name="system.origin.name" type="text" value="{{system.origin.name}}" placeholder="{{localize 'ESSENCE.Item.Distinction.OriginBenefitNamePlaceholder'}}">
 <div>{{essenceEditor system.origin.text target="system.origin.text" button=true}}</div>
 </div>

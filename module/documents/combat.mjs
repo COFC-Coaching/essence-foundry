@@ -150,7 +150,7 @@ export default class EssenceCombat extends Combat {
       const next = Math.min(5, (ps.deathTrackStep ?? 0) + 1);
       update["system.playState.deathTrackStep"] = next;
       if (next >= 5) {
-        ui.notifications.error(`${actor.name} has reached the end of the Death Track.`);
+        ui.notifications.error(game.i18n.format("ESSENCE.Notify.EndOfDeathTrack", { name: actor.name }));
         await ChatMessage.create({
           speaker: ChatMessage.getSpeaker({ actor }),
           content: `<p><strong>${actor.name}</strong>'s Death Track has reached its final step.</p>`

@@ -4,14 +4,14 @@
   <h1><input name="name" type="text" value="{{item.name}}"></h1>
 </header>
 
-<h3 class="section-head">Description</h3>
+<h3 class="section-head">{{localize "ESSENCE.Common.Description"}}</h3>
 <div>{{essenceEditor system.description target="system.description" button=true}}</div>
 
-<h3 class="section-head">Legacy</h3>
-<input name="system.legacy.name" type="text" value="{{system.legacy.name}}" placeholder="Legacy name">
+<h3 class="section-head">{{localize "ESSENCE.Item.Heritage.Legacy"}}</h3>
+<input name="system.legacy.name" type="text" value="{{system.legacy.name}}" placeholder="{{localize 'ESSENCE.Item.Heritage.LegacyNamePlaceholder'}}">
 <div>{{essenceEditor system.legacy.text target="system.legacy.text" button=true}}</div>
 
-<h3 class="section-head">Familiarity</h3>
-<input name="system.familiarity.name" type="text" value="{{system.familiarity.name}}" placeholder="Familiarity name">
+<h3 class="section-head">{{localize "ESSENCE.Item.Heritage.Familiarity"}}</h3>
+<input name="system.familiarity.name" type="text" value="{{system.familiarity.name}}" placeholder="{{localize 'ESSENCE.Item.Heritage.FamiliarityNamePlaceholder'}}">
 <div>{{essenceEditor system.familiarity.text target="system.familiarity.text" button=true}}</div>
 </div>

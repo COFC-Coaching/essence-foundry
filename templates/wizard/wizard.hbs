@@ -9,26 +9,26 @@
 
   {{!-- ============ STEP 1: CONCEPT ============ --}}
   {{#if (eq step 0)}}
-    <h2>Concept</h2>
-    <p class="muted">Decide who the character is before touching any numbers. Confirm the campaign's starting Tier with your GM.</p>
-    <label>Concept / Background{{essenceEditor system.concept target="system.concept" button=true}}</label>
+    <h2>{{localize "ESSENCE.Wizard.Character.Concept"}}</h2>
+    <p class="muted">{{localize "ESSENCE.Wizard.Character.ConceptHint"}}</p>
+    <label>{{localize "ESSENCE.Wizard.Character.ConceptBackground"}}{{essenceEditor system.concept target="system.concept" button=true}}</label>
     <div class="wizard-row">
-      <label>Player Name <input type="text" name="system.playerName" value="{{system.playerName}}"></label>
-      <label>Tier <input type="number" name="system.tier" value="{{system.tier}}" style="width:4em"></label>
-      <label>Level <input type="number" name="system.level" value="{{system.level}}" style="width:4em"></label>
+      <label>{{localize "ESSENCE.Wizard.Character.PlayerName"}} <input type="text" name="system.playerName" value="{{system.playerName}}"></label>
+      <label>{{localize "ESSENCE.Common.Tier"}} <input type="number" name="system.tier" value="{{system.tier}}" style="width:4em"></label>
+      <label>{{localize "ESSENCE.Common.Level"}} <input type="number" name="system.level" value="{{system.level}}" style="width:4em"></label>
     </div>
     <div class="wizard-row">
-      <label>Pronouns <input type="text" name="system.pronouns" value="{{system.pronouns}}"></label>
-      <label>Age <input type="text" name="system.age" value="{{system.age}}"></label>
+      <label>{{localize "ESSENCE.Wizard.Character.Pronouns"}} <input type="text" name="system.pronouns" value="{{system.pronouns}}"></label>
+      <label>{{localize "ESSENCE.Wizard.Character.Age"}} <input type="text" name="system.age" value="{{system.age}}"></label>
     </div>
   {{/if}}
 
   {{!-- ============ STEP 2: IDENTITY ============ --}}
   {{#if (eq step 1)}}
-    <h2>Identity</h2>
-    <p class="muted">Choose a Species, Heritage, and Distinction. Base Action Pool = 5 + Tier = {{system.baseCombatDice}}.</p>
+    <h2>{{localize "ESSENCE.Wizard.Character.Identity"}}</h2>
+    <p class="muted">{{localize "ESSENCE.Wizard.Character.IdentityHint" pool=system.baseCombatDice}}</p>
 
-    <h3 class="section-head">Species {{#if speciesItem}}— <strong>{{speciesItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="species">(clear)</button>{{/if}}</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Item.Species"}} {{#if speciesItem}}— <strong>{{speciesItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="species">({{localize "ESSENCE.Common.Clear"}})</button>{{/if}}</h3>
     <ul class="wizard-pick-list">
       {{#each speciesOptions as |opt|}}
         <li><button type="button" class="{{#if (eq opt.name ../speciesItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.species" data-id="{{opt.id}}">{{opt.name}}</button></li>
@@ -40,11 +40,11 @@
          stale embedded Item and creates a fresh copy from the compendium (see origin-select.mjs). --}}
     {{#if speciesItem}}
       <div class="wizard-origin-picker">
-        <h4 class="section-head">{{speciesItem.system.nature.name}} <span class="muted">(Nature — always active)</span></h4>
+        <h4 class="section-head">{{speciesItem.system.nature.name}} <span class="muted">{{localize "ESSENCE.Wizard.Character.NatureAlwaysActive"}}</span></h4>
         <div class="wizard-origin-text">{{{speciesItem.system.nature.text}}}</div>
         {{#if (eq speciesItem.system.nature.subChoice.type "fixed")}}
           <div class="wizard-subchoice">
-            <span class="muted">{{speciesItem.system.nature.subChoice.label}} ({{speciesItem.system.nature.subChoice.selected.length}} / {{speciesItem.system.nature.subChoice.count}} chosen)</span>
+            <span class="muted">{{speciesItem.system.nature.subChoice.label}} {{localize "ESSENCE.Wizard.Character.ChosenFraction" chosen=speciesItem.system.nature.subChoice.selected.length total=speciesItem.system.nature.subChoice.count}}</span>
             {{#each natureSubChoiceOptions as |opt|}}
               <label class="subchoice-option">
                 <input type="checkbox" data-action="toggleSubChoiceOption" data-scope="nature" data-option="{{opt.value}}"
@@ -56,12 +56,12 @@
         {{else if (eq speciesItem.system.nature.subChoice.type "free")}}
           <div class="wizard-subchoice">
             <label>{{speciesItem.system.nature.subChoice.label}}
-              <input type="text" class="subchoice-free-text" data-path="nature" value="{{lookup speciesItem.system.nature.subChoice.selected 0}}" placeholder="Describe your {{speciesItem.system.nature.subChoice.label}}">
+              <input type="text" class="subchoice-free-text" data-path="nature" value="{{lookup speciesItem.system.nature.subChoice.selected 0}}" placeholder="{{localize 'ESSENCE.Wizard.Character.DescribeYour' label=speciesItem.system.nature.subChoice.label}}">
             </label>
           </div>
         {{/if}}
 
-        <h4 class="section-head">{{speciesItem.system.adaptationLabel}}s <span class="muted">({{adaptationChosenCount}} / {{adaptationCap}} chosen)</span></h4>
+        <h4 class="section-head">{{speciesItem.system.adaptationLabel}}s <span class="muted">{{localize "ESSENCE.Wizard.Character.ChosenFraction" chosen=adaptationChosenCount total=adaptationCap}}</span></h4>
         <ol class="wizard-adaptation-list">
           {{#each adaptationRows as |a|}}
             <li class="wizard-adaptation-row">
@@ -74,7 +74,7 @@
               {{#if a.chosen}}
                 {{#if (eq a.subChoice.type "fixed")}}
                   <div class="wizard-subchoice">
-                    <span class="muted">{{a.subChoice.label}} ({{a.subChoice.selected.length}} / {{a.subChoice.count}} chosen)</span>
+                    <span class="muted">{{a.subChoice.label}} {{localize "ESSENCE.Wizard.Character.ChosenFraction" chosen=a.subChoice.selected.length total=a.subChoice.count}}</span>
                     {{#each a.subChoiceOptions as |opt|}}
                       <label class="subchoice-option">
                         <input type="checkbox" data-action="toggleSubChoiceOption" data-scope="adaptation" data-index="{{a.i}}" data-option="{{opt.value}}"
@@ -86,7 +86,7 @@
                 {{else if (eq a.subChoice.type "free")}}
                   <div class="wizard-subchoice">
                     <label>{{a.subChoice.label}}
-                      <input type="text" class="subchoice-free-text" data-path="adaptations.{{a.i}}" value="{{lookup a.subChoice.selected 0}}" placeholder="Describe your {{a.subChoice.label}}">
+                      <input type="text" class="subchoice-free-text" data-path="adaptations.{{a.i}}" value="{{lookup a.subChoice.selected 0}}" placeholder="{{localize 'ESSENCE.Wizard.Character.DescribeYour' label=a.subChoice.label}}">
                     </label>
                   </div>
                 {{/if}}
@@ -97,15 +97,15 @@
       </div>
     {{/if}}
 
-    <h3 class="section-head">Heritage {{#if heritageItem}}— <strong>{{heritageItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="heritage">(clear)</button>{{/if}}</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Item.Heritage"}} {{#if heritageItem}}— <strong>{{heritageItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="heritage">({{localize "ESSENCE.Common.Clear"}})</button>{{/if}}</h3>
     <ul class="wizard-pick-list">
       {{#each heritageOptions as |opt|}}
         <li><button type="button" class="{{#if (eq opt.name ../heritageItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.heritages" data-id="{{opt.id}}">{{opt.name}}</button></li>
       {{/each}}
     </ul>
 
-    <h3 class="section-head">Distinction {{#if distinctionItem}}— <strong>{{distinctionItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="distinction">(clear)</button>{{/if}}</h3>
-    <p class="muted">Gestalt, Magecraft, Psionics, Ritualism, and Calling are gated — you can't invest Skill Points in them without the matching Distinction.</p>
+    <h3 class="section-head">{{localize "ESSENCE.Item.Distinction"}} {{#if distinctionItem}}— <strong>{{distinctionItem.name}}</strong> <button type="button" class="link-button" data-action="clearOrigin" data-type="distinction">({{localize "ESSENCE.Common.Clear"}})</button>{{/if}}</h3>
+    <p class="muted">{{localize "ESSENCE.Wizard.Character.GatedSkillsHint"}}</p>
     <ul class="wizard-pick-list">
       {{#each distinctionOptions as |opt|}}
         <li><button type="button" class="{{#if (eq opt.name ../distinctionItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.distinctions" data-id="{{opt.id}}">{{opt.name}} <span class="muted">({{opt.system.keyCombatSkill}})</span></button></li>
@@ -115,10 +115,10 @@
 
   {{!-- ============ STEP 3: ATTRIBUTES ============ --}}
   {{#if (eq step 2)}}
-    <h2>Attributes</h2>
-    <p class="muted">Distribute {{attributePool}} points across the 9 Attributes, starting at 1 each, none above 3. Points remaining: <strong>{{attributeRemaining}}</strong></p>
+    <h2>{{localize "ESSENCE.Common.Attributes"}}</h2>
+    <p class="muted">{{localize "ESSENCE.Wizard.Character.AttributesHint" pool=attributePool}} {{localize "ESSENCE.Wizard.PointsRemaining"}}: <strong>{{attributeRemaining}}</strong></p>
     <table class="item-table">
-      <thead><tr><th>Attribute</th><th></th><th>Value</th><th></th></tr></thead>
+      <thead><tr><th>{{localize "ESSENCE.Common.Attribute"}}</th><th></th><th>{{localize "ESSENCE.Common.Value"}}</th><th></th></tr></thead>
       <tbody>
         {{#each attributes as |a|}}
           <tr>
@@ -130,26 +130,26 @@
         {{/each}}
       </tbody>
     </table>
-    <h3 class="section-head">Resources &amp; Defenses (derived)</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Wizard.Monster.ResourcesDefensesDerived"}}</h3>
     <div class="wizard-row">
-      <span>Stamina {{system.resources.stamina.max}}</span>
-      <span>Focus {{system.resources.focus.max}}</span>
-      <span>Mana {{system.resources.mana.max}}</span>
-      <span>Fortitude {{system.defenses.fortitude}}</span>
-      <span>Composure {{system.defenses.composure}}</span>
-      <span>Harmony {{system.defenses.harmony}}</span>
+      <span>{{localize "ESSENCE.Common.Stamina"}} {{system.resources.stamina.max}}</span>
+      <span>{{localize "ESSENCE.Common.Focus"}} {{system.resources.focus.max}}</span>
+      <span>{{localize "ESSENCE.Common.Mana"}} {{system.resources.mana.max}}</span>
+      <span>{{localize "ESSENCE.Common.Fortitude"}} {{system.defenses.fortitude}}</span>
+      <span>{{localize "ESSENCE.Common.Composure"}} {{system.defenses.composure}}</span>
+      <span>{{localize "ESSENCE.Common.Harmony"}} {{system.defenses.harmony}}</span>
     </div>
   {{/if}}
 
   {{!-- ============ STEP 4: WOUNDS ============ --}}
   {{#if (eq step 3)}}
-    <h2>Wounds</h2>
-    <p class="muted">Order never changes: Damage → Resilience → Wounds → Temporary Wounds → Core Wounds. Most characters start at 0 Resilience and 0 Temporary Wounds — gear and features grant more.</p>
+    <h2>{{localize "ESSENCE.Common.Wounds"}}</h2>
+    <p class="muted">{{localize "ESSENCE.Wizard.Character.WoundsHint"}}</p>
     <div class="wizard-row">
-      <label>Resilience <input type="number" name="system.resilience" value="{{system.resilience}}" style="width:4em"></label>
-      <label>Temporary Wounds Available <input type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" style="width:4em" min="0" max="5"></label>
+      <label>{{localize "ESSENCE.Common.Resilience"}} <input type="number" name="system.resilience" value="{{system.resilience}}" style="width:4em"></label>
+      <label>{{localize "ESSENCE.Common.TemporaryWoundsAvailable"}} <input type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" style="width:4em" min="0" max="5"></label>
     </div>
-    <h3 class="section-head">Core Wounds (start empty)</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Wizard.Monster.CoreWoundsStartEmpty"}}</h3>
     <span class="pip-track">
       {{#each system.coreWounds as |w|}}<span class="pip {{#if w.filled}}filled{{/if}}"></span>{{/each}}
     </span>
@@ -157,14 +157,14 @@
 
   {{!-- ============ STEP 5: COMBAT SKILLS ============ --}}
   {{#if (eq step 4)}}
-    <h2>Combat Skills</h2>
-    <p class="muted">Distribute {{skillPool}} points among the 9 Combat Skills — no Skill above Rank 2 at creation. Points remaining: <strong>{{skillRemaining}}</strong></p>
+    <h2>{{localize "ESSENCE.Common.CombatSkills"}}</h2>
+    <p class="muted">{{localize "ESSENCE.Wizard.Character.SkillsHint" pool=skillPool}} {{localize "ESSENCE.Wizard.PointsRemaining"}}: <strong>{{skillRemaining}}</strong></p>
     <table class="item-table">
-      <thead><tr><th>Skill</th><th></th><th>Rank</th><th></th></tr></thead>
+      <thead><tr><th>{{localize "ESSENCE.Common.Skill"}}</th><th></th><th>{{localize "ESSENCE.Common.Rank"}}</th><th></th></tr></thead>
       <tbody>
         {{#each skills as |s|}}
           <tr class="{{#unless s.gateOpen}}gated{{/unless}}">
-            <td class="capitalize">{{s.key}} {{#unless s.gateOpen}}<span class="gate-note">(requires {{s.gateDistinction}})</span>{{/unless}}</td>
+            <td class="capitalize">{{s.key}} {{#unless s.gateOpen}}<span class="gate-note">({{localize "ESSENCE.Wizard.Monster.RequiresDistinctionShort" name=s.gateDistinction}})</span>{{/unless}}</td>
             <td><button type="button" data-action="adjustSkill" data-skill="{{s.key}}" data-delta="-1">-</button></td>
             <td class="wizard-value">{{s.value}}</td>
             <td><button type="button" data-action="adjustSkill" data-skill="{{s.key}}" data-delta="1" {{#unless s.gateOpen}}disabled{{/unless}}>+</button></td>
@@ -173,8 +173,8 @@
       </tbody>
     </table>
 
-    <h3 class="section-head">Expertises ({{expertiseSpent}} / {{expertiseCount}})</h3>
-    <p class="muted">Each Expertise must belong to a Skill rated at least 1. No per-skill limit — specialize or spread out.</p>
+    <h3 class="section-head">{{localize "ESSENCE.Wizard.Character.Expertises"}} ({{expertiseSpent}} / {{expertiseCount}})</h3>
+    <p class="muted">{{localize "ESSENCE.Wizard.Character.ExpertisesHint"}}</p>
     {{#each expertisesBySkill as |es|}}
       <div class="specialty-row specialty-row-wrap">
         <span class="attr-label capitalize">{{es.key}}</span>
@@ -185,68 +185,68 @@
         </div>
       </div>
     {{/each}}
-    {{#unless eligibleSkills.length}}<p class="muted">Assign at least 1 Rank to a Combat Skill above to unlock its Expertises.</p>{{/unless}}
+    {{#unless eligibleSkills.length}}<p class="muted">{{localize "ESSENCE.Wizard.Character.AssignRankHint"}}</p>{{/unless}}
 
-    <h3 class="section-head">Basic Combat Cards ({{ownedBasicCards.length}} / 7)</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Wizard.Character.BasicCombatCards"}} ({{ownedBasicCards.length}} / 7)</h3>
     {{#if missingBasicCount}}
-      <button type="button" data-action="grantBasicCards">Grant Missing Basic Cards</button>
+      <button type="button" data-action="grantBasicCards">{{localize "ESSENCE.Wizard.Character.GrantMissingBasicCards"}}</button>
     {{else}}
-      <p class="muted">All 7 granted.</p>
+      <p class="muted">{{localize "ESSENCE.Wizard.Character.All7Granted"}}</p>
     {{/if}}
 
-    <h3 class="section-head">Combat Cards ({{cardCount}} / {{cardLimit}})</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Common.CombatCards"}} ({{cardCount}} / {{cardLimit}})</h3>
     <div class="wizard-two-col">
       <div>
-        <h4>Selected</h4>
+        <h4>{{localize "ESSENCE.Common.Selected"}}</h4>
         <ul class="item-list">
           {{#each ownedActionCards as |item|}}
-            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}}</span> <button type="button" data-action="toggleCard" data-item-id="{{item.id}}" aria-label="Remove {{item.name}}"><i class="fa-solid fa-trash"></i></button></li>
+            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}}</span> <button type="button" data-action="toggleCard" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
           {{/each}}
           {{#each ownedReactionCards as |item|}}
-            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}} · Reaction</span> <button type="button" data-action="toggleCard" data-item-id="{{item.id}}" aria-label="Remove {{item.name}}"><i class="fa-solid fa-trash"></i></button></li>
+            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}} · {{localize "ESSENCE.Common.Reaction"}}</span> <button type="button" data-action="toggleCard" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
           {{/each}}
         </ul>
       </div>
       <div>
-        <h4>Qualifying Cards</h4>
-        <input type="text" data-wizard-search="cards" placeholder="Search…" value="{{cardSearch}}">
+        <h4>{{localize "ESSENCE.Wizard.Monster.QualifyingCards"}}</h4>
+        <input type="text" data-wizard-search="cards" placeholder="{{localize 'ESSENCE.Common.SearchPlaceholder'}}" value="{{cardSearch}}">
         <div class="wizard-row wizard-card-filters">
-          <label>Type
+          <label>{{localize "ESSENCE.Common.Type"}}
             <select data-wizard-select="cardType">
-              <option value="all" {{#if (eq cardTypeFilter "all")}}selected{{/if}}>All</option>
-              <option value="action-card" {{#if (eq cardTypeFilter "action-card")}}selected{{/if}}>Action</option>
-              <option value="reaction-card" {{#if (eq cardTypeFilter "reaction-card")}}selected{{/if}}>Reaction</option>
+              <option value="all" {{#if (eq cardTypeFilter "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
+              <option value="action-card" {{#if (eq cardTypeFilter "action-card")}}selected{{/if}}>{{localize "ESSENCE.Common.Action"}}</option>
+              <option value="reaction-card" {{#if (eq cardTypeFilter "reaction-card")}}selected{{/if}}>{{localize "ESSENCE.Common.Reaction"}}</option>
             </select>
           </label>
-          <label>Skill
+          <label>{{localize "ESSENCE.Common.Skill"}}
             <select data-wizard-select="cardSkill">
-              <option value="all" {{#if (eq cardSkillFilter "all")}}selected{{/if}}>All</option>
+              <option value="all" {{#if (eq cardSkillFilter "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
               {{#each cardSkillOptions as |sk|}}
                 <option value="{{sk}}" {{#if (eq ../cardSkillFilter sk)}}selected{{/if}} class="capitalize">{{sk}}</option>
               {{/each}}
             </select>
           </label>
-          <label>Subtype
+          <label>{{localize "ESSENCE.Common.Subtype"}}
             <select data-wizard-select="cardSubtype">
-              <option value="all" {{#if (eq cardSubtypeFilter "all")}}selected{{/if}}>All</option>
+              <option value="all" {{#if (eq cardSubtypeFilter "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
               {{#each cardSubtypeOptions as |st|}}
                 <option value="{{st}}" {{#if (eq ../cardSubtypeFilter st)}}selected{{/if}}>{{st}}</option>
               {{/each}}
             </select>
           </label>
-          <label>Sort
+          <label>{{localize "ESSENCE.Common.Sort"}}
             <select data-wizard-select="cardSort">
-              <option value="rank" {{#if (eq cardSort "rank")}}selected{{/if}}>Rank</option>
-              <option value="name" {{#if (eq cardSort "name")}}selected{{/if}}>Name</option>
-              <option value="skill" {{#if (eq cardSort "skill")}}selected{{/if}}>Skill</option>
+              <option value="rank" {{#if (eq cardSort "rank")}}selected{{/if}}>{{localize "ESSENCE.Common.Rank"}}</option>
+              <option value="name" {{#if (eq cardSort "name")}}selected{{/if}}>{{localize "ESSENCE.Common.Name"}}</option>
+              <option value="skill" {{#if (eq cardSort "skill")}}selected{{/if}}>{{localize "ESSENCE.Common.Skill"}}</option>
             </select>
           </label>
         </div>
         <ul class="item-list wizard-scroll-list">
           {{#each browsableCards as |item|}}
-            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}} · {{item.system.skill}}{{#if item.system.subtype}} · {{item.system.subtype}}{{/if}}{{#if (eq item.type "reaction-card")}} · Reaction{{/if}}</span> <button type="button" data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}" aria-label="Add {{item.name}}"><i class="fa-solid fa-plus"></i></button></li>
+            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}} · {{item.system.skill}}{{#if item.system.subtype}} · {{item.system.subtype}}{{/if}}{{#if (eq item.type "reaction-card")}} · {{localize "ESSENCE.Common.Reaction"}}{{/if}}</span> <button type="button" data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.AddAria' name=item.name}}"><i class="fa-solid fa-plus"></i></button></li>
           {{else}}
-            <li class="muted">No cards match these filters.</li>
+            <li class="muted">{{localize "ESSENCE.Wizard.Character.NoCardsMatchFilters"}}</li>
           {{/each}}
         </ul>
       </div>
@@ -255,36 +255,36 @@
 
   {{!-- ============ STEP 6: INFLUENCE ============ --}}
   {{#if (eq step 5)}}
-    <h2>Influence</h2>
-    <p class="muted">Influence folds wealth, reputation, and pull into one resource. Reach is its scale.</p>
-    <label>Reach <input type="number" name="system.reach" value="{{system.reach}}" style="width:4em"></label>
-    <h3 class="section-head">Temporary Influence</h3>
+    <h2>{{localize "ESSENCE.Sheet.Influence"}}</h2>
+    <p class="muted">{{localize "ESSENCE.Wizard.Character.InfluenceHint"}}</p>
+    <label>{{localize "ESSENCE.Sheet.Reach"}} <input type="number" name="system.reach" value="{{system.reach}}" style="width:4em"></label>
+    <h3 class="section-head">{{localize "ESSENCE.Sheet.TemporaryInfluence"}}</h3>
     <span class="pip-track">
       {{#each temporaryInfluencePips as |filled i|}}
-        <button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempInfluence" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="Temporary Influence {{addOne i}}"></button>
+        <button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempInfluence" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="{{localize 'ESSENCE.Sheet.TemporaryInfluenceAria' n=(addOne i)}}"></button>
       {{/each}}
     </span>
-    <h3 class="section-head">Core Influence <span class="muted">(never spent by choice — new characters begin unmarked)</span></h3>
+    <h3 class="section-head">{{localize "ESSENCE.Sheet.CoreInfluence"}} <span class="muted">{{localize "ESSENCE.Wizard.Character.CoreInfluenceHint"}}</span></h3>
     <span class="pip-track">
       {{#each coreInfluencePips as |c i|}}
-        <button type="button" class="pip toggle {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}" aria-pressed="{{c.filled}}" aria-label="Core Influence {{addOne i}}"></button>
+        <button type="button" class="pip toggle {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}" aria-pressed="{{c.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreInfluenceAria' n=(addOne i)}}"></button>
       {{/each}}
     </span>
   {{/if}}
 
   {{!-- ============ STEP 7: NON-COMBAT ============ --}}
   {{#if (eq step 6)}}
-    <h2>Non-Combat</h2>
-    <label>Career <input type="text" name="system.career" value="{{system.career}}"></label>
+    <h2>{{localize "ESSENCE.Character.TabNonCombat"}}</h2>
+    <label>{{localize "ESSENCE.Character.Career"}} <input type="text" name="system.career" value="{{system.career}}"></label>
     <div class="wizard-row">
-      <label>Key Aspect 1 <input type="text" name="system.keyAspects.0" value="{{lookup system.keyAspects 0}}"></label>
-      <label>Key Aspect 2 <input type="text" name="system.keyAspects.1" value="{{lookup system.keyAspects 1}}"></label>
-      <label>Key Aspect 3 <input type="text" name="system.keyAspects.2" value="{{lookup system.keyAspects 2}}"></label>
+      <label>{{localize "ESSENCE.Character.KeyAspect"}} 1 <input type="text" name="system.keyAspects.0" value="{{lookup system.keyAspects 0}}"></label>
+      <label>{{localize "ESSENCE.Character.KeyAspect"}} 2 <input type="text" name="system.keyAspects.1" value="{{lookup system.keyAspects 1}}"></label>
+      <label>{{localize "ESSENCE.Character.KeyAspect"}} 3 <input type="text" name="system.keyAspects.2" value="{{lookup system.keyAspects 2}}"></label>
     </div>
-    <h3 class="section-head">Non-Combat Skills — {{nonCombatSpent}} / {{nonCombatPool}} points, max 2 each. Remaining: {{nonCombatRemaining}}</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Wizard.Character.NonCombatSkillsHeader" spent=nonCombatSpent pool=nonCombatPool remaining=nonCombatRemaining}}</h3>
     {{#each nonCombatEntries as |s|}}
       <div class="nc-skill-row">
-        <input type="text" name="system.nonCombatSkills.{{s.i}}.name" value="{{s.name}}" placeholder="Skill name">
+        <input type="text" name="system.nonCombatSkills.{{s.i}}.name" value="{{s.name}}" placeholder="{{localize 'ESSENCE.Wizard.Character.SkillNamePlaceholder'}}">
         <button type="button" data-action="adjustNonCombatRating" data-index="{{s.i}}" data-delta="-1">-</button>
         {{!-- Must be a real named input, not a <span> — a submit-on-change form collects every
              system.nonCombatSkills.*.* input present and reconstructs the whole array from just
@@ -295,15 +295,15 @@
         <a data-action="deleteNonCombatSkill" data-index="{{s.i}}"><i class="fa-solid fa-trash"></i></a>
       </div>
     {{/each}}
-    <button type="button" data-action="addNonCombatSkill"><i class="fa-solid fa-plus"></i> Add Skill</button>
+    <button type="button" data-action="addNonCombatSkill"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Character.AddSkill"}}</button>
   {{/if}}
 
   {{!-- ============ STEP 8: PASSIVE FEATURES ============ --}}
   {{#if (eq step 7)}}
-    <h2>Passive Features</h2>
-    <p class="muted">Species/Heritage/Distinction traits are collected automatically. Add anything else standing here (Skill Tree passives, campaign bonuses, etc.).</p>
+    <h2>{{localize "ESSENCE.Wizard.Character.PassiveFeatures"}}</h2>
+    <p class="muted">{{localize "ESSENCE.Wizard.Character.PassiveFeaturesHint"}}</p>
     <table class="item-table">
-      <thead><tr><th>Feature</th><th>Source</th><th>Description</th></tr></thead>
+      <thead><tr><th>{{localize "ESSENCE.Character.Feature"}}</th><th>{{localize "ESSENCE.Common.Source"}}</th><th>{{localize "ESSENCE.Common.Description"}}</th></tr></thead>
       <tbody>
         {{#each originFeatures as |f|}}
           <tr class="origin-feature-row"><td>{{f.name}}</td><td>{{f.source}}</td><td>{{{f.text}}}</td></tr>
@@ -318,46 +318,46 @@
         {{/each}}
       </tbody>
     </table>
-    <button type="button" data-action="addPassiveFeature"><i class="fa-solid fa-plus"></i> Add Feature</button>
+    <button type="button" data-action="addPassiveFeature"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Character.AddFeature"}}</button>
   {{/if}}
 
   {{!-- ============ STEP 9: EQUIPMENT ============ --}}
   {{#if (eq step 8)}}
-    <h2>Equipment</h2>
-    <p class="muted">Your Signature Loadout is what you bring on this Adventure, up to your Signature Equipment Limit. The Armory fills in as you play.</p>
-    <h3 class="section-head">Signature Loadout — {{signatureUsed}} / {{signatureLimit}} slots &middot; Reach {{reach}}</h3>
+    <h2>{{localize "ESSENCE.Item.Equipment"}}</h2>
+    <p class="muted">{{localize "ESSENCE.Wizard.Character.EquipmentHint"}}</p>
+    <h3 class="section-head">{{localize "ESSENCE.Wizard.SignatureLoadout" used=signatureUsed limit=signatureLimit reach=reach}}</h3>
     <ul class="item-list">
       {{#each signatureItems as |item|}}
-        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">Reach {{item.system.cost}}</span>
-          {{#if item.overReach}}<span class="muted reach-warning" title="Reach cost exceeds your current Reach. Non-blocking."><i class="fa-solid fa-triangle-exclamation"></i></span>{{/if}}
-          <button type="button" data-action="toggleEquipment" data-item-id="{{item.id}}" aria-label="Remove {{item.name}}"><i class="fa-solid fa-trash"></i></button></li>
+        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{localize "ESSENCE.Item.Equipment.Reach"}} {{item.system.cost}}</span>
+          {{#if item.overReach}}<span class="muted reach-warning" title="{{localize 'ESSENCE.Wizard.Character.ExceedsReachYours'}}"><i class="fa-solid fa-triangle-exclamation"></i></span>{{/if}}
+          <button type="button" data-action="toggleEquipment" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
       {{/each}}
     </ul>
 
     {{#if itemGrants.length}}
-      <h3 class="section-head">Item Grants <span class="muted">(Quartermaster's Due, Internal Compartment, ...)</span></h3>
+      <h3 class="section-head">{{localize "ESSENCE.Sheet.ItemGrants"}} <span class="muted">{{localize "ESSENCE.Sheet.ItemGrantsExamples"}}</span></h3>
       <ul class="item-list">
         {{#each itemGrants as |grant|}}
           <li>
             <strong>{{grant.sourceName}}</strong>
             {{#if grant.grantedItem}}
               — <a data-action="previewItem" data-uuid="{{grant.grantedItem.uuid}}">{{grant.grantedItem.name}}</a>
-              <button type="button" data-action="chooseGrantedItem" data-grant-source="{{grant.sourceName}}">Replace</button>
+              <button type="button" data-action="chooseGrantedItem" data-grant-source="{{grant.sourceName}}">{{localize "ESSENCE.Common.Replace"}}</button>
             {{else}}
-              <span class="muted">— not yet chosen</span>
-              <button type="button" data-action="chooseGrantedItem" data-grant-source="{{grant.sourceName}}">Choose Item</button>
+              <span class="muted">{{localize "ESSENCE.Sheet.NotYetChosen"}}</span>
+              <button type="button" data-action="chooseGrantedItem" data-grant-source="{{grant.sourceName}}">{{localize "ESSENCE.Sheet.ChooseItem"}}</button>
             {{/if}}
           </li>
         {{/each}}
       </ul>
     {{/if}}
 
-    <h3 class="section-head">Equipment Library</h3>
-    <input type="text" data-wizard-search="equipment" placeholder="Search…" value="{{equipmentSearch}}">
+    <h3 class="section-head">{{localize "ESSENCE.Wizard.EquipmentLibrary"}}</h3>
+    <input type="text" data-wizard-search="equipment" placeholder="{{localize 'ESSENCE.Common.SearchPlaceholder'}}" value="{{equipmentSearch}}">
     <div class="wizard-row wizard-card-filters">
-      <label>Group
+      <label>{{localize "ESSENCE.Wizard.Group"}}
         <select data-wizard-select="equipmentCategory">
-          <option value="all" {{#if (eq equipmentCategoryFilter "all")}}selected{{/if}}>All</option>
+          <option value="all" {{#if (eq equipmentCategoryFilter "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
           {{#each equipmentCategoryOptions as |opt|}}
             <option value="{{opt.value}}" {{#if (eq ../equipmentCategoryFilter opt.value)}}selected{{/if}}>{{opt.label}}</option>
           {{/each}}
@@ -366,42 +366,42 @@
     </div>
     <ul class="item-list wizard-scroll-list">
       {{#each browsableEquipment as |item|}}
-        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{equipmentCategoryLabel item.system.category}} &middot; Reach {{item.system.cost}}</span> <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" aria-label="Add {{item.name}}"><i class="fa-solid fa-plus"></i></button></li>
+        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{equipmentCategoryLabel item.system.category}} &middot; {{localize "ESSENCE.Item.Equipment.Reach"}} {{item.system.cost}}</span> <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.AddAria' name=item.name}}"><i class="fa-solid fa-plus"></i></button></li>
       {{/each}}
     </ul>
   {{/if}}
 
   {{!-- ============ STEP 10: FINALIZE ============ --}}
   {{#if (eq step 9)}}
-    <h2>Finalize</h2>
-    <p class="muted">Confirm final Resources, Defenses, and Base Action Pool, then check every requirement.</p>
+    <h2>{{localize "ESSENCE.Wizard.Finalize"}}</h2>
+    <p class="muted">{{localize "ESSENCE.Wizard.Character.FinalizeHint"}}</p>
     <div class="wizard-row">
-      <span>Stamina {{resources.stamina.max}}</span>
-      <span>Focus {{resources.focus.max}}</span>
-      <span>Mana {{resources.mana.max}}</span>
-      <span>Fortitude {{defenses.fortitude}}</span>
-      <span>Composure {{defenses.composure}}</span>
-      <span>Harmony {{defenses.harmony}}</span>
-      <span>Base Action Pool {{baseCombatDice}}</span>
+      <span>{{localize "ESSENCE.Common.Stamina"}} {{resources.stamina.max}}</span>
+      <span>{{localize "ESSENCE.Common.Focus"}} {{resources.focus.max}}</span>
+      <span>{{localize "ESSENCE.Common.Mana"}} {{resources.mana.max}}</span>
+      <span>{{localize "ESSENCE.Common.Fortitude"}} {{defenses.fortitude}}</span>
+      <span>{{localize "ESSENCE.Common.Composure"}} {{defenses.composure}}</span>
+      <span>{{localize "ESSENCE.Common.Harmony"}} {{defenses.harmony}}</span>
+      <span>{{localize "ESSENCE.Common.BaseActionPool"}} {{baseCombatDice}}</span>
     </div>
-    <h3 class="section-head">Checklist</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Wizard.Character.Checklist"}}</h3>
     <ul class="wizard-checklist">
       {{#each checklist as |c|}}
         <li class="{{#if c.ok}}ok{{else}}fail{{/if}}"><i class="fa-solid {{#if c.ok}}fa-check{{else}}fa-xmark{{/if}}"></i> {{c.label}}</li>
       {{/each}}
     </ul>
-    <p class="muted">Weaknesses are intentional. Once your GM approves the sheet, you're ready to play.</p>
+    <p class="muted">{{localize "ESSENCE.Wizard.Character.WeaknessesNote"}}</p>
   {{/if}}
 
   </div>
 
   <footer class="wizard-footer">
-    <button type="button" data-action="wizardBack" {{#if isFirst}}disabled{{/if}}>← Back</button>
-    <span class="muted">Step {{addOne step}} of 10 — {{stepName}}</span>
+    <button type="button" data-action="wizardBack" {{#if isFirst}}disabled{{/if}}>← {{localize "ESSENCE.Common.Back"}}</button>
+    <span class="muted">{{localize "ESSENCE.Wizard.StepOf" step=(addOne step) total=10 name=stepName}}</span>
     {{#if isLast}}
-      <button type="button" data-action="wizardAccept">Accept</button>
+      <button type="button" data-action="wizardAccept">{{localize "ESSENCE.Common.Accept"}}</button>
     {{else}}
-      <button type="button" data-action="wizardNext">Next →</button>
+      <button type="button" data-action="wizardNext">{{localize "ESSENCE.Common.Next"}} →</button>
     {{/if}}
   </footer>
 </div>

@@ -40,8 +40,14 @@ export const ROLE_BUDGETS = {
   }
 };
 
+/** Reads the GM-tunable override from the "roleBudgets" world setting (see
+ *  role-budgets-settings.mjs) when one exists for this Role, falling back to this module's own
+ *  ROLE_BUDGETS defaults — covers both a setting that's never been touched and a settings object
+ *  from an older version missing a Role or field this version added. */
 export function getRoleBudget(role) {
-  return ROLE_BUDGETS[role] ?? ROLE_BUDGETS.Standard;
+  const defaults = ROLE_BUDGETS[role] ?? ROLE_BUDGETS.Standard;
+  const stored = game.settings?.get("essence-system", "roleBudgets")?.[role];
+  return stored ? { ...defaults, ...stored } : defaults;
 }
 
 export function computeResilience(role, tier) {

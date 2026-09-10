@@ -2,8 +2,8 @@
 <header class="sheet-header">
   <img class="profile-img" src="{{item.img}}" data-edit="img" data-action="editImage">
   <h1><input name="name" type="text" value="{{item.name}}" style="font-size: {{fitTitleSize item.name max=24 min=14 startAt=12}}px" {{#if viewMode}}disabled{{/if}}></h1>
-  <button type="button" class="card-view-toggle" data-action="toggleCardView" title="{{#if viewMode}}Edit this card{{else}}View this card{{/if}}">
-    <i class="fa-solid {{#if viewMode}}fa-pen{{else}}fa-eye{{/if}}"></i> {{#if viewMode}}Edit{{else}}View{{/if}}
+  <button type="button" class="card-view-toggle" data-action="toggleCardView" title="{{#if viewMode}}{{localize 'ESSENCE.Common.EditThisItem'}}{{else}}{{localize 'ESSENCE.Common.ViewThisItem'}}{{/if}}">
+    <i class="fa-solid {{#if viewMode}}fa-pen{{else}}fa-eye{{/if}}"></i> {{#if viewMode}}{{localize "ESSENCE.Common.Edit"}}{{else}}{{localize "ESSENCE.Common.View"}}{{/if}}
   </button>
 </header>
 
@@ -15,10 +15,10 @@
   {{#if system.expertises}}<div class="card-view-expertises">{{system.expertises}}</div>{{/if}}
 
   <div class="card-view-infogrid">
-    <div><span class="card-view-statlabel">Rank</span><span>{{system.rank}}</span></div>
-    {{#if system.min}}<div><span class="card-view-statlabel">Commitment</span><span>Dice {{system.min}}+{{#if system.cost}} · Cost {{system.cost}} {{domainResource system.domain}}{{/if}}</span></div>{{/if}}
-    {{#if system.attr}}<div><span class="card-view-statlabel">Attribute</span><span>{{system.attr}}</span></div>{{/if}}
-    {{#if system.defense}}<div><span class="card-view-statlabel">Defense</span><span>{{system.defense}}</span></div>{{/if}}
+    <div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Rank"}}</span><span>{{system.rank}}</span></div>
+    {{#if system.min}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Item.Card.Commitment"}}</span><span>{{localize "ESSENCE.Common.Dice"}} {{system.min}}+{{#if system.cost}} · {{localize "ESSENCE.Common.Cost"}} {{system.cost}} {{domainResource system.domain}}{{/if}}</span></div>{{/if}}
+    {{#if system.attr}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Attribute"}}</span><span>{{system.attr}}</span></div>{{/if}}
+    {{#if system.defense}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Defense"}}</span><span>{{system.defense}}</span></div>{{/if}}
   </div>
   {{#if system.tags}}<div class="card-view-tags muted">{{system.tags}}</div>{{/if}}
 
@@ -32,7 +32,7 @@
   {{/each}}
 
   {{#if system.surges.length}}
-    <div class="card-view-label">Surges</div>
+    <div class="card-view-label">{{localize "ESSENCE.Common.Surges"}}</div>
     <div class="card-view-surges">
       {{#each system.surges as |s|}}
         {{#if s.html}}
@@ -55,8 +55,8 @@
 {{else}}
 
 <div class="card-fields grid-3">
-  <label>Rank <input name="system.rank" type="number" value="{{system.rank}}"></label>
-  <label>Subtype
+  <label>{{localize "ESSENCE.Common.Rank"}} <input name="system.rank" type="number" value="{{system.rank}}"></label>
+  <label>{{localize "ESSENCE.Common.Subtype"}}
     <select name="system.subtype">
       <option value="" {{#unless system.subtype}}selected{{/unless}}>—</option>
       {{#each subtypeOptions as |st|}}
@@ -64,50 +64,50 @@
       {{/each}}
     </select>
   </label>
-  <label>Attribute <input name="system.attr" type="text" value="{{system.attr}}"></label>
-  <label>Skill
+  <label>{{localize "ESSENCE.Common.Attribute"}} <input name="system.attr" type="text" value="{{system.attr}}"></label>
+  <label>{{localize "ESSENCE.Common.Skill"}}
     <select class="skill-select">
-      <option value="" {{#unless system.skill}}selected{{/unless}}>— Basic/Universal —</option>
+      <option value="" {{#unless system.skill}}selected{{/unless}}>{{localize "ESSENCE.Item.Card.BasicUniversal"}}</option>
       {{#each skillOptions as |s|}}
         <option value="{{s.key}}" {{#if (eq s.key ../system.skill)}}selected{{/if}}>{{s.label}}</option>
       {{/each}}
     </select>
   </label>
-  <label>Defense <input name="system.defense" type="text" value="{{system.defense}}"></label>
-  <label>Min Dice <input name="system.min" type="text" value="{{system.min}}"></label>
-  <label>Cost <input name="system.cost" type="text" value="{{system.cost}}"></label>
-  <label>Tags <input name="system.tags" type="text" value="{{system.tags}}"></label>
+  <label>{{localize "ESSENCE.Common.Defense"}} <input name="system.defense" type="text" value="{{system.defense}}"></label>
+  <label>{{localize "ESSENCE.Item.Card.MinDice"}} <input name="system.min" type="text" value="{{system.min}}"></label>
+  <label>{{localize "ESSENCE.Common.Cost"}} <input name="system.cost" type="text" value="{{system.cost}}"></label>
+  <label>{{localize "ESSENCE.Common.Tags"}} <input name="system.tags" type="text" value="{{system.tags}}"></label>
 </div>
 
-<h3 class="section-head">Body</h3>
+<h3 class="section-head">{{localize "ESSENCE.Item.Card.Body"}}</h3>
 <ol class="body-lines">
   {{#each system.body as |line i|}}
     <li>
-      <input name="system.body.{{i}}.label" type="text" value="{{line.label}}" placeholder="Label">
-      <button type="button" data-action="deleteArrayRow" data-array="body" data-index="{{i}}" aria-label="Delete body line {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
+      <input name="system.body.{{i}}.label" type="text" value="{{line.label}}" placeholder="{{localize 'ESSENCE.Common.Label'}}">
+      <button type="button" data-action="deleteArrayRow" data-array="body" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Item.Card.DeleteBodyLineAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button>
       <div>{{essenceEditor line.html target=(concat "system.body." i ".html") button=true}}</div>
     </li>
   {{/each}}
 </ol>
-<button type="button" data-action="addArrayRow" data-array="body"><i class="fa-solid fa-plus"></i> Add Body Line</button>
+<button type="button" data-action="addArrayRow" data-array="body"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Item.Card.AddBodyLine"}}</button>
 
-<h3 class="section-head">Surges</h3>
+<h3 class="section-head">{{localize "ESSENCE.Common.Surges"}}</h3>
 <ol class="surges">
   {{#each system.surges as |s i|}}
     <li>
       <input name="system.surges.{{i}}.n" type="text" value="{{s.n}}" style="width:3em">
-      <button type="button" data-action="deleteArrayRow" data-array="surges" data-index="{{i}}" aria-label="Delete surge {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
+      <button type="button" data-action="deleteArrayRow" data-array="surges" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Item.Card.DeleteSurgeAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button>
       <div>{{essenceEditor s.html target=(concat "system.surges." i ".html") button=true}}</div>
     </li>
   {{/each}}
 </ol>
-<button type="button" data-action="addArrayRow" data-array="surges"><i class="fa-solid fa-plus"></i> Add Surge</button>
+<button type="button" data-action="addArrayRow" data-array="surges"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Item.Card.AddSurge"}}</button>
 
-<h3 class="section-head">Rider</h3>
-<input name="system.rider.title" type="text" value="{{system.rider.title}}" placeholder="Rider title">
+<h3 class="section-head">{{localize "ESSENCE.Item.Card.Rider"}}</h3>
+<input name="system.rider.title" type="text" value="{{system.rider.title}}" placeholder="{{localize 'ESSENCE.Item.Card.RiderTitlePlaceholder'}}">
 <div>{{essenceEditor system.rider.html target="system.rider.html" button=true}}</div>
 
-<h3 class="section-head">Flavor</h3>
+<h3 class="section-head">{{localize "ESSENCE.Common.Flavor"}}</h3>
 <div>{{essenceEditor system.flavor target="system.flavor" button=true}}</div>
 {{/if}}
 </div>

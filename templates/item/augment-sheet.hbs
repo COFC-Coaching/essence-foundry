@@ -2,24 +2,24 @@
 <header class="sheet-header">
   <img class="profile-img" src="{{item.img}}" data-edit="img" data-action="editImage">
   <h1><input name="name" type="text" value="{{item.name}}" {{#if viewMode}}disabled{{/if}}></h1>
-  <button type="button" class="card-view-toggle augment-view-toggle" data-action="toggleCardView" title="{{#if viewMode}}Edit this augment{{else}}View this augment{{/if}}">
-    <i class="fa-solid {{#if viewMode}}fa-pen{{else}}fa-eye{{/if}}"></i> {{#if viewMode}}Edit{{else}}View{{/if}}
+  <button type="button" class="card-view-toggle augment-view-toggle" data-action="toggleCardView" title="{{#if viewMode}}{{localize 'ESSENCE.Common.EditThisItem'}}{{else}}{{localize 'ESSENCE.Common.ViewThisItem'}}{{/if}}">
+    <i class="fa-solid {{#if viewMode}}fa-pen{{else}}fa-eye{{/if}}"></i> {{#if viewMode}}{{localize "ESSENCE.Common.Edit"}}{{else}}{{localize "ESSENCE.Common.View"}}{{/if}}
   </button>
 </header>
 
 {{#if viewMode}}
 <div class="card-view augment-view">
   <div class="card-view-infogrid">
-    <div><span class="card-view-statlabel">Kind</span><span>{{system.kind}}</span></div>
-    <div><span class="card-view-statlabel">Compatibility</span><span>{{system.compatibility}}</span></div>
+    <div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Kind"}}</span><span>{{system.kind}}</span></div>
+    <div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Compatibility"}}</span><span>{{system.compatibility}}</span></div>
     {{#if (eq system.kind "function")}}
-      <div><span class="card-view-statlabel">Uses</span><span>{{system.usesRemaining}}/{{system.uses}}</span></div>
+      <div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Uses"}}</span><span>{{system.usesRemaining}}/{{system.uses}}</span></div>
     {{/if}}
   </div>
 
   {{#if system.effect}}
     <div class="card-view-line">
-      <div class="card-view-label">Effect</div>
+      <div class="card-view-label">{{localize "ESSENCE.Common.Effect"}}</div>
       <div class="card-view-text">{{{system.effect}}}</div>
     </div>
   {{/if}}
@@ -29,30 +29,30 @@
 {{else}}
 
 <div class="equipment-fields grid-3">
-  <label>Kind
+  <label>{{localize "ESSENCE.Common.Kind"}}
     <select name="system.kind">
-      <option value="function" {{#if (eq system.kind "function")}}selected{{/if}}>Function</option>
-      <option value="support" {{#if (eq system.kind "support")}}selected{{/if}}>Support</option>
+      <option value="function" {{#if (eq system.kind "function")}}selected{{/if}}>{{localize "ESSENCE.Item.Augment.KindFunction"}}</option>
+      <option value="support" {{#if (eq system.kind "support")}}selected{{/if}}>{{localize "ESSENCE.Item.Augment.KindSupport"}}</option>
     </select>
   </label>
-  <label>Compatibility <input name="system.compatibility" type="text" value="{{system.compatibility}}" placeholder="e.g. Any, Weapon, Requires Tier 3+ Chassis"></label>
+  <label>{{localize "ESSENCE.Common.Compatibility"}} <input name="system.compatibility" type="text" value="{{system.compatibility}}" placeholder="{{localize 'ESSENCE.Item.Augment.CompatibilityPlaceholder'}}"></label>
   {{#if (eq system.kind "function")}}
-    <label>Uses <input name="system.uses" type="number" min="0" value="{{system.uses}}"></label>
-    <label>Uses Remaining <input name="system.usesRemaining" type="number" min="0" value="{{system.usesRemaining}}"></label>
+    <label>{{localize "ESSENCE.Common.Uses"}} <input name="system.uses" type="number" min="0" value="{{system.uses}}"></label>
+    <label>{{localize "ESSENCE.Item.Augment.UsesRemaining"}} <input name="system.usesRemaining" type="number" min="0" value="{{system.usesRemaining}}"></label>
   {{/if}}
 </div>
 
 <p class="muted">
   {{#if (eq system.kind "function")}}
-    A Function Augment grants an Equipment Action/Reaction with limited Uses that refresh at the end of the Adventure unless stated otherwise.
+    {{localize "ESSENCE.Item.Augment.FunctionHint"}}
   {{else}}
-    A Support Augment is an always-active modifier with no Uses. Installed normally it modifies its Chassis directly; if its Mount is Linked and the Link is On, it modifies the paired Function instead.
+    {{localize "ESSENCE.Item.Augment.SupportHint"}}
   {{/if}}
 </p>
 
-<h3 class="section-head">Effect</h3>
+<h3 class="section-head">{{localize "ESSENCE.Common.Effect"}}</h3>
 <div>{{essenceEditor system.effect target="system.effect" button=true}}</div>
-<h3 class="section-head">Flavor</h3>
+<h3 class="section-head">{{localize "ESSENCE.Common.Flavor"}}</h3>
 <div>{{essenceEditor system.flavor target="system.flavor" button=true}}</div>
 {{/if}}
 </div>

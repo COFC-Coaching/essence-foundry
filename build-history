@@ -1496,3 +1496,64 @@ keys shown directly as UI labels" and "field-name casing mismatches" patterns al
 name silently missing from markup, invisible until someone actually clicks the affected control.
 Worth an audit of other `data-action`-only elements across the templates for a similar missing
 `data-*` companion attribute the core handler expects.
+
+### 2026-09-09 — Broader Foundry-native audit + full localization pass + GM-tunable Role Budgets
+
+After the Sheet Portrait fix, the user asked for a systematic audit of the whole codebase for
+other places building bespoke instead of building with Foundry's own tools/permissions — the same
+question that had just found the portrait bug. Ran a dedicated review across permissions, dialogs,
+drag-and-drop, Active Effects, sockets, settings, localization, folders, and other `data-action`
+gaps (cross-referencing all 83 template `data-action` values against every sheet's registered
+`actions` map — `editImage` was confirmed as the only core-Foundry action relied on anywhere, so no
+second instance of that exact bug class existed). Findings: permissions, `DialogV2` usage,
+drag-and-drop, and Conditions' Active Effects were all already correctly Foundry-native — no gaps.
+Two real gaps turned up: **zero `game.settings.register` calls anywhere** (nothing GM-configurable
+via Foundry's own Settings menu), and **zero `game.i18n` usage anywhere** despite `lang/en.json`
+existing (only populated with the `TYPES.*` keys Foundry itself requires for the Create-dialog
+type picker).
+
+**Localization**: Every template (`templates/actor/*.hbs`, all 8 `templates/item/*.hbs`, all 4
+`templates/wizard/*.hbs`, `templates/chat/roll-card.hbs`) and every `ui.notifications.*` call
+across `module/` (49 call sites, `actor-sheet.mjs`/`npc-sheet.mjs` sharing nearly identical text —
+confirmed via `diff` before keying them) now goes through `{{localize}}` / `game.i18n.localize()`
+/`.format()` against `lang/en.json`, which grew from 12 keys (the pre-existing `TYPES.*` only) to
+~530. Key namespace convention established this session: `ESSENCE.Common.*` for terms repeated
+across many sheets (Fortitude, Tier, Effect, aria-label patterns like `{name}`-parameterized
+Edit/Delete/Remove/Add), `ESSENCE.Sheet.*` for text shared between the Character and NPC sheets
+specifically (most of both sheets' bodies are near-identical per the known duplication debt, so
+reusing one key across both was both correct and the right leverage against that duplication),
+`ESSENCE.Character.*`/`ESSENCE.Npc.*` for sheet-specific-only strings, `ESSENCE.Item.<Type>.*` for
+each Item sheet, `ESSENCE.Wizard.<Wizard>.*` for each of the four wizard apps, `ESSENCE.Chat.*` for
+the roll card, and `ESSENCE.Notify.*` for notification strings. Every key was validated by script
+(not eyeballed): extracted every `{{localize "..."}}`/`game.i18n` call site across the whole
+codebase, diffed against `lang/en.json`'s keys, confirmed zero missing and zero duplicates; ran
+`node --check` across every touched `.mjs` file and a `{{#`/`{{/` brace-balance count across every
+touched `.hbs` file (all matched their pre-edit counts). **Explicitly scoped out of this pass**:
+`ChatMessage.create()` content strings (the HTML posted to chat for Apply Damage, Recover Wound,
+Influence Injury, Contribute to Shared Goal, etc.) are still hardcoded template literals — same
+gap shape as the notifications just fixed, but a larger, separate surface (building localized HTML
+fragments rather than single-line messages) left for a future session.
+
+**GM-tunable Role Budgets**: `monster-budgets.mjs`'s `ROLE_BUDGETS` (used by the Monster Creator's
+Auto-Generate) already had a doc comment saying it's meant to be tuned by GMs since "there's
+nothing canonical to match" — but doing so meant editing source. Added a `roleBudgets` world
+setting (`scope: "world", config: false, type: Object`, since a raw nested-object setting has no
+sensible `config: true` single-control UI) plus a `registerMenu` entry (`restricted: true`, so only
+a GM can open it — Foundry's own permission check, not a custom one) pointing at a new
+`EssenceRoleBudgetsSettings` app (`module/apps/role-budgets-settings.mjs` +
+`templates/settings/role-budgets.hbs`) — a simple field-major table (10 fields × 4 Roles) with a
+Reset to Defaults button. `getRoleBudget(role)` now merges the stored setting over the hardcoded
+defaults per-Role (`{...defaults, ...stored}`), so a setting saved by an older version that's
+missing a field this version added still gets that field from the default rather than `undefined`.
+
+**Also fixed, flagged live by the user from a screenshot mid-session**: the Character sheet's Core
+tab had a redundant "Origin" box (Species/Heritage/Distinction names as clickable links, plus the
+Distinction's Key Skill/Primary Attribute) duplicating the header's own Species/Heritage/Distinction
+fields — and the same trait line already surfaces in Non-Combat's "General Features & Benefits"
+table. Removed the Core-tab box entirely. Known tradeoff, called out to the user rather than
+silently accepted: that box was the sheet's only click-to-open link into the actual Species/
+Heritage/Distinction Items (e.g. to pick a Species' Adaptations) — the header fields are plain text
+mirrors (`system.species`/`heritage`/`distinction`), not links. Not restored this session; those
+Items can still be opened by dragging them onto the sheet again or from the world's Items directory.
+
+v0.6.46, see CHANGELOG.md.

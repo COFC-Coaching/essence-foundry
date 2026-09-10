@@ -9,38 +9,37 @@
     {{/each}}
   </div>
   <div class="roll-summary">
-    <p><strong>Pool:</strong> {{pool}}d10{{#if defense}} vs Defense {{defense}}{{/if}}</p>
+    <p><strong>{{localize "ESSENCE.Chat.Pool"}}:</strong> {{pool}}d10{{#if defense}} {{localize "ESSENCE.Chat.VsDefense" defense=defense}}{{/if}}</p>
     {{#if targets.length}}
       <table class="target-results">
-        <thead><tr><th>Target</th><th>Defense</th><th>Result</th></tr></thead>
+        <thead><tr><th>{{localize "ESSENCE.Chat.Target"}}</th><th>{{localize "ESSENCE.Chat.Defense"}}</th><th>{{localize "ESSENCE.Chat.Result"}}</th></tr></thead>
         <tbody>
           {{#each targets as |t|}}
             <tr>
               <td>{{t.name}}</td>
               <td>{{#if t.defense}}{{t.defense}}{{else}}—{{/if}}</td>
-              <td>{{#if t.succeeded}}<span class="pass">Success</span>{{else}}<span class="fail">Failure</span>{{/if}}</td>
+              <td>{{#if t.succeeded}}<span class="pass">{{localize "ESSENCE.Chat.Success"}}</span>{{else}}<span class="fail">{{localize "ESSENCE.Chat.Failure"}}</span>{{/if}}</td>
             </tr>
           {{/each}}
         </tbody>
       </table>
-      <p class="muted">Success Die: {{successDie}}</p>
+      <p class="muted">{{localize "ESSENCE.Chat.SuccessDie"}}: {{successDie}}</p>
     {{else}}
-      <p><strong>Success Die:</strong> {{successDie}} —
-        {{#if succeeded}}<span class="pass">Success</span>{{else}}<span class="fail">Failure</span>{{/if}}
+      <p><strong>{{localize "ESSENCE.Chat.SuccessDie"}}:</strong> {{successDie}} —
+        {{#if succeeded}}<span class="pass">{{localize "ESSENCE.Chat.Success"}}</span>{{else}}<span class="fail">{{localize "ESSENCE.Chat.Failure"}}</span>{{/if}}
       </p>
     {{/if}}
     {{#if bonusSurges}}
-      <p class="muted mastery-note"><strong>Mastery:</strong> +{{bonusSurges}} free Surge</p>
+      <p class="muted mastery-note"><strong>{{localize "ESSENCE.Chat.Mastery"}}:</strong> {{localize "ESSENCE.Chat.FreeSurge" n=bonusSurges}}</p>
     {{/if}}
     {{#if openRoll}}
       <p class="muted open-roll-note">
-        <strong>Surges:</strong> {{surges}} candidate die{{#unless (eq surges 1)}}ce{{/unless}} at 6+
-        (excluding the Success Die) — Defense wasn't declared, so the GM decides how many actually
-        count.
+        <strong>{{localize "ESSENCE.Chat.Surges"}}:</strong>
+        {{#if (eq surges 1)}}{{localize "ESSENCE.Chat.OpenRollNoteSingular" surges=surges}}{{else}}{{localize "ESSENCE.Chat.OpenRollNotePlural" surges=surges}}{{/if}}
       </p>
     {{else if surgeOptions.length}}
       <div class="surge-options">
-        <p class="surges-remaining"><strong>Surges:</strong> <span class="remaining">{{surges}}</span> / {{surges}} available</p>
+        <p class="surges-remaining"><strong>{{localize "ESSENCE.Chat.Surges"}}:</strong> <span class="remaining">{{surges}}</span> / {{surges}} {{localize "ESSENCE.Chat.Available"}}</p>
         {{#each surgeOptions as |opt|}}
           <button type="button" class="surge-option" data-index="{{opt.i}}" data-cost="{{opt.n}}">
             <span class="cost">{{opt.n}}</span> <span class="surge-text">{{{opt.html}}}</span>
@@ -48,8 +47,8 @@
         {{/each}}
       </div>
     {{else}}
-      <p><strong>Surges:</strong> {{surges}}</p>
+      <p><strong>{{localize "ESSENCE.Chat.Surges"}}:</strong> {{surges}}</p>
     {{/if}}
-    <p class="muted"><strong>Open-difficulty successes (6+):</strong> {{poolSuccesses}}</p>
+    <p class="muted"><strong>{{localize "ESSENCE.Chat.OpenDifficultySuccesses"}}:</strong> {{poolSuccesses}}</p>
   </div>
 </div>

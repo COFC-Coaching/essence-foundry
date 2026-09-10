@@ -310,7 +310,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     if (ps.combatStarted && ps.actionDice !== null) {
       const available = ps.actionDice ?? 0;
       if (available <= 0) {
-        ui.notifications.warn("No Action Dice remaining.");
+        ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.NoActionDiceRemaining"));
         return;
       }
       const committed = await EssenceNpcSheet.#promptDiceCount({
@@ -353,11 +353,11 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     const cardMin = Math.max(1, parseInt(sys.min, 10) || 1);
 
     if (available <= 0) {
-      ui.notifications.warn(`No ${poolLabel} Dice remaining.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoPoolDiceRemaining", { label: poolLabel }));
       return;
     }
     if (cardMin > available) {
-      ui.notifications.warn(`${item.name} requires at least ${cardMin} dice, but only ${available} ${poolLabel} Dice remain.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CardRequiresMoreDice", { name: item.name, min: cardMin, available, label: poolLabel }));
       return;
     }
 
@@ -383,7 +383,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
         const current = this.actor.system.resources[resKey].value;
         update[`system.playState.current${capitalize(resKey)}`] = Math.max(0, current - cost);
         if (cost > current) {
-          ui.notifications.warn(`${item.name} costs ${cost} ${capitalize(resKey)}, but ${this.actor.name} only has ${current} remaining.`);
+          ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CardCostExceedsResource", { name: item.name, cost, resource: capitalize(resKey), actorName: this.actor.name, current }));
         }
       }
     }
@@ -405,7 +405,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     const sameRound = ps.lastReactionRound === game.combat.round;
     const sameActiveCombatant = ps.lastReactionCombatantId && ps.lastReactionCombatantId === game.combat.combatant?.id;
     if (sameRound && sameActiveCombatant) {
-      ui.notifications.warn(`${actor.name} already used a Reaction during this Turn. Only one Reaction per Action is normally allowed — if this is responding to a different Action, this is fine to ignore.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.SecondReactionWarning", { name: actor.name }));
     }
   }
 
@@ -423,7 +423,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   static async #onRollInitiative() {
     const combat = game.combat;
     if (!combat) {
-      ui.notifications.warn("Start a combat encounter from the Combat Tracker first.");
+      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.StartCombatFirst"));
       return;
     }
 
@@ -461,7 +461,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       { key: "reactionDice", label: "Reaction", available: ps.reactionDice ?? 0 }
     ].filter((p) => p.available > 0);
     if (!pools.length) {
-      ui.notifications.warn("No Action or Reaction Dice available to burn.");
+      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.NoDiceToBurn"));
       return;
     }
     const result = await new Promise((resolve) => {
@@ -619,7 +619,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     });
 
     if (becameCritical) {
-      ui.notifications.warn(`${this.actor.name} is Critically Wounded! The Death Track has begun.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CriticallyWounded", { name: this.actor.name }));
     }
   }
 
@@ -630,7 +630,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       if (coreWounds[i].filled) { slot = i; break; }
     }
     if (slot === -1) {
-      ui.notifications.warn(`${this.actor.name} has no Core Wounds to recover.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoCoreWoundsToRecover", { name: this.actor.name }));
       return;
     }
     const recovered = coreWounds[slot];
@@ -732,7 +732,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     });
 
     if (becameCritical) {
-      ui.notifications.warn(`${this.actor.name} has taken a Critical Influence Injury! This must be actively addressed in the fiction before recovery begins.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CriticalInfluenceInjury", { name: this.actor.name }));
     }
   }
 
@@ -743,7 +743,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       if (coreInfluence[i].filled) { slot = i; break; }
     }
     if (slot === -1) {
-      ui.notifications.warn(`${this.actor.name} has no Core Influence Injuries to recover.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoCoreInfluenceToRecover", { name: this.actor.name }));
       return;
     }
 
@@ -762,7 +762,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     const max = sys.temporaryInfluence ?? 5;
     const current = sys.playState.currentTemporaryInfluence ?? 0;
     if (current >= max) {
-      ui.notifications.warn(`${this.actor.name} has no open Temporary Influence slots left to spend.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoTempInfluenceSlots", { name: this.actor.name }));
       return;
     }
     await this.actor.update({ "system.playState.currentTemporaryInfluence": current + 1 });
@@ -844,7 +844,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     });
 
     if (becameCritical) {
-      ui.notifications.warn(`${this.actor.name} has taken a Critical Influence Injury contributing to "${goalLabel}"! This must be actively addressed in the fiction before recovery begins.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CriticalInfluenceInjuryGoal", { name: this.actor.name, goal: goalLabel }));
     }
   }
 
@@ -921,7 +921,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     });
 
     if (becameCritical) {
-      ui.notifications.warn(`${this.actor.name} has taken a Critical Influence Injury from Influence Breach! This must be actively addressed in the fiction before recovery begins.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CriticalInfluenceInjuryBreach", { name: this.actor.name }));
     }
   }
 
@@ -974,7 +974,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     const owned = this.actor.items.filter((i) => i.type === "equipment" && i.system.reachExceptionSource !== sourceName);
     const eligible = owned.filter((i) => equipmentMatchesGrant(i.system, grant) && reachQualifiesForGrant(i.system, grant, reach));
     if (!eligible.length) {
-      ui.notifications.warn(`No item in this NPC's Inventory currently qualifies for ${sourceName}.`);
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoQualifyingItemNpc", { source: sourceName }));
       return;
     }
 

@@ -2,6 +2,39 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.46
+
+**Full localization pass — every hardcoded UI string routed through `lang/en.json`.** Following a
+Foundry-native-first audit that flagged localization as a large, systemic gap (zero `game.i18n`
+usage anywhere, hardcoded English across all 15 templates and 49 `ui.notifications` calls), all
+user-facing text — button labels, headers, tooltips, placeholders, aria-labels, and notification
+messages — now goes through `{{localize}}` (templates) or `game.i18n.localize()`/`format()`
+(`.mjs` files) against ~530 keys in `lang/en.json`, instead of literal strings baked into markup
+and code. This doesn't change anything a player sees today — it's the difference between the text
+being hardcoded versus being swappable via a `lang/<code>.json` file, which is what actually makes
+a future translation (or a community one) possible without touching source. Every key was
+cross-validated (script-checked, not just eyeballed) against every `{{localize}}`/`game.i18n` call
+site — zero missing, zero unused duplicates.
+
+**Added a GM-configurable Settings menu for the homebrew Monster Role Budget table**
+(`module/apps/role-budgets-settings.mjs`, registered via `game.settings.registerMenu`, `restricted:
+true` so only a GM can open it). `monster-budgets.mjs`'s own doc comment already said this table —
+used by the Monster Creator to auto-fill Minion/Standard/Elite/Nemesis stat blocks — has "nothing
+canonical to match, so tune this table freely if actual play calls for it"; previously that meant
+editing source. `getRoleBudget()` now reads a `roleBudgets` world setting first, merging it over
+the hardcoded defaults so a stale/partial setting from an older version can't leave a Role missing
+a field.
+
+**Removed the redundant "Origin" box from the Character sheet's Core tab** — it duplicated the
+Species/Heritage/Distinction fields already shown in the sheet header, and the Distinction's Key
+Skill/Primary Attribute trait line it also showed already surfaces in Non-Combat's "General
+Features & Benefits" table. Flagged by the user directly from a live screenshot.
+
+**Known follow-up, not done this pass**: `ChatMessage.create()` content strings (the HTML posted
+to chat for Apply Damage, Recover Wound, Influence Injury, etc.) are still hardcoded template
+literals — a similarly-shaped gap to the notification strings just fixed, but scoped out of this
+pass since it's a materially larger surface (chat-card HTML generation, not single-line messages).
+
 ## 0.6.45
 
 **Fixed the Sheet Portrait not being clickable/editable anywhere in the system** — every sheet's

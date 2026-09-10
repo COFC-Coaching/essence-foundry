@@ -203,17 +203,17 @@ export default class EssenceContentWizard extends HandlebarsApplicationMixin(App
 
   static async #onCreateDraft(event, target) {
     if (!canCreateContent()) {
-      ui.notifications.error("You don't have permission to create content (Foundry's \"Create Items\" permission).");
+      ui.notifications.error(game.i18n.localize("ESSENCE.Notify.NoCreatePermission"));
       return;
     }
     if (!this.#type) {
-      ui.notifications.warn("Choose a content type first.");
+      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ChooseContentTypeFirst"));
       return;
     }
     const nameInput = this.element.querySelector('[data-field="name"]');
     const name = nameInput?.value?.trim();
     if (!name) {
-      ui.notifications.warn("Give it a name first.");
+      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.GiveItNameFirst"));
       return;
     }
     const cfg = TYPE_CONFIG[this.#type];

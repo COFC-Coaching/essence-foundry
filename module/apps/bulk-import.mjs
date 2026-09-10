@@ -427,7 +427,7 @@ export default class EssenceBulkImport extends HandlebarsApplicationMixin(Applic
    */
   static async #onRunImport() {
     if (!canCreateContent()) {
-      ui.notifications.error("You don't have permission to create content (Foundry's \"Create Items\" permission).");
+      ui.notifications.error(game.i18n.localize("ESSENCE.Notify.NoCreatePermission"));
       return;
     }
     if (!this.#parsed?.records?.length) return;

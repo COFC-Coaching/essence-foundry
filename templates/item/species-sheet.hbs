@@ -4,55 +4,55 @@
   <h1><input name="name" type="text" value="{{item.name}}"></h1>
 </header>
 
-<h3 class="section-head">Description</h3>
+<h3 class="section-head">{{localize "ESSENCE.Common.Description"}}</h3>
 <div>{{essenceEditor system.description target="system.description" button=true}}</div>
 
-<h3 class="section-head">Nature</h3>
-<input name="system.nature.name" type="text" value="{{system.nature.name}}" placeholder="Nature name">
+<h3 class="section-head">{{localize "ESSENCE.Item.Species.Nature"}}</h3>
+<input name="system.nature.name" type="text" value="{{system.nature.name}}" placeholder="{{localize 'ESSENCE.Item.Species.NatureNamePlaceholder'}}">
 <div>{{essenceEditor system.nature.text target="system.nature.text" button=true}}</div>
 <fieldset class="subchoice-editor">
-  <legend>Nested sub-choice (optional — e.g. "choose two Senses" buried in this trait's own text)</legend>
-  <label>Label <input name="system.nature.subChoice.label" type="text" value="{{system.nature.subChoice.label}}" placeholder="e.g. Senses, Lineage"></label>
-  <label>Type
+  <legend>{{localize "ESSENCE.Item.Species.SubChoiceLegend"}}</legend>
+  <label>{{localize "ESSENCE.Common.Label"}} <input name="system.nature.subChoice.label" type="text" value="{{system.nature.subChoice.label}}" placeholder="{{localize 'ESSENCE.Item.Species.NatureSubChoiceLabelPlaceholder'}}"></label>
+  <label>{{localize "ESSENCE.Common.Type"}}
     <select name="system.nature.subChoice.type">
-      <option value="none" {{#if (eq system.nature.subChoice.type "none")}}selected{{/if}}>None</option>
-      <option value="fixed" {{#if (eq system.nature.subChoice.type "fixed")}}selected{{/if}}>Fixed list</option>
-      <option value="free" {{#if (eq system.nature.subChoice.type "free")}}selected{{/if}}>Free text</option>
+      <option value="none" {{#if (eq system.nature.subChoice.type "none")}}selected{{/if}}>{{localize "ESSENCE.Common.None"}}</option>
+      <option value="fixed" {{#if (eq system.nature.subChoice.type "fixed")}}selected{{/if}}>{{localize "ESSENCE.Common.FixedList"}}</option>
+      <option value="free" {{#if (eq system.nature.subChoice.type "free")}}selected{{/if}}>{{localize "ESSENCE.Common.FreeText"}}</option>
     </select>
   </label>
-  <label>Count <input name="system.nature.subChoice.count" type="number" value="{{system.nature.subChoice.count}}" style="width:3em" min="1"></label>
-  <label>Fixed options (comma-separated)
-    <input class="subchoice-options-field" data-path="nature" type="text" value="{{natureOptionsText}}" placeholder="e.g. Low-Light Vision, Keen Hearing, Keen Scent">
+  <label>{{localize "ESSENCE.Common.Count"}} <input name="system.nature.subChoice.count" type="number" value="{{system.nature.subChoice.count}}" style="width:3em" min="1"></label>
+  <label>{{localize "ESSENCE.Item.Species.FixedOptionsLabel"}}
+    <input class="subchoice-options-field" data-path="nature" type="text" value="{{natureOptionsText}}" placeholder="{{localize 'ESSENCE.Item.Species.NatureOptionsPlaceholder'}}">
   </label>
 </fieldset>
 
-<h3 class="section-head">{{system.adaptationLabel}}s <span class="muted">(choose {{system.adaptationCount}})</span></h3>
-<label>Adaptation label <input name="system.adaptationLabel" type="text" value="{{system.adaptationLabel}}"></label>
-<label>Choose count <input name="system.adaptationCount" type="number" value="{{system.adaptationCount}}" style="width:3em"></label>
+<h3 class="section-head">{{system.adaptationLabel}}s <span class="muted">{{localize "ESSENCE.Item.Species.ChooseCountSuffix" n=system.adaptationCount}}</span></h3>
+<label>{{localize "ESSENCE.Item.Species.AdaptationLabel"}} <input name="system.adaptationLabel" type="text" value="{{system.adaptationLabel}}"></label>
+<label>{{localize "ESSENCE.Item.Species.ChooseCount"}} <input name="system.adaptationCount" type="number" value="{{system.adaptationCount}}" style="width:3em"></label>
 <ol class="adaptations">
   {{#each system.adaptations as |a i|}}
     <li>
-      <label class="chosen-toggle"><input type="checkbox" name="system.adaptations.{{i}}.chosen" {{#if a.chosen}}checked{{/if}}> Chosen</label>
-      <input name="system.adaptations.{{i}}.name" type="text" value="{{a.name}}" placeholder="Adaptation name">
+      <label class="chosen-toggle"><input type="checkbox" name="system.adaptations.{{i}}.chosen" {{#if a.chosen}}checked{{/if}}> {{localize "ESSENCE.Common.Chosen"}}</label>
+      <input name="system.adaptations.{{i}}.name" type="text" value="{{a.name}}" placeholder="{{localize 'ESSENCE.Item.Species.AdaptationNamePlaceholder'}}">
       <div>{{essenceEditor a.text target=(concat "system.adaptations." i ".text") button=true}}</div>
       <fieldset class="subchoice-editor">
-        <legend>Nested sub-choice (optional)</legend>
-        <label>Label <input name="system.adaptations.{{i}}.subChoice.label" type="text" value="{{a.subChoice.label}}" placeholder="e.g. Senses, Weapon"></label>
-        <label>Type
+        <legend>{{localize "ESSENCE.Item.Species.SubChoiceLegend"}}</legend>
+        <label>{{localize "ESSENCE.Common.Label"}} <input name="system.adaptations.{{i}}.subChoice.label" type="text" value="{{a.subChoice.label}}" placeholder="{{localize 'ESSENCE.Item.Species.AdaptationSubChoiceLabelPlaceholder'}}"></label>
+        <label>{{localize "ESSENCE.Common.Type"}}
           <select name="system.adaptations.{{i}}.subChoice.type">
-            <option value="none" {{#if (eq a.subChoice.type "none")}}selected{{/if}}>None</option>
-            <option value="fixed" {{#if (eq a.subChoice.type "fixed")}}selected{{/if}}>Fixed list</option>
-            <option value="free" {{#if (eq a.subChoice.type "free")}}selected{{/if}}>Free text</option>
+            <option value="none" {{#if (eq a.subChoice.type "none")}}selected{{/if}}>{{localize "ESSENCE.Common.None"}}</option>
+            <option value="fixed" {{#if (eq a.subChoice.type "fixed")}}selected{{/if}}>{{localize "ESSENCE.Common.FixedList"}}</option>
+            <option value="free" {{#if (eq a.subChoice.type "free")}}selected{{/if}}>{{localize "ESSENCE.Common.FreeText"}}</option>
           </select>
         </label>
-        <label>Count <input name="system.adaptations.{{i}}.subChoice.count" type="number" value="{{a.subChoice.count}}" style="width:3em" min="1"></label>
-        <label>Fixed options (comma-separated)
-          <input class="subchoice-options-field" data-path="adaptations.{{i}}" type="text" value="{{lookup ../adaptationOptionsText i}}" placeholder="e.g. Claws, Horns, Fangs">
+        <label>{{localize "ESSENCE.Common.Count"}} <input name="system.adaptations.{{i}}.subChoice.count" type="number" value="{{a.subChoice.count}}" style="width:3em" min="1"></label>
+        <label>{{localize "ESSENCE.Item.Species.FixedOptionsLabel"}}
+          <input class="subchoice-options-field" data-path="adaptations.{{i}}" type="text" value="{{lookup ../adaptationOptionsText i}}" placeholder="{{localize 'ESSENCE.Item.Species.AdaptationOptionsPlaceholder'}}">
         </label>
       </fieldset>
-      <button type="button" data-action="deleteArrayRow" data-array="adaptations" data-index="{{i}}" aria-label="Delete adaptation {{addOne i}}"><i class="fa-solid fa-trash"></i></button>
+      <button type="button" data-action="deleteArrayRow" data-array="adaptations" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Item.Species.DeleteAdaptationAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button>
     </li>
   {{/each}}
 </ol>
-<button type="button" data-action="addArrayRow" data-array="adaptations"><i class="fa-solid fa-plus"></i> Add Adaptation</button>
+<button type="button" data-action="addArrayRow" data-array="adaptations"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Item.Species.AddAdaptation"}}</button>
 </div>

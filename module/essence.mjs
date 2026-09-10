@@ -16,6 +16,8 @@ import EssenceContentWizard, { canCreateContent } from "./apps/content-wizard.mj
 import EssenceBulkImport from "./apps/bulk-import.mjs";
 import { capitalize, fitTitleSize, domainResource } from "./utils.mjs";
 import { syncEquipmentEffect } from "./data/equipment-effects.mjs";
+import { ROLE_BUDGETS } from "./data/monster-budgets.mjs";
+import EssenceRoleBudgetsSettings from "./apps/role-budgets-settings.mjs";
 
 /** Foundry combat's own enum values, given a display label a player should actually see. */
 const TURN_LABELS = { notStarted: "Not Started", first: "First Turn", active: "Active", ended: "Ended" };
@@ -81,6 +83,23 @@ Hooks.once("init", () => {
   Handlebars.registerHelper("turnLabel", (turn) => TURN_LABELS[turn] ?? capitalize(turn ?? ""));
   Handlebars.registerHelper("fitTitleSize", (text, options) => fitTitleSize(text, options.hash));
   Handlebars.registerHelper("domainResource", domainResource);
+
+  // Homebrew Role (Minion/Standard/Elite/Nemesis) budget table the Monster Creator auto-fills
+  // stat blocks from — see monster-budgets.mjs's own doc comment on why this is meant to be
+  // GM-tunable. `config: false` since this is an Object setting with no sensible single-control
+  // UI; `restricted: true` on the menu means only a GM (Foundry's own permission check, not a
+  // custom one) can even open the settings app that edits it.
+  game.settings.register("essence-system", "roleBudgets", {
+    scope: "world", config: false, type: Object, default: ROLE_BUDGETS
+  });
+  game.settings.registerMenu("essence-system", "roleBudgetsMenu", {
+    name: "ESSENCE.Settings.RoleBudgets.Title",
+    label: "ESSENCE.Settings.RoleBudgets.MenuLabel",
+    hint: "ESSENCE.Settings.RoleBudgets.Hint",
+    icon: "fa-solid fa-scale-balanced",
+    type: EssenceRoleBudgetsSettings,
+    restricted: true
+  });
 });
 
 /**
