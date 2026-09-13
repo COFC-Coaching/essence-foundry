@@ -1,0 +1,52 @@
+{
+  "_id": "17ba14417fcc8e4a",
+  "name": "The Knot in the Prayer",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Hex",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Severance, Liturgy",
+    "expertisesMode": "any",
+    "tags": "damage, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Necrotic Damage and suppress one ordinary magical Movement bonus, up to 1 unit, until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Also suppress 1 point of ordinary concealment benefit on it until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, end the chosen Movement bonus rather than suppress it."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Hex",
+      "html": "Rite, 2 Echoes: on a hit, bind the target. Trigger: it receives an ordinary beneficial magical effect. Echo: impose -1 on its next Success Die before your next turn.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!17ba14417fcc8e4a"
+}

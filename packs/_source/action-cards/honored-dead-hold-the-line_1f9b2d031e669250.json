@@ -1,0 +1,52 @@
+{
+  "_id": "1f9b2d031e669250",
+  "name": "Honored Dead, Hold the Line",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Ancestor",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Chorus, Anchoring",
+    "expertisesMode": "any",
+    "tags": "protection, support, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and up to two willing allies within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Each target reduces its next incoming Damage by 1 and resists its next 2 units of forced movement until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Each ally may move 1 unit toward you."
+      },
+      {
+        "n": "2",
+        "html": "One protected target suppresses a non-Critical Wound Condition's numerical penalties until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Ancestor",
+      "html": "You may burn 3 Action Dice and spend 3 Mana to enter Ancestor Full Manifestation (FM-2A). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-2A"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1f9b2d031e669250"
+}

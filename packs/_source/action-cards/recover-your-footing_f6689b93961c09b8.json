@@ -1,0 +1,52 @@
+{
+  "_id": "f6689b93961c09b8",
+  "name": "Recover Your Footing",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Order",
+    "attr": "Anima",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Discipline, Inspiration",
+    "expertisesMode": "any",
+    "tags": "support, suppression, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target may stand from Prone without burning a die, then suppress one ordinary Slowed Condition until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target may move 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "It becomes Rallied until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Order",
+      "html": "Spend this Authority when the target fails a Combat Card due to an ordinary Success Die penalty: suppress that penalty for its next card before your next turn; the failed card remains failed.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f6689b93961c09b8"
+}

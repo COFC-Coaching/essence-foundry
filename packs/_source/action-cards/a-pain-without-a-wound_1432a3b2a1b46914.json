@@ -1,0 +1,52 @@
+{
+  "_id": "1432a3b2a1b46914",
+  "name": "A Pain Without a Wound",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Assault",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Composure",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Telepathy, Biokinesis",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One living enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 Psychic Damage. The target suffers -1 Composure against your next Psionics Action until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, the target is Slowed 1 until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, suppress 1 point of its next ordinary numerical attack bonus until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Assault",
+      "html": "If you accepted Strain and hit, gain +1 Composure against the target until the start of your next turn; no existing injury on either creature changes.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1432a3b2a1b46914"
+}

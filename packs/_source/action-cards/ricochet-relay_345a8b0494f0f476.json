@@ -1,0 +1,52 @@
+{
+  "_id": "345a8b0494f0f476",
+  "name": "Ricochet Relay",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Trajectory, Flair",
+    "expertisesMode": "any",
+    "tags": "damage, area, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two detected enemies within ranged Weapon Range along one bent, unobstructed path."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each target takes 1 weapon Damage. Measure the full path through the first target's space to the second."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 point of cover bonus against both targets."
+      },
+      {
+        "n": "2",
+        "html": "Push one hit target 1 unit in the direction of the last path segment."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Trickshot",
+      "html": "After resolving, you may transfer existing Lock between the targets. The new target is Locked through ordinary concealment until your next turn.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!345a8b0494f0f476"
+}

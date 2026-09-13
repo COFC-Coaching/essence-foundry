@@ -1,0 +1,52 @@
+{
+  "_id": "abe3216e7cc8b262",
+  "name": "Raking Talons",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Gestalt",
+    "subtype": "Predator",
+    "attr": "Grace",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Slashing Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 Slashing Damage."
+      },
+      {
+        "n": "1",
+        "html": "Move 1 unit around the target after the attack."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Predator",
+      "html": "Assume Hooked Talons (upkeep 0): you can climb rough surfaces at normal Movement, but must keep one hand free while climbing.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!abe3216e7cc8b262"
+}

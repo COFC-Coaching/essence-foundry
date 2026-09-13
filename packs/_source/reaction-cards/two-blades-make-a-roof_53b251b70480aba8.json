@@ -1,0 +1,52 @@
+{
+  "_id": "53b251b70480aba8",
+  "name": "Two Blades Make a Roof",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Guard",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Dueling, Phalanx",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or an adjacent willing ally."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An attack targets the creature, before its roll. Response (unopposed): Grant +1 Fortitude against that attack."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After the attack, the protected creature may move 1 unit toward you."
+      },
+      {
+        "n": "2",
+        "html": "If the attack hits, reduce its Damage to that creature by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "f86106a69c957230",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!53b251b70480aba8"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "cc3080861a493810",
+  "name": "The Gap That Wasn't There",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Ambush",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Infiltration, Deception",
+    "expertisesMode": "any",
+    "tags": "damage, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range after moving up to 1 unit."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 1 unit through existing concealment. On success, deal 2 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 point of cover bonus."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Damage if you were Hidden from the target when this Action was declared; attacking reveals you."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Ambush",
+      "html": "When that target misses an Action before your next turn, you may move 2 units toward concealment without triggering its movement Reactions.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!cc3080861a493810"
+}

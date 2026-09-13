@@ -1,0 +1,52 @@
+{
+  "_id": "1518e363cde9bc0d",
+  "name": "The Emperor's Closed Gate",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Ward",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Consecration, Inscription",
+    "expertisesMode": "any",
+    "tags": "terrain, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One empty space within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Mark the space until the start of your next turn. A willing creature standing there gains +1 Fortitude and resists its next 1 unit of forced movement while it remains there."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "An adjacent empty space gains the same mark."
+      },
+      {
+        "n": "2",
+        "html": "One willing creature on a mark reduces its next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Ward",
+      "html": "Rite, 2 Echoes: anchor one marked space. Trigger: a willing occupant would be pushed or pulled. Echo: reduce that movement by 1 unit.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1518e363cde9bc0d"
+}

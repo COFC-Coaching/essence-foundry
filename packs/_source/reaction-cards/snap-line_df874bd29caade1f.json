@@ -1,0 +1,52 @@
+{
+  "_id": "df874bd29caade1f",
+  "name": "Snap Line",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Ballistics",
+    "subtype": "Targeting",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, setup, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One visible enemy within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy finishes voluntary movement out of cover. Response: On success, deal 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore ordinary concealment for this shot."
+      },
+      {
+        "n": "2",
+        "html": "After resolving, establish Lock on the target."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "654c5d2c8a2dce33",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!df874bd29caade1f"
+}

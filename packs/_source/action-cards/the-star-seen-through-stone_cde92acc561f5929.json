@@ -1,0 +1,52 @@
+{
+  "_id": "cde92acc561f5929",
+  "name": "The Star Seen Through Stone",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Divination",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "1",
+    "expertises": "Consecration, Inscription",
+    "expertisesMode": "any",
+    "tags": "information, terrain, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One visible point within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Until your next turn, detect moving creatures within 2 units of the point through ordinary concealment, but not through solid walls. Reveal their spaces to willing allies within 3 units of you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the detection radius by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "One detected enemy loses its ordinary concealment benefit against the next attack targeting it until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Divination",
+      "html": "Rite, 2 Echoes: anchor the point. Trigger: a detected enemy begins an Action within 2 units. Echo: yourself or a willing ally within 3 units gains +1 Defense against that Action.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!cde92acc561f5929"
+}

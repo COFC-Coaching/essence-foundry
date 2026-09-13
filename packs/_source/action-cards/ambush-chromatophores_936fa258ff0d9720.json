@@ -1,0 +1,52 @@
+{
+  "_id": "936fa258ff0d9720",
+  "name": "Ambush Chromatophores",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Predator",
+    "attr": "Grace",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Awareness, Locomotion",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, information",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy adjacent after moving up to 2 units from concealment."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 2 units. On success, deal 1 Slashing Damage, or 2 if you began in concealment and the target had not detected you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore difficult terrain during movement."
+      },
+      {
+        "n": "2",
+        "html": "After a hit, move 2 units back toward concealment without triggering its movement Reactions."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Predator",
+      "html": "Assume Chromatophores (upkeep 0): while stationary in existing concealment, you may remain Hidden after observing enemies, but attacking still reveals you.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!936fa258ff0d9720"
+}

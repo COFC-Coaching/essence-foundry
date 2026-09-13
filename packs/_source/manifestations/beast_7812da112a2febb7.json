@@ -1,0 +1,217 @@
+{
+  "_id": "7812da112a2febb7",
+  "name": "Beast",
+  "type": "npc",
+  "img": "icons/svg/blood.svg",
+  "system": {
+    "might": 0,
+    "grace": 0,
+    "vigor": 0,
+    "intellect": 0,
+    "acuity": 0,
+    "resolve": 0,
+    "presence": 0,
+    "adaptability": 0,
+    "anima": 0,
+    "tier": 1,
+    "level": 1,
+    "role": "",
+    "gmNotes": "<p><strong>Purpose:</strong> Close pursuit and the threat of retaliation; weaker mental resistance is intentional.</p><p><strong>Trait &mdash; Unbroken Trail.</strong> Detect a moving creature within 2 units through ordinary concealment if it took Damage since your last turn. This reveals its occupied space, not its thoughts, identity or destination, and never passes through solid barriers.</p><p><em>Full Manifestation profile — Rank 1, Living. See CALLING_PROFILES.md / the Full Manifestation Guide journal for the shared entry/dismissal/defeat procedure.</em></p>",
+    "resilience": 1,
+    "movement": 4,
+    "fortitudeBonus": 5,
+    "composureBonus": 3,
+    "harmonyBonus": 4,
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ]
+  },
+  "items": [
+    {
+      "_id": "8a4618e08b06d8f7",
+      "_key": "!actors.items!7812da112a2febb7.8a4618e08b06d8f7",
+      "name": "Driving Fangs",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 1,
+        "style": "Calling",
+        "subtype": "Beast",
+        "attr": "Presence",
+        "skill": "Calling",
+        "defense": "Fortitude",
+        "min": "2",
+        "cost": "1",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "One enemy within 1 unit."
+          },
+          {
+            "label": "Effect",
+            "html": "On success, deal 2 Piercing Damage."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "After a hit, push the target 1 unit and optionally follow into the vacated space."
+          },
+          {
+            "n": "2",
+            "html": "A hit target is Slowed 1 until the start of your next turn."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "6fbf2fe58f89ee5d",
+      "_key": "!actors.items!7812da112a2febb7.6fbf2fe58f89ee5d",
+      "name": "Closing Pounce",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 1,
+        "style": "Calling",
+        "subtype": "Beast",
+        "attr": "Adaptability",
+        "skill": "Calling",
+        "defense": "Fortitude",
+        "min": "2",
+        "cost": "0",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "One enemy within 1 unit after movement."
+          },
+          {
+            "label": "Effect",
+            "html": "Move up to 2 units along a clear path, then attack the target. On success, deal 1 Slashing Damage. The movement does not depend on hitting."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "Increase movement by 1 unit."
+          },
+          {
+            "n": "2",
+            "html": "Deal +1 Slashing Damage if you moved at least 2 units toward the target during this Action."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "f2d6546f9dc41028",
+      "_key": "!actors.items!7812da112a2febb7.f2d6546f9dc41028",
+      "name": "Cornered Answer",
+      "type": "reaction-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 1,
+        "style": "Calling",
+        "subtype": "Beast",
+        "attr": "Anima",
+        "skill": "Calling",
+        "defense": "Fortitude",
+        "min": "2",
+        "cost": "1",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "One adjacent enemy."
+          },
+          {
+            "label": "Trigger",
+            "html": "The enemy damages you with a melee Action."
+          },
+          {
+            "label": "Effect",
+            "html": "After that Damage resolves, attack; on success, deal 1 Slashing Damage. This does not prevent the triggering harm."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "After a hit, move 1 unit while remaining adjacent to the enemy."
+          },
+          {
+            "n": "2",
+            "html": "A hit enemy suffers -1 on its next Success Die before the start of your next turn."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!7812da112a2febb7"
+}

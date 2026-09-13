@@ -1,0 +1,52 @@
+{
+  "_id": "9afe2a9c838edc0e",
+  "name": "Corridor Denial",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Trajectory, Penetration",
+    "expertisesMode": "any",
+    "tags": "terrain, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "A line of 5 spaces within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Until your next turn, the line is difficult terrain for enemies and provides no cover bonus to creatures inside it."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The line may turn once at a visible corner."
+      },
+      {
+        "n": "2",
+        "html": "One enemy currently in the line takes 1 weapon Damage on a successful attack against its Fortitude."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Suppression",
+      "html": "If your Locked target voluntarily moves into or along the line before your next turn, end Lock to halt that movement after its first unit. It may burn 1 die to continue.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!9afe2a9c838edc0e"
+}

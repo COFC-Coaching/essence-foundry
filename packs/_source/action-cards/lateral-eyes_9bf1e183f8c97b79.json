@@ -1,0 +1,52 @@
+{
+  "_id": "9bf1e183f8c97b79",
+  "name": "Lateral Eyes",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Gestalt",
+    "subtype": "Chimera",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "information, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Detect the location of one concealed but not fully hidden enemy within 3 units; gain +1 Fortitude against that enemy until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase detection range by 2 units."
+      },
+      {
+        "n": "2",
+        "html": "An adjacent willing ally gains the same defensive bonus."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Chimera",
+      "html": "Assume Lateral Eyes (upkeep 0): ordinary visual concealment within 1 unit does not impose penalties on your attacks; solid barriers and complete invisibility still matter.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!9bf1e183f8c97b79"
+}

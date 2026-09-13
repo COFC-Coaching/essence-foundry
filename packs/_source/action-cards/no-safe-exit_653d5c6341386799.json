@@ -1,0 +1,52 @@
+{
+  "_id": "653d5c6341386799",
+  "name": "No Safe Exit",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Execution",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Cadence, Payload",
+    "expertisesMode": "any",
+    "tags": "damage, control, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage and make the target Slowed 2 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 weapon Damage."
+      },
+      {
+        "n": "1",
+        "html": "The target also suffers -1 on its next ranged Success Die until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Execution",
+      "html": "If the target is Locked, you may end Lock when it next leaves cover before your next turn: it takes 1 weapon Damage after that movement. This rider resolves once.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!653d5c6341386799"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "5730f7bcbd89c22c",
+  "name": "The Repeating Error",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Fracture",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Imprint, Mesmerism",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Psychic Damage; impose -1 on its next Success Die if it repeats the Combat Card it used most recently until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The penalty also applies if it selects the same target again."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, it is Distracted until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Fracture",
+      "html": "If you accepted Strain and the target repeats that card before your next turn, it is Slowed 1 until your next turn after resolving the card.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5730f7bcbd89c22c"
+}

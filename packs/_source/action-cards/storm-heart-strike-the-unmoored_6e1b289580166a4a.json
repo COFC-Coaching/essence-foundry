@@ -1,0 +1,52 @@
+{
+  "_id": "6e1b289580166a4a",
+  "name": "Storm Heart, Strike the Unmoored",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Elemental",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Vessel, Banishment",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 Lightning Damage and suppress 1 point of its ordinary magical Movement bonuses until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, push it 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "After a hit, end the selected Movement bonus if it is ordinary and magical."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Elemental",
+      "html": "You may burn 3 Action Dice and spend 3 Mana to enter Elemental Full Manifestation (FM-2E). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-2E"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!6e1b289580166a4a"
+}

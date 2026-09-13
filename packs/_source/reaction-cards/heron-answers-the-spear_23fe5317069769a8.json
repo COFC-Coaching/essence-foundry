@@ -1,0 +1,52 @@
+{
+  "_id": "23fe5317069769a8",
+  "name": "Heron Answers the Spear",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Opener",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Dueling, Skirmishing",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy misses you with a melee Action. Response: On success, deal 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit around the target after the attack."
+      },
+      {
+        "n": "2",
+        "html": "If hit, gain 1 additional Combo."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "f86106a69c957230",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!23fe5317069769a8"
+}

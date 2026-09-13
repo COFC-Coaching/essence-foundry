@@ -1,0 +1,52 @@
+{
+  "_id": "23ae1210dcf52d83",
+  "name": "Reed Bends Before Iron",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Prowess",
+    "subtype": "Guard",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Reduce the next incoming Damage you take by 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "You also resist the next 1 unit of forced movement until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Extend the protection to one adjacent willing ally."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Guard",
+      "html": "You may enter Reed Stance: while you have not moved since your last turn began, the first forced movement against you each round is reduced by 1 unit.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!23ae1210dcf52d83"
+}

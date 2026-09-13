@@ -1,0 +1,52 @@
+{
+  "_id": "b14dd5e8c42681f2",
+  "name": "Duck Behind the Stock",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: A ranged Action would deal Damage to you. Response (unopposed): Reduce that Damage by 1."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After the attack, move 1 unit toward cover."
+      },
+      {
+        "n": "2",
+        "html": "Reduce its Damage by 1 more if you already have cover."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "654c5d2c8a2dce33",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b14dd5e8c42681f2"
+}

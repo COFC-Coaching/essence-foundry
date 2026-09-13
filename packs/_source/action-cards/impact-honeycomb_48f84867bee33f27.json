@@ -1,0 +1,52 @@
+{
+  "_id": "48f84867bee33f27",
+  "name": "Impact Honeycomb",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Bulwark",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Integration, Regeneration",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and one adjacent willing ally."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Each target reduces its next incoming Damage by 1 and resists its next 2 units of forced movement until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The ally may move 1 unit toward you."
+      },
+      {
+        "n": "2",
+        "html": "One protected target reduces that Damage by 1 more."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Bulwark",
+      "html": "Assume Honeycomb (upkeep 1): once each round, reduce 1 incoming Damage to an adjacent ally by taking that 1 Damage yourself instead; resolve it against your accumulated Damage normally.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!48f84867bee33f27"
+}

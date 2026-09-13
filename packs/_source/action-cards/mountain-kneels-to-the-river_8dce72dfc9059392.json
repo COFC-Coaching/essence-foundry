@@ -1,0 +1,52 @@
+{
+  "_id": "8dce72dfc9059392",
+  "name": "Mountain Kneels to the River",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Finisher",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Grappling, Brawling",
+    "expertisesMode": "any",
+    "tags": "damage, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Bludgeoning Damage, move the target to an empty space within 2 units of you and knock it Prone."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target may land 1 unit farther away."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Damage if it was already Prone or Slowed."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Finisher",
+      "html": "After a hit, spend 2 Combo to pin the target's position: until your next turn, standing from Prone costs it 2 burned dice rather than 1.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!8dce72dfc9059392"
+}

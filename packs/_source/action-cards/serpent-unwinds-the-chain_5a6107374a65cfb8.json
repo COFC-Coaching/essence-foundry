@@ -1,0 +1,52 @@
+{
+  "_id": "5a6107374a65cfb8",
+  "name": "Serpent Unwinds the Chain",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Breaker",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "1",
+    "expertises": "Grappling, Skirmishing",
+    "expertisesMode": "any",
+    "tags": "damage, control, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy restraining you or a willing ally, or one enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage and end one ordinary restraint maintained by that target on you or an adjacent ally."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The freed creature may move 1 unit without triggering the target's movement Reactions."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target is Slowed 2 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Breaker",
+      "html": "After a hit, spend 1 Combo to preserve your Stance when you are next forcibly moved before your next turn, ignoring its normal movement-ending clause once.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5a6107374a65cfb8"
+}

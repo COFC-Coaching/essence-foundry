@@ -1,0 +1,52 @@
+{
+  "_id": "4d348e54649be789",
+  "name": "Not Where You Aimed",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Cunning",
+    "subtype": "Evasion",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction targets you, before its roll. Response (unopposed): Move 1 unit and gain +1 Fortitude against that Action. Recheck range afterward."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore difficult terrain for that movement."
+      },
+      {
+        "n": "2",
+        "html": "If the attack still hits, reduce its Damage by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "41212bdcb35286d8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!4d348e54649be789"
+}

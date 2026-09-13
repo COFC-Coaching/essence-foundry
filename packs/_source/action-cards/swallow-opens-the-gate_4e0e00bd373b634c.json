@@ -1,0 +1,52 @@
+{
+  "_id": "4e0e00bd373b634c",
+  "name": "Swallow Opens the Gate",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Prowess",
+    "subtype": "Opener",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 weapon Damage."
+      },
+      {
+        "n": "1",
+        "html": "Move 1 unit after the attack."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Opener",
+      "html": "If you began this Action with no Combo and hit, gain 1 additional Combo.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!4e0e00bd373b634c"
+}

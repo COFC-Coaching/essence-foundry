@@ -1,0 +1,52 @@
+{
+  "_id": "b5c6a5ec45e7b70a",
+  "name": "Read the Follow-Through",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Reversal",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Observation, Exploitation",
+    "expertisesMode": "any",
+    "tags": "protection, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would deal Damage to you. Response (unopposed): Reduce that Damage by 1. If the attacker was Exposed when the Action began, reduce it by 2 instead."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After the Action, move 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "After the Action, the attacker becomes Exposed if detected and within 3 units."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "41212bdcb35286d8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b5c6a5ec45e7b70a"
+}

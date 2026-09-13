@@ -1,0 +1,52 @@
+{
+  "_id": "193947624c7cd009",
+  "name": "An Obvious Mistake",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Cunning",
+    "subtype": "Reversal",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, setup, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy misses you with a melee Action. Response: On success, deal 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After a hit, move 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target becomes Exposed until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "41212bdcb35286d8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!193947624c7cd009"
+}

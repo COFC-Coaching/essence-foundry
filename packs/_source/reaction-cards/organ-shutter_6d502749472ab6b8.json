@@ -1,0 +1,52 @@
+{
+  "_id": "6d502749472ab6b8",
+  "name": "Organ Shutter",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Bulwark",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Regeneration, Metabolism",
+    "expertisesMode": "any",
+    "tags": "protection, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would deal Damage to you. Response (unopposed): Reduce the Damage by 2, then become Unstable until your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Suppress one ordinary Poison Condition until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one non-Critical physical Wound Condition's numerical penalties until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "06e138447ec657be",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!6d502749472ab6b8"
+}

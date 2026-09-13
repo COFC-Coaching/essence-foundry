@@ -1,0 +1,52 @@
+{
+  "_id": "8317f1538fd209b0",
+  "name": "The Empress's Sheltering Hand",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Ward",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Consecration, Sympathy",
+    "expertisesMode": "any",
+    "tags": "protection, support, terrain",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and up to two willing allies within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Each target reduces its next incoming Damage by 1 and gains +1 Harmony against the next attack targeting it until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Each ally may move 1 unit toward you."
+      },
+      {
+        "n": "2",
+        "html": "One target reduces that Damage by 1 more."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Ward",
+      "html": "Rite, 2 Echoes: anchor a visible point within 3 units. Trigger: a willing creature within 1 unit would be pushed or pulled. Echo: reduce that movement by 2 units.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!8317f1538fd209b0"
+}

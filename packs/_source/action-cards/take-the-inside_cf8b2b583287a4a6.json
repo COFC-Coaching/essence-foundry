@@ -1,0 +1,52 @@
+{
+  "_id": "cf8b2b583287a4a6",
+  "name": "Take the Inside",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Order",
+    "attr": "Adaptability",
+    "skill": "Leadership",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Tactics, Coordination",
+    "expertisesMode": "any",
+    "tags": "damage, support, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage. Afterward yourself or an adjacent willing ally may move 1 unit around the target."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase that movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target suffers -1 Fortitude against the next melee attack before your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Order",
+      "html": "Spend this Authority when you or an ally within 3 units ends adjacent to the target: that creature becomes Rallied until your next turn.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!cf8b2b583287a4a6"
+}

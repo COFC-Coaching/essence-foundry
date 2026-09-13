@@ -1,0 +1,52 @@
+{
+  "_id": "bbaed57b1cf6c80e",
+  "name": "Disciplined Retreat",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Formation",
+    "attr": "Adaptability",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Discipline, Guardianship",
+    "expertisesMode": "any",
+    "tags": "mobility, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and up to two willing allies within 2 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Each target may move 1 unit away from a visible enemy; choose one target to gain +1 Fortitude against that enemy until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase each movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "All targets gain the defensive bonus."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Formation",
+      "html": "Spend this Authority when a retreating creature would become Prone before your next turn: suppress that Prone effect until the triggering Action ends, then allow it to resume.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!bbaed57b1cf6c80e"
+}

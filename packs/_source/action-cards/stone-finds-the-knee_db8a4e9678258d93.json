@@ -1,0 +1,52 @@
+{
+  "_id": "db8a4e9678258d93",
+  "name": "Stone Finds the Knee",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Prowess",
+    "subtype": "Breaker",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Bludgeoning Damage and push the target 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Push 1 additional unit."
+      },
+      {
+        "n": "2",
+        "html": "The target's Movement is reduced by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Breaker",
+      "html": "If a hit moves the target away from an ally or from cover, gain 1 additional Combo.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!db8a4e9678258d93"
+}

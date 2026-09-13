@@ -1,0 +1,52 @@
+{
+  "_id": "ef9dce3ced6af034",
+  "name": "Leave Nothing Open",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Execution",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Precision, Flair",
+    "expertisesMode": "any",
+    "tags": "damage, control, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Your visible Locked target within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The target fails an Action while Slowed or Distracted. Response: On success, deal 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, push it 1 unit out of its current space."
+      },
+      {
+        "n": "2",
+        "html": "After a hit, end Lock to deal +1 weapon Damage."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "654c5d2c8a2dce33",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ef9dce3ced6af034"
+}

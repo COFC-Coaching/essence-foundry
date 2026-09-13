@@ -1,0 +1,52 @@
+{
+  "_id": "5fb2de2f0ba5850a",
+  "name": "Serrated Jaw",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Predator",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Armament, Metabolism",
+    "expertisesMode": "any",
+    "tags": "damage, control, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Piercing Damage. If the target is already Slowed, pull it 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 Damage."
+      },
+      {
+        "n": "1",
+        "html": "Suppress one ordinary Poison penalty on yourself until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Predator",
+      "html": "Assume Serrated Jaw (upkeep 0): your first Gestalt hit each turn against a creature that is Prone can move it 1 unit toward you.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5fb2de2f0ba5850a"
+}

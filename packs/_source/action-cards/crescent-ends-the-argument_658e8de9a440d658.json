@@ -1,0 +1,52 @@
+{
+  "_id": "658e8de9a440d658",
+  "name": "Crescent Ends the Argument",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Finisher",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Dueling, Reaving",
+    "expertisesMode": "any",
+    "tags": "damage, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, move 1 unit around the target without triggering its movement Reactions."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Damage if the target already took Damage since its last turn."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Finisher",
+      "html": "After a hit, spend 3 Combo to prevent the target from making movement Reactions until the start of your next turn and move up to 2 units away from it.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!658e8de9a440d658"
+}

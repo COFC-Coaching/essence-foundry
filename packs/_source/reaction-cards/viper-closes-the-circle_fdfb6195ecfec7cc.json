@@ -1,0 +1,52 @@
+{
+  "_id": "fdfb6195ecfec7cc",
+  "name": "Viper Closes the Circle",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Finisher",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Grappling, Berserking",
+    "expertisesMode": "any",
+    "tags": "damage, control, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy fails an Action while adjacent to you. Response: On success, deal 1 Bludgeoning Damage. You may spend 2 Combo after a hit to knock it Prone."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, pull the target 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Damage if the target is Prone."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "f86106a69c957230",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!fdfb6195ecfec7cc"
+}

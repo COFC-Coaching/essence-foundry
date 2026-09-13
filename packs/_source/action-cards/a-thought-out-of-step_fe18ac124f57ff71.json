@@ -1,0 +1,52 @@
+{
+  "_id": "fe18ac124f57ff71",
+  "name": "A Thought Out of Step",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Psionics",
+    "subtype": "Fracture",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "debuff, control, information",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, the target is Distracted until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, it is also Slowed 1 until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Deal 1 Psychic Damage on a hit."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Fracture",
+      "html": "If you accepted Strain and hit, learn which of the target's Fortitude and Composure is lower.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!fe18ac124f57ff71"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "c67dd48f754870e3",
+  "name": "Red Fang, Take the Foremost",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Beast",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Dominion, Vessel",
+    "expertisesMode": "any",
+    "tags": "damage, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 2 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Piercing Damage and pull it 1 unit toward you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the pull by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Piercing Damage."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Beast",
+      "html": "You may burn 3 Action Dice and spend 2 Mana to enter Beast Full Manifestation (FM-1B). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-1B"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c67dd48f754870e3"
+}

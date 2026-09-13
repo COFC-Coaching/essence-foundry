@@ -1,0 +1,52 @@
+{
+  "_id": "b10761ecd6f3910d",
+  "name": "Mercurial Refraction",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Chaos",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Transmutation, Disjunction",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would deal Fire, Cold, Lightning, Acid, Force or Arcane Damage to the target. Response (unopposed): Change that Damage to another listed type and reduce it by 1. Conditions do not change."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target also resists 1 unit of forced movement from the Action."
+      },
+      {
+        "n": "2",
+        "html": "Reduce that Damage by 1 more."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "0b2b283e84264679",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b10761ecd6f3910d"
+}

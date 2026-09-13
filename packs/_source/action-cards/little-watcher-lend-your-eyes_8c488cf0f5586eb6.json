@@ -1,0 +1,52 @@
+{
+  "_id": "8c488cf0f5586eb6",
+  "name": "Little Watcher, Lend Your Eyes",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Calling",
+    "subtype": "Familiar",
+    "attr": "Adaptability",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "information, utility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self; choose a visible point within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Until your next turn, perceive ordinary sights and sounds from the point. Your body remains in place and aware; solid barriers block perception."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase range by 2 units."
+      },
+      {
+        "n": "2",
+        "html": "Reveal one ordinarily concealed creature's occupied space within 1 unit of the point."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Familiar",
+      "html": "You may burn 3 Action Dice and spend 1 Mana to enter Familiar Full Manifestation (FM-0F). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-0F"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!8c488cf0f5586eb6"
+}

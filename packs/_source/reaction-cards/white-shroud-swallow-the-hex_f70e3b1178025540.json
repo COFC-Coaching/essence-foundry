@@ -1,0 +1,52 @@
+{
+  "_id": "f70e3b1178025540",
+  "name": "White Shroud, Swallow the Hex",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Phantom",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Banishment, Anchoring",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction imposes an ordinary magical Condition on the target. Response (unopposed): Suppress that Condition until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target gains +1 Harmony against the next attack targeting it until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "The target reduces its next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "e87efeb1c809057f",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f70e3b1178025540"
+}

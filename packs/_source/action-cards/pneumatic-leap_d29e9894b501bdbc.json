@@ -1,0 +1,52 @@
+{
+  "_id": "d29e9894b501bdbc",
+  "name": "Pneumatic Leap",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Strider",
+    "attr": "Grace",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Locomotion, Armament",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy adjacent to an empty landing space within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Leap to the landing space along a clear path. On success, deal 1 Bludgeoning Damage to the target."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase leap distance by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, push the target 2 units away from your landing space."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Strider",
+      "html": "Assume Pneumatics (upkeep 0): your jumps ignore the first 1 unit of vertical rise, but cannot pass through solid obstacles or end unsupported.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d29e9894b501bdbc"
+}

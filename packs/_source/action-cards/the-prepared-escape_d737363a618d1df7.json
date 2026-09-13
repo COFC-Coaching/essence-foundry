@@ -1,0 +1,52 @@
+{
+  "_id": "d737363a618d1df7",
+  "name": "The Prepared Escape",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Evasion",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "3",
+    "cost": "1",
+    "expertises": "Sabotage, Improvisation",
+    "expertisesMode": "any",
+    "tags": "mobility, support, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or a willing ally within 2 units beside a mundane restraint or obstacle."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress one ordinary Movement penalty from a mundane restraint or terrain until the start of your next turn. The target may move 2 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Both you and the willing ally receive the suppression and movement."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Evasion",
+      "html": "When a pursuer voluntarily crosses the target's starting space, it is Slowed 2 until your next turn and cannot make movement Reactions during that move.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d737363a618d1df7"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "c731bf799c24a7fd",
+  "name": "A Place to Regroup",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Standard",
+    "attr": "Adaptability",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Guardianship, Tactics",
+    "expertisesMode": "any",
+    "tags": "protection, mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One space within 4 units; yourself or up to two willing allies within 2 units of it."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Mark the space until the start of your next turn. Each chosen target may move 2 units toward it and gains +1 Fortitude against ranged attacks while adjacent to it."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One target ignores difficult terrain during this movement."
+      },
+      {
+        "n": "2",
+        "html": "One target suppresses a Light Wound Condition's numerical penalties while beside the point until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Standard",
+      "html": "Spend this Authority when a willing creature leaves the rally point before your next turn: it keeps the ranged Fortitude bonus until that movement ends.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c731bf799c24a7fd"
+}

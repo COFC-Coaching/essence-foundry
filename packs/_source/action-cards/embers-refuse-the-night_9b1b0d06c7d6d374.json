@@ -1,0 +1,52 @@
+{
+  "_id": "9b1b0d06c7d6d374",
+  "name": "Embers Refuse the Night",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Finisher",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Berserking, Phalanx",
+    "expertisesMode": "any",
+    "tags": "damage, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 weapon Damage. Suppress one Light Wound Condition's numerical penalties on yourself until the start of your next turn, even on a miss."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "An adjacent willing ally may receive the suppression instead."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, reduce your next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Finisher",
+      "html": "After a hit, spend 2 Combo to preserve the numerical suppression through the end of your next turn. No Wound is removed or downgraded.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!9b1b0d06c7d6d374"
+}

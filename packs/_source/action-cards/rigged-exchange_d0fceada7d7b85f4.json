@@ -1,0 +1,52 @@
+{
+  "_id": "d0fceada7d7b85f4",
+  "name": "Rigged Exchange",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Trap",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Sleight, Improvisation",
+    "expertisesMode": "any",
+    "tags": "damage, terrain, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage and move the target 1 unit. Independently, leave a visible mundane snare in your vacated space if you move during this Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit before the attack."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Damage if the target is already Slowed or Prone."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Trap",
+      "html": "When an enemy voluntarily enters your vacated space, it becomes Slowed 2 and Exposed until your next turn; remove the snare.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d0fceada7d7b85f4"
+}

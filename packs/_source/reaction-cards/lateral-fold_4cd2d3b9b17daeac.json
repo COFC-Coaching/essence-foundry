@@ -1,0 +1,52 @@
+{
+  "_id": "4cd2d3b9b17daeac",
+  "name": "Lateral Fold",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Magecraft",
+    "subtype": "Space",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction targets you, before rolling. Response (unopposed): Move 1 unit along a clear path; gain +1 Fortitude against that Action. Recheck target validity afterward."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore difficult terrain during that movement."
+      },
+      {
+        "n": "2",
+        "html": "Move 1 additional unit, ending in a supported space."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "0b2b283e84264679",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!4cd2d3b9b17daeac"
+}

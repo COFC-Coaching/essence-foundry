@@ -1,0 +1,52 @@
+{
+  "_id": "6ec68b93ab050ca7",
+  "name": "Mantle of Flowing Glass",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Water",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Reinforcement, Transmutation",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress one ordinary Slowed Condition on the target until the start of your next turn; it reduces its next incoming Fire Damage by 2 during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target may move 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Also suppress one ordinary Burning Condition for the same duration."
+      }
+    ],
+    "rider": {
+      "title": "Water Thread",
+      "html": "Gain a Water Thread. Before rolling a later Magecraft card, consume it: suppress one ordinary Movement penalty on yourself or one willing target of that card until the start of your next turn.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!6ec68b93ab050ca7"
+}

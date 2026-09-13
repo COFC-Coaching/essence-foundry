@@ -1,0 +1,52 @@
+{
+  "_id": "216715f73d7c73f5",
+  "name": "Too Good to Ignore",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Gambit",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Deception, Exploitation",
+    "expertisesMode": "any",
+    "tags": "debuff, setup, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, the target is Distracted until the start of your next turn; you suffer -1 Fortitude against it for that duration, but gain +1 to your next Cunning Success Die against it."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, the target is also Exposed until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "You may end your own Fortitude penalty immediately after your next Cunning hit against it."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Gambit",
+      "html": "When the target declares an attack against you before your next turn, you may move 2 units without triggering its movement Reactions; recheck range afterward.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!216715f73d7c73f5"
+}

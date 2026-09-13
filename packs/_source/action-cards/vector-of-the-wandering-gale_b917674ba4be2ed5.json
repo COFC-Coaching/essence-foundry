@@ -1,0 +1,52 @@
+{
+  "_id": "b917674ba4be2ed5",
+  "name": "Vector of the Wandering Gale",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Air",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sculpting, Augmentation",
+    "expertisesMode": "any",
+    "tags": "control, mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy or willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, push an enemy 2 units. A willing ally instead moves 2 units without opposition. The movement cannot pass through solid barriers."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Move the target horizontally in any direction instead of directly away; a willing ally also gains +1 Fortitude until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Air Thread",
+      "html": "Gain an Air Thread. Before rolling a later Magecraft card, consume it: you may move 1 unit immediately before or after that card, without triggering movement Reactions.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b917674ba4be2ed5"
+}

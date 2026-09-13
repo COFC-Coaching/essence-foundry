@@ -1,0 +1,52 @@
+{
+  "_id": "bed0ecdf4a1989d8",
+  "name": "With Me",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Leadership",
+    "subtype": "Order",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "mobility, support, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units who can perceive you."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target moves up to 2 units toward you or a visible enemy; when targeting yourself, choose any visible destination."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "The target becomes Rallied until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Order",
+      "html": "Spend this Authority when you or an ally within 3 units begins voluntary movement: ignore the first difficult space of that movement.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!bed0ecdf4a1989d8"
+}

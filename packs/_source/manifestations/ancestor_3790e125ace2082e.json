@@ -1,0 +1,223 @@
+{
+  "_id": "3790e125ace2082e",
+  "name": "Ancestor",
+  "type": "npc",
+  "img": "icons/svg/holy-shield.svg",
+  "system": {
+    "might": 0,
+    "grace": 0,
+    "vigor": 0,
+    "intellect": 0,
+    "acuity": 0,
+    "resolve": 0,
+    "presence": 0,
+    "adaptability": 0,
+    "anima": 0,
+    "tier": 1,
+    "level": 1,
+    "role": "",
+    "gmNotes": "<p><strong>Purpose:</strong> Self-sufficient martial defense that becomes more flexible beside an ally.</p><p><strong>Trait &mdash; Inherited Footing.</strong> The first time each round you would become Prone from an ordinary effect, you may instead become Slowed 1 until the start of your next turn. This is a substitution, not prevention of any associated Wound or Damage.</p><p><em>Full Manifestation profile — Rank 2, Nonliving. See CALLING_PROFILES.md / the Full Manifestation Guide journal for the shared entry/dismissal/defeat procedure.</em></p>",
+    "resilience": 1,
+    "movement": 3,
+    "fortitudeBonus": 6,
+    "composureBonus": 5,
+    "harmonyBonus": 6,
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ]
+  },
+  "items": [
+    {
+      "_id": "50a858aebd4a4024",
+      "_key": "!actors.items!3790e125ace2082e.50a858aebd4a4024",
+      "name": "Remembered Blade",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 2,
+        "style": "Calling",
+        "subtype": "Ancestor",
+        "attr": "Presence",
+        "skill": "Calling",
+        "defense": "Fortitude",
+        "min": "3",
+        "cost": "1",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "One enemy within 1 unit."
+          },
+          {
+            "label": "Effect",
+            "html": "On success, deal 2 Slashing Damage."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "After a hit, you or one adjacent willing ally may move 1 unit."
+          },
+          {
+            "n": "2",
+            "html": "You gain +1 Fortitude against the next attack targeting you before the start of your next turn."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "453eef1aec8ab3db",
+      "_key": "!actors.items!3790e125ace2082e.453eef1aec8ab3db",
+      "name": "Circle of the Watch",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 2,
+        "style": "Calling",
+        "subtype": "Ancestor",
+        "attr": "Anima",
+        "skill": "Calling",
+        "defense": "",
+        "min": "3",
+        "cost": "1",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "Self and optionally one willing ally within 2 units."
+          },
+          {
+            "label": "Effect",
+            "html": "Each target reduces its next incoming Damage by 1 before the start of your next turn. This protection does not stack with another copy of this maneuver."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "Each target resists its next 1 unit of forced movement before that deadline."
+          },
+          {
+            "n": "2",
+            "html": "One target suppresses a non-Critical Wound Condition's numerical penalties until the start of your next turn. The Wound remains recorded."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "2a38dbe27551694e",
+      "_key": "!actors.items!3790e125ace2082e.2a38dbe27551694e",
+      "name": "A Duty Not Yet Ended",
+      "type": "reaction-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 2,
+        "style": "Calling",
+        "subtype": "Ancestor",
+        "attr": "Anima",
+        "skill": "Calling",
+        "defense": "",
+        "min": "3",
+        "cost": "2",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "Self or one willing ally within 2 units."
+          },
+          {
+            "label": "Trigger",
+            "html": "An Action or Reaction would deal Damage to the target."
+          },
+          {
+            "label": "Effect",
+            "html": "Reduce that Damage by 2."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "The target gains +1 Composure against the next attack targeting it before the start of your next turn."
+          },
+          {
+            "n": "2",
+            "html": "After the triggering card, move the target 1 unit without triggering movement Reactions."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!3790e125ace2082e"
+}

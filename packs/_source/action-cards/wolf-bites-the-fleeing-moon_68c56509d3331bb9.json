@@ -1,0 +1,52 @@
+{
+  "_id": "68c56509d3331bb9",
+  "name": "Wolf Bites the Fleeing Moon",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Finisher",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Berserking, Skirmishing",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage, or 2 if the target voluntarily moved away from you since your last turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit toward the target before rolling."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target is Slowed 2 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Finisher",
+      "html": "After a hit, spend 2 Combo to follow the target up to 2 units the next time it voluntarily moves before your next turn; this follow does not trigger movement Reactions.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!68c56509d3331bb9"
+}

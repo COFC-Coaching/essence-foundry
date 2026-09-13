@@ -1,0 +1,52 @@
+{
+  "_id": "3d5058a25c916ae4",
+  "name": "Track the Muzzle",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Targeting",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Precision, Cadence",
+    "expertisesMode": "any",
+    "tags": "protection, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self; your visible Locked target."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: Your Locked target declares a ranged Action against you, before rolling. Response (unopposed): Gain +1 Fortitude against that Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "If it misses, preserve Lock through its next move behind cover until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "End Lock to reduce Damage from that Action by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "654c5d2c8a2dce33",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!3d5058a25c916ae4"
+}

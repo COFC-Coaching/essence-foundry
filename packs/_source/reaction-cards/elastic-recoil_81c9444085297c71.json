@@ -1,0 +1,52 @@
+{
+  "_id": "81c9444085297c71",
+  "name": "Elastic Recoil",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Strider",
+    "attr": "Grace",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Locomotion, Plasticity",
+    "expertisesMode": "any",
+    "tags": "protection, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: A melee Action targets you before rolling. Response (unopposed): Move 1 unit and gain +1 Fortitude against it. Recheck its target validity afterward."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Your movement ignores difficult terrain."
+      },
+      {
+        "n": "2",
+        "html": "Move 1 additional unit away from the attacker."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "06e138447ec657be",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!81c9444085297c71"
+}

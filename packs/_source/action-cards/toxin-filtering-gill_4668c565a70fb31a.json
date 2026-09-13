@@ -1,0 +1,52 @@
+{
+  "_id": "4668c565a70fb31a",
+  "name": "Toxin-Filtering Gill",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Chimera",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Metabolism, Regeneration",
+    "expertisesMode": "any",
+    "tags": "suppression, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one adjacent willing ally."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress one ordinary Poison or breathing-related numerical penalty until the start of your next turn. The target also reduces its next incoming Acid Damage by 1 during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target may move 1 unit out of a cloud or liquid."
+      },
+      {
+        "n": "2",
+        "html": "Protect both yourself and the ally."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Chimera",
+      "html": "Assume Filter (upkeep 0): your first exposure each round to a harmful gas cannot apply an ordinary Poison Condition; its Damage and other effects remain.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!4668c565a70fb31a"
+}

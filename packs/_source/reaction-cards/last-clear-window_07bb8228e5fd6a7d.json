@@ -1,0 +1,52 @@
+{
+  "_id": "07bb8228e5fd6a7d",
+  "name": "Last Clear Window",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Execution",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Flair, Penetration",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Your visible Locked target within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The target declares a defensive Action, before its benefits apply. Response: On success, deal 2 weapon Damage before that Action continues."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 point of cover bonus."
+      },
+      {
+        "n": "2",
+        "html": "After a hit, end Lock to suppress 1 point of the declared Action's ordinary defensive bonus until the start of your next turn. The Action is not canceled."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "654c5d2c8a2dce33",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!07bb8228e5fd6a7d"
+}

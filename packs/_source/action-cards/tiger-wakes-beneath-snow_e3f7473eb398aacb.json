@@ -1,0 +1,52 @@
+{
+  "_id": "e3f7473eb398aacb",
+  "name": "Tiger Wakes Beneath Snow",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Opener",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Berserking, Brawling",
+    "expertisesMode": "any",
+    "tags": "damage, suppression, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Bludgeoning Damage. Until your next turn, ignore the Movement penalty from one Light physical Wound Condition."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 Damage if you have a Core Wound."
+      },
+      {
+        "n": "1",
+        "html": "On a hit, push the target 1 unit."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Opener",
+      "html": "If hit, you may enter Tiger Stance: while you have a Core Wound, the first Prowess hit on your turn grants 1 additional Combo; your Composure is reduced by 1.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e3f7473eb398aacb"
+}

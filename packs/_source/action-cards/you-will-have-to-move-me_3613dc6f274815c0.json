@@ -1,0 +1,52 @@
+{
+  "_id": "3613dc6f274815c0",
+  "name": "You Will Have to Move Me",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Vow",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "Composure",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Provocation, Valor",
+    "expertisesMode": "any",
+    "tags": "protection, debuff, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, the target is Distracted until the start of your next turn. Independently, you gain +1 Fortitude and reduce the next Damage from that target by 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit toward the target."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target cannot make movement Reactions against your allies until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Vow",
+      "html": "Vow: do not voluntarily leave your current space before your next turn. Spend this Authority when the target damages you to make yourself Rallied; leaving first discards it.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!3613dc6f274815c0"
+}

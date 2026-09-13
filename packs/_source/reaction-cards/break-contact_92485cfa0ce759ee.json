@@ -1,0 +1,52 @@
+{
+  "_id": "92485cfa0ce759ee",
+  "name": "Break Contact",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Payload, Mobility",
+    "expertisesMode": "any",
+    "tags": "protection, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An enemy Action would deal Damage to the target. Response (unopposed): Reduce that Damage by 1; after the Action, the protected creature may move 2 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The movement does not trigger movement Reactions from the attacker."
+      },
+      {
+        "n": "2",
+        "html": "Reduce the Damage by 1 more if its source is your Locked target."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "654c5d2c8a2dce33",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!92485cfa0ce759ee"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "d20d39b17d94fb23",
+  "name": "Mass Redistribution",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Titan",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Metabolism, Plasticity",
+    "expertisesMode": "any",
+    "tags": "protection, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would push, pull or knock you Prone. Response (unopposed): Reduce forced movement by 2 units and prevent its Prone effect."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After resolving, move 1 unit along a supported surface."
+      },
+      {
+        "n": "2",
+        "html": "Reduce Damage from that Action by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "06e138447ec657be",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d20d39b17d94fb23"
+}

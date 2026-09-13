@@ -1,0 +1,52 @@
+{
+  "_id": "fbc947027c1efa78",
+  "name": "The Answer Hidden in the Spread",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Divination",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Sympathy, Entreaty",
+    "expertisesMode": "any",
+    "tags": "support, setup, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The target rolls a Combat Card, before spending Surges. Response (unopposed): It may reroll one die and must use the new result, then recalculate its Success Die and generated Surges."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "It may ignore one ordinary -1 Success Die penalty on that card."
+      },
+      {
+        "n": "2",
+        "html": "After that card, the target may move 1 unit. No additional Action is granted."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "928afd1ad9675380",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!fbc947027c1efa78"
+}

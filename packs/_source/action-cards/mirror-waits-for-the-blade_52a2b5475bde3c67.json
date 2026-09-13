@@ -1,0 +1,52 @@
+{
+  "_id": "52a2b5475bde3c67",
+  "name": "Mirror Waits for the Blade",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Guard",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Dueling, Reaving",
+    "expertisesMode": "any",
+    "tags": "protection, setup, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Choose one visible enemy. Gain +1 Fortitude against it and ignore its cover bonus for your next Prowess attack until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit without triggering the chosen enemy's movement Reactions."
+      },
+      {
+        "n": "2",
+        "html": "Gain the Fortitude bonus against all enemies instead."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Guard",
+      "html": "If the chosen enemy misses you before your next turn, you may spend 1 Combo to move 1 unit and give it -1 Fortitude against your next Prowess Action until the end of your next turn.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!52a2b5475bde3c67"
+}

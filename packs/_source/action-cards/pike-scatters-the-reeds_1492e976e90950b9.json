@@ -1,0 +1,52 @@
+{
+  "_id": "1492e976e90950b9",
+  "name": "Pike Scatters the Reeds",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Breaker",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Phalanx, Skirmishing",
+    "expertisesMode": "any",
+    "tags": "damage, control, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two enemies within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, push each target 1 unit. Choose one hit target to take 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "An adjacent willing ally may move 1 unit into a vacated space."
+      },
+      {
+        "n": "2",
+        "html": "One hit target is Slowed 2 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Breaker",
+      "html": "If at least one target ends farther from you, enter Pike Stance: your first Prowess Reaction against an approaching enemy before your next turn gains 1 Surge.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1492e976e90950b9"
+}

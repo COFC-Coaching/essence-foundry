@@ -1,0 +1,52 @@
+{
+  "_id": "c3244aa23e0171f0",
+  "name": "Lantern Guest, Turn the Spear",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Calling",
+    "subtype": "Sprite",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target reduces its next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "It also resists its next 1 unit of forced movement until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "After that Damage resolves, the target may move 1 unit."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Sprite",
+      "html": "You may burn 3 Action Dice and spend 1 Mana to enter Sprite Full Manifestation (FM-0S). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-0S"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c3244aa23e0171f0"
+}

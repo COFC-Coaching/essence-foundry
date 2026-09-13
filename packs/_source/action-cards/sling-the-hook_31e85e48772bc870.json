@@ -1,0 +1,52 @@
+{
+  "_id": "31e85e48772bc870",
+  "name": "Sling the Hook",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Payload, Flair",
+    "expertisesMode": "any",
+    "tags": "damage, control, utility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within ranged Weapon Range, or one unattended light object within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage and pull the enemy 1 unit. An unattended object instead moves up to 2 units toward you without opposition."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Pull 1 additional unit."
+      },
+      {
+        "n": "2",
+        "html": "After hitting an enemy, you may move 1 unit toward it."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Trickshot",
+      "html": "After a hit on a Locked enemy, you may end Lock to prevent that enemy from pushing or pulling you until the start of your next turn.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!31e85e48772bc870"
+}

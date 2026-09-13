@@ -1,0 +1,52 @@
+{
+  "_id": "476e9caa2c32439c",
+  "name": "Hunting Chorus, Circle Close",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Beast",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Chorus, Dominion",
+    "expertisesMode": "any",
+    "tags": "area, debuff, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two detected enemies within 4 units and 2 units of each other."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each is Distracted until the start of your next turn; choose one hit target to move 1 unit away from you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase that movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "One hit target takes 1 Psychic Damage."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Beast",
+      "html": "You may burn 3 Action Dice and spend 2 Mana to enter Beast Full Manifestation (FM-1B). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-1B"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!476e9caa2c32439c"
+}

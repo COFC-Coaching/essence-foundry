@@ -1,0 +1,52 @@
+{
+  "_id": "e163f75d3630209f",
+  "name": "Vector Without Resistance",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Assault",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Telekinesis, Mesmerism",
+    "expertisesMode": "any",
+    "tags": "damage, control, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 Force Damage and suppress its ordinary concealment against your next Psionics Action until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, move the target 1 unit sideways."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target cannot make movement Reactions until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Assault",
+      "html": "If you accepted Strain and hit, you may move 1 unit to mirror the target's new position after its next voluntary movement before your next turn.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e163f75d3630209f"
+}

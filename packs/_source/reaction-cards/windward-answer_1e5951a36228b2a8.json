@@ -1,0 +1,52 @@
+{
+  "_id": "1e5951a36228b2a8",
+  "name": "Windward Answer",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Air",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sculpting, Augmentation",
+    "expertisesMode": "any",
+    "tags": "protection, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: A ranged physical Action targets the creature, before rolling. Response (unopposed): Grant +1 Fortitude against that attack and move the creature 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit along a supported path."
+      },
+      {
+        "n": "2",
+        "html": "If the attack still hits, reduce its Damage by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "0b2b283e84264679",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1e5951a36228b2a8"
+}

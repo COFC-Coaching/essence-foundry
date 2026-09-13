@@ -1,0 +1,52 @@
+{
+  "_id": "5209d60a4dc309cc",
+  "name": "Old Bear, Shoulder the Burden",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Beast",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Anchoring, Vessel",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Reduce the target's next incoming Damage by 1 and its next forced movement by 2 units until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Suppress one Light physical Wound Condition's Movement penalty until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Self and one willing ally both receive the protection."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Beast",
+      "html": "You may burn 3 Action Dice and spend 2 Mana to enter Beast Full Manifestation (FM-1B). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-1B"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5209d60a4dc309cc"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "f1ccc6719d257426",
+  "name": "Palmed Advantage",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Ambush",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sleight, Deception",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage and make the target Distracted until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move one unsecured small object held by the target into its space on a hit; not its weapon or signature equipment."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target cannot make movement Reactions against you until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Ambush",
+      "html": "When the target next moves or retrieves an object before your next turn, you may move 1 unit around it and make it Exposed.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f1ccc6719d257426"
+}

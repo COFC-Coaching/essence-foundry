@@ -1,0 +1,52 @@
+{
+  "_id": "79cd71092b7cab74",
+  "name": "The Second Blind Spot",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Ambush",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Infiltration, Exploitation",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy misses an Action while Exposed, or ends an Action without detecting you despite your nearby concealment. Response: On success, deal 2 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After a hit, move 1 unit around it."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target cannot make movement Reactions against you until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "41212bdcb35286d8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!79cd71092b7cab74"
+}

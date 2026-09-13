@@ -1,0 +1,52 @@
+{
+  "_id": "1f140d2c028c5158",
+  "name": "Falling Petal Cuts Deep",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Finisher",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Dueling, Reaving",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage. The target suffers -1 Fortitude against your next Prowess attack before your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 weapon Damage."
+      },
+      {
+        "n": "1",
+        "html": "On a hit, move 1 unit around the target."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Finisher",
+      "html": "After a hit, you may spend 2 Combo to extend the Fortitude penalty to the next attack by any creature instead; it still expires at your next turn.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1f140d2c028c5158"
+}

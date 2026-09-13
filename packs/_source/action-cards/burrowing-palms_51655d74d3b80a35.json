@@ -1,0 +1,52 @@
+{
+  "_id": "51655d74d3b80a35",
+  "name": "Burrowing Palms",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Strider",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "3",
+    "cost": "1",
+    "expertises": "Plasticity, Locomotion",
+    "expertisesMode": "any",
+    "tags": "mobility, suppression, terrain",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self; an exposed patch of loose earth within 1 unit."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Move through up to 2 units of loose, unworked earth and emerge in a detected empty space. This leaves no usable tunnel and cannot pass through foundations or stone."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "On emerging, suppress one ordinary restraint on yourself until your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Strider",
+      "html": "Assume Burrowing Palms (upkeep 0): loose earth and rubble do not count as difficult terrain for your normal Movement.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!51655d74d3b80a35"
+}

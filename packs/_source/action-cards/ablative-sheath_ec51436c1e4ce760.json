@@ -1,0 +1,52 @@
+{
+  "_id": "ec51436c1e4ce760",
+  "name": "Ablative Sheath",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Bulwark",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Metabolism, Awareness",
+    "expertisesMode": "any",
+    "tags": "protection, information, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Choose Fire, Cold, Lightning or Acid. Reduce the next Damage of that type you take by 2 until the start of your next turn; detect its nearest visible source within 4 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "You may move 1 unit away from that source."
+      },
+      {
+        "n": "2",
+        "html": "Choose a second listed Damage type for the same protection."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Bulwark",
+      "html": "Assume Sheath (upkeep 1): the first Damage each round of the chosen type is reduced by 1. Choosing another type requires establishing this Adaptation again.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ec51436c1e4ce760"
+}

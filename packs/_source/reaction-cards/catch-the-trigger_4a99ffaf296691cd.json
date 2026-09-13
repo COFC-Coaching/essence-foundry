@@ -1,0 +1,52 @@
+{
+  "_id": "4a99ffaf296691cd",
+  "name": "Catch the Trigger",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Trap",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Sabotage, Observation",
+    "expertisesMode": "any",
+    "tags": "protection, support, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: A visible mundane trap or terrain hazard would deal Damage to the target. Response (unopposed): Reduce that Damage by 2."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move the protected creature 1 unit to a safe adjacent space after the hazard resolves."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one ordinary Condition imposed by that hazard until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "41212bdcb35286d8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!4a99ffaf296691cd"
+}

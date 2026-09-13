@@ -1,0 +1,52 @@
+{
+  "_id": "b65240b209486fa4",
+  "name": "The Banner Does Not Fall",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Standard",
+    "attr": "Anima",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Discipline, Inspiration",
+    "expertisesMode": "any",
+    "tags": "setup, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One space within 3 units; up to three willing creatures within 1 unit of it."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Mark the point until the start of your next turn. Each target becomes Rallied and suppresses one ordinary morale-based Success Die penalty while within 1 unit of it."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One target may move 2 units toward the point."
+      },
+      {
+        "n": "2",
+        "html": "Each target reduces its next incoming Damage by 1 while beside the point until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Standard",
+      "html": "Spend this Authority when one marked target would lose Rallied from a Core Wound before your next turn: preserve Rallied until its original expiration; the Wound still applies.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b65240b209486fa4"
+}

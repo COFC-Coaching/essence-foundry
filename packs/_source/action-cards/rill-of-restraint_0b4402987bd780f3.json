@@ -1,0 +1,52 @@
+{
+  "_id": "0b4402987bd780f3",
+  "name": "Rill of Restraint",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Magecraft",
+    "subtype": "Water",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Cold Damage and make it Slowed 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Slow by 1."
+      },
+      {
+        "n": "2",
+        "html": "After a hit, pull the target 1 unit."
+      }
+    ],
+    "rider": {
+      "title": "Water Thread",
+      "html": "Gain a Water Thread. Before rolling a later Magecraft card, consume it: suppress one ordinary Movement penalty on yourself or one willing target of that card until the start of your next turn.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!0b4402987bd780f3"
+}

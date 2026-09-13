@@ -1,0 +1,52 @@
+{
+  "_id": "e31a236e6dd532b5",
+  "name": "A Fraction Before Impact",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Psionics",
+    "subtype": "Trance",
+    "attr": "Acuity",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, mobility, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction targets you before its roll. Response (unopposed): Gain +1 to the targeted Defense against that Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit after the Action resolves."
+      },
+      {
+        "n": "2",
+        "html": "If the Action misses and you accepted no Strain on this card, remove 1 Strain."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "7f44f584777fefe2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e31a236e6dd532b5"
+}

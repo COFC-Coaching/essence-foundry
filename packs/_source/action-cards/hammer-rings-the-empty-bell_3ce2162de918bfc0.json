@@ -1,0 +1,52 @@
+{
+  "_id": "3ce2162de918bfc0",
+  "name": "Hammer Rings the Empty Bell",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Breaker",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Brawling, Dueling",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Bludgeoning Damage and impose -1 on the target's next Success Die before your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Suppress its next 1 point of cover bonus until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "The target cannot make movement Reactions until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Breaker",
+      "html": "If you hit a creature that has declared a defensive Reaction to this Action, gain 1 additional Combo.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!3ce2162de918bfc0"
+}

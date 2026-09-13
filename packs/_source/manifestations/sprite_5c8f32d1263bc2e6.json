@@ -1,0 +1,211 @@
+{
+  "_id": "5c8f32d1263bc2e6",
+  "name": "Sprite",
+  "type": "npc",
+  "img": "icons/svg/light.svg",
+  "system": {
+    "might": 0,
+    "grace": 0,
+    "vigor": 0,
+    "intellect": 0,
+    "acuity": 0,
+    "resolve": 0,
+    "presence": 0,
+    "adaptability": 0,
+    "anima": 0,
+    "tier": 1,
+    "level": 1,
+    "role": "",
+    "gmNotes": "<p><strong>Purpose:</strong> Light skirmishing, short-range shelter and limited elevated movement, rather than healing.</p><p><strong>Trait &mdash; Low Hover.</strong> You may move up to 1 unit above supported ground. This ignores ground difficult terrain but does not cross open chasms, bypass overhead barriers, grant additional Movement or place you beyond ordinary reach. Forced movement still affects you.</p><p><em>Full Manifestation profile — Rank 0, Living. See CALLING_PROFILES.md / the Full Manifestation Guide journal for the shared entry/dismissal/defeat procedure.</em></p>",
+    "resilience": 0,
+    "movement": 4,
+    "fortitudeBonus": 3,
+    "composureBonus": 4,
+    "harmonyBonus": 4,
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ]
+  },
+  "items": [
+    {
+      "_id": "7deb639aa1141d71",
+      "_key": "!actors.items!5c8f32d1263bc2e6.7deb639aa1141d71",
+      "name": "Glimmer Ray",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 0,
+        "style": "Calling",
+        "subtype": "Sprite",
+        "attr": "Anima",
+        "skill": "Calling",
+        "defense": "Harmony",
+        "min": "2",
+        "cost": "0",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "One enemy within 3 units."
+          },
+          {
+            "label": "Effect",
+            "html": "On success, deal 1 Radiant Damage."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "A hit target cannot benefit from ordinary concealment until the start of your next turn."
+          },
+          {
+            "n": "2",
+            "html": "Deal +1 Radiant Damage."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "7f225611b91e8cbf",
+      "_key": "!actors.items!5c8f32d1263bc2e6.7f225611b91e8cbf",
+      "name": "Shelter in a Spark",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 0,
+        "style": "Calling",
+        "subtype": "Sprite",
+        "attr": "Anima",
+        "skill": "Calling",
+        "defense": "",
+        "min": "2",
+        "cost": "0",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "Self or one willing ally within 2 units."
+          },
+          {
+            "label": "Effect",
+            "html": "Reduce the target's next incoming Damage by 1 before the start of your next turn."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "The target resists its next 1 unit of forced movement before that deadline."
+          },
+          {
+            "n": "2",
+            "html": "The target may move 1 unit without triggering movement Reactions."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "e7457c3049f1c060",
+      "_key": "!actors.items!5c8f32d1263bc2e6.e7457c3049f1c060",
+      "name": "Vanishing Angle",
+      "type": "reaction-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 0,
+        "style": "Calling",
+        "subtype": "Sprite",
+        "attr": "Adaptability",
+        "skill": "Calling",
+        "defense": "",
+        "min": "2",
+        "cost": "0",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "Self or one willing ally within 2 units."
+          },
+          {
+            "label": "Trigger",
+            "html": "A detected attacker targets the creature, before rolling."
+          },
+          {
+            "label": "Effect",
+            "html": "Grant +1 to its targeted Defense against that attack."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "The target detects the attacker's occupied space through ordinary concealment for this attack."
+          },
+          {
+            "n": "2",
+            "html": "Move the target 1 unit before the attack; recheck its eligibility."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!5c8f32d1263bc2e6"
+}

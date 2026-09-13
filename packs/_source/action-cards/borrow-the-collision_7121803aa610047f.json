@@ -1,0 +1,52 @@
+{
+  "_id": "7121803aa610047f",
+  "name": "Borrow the Collision",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Reversal",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Improvisation, Exploitation",
+    "expertisesMode": "any",
+    "tags": "damage, control, area",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy with an empty space adjacent to another enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, move the target 1 unit into the chosen empty space and deal 1 Bludgeoning Damage to it."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Knock the moved target Prone."
+      },
+      {
+        "n": "2",
+        "html": "Also attack the second enemy with the same roll for 1 Bludgeoning Damage."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Reversal",
+      "html": "When either target voluntarily moves adjacent to you before your next turn, push that creature 1 unit away and make it Exposed.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!7121803aa610047f"
+}

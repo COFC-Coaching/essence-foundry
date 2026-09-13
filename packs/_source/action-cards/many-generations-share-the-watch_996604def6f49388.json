@@ -1,0 +1,52 @@
+{
+  "_id": "996604def6f49388",
+  "name": "Many Generations, Share the Watch",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Ancestor",
+    "attr": "Adaptability",
+    "skill": "Calling",
+    "defense": "",
+    "min": "3",
+    "cost": "1",
+    "expertises": "Chorus, Transference",
+    "expertisesMode": "any",
+    "tags": "information, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and up to two willing allies within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Each target detects ordinary moving creatures within 2 units through concealment until the start of your next turn; no sight passes through solid barriers. Each gains +1 Composure against sensory effects."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One target may move 2 units toward another protected creature; alone, move freely."
+      },
+      {
+        "n": "2",
+        "html": "Each target ignores one ordinary concealment penalty on its next Combat Card until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Ancestor",
+      "html": "You may burn 3 Action Dice and spend 3 Mana to enter Ancestor Full Manifestation (FM-2A). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-2A"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!996604def6f49388"
+}

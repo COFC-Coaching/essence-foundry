@@ -1,0 +1,52 @@
+{
+  "_id": "4ab9b8fef872f1e7",
+  "name": "Cut the Tether",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "1",
+    "expertises": "Penetration, Payload",
+    "expertisesMode": "any",
+    "tags": "damage, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within ranged Weapon Range maintaining an ordinary restraint, or the exposed restraint itself."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage to an enemy and suppress one ordinary restraint it maintains until the start of your next turn. An unattended mundane tether can instead be severed without an opposed roll."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "A freed willing creature may move 1 unit immediately."
+      },
+      {
+        "n": "2",
+        "html": "End the restraint rather than suppress it, if it is nonmagical and not a Specialty effect."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Trickshot",
+      "html": "If the restraining enemy is Locked, end Lock after a hit to make it Slowed 2 until the start of your next turn.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!4ab9b8fef872f1e7"
+}

@@ -1,0 +1,266 @@
+[
+  {
+    "name": "Familiar",
+    "rank": 0,
+    "body": "Living",
+    "fortitude": 5, "composure": 6, "harmony": 6, "resilience": 0, "movement": 4, "woundCapacity": 3,
+    "purpose": "Mobile harassment and close-range observation. The form remains fragile if cornered.",
+    "traitName": "Small Passage",
+    "traitText": "You may squeeze through a gap at least half a tactical space wide, paying 1 extra unit of movement to cross it. This never permits passage through a closed solid barrier or ending your movement in an occupied space.",
+    "maneuvers": [
+      {
+        "name": "Needle Claw", "kind": "action", "min": "2", "mana": "0", "attr": "Anima", "defense": "Fortitude",
+        "target": "One enemy within 1 unit.",
+        "effect": "On success, deal 1 Piercing Damage.",
+        "surge1n": "1", "surge1": "After a hit, move 1 unit around the target without triggering movement Reactions from that target.",
+        "surge2n": "2", "surge2": "Deal +1 Piercing Damage."
+      },
+      {
+        "name": "Watcher's Circuit", "kind": "action", "min": "2", "mana": "0", "attr": "Adaptability", "defense": "",
+        "target": "Self.",
+        "effect": "Move up to 2 units. Until the start of your next turn, you detect the occupied spaces of ordinarily concealed moving creatures within 2 units; solid barriers still block detection.",
+        "surge1n": "1", "surge1": "Increase movement by 1 unit.",
+        "surge2n": "2", "surge2": "One willing ally within 2 units also receives the detected positions until the start of your next turn."
+      },
+      {
+        "name": "Burrow from the Blow", "kind": "reaction", "min": "2", "mana": "0", "attr": "Adaptability", "defense": "",
+        "target": "Self.",
+        "trigger": "A detected attacker declares a single-target attack against you, before rolling.",
+        "effect": "Gain +1 to the targeted Defense against that attack. After it resolves, move 1 unit.",
+        "surge1n": "1", "surge1": "Ignore difficult terrain during that movement.",
+        "surge2n": "2", "surge2": "Reduce that attack's Damage by 1."
+      }
+    ]
+  },
+  {
+    "name": "Sprite",
+    "rank": 0,
+    "body": "Living",
+    "fortitude": 5, "composure": 6, "harmony": 6, "resilience": 0, "movement": 4, "woundCapacity": 3,
+    "purpose": "Light skirmishing, short-range shelter and limited elevated movement, rather than healing.",
+    "traitName": "Low Hover",
+    "traitText": "You may move up to 1 unit above supported ground. This ignores ground difficult terrain but does not cross open chasms, bypass overhead barriers, grant additional Movement or place you beyond ordinary reach. Forced movement still affects you.",
+    "maneuvers": [
+      {
+        "name": "Glimmer Ray", "kind": "action", "min": "2", "mana": "0", "attr": "Anima", "defense": "Harmony",
+        "target": "One enemy within 3 units.",
+        "effect": "On success, deal 1 Radiant Damage.",
+        "surge1n": "1", "surge1": "A hit target cannot benefit from ordinary concealment until the start of your next turn.",
+        "surge2n": "2", "surge2": "Deal +1 Radiant Damage."
+      },
+      {
+        "name": "Shelter in a Spark", "kind": "action", "min": "2", "mana": "0", "attr": "Anima", "defense": "",
+        "target": "Self or one willing ally within 2 units.",
+        "effect": "Reduce the target's next incoming Damage by 1 before the start of your next turn.",
+        "surge1n": "1", "surge1": "The target resists its next 1 unit of forced movement before that deadline.",
+        "surge2n": "2", "surge2": "The target may move 1 unit without triggering movement Reactions."
+      },
+      {
+        "name": "Vanishing Angle", "kind": "reaction", "min": "2", "mana": "0", "attr": "Adaptability", "defense": "",
+        "target": "Self or one willing ally within 2 units.",
+        "trigger": "A detected attacker targets the creature, before rolling.",
+        "effect": "Grant +1 to its targeted Defense against that attack.",
+        "surge1n": "1", "surge1": "The target detects the attacker's occupied space through ordinary concealment for this attack.",
+        "surge2n": "2", "surge2": "Move the target 1 unit before the attack; recheck its eligibility."
+      }
+    ]
+  },
+  {
+    "name": "Beast",
+    "rank": 1,
+    "body": "Living",
+    "fortitude": 7, "composure": 5, "harmony": 6, "resilience": 1, "movement": 4, "woundCapacity": 4,
+    "purpose": "Close pursuit and the threat of retaliation; weaker mental resistance is intentional.",
+    "traitName": "Unbroken Trail",
+    "traitText": "Detect a moving creature within 2 units through ordinary concealment if it took Damage since your last turn. This reveals its occupied space, not its thoughts, identity or destination, and never passes through solid barriers.",
+    "maneuvers": [
+      {
+        "name": "Driving Fangs", "kind": "action", "min": "2", "mana": "1", "attr": "Presence", "defense": "Fortitude",
+        "target": "One enemy within 1 unit.",
+        "effect": "On success, deal 2 Piercing Damage.",
+        "surge1n": "1", "surge1": "After a hit, push the target 1 unit and optionally follow into the vacated space.",
+        "surge2n": "2", "surge2": "A hit target is Slowed 1 until the start of your next turn."
+      },
+      {
+        "name": "Closing Pounce", "kind": "action", "min": "2", "mana": "0", "attr": "Adaptability", "defense": "Fortitude",
+        "target": "One enemy within 1 unit after movement.",
+        "effect": "Move up to 2 units along a clear path, then attack the target. On success, deal 1 Slashing Damage. The movement does not depend on hitting.",
+        "surge1n": "1", "surge1": "Increase movement by 1 unit.",
+        "surge2n": "2", "surge2": "Deal +1 Slashing Damage if you moved at least 2 units toward the target during this Action."
+      },
+      {
+        "name": "Cornered Answer", "kind": "reaction", "min": "2", "mana": "1", "attr": "Anima", "defense": "Fortitude",
+        "target": "One adjacent enemy.",
+        "trigger": "The enemy damages you with a melee Action.",
+        "effect": "After that Damage resolves, attack; on success, deal 1 Slashing Damage. This does not prevent the triggering harm.",
+        "surge1n": "1", "surge1": "After a hit, move 1 unit while remaining adjacent to the enemy.",
+        "surge2n": "2", "surge2": "A hit enemy suffers -1 on its next Success Die before the start of your next turn."
+      }
+    ]
+  },
+  {
+    "name": "Phantom",
+    "rank": 1,
+    "body": "Nonliving",
+    "fortitude": 6, "composure": 7, "harmony": 7, "resilience": 0, "movement": 3, "woundCapacity": 4,
+    "purpose": "Selective pressure and concealment; not invulnerability or wall-walking.",
+    "traitName": "Soundless Step",
+    "traitText": "Your own ordinary movement makes no sound. This does not suppress visible movement, equipment being manipulated, attacks, speech or magical detection, and does not itself make you Hidden.",
+    "maneuvers": [
+      {
+        "name": "Winter's Hand", "kind": "action", "min": "2", "mana": "0", "attr": "Anima", "defense": "Harmony",
+        "target": "One enemy within 3 units.",
+        "effect": "On success, deal 1 Necrotic Damage.",
+        "surge1n": "1", "surge1": "A hit target loses the benefit of one ordinary magical Movement bonus until the start of your next turn.",
+        "surge2n": "2", "surge2": "Deal +1 Necrotic Damage."
+      },
+      {
+        "name": "Veil of the Unseen Guest", "kind": "action", "min": "2", "mana": "1", "attr": "Adaptability", "defense": "",
+        "target": "Self or one willing ally within 3 units.",
+        "effect": "Reduce the target's next incoming Damage by 1 before the start of your next turn. Its space provides ordinary concealment until that deadline; anyone occupying it can use the concealment.",
+        "surge1n": "1", "surge1": "The target may move 1 unit toward existing cover; self may move freely.",
+        "surge2n": "2", "surge2": "Suppress one ordinary sensory penalty on the target until the start of your next turn."
+      },
+      {
+        "name": "Shroud Against the Edge", "kind": "reaction", "min": "2", "mana": "1", "attr": "Anima", "defense": "",
+        "target": "Self.",
+        "trigger": "An Action or Reaction would deal Damage to you.",
+        "effect": "Reduce that Damage by 1; after the triggering card resolves, move 1 unit.",
+        "surge1n": "1", "surge1": "Ignore difficult terrain during that movement.",
+        "surge2n": "2", "surge2": "Reduce the Damage by 1 more."
+      }
+    ]
+  },
+  {
+    "name": "Golem",
+    "rank": 1,
+    "body": "Nonliving",
+    "fortitude": 7, "composure": 6, "harmony": 5, "resilience": 2, "movement": 2, "woundCapacity": 4,
+    "purpose": "A slow, durable body with deliberate reach and movement weaknesses.",
+    "traitName": "Set Foundation",
+    "traitText": "Once per round, resist 1 unit of forced movement while standing on solid supported ground. Choosing to use it consumes that round's benefit even if the remaining forced movement still displaces you.",
+    "maneuvers": [
+      {
+        "name": "Mason's Palm", "kind": "action", "min": "2", "mana": "1", "attr": "Presence", "defense": "Fortitude",
+        "target": "One enemy or unattended object within 1 unit.",
+        "effect": "On success against an enemy, deal 2 Bludgeoning Damage. An unattended object instead takes 2 Bludgeoning Damage without opposition.",
+        "surge1n": "1", "surge1": "After a hit, push an enemy 1 unit.",
+        "surge2n": "2", "surge2": "Deal +1 Damage to an unattended object, or suppress a hit enemy's ordinary Fortitude bonus until the start of your next turn."
+      },
+      {
+        "name": "Span of Stone", "kind": "action", "min": "2", "mana": "0", "attr": "Anima", "defense": "",
+        "target": "Self or one adjacent willing ally.",
+        "effect": "Reduce the target's next incoming Damage by 1 before the start of your next turn. If protecting an ally, remain adjacent for this protection to apply.",
+        "surge1n": "1", "surge1": "The target resists its next 1 unit of forced movement before that deadline.",
+        "surge2n": "2", "surge2": "Extend the protection to one other adjacent willing ally; if alone, increase your protection by 1 instead."
+      },
+      {
+        "name": "Receive the Weight", "kind": "reaction", "min": "2", "mana": "1", "attr": "Anima", "defense": "",
+        "target": "Self or one adjacent willing ally.",
+        "trigger": "An Action or Reaction would deal physical Damage to the target.",
+        "effect": "Reduce that Damage by 1 and resist up to 1 unit of forced movement imposed by that card.",
+        "surge1n": "1", "surge1": "Prevent an ordinary Prone effect from that card.",
+        "surge2n": "2", "surge2": "Reduce the Damage by 1 more."
+      }
+    ]
+  },
+  {
+    "name": "Elemental",
+    "rank": 2,
+    "body": "Nonliving",
+    "fortitude": 7, "composure": 7, "harmony": 8, "resilience": 1, "movement": 3, "woundCapacity": 5,
+    "purpose": "Limited area pressure and protection against a chosen energy, not healing through elemental absorption.",
+    "traitName": "Declared Aspect",
+    "traitText": "At your first entry each Encounter choose Fire, Cold or Lightning. This fixes the profile's aspect for that Encounter. Once per round, reduce incoming Damage of that aspect by 1. Changing appearance or re-entering does not change aspect, renew the reduction or create a fresh Wound record. Aspect has no implied immunity or associated Condition.",
+    "maneuvers": [
+      {
+        "name": "Converging Current", "kind": "action", "min": "3", "mana": "1", "attr": "Presence", "defense": "Fortitude",
+        "target": "Up to two enemies within 4 units and within 1 unit of each other.",
+        "effect": "Roll once. Each successfully affected target takes 1 Damage of your aspect.",
+        "surge1n": "1", "surge1": "Push one hit target 1 unit.",
+        "surge2n": "2", "surge2": "One hit target takes +1 Damage of your aspect."
+      },
+      {
+        "name": "Heart of the Storm", "kind": "action", "min": "3", "mana": "1", "attr": "Anima", "defense": "Fortitude",
+        "target": "One enemy within 4 units.",
+        "effect": "On success, deal 2 Damage of your aspect.",
+        "surge1n": "1", "surge1": "After the attack, move 1 unit; this movement does not require a hit.",
+        "surge2n": "2", "surge2": "A hit target is Slowed 2 until the start of your next turn."
+      },
+      {
+        "name": "Divide the Torrent", "kind": "reaction", "min": "3", "mana": "1", "attr": "Anima", "defense": "",
+        "target": "Self or one willing ally within 3 units.",
+        "trigger": "An Action or Reaction would deal Damage to the target.",
+        "effect": "Reduce that Damage by 2 if it matches your aspect, otherwise by 1. This is prevention, never absorption that restores anything.",
+        "surge1n": "1", "surge1": "The target resists 1 unit of forced movement from that card.",
+        "surge2n": "2", "surge2": "One adjacent willing creature also reduces Damage from the same card by 1."
+      }
+    ]
+  },
+  {
+    "name": "Ancestor",
+    "rank": 2,
+    "body": "Nonliving",
+    "fortitude": 8, "composure": 7, "harmony": 8, "resilience": 1, "movement": 3, "woundCapacity": 5,
+    "purpose": "Self-sufficient martial defense that becomes more flexible beside an ally.",
+    "traitName": "Inherited Footing",
+    "traitText": "The first time each round you would become Prone from an ordinary effect, you may instead become Slowed 1 until the start of your next turn. This is a substitution, not prevention of any associated Wound or Damage.",
+    "maneuvers": [
+      {
+        "name": "Remembered Blade", "kind": "action", "min": "3", "mana": "1", "attr": "Presence", "defense": "Fortitude",
+        "target": "One enemy within 1 unit.",
+        "effect": "On success, deal 2 Slashing Damage.",
+        "surge1n": "1", "surge1": "After a hit, you or one adjacent willing ally may move 1 unit.",
+        "surge2n": "2", "surge2": "You gain +1 Fortitude against the next attack targeting you before the start of your next turn."
+      },
+      {
+        "name": "Circle of the Watch", "kind": "action", "min": "3", "mana": "1", "attr": "Anima", "defense": "",
+        "target": "Self and optionally one willing ally within 2 units.",
+        "effect": "Each target reduces its next incoming Damage by 1 before the start of your next turn. This protection does not stack with another copy of this maneuver.",
+        "surge1n": "1", "surge1": "Each target resists its next 1 unit of forced movement before that deadline.",
+        "surge2n": "2", "surge2": "One target suppresses a non-Critical Wound Condition's numerical penalties until the start of your next turn. The Wound remains recorded."
+      },
+      {
+        "name": "A Duty Not Yet Ended", "kind": "reaction", "min": "3", "mana": "2", "attr": "Anima", "defense": "",
+        "target": "Self or one willing ally within 2 units.",
+        "trigger": "An Action or Reaction would deal Damage to the target.",
+        "effect": "Reduce that Damage by 2.",
+        "surge1n": "1", "surge1": "The target gains +1 Composure against the next attack targeting it before the start of your next turn.",
+        "surge2n": "2", "surge2": "After the triggering card, move the target 1 unit without triggering movement Reactions."
+      }
+    ]
+  },
+  {
+    "name": "Fey",
+    "rank": 2,
+    "body": "Living",
+    "fortitude": 7, "composure": 8, "harmony": 8, "resilience": 0, "movement": 4, "woundCapacity": 5,
+    "purpose": "Mobility and conditional hindrance, with relatively little damage insulation. No maneuver controls dialogue, beliefs or noncombat choices.",
+    "traitName": "Rootwise Step",
+    "traitText": "Once during each of your turns, ignore the extra movement cost of entering one space of difficult terrain. This neither increases Movement nor allows crossing a barrier. Dismissal and re-entry do not renew the benefit.",
+    "maneuvers": [
+      {
+        "name": "Thorn of the Uninvited", "kind": "action", "min": "3", "mana": "1", "attr": "Presence", "defense": "Harmony",
+        "target": "One enemy within 4 units.",
+        "effect": "On success, deal 1 Arcane Damage and make the target Slowed 1 until the start of your next turn.",
+        "surge1n": "1", "surge1": "A hit target gains no benefit from ordinary concealment until that deadline.",
+        "surge2n": "2", "surge2": "Deal +1 Arcane Damage."
+      },
+      {
+        "name": "The Other Seat", "kind": "action", "min": "3", "mana": "1", "attr": "Adaptability", "defense": "",
+        "target": "Self and optionally one willing ally within 3 units.",
+        "effect": "Swap spaces with the ally along a clear supported path, or, if acting alone, move up to 2 units. This movement does not trigger movement Reactions.",
+        "surge1n": "1", "surge1": "Ignore difficult terrain during the movement.",
+        "surge2n": "2", "surge2": "One moved creature gains +1 to the Defense tested by the next attack against it before the start of your next turn."
+      },
+      {
+        "name": "Invitation Withdrawn", "kind": "reaction", "min": "3", "mana": "1", "attr": "Adaptability", "defense": "",
+        "target": "Self or one willing ally within 3 units.",
+        "trigger": "A detected attacker targets the creature, before rolling.",
+        "effect": "Move it 1 unit along a clear supported path and grant +1 Fortitude against that attack. Recheck target eligibility.",
+        "surge1n": "1", "surge1": "Increase movement by 1 unit.",
+        "surge2n": "2", "surge2": "Swap the target with another adjacent willing creature instead. The substitute becomes the target only if still legal and receives the Fortitude bonus."
+      }
+    ]
+  }
+]

@@ -1,0 +1,52 @@
+{
+  "_id": "78a72c49794799af",
+  "name": "Bank Shot",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Trajectory, Flair",
+    "expertisesMode": "any",
+    "tags": "damage, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within ranged Weapon Range, along a clear path around one obstacle."
+      },
+      {
+        "label": "Effect",
+        "html": "Measure range along the shot's bent path. On success, deal 1 weapon Damage. The shot cannot pass through solid material."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 point of cover bonus."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, move the target 1 unit away from the final segment of the shot."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Trickshot",
+      "html": "After resolving, you may maintain an existing Lock along this same clear bent path until your next turn, even without direct sight.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!78a72c49794799af"
+}

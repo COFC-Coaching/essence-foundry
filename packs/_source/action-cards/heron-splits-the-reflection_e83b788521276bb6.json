@@ -1,0 +1,52 @@
+{
+  "_id": "e83b788521276bb6",
+  "name": "Heron Splits the Reflection",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Opener",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Dueling, Skirmishing",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage. Ignore its cover bonus if no other enemy is adjacent to you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, shift 1 unit around the target without triggering its movement Reactions."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 weapon Damage if no other enemy is adjacent to you."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Opener",
+      "html": "After a hit, gain 1 additional Combo if you attacked from a different space than on your previous Prowess Action.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e83b788521276bb6"
+}

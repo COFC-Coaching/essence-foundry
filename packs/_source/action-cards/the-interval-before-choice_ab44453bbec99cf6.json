@@ -1,0 +1,52 @@
+{
+  "_id": "ab44453bbec99cf6",
+  "name": "The Interval Before Choice",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Trance",
+    "attr": "Acuity",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Precognition, Clairvoyance",
+    "expertisesMode": "any",
+    "tags": "protection, information, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Choose a detected enemy within 5 units. Gain +1 to the Defense targeted by its next attack against you until the start of your next turn; learn its remaining Reaction Dice."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit toward a space with a clear view of it."
+      },
+      {
+        "n": "2",
+        "html": "Gain the defensive benefit against a second detected enemy within 5 units."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Trance",
+      "html": "Enter Interval Trance until the end of your next turn: the first time the chosen enemy misses you during the Trance, you may remove 1 Strain, provided you accepted none on this card.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ab44453bbec99cf6"
+}

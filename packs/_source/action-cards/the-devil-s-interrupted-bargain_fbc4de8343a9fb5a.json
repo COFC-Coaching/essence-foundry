@@ -1,0 +1,52 @@
+{
+  "_id": "fbc4de8343a9fb5a",
+  "name": "The Devil's Interrupted Bargain",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Hex",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Entreaty, Severance",
+    "expertisesMode": "any",
+    "tags": "damage, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 Necrotic Damage and suppress 1 point of its ordinary magical Defense bonuses until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, suppress 1 point of ordinary magical Movement bonus as well."
+      },
+      {
+        "n": "2",
+        "html": "End the selected ordinary Defense bonus rather than suppress it."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Hex",
+      "html": "Rite, 2 Echoes: on a hit, the target becomes Possessed. Trigger: it receives an ordinary magical defensive benefit. Echo: it becomes Distracted until your next turn.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!fbc4de8343a9fb5a"
+}

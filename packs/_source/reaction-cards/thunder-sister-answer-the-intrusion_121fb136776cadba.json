@@ -1,0 +1,52 @@
+{
+  "_id": "121fb136776cadba",
+  "name": "Thunder Sister, Answer the Intrusion",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Elemental",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Dominion, Chorus",
+    "expertisesMode": "any",
+    "tags": "damage, area, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy finishes voluntary movement adjacent to you or an ally within 2 units. Response: On success, deal 1 Lightning Damage and push it 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Push it 1 additional unit."
+      },
+      {
+        "n": "2",
+        "html": "Also attack a second enemy within 1 unit of the first with the same roll for 1 Lightning Damage."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "e87efeb1c809057f",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!121fb136776cadba"
+}

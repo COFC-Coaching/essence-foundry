@@ -1,0 +1,52 @@
+{
+  "_id": "596c2d7107c28b26",
+  "name": "Chisel Parts the Iron Gate",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Breaker",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Dueling, Phalanx",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage and suppress 1 point of its equipment Fortitude bonus until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "An adjacent willing ally ignores the target's movement Reactions until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 weapon Damage."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Breaker",
+      "html": "After a hit, spend 2 Combo to end one ordinary defensive benefit on the target. This cannot remove a Specialty Condition, an item or a Wound.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!596c2d7107c28b26"
+}

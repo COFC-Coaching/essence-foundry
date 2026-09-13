@@ -1,0 +1,52 @@
+{
+  "_id": "d0be269dfb41d1de",
+  "name": "Sacrificial Carapace",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Bulwark",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Regeneration, Integration",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one adjacent willing ally."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would deal Damage to the target. Response (unopposed): Reduce that Damage by 1. You may end your Adaptation to reduce it by 1 more."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Suppress one ordinary Condition imposed by the Action until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one Light physical Wound Condition's numerical penalties on yourself until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "06e138447ec657be",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d0be269dfb41d1de"
+}

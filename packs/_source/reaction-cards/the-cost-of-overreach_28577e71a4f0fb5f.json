@@ -1,0 +1,52 @@
+{
+  "_id": "28577e71a4f0fb5f",
+  "name": "The Cost of Overreach",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Reversal",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Exploitation, Improvisation",
+    "expertisesMode": "any",
+    "tags": "damage, control, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy misses you with an Action for which it rolled at least 3 dice. Response: On success, deal 1 weapon Damage and move it 1 unit sideways."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After a hit, move into its vacated space."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 weapon Damage if it is beside an obstacle."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "41212bdcb35286d8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!28577e71a4f0fb5f"
+}

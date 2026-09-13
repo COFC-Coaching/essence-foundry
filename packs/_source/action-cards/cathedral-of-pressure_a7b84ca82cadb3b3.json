@@ -1,0 +1,52 @@
+{
+  "_id": "a7b84ca82cadb3b3",
+  "name": "Cathedral of Pressure",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Assault",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Telekinesis, Imprint",
+    "expertisesMode": "any",
+    "tags": "damage, area, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Enemies in a sphere of radius 1 centered within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each takes 1 Force Damage and is pushed 1 unit away from the center."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The center remains difficult terrain until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Force Damage to one hit target."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Assault",
+      "html": "If you accepted Strain, leave a pressure imprint in one empty area space until the start of your next turn; its first enemy entrant is pushed 1 unit away after entry.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!a7b84ca82cadb3b3"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "06f95f339edbda8a",
+  "name": "Eel Loosens the Fisher's Knot",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Breaker",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "3",
+    "cost": "1",
+    "expertises": "Grappling, Dueling",
+    "expertisesMode": "any",
+    "tags": "protection, mobility, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction successfully restrains you or makes you Prone. Response (unopposed): Suppress that one effect until the Action finishes, then move 1 unit. End the effect if you leave its source's reach; otherwise it resumes."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 additional unit."
+      },
+      {
+        "n": "2",
+        "html": "Reduce Damage from the triggering Action by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "f86106a69c957230",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!06f95f339edbda8a"
+}

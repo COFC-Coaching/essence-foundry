@@ -1,0 +1,52 @@
+{
+  "_id": "24c80d7df168a2f6",
+  "name": "Corridor of Impossible Nearness",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Space",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Fabrication, Augmentation",
+    "expertisesMode": "any",
+    "tags": "terrain, mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Two visible empty supported spaces within 5 units of you and 3 units of each other."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Concentration: connect the spaces for up to 3 rounds. A willing creature can spend 1 Movement to travel between them if a clear path exists; this is not an extra Action and cannot cross solid walls."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Endpoints may be 4 units apart."
+      },
+      {
+        "n": "2",
+        "html": "One willing creature using the connection before your next turn gains +1 Fortitude until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Space Thread",
+      "html": "Gain a Space Thread. Before rolling a later Magecraft card, consume it: choose a visible empty space within 2 units as its origin. Measure its Range and area from that space.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!24c80d7df168a2f6"
+}

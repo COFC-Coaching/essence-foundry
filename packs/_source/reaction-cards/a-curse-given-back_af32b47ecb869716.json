@@ -1,0 +1,52 @@
+{
+  "_id": "af32b47ecb869716",
+  "name": "A Curse Given Back",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Hex",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Severance, Sympathy",
+    "expertisesMode": "any",
+    "tags": "suppression, debuff, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy imposes an ordinary magical Condition on you. Response: On success, suppress that Condition on yourself until the start of your next turn and give the enemy -1 Harmony for the same duration."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, the enemy is Slowed 1 until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Deal 1 Necrotic Damage on a hit."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "928afd1ad9675380",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!af32b47ecb869716"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "61a4871ecd632ca2",
+  "name": "Center Mass",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Targeting",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Precision, Cadence",
+    "expertisesMode": "any",
+    "tags": "damage, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage. If you attacked this target with your previous Ballistics Action, ignore 1 point of cover bonus."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 weapon Damage."
+      },
+      {
+        "n": "1",
+        "html": "On a hit, the target has -1 Fortitude against your next Ballistics Action until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Targeting",
+      "html": "Establish Lock after resolving. If it was already Locked, preserve that Lock through one loss of sight until the end of your next turn.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!61a4871ecd632ca2"
+}

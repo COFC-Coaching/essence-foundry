@@ -1,0 +1,52 @@
+{
+  "_id": "343e63795e5edf6e",
+  "name": "You Looked Away",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Ambush",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Infiltration, Sleight",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy declares an Action against someone other than you while you have cover from it. Response: On success, deal 1 weapon Damage before that Action continues."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 point of cover bonus."
+      },
+      {
+        "n": "2",
+        "html": "After resolving, move 1 unit toward cover."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "41212bdcb35286d8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!343e63795e5edf6e"
+}

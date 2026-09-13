@@ -1,0 +1,52 @@
+{
+  "_id": "e6619dc81ef23593",
+  "name": "The Salt That Remembers",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Ward",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Severance, Sympathy",
+    "expertisesMode": "any",
+    "tags": "suppression, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress one ordinary magical Movement penalty until the start of your next turn; the target reduces its next incoming forced movement by 2 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target may move 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Also suppress one ordinary magical sensory penalty for the same duration."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Ward",
+      "html": "Rite, 2 Echoes: bind the target. Trigger: it is targeted by the source of the suppressed Condition. Echo: gain +1 to the targeted Defense against that Action.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e6619dc81ef23593"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "1de3d7f215c03f6a",
+  "name": "The Justice of Unspoken Names",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Hex",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Inscription, Liturgy",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, information",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 6 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Necrotic Damage and impose -2 on its next Success Die until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Learn its lowest Defense."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Necrotic Damage."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Hex",
+      "html": "Rite, 2 Echoes: on a hit, the target becomes Possessed. Trigger: it targets a creature other than the one it targeted on its previous Action. Echo: deal 1 Necrotic Damage after that Action.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1de3d7f215c03f6a"
+}

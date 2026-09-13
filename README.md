@@ -63,8 +63,9 @@ manifest's `download` field points at.
 
 ## Refreshing compendium content from the database
 
-The card/equipment compendiums are generated from the live "Essence" Neon Postgres project,
-not hand-maintained. To pull the latest content and rebuild the packs:
+The Condition/Equipment compendiums (and the small "Basic" universal Action/Reaction Cards —
+Hide, Strike, Brace, etc.) are generated from the live "Essence" Neon Postgres project, not
+hand-maintained. To pull the latest content and rebuild the packs:
 
 ```bash
 npm install
@@ -77,6 +78,16 @@ app's local `_repo/.env.api` file. Note: that `.env.api` connection currently po
 Neon branch where `equipment_cards` is empty even though the main branch has 23 rows — if
 `fetch-from-neon.mjs` reports 0 equipment rows, don't run `build-packs.mjs` over it; regenerate
 that one table from the correct branch/connection string first.
+
+**The 396-card Rank 0-2 Style catalogue is NOT part of the Neon fetch above.** As of the
+PLAYTEST_RULES.md/CALLING_PROFILES.md mechanics rework, every Action/Reaction Card belonging to
+one of the 9 Combat Styles is hand-authored as CSV in `scripts/combat-cards/` (one file per
+domain per type — e.g. `mental-actions.csv`), using the identical column layout as
+`bulk-import.mjs`'s downloadable GM templates. `build-packs.mjs` reads these directly; running
+`fetch-from-neon.mjs` has no effect on them, and re-running `build-packs.mjs` alone is enough to
+pick up an edit to one of these CSVs. Edit a CSV in place (Excel/Sheets/any spreadsheet tool) to
+revise a card, or add a row to add one — folder placement (which Combat Style's compendium
+folder a card lands in) is derived automatically from its `skill` column.
 
 Foundry holds an exclusive lock on the LevelDB pack files while a world using this system is
 running, which blocks both `build-packs.mjs` and `git add`. Don't kill the Foundry process to
@@ -96,6 +107,7 @@ which releases the lock without dropping the session or requiring you to log bac
 - `module/apps/` — the Character Creation and Create Content wizards
 - `module/dice/` — the dice engine, ported exactly from the web app's `engine.ts`
 - `templates/` — Handlebars templates for sheets, chat cards, and the wizards
-- `scripts/` — content pipeline (Neon → compendium packs) — dev tooling only, not shipped in
+- `scripts/` — content pipeline (Neon + hand-authored CSV/JSON → compendium packs; see
+  `scripts/combat-cards/` for the 396-card Style catalogue) — dev tooling only, not shipped in
   releases
 - `.github/workflows/release.yml` — the release pipeline described above

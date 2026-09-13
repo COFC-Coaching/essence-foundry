@@ -1,0 +1,52 @@
+{
+  "_id": "8be19b1c667a20a4",
+  "name": "Mirror-Blooded One, Lend Me Your Grace",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Fey",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Vessel, Accord",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target gains +1 Fortitude and suppresses one ordinary Slowed Condition until the start of your next turn; it may move 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "The target reduces its next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Fey",
+      "html": "You may burn 3 Action Dice and spend 3 Mana to enter Fey Full Manifestation (FM-2F). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-2F"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!8be19b1c667a20a4"
+}

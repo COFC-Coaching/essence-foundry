@@ -1,0 +1,52 @@
+{
+  "_id": "b099933891f4037c",
+  "name": "Wheel Around the Threat",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Formation",
+    "attr": "Adaptability",
+    "skill": "Leadership",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Tactics, Coordination",
+    "expertisesMode": "any",
+    "tags": "damage, control, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage and move it 1 unit sideways. After resolving, you and one adjacent willing ally may each move 1 unit around it."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The moved creatures ignore the target's movement Reactions for this movement."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 weapon Damage."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Formation",
+      "html": "Spend this Authority when you or the ally next attacks the target from a different space before your next turn: ignore 1 point of its equipment Fortitude for that attack.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b099933891f4037c"
+}

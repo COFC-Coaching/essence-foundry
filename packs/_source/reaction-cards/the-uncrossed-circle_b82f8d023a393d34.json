@@ -1,0 +1,52 @@
+{
+  "_id": "b82f8d023a393d34",
+  "name": "The Uncrossed Circle",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Ward",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Consecration, Inscription",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An attack targets the creature while it stands within 1 unit of one of your Rite anchors, before rolling. Response (unopposed): Grant +1 to its targeted Defense against that attack."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The creature resists up to 2 units of forced movement from the attack."
+      },
+      {
+        "n": "2",
+        "html": "Reduce its Damage by 1 if it hits."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "928afd1ad9675380",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b82f8d023a393d34"
+}

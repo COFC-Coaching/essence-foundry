@@ -4,6 +4,7 @@ import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
 import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, resetAdventureUses, resolveEquipmentDropSlot, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
+import { availableSubtypes, enterManifestation } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -93,9 +94,27 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       activateReachTrigger: EssenceActorSheet.#onActivateReachTrigger,
       deactivateReachTrigger: EssenceActorSheet.#onDeactivateReachTrigger,
       resetAdventureUses: EssenceActorSheet.#onResetAdventureUses,
-      chooseGrantedItem: EssenceActorSheet.#onChooseGrantedItem
+      chooseGrantedItem: EssenceActorSheet.#onChooseGrantedItem,
+      openManifestation: EssenceActorSheet.#onOpenManifestation
     }
   };
+
+  /** Adds a "Full Manifestation" entry to the sheet's own header dropdown (alongside core's
+   *  Configure Ownership/Prototype Token/etc.) for any character with Calling — the entry point
+   *  the player uses to enter one of the 8 CALLING_PROFILES.md forms (see manifestation.mjs). Not
+   *  shown for Rank 0-without-Calling characters, since there's nothing to manifest into yet. */
+  _getHeaderControls() {
+    const controls = super._getHeaderControls();
+    if ((this.actor.system.calling ?? 0) > 0) {
+      const active = this.actor.system.specialties.activeManifestation;
+      controls.push({
+        icon: "fa-solid fa-mask",
+        label: active ? game.i18n.format("ESSENCE.Character.ManifestedAsControl", { subtype: active }) : game.i18n.localize("ESSENCE.Character.FullManifestationControl"),
+        action: "openManifestation"
+      });
+    }
+    return controls;
+  }
 
   static PARTS = {
     body: { template: "systems/essence-system/templates/actor/character-sheet.hbs" }
@@ -357,9 +376,14 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       label: f.label,
       threads: f.threads.map((t) => ({ name: t, active: system.specialties.threads.includes(t) }))
     }));
-    context.authorityCap = Math.ceil((system.leadership ?? 0) / 2);
+    // max(1, half Rank rounded up) — the plain half-rank formula gives 0 slots at Leadership Rank
+    // 0, an unusable result PLAYTEST_RULES.md §13 explicitly patches with this floor.
+    context.authorityCap = Math.max(1, Math.ceil((system.leadership ?? 0) / 2));
     context.authorityEntries = system.specialties.authority.map((value, i) => ({ value, i }));
     context.riteEntries = system.specialties.rites.map((r, i) => ({ ...r, i }));
+    // Read-only status for the Calling specialty row — entering/dismissing a Full Manifestation
+    // happens through this sheet's own header dropdown (see manifestation.mjs), not here.
+    context.brokenManifestations = system.specialties.manifestationRecords.filter((r) => r.broken).map((r) => r.subtype);
 
     // Universal actions everyone can use (Hide, Strike, Brace, ...) are just Action/Reaction Cards
     // with no Combat Skill set — split those into their own "Basic" row of quick-access buttons
@@ -1290,10 +1314,10 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     await this.actor.update({ "system.specialties.threads": threads });
   }
 
-  /** Leadership — Authority: stored die results, capped at half Leadership Rank (rounded up). */
+  /** Leadership — Authority: stored die results, capped at max(1, half Leadership Rank rounded up). */
   static async #onAddAuthority() {
     const rank = this.actor.system.leadership ?? 0;
-    const cap = Math.ceil(rank / 2);
+    const cap = Math.max(1, Math.ceil(rank / 2));
     const authority = this.actor.system.specialties.authority;
     if (authority.length >= cap) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.MaxAuthorityStored", { cap }));
@@ -1339,6 +1363,45 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const rites = this.actor.system.specialties.rites.map((r) => ({ ...r }));
     rites.splice(i, 1);
     await this.actor.update({ "system.specialties.rites": rites });
+  }
+
+  /**
+   * Calling — Full Manifestation entry point (see manifestation.mjs). Already-manifested is
+   * handled by pointing the player at the profile's own sheet instead of offering a second Enter
+   * here — Dismiss/Apply Defeat live on that NPC sheet's matching header control, not this one.
+   */
+  static async #onOpenManifestation() {
+    const actor = this.actor;
+    const active = actor.system.specialties.activeManifestation;
+    if (active) {
+      ui.notifications.info(game.i18n.format("ESSENCE.Notify.AlreadyManifested", { name: actor.name, subtype: active }));
+      return;
+    }
+    const subtypes = availableSubtypes(actor);
+    if (!subtypes.length) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoManifestationRank", { name: actor.name }));
+      return;
+    }
+    const options = subtypes.map((s) => {
+      const record = actor.system.specialties.manifestationRecords.find((r) => r.subtype === s.name);
+      const broken = record?.broken;
+      return `<option value="${s.name}" ${broken ? "disabled" : ""}>${s.name} (Rank ${s.rank})${broken ? " — Broken until Downtime" : ""}</option>`;
+    }).join("");
+    const subtype = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: game.i18n.localize("ESSENCE.Character.FullManifestationControl") },
+        content: `<p>${game.i18n.localize("ESSENCE.Character.ManifestationDialogHint")}</p><label>${game.i18n.localize("ESSENCE.Character.ManifestAsLabel")} <select name="subtype">${options}</select></label>`,
+        buttons: [{
+          action: "enter",
+          label: game.i18n.localize("ESSENCE.Character.EnterManifestation"),
+          default: true,
+          callback: (event, button) => button.form.elements.subtype.value
+        }],
+        submit: (result) => resolve(result)
+      }).render(true);
+    });
+    if (!subtype) return;
+    await enterManifestation(actor, subtype);
   }
 
   /** Opens a Card in its read view — same sheet as Edit, just guaranteed to land on the

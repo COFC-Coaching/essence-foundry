@@ -1,0 +1,52 @@
+{
+  "_id": "6b87f84064d94827",
+  "name": "The Needle Returns",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Ritualism",
+    "subtype": "Hex",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy misses you with an Action. Response: On success, deal 1 Necrotic Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, the target is Slowed 1 until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, suppress 1 point of its ordinary accuracy bonuses until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "928afd1ad9675380",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!6b87f84064d94827"
+}

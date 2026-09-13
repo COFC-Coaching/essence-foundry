@@ -1,0 +1,52 @@
+{
+  "_id": "158cb066913cccf3",
+  "name": "River Sovereign, Carry Us Through",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Elemental",
+    "attr": "Adaptability",
+    "skill": "Calling",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Accord, Transference",
+    "expertisesMode": "any",
+    "tags": "mobility, support, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and up to two willing allies within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Each target moves up to 2 units, ignoring ground difficult terrain, and resists its next 1 unit of forced movement until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase one target's movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Each target suppresses one ordinary Slowed Condition during the movement."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Elemental",
+      "html": "You may burn 3 Action Dice and spend 3 Mana to enter Elemental Full Manifestation (FM-2E). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-2E"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!158cb066913cccf3"
+}

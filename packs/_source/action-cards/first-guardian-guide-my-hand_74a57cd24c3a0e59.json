@@ -1,0 +1,52 @@
+{
+  "_id": "74a57cd24c3a0e59",
+  "name": "First Guardian, Guide My Hand",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Ancestor",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Vessel, Accord",
+    "expertisesMode": "any",
+    "tags": "damage, support, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 weapon Damage. Yourself or one adjacent willing ally gains +1 Composure against the next attack targeting it until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The protected creature may move 1 unit toward you; self moves freely."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one ordinary Success Die penalty on that creature's next Combat Card until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Ancestor",
+      "html": "You may burn 3 Action Dice and spend 3 Mana to enter Ancestor Full Manifestation (FM-2A). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-2A"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!74a57cd24c3a0e59"
+}

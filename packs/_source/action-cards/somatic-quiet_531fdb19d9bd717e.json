@@ -1,0 +1,52 @@
+{
+  "_id": "531fdb19d9bd717e",
+  "name": "Somatic Quiet",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Trance",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Biokinesis, Imprint",
+    "expertisesMode": "any",
+    "tags": "setup, suppression, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Do not accept Strain on this card. Remove 1 Strain; suppress one ordinary pain or Poison penalty until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Extend suppression through the end of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one Light physical Wound Condition's numerical penalties until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Trance",
+      "html": "Enter Somatic Trance until the end of your next turn: ignore 1 point of the Composure penalty caused by your current Strain. The Strain remains and other penalties still apply.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!531fdb19d9bd717e"
+}

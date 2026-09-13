@@ -1,0 +1,52 @@
+{
+  "_id": "52edc46e42834374",
+  "name": "Keratin Mantle",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Bulwark",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Metabolism, Integration",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one adjacent willing ally."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Reduce the target's next incoming Damage by 1 and next forced movement by 1 unit until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target gains +1 Fortitude against hazards until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "You and the ally both receive the protection."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Bulwark",
+      "html": "Assume Mantle (upkeep 1): the first Damage you take each round is reduced by 1. This is prevention, not increased Resilience or removal of accumulated Damage.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!52edc46e42834374"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "f81338b98b051e3e",
+  "name": "Willow Hides the Broken Branch",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Guard",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Berserking, Grappling",
+    "expertisesMode": "any",
+    "tags": "protection, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress one Light physical Wound Condition's numerical penalties until the start of your next turn. You also reduce your next incoming Damage by 1 during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Extend suppression to the end of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Until your next turn, reduce forced movement against you by 2 units."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Guard",
+      "html": "Enter Willow Stance: you do not lose Combo from the first Core Wound you suffer each round. The Wound and its other consequences still occur.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f81338b98b051e3e"
+}

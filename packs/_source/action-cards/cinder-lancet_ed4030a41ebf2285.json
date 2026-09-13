@@ -1,0 +1,52 @@
+{
+  "_id": "ed4030a41ebf2285",
+  "name": "Cinder Lancet",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Magecraft",
+    "subtype": "Fire",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, information",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Fire Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 Fire Damage."
+      },
+      {
+        "n": "1",
+        "html": "After a hit, illuminate the target's space, removing ordinary darkness there until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Fire Thread",
+      "html": "Gain a Fire Thread. Before rolling a later Magecraft card, consume it: one target that already took Damage since its last turn takes +1 Damage from that card if hit.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ed4030a41ebf2285"
+}

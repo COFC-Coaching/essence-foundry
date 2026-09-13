@@ -1,0 +1,217 @@
+{
+  "_id": "2c57e887242ed98e",
+  "name": "Phantom",
+  "type": "npc",
+  "img": "icons/svg/invisible.svg",
+  "system": {
+    "might": 0,
+    "grace": 0,
+    "vigor": 0,
+    "intellect": 0,
+    "acuity": 0,
+    "resolve": 0,
+    "presence": 0,
+    "adaptability": 0,
+    "anima": 0,
+    "tier": 1,
+    "level": 1,
+    "role": "",
+    "gmNotes": "<p><strong>Purpose:</strong> Selective pressure and concealment; not invulnerability or wall-walking.</p><p><strong>Trait &mdash; Soundless Step.</strong> Your own ordinary movement makes no sound. This does not suppress visible movement, equipment being manipulated, attacks, speech or magical detection, and does not itself make you Hidden.</p><p><em>Full Manifestation profile — Rank 1, Nonliving. See CALLING_PROFILES.md / the Full Manifestation Guide journal for the shared entry/dismissal/defeat procedure.</em></p>",
+    "resilience": 0,
+    "movement": 3,
+    "fortitudeBonus": 4,
+    "composureBonus": 5,
+    "harmonyBonus": 5,
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ]
+  },
+  "items": [
+    {
+      "_id": "796031ae4ea6086a",
+      "_key": "!actors.items!2c57e887242ed98e.796031ae4ea6086a",
+      "name": "Winter's Hand",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 1,
+        "style": "Calling",
+        "subtype": "Phantom",
+        "attr": "Anima",
+        "skill": "Calling",
+        "defense": "Harmony",
+        "min": "2",
+        "cost": "0",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "One enemy within 3 units."
+          },
+          {
+            "label": "Effect",
+            "html": "On success, deal 1 Necrotic Damage."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "A hit target loses the benefit of one ordinary magical Movement bonus until the start of your next turn."
+          },
+          {
+            "n": "2",
+            "html": "Deal +1 Necrotic Damage."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "a30924bf2a62c67c",
+      "_key": "!actors.items!2c57e887242ed98e.a30924bf2a62c67c",
+      "name": "Veil of the Unseen Guest",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 1,
+        "style": "Calling",
+        "subtype": "Phantom",
+        "attr": "Adaptability",
+        "skill": "Calling",
+        "defense": "",
+        "min": "2",
+        "cost": "1",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "Self or one willing ally within 3 units."
+          },
+          {
+            "label": "Effect",
+            "html": "Reduce the target's next incoming Damage by 1 before the start of your next turn. Its space provides ordinary concealment until that deadline; anyone occupying it can use the concealment."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "The target may move 1 unit toward existing cover; self may move freely."
+          },
+          {
+            "n": "2",
+            "html": "Suppress one ordinary sensory penalty on the target until the start of your next turn."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "084bfddd25eab6f2",
+      "_key": "!actors.items!2c57e887242ed98e.084bfddd25eab6f2",
+      "name": "Shroud Against the Edge",
+      "type": "reaction-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 1,
+        "style": "Calling",
+        "subtype": "Phantom",
+        "attr": "Anima",
+        "skill": "Calling",
+        "defense": "",
+        "min": "2",
+        "cost": "1",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "Self."
+          },
+          {
+            "label": "Trigger",
+            "html": "An Action or Reaction would deal Damage to you."
+          },
+          {
+            "label": "Effect",
+            "html": "Reduce that Damage by 1; after the triggering card resolves, move 1 unit."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "Ignore difficult terrain during that movement."
+          },
+          {
+            "n": "2",
+            "html": "Reduce the Damage by 1 more."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!2c57e887242ed98e"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "233756a9815ca54f",
+  "name": "Intrusive Chorus",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Assault",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Telepathy, Imprint",
+    "expertisesMode": "any",
+    "tags": "damage, area, information",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two enemies within 4 units and 2 units of each other."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each is Distracted until the start of your next turn; choose one hit target to take 1 Psychic Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Each hit target's next spoken combat coordination is perceptible to you, without reading private thoughts, until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Deal 1 Psychic Damage to the second hit target."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Assault",
+      "html": "If you accepted Strain, mark one hit target: you detect its space through ordinary concealment until the start of your next turn, but not through solid walls.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!233756a9815ca54f"
+}

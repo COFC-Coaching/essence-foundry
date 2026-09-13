@@ -1,0 +1,52 @@
+{
+  "_id": "ea6778a2623837d7",
+  "name": "No Panic, Just Orders",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Order",
+    "attr": "Anima",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Discipline, Tactics",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction imposes an ordinary mental or morale Condition on the target. Response (unopposed): Suppress that Condition until the start of your next turn; the target gains +1 Composure for that duration."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target may move 1 unit toward you; self moves freely."
+      },
+      {
+        "n": "2",
+        "html": "The target reduces its next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "bb8e7b0bcde9b2a5",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ea6778a2623837d7"
+}

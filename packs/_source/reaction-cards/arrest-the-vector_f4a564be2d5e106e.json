@@ -1,0 +1,52 @@
+{
+  "_id": "f4a564be2d5e106e",
+  "name": "Arrest the Vector",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Barrier",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Telekinesis, Precognition",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would force the target to move. Response (unopposed): Reduce that movement by 3 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Prevent a Prone effect imposed by that same Action."
+      },
+      {
+        "n": "2",
+        "html": "Reduce the Action's Damage to the target by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "7f44f584777fefe2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f4a564be2d5e106e"
+}

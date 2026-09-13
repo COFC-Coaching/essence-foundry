@@ -1,0 +1,52 @@
+{
+  "_id": "bd617cf12abb233b",
+  "name": "The High Priestess Counts the Steps",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Divination",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Sympathy, Entreaty",
+    "expertisesMode": "any",
+    "tags": "information, setup, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two detected enemies within 6 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, learn each target's lowest Defense and remaining Reaction Dice, and reveal its occupied space through ordinary concealment until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One hit target suffers -1 Harmony against the next attack targeting it until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "One willing ally within 3 units gains +1 Defense against each hit target's next attack until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Divination",
+      "html": "Rite, 2 Echoes: bind one hit target. Trigger: it declares an Action with 3 or more rolled dice. Echo: yourself or a willing ally within 3 units may move 2 units before its roll.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!bd617cf12abb233b"
+}

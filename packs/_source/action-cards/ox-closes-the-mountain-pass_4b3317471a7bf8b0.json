@@ -1,0 +1,52 @@
+{
+  "_id": "4b3317471a7bf8b0",
+  "name": "Ox Closes the Mountain Pass",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Finisher",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Grappling, Phalanx",
+    "expertisesMode": "any",
+    "tags": "damage, control, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Bludgeoning Damage and prevent the target from moving through your space until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Pull the target 1 unit before dealing Damage."
+      },
+      {
+        "n": "2",
+        "html": "The target cannot voluntarily move farther from you until the start of your next turn; it may burn 1 die to end this restriction."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Finisher",
+      "html": "After a hit, spend 2 Combo to enter Ox Stance: adjacent enemies treat spaces adjacent to you as difficult terrain while you remain in place.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!4b3317471a7bf8b0"
+}

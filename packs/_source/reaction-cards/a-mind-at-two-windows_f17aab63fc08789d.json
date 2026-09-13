@@ -1,0 +1,52 @@
+{
+  "_id": "f17aab63fc08789d",
+  "name": "A Mind at Two Windows",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Projection",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Clairvoyance, Imprint",
+    "expertisesMode": "any",
+    "tags": "protection, mobility, information",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An area Action is declared including the target. Response (unopposed): Move it up to 2 units toward a visible empty supported space; recheck the area afterward."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore difficult terrain during this movement."
+      },
+      {
+        "n": "2",
+        "html": "Detect ordinarily concealed enemies within 2 units of the destination until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "7f44f584777fefe2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f17aab63fc08789d"
+}

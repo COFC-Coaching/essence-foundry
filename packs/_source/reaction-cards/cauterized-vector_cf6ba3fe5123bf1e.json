@@ -1,0 +1,52 @@
+{
+  "_id": "cf6ba3fe5123bf1e",
+  "name": "Cauterized Vector",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Fire",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Channeling, Disjunction",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy misses you with a ranged Action. Response: On success, deal 1 Fire Damage and illuminate its space until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore ordinary concealment for this attack."
+      },
+      {
+        "n": "2",
+        "html": "Suppress 1 point of its next ordinary magical Damage reduction until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "0b2b283e84264679",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!cf6ba3fe5123bf1e"
+}

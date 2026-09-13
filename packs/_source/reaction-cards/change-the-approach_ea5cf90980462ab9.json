@@ -1,0 +1,52 @@
+{
+  "_id": "ea5cf90980462ab9",
+  "name": "Change the Approach",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Order",
+    "attr": "Adaptability",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Tactics, Coordination",
+    "expertisesMode": "any",
+    "tags": "mobility, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An enemy ends voluntary movement adjacent to the target. Response (unopposed): Move the target 1 unit along a clear path without triggering that enemy's movement Reactions."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "The target gains +1 Fortitude against that enemy until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "bb8e7b0bcde9b2a5",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ea5cf90980462ab9"
+}

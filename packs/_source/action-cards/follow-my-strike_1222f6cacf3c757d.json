@@ -1,0 +1,52 @@
+{
+  "_id": "1222f6cacf3c757d",
+  "name": "Follow My Strike",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Example",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Valor, Coordination",
+    "expertisesMode": "any",
+    "tags": "damage, setup, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage. Yourself or one adjacent willing ally becomes Rallied until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The Rallied creature may move 1 unit toward the target."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 weapon Damage."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Example",
+      "html": "Spend this Authority when a Rallied creature within 3 units consumes Rallied on an attack against this target: ignore 1 point of the target's cover bonus for that attack.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1222f6cacf3c757d"
+}

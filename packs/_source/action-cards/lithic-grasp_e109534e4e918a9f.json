@@ -1,0 +1,52 @@
+{
+  "_id": "e109534e4e918a9f",
+  "name": "Lithic Grasp",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Earth",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Transmutation, Disjunction",
+    "expertisesMode": "any",
+    "tags": "damage, control, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy on a solid surface within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Bludgeoning Damage and make it Slowed 2 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, suppress 1 point of its ordinary Movement bonuses until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "After a hit, end one ordinary effect allowing that target to ignore difficult terrain."
+      }
+    ],
+    "rider": {
+      "title": "Earth Thread",
+      "html": "Gain an Earth Thread. Before rolling a later Magecraft card, consume it: yourself or one willing target of that card reduces its next incoming Damage by 1 before the start of your next turn.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e109534e4e918a9f"
+}

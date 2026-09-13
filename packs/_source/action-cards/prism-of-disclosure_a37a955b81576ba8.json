@@ -1,0 +1,52 @@
+{
+  "_id": "a37a955b81576ba8",
+  "name": "Prism of Disclosure",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Light",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Disjunction, Sculpting",
+    "expertisesMode": "any",
+    "tags": "damage, information, area",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two detected enemies within 5 units and 2 units of each other."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each sheds light and cannot benefit from ordinary visual concealment until the start of your next turn. Choose one hit target to take 1 Radiant Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase separation between targets to 4 units."
+      },
+      {
+        "n": "2",
+        "html": "End one ordinary visual illusion covering a hit target's location, but not a Specialty effect."
+      }
+    ],
+    "rider": {
+      "title": "Light Thread",
+      "html": "Gain a Light Thread. Before rolling a later Magecraft card, consume it: ignore ordinary concealment penalties against its detected targets. This does not detect a hidden creature or bypass solid cover.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!a37a955b81576ba8"
+}

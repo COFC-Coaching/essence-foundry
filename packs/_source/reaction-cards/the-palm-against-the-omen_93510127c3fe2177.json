@@ -1,0 +1,52 @@
+{
+  "_id": "93510127c3fe2177",
+  "name": "The Palm Against the Omen",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Ritualism",
+    "subtype": "Ward",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 2 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would deal Damage to the target. Response (unopposed): Reduce it by 1."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target also resists 1 unit of forced movement from that Action."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one ordinary Condition imposed by that Action until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "928afd1ad9675380",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!93510127c3fe2177"
+}

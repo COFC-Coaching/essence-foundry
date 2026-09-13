@@ -1,0 +1,52 @@
+{
+  "_id": "3720b046bb26fe68",
+  "name": "Three-Lane Sweep",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Salvo",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Cadence, Trajectory",
+    "expertisesMode": "any",
+    "tags": "damage, area, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to three enemies within ranged Weapon Range and a cone of length 5."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each target takes 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Choose one target to ignore 1 point of cover bonus against."
+      },
+      {
+        "n": "2",
+        "html": "Each hit target is Slowed 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Salvo",
+      "html": "After resolving, choose a hit target. You may transfer your Lock to it; the other hit targets cannot provide it cover against your next Ballistics Action until the start of your next turn.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!3720b046bb26fe68"
+}

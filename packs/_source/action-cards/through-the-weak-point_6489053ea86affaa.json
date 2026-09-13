@@ -1,0 +1,52 @@
+{
+  "_id": "6489053ea86affaa",
+  "name": "Through the Weak Point",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Penetration, Precision",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within ranged Weapon Range behind light, non-solid cover."
+      },
+      {
+        "label": "Effect",
+        "html": "Ignore up to 2 points of ordinary cover bonus. On success, deal 2 weapon Damage. Solid walls still block the shot."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Suppress 1 point of equipment Fortitude for this attack."
+      },
+      {
+        "n": "2",
+        "html": "One hit target cannot claim that particular cover source until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Trickshot",
+      "html": "After a hit, you may end Lock to let the next allied ranged attack against that target ignore 1 point of cover bonus until the start of your next turn.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!6489053ea86affaa"
+}

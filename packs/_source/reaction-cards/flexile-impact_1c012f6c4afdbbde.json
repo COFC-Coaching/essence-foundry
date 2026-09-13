@@ -1,0 +1,52 @@
+{
+  "_id": "1c012f6c4afdbbde",
+  "name": "Flexile Impact",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Gestalt",
+    "subtype": "Bulwark",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would deal physical Damage to you. Response (unopposed): Reduce that Damage by 1."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After the attack, move 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Reduce the Damage by 1 more, but become Unstable until your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "06e138447ec657be",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1c012f6c4afdbbde"
+}

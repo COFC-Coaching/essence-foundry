@@ -1,0 +1,52 @@
+{
+  "_id": "a88a593d13e7b803",
+  "name": "Vibration Whiskers",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Predator",
+    "attr": "Grace",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Awareness, Armament",
+    "expertisesMode": "any",
+    "tags": "damage, information",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "Ignore ordinary visual concealment for this attack. On success, deal 1 Slashing Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Learn whether the target has a higher Fortitude or Composure."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Damage if the target voluntarily moved since your last turn."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Predator",
+      "html": "Assume Whiskers (upkeep 0): you detect the occupied space of moving creatures within 2 units on the same continuous surface, but not their identity or through solid walls.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!a88a593d13e7b803"
+}

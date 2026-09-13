@@ -1,0 +1,52 @@
+{
+  "_id": "1476956d3e56811f",
+  "name": "Ground the Surge",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Trance",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Imprint, Precognition",
+    "expertisesMode": "any",
+    "tags": "setup, mobility, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An enemy Action misses you while you have Strain. Response (unopposed): Do not accept Strain on this card. Remove 1 Strain and move 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Gain +1 Composure against that enemy until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Suppress the Harmony penalty from your remaining Strain until the start of your next turn; the Strain remains."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "7f44f584777fefe2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1476956d3e56811f"
+}

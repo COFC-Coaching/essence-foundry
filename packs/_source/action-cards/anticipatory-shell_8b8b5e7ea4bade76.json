@@ -1,0 +1,52 @@
+{
+  "_id": "8b8b5e7ea4bade76",
+  "name": "Anticipatory Shell",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Barrier",
+    "attr": "Acuity",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Precognition, Telekinesis",
+    "expertisesMode": "any",
+    "tags": "protection, support, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target gains +1 Fortitude against the next attack targeting it and reduces its next incoming forced movement by 2 units until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move the target 1 unit along a clear path."
+      },
+      {
+        "n": "2",
+        "html": "The target reduces its next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Barrier",
+      "html": "If you accepted Strain, choose the first visible attacker to miss the protected creature before your next turn; impose -1 on its next Success Die before your next turn.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!8b8b5e7ea4bade76"
+}

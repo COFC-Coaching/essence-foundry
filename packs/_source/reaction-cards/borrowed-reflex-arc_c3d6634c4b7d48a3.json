@@ -1,0 +1,52 @@
+{
+  "_id": "c3d6634c4b7d48a3",
+  "name": "Borrowed Reflex Arc",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Chimera",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Integration, Awareness",
+    "expertisesMode": "any",
+    "tags": "protection, information",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction targets you while you have an Adaptation, before its roll. Response (unopposed): Retain or end that Adaptation; gain +1 to the targeted Defense against the Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Detect the attacker's space if it is within 3 units and not behind a solid barrier."
+      },
+      {
+        "n": "2",
+        "html": "If you ended the Adaptation, reduce Damage from the Action by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "06e138447ec657be",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c3d6634c4b7d48a3"
+}

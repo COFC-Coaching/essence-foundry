@@ -1,0 +1,52 @@
+{
+  "_id": "c7c9f9291f675fe0",
+  "name": "Hunting Brother, Answer the Bite",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Beast",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Vessel, Accord",
+    "expertisesMode": "any",
+    "tags": "damage, control, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 2 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy damages you with a melee Action. Response: After that Damage, on success deal 1 Slashing Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After a hit, pull the target 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Slashing Damage."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "e87efeb1c809057f",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c7c9f9291f675fe0"
+}

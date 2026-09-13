@@ -1,0 +1,52 @@
+{
+  "_id": "feeb64ae38132acc",
+  "name": "This Is How We Break Through",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Example",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Valor, Tactics",
+    "expertisesMode": "any",
+    "tags": "damage, control, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 weapon Damage and push it 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move into its vacated space after a hit."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, suppress 1 point of its equipment Fortitude against the next attack until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Example",
+      "html": "Spend this Authority when you or an ally within 3 units crosses the target's former space before your next turn: that creature becomes Rallied.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!feeb64ae38132acc"
+}

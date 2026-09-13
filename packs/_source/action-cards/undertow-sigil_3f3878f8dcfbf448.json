@@ -1,0 +1,52 @@
+{
+  "_id": "3f3878f8dcfbf448",
+  "name": "Undertow Sigil",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Water",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sculpting, Channeling",
+    "expertisesMode": "any",
+    "tags": "damage, area, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two enemies within 4 units and 2 units of each other."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, pull each target 1 unit toward a visible point between them. Choose one hit target to take 1 Cold Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Pull 1 additional unit."
+      },
+      {
+        "n": "2",
+        "html": "Each hit target is Slowed 2 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Water Thread",
+      "html": "Gain a Water Thread. Before rolling a later Magecraft card, consume it: suppress one ordinary Movement penalty on yourself or one willing target of that card until the start of your next turn.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!3f3878f8dcfbf448"
+}

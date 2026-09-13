@@ -1,0 +1,52 @@
+{
+  "_id": "05c1b4120e03f309",
+  "name": "Reflex Spines",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Bulwark",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Awareness, Armament",
+    "expertisesMode": "any",
+    "tags": "damage, protection, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Piercing Damage. Independently, reduce your next incoming melee Damage by 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, push the enemy 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Gain +1 Fortitude against that enemy until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Bulwark",
+      "html": "Assume Spines (upkeep 1): the first time each round an enemy voluntarily moves between two spaces adjacent to you, its movement ends in the destination space.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!05c1b4120e03f309"
+}

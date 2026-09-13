@@ -1,0 +1,52 @@
+{
+  "_id": "793ef9504433ac6e",
+  "name": "Tool-Bearing Digits",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Chimera",
+    "attr": "Grace",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Plasticity, Integration",
+    "expertisesMode": "any",
+    "tags": "damage, control, utility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy, or one unsecured small object within 2 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Bludgeoning Damage and pull a hit enemy 1 unit. An unattended object instead moves into your hand without opposition."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After a hit, move 1 unit around the enemy."
+      },
+      {
+        "n": "2",
+        "html": "A hit enemy cannot make movement Reactions against you until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Chimera",
+      "html": "Assume Digits (upkeep 0): you may hold one extra small object, but gain no additional weapon Source, Action, Reaction or item use.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!793ef9504433ac6e"
+}

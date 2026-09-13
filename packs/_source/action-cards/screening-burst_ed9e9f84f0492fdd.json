@@ -1,0 +1,52 @@
+{
+  "_id": "ed9e9f84f0492fdd",
+  "name": "Screening Burst",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Payload, Mobility",
+    "expertisesMode": "any",
+    "tags": "protection, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target may move 1 unit and gains +1 Fortitude against ranged attacks until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Protect a second willing creature within 2 units of the first."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Suppression",
+      "html": "While your Lock is visible, you may end it when its target attacks a protected creature before your next turn to reduce that attack's Damage by 1.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ed9e9f84f0492fdd"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "e8ba2ae2f1f74672",
+  "name": "The Promise Holds",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Vow",
+    "attr": "Anima",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Valor, Inspiration",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would cause Damage to the target while it has at least one Core Wound. Response (unopposed): Reduce the Damage by 2, without changing existing Wounds."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target becomes Rallied until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one non-Critical Wound Condition's numerical penalties on the target until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "bb8e7b0bcde9b2a5",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e8ba2ae2f1f74672"
+}

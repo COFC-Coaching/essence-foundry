@@ -1,0 +1,52 @@
+{
+  "_id": "5e90913ba5f84e96",
+  "name": "Nociceptive Spike",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Assault",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Biokinesis, Mesmerism",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One living enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Psychic Damage and make the target Slowed 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Slow by 1."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target suffers -1 on its next Success Die until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Assault",
+      "html": "If you accepted Strain and hit, suppress one ordinary pain penalty on yourself until your next turn. This does not suppress a Wound Condition.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5e90913ba5f84e96"
+}

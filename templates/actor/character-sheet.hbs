@@ -219,7 +219,7 @@
       {{#if (gt system.psionics 0)}}
         <div class="specialty-row">
           <span class="attr-label" title="{{localize 'ESSENCE.Character.StrainTooltip'}}">{{localize "ESSENCE.Character.StrainLabel"}}</span>
-          <input type="number" name="system.specialties.strain" value="{{system.specialties.strain}}" style="width:3em" min="0">
+          <input type="number" name="system.specialties.strain" value="{{system.specialties.strain}}" style="width:3em" min="0" max="6">
         </div>
       {{/if}}
       {{#if (gt system.leadership 0)}}
@@ -252,8 +252,14 @@
       {{#if (gt system.calling 0)}}
         <div class="specialty-row">
           <span class="attr-label" title="{{localize 'ESSENCE.Character.ManifestationTooltip'}}">{{localize "ESSENCE.Character.ManifestationLabel"}}</span>
-          <label><input type="checkbox" name="system.specialties.manifested" {{#if system.specialties.manifested}}checked{{/if}}> {{localize "ESSENCE.Character.FullyManifested"}}</label>
-          <label><input type="checkbox" name="system.specialties.broken" {{#if system.specialties.broken}}checked{{/if}}> {{localize "ESSENCE.Character.Broken"}}</label>
+          {{#if system.specialties.activeManifestation}}
+            <span>{{localize "ESSENCE.Character.FullyManifested"}}: <strong>{{system.specialties.activeManifestation}}</strong></span>
+          {{else}}
+            <span class="muted">{{localize "ESSENCE.Character.NotManifested"}}</span>
+          {{/if}}
+          {{#if brokenManifestations.length}}
+            <span class="muted">{{localize "ESSENCE.Character.Broken"}}: {{#each brokenManifestations}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</span>
+          {{/if}}
         </div>
       {{/if}}
     </div>

@@ -1,0 +1,52 @@
+{
+  "_id": "53705ff410cf497b",
+  "name": "Between Intention and Motion",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Barrier",
+    "attr": "Acuity",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Precognition, Telekinesis",
+    "expertisesMode": "any",
+    "tags": "protection, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would deal Damage to the target. Response (unopposed): Reduce it by 2; afterward the target may move 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Prevent one ordinary Prone or Slowed effect imposed by that Action."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "7f44f584777fefe2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!53705ff410cf497b"
+}

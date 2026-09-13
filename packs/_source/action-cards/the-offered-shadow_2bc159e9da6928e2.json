@@ -1,0 +1,52 @@
+{
+  "_id": "2bc159e9da6928e2",
+  "name": "The Offered Shadow",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Offering",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Entreaty, Severance",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Burn 1 additional Action Die. On success, deal 2 Necrotic Damage; your Harmony is reduced by 1 until the start of your next turn, even on a miss."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, suppress its ordinary concealment until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target is Slowed 2 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Offering",
+      "html": "Rite, 2 Echoes: on a hit, the target becomes Possessed. Trigger: it attacks your Harmony. Echo: grant +1 Harmony against that attack before rolling.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2bc159e9da6928e2"
+}

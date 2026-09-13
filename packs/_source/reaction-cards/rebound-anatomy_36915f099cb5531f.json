@@ -1,0 +1,52 @@
+{
+  "_id": "36915f099cb5531f",
+  "name": "Rebound Anatomy",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Titan",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Armament, Plasticity",
+    "expertisesMode": "any",
+    "tags": "damage, control, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy pushes you or knocks you Prone with an Action. Response: After its effect, on success deal 2 Bludgeoning Damage and stand if there is room."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, push the enemy 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, move it to another empty adjacent space and remain adjacent."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "06e138447ec657be",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!36915f099cb5531f"
+}

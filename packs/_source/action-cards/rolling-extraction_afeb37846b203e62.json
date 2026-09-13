@@ -1,0 +1,52 @@
+{
+  "_id": "afeb37846b203e62",
+  "name": "Rolling Extraction",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Salvo",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Mobility, Flair",
+    "expertisesMode": "any",
+    "tags": "damage, area, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two enemies within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each target takes 1 weapon Damage. After resolving, yourself or a willing ally within 3 units may move up to 2 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "The moving creature ignores movement Reactions from hit targets."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Salvo",
+      "html": "If a hit target is Locked, you may end Lock to grant the moving creature +1 Fortitude against ranged attacks until the start of your next turn.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!afeb37846b203e62"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "58908ad063c4015c",
+  "name": "Ballast Knuckles",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Gestalt",
+    "subtype": "Titan",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, control, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Bludgeoning Damage and push it 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Push 1 additional unit."
+      },
+      {
+        "n": "2",
+        "html": "Knock the target Prone if it ends beside an obstacle."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Titan",
+      "html": "Assume Ballast (upkeep 0): reduce the first forced movement against you each round by 1 unit; your normal Movement is reduced by 1.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!58908ad063c4015c"
+}

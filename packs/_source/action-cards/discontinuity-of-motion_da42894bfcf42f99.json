@@ -1,0 +1,52 @@
+{
+  "_id": "da42894bfcf42f99",
+  "name": "Discontinuity of Motion",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Fracture",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Biokinesis, Precognition",
+    "expertisesMode": "any",
+    "tags": "control, setup, information",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One living enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, the target is Slowed 2 and suffers -1 Fortitude against your next Psionics Action until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Learn whether the target has more Action or Reaction Dice remaining."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, it must burn 1 die before its next voluntary movement until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Fracture",
+      "html": "If you accepted Strain and hit, you may move 1 unit after the target next moves before your next turn.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!da42894bfcf42f99"
+}

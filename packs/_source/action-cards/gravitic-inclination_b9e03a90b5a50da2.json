@@ -1,0 +1,52 @@
+{
+  "_id": "b9e03a90b5a50da2",
+  "name": "Gravitic Inclination",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Space",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sculpting, Channeling",
+    "expertisesMode": "any",
+    "tags": "damage, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Force Damage and pull it 1 unit toward a visible point within 2 units of it."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Pull 1 additional unit."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Force Damage if the target ends adjacent to a solid obstacle."
+      }
+    ],
+    "rider": {
+      "title": "Space Thread",
+      "html": "Gain a Space Thread. Before rolling a later Magecraft card, consume it: choose a visible empty space within 2 units as its origin. Measure its Range and area from that space.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b9e03a90b5a50da2"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "d668b2707d11dee5",
+  "name": "Hold Your Ground",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Leadership",
+    "subtype": "Formation",
+    "attr": "Anima",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and an optional adjacent willing ally."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Each target resists its next 1 unit of forced movement until the start of your next turn. Choose one target to reduce its next incoming Damage by 1 in that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The ally may move 1 unit toward you."
+      },
+      {
+        "n": "2",
+        "html": "Both targets receive the Damage reduction."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Formation",
+      "html": "Spend this Authority when you or an adjacent willing ally would be pushed: reduce that push by 1 unit. This does not require another ally.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d668b2707d11dee5"
+}

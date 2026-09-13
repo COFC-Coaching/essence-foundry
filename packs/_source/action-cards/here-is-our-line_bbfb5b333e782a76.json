@@ -1,0 +1,52 @@
+{
+  "_id": "bbfb5b333e782a76",
+  "name": "Here Is Our Line",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Leadership",
+    "subtype": "Standard",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, support, terrain",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One visible space within 2 units; yourself or a willing ally adjacent to it."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Mark the space as a rally point until the start of your next turn. The chosen creature gains +1 Fortitude against the next attack targeting it while within 1 unit of the point."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move the point 1 unit before establishing it."
+      },
+      {
+        "n": "2",
+        "html": "One willing creature within 1 unit of the point becomes Rallied until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Standard",
+      "html": "Spend this Authority when a willing creature within 1 unit of the marked point is missed: it may move 1 unit toward the point without triggering movement Reactions.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!bbfb5b333e782a76"
+}

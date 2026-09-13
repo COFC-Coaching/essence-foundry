@@ -1,0 +1,52 @@
+{
+  "_id": "c37a545b3ee122a8",
+  "name": "Lucent Needle",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Magecraft",
+    "subtype": "Light",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, information, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Radiant Damage. The target sheds visible light in its space until the start of your next turn; this does not reveal creatures other than it."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore ordinary darkness penalties for this attack."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target is Distracted until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Light Thread",
+      "html": "Gain a Light Thread. Before rolling a later Magecraft card, consume it: ignore ordinary concealment penalties against its detected targets. This does not detect a hidden creature or bypass solid cover.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c37a545b3ee122a8"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "835c9d06dc5c33d7",
+  "name": "Still Water Within",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Psionics",
+    "subtype": "Trance",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "setup, protection, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Do not accept Strain on this card. Remove 1 Strain and gain +1 Composure against the next psychic attack before your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one ordinary distraction penalty until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Trance",
+      "html": "Enter Still Water Trance until the end of your next turn: if you accept no Strain during an entire turn, you may burn 1 Action Die at its end to remove 1 Strain.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!835c9d06dc5c33d7"
+}

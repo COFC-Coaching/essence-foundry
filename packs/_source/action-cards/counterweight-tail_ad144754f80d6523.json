@@ -1,0 +1,52 @@
+{
+  "_id": "ad144754f80d6523",
+  "name": "Counterweight Tail",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Titan",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Plasticity, Locomotion",
+    "expertisesMode": "any",
+    "tags": "damage, control, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Bludgeoning Damage and move the target to another empty space adjacent to you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "You may move 1 unit before moving the target."
+      },
+      {
+        "n": "2",
+        "html": "Knock the target Prone."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Titan",
+      "html": "Assume Counterweight (upkeep 0): you cannot be made Prone by ordinary terrain; other sources can still knock you Prone.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ad144754f80d6523"
+}

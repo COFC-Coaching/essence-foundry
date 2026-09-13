@@ -1,0 +1,52 @@
+{
+  "_id": "74b730637e0b1b4c",
+  "name": "Pillar of Embers",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Fire",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sculpting, Channeling",
+    "expertisesMode": "any",
+    "tags": "damage, area, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Enemies in a sphere of radius 1 centered within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each target takes 1 Fire Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Exclude one chosen creature from the area."
+      },
+      {
+        "n": "2",
+        "html": "One hit target gains Burning until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Fire Thread",
+      "html": "Gain a Fire Thread. Before rolling a later Magecraft card, consume it: one target that already took Damage since its last turn takes +1 Damage from that card if hit.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!74b730637e0b1b4c"
+}

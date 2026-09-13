@@ -1,0 +1,52 @@
+{
+  "_id": "b526190e84e24284",
+  "name": "Eclipse of Intent",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Shadow",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Composure",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Disjunction, Sculpting",
+    "expertisesMode": "any",
+    "tags": "protection, debuff, terrain",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy declares a single-target Action against you or an ally within 3 units. Response: On success, impose -2 on its Success Die for that Action; its target's space gains concealment afterward until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Another adjacent space also gains concealment."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, suppress one ordinary accuracy bonus on that Action, to a maximum of 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "0b2b283e84264679",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b526190e84e24284"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "656660135fb25589",
+  "name": "Bell Swallows the Hammer",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Breaker",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Brawling, Phalanx",
+    "expertisesMode": "any",
+    "tags": "protection, control, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or an adjacent willing ally."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: A melee Action would push or pull the target. Response (unopposed): Reduce that forced movement by 2 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target also reduces Damage from that Action by 1."
+      },
+      {
+        "n": "2",
+        "html": "After the Action, move its attacker 1 unit away from the protected creature if adjacent to you; compare your Success Die to its Fortitude."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "f86106a69c957230",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!656660135fb25589"
+}

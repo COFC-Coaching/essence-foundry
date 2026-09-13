@@ -1,0 +1,52 @@
+{
+  "_id": "e9b416d4814bdba8",
+  "name": "Loose Angle",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Ignore 1 point of cover bonus. On success, deal 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 additional point of cover bonus."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, push the target 1 unit sideways along a clear path."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Trickshot",
+      "html": "After resolving, you may move 1 unit while keeping a Locked target visible. This movement cannot pass through enemies.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e9b416d4814bdba8"
+}

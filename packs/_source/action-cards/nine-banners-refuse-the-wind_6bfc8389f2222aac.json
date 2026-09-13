@@ -1,0 +1,52 @@
+{
+  "_id": "6bfc8389f2222aac",
+  "name": "Nine Banners Refuse the Wind",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Guard",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Phalanx, Reaving",
+    "expertisesMode": "any",
+    "tags": "protection, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and up to two willing allies within 2 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Each target reduces its next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Each ally may move 1 unit toward you."
+      },
+      {
+        "n": "2",
+        "html": "Each protected creature also resists its next 2 units of forced movement until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Guard",
+      "html": "Spend 2 Combo to enter Banner Stance: the first protected ally damaged before your next turn may move 1 unit into an empty space adjacent to you after the Damage.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!6bfc8389f2222aac"
+}

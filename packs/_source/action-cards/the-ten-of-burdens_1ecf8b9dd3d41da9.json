@@ -1,0 +1,52 @@
+{
+  "_id": "1ecf8b9dd3d41da9",
+  "name": "The Ten of Burdens",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Hex",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Sympathy, Reagents",
+    "expertisesMode": "any",
+    "tags": "damage, area, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two enemies within 5 units and 2 units of each other."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each takes 1 Necrotic Damage and becomes Slowed 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Slow on one target to 2."
+      },
+      {
+        "n": "2",
+        "html": "Each hit target suffers -1 Composure against the next attack targeting it until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Hex",
+      "html": "Rite, 2 Echoes: on a hit, choose one target to become Possessed. Trigger: it voluntarily ends movement adjacent to another enemy. Echo: both are Distracted until your next turn.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1ecf8b9dd3d41da9"
+}

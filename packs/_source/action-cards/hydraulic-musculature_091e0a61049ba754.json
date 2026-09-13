@@ -1,0 +1,52 @@
+{
+  "_id": "091e0a61049ba754",
+  "name": "Hydraulic Musculature",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Titan",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Armament, Metabolism",
+    "expertisesMode": "any",
+    "tags": "damage, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Bludgeoning Damage and push it 2 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Push 1 additional unit."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Damage if the target hits an impassable obstacle."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Titan",
+      "html": "Assume Hydraulics (upkeep 1): the first successful Gestalt push or pull on each of your turns moves its target 1 additional unit.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!091e0a61049ba754"
+}

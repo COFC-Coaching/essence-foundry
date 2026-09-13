@@ -1,0 +1,52 @@
+{
+  "_id": "39a6efaf2c8c5ff6",
+  "name": "Boar Breaks the Thicket",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Blitz",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Berserking, Reaving",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range after your movement."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 2 units in a straight line. On success, deal 1 weapon Damage and push the target 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 Damage if you moved at least 2 units toward the target."
+      },
+      {
+        "n": "1",
+        "html": "After a hit, move into the target's vacated space."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Blitz",
+      "html": "After a hit, you may spend 1 Combo to push a different adjacent enemy 1 unit; compare this Action's Success Die to its Fortitude.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!39a6efaf2c8c5ff6"
+}

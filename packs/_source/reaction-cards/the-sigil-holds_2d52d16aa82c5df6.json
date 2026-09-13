@@ -1,0 +1,52 @@
+{
+  "_id": "2d52d16aa82c5df6",
+  "name": "The Sigil Holds",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Imbuement",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Inscription, Reagents",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would force the target to move or make it Prone. Response (unopposed): Reduce forced movement by 2 units and prevent that Prone effect."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Suppress an ordinary Poison penalty on the target until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Reduce the Action's Damage to the target by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "928afd1ad9675380",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2d52d16aa82c5df6"
+}

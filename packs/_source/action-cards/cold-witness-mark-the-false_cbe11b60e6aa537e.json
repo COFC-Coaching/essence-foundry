@@ -1,0 +1,52 @@
+{
+  "_id": "cbe11b60e6aa537e",
+  "name": "Cold Witness, Mark the False",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Phantom",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Banishment, Anchoring",
+    "expertisesMode": "any",
+    "tags": "damage, information, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Necrotic Damage and reveal its occupied space through ordinary concealment until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Learn whether it is sustained by a visible ordinary magical effect, without revealing secret identity or intentions."
+      },
+      {
+        "n": "2",
+        "html": "Suppress 1 point of its ordinary magical Fortitude bonuses until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Phantom",
+      "html": "You may burn 3 Action Dice and spend 2 Mana to enter Phantom Full Manifestation (FM-1P). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-1P"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!cbe11b60e6aa537e"
+}

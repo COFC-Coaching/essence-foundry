@@ -4,6 +4,7 @@ import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
 import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, resetAdventureUses, resolveEquipmentDropSlot, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
+import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -70,9 +71,32 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       itemDelete: EssenceNpcSheet.#onItemDelete,
       selectOrigin: EssenceNpcSheet.#onSelectOrigin,
       clearOrigin: EssenceNpcSheet.#onClearOrigin,
-      chooseGrantedItem: EssenceNpcSheet.#onChooseGrantedItem
+      chooseGrantedItem: EssenceNpcSheet.#onChooseGrantedItem,
+      dismissManifestation: EssenceNpcSheet.#onDismissManifestation,
+      applyManifestationDefeat: EssenceNpcSheet.#onApplyManifestationDefeat
     }
   };
+
+  /** The reverse side of EssenceActorSheet's "Full Manifestation" header control — shown only on
+   *  an NPC Actor that IS a manifestation clone (see manifestation.mjs's essence-system flags),
+   *  never on an ordinary monster/adversary NPC. */
+  _getHeaderControls() {
+    const controls = super._getHeaderControls();
+    const callerId = this.actor.getFlag(MANIFESTATION_FLAG_SCOPE, "manifestationOf");
+    if (!callerId) return controls;
+    const caller = game.actors.get(callerId);
+    controls.push({
+      icon: "fa-solid fa-arrow-rotate-left",
+      label: game.i18n.format("ESSENCE.Character.ReturnToCallerControl", { name: caller?.name ?? "Caller" }),
+      action: "dismissManifestation"
+    });
+    controls.push({
+      icon: "fa-solid fa-skull",
+      label: game.i18n.localize("ESSENCE.Character.ApplyManifestationDefeatControl"),
+      action: "applyManifestationDefeat"
+    });
+    return controls;
+  }
 
   static PARTS = {
     body: { template: "systems/essence-system/templates/actor/npc-sheet.hbs" }
@@ -997,5 +1021,15 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       "system.reachExceptionMargin": grant.reachMargin,
       "system.slotCost": grant.countsAgainstLimit ? 1 : 0
     });
+  }
+
+  /** Voluntary Dismiss — burn 1 Action Die on the caller's turn, paid by hand like every other
+   *  cost here (see manifestation.mjs's dismissManifestation). */
+  static async #onDismissManifestation() {
+    await dismissManifestation(this.actor);
+  }
+
+  static async #onApplyManifestationDefeat() {
+    await applyManifestationDefeat(this.actor);
   }
 }

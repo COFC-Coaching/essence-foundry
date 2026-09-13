@@ -1,0 +1,52 @@
+{
+  "_id": "41ca7d8a04f05a33",
+  "name": "Keep the Wounded Moving",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Order",
+    "attr": "Anima",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Inspiration, Guardianship",
+    "expertisesMode": "any",
+    "tags": "suppression, support, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress one non-Critical Wound Condition's numerical penalties until the start of your next turn; the target may move 2 units and reduces its next incoming Damage by 1 during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Extend only the suppression through the end of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "One additional willing creature within 2 units receives the movement and Damage protection, not the Wound suppression."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Order",
+      "html": "Spend this Authority when the protected creature is targeted before your next turn: it gains +1 to the targeted Defense against that attack.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!41ca7d8a04f05a33"
+}

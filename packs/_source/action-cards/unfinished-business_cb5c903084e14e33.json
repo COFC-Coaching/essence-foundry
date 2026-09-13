@@ -1,0 +1,52 @@
+{
+  "_id": "cb5c903084e14e33",
+  "name": "Unfinished Business",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Execution",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Precision, Penetration",
+    "expertisesMode": "any",
+    "tags": "damage, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage, or 2 if that target has no cover bonus and already took Damage since its last turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Suppress 1 point of equipment Fortitude for this attack."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target is Distracted until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Execution",
+      "html": "After a hit, you may end Lock on the target to prevent its next 1 unit of voluntary movement before your next turn.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!cb5c903084e14e33"
+}

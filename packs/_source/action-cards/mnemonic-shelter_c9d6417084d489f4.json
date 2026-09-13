@@ -1,0 +1,52 @@
+{
+  "_id": "c9d6417084d489f4",
+  "name": "Mnemonic Shelter",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Barrier",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Imprint, Clairvoyance",
+    "expertisesMode": "any",
+    "tags": "protection, information, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target reduces its next incoming Psychic or Arcane Damage by 2 until the start of your next turn; it knows the direction of that effect's source after resolution."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Extend the protection to Radiant or Necrotic Damage as well."
+      },
+      {
+        "n": "2",
+        "html": "Also suppress one ordinary sensory impairment on the target until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Barrier",
+      "html": "If you accepted Strain, leave a mental landmark in the target's space: you ignore ordinary concealment when targeting that space with Psionics until the start of your next turn.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c9d6417084d489f4"
+}

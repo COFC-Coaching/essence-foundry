@@ -1,0 +1,52 @@
+{
+  "_id": "ea83aa04b0b57c04",
+  "name": "Cognitive Quarantine",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Barrier",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Telepathy, Mesmerism",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress one ordinary hostile mental Condition until the start of your next turn; reduce its next incoming Psychic or Arcane Damage by 1 during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Gain +1 Composure on the target until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one non-Critical mental Wound Condition's numerical penalties for the same duration."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Barrier",
+      "html": "If you accepted Strain, the target cannot receive a second copy of the suppressed ordinary Condition from the same source before your next turn; different effects still apply.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ea83aa04b0b57c04"
+}

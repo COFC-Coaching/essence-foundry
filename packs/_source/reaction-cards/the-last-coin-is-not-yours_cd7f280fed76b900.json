@@ -1,0 +1,52 @@
+{
+  "_id": "cd7f280fed76b900",
+  "name": "The Last Coin Is Not Yours",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Offering",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Severance, Sympathy",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy ends one of your Rites with an Action. Response: On success, deal 2 Necrotic Damage after that Action; the Rite remains ended."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, suppress one ordinary magical Movement bonus on the enemy until the start of your next turn, up to 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, it is Distracted until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "928afd1ad9675380",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!cd7f280fed76b900"
+}

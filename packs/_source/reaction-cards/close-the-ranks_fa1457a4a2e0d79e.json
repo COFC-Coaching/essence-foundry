@@ -1,0 +1,52 @@
+{
+  "_id": "fa1457a4a2e0d79e",
+  "name": "Close the Ranks",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Formation",
+    "attr": "Anima",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Guardianship, Discipline",
+    "expertisesMode": "any",
+    "tags": "protection, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would push or pull the target. Response (unopposed): Reduce that movement by 2 units and grant +1 Fortitude against the triggering Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target may move 1 unit toward another willing creature after the Action."
+      },
+      {
+        "n": "2",
+        "html": "Reduce the Action's Damage to the target by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "bb8e7b0bcde9b2a5",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!fa1457a4a2e0d79e"
+}

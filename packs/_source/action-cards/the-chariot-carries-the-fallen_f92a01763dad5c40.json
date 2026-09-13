@@ -1,0 +1,52 @@
+{
+  "_id": "f92a01763dad5c40",
+  "name": "The Chariot Carries the Fallen",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Imbuement",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Liturgy, Reagents",
+    "expertisesMode": "any",
+    "tags": "suppression, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress one non-Critical physical Wound Condition's numerical penalties until the start of your next turn; the target may stand from Prone and move 2 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "The target reduces its next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Imbuement",
+      "html": "Rite, 2 Echoes: bind the target. Trigger: it begins voluntary movement while a Wound penalty is suppressed. Echo: ignore the first difficult space and resist 1 unit of forced movement during that movement.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f92a01763dad5c40"
+}

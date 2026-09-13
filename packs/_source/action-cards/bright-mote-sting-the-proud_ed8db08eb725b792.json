@@ -1,0 +1,52 @@
+{
+  "_id": "ed8db08eb725b792",
+  "name": "Bright Mote, Sting the Proud",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Calling",
+    "subtype": "Sprite",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, information, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Radiant Damage and illuminate the target's space until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore ordinary darkness for this attack."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target is Distracted until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Sprite",
+      "html": "You may burn 3 Action Dice and spend 1 Mana to enter Sprite Full Manifestation (FM-0S). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-0S"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ed8db08eb725b792"
+}

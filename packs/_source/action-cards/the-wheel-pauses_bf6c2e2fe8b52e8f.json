@@ -1,0 +1,52 @@
+{
+  "_id": "bf6c2e2fe8b52e8f",
+  "name": "The Wheel Pauses",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Divination",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Liturgy, Consecration",
+    "expertisesMode": "any",
+    "tags": "protection, information, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target gains +1 to the targeted Defense against the next attack targeting it until the start of your next turn and may move 1 unit toward a visible empty space."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one ordinary distraction penalty on the target's next Combat Card until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Divination",
+      "html": "Rite, 2 Echoes: bind the target. Trigger: it misses a Combat Card. Echo: reveal the defending creature's lowest Defense, then the protected target may move 1 unit.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!bf6c2e2fe8b52e8f"
+}

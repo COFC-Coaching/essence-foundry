@@ -1,0 +1,52 @@
+{
+  "_id": "ed0f13e82b6991f6",
+  "name": "Counterseal",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Aether",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Disjunction, Reinforcement",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction imposes an ordinary magical Condition on the target. Response (unopposed): Suppress that Condition until the start of your next turn. Specialty and Wound Conditions are unaffected."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Suppress ordinary concealment penalties against the source for the target's next card until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "The target reduces its next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "0b2b283e84264679",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ed0f13e82b6991f6"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "0a0765c803ba0eb8",
+  "name": "The World Within the Empty Cup",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Offering",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Reagents, Severance",
+    "expertisesMode": "any",
+    "tags": "suppression, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and up to two willing allies within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Burn 1 additional Action Die. Each target suppresses one ordinary magical Condition until the start of your next turn and reduces its next incoming magical Damage by 1 during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One target may move 2 units toward you; self moves freely."
+      },
+      {
+        "n": "2",
+        "html": "One target suppresses a Light Wound Condition's numerical penalties until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Offering",
+      "html": "Rite, 2 Echoes: bind one target. Trigger: it resists an ordinary magical Condition with a successful Defense. Echo: reveal its source's occupied space if within 5 units and not behind solid cover.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!0a0765c803ba0eb8"
+}

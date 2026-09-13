@@ -1,0 +1,52 @@
+{
+  "_id": "87fd524c09a9a255",
+  "name": "Fault in the Formation",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Trap",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Sabotage, Exploitation",
+    "expertisesMode": "any",
+    "tags": "area, control, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two adjacent enemies within 3 units of you."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each target is Slowed 1 and suffers -1 Fortitude against your next Cunning Action until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move one hit target 1 unit sideways."
+      },
+      {
+        "n": "2",
+        "html": "Deal 1 Piercing Damage to each hit target using thrown trap material."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Trap",
+      "html": "When a hit target ends adjacent to another enemy before your next turn, make both Exposed until your next turn.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!87fd524c09a9a255"
+}

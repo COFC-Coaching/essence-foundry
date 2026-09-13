@@ -1,0 +1,52 @@
+{
+  "_id": "c0250436c54be1db",
+  "name": "Mantis Counts the Heartbeats",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Opener",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "1",
+    "expertises": "Dueling, Grappling",
+    "expertisesMode": "any",
+    "tags": "damage, setup, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage and reduce the target's Fortitude by 1 against your next Prowess Action until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Pull the target 1 unit after the attack."
+      },
+      {
+        "n": "2",
+        "html": "The Fortitude penalty also applies to your next Prowess Reaction against it before your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Opener",
+      "html": "After a hit, gain 1 additional Combo. Spend 1 Combo when the target next moves before your next turn to move 1 unit with it, keeping adjacent.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c0250436c54be1db"
+}

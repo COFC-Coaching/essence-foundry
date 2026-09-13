@@ -1,0 +1,52 @@
+{
+  "_id": "f719c509bd9a28c8",
+  "name": "Mote of Mercy, Turn the Edge",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Calling",
+    "subtype": "Sprite",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would deal Damage to the target. Response (unopposed): Reduce it by 1; this prevents harm rather than healing any injury."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target resists 1 unit of forced movement from that Action."
+      },
+      {
+        "n": "2",
+        "html": "Reduce the Damage by 1 more."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "e87efeb1c809057f",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f719c509bd9a28c8"
+}

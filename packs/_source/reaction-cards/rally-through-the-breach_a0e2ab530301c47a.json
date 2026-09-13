@@ -1,0 +1,52 @@
+{
+  "_id": "a0e2ab530301c47a",
+  "name": "Rally Through the Breach",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Standard",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Inspiration, Tactics",
+    "expertisesMode": "any",
+    "tags": "setup, support, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units of you and 1 unit of your rally point."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An enemy Action misses that creature. Response (unopposed): Make it Rallied until the start of your next turn; it may move 1 unit toward the rally point."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one ordinary morale-based Success Die penalty on the target until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "bb8e7b0bcde9b2a5",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!a0e2ab530301c47a"
+}

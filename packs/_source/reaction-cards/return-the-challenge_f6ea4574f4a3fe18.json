@@ -1,0 +1,52 @@
+{
+  "_id": "f6ea4574f4a3fe18",
+  "name": "Return the Challenge",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Example",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Provocation, Valor",
+    "expertisesMode": "any",
+    "tags": "damage, support, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy deals Damage to you with a melee Action. Response: After its Damage, on success deal 2 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, push the enemy 1 unit away from an adjacent ally, or from yourself."
+      },
+      {
+        "n": "2",
+        "html": "Make yourself or one willing ally within 3 units Rallied until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "bb8e7b0bcde9b2a5",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f6ea4574f4a3fe18"
+}

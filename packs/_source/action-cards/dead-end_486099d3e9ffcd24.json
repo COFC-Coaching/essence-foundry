@@ -1,0 +1,52 @@
+{
+  "_id": "486099d3e9ffcd24",
+  "name": "Dead End",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Execution",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Cadence, Mobility",
+    "expertisesMode": "any",
+    "tags": "damage, control, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage. If the target ends beside an obstacle, it is Slowed 2 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit before rolling."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Damage if the target cannot move directly away from you without entering an obstacle."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Execution",
+      "html": "After a hit on a Locked target, you may end Lock to gain +1 Fortitude against that target until the start of your next turn.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!486099d3e9ffcd24"
+}

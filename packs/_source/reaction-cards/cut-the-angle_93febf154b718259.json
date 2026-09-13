@@ -1,0 +1,52 @@
+{
+  "_id": "93febf154b718259",
+  "name": "Cut the Angle",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Mobility, Flair",
+    "expertisesMode": "any",
+    "tags": "protection, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: A ranged Action targets you, before its roll. Response (unopposed): Move 1 unit and gain +1 Fortitude against that Action. The attack is rechecked from your new space."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 additional unit, but only toward cover."
+      },
+      {
+        "n": "2",
+        "html": "Your movement does not trigger movement Reactions from the attacker."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "654c5d2c8a2dce33",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!93febf154b718259"
+}

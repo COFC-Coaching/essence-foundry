@@ -1,0 +1,52 @@
+{
+  "_id": "b27fc371d8426570",
+  "name": "Borrowed Moment",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Time",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Augmentation, Reinforcement",
+    "expertisesMode": "any",
+    "tags": "support, suppression, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Until your next turn, the target may ignore one ordinary penalty to a Success Die when it next uses a Combat Card. This grants no Action or extra die."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target also ignores difficult terrain during its next 1 unit of movement until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "The target gains +1 Composure until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Time Thread",
+      "html": "Gain a Time Thread. Before rolling a later Magecraft card, consume it: one non-damaging benefit of that card ending at the start of your next turn instead ends at the end of that turn.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b27fc371d8426570"
+}

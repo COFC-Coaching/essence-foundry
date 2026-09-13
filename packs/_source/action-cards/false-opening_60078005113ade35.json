@@ -1,0 +1,52 @@
+{
+  "_id": "60078005113ade35",
+  "name": "False Opening",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Cunning",
+    "subtype": "Ambush",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, setup, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 weapon Damage."
+      },
+      {
+        "n": "1",
+        "html": "On a hit, the target becomes Exposed until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Ambush",
+      "html": "When this target misses an Action before your next turn, you may move 1 unit without triggering its movement Reactions.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!60078005113ade35"
+}

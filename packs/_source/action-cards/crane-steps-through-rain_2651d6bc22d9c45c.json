@@ -1,0 +1,52 @@
+{
+  "_id": "2651d6bc22d9c45c",
+  "name": "Crane Steps Through Rain",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Blitz",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Skirmishing, Dueling",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range after your movement."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 2 units. On success, deal 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore difficult terrain during this movement."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, move 2 units away from the target without triggering its movement Reactions."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Blitz",
+      "html": "Spend 1 Combo after resolving to gain +1 Fortitude against the target until the start of your next turn, provided you are no longer adjacent to it.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2651d6bc22d9c45c"
+}

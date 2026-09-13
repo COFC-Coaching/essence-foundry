@@ -1,0 +1,52 @@
+{
+  "_id": "42df21da969813f0",
+  "name": "Gate-Keeper, Stand Between",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Golem",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Anchoring, Accord",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target reduces its next incoming Damage by 1 and gains +1 Fortitude against the next ranged attack targeting it until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "It resists its next 1 unit of forced movement until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Protect a second willing creature adjacent to the first."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Golem",
+      "html": "You may burn 3 Action Dice and spend 2 Mana to enter Golem Full Manifestation (FM-1G). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-1G"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!42df21da969813f0"
+}

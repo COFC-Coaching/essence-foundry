@@ -1,0 +1,52 @@
+{
+  "_id": "269144bb5eae04ff",
+  "name": "Wrong Foot",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Cunning",
+    "subtype": "Reversal",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "debuff, protection, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, the target suffers -1 on its next Success Die until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, move 1 unit away from the target."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target also becomes Exposed until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Reversal",
+      "html": "When the target declares an attack against you, you gain +1 to the targeted Defense against that attack.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!269144bb5eae04ff"
+}

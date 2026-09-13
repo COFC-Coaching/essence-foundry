@@ -1,0 +1,52 @@
+{
+  "_id": "26b0fb2865aec2c9",
+  "name": "Venom Reservoir",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Predator",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Metabolism, Armament",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Piercing Damage and impose Poison: -1 on the target's next Success Die until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the penalty to -2."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Piercing Damage."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Predator",
+      "html": "Assume Reservoir (upkeep 1): when a creature damages you with a bite or similar bodily melee attack, it becomes Slowed 1 until its next turn ends; no more than once per creature per round.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!26b0fb2865aec2c9"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "49b5080bdcfebe50",
+  "name": "Uncertain Geometry",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Chaos",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Fabrication, Augmentation",
+    "expertisesMode": "any",
+    "tags": "terrain, mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Two adjacent empty spaces within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Until your next turn, create illusory steps in the spaces: willing creatures ignore difficult terrain there, and enemies treat them as difficult terrain. The steps do not support weight over gaps."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Add a third connected empty space."
+      },
+      {
+        "n": "2",
+        "html": "One willing creature in the area gains +1 Fortitude until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Chaos Thread",
+      "html": "Gain a Chaos Thread. Before rolling a later Magecraft card, consume it: change its Damage type to Fire, Cold, Lightning, Acid, Force or Arcane. Conditions do not change.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!49b5080bdcfebe50"
+}

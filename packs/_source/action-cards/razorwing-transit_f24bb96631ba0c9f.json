@@ -1,0 +1,52 @@
+{
+  "_id": "f24bb96631ba0c9f",
+  "name": "Razorwing Transit",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Strider",
+    "attr": "Grace",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Locomotion, Armament",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, area",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two enemies adjacent to spaces along a 3-unit clear path."
+      },
+      {
+        "label": "Effect",
+        "html": "Move along the path, briefly gliding over ground hazards. On success, deal 1 Slashing Damage to each selected target. End supported."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the path by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "One hit target is pushed 1 unit away from the path."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Strider",
+      "html": "Assume Razorwings (upkeep 1): once on your turn, glide up to 2 units as part of normal Movement, ignoring ground terrain. You cannot hover or gain height.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f24bb96631ba0c9f"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "9b5ecc1976205212",
+  "name": "Break the Pattern",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Fracture",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Mesmerism, Biokinesis",
+    "expertisesMode": "any",
+    "tags": "debuff, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy declares the same Combat Card it used on its previous Action. Response: On success, impose -1 on that card's Success Die and make it Slowed 1 after resolving until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Slow by 1."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, suppress 1 point of ordinary accuracy bonus on that card."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "7f44f584777fefe2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!9b5ecc1976205212"
+}

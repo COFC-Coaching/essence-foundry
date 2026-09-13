@@ -65,6 +65,37 @@ function loadRows(file) {
   return raw[0].rows;
 }
 
+/**
+ * Minimal RFC 4180 CSV parser — same logic as bulk-import.mjs's parseCsv/rowsToObjects (duplicated
+ * rather than imported since that module is a Foundry client ApplicationV2 class that references
+ * `foundry.applications.api` at load time and can't run under plain Node). Used to read the
+ * hand-authored playtest combat-card CSVs in scripts/combat-cards/ — see PLAYTEST_CARD_FILES below.
+ */
+function loadCombatCardCsv(filePath) {
+  const text = fs.readFileSync(filePath, "utf8");
+  const rows = [];
+  let row = [], field = "", inQuotes = false;
+  const s = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (inQuotes) {
+      if (c === '"') { if (s[i + 1] === '"') { field += '"'; i++; } else inQuotes = false; }
+      else field += c;
+    } else if (c === '"') inQuotes = true;
+    else if (c === ",") { row.push(field); field = ""; }
+    else if (c === "\n") { row.push(field); rows.push(row); row = []; field = ""; }
+    else field += c;
+  }
+  if (field.length || row.length) { row.push(field); rows.push(row); }
+  const dataRows = rows.filter((r) => r.some((f) => f.trim() !== ""));
+  const header = dataRows[0].map((h) => h.trim());
+  return dataRows.slice(1).map((r) => {
+    const obj = {};
+    header.forEach((h, i) => { obj[h] = (r[i] ?? "").trim(); });
+    return obj;
+  });
+}
+
 function writeSourceDoc(packName, doc, collection = "items") {
   const dir = path.join(SOURCE_DIR, packName);
   fs.mkdirSync(dir, { recursive: true });
@@ -201,6 +232,67 @@ function cardToItem(row, type, folderMap) {
     ownership: { default: 0 }
   };
 }
+
+/**
+ * The 396-card Rank 0-2 playtest catalogue (PLAYTEST_RULES.md) replacing the previous
+ * Neon-sourced Style catalogue — hand-authored per domain/type as CSV in scripts/combat-cards/,
+ * using the exact same column shape as bulk-import.mjs's downloadable templates (so the same CSV
+ * a GM fills out by hand for a one-off homebrew card is also this catalogue's own source format).
+ * `Basic` (skill-less) universal cards are NOT part of this set (see PLAYTEST_RULES.md §2 — "The
+ * set excludes... the universal Basic set") and keep coming from raw-combat-cards.json as before.
+ */
+function bodyFromCsvRow(row) {
+  const body = [];
+  if (row.target_html) body.push({ label: row.target_label || "Target", html: row.target_html });
+  if (row.effect_html) body.push({ label: row.effect_label || "Effect", html: row.effect_html });
+  return body;
+}
+
+function surgesFromCsvRow(row) {
+  const surges = [];
+  if (row.surge1_html) surges.push({ n: row.surge1_n || "1", html: row.surge1_html });
+  if (row.surge2_html) surges.push({ n: row.surge2_n || "1", html: row.surge2_html });
+  return surges;
+}
+
+function playtestCardCsvToItem(row, type, folderMap) {
+  const skill = row.skill || "";
+  const system = {
+    domain: row.domain || "physical",
+    rank: Number(row.rank) || 0,
+    style: row.style || "",
+    subtype: row.subtype || "",
+    attr: row.attr || "",
+    skill,
+    defense: row.defense || "",
+    min: row.min || "",
+    cost: row.cost || "",
+    expertises: row.expertises || "",
+    expertisesMode: row.expertises_mode || "any",
+    tags: row.tags || "",
+    flavor: row.flavor || "",
+    body: bodyFromCsvRow(row),
+    surges: surgesFromCsvRow(row),
+    rider: { title: row.rider_title || "", html: row.rider_html || "", meta: row.rider_meta || "" }
+  };
+  return {
+    _id: stableId(`playtest-card:${type}:${row.name}`).slice(0, 16),
+    name: row.name,
+    type,
+    img: "icons/svg/card-hand.svg",
+    system,
+    folder: folderMap ? (folderMap[skill] ?? folderMap[BASIC_FOLDER_NAME] ?? null) : null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
+/** [filename in scripts/combat-cards/, "action" | "reaction"] — see loadCombatCardCsv(). */
+const PLAYTEST_CARD_FILES = [
+  ["mental-actions.csv", "action"], ["mental-reactions.csv", "reaction"],
+  ["physical-actions.csv", "action"], ["physical-reactions.csv", "reaction"],
+  ["spiritual-actions.csv", "action"], ["spiritual-reactions.csv", "reaction"]
+];
 
 function conditionToItem(row) {
   const d = row.data;
@@ -359,6 +451,128 @@ function distinctionToItem(d) {
   };
 }
 
+/** Icon per Calling Full Manifestation subtype — plain Foundry-core svg, matching every other
+ *  pack's approach (skull.svg for Conditions, item-bag.svg for Equipment, etc.). */
+const MANIFESTATION_ICONS = {
+  Familiar: "icons/svg/wing.svg",
+  Sprite: "icons/svg/light.svg",
+  Beast: "icons/svg/blood.svg",
+  Phantom: "icons/svg/invisible.svg",
+  Golem: "icons/svg/mountain.svg",
+  Elemental: "icons/svg/fire.svg",
+  Ancestor: "icons/svg/holy-shield.svg",
+  Fey: "icons/svg/moon.svg"
+};
+
+/**
+ * One of a Full Manifestation profile's 2-3 built-in maneuvers, authored as a plain action-card/
+ * reaction-card Item — the same schema the 396-card catalogue uses (see bulk-import.mjs's
+ * cardRowToSystem) — so the existing card-rendering sheet UI, roll flow and dice-pool prompt all
+ * work on these unmodified. `skill`/`style` are always "Calling" and `subtype` is the profile name,
+ * matching how a catalogue card that triggers this profile's Full Manifestation Rider is tagged
+ * (see e.g. "Bare Tooth and Claw"'s subtype "Beast"). `tags: "Manifestation"` marks these as not
+ * part of the 396-card catalogue (CALLING_PROFILES.md's own count exclusion) so Bulk Import and any
+ * future catalogue-wide tooling can filter them out by tag rather than by pack membership alone.
+ * Per CALLING_PROFILES.md's shared manifestation procedure: no Expertise is required and no
+ * Mastery Surge is granted, dice math uses the CALLER's own Calling Rank and Attribute (never a
+ * stat on this template Actor), and a maneuver has no subtype Rider and cannot itself start
+ * another Full Manifestation — `expertises`/`rider` are therefore always left blank.
+ */
+function manifestationManeuverToItem(m, profileName, rank, actorId) {
+  const type = m.kind === "reaction" ? "reaction-card" : "action-card";
+  const body = [{ label: "Target", html: m.target }];
+  if (m.kind === "reaction") body.push({ label: "Trigger", html: m.trigger });
+  body.push({ label: "Effect", html: m.effect });
+  const itemId = stableId(`manifestation-maneuver:${profileName}:${m.name}`).slice(0, 16);
+  return {
+    _id: itemId,
+    // Nested embedded docs need their own _key too (!<parentCollection>.<embeddedCollection>!<parentId>.<id>)
+    // — see guideToJournal's identical note for JournalEntry pages; here the parent is the Actor
+    // and the embedded collection is its owned Items.
+    _key: `!actors.items!${actorId}.${itemId}`,
+    name: m.name,
+    type,
+    img: "icons/svg/card-hand.svg",
+    system: {
+      domain: "spiritual",
+      rank,
+      style: "Calling",
+      subtype: profileName,
+      attr: m.attr,
+      skill: "Calling",
+      defense: m.defense || "",
+      min: m.min,
+      cost: m.mana,
+      expertises: "",
+      expertisesMode: "any",
+      tags: "Manifestation",
+      flavor: "",
+      body,
+      surges: [
+        { n: m.surge1n, html: m.surge1 },
+        { n: m.surge2n, html: m.surge2 }
+      ],
+      rider: { title: "", html: "", meta: "" }
+    },
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
+/**
+ * A Full Manifestation profile, authored as an NPC Actor (EssenceNpcData — see actor-npc.mjs) so
+ * it gets its own Fortitude/Composure/Harmony/Resilience/Movement, its own Wound track, and can be
+ * owned/controlled by a player directly, exactly like any other NPC sheet. This template lives in
+ * the "manifestations" compendium; a GM drags a copy into the world the first time a character
+ * manifests that subtype, and that world copy becomes the character's own persistent record for
+ * the rest of the Adventure (see CALLING_PROFILES.md's "one persistent Wound record per subtype").
+ *
+ * Every attribute (might/grace/vigor/...) is left at 0 rather than the schema's usual 1 — a
+ * profile's own attributes are never actually rolled: CALLING_PROFILES.md's shared procedure says
+ * maneuvers "use your existing... Calling Rank" and "your own Attribute ratings," i.e. the
+ * CALLER's, not this template's. Leaving them at 0 makes that explicit rather than implying a
+ * stat block that would otherwise sit unused and confuse a GM reading the sheet. Fortitude/
+ * Composure/Harmony are instead hit exactly via the flat *Bonus fields on top of that all-0 base
+ * (2 + twoLowest(0,0,0) + bonus === 2 + bonus), since the schema only exposes those three Defenses
+ * as derived values, never as directly-set numbers.
+ *
+ * `coreWounds` is sized to the profile's own Wound capacity (3-5, not the usual fixed 5) by
+ * slicing the same ["Light","Light","Serious","Serious","Critical"] pattern Apply Damage already
+ * assigns by slot index (see actor-sheet.mjs's SEVERITY_BY_INDEX) — Apply Damage indexes by
+ * position, not by array length, so a shorter track "just works" with the existing Wound-filling
+ * code with no changes there.
+ */
+function manifestationProfileToActor(profile) {
+  const _id = stableId(`manifestation:${profile.name}`).slice(0, 16);
+  const zeroAttrs = {
+    might: 0, grace: 0, vigor: 0, intellect: 0, acuity: 0, resolve: 0,
+    presence: 0, adaptability: 0, anima: 0
+  };
+  return {
+    _id,
+    name: profile.name,
+    type: "npc",
+    img: MANIFESTATION_ICONS[profile.name] ?? "icons/svg/upgrade.svg",
+    system: {
+      ...zeroAttrs,
+      tier: 1,
+      level: 1,
+      role: "",
+      gmNotes: `<p><strong>Purpose:</strong> ${profile.purpose}</p><p><strong>Trait &mdash; ${profile.traitName}.</strong> ${profile.traitText}</p><p><em>Full Manifestation profile — Rank ${profile.rank}, ${profile.body}. See CALLING_PROFILES.md / the Full Manifestation Guide journal for the shared entry/dismissal/defeat procedure.</em></p>`,
+      resilience: profile.resilience,
+      movement: profile.movement,
+      fortitudeBonus: profile.fortitude - 2,
+      composureBonus: profile.composure - 2,
+      harmonyBonus: profile.harmony - 2,
+      coreWounds: Array.from({ length: profile.woundCapacity }, () => ({ filled: false, domain: "", severity: "", condition: "" }))
+    },
+    items: profile.maneuvers.map((m) => manifestationManeuverToItem(m, profile.name, profile.rank, _id)),
+    folder: null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
 function combatStyleToJournal(cs) {
   const list = (items) => `<ul>${items.map((i) => `<li>${i}</li>`).join("")}</ul>`;
   const content = `
@@ -447,19 +661,37 @@ async function main() {
   }
 
   let actionCount = 0, reactionCount = 0, conditionCount = 0, equipmentCount = 0;
-  let speciesCount = 0, heritageCount = 0, distinctionCount = 0, styleCount = 0, guideCount = 0;
+  let speciesCount = 0, heritageCount = 0, distinctionCount = 0, styleCount = 0, guideCount = 0, manifestationCount = 0;
 
   if (wants("action-cards") || wants("reaction-cards")) {
     const actionCardFolders = writeCombatSkillFolders("action-cards");
     const reactionCardFolders = writeCombatSkillFolders("reaction-cards");
 
-    const combatCards = loadRows("raw-combat-cards.json");
+    // Basic (skill-less) universal cards — Hide, Strike, Brace, Dash, etc. — still come from the
+    // live Neon "Essence" database as before. Everything ELSE that used to come from that same
+    // fetch (the old 9-Style catalogue) is now replaced wholesale by the hand-authored 396-card
+    // playtest catalogue below (see PLAYTEST_CARD_FILES/playtestCardCsvToItem) — the hard mechanics
+    // rework in PLAYTEST_RULES.md/CALLING_PROFILES.md made a straight content-only re-fetch
+    // insufficient, so this filters raw-combat-cards.json down to just the still-current Basics.
+    const combatCards = loadRows("raw-combat-cards.json").filter((row) => !(row.data.skill || row.skill));
     for (const row of combatCards) {
       const type = row.kind === "reaction" ? "reaction-card" : "action-card";
       const pack = row.kind === "reaction" ? "reaction-cards" : "action-cards";
       const folderMap = row.kind === "reaction" ? reactionCardFolders : actionCardFolders;
       writeSourceDoc(pack, cardToItem(row, type, folderMap));
       if (type === "action-card") actionCount++; else reactionCount++;
+    }
+
+    for (const [file, kind] of PLAYTEST_CARD_FILES) {
+      const csvRows = loadCombatCardCsv(path.join(ROOT, "scripts", "combat-cards", file));
+      const type = kind === "reaction" ? "reaction-card" : "action-card";
+      const pack = kind === "reaction" ? "reaction-cards" : "action-cards";
+      const folderMap = kind === "reaction" ? reactionCardFolders : actionCardFolders;
+      for (const row of csvRows) {
+        if (!row.name) continue;
+        writeSourceDoc(pack, playtestCardCsvToItem(row, type, folderMap));
+        if (type === "action-card") actionCount++; else reactionCount++;
+      }
     }
   }
 
@@ -497,18 +729,25 @@ async function main() {
     styleCount = combatStyles.length;
   }
 
+  if (wants("manifestations")) {
+    const profiles = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "calling-profiles-data.json"), "utf8"));
+    for (const p of profiles) writeSourceDoc("manifestations", manifestationProfileToActor(p), "actors");
+    manifestationCount = profiles.length;
+  }
+
   if (wants("guide")) {
     const guides = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "guide-data.json"), "utf8"));
     for (const g of guides) writeSourceDoc("guide", guideToJournal(g), "journal");
     guideCount = guides.length;
   }
 
-  console.log(`Source docs written: ${actionCount} action cards, ${reactionCount} reaction cards, ${conditionCount} conditions, ${equipmentCount} equipment, ${speciesCount} species, ${heritageCount} heritages, ${distinctionCount} distinctions, ${styleCount} combat styles, ${guideCount} guide entries.`);
+  console.log(`Source docs written: ${actionCount} action cards, ${reactionCount} reaction cards, ${conditionCount} conditions, ${equipmentCount} equipment, ${speciesCount} species, ${heritageCount} heritages, ${distinctionCount} distinctions, ${styleCount} combat styles, ${manifestationCount} manifestation profiles, ${guideCount} guide entries.`);
 
   const packTypes = {
     "action-cards": "Item", "reaction-cards": "Item", conditions: "Item", equipment: "Item",
     species: "Item", heritages: "Item", distinctions: "Item",
-    "combat-styles": "JournalEntry", guide: "JournalEntry"
+    "combat-styles": "JournalEntry", guide: "JournalEntry",
+    manifestations: "Actor"
   };
   for (const [packName, type] of Object.entries(packTypes)) {
     if (!wants(packName)) continue;

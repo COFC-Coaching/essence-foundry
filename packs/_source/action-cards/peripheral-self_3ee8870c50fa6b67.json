@@ -1,0 +1,52 @@
+{
+  "_id": "3ee8870c50fa6b67",
+  "name": "Peripheral Self",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Psionics",
+    "subtype": "Projection",
+    "attr": "Acuity",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "information, utility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One visible point within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Until your next turn, perceive ordinary sights and sounds from the point, without seeing through solid barriers. Your body remains aware and in place."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase range by 2 units."
+      },
+      {
+        "n": "2",
+        "html": "Learn the occupied space of one ordinarily concealed creature within 1 unit of the point."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Projection",
+      "html": "If you accepted Strain, you may move the viewpoint up to 2 units when you next move before your next turn; it must stay within 4 units of you.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!3ee8870c50fa6b67"
+}

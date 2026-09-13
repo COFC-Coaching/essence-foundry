@@ -1,0 +1,52 @@
+{
+  "_id": "40b67015b5b4bf7f",
+  "name": "Answer to Me",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Vow",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Provocation, Guardianship",
+    "expertisesMode": "any",
+    "tags": "protection, debuff, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, the enemy has -1 on its next Success Die against an ally other than you until the start of your next turn. Independently, reduce your next incoming Damage from that enemy by 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit toward the enemy."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, it becomes Distracted until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Vow",
+      "html": "Vow: remain within 3 units of the enemy until your next turn. Spend this Authority when it attacks an ally to give that ally +1 to the targeted Defense; leaving voluntarily discards it.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!40b67015b5b4bf7f"
+}

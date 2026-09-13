@@ -1,0 +1,52 @@
+{
+  "_id": "dfb637493b3dbfb9",
+  "name": "Mantle of Living Stone",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Titan",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Metabolism, Plasticity",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Gain +1 Fortitude and resist up to 3 units of forced movement until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "An adjacent willing ally gains +1 Fortitude against one attack until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Reduce your next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Titan",
+      "html": "Assume Stone Mantle (upkeep 1): gain +1 Fortitude while your normal Movement is reduced by 2, to a minimum of 1. Ending the Adaptation ends both effects.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!dfb637493b3dbfb9"
+}

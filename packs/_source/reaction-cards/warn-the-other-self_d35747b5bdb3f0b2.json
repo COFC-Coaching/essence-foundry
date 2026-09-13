@@ -1,0 +1,52 @@
+{
+  "_id": "d35747b5bdb3f0b2",
+  "name": "Warn the Other Self",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Projection",
+    "attr": "Acuity",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Clairvoyance, Telepathy",
+    "expertisesMode": "any",
+    "tags": "protection, support, information",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An attack targets the creature from a source you detect, before rolling. Response (unopposed): Grant +1 to the targeted Defense against that attack and reveal the source's occupied space to the target."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target may move 1 unit toward you."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one ordinary sensory penalty on the target until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "7f44f584777fefe2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d35747b5bdb3f0b2"
+}

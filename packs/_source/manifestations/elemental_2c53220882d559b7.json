@@ -1,0 +1,223 @@
+{
+  "_id": "2c53220882d559b7",
+  "name": "Elemental",
+  "type": "npc",
+  "img": "icons/svg/fire.svg",
+  "system": {
+    "might": 0,
+    "grace": 0,
+    "vigor": 0,
+    "intellect": 0,
+    "acuity": 0,
+    "resolve": 0,
+    "presence": 0,
+    "adaptability": 0,
+    "anima": 0,
+    "tier": 1,
+    "level": 1,
+    "role": "",
+    "gmNotes": "<p><strong>Purpose:</strong> Limited area pressure and protection against a chosen energy, not healing through elemental absorption.</p><p><strong>Trait &mdash; Declared Aspect.</strong> At your first entry each Encounter choose Fire, Cold or Lightning. This fixes the profile's aspect for that Encounter. Once per round, reduce incoming Damage of that aspect by 1. Changing appearance or re-entering does not change aspect, renew the reduction or create a fresh Wound record. Aspect has no implied immunity or associated Condition.</p><p><em>Full Manifestation profile — Rank 2, Nonliving. See CALLING_PROFILES.md / the Full Manifestation Guide journal for the shared entry/dismissal/defeat procedure.</em></p>",
+    "resilience": 1,
+    "movement": 3,
+    "fortitudeBonus": 5,
+    "composureBonus": 5,
+    "harmonyBonus": 6,
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ]
+  },
+  "items": [
+    {
+      "_id": "05fa26ef4d538208",
+      "_key": "!actors.items!2c53220882d559b7.05fa26ef4d538208",
+      "name": "Converging Current",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 2,
+        "style": "Calling",
+        "subtype": "Elemental",
+        "attr": "Presence",
+        "skill": "Calling",
+        "defense": "Fortitude",
+        "min": "3",
+        "cost": "1",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "Up to two enemies within 4 units and within 1 unit of each other."
+          },
+          {
+            "label": "Effect",
+            "html": "Roll once. Each successfully affected target takes 1 Damage of your aspect."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "Push one hit target 1 unit."
+          },
+          {
+            "n": "2",
+            "html": "One hit target takes +1 Damage of your aspect."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "d86cc1a72551f8e4",
+      "_key": "!actors.items!2c53220882d559b7.d86cc1a72551f8e4",
+      "name": "Heart of the Storm",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 2,
+        "style": "Calling",
+        "subtype": "Elemental",
+        "attr": "Anima",
+        "skill": "Calling",
+        "defense": "Fortitude",
+        "min": "3",
+        "cost": "1",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "One enemy within 4 units."
+          },
+          {
+            "label": "Effect",
+            "html": "On success, deal 2 Damage of your aspect."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "After the attack, move 1 unit; this movement does not require a hit."
+          },
+          {
+            "n": "2",
+            "html": "A hit target is Slowed 2 until the start of your next turn."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "e0589be46f533b3a",
+      "_key": "!actors.items!2c53220882d559b7.e0589be46f533b3a",
+      "name": "Divide the Torrent",
+      "type": "reaction-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 2,
+        "style": "Calling",
+        "subtype": "Elemental",
+        "attr": "Anima",
+        "skill": "Calling",
+        "defense": "",
+        "min": "3",
+        "cost": "1",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "Self or one willing ally within 3 units."
+          },
+          {
+            "label": "Trigger",
+            "html": "An Action or Reaction would deal Damage to the target."
+          },
+          {
+            "label": "Effect",
+            "html": "Reduce that Damage by 2 if it matches your aspect, otherwise by 1. This is prevention, never absorption that restores anything."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "The target resists 1 unit of forced movement from that card."
+          },
+          {
+            "n": "2",
+            "html": "One adjacent willing creature also reduces Damage from the same card by 1."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!2c53220882d559b7"
+}

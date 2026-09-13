@@ -1,0 +1,52 @@
+{
+  "_id": "aeb078adf32daf29",
+  "name": "Exit Behind the Noise",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Evasion",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sabotage, Infiltration",
+    "expertisesMode": "any",
+    "tags": "mobility, support, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self; a nearby loose object or noisy surface."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Create a brief mundane distraction and move up to 3 units. You can become Hidden only if you end in actual concealment and meet the normal hiding rules."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore difficult terrain during this movement."
+      },
+      {
+        "n": "2",
+        "html": "One willing ally within 2 units may move 1 unit toward cover."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Evasion",
+      "html": "When an enemy leaves its cover to pursue you before your next turn, it becomes Exposed after that movement.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!aeb078adf32daf29"
+}

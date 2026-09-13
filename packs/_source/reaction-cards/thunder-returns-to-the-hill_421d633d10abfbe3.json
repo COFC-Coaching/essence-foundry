@@ -1,0 +1,52 @@
+{
+  "_id": "421d633d10abfbe3",
+  "name": "Thunder Returns to the Hill",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Opener",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Berserking, Brawling",
+    "expertisesMode": "any",
+    "tags": "damage, suppression, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy deals Damage to you with an Action. Response: After its Damage resolves, on success deal 2 weapon Damage to it."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "If hit, push it 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "If hit, suppress one Light physical Wound Condition's numerical penalties on yourself until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "f86106a69c957230",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!421d633d10abfbe3"
+}

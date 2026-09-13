@@ -1,0 +1,52 @@
+{
+  "_id": "046bbaa8d5f34f34",
+  "name": "Windling, Borrow Me a Step",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Calling",
+    "subtype": "Sprite",
+    "attr": "Adaptability",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target moves up to 2 units along a supported path."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Ignore ground difficult terrain during this movement."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Sprite",
+      "html": "You may burn 3 Action Dice and spend 1 Mana to enter Sprite Full Manifestation (FM-0S). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-0S"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!046bbaa8d5f34f34"
+}

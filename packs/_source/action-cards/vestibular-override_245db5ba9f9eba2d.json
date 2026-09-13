@@ -1,0 +1,52 @@
+{
+  "_id": "245db5ba9f9eba2d",
+  "name": "Vestibular Override",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Strider",
+    "attr": "Grace",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Awareness, Regeneration",
+    "expertisesMode": "any",
+    "tags": "mobility, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Stand from Prone without burning a die, then move up to 2 units. Suppress ordinary dizziness or disorientation penalties during this Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one ordinary Movement-limiting Condition until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Strider",
+      "html": "Assume Override (upkeep 0): ignore the Fortitude penalty from Prone; its other effects remain.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!245db5ba9f9eba2d"
+}

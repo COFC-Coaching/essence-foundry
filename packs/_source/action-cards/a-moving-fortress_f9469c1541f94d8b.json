@@ -1,0 +1,52 @@
+{
+  "_id": "f9469c1541f94d8b",
+  "name": "A Moving Fortress",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Formation",
+    "attr": "Anima",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Guardianship, Coordination",
+    "expertisesMode": "any",
+    "tags": "protection, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and up to two willing allies within 2 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Each target reduces its next incoming Damage by 1 until the start of your next turn and may move 1 unit toward another protected creature; alone, move 1 unit freely."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Each target also resists its next 2 units of forced movement until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "One target reduces its incoming Damage by 1 more."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Formation",
+      "html": "Spend this Authority when two protected creatures would be separated by forced movement before your next turn: one may follow the other 2 units. Alone, resist 2 units of that movement instead.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f9469c1541f94d8b"
+}

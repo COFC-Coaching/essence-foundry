@@ -1,0 +1,52 @@
+{
+  "_id": "f1cf1fc6d41e21a3",
+  "name": "Make Their Courage Expensive",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Example",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Provocation, Valor",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 weapon Damage. The target suffers -1 on its next Success Die against a creature other than you until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, the target is Slowed 1 until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Gain +1 Fortitude against the target until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Example",
+      "html": "Spend this Authority when the target attacks an ally before your next turn: after its attack, move 1 unit toward it and make yourself Rallied.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f1cf1fc6d41e21a3"
+}

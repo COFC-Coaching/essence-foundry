@@ -1,0 +1,223 @@
+{
+  "_id": "17a2eec6cc66b50b",
+  "name": "Fey",
+  "type": "npc",
+  "img": "icons/svg/moon.svg",
+  "system": {
+    "might": 0,
+    "grace": 0,
+    "vigor": 0,
+    "intellect": 0,
+    "acuity": 0,
+    "resolve": 0,
+    "presence": 0,
+    "adaptability": 0,
+    "anima": 0,
+    "tier": 1,
+    "level": 1,
+    "role": "",
+    "gmNotes": "<p><strong>Purpose:</strong> Mobility and conditional hindrance, with relatively little damage insulation. No maneuver controls dialogue, beliefs or noncombat choices.</p><p><strong>Trait &mdash; Rootwise Step.</strong> Once during each of your turns, ignore the extra movement cost of entering one space of difficult terrain. This neither increases Movement nor allows crossing a barrier. Dismissal and re-entry do not renew the benefit.</p><p><em>Full Manifestation profile — Rank 2, Living. See CALLING_PROFILES.md / the Full Manifestation Guide journal for the shared entry/dismissal/defeat procedure.</em></p>",
+    "resilience": 0,
+    "movement": 4,
+    "fortitudeBonus": 5,
+    "composureBonus": 6,
+    "harmonyBonus": 6,
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ]
+  },
+  "items": [
+    {
+      "_id": "96eeca58c9123e12",
+      "_key": "!actors.items!17a2eec6cc66b50b.96eeca58c9123e12",
+      "name": "Thorn of the Uninvited",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 2,
+        "style": "Calling",
+        "subtype": "Fey",
+        "attr": "Presence",
+        "skill": "Calling",
+        "defense": "Harmony",
+        "min": "3",
+        "cost": "1",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "One enemy within 4 units."
+          },
+          {
+            "label": "Effect",
+            "html": "On success, deal 1 Arcane Damage and make the target Slowed 1 until the start of your next turn."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "A hit target gains no benefit from ordinary concealment until that deadline."
+          },
+          {
+            "n": "2",
+            "html": "Deal +1 Arcane Damage."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "558c9533ebb8f7d1",
+      "_key": "!actors.items!17a2eec6cc66b50b.558c9533ebb8f7d1",
+      "name": "The Other Seat",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 2,
+        "style": "Calling",
+        "subtype": "Fey",
+        "attr": "Adaptability",
+        "skill": "Calling",
+        "defense": "",
+        "min": "3",
+        "cost": "1",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "Self and optionally one willing ally within 3 units."
+          },
+          {
+            "label": "Effect",
+            "html": "Swap spaces with the ally along a clear supported path, or, if acting alone, move up to 2 units. This movement does not trigger movement Reactions."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "Ignore difficult terrain during the movement."
+          },
+          {
+            "n": "2",
+            "html": "One moved creature gains +1 to the Defense tested by the next attack against it before the start of your next turn."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "bfee17560ad59336",
+      "_key": "!actors.items!17a2eec6cc66b50b.bfee17560ad59336",
+      "name": "Invitation Withdrawn",
+      "type": "reaction-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 2,
+        "style": "Calling",
+        "subtype": "Fey",
+        "attr": "Adaptability",
+        "skill": "Calling",
+        "defense": "",
+        "min": "3",
+        "cost": "1",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "Self or one willing ally within 3 units."
+          },
+          {
+            "label": "Trigger",
+            "html": "A detected attacker targets the creature, before rolling."
+          },
+          {
+            "label": "Effect",
+            "html": "Move it 1 unit along a clear supported path and grant +1 Fortitude against that attack. Recheck target eligibility."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "Increase movement by 1 unit."
+          },
+          {
+            "n": "2",
+            "html": "Swap the target with another adjacent willing creature instead. The substitute becomes the target only if still legal and receives the Fortitude bonus."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!17a2eec6cc66b50b"
+}

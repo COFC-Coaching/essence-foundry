@@ -1,0 +1,52 @@
+{
+  "_id": "bf060e3ca232fb13",
+  "name": "The Mind Refuses",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Psionics",
+    "subtype": "Barrier",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Reduce the next incoming Damage you take by 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Gain +1 Composure against the next attack targeting you until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Extend the Damage protection to one willing ally within 2 units."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Barrier",
+      "html": "If you accepted Strain for this card, the first creature to push or pull you before your next turn moves you 1 fewer unit.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!bf060e3ca232fb13"
+}

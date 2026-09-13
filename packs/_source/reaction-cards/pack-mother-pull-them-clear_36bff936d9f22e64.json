@@ -1,0 +1,52 @@
+{
+  "_id": "36bff936d9f22e64",
+  "name": "Pack Mother, Pull Them Clear",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Beast",
+    "attr": "Adaptability",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Transference, Chorus",
+    "expertisesMode": "any",
+    "tags": "protection, mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An area Action is declared including the target. Response (unopposed): Move it 1 unit along a clear path, then recheck the area."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "If still affected, grant +1 to its targeted Defense against that Action."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "e87efeb1c809057f",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!36bff936d9f22e64"
+}

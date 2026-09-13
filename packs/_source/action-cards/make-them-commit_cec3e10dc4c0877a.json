@@ -1,0 +1,52 @@
+{
+  "_id": "cec3e10dc4c0877a",
+  "name": "Make Them Commit",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Order",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Provocation, Tactics",
+    "expertisesMode": "any",
+    "tags": "debuff, protection, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, the target is Distracted until the start of your next turn; you gain +1 Fortitude against it during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit toward or around it."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, it is Slowed 2 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Order",
+      "html": "Spend this Authority when the target declares an Action against you before your next turn: one willing creature within 3 units, including you, may move 1 unit before that Action rolls.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!cec3e10dc4c0877a"
+}

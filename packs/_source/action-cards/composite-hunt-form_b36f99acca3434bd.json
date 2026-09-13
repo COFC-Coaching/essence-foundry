@@ -1,0 +1,52 @@
+{
+  "_id": "b36f99acca3434bd",
+  "name": "Composite Hunt Form",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Chimera",
+    "attr": "Grace",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Integration, Awareness",
+    "expertisesMode": "any",
+    "tags": "damage, information, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy adjacent after your movement."
+      },
+      {
+        "label": "Effect",
+        "html": "Detect moving creatures within 2 units on your surface. Move up to 1 unit. On success, deal 2 Slashing Damage to one detected enemy."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore ordinary concealment for the attack."
+      },
+      {
+        "n": "2",
+        "html": "After a hit, move 2 units along a wall or floor."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Chimera",
+      "html": "Assume Composite Hunt (upkeep 1): ignore ordinary concealment within 2 units and cross a 1-unit gap during normal Movement. This occupies your single Adaptation slot.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b36f99acca3434bd"
+}

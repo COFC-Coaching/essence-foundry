@@ -1,0 +1,52 @@
+{
+  "_id": "92a6f380eb2419a2",
+  "name": "Inventory of Weaknesses",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Ambush",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "Composure",
+    "min": "3",
+    "cost": "1",
+    "expertises": "Observation, Exploitation",
+    "expertisesMode": "any",
+    "tags": "information, setup, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two detected enemies within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, learn each target's lowest Defense and make each Exposed until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Also learn which target has more remaining Reaction Dice."
+      },
+      {
+        "n": "2",
+        "html": "Each hit target suffers -1 on its next Success Die until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Ambush",
+      "html": "When one chosen hit target gains an ordinary defensive benefit before your next turn, suppress 1 point of that benefit against the next attack before your next turn.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!92a6f380eb2419a2"
+}

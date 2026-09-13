@@ -1,5 +1,16 @@
 const { fields } = foundry.data;
 
+/**
+ * Psionics Strain's provisional penalty table (PLAYTEST_RULES.md §12): each threshold's penalty is
+ * cumulative with every lower one already reached (6 Strain suffers all three, not only Fortitude).
+ * Strain itself is capped at 6 by the schema field below; no further penalty exists past that cap.
+ */
+const STRAIN_PENALTY_THRESHOLDS = [
+  { min: 2, composure: 1 },
+  { min: 4, harmony: 1 },
+  { min: 6, fortitude: 1 }
+];
+
 /** One of the 9 attributes: base 1, 7 points to distribute, max 3 at creation. */
 export function attributeField() {
   return new fields.NumberField({ required: true, integer: true, initial: 1, min: 0 });
@@ -140,15 +151,29 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
         }),
         contingency: new fields.StringField({ initial: "" }), // Cunning — trigger + effect, free text
         threads: new fields.ArrayField(new fields.StringField()), // Magecraft — up to 3, fixed family names
-        strain: new fields.NumberField({ integer: true, initial: 0, min: 0 }), // Psionics
+        // Psionics — capped at 6 per PLAYTEST_RULES.md §12's provisional table (see
+        // STRAIN_PENALTY_THRESHOLDS below for the Composure/Harmony/Fortitude penalties this
+        // supersedes the older burn-a-die/Psychic-damage Strain rule with for this playtest wave).
+        strain: new fields.NumberField({ integer: true, initial: 0, min: 0, max: 6 }), // Psionics
         authority: new fields.ArrayField(new fields.NumberField({ integer: true })), // Leadership — stored die results
         rites: new fields.ArrayField(new fields.SchemaField({ // Ritualism — up to 3
           trigger: new fields.StringField({ initial: "" }),
           echo: new fields.StringField({ initial: "" }),
           echoLimit: new fields.NumberField({ integer: true, initial: 1, min: 1 })
         })),
-        manifested: new fields.BooleanField({ initial: false }), // Calling — Full Manifestation active
-        broken: new fields.BooleanField({ initial: false }) // Calling — Specialty Condition
+        // Calling — Full Manifestation. `manifested`/`broken` are the original flat flags kept for
+        // back-compat with any world data already using them; `activeManifestation` (the current
+        // subtype name, "" when not manifested) and `manifestationRecords` (see manifestation.mjs)
+        // are the richer per-subtype tracking the swap-to-NPC-actor implementation actually reads —
+        // see CALLING_PROFILES.md's "one persistent Wound record per subtype for the Adventure."
+        manifested: new fields.BooleanField({ initial: false }),
+        broken: new fields.BooleanField({ initial: false }),
+        activeManifestation: new fields.StringField({ initial: "" }),
+        manifestationRecords: new fields.ArrayField(new fields.SchemaField({
+          subtype: new fields.StringField({ initial: "" }),
+          actorId: new fields.StringField({ initial: "" }), // this character's own persistent world-Actor copy of that profile
+          broken: new fields.BooleanField({ initial: false }) // per CALLING_PROFILES.md's defeat rule — until Downtime
+        }))
       }),
 
       // Play state — combat lifecycle & live resource tracking (see play-mode.ts parity notes)
@@ -216,10 +241,19 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
       focus: { value: this.playState.currentFocus ?? focusMax, max: focusMax },
       mana: { value: this.playState.currentMana ?? manaMax, max: manaMax }
     };
+    // Psionics Strain's provisional penalty (see STRAIN_PENALTY_THRESHOLDS above) reduces the
+    // character's own Defenses directly rather than needing a GM to remember and apply it by hand
+    // — the same automation approach as woundState/standing below reading off filled-box counts.
+    const strain = this.specialties?.strain ?? 0;
+    const strainPenalty = STRAIN_PENALTY_THRESHOLDS.reduce((acc, t) => {
+      if (strain < t.min) return acc;
+      return { composure: acc.composure + (t.composure ?? 0), harmony: acc.harmony + (t.harmony ?? 0), fortitude: acc.fortitude + (t.fortitude ?? 0) };
+    }, { composure: 0, harmony: 0, fortitude: 0 });
+
     this.defenses = {
-      fortitude: 2 + twoLowest(might, grace, vigor) + this.fortitudeBonus,
-      composure: 2 + twoLowest(intellect, acuity, resolve) + this.composureBonus,
-      harmony: 2 + twoLowest(presence, adaptability, anima) + this.harmonyBonus
+      fortitude: 2 + twoLowest(might, grace, vigor) + this.fortitudeBonus - strainPenalty.fortitude,
+      composure: 2 + twoLowest(intellect, acuity, resolve) + this.composureBonus - strainPenalty.composure,
+      harmony: 2 + twoLowest(presence, adaptability, anima) + this.harmonyBonus - strainPenalty.harmony
     };
 
     // Base combat dice pool: Tier + 5 (see play-mode.ts)

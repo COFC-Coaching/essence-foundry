@@ -1,0 +1,52 @@
+{
+  "_id": "3602341aede620d1",
+  "name": "The Hermit's Hidden Flame",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Imbuement",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Entreaty, Liturgy",
+    "expertisesMode": "any",
+    "tags": "suppression, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress one Light Wound Condition's numerical penalties until the start of your next turn; the target gains +1 Harmony against pain-based effects during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Extend suppression through the end of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Also suppress one ordinary fear or distraction penalty until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Imbuement",
+      "html": "Rite, 2 Echoes: bind the target. Trigger: it suffers Damage while a Wound penalty is suppressed. Echo: it may move 1 unit afterward. Damage and Wounds still apply.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!3602341aede620d1"
+}

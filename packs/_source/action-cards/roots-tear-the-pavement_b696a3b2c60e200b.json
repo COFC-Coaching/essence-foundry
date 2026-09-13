@@ -1,0 +1,52 @@
+{
+  "_id": "b696a3b2c60e200b",
+  "name": "Roots Tear the Pavement",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Breaker",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Grappling, Reaving",
+    "expertisesMode": "any",
+    "tags": "damage, control, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, pull the target 2 units along a clear path that ends adjacent to you, then deal 1 Bludgeoning Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The final space may instead be any empty space adjacent to you."
+      },
+      {
+        "n": "2",
+        "html": "Knock the target Prone."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Breaker",
+      "html": "After moving the target, spend 1 Combo to move 1 unit and pull it 1 unit along with you, keeping it adjacent.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b696a3b2c60e200b"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "72cc053023caf978",
+  "name": "Aegis Minor",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Magecraft",
+    "subtype": "Aether",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target reduces its next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target also resists its next 1 unit of forced movement until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Protect a second willing creature within 1 unit of the first."
+      }
+    ],
+    "rider": {
+      "title": "Aether Thread",
+      "html": "Gain an Aether Thread. Before rolling a later Magecraft card, consume it: increase its Success Die by 1, to a maximum of 10. This does not generate Surges.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!72cc053023caf978"
+}

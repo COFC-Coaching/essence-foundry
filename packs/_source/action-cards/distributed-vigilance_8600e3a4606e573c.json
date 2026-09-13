@@ -1,0 +1,52 @@
+{
+  "_id": "8600e3a4606e573c",
+  "name": "Distributed Vigilance",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Chimera",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Awareness, Integration",
+    "expertisesMode": "any",
+    "tags": "information, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self; choose a visible point within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Until your next turn, know when a creature enters within 1 unit of the point, even in ordinary darkness; gain +1 Composure against sensory deception."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the watched radius to 2 units."
+      },
+      {
+        "n": "2",
+        "html": "Share the defensive benefit with an adjacent willing ally."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Chimera",
+      "html": "Assume Vigilance (upkeep 0): replacing an Adaptation never blocks your awareness of detected creatures during the transformation; gain +1 Composure against distraction while transforming.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!8600e3a4606e573c"
+}

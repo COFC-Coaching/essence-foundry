@@ -1,0 +1,52 @@
+{
+  "_id": "a5002c29af482475",
+  "name": "Moving Reference",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Targeting",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Mobility, Trajectory",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within ranged Weapon Range after your movement."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 2 units before rolling. On success, deal 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore difficult terrain during this movement."
+      },
+      {
+        "n": "2",
+        "html": "Ignore cover from one low obstacle for this attack; you still need a clear path over or around it."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Targeting",
+      "html": "After resolving, establish Lock if you ended at least 2 units from your starting space. Otherwise retain any existing Lock.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!a5002c29af482475"
+}

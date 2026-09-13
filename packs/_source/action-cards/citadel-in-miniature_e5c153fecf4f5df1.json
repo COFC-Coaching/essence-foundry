@@ -1,0 +1,52 @@
+{
+  "_id": "e5c153fecf4f5df1",
+  "name": "Citadel in Miniature",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Earth",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Fabrication, Reinforcement",
+    "expertisesMode": "any",
+    "tags": "terrain, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "A connected line of up to 3 empty spaces within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Concentration: form a temporary waist-high wall, granting +1 cover across it. Each space has 2 Wounds and 0 Resilience. It lasts up to 3 rounds; creatures can cross a space as difficult terrain."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One space may provide full cover, but then blocks movement until destroyed."
+      },
+      {
+        "n": "2",
+        "html": "Up to two willing creatures beside the wall reduce their next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Earth Thread",
+      "html": "Gain an Earth Thread. Before rolling a later Magecraft card, consume it: yourself or one willing target of that card reduces its next incoming Damage by 1 before the start of your next turn.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e5c153fecf4f5df1"
+}

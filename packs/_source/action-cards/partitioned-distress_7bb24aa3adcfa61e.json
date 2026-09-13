@@ -1,0 +1,52 @@
+{
+  "_id": "7bb24aa3adcfa61e",
+  "name": "Partitioned Distress",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Barrier",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Biokinesis, Telepathy",
+    "expertisesMode": "any",
+    "tags": "suppression, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress one Light Wound Condition's numerical penalties until the start of your next turn. The target also gains +1 Composure against pain during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Extend suppression through the end of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Also suppress one ordinary Poison penalty for the same duration."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Barrier",
+      "html": "If you accepted Strain, the target may move 1 unit when it next suffers Damage before your next turn, after the Damage resolves.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!7bb24aa3adcfa61e"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "9b2d0d379a00dbcf",
+  "name": "Small Claw, Find the Opening",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Calling",
+    "subtype": "Familiar",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 2 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Slashing Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 Slashing Damage."
+      },
+      {
+        "n": "1",
+        "html": "On a hit, move 1 unit around the target."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Familiar",
+      "html": "You may burn 3 Action Dice and spend 1 Mana to enter Familiar Full Manifestation (FM-0F). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-0F"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!9b2d0d379a00dbcf"
+}

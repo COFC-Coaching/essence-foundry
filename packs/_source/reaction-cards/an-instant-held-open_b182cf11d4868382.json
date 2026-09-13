@@ -1,0 +1,52 @@
+{
+  "_id": "b182cf11d4868382",
+  "name": "An Instant Held Open",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Time",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Augmentation, Channeling",
+    "expertisesMode": "any",
+    "tags": "support, setup, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The target rolls a Combat Card with a Success Die below 6, before spending Surges. Response (unopposed): Increase that Success Die by 1, to a maximum of 6; this changes no Surge generation."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target ignores one ordinary -1 Success Die penalty on that card."
+      },
+      {
+        "n": "2",
+        "html": "After that card, the target may move 1 unit. This grants no additional Action."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "0b2b283e84264679",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b182cf11d4868382"
+}

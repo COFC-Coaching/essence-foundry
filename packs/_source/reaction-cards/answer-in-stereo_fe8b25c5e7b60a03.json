@@ -1,0 +1,52 @@
+{
+  "_id": "fe8b25c5e7b60a03",
+  "name": "Answer in Stereo",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Salvo",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Cadence, Trajectory",
+    "expertisesMode": "any",
+    "tags": "damage, area, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two enemies within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An enemy ranged Action misses you while another enemy is within 2 units of its source. Response: On success, deal 1 weapon Damage to each selected target."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 point of cover bonus against one target."
+      },
+      {
+        "n": "2",
+        "html": "One hit target is Distracted until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "654c5d2c8a2dce33",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!fe8b25c5e7b60a03"
+}

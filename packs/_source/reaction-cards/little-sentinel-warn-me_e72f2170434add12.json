@@ -1,0 +1,52 @@
+{
+  "_id": "e72f2170434add12",
+  "name": "Little Sentinel, Warn Me",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Calling",
+    "subtype": "Familiar",
+    "attr": "Adaptability",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, information, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 2 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An attack targets the creature from a source you detect, before rolling. Response (unopposed): Grant +1 to its targeted Defense against the attack."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Reveal the attacker's occupied space to the target."
+      },
+      {
+        "n": "2",
+        "html": "After the attack, the target may move 1 unit."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "e87efeb1c809057f",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e72f2170434add12"
+}

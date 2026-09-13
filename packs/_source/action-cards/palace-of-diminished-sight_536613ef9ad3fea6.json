@@ -1,0 +1,52 @@
+{
+  "_id": "536613ef9ad3fea6",
+  "name": "Palace of Diminished Sight",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Shadow",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "Composure",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Fabrication, Channeling",
+    "expertisesMode": "any",
+    "tags": "terrain, area, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Enemies in a sphere of radius 1 centered within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each target is Distracted until the start of your next turn. Independently, three chosen spaces in the area provide concealment until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Reposition one chosen shadow space to an adjacent empty space."
+      },
+      {
+        "n": "2",
+        "html": "One hit target takes 1 Arcane Damage."
+      }
+    ],
+    "rider": {
+      "title": "Shadow Thread",
+      "html": "Gain a Shadow Thread. Before rolling a later Magecraft card, consume it: after resolving, choose two adjacent spaces within 3 units; they provide concealment until the start of your next turn.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!536613ef9ad3fea6"
+}

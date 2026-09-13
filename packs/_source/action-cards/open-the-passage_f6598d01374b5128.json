@@ -1,0 +1,52 @@
+{
+  "_id": "f6598d01374b5128",
+  "name": "Open the Passage",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Formation",
+    "attr": "Adaptability",
+    "skill": "Leadership",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Tactics, Valor",
+    "expertisesMode": "any",
+    "tags": "damage, control, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage and push the target 1 unit. Independently, your allies may pass through your space until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After a hit, move into the target's vacated space."
+      },
+      {
+        "n": "2",
+        "html": "An adjacent willing ally may move 2 units through the opened space after the attack."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Formation",
+      "html": "Spend this Authority when you or an ally crosses the target's former space before your next turn: that creature ignores movement Reactions from the target for that move.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f6598d01374b5128"
+}

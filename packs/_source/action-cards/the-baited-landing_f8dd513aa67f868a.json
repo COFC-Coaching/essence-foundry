@@ -1,0 +1,52 @@
+{
+  "_id": "f8dd513aa67f868a",
+  "name": "The Baited Landing",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Trap",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Sabotage, Observation",
+    "expertisesMode": "any",
+    "tags": "terrain, control, damage",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "A sphere of radius 1 centered within 3 units, using mundane trap material."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The area's empty spaces become difficult terrain until the start of your next turn. Choose one visible safe route through it that willing allies can use normally."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Extend the safe route 1 space beyond the area."
+      },
+      {
+        "n": "2",
+        "html": "One enemy already in the area is Slowed 2 on a successful Fortitude check with this roll until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Trap",
+      "html": "When an enemy voluntarily enters the area, it takes 1 Piercing Damage and is knocked Prone. This triggers once, after its entry.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f8dd513aa67f868a"
+}

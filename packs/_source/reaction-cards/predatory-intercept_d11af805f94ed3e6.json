@@ -1,0 +1,52 @@
+{
+  "_id": "d11af805f94ed3e6",
+  "name": "Predatory Intercept",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Predator",
+    "attr": "Grace",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Awareness, Armament",
+    "expertisesMode": "any",
+    "tags": "damage, control, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy adjacent after it moves."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy ends voluntary movement adjacent to you. Response: On success, deal 1 Slashing Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore ordinary concealment for this attack."
+      },
+      {
+        "n": "2",
+        "html": "After a hit, pull the target 1 unit."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "06e138447ec657be",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d11af805f94ed3e6"
+}

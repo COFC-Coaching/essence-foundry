@@ -1,0 +1,52 @@
+{
+  "_id": "60d42f303f13420e",
+  "name": "Hold the Last Sightline",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Targeting",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "",
+    "min": "3",
+    "cost": "1",
+    "expertises": "Mobility, Flair",
+    "expertisesMode": "any",
+    "tags": "protection, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target moves up to 2 units into a space with cover, or 1 unit if no cover is available, then reduces its next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore difficult terrain during the movement."
+      },
+      {
+        "n": "2",
+        "html": "The target also gains +1 Fortitude against ranged attacks until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Targeting",
+      "html": "Your current Lock persists through one break in sight until the end of your next turn; if it is restored sooner, you may transfer it to a different visible creature without a burn.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!60d42f303f13420e"
+}

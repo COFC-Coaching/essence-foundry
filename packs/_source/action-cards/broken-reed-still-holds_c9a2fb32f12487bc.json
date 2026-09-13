@@ -1,0 +1,52 @@
+{
+  "_id": "c9a2fb32f12487bc",
+  "name": "Broken Reed Still Holds",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Guard",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Brawling, Berserking",
+    "expertisesMode": "any",
+    "tags": "protection, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress the numerical penalties of one non-Critical physical Wound Condition until the start of your next turn. Reduce your next incoming Damage by 1 during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Extend only the suppression through the end of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Gain +1 Fortitude until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Guard",
+      "html": "You may spend 1 Combo to enter Broken Reed Stance: each time you would lose Combo from a Core Wound, lose at most 1 from that entire Damage event. Injuries still apply.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c9a2fb32f12487bc"
+}

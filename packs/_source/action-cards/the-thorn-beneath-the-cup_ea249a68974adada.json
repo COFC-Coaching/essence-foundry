@@ -1,0 +1,52 @@
+{
+  "_id": "ea249a68974adada",
+  "name": "The Thorn Beneath the Cup",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Ritualism",
+    "subtype": "Hex",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Necrotic Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 Necrotic Damage."
+      },
+      {
+        "n": "1",
+        "html": "On a hit, the target is Slowed 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Hex",
+      "html": "Rite, 1 Echo: on a hit, the target becomes Possessed. Trigger: it voluntarily moves at least 2 units in one movement. Echo: it is Distracted until your next turn.",
+      "meta": "ECHO LIMIT: 1; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ea249a68974adada"
+}

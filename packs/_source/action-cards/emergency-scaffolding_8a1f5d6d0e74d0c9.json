@@ -1,0 +1,52 @@
+{
+  "_id": "8a1f5d6d0e74d0c9",
+  "name": "Emergency Scaffolding",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Bulwark",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Regeneration, Plasticity",
+    "expertisesMode": "any",
+    "tags": "suppression, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress one non-Critical physical Wound Condition's numerical penalties until the start of your next turn; reduce your next incoming Damage by 1 during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Extend suppression through the end of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one additional Light physical Wound Condition for the same duration."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Bulwark",
+      "html": "Assume Scaffolding (upkeep 1): maintain suppression of one non-Critical physical Wound's numerical penalties; your Movement is reduced by 1. All injuries remain recorded.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!8a1f5d6d0e74d0c9"
+}

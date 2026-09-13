@@ -1,0 +1,52 @@
+{
+  "_id": "44ec5891ba369af5",
+  "name": "Veiled Guest, Hide the Wounded",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Phantom",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Vessel, Anchoring",
+    "expertisesMode": "any",
+    "tags": "suppression, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target's space provides concealment until the start of your next turn; suppress one Light Wound Condition's numerical penalties for that duration."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target may move 1 unit with the concealment following it."
+      },
+      {
+        "n": "2",
+        "html": "Reduce its next incoming Necrotic or Psychic Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Phantom",
+      "html": "You may burn 3 Action Dice and spend 2 Mana to enter Phantom Full Manifestation (FM-1P). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-1P"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!44ec5891ba369af5"
+}

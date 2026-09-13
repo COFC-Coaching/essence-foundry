@@ -1,0 +1,52 @@
+{
+  "_id": "52ac96bcc5ce6e63",
+  "name": "Judgment Through the Prism",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Light",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Harmony",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Channeling, Disjunction",
+    "expertisesMode": "any",
+    "tags": "damage, information, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 6 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 Radiant Damage and suppress its ordinary concealment until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Learn whether an ordinary illusion is altering the target's visible outline."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, end one ordinary magical concealment benefit on it."
+      }
+    ],
+    "rider": {
+      "title": "Light Thread",
+      "html": "Gain a Light Thread. Before rolling a later Magecraft card, consume it: ignore ordinary concealment penalties against its detected targets. This does not detect a hidden creature or bypass solid cover.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!52ac96bcc5ce6e63"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "7eb050e0284133cc",
+  "name": "Make Room for Trouble",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Reversal",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Improvisation, Sleight",
+    "expertisesMode": "any",
+    "tags": "damage, control, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, move the target to another empty space adjacent to you and deal 1 Bludgeoning Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "You may move 1 unit before relocating it."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, knock the target Prone if it ends beside an obstacle."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Reversal",
+      "html": "When an enemy attempts to pass through your vacated space, you may move 1 unit and give it -1 on its next Success Die before your next turn.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!7eb050e0284133cc"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "c782546485ee8174",
+  "name": "Architecture of a Second Self",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Projection",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Imprint, Clairvoyance",
+    "expertisesMode": "any",
+    "tags": "information, setup, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One visible empty space within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Create an intangible viewpoint until the start of your next turn. Perceive from it and use it as the origin of your next Psionics Action, measuring range from it. It cannot cross solid barriers."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move the viewpoint up to 2 units before that next Action."
+      },
+      {
+        "n": "2",
+        "html": "Ignore ordinary concealment against detected targets within 2 units of the viewpoint."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Projection",
+      "html": "If you accepted Strain, when the viewpoint expires you may move 2 units toward its last location without triggering movement Reactions.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c782546485ee8174"
+}

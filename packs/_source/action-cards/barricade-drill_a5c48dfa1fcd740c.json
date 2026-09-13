@@ -1,0 +1,52 @@
+{
+  "_id": "a5c48dfa1fcd740c",
+  "name": "Barricade Drill",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Move up to 1 unit into cover. Gain +1 Fortitude against ranged attacks until the start of your next turn, even if no cover is available."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "One adjacent willing ally gains the Fortitude bonus."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Suppression",
+      "html": "After resolving, choose a visible creature within ranged Weapon Range. You may burn 1 die to establish Lock on it without leaving cover.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!a5c48dfa1fcd740c"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "86525ad489bb7848",
+  "name": "Monkey Steals the Threshold",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Blitz",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Brawling, Grappling",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Bludgeoning Damage and swap spaces with the target, if both spaces can hold their new occupants."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After swapping, move 1 unit without triggering the target's movement Reactions."
+      },
+      {
+        "n": "2",
+        "html": "The target is Slowed 2 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Blitz",
+      "html": "After a successful swap, gain 1 additional Combo if the target now stands beside an obstacle or another enemy.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!86525ad489bb7848"
+}

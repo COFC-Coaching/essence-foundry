@@ -1,0 +1,52 @@
+{
+  "_id": "beb0153ecc8a96f4",
+  "name": "Read the Tell",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Cunning",
+    "subtype": "Ambush",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "information, setup, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, learn its highest Defense and make it Exposed until the start of your next turn. Ties are reported as ties."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Also learn its lowest Defense."
+      },
+      {
+        "n": "2",
+        "html": "An ally within 3 units gains +1 Defense against the target's next attack until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Ambush",
+      "html": "When the target changes position before your next turn, you may move 1 unit toward a space with a clear view of it.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!beb0153ecc8a96f4"
+}

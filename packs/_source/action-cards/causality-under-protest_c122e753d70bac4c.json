@@ -1,0 +1,52 @@
+{
+  "_id": "c122e753d70bac4c",
+  "name": "Causality Under Protest",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Barrier",
+    "attr": "Acuity",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Precognition, Telekinesis",
+    "expertisesMode": "any",
+    "tags": "protection, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Each target reduces its next incoming Damage by 1 and gains +1 Fortitude against the next attack targeting it until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Each may move 1 unit toward cover."
+      },
+      {
+        "n": "2",
+        "html": "One protected target reduces that Damage by 1 more."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Barrier",
+      "html": "If you accepted Strain, the first protected target to be missed before your next turn may move 1 unit without triggering movement Reactions.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c122e753d70bac4c"
+}

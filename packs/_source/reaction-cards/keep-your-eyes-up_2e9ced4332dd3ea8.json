@@ -1,0 +1,52 @@
+{
+  "_id": "2e9ced4332dd3ea8",
+  "name": "Keep Your Eyes Up",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Leadership",
+    "subtype": "Order",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, support, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An attack targets the creature from a source you detect, before rolling. Response (unopposed): Grant +1 to its targeted Defense against that attack."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Reveal the attacker's occupied space to the protected target."
+      },
+      {
+        "n": "2",
+        "html": "The target becomes Rallied until the start of your next turn if the attack misses."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "bb8e7b0bcde9b2a5",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2e9ced4332dd3ea8"
+}

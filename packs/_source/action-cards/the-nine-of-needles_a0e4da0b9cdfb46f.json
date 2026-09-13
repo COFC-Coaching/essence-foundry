@@ -1,0 +1,52 @@
+{
+  "_id": "a0e4da0b9cdfb46f",
+  "name": "The Nine of Needles",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Hex",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Inscription, Sympathy",
+    "expertisesMode": "any",
+    "tags": "damage, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Necrotic Damage and make the target Slowed 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Slow by 1."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, it suffers -1 Harmony against the next attack targeting it until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Hex",
+      "html": "Rite, 2 Echoes: on a hit, the target becomes Possessed. Trigger: it voluntarily moves at least 2 units in one movement. Echo: deal 1 Necrotic Damage.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!a0e4da0b9cdfb46f"
+}

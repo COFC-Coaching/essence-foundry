@@ -1,0 +1,52 @@
+{
+  "_id": "71ab1ed4f4bf8bde",
+  "name": "The Unblinking Eye",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Ritualism",
+    "subtype": "Divination",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "information, setup, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, learn its lowest Defense and reveal its occupied space through ordinary concealment until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Also learn its highest Defense."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, it suffers -1 Harmony against your next Ritualism card until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Divination",
+      "html": "Rite, 1 Echo: on a hit, bind the target. Trigger: it starts an Action. Echo: you or a willing ally within 2 units gains +1 to the targeted Defense against that Action.",
+      "meta": "ECHO LIMIT: 1; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!71ab1ed4f4bf8bde"
+}

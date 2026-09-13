@@ -1,0 +1,52 @@
+{
+  "_id": "ff0fd7b885e1e2a6",
+  "name": "Curtain Call",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Execution",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Flair, Payload",
+    "expertisesMode": "any",
+    "tags": "damage, control, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage and push it 1 unit if it is Distracted or Slowed."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the push by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "After a hit, yourself or one willing ally within 3 units may move 1 unit into cover."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Execution",
+      "html": "After a hit, you may end Lock on the target to create concealment in your space until the start of your next turn.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ff0fd7b885e1e2a6"
+}

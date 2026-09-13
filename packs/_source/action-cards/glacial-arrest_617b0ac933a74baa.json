@@ -1,0 +1,52 @@
+{
+  "_id": "617b0ac933a74baa",
+  "name": "Glacial Arrest",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Water",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Transmutation, Reinforcement",
+    "expertisesMode": "any",
+    "tags": "damage, control, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Cold Damage and make it Slowed 2 until the start of your next turn. Independently, reduce your next incoming Fire Damage by 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One willing ally within 2 units gains the same Fire protection."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target must burn 1 die before voluntarily moving until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Water Thread",
+      "html": "Gain a Water Thread. Before rolling a later Magecraft card, consume it: suppress one ordinary Movement penalty on yourself or one willing target of that card until the start of your next turn.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!617b0ac933a74baa"
+}

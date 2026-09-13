@@ -1,0 +1,52 @@
+{
+  "_id": "2ef1e5948b91c241",
+  "name": "The Tower Without a Door",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Ward",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Inscription, Reagents",
+    "expertisesMode": "any",
+    "tags": "terrain, protection, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "A sphere of radius 1 centered within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Until your next turn, willing creatures in the area gain +1 Fortitude against ranged attacks; the center space is difficult terrain for enemies."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Extend difficult terrain to an adjacent empty space."
+      },
+      {
+        "n": "2",
+        "html": "One willing creature in the area suppresses one ordinary Poison penalty until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Ward",
+      "html": "Rite, 2 Echoes: anchor the center. Trigger: an enemy voluntarily enters the center space. Echo: push it 1 unit away after entry and make it Slowed 1 until your next turn.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2ef1e5948b91c241"
+}

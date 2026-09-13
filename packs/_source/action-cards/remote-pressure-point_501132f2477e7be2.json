@@ -1,0 +1,52 @@
+{
+  "_id": "501132f2477e7be2",
+  "name": "Remote Pressure Point",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Projection",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Telekinesis, Imprint",
+    "expertisesMode": "any",
+    "tags": "damage, control, terrain",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Force Damage and push it 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Choose any horizontal direction for the push."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target's space becomes difficult terrain until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Projection",
+      "html": "If you accepted Strain, keep a pressure point in the target's original space until the start of your next turn; the first enemy voluntarily entering it is Slowed 1 until your next turn.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!501132f2477e7be2"
+}

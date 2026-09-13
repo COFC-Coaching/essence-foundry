@@ -1,0 +1,52 @@
+{
+  "_id": "d3e94658aca66b6b",
+  "name": "Palm Measures the Storm",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Prowess",
+    "subtype": "Opener",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, setup, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Choose one visible enemy. Gain +1 Fortitude against its attacks until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit toward the chosen enemy."
+      },
+      {
+        "n": "2",
+        "html": "One adjacent willing ally gains the same protection."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Opener",
+      "html": "Gain 1 Combo if you have none. Your next Prowess hit on the chosen enemy before your next turn preserves 1 Combo from loss caused by your next Core Wound.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d3e94658aca66b6b"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "670bf58badcdb9d9",
+  "name": "River King, Divide the Torrent",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Elemental",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Anchoring, Banishment",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would deal Fire, Cold, Lightning or Acid Damage to the target. Response (unopposed): Reduce it by 2 and suppress one ordinary Burning or Poison Condition imposed by that Action until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target may move 1 unit after the Action."
+      },
+      {
+        "n": "2",
+        "html": "An adjacent willing creature also reduces Damage from that same Action by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "e87efeb1c809057f",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!670bf58badcdb9d9"
+}

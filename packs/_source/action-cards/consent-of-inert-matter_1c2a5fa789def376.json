@@ -1,0 +1,52 @@
+{
+  "_id": "1c2a5fa789def376",
+  "name": "Consent of Inert Matter",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Projection",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Telekinesis, Clairvoyance",
+    "expertisesMode": "any",
+    "tags": "damage, control, utility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy or unattended object within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, move the enemy 2 units horizontally along a clear path and deal 1 Force Damage. An unattended light object instead moves 3 units without opposition."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, suppress the target's ordinary benefit from the cover it just left until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Projection",
+      "html": "If you accepted Strain, leave a kinetic brace in the destination until the start of your next turn: its occupant resists the next 2 units of forced movement; you may choose not to brace an enemy.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1c2a5fa789def376"
+}

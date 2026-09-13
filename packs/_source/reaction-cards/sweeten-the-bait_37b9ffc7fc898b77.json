@@ -1,0 +1,52 @@
+{
+  "_id": "37b9ffc7fc898b77",
+  "name": "Sweeten the Bait",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Gambit",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Deception, Observation",
+    "expertisesMode": "any",
+    "tags": "protection, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy declares an attack against you, before rolling. Response: On success, impose -1 on that attack's Success Die; you take -1 Fortitude against it if your Reaction misses."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After a hit, move 1 unit away."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, suppress its ordinary accuracy bonuses for that attack, to a maximum reduction of 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "41212bdcb35286d8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!37b9ffc7fc898b77"
+}

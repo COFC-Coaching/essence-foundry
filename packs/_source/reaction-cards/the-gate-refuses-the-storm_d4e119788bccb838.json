@@ -1,0 +1,52 @@
+{
+  "_id": "d4e119788bccb838",
+  "name": "The Gate Refuses the Storm",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Ward",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Consecration, Liturgy",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would deal Damage to the target. Response (unopposed): Reduce it by 2 and resist 1 unit of forced movement from the Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Resist 1 additional unit."
+      },
+      {
+        "n": "2",
+        "html": "An adjacent willing creature also reduces Damage from the same Action by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "928afd1ad9675380",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d4e119788bccb838"
+}

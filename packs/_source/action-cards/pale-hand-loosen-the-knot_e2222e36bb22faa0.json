@@ -1,0 +1,52 @@
+{
+  "_id": "e2222e36bb22faa0",
+  "name": "Pale Hand, Loosen the Knot",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Phantom",
+    "attr": "Adaptability",
+    "skill": "Calling",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Banishment, Transference",
+    "expertisesMode": "any",
+    "tags": "damage, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 4 units maintaining an ordinary restraint, or any enemy in range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Necrotic Damage and suppress one ordinary restraint it maintains on you or a willing ally until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "A freed willing creature may move 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "End that restraint rather than suppress it if it is ordinary and magical."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Phantom",
+      "html": "You may burn 3 Action Dice and spend 2 Mana to enter Phantom Full Manifestation (FM-1P). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-1P"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e2222e36bb22faa0"
+}

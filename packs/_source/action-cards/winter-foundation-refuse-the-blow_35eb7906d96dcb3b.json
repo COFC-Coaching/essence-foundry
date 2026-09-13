@@ -1,0 +1,52 @@
+{
+  "_id": "35eb7906d96dcb3b",
+  "name": "Winter Foundation, Refuse the Blow",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Elemental",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Anchoring, Accord",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Reduce the target's next incoming Damage by 2 until the start of your next turn; during that time, it may suppress one ordinary Burning Condition."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target resists its next 1 unit of forced movement until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "An adjacent willing creature also reduces its next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Elemental",
+      "html": "You may burn 3 Action Dice and spend 3 Mana to enter Elemental Full Manifestation (FM-2E). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-2E"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!35eb7906d96dcb3b"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "80e67ff84dc1a87d",
+  "name": "Keeper of Oaths, Judge the Intrusion",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Ancestor",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "Harmony",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Dominion, Banishment",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 Radiant Damage and suppress one ordinary magical Condition that target maintains on yourself or a willing ally until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, the target is Distracted until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "End the suppressed Condition if it is ordinary and magical; Specialty and Wound Conditions remain."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Ancestor",
+      "html": "You may burn 3 Action Dice and spend 3 Mana to enter Ancestor Full Manifestation (FM-2A). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-2A"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!80e67ff84dc1a87d"
+}

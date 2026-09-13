@@ -1,0 +1,52 @@
+{
+  "_id": "4f3616820fbded73",
+  "name": "We Are Not Finished",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Vow",
+    "attr": "Anima",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Inspiration, Valor",
+    "expertisesMode": "any",
+    "tags": "suppression, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress one Light Wound Condition's numerical penalties and one ordinary morale-based Success Die penalty until the start of your next turn. No injury changes."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Extend only the Wound suppression through the end of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "The target becomes Rallied until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Vow",
+      "html": "Vow: do not voluntarily leave the target more than 3 units away before your next turn. Spend this Authority when it is damaged to let it move 1 unit afterward; breaking the Vow discards it.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!4f3616820fbded73"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "e3d4b4fe0a2da953",
+  "name": "Your Plan, My Timing",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Reversal",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Composure",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Observation, Deception",
+    "expertisesMode": "any",
+    "tags": "debuff, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, impose -2 on its next Success Die until the start of your next turn. You may move 1 unit after resolving."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After a hit, the target becomes Exposed until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "An ally within 3 units gains +1 to the targeted Defense against that enemy's next attack until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Reversal",
+      "html": "When this target declares an Action against you before your next turn, you may swap places with an adjacent willing ally; that ally chooses whether to become the legal target instead.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e3d4b4fe0a2da953"
+}

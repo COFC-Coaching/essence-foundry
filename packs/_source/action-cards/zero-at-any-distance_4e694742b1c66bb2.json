@@ -1,0 +1,52 @@
+{
+  "_id": "4e694742b1c66bb2",
+  "name": "Zero at Any Distance",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Targeting",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Precision, Mobility",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 1 unit before rolling. On success, deal 2 weapon Damage; ignore the penalty for firing while adjacent to an enemy."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Ignore all ordinary concealment and 1 point of cover bonus for this attack."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Targeting",
+      "html": "After resolving, establish Lock. If it was already Locked, the next time it approaches you before your next turn you may move 1 unit away without triggering its movement Reactions.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!4e694742b1c66bb2"
+}

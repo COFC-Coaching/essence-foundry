@@ -1,0 +1,52 @@
+{
+  "_id": "a3e06cb939c90402",
+  "name": "The Tempered Brand",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Fire",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Augmentation, Disjunction",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Fire Damage and suppress 1 point of its next ordinary Damage reduction until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Your next damaging Magecraft card against that target gains +1 on its Success Die until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "End one ordinary concealment effect on the target after a hit."
+      }
+    ],
+    "rider": {
+      "title": "Fire Thread",
+      "html": "Gain a Fire Thread. Before rolling a later Magecraft card, consume it: one target that already took Damage since its last turn takes +1 Damage from that card if hit.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!a3e06cb939c90402"
+}

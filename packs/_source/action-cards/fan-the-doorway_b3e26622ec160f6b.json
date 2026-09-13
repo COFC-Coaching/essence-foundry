@@ -1,0 +1,52 @@
+{
+  "_id": "b3e26622ec160f6b",
+  "name": "Fan the Doorway",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Salvo",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Payload, Trajectory",
+    "expertisesMode": "any",
+    "tags": "damage, area, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Enemies in a cone of length 3 within your ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each target is Slowed 1 until the start of your next turn. Deal 1 weapon Damage to one hit target of your choice."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Slow to 2."
+      },
+      {
+        "n": "2",
+        "html": "Deal 1 weapon Damage to a second hit target."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Salvo",
+      "html": "You may end Lock on a hit target to make one empty cone space difficult terrain until your next turn; creatures cannot treat that space as cover.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b3e26622ec160f6b"
+}

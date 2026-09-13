@@ -1,0 +1,52 @@
+{
+  "_id": "1222918e4f5483e0",
+  "name": "A Name for the Silence",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Trance",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Telepathy, Biokinesis",
+    "expertisesMode": "any",
+    "tags": "setup, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Do not accept Strain on this card. Remove 2 Strain from yourself and suppress one ordinary mental or pain Condition on the target until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Extend suppression through the end of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one Light Wound Condition's numerical penalties on the target until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Trance",
+      "html": "Enter Silence Trance until the end of your next turn: you cannot accept Strain, but gain +1 Composure. End the Trance voluntarily only at the start of your turn.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1222918e4f5483e0"
+}

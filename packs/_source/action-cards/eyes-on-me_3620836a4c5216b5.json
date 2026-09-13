@@ -1,0 +1,52 @@
+{
+  "_id": "3620836a4c5216b5",
+  "name": "Eyes on Me",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Leadership",
+    "subtype": "Vow",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "debuff, protection, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 4 units that can perceive you."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, the target has -1 on its next Success Die against anyone other than you until the start of your next turn. You gain +1 Fortitude against it during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit toward the target."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target is Distracted until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Vow",
+      "html": "Vow: do not voluntarily move farther from the target before your next turn. If kept, spend this Authority when it attacks you to resist 1 unit of forced movement; breaking the Vow discards it.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!3620836a4c5216b5"
+}

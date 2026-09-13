@@ -1,0 +1,52 @@
+{
+  "_id": "8f879b802ec3a50e",
+  "name": "The Unreliable Present",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Fracture",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Composure",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Mesmerism, Precognition",
+    "expertisesMode": "any",
+    "tags": "area, debuff, information",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two detected enemies within 5 units and 2 units of each other."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each is Distracted and suffers -1 Composure until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Each hit target also has -1 on its next ranged Success Die until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Deal 1 Psychic Damage to one hit target."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Fracture",
+      "html": "If you accepted Strain, choose one hit target: when it next changes targets between Actions before your next turn, you may move 1 unit and learn its remaining Reaction Dice.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!8f879b802ec3a50e"
+}

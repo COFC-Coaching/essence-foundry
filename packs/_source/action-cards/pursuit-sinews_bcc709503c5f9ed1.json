@@ -1,0 +1,52 @@
+{
+  "_id": "bcc709503c5f9ed1",
+  "name": "Pursuit Sinews",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Predator",
+    "attr": "Grace",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Locomotion, Integration",
+    "expertisesMode": "any",
+    "tags": "damage, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy adjacent after your movement."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 2 units toward a creature that moved since your last turn. On success, deal 1 Slashing Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "After a hit, ignore the target's movement Reactions until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Predator",
+      "html": "Assume Pursuit Sinews (upkeep 0): once on each of your turns, when you replace this Adaptation with another, move 1 unit toward a visible enemy.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!bcc709503c5f9ed1"
+}

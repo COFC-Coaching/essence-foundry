@@ -1,0 +1,52 @@
+{
+  "_id": "6d9965846043d63d",
+  "name": "Pebble Trips the Heel",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Prowess",
+    "subtype": "Breaker",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, control, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy that starts within 1 unit of you."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy voluntarily begins moving away from you. Response: On success, deal 1 Bludgeoning Damage after its first unit of movement."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, reduce its remaining Movement this turn by 1."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, follow 1 unit without triggering movement Reactions."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "f86106a69c957230",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!6d9965846043d63d"
+}

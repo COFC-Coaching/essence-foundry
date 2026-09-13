@@ -1,0 +1,52 @@
+{
+  "_id": "78ade46002d2f094",
+  "name": "Dismantle the Advantage",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Reversal",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Sabotage, Sleight",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage and end one ordinary defensive benefit worth at most +1 Defense or 1 Damage reduction. Equipment and Specialty Conditions remain."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move a small unattended object in the target's space up to 2 units."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 weapon Damage."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Reversal",
+      "html": "When this target receives another ordinary defensive benefit before your next turn, it becomes Exposed after that benefit resolves.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!78ade46002d2f094"
+}

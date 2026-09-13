@@ -1,0 +1,52 @@
+{
+  "_id": "3c46bf765d5ba816",
+  "name": "Two-Point Check",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Salvo",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Precision, Cadence",
+    "expertisesMode": "any",
+    "tags": "damage, area, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two enemies within ranged Weapon Range and 3 units of each other."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage to each target."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 point of cover bonus against one target."
+      },
+      {
+        "n": "2",
+        "html": "One hit target suffers -1 Fortitude against your next Ballistics Action until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Salvo",
+      "html": "If you began with Lock on one target, you may transfer it to the other after resolving. If both were hit, the transfer ignores temporary concealment.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!3c46bf765d5ba816"
+}

@@ -1,0 +1,211 @@
+{
+  "_id": "b97ff0159fded099",
+  "name": "Familiar",
+  "type": "npc",
+  "img": "icons/svg/wing.svg",
+  "system": {
+    "might": 0,
+    "grace": 0,
+    "vigor": 0,
+    "intellect": 0,
+    "acuity": 0,
+    "resolve": 0,
+    "presence": 0,
+    "adaptability": 0,
+    "anima": 0,
+    "tier": 1,
+    "level": 1,
+    "role": "",
+    "gmNotes": "<p><strong>Purpose:</strong> Mobile harassment and close-range observation. The form remains fragile if cornered.</p><p><strong>Trait &mdash; Small Passage.</strong> You may squeeze through a gap at least half a tactical space wide, paying 1 extra unit of movement to cross it. This never permits passage through a closed solid barrier or ending your movement in an occupied space.</p><p><em>Full Manifestation profile — Rank 0, Living. See CALLING_PROFILES.md / the Full Manifestation Guide journal for the shared entry/dismissal/defeat procedure.</em></p>",
+    "resilience": 0,
+    "movement": 4,
+    "fortitudeBonus": 3,
+    "composureBonus": 4,
+    "harmonyBonus": 4,
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ]
+  },
+  "items": [
+    {
+      "_id": "f404574790d6e735",
+      "_key": "!actors.items!b97ff0159fded099.f404574790d6e735",
+      "name": "Needle Claw",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 0,
+        "style": "Calling",
+        "subtype": "Familiar",
+        "attr": "Anima",
+        "skill": "Calling",
+        "defense": "Fortitude",
+        "min": "2",
+        "cost": "0",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "One enemy within 1 unit."
+          },
+          {
+            "label": "Effect",
+            "html": "On success, deal 1 Piercing Damage."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "After a hit, move 1 unit around the target without triggering movement Reactions from that target."
+          },
+          {
+            "n": "2",
+            "html": "Deal +1 Piercing Damage."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "d42ee9e2c65ac8d3",
+      "_key": "!actors.items!b97ff0159fded099.d42ee9e2c65ac8d3",
+      "name": "Watcher's Circuit",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 0,
+        "style": "Calling",
+        "subtype": "Familiar",
+        "attr": "Adaptability",
+        "skill": "Calling",
+        "defense": "",
+        "min": "2",
+        "cost": "0",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "Self."
+          },
+          {
+            "label": "Effect",
+            "html": "Move up to 2 units. Until the start of your next turn, you detect the occupied spaces of ordinarily concealed moving creatures within 2 units; solid barriers still block detection."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "Increase movement by 1 unit."
+          },
+          {
+            "n": "2",
+            "html": "One willing ally within 2 units also receives the detected positions until the start of your next turn."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "6616154bdafcc029",
+      "_key": "!actors.items!b97ff0159fded099.6616154bdafcc029",
+      "name": "Burrow from the Blow",
+      "type": "reaction-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 0,
+        "style": "Calling",
+        "subtype": "Familiar",
+        "attr": "Adaptability",
+        "skill": "Calling",
+        "defense": "",
+        "min": "2",
+        "cost": "0",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "Self."
+          },
+          {
+            "label": "Trigger",
+            "html": "A detected attacker declares a single-target attack against you, before rolling."
+          },
+          {
+            "label": "Effect",
+            "html": "Gain +1 to the targeted Defense against that attack. After it resolves, move 1 unit."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "Ignore difficult terrain during that movement."
+          },
+          {
+            "n": "2",
+            "html": "Reduce that attack's Damage by 1."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!b97ff0159fded099"
+}

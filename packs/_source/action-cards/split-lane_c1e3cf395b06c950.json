@@ -1,0 +1,52 @@
+{
+  "_id": "c1e3cf395b06c950",
+  "name": "Split Lane",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Ballistics",
+    "subtype": "Salvo",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, area, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two enemies within ranged Weapon Range and 2 units of each other."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage to one chosen target. The other hit target suffers -1 on its next Success Die until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The second target may be up to 4 units from the first."
+      },
+      {
+        "n": "2",
+        "html": "Deal 1 weapon Damage to the second hit target instead of the penalty."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Salvo",
+      "html": "After resolving, you may transfer your existing Lock to either target you can still see.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c1e3cf395b06c950"
+}

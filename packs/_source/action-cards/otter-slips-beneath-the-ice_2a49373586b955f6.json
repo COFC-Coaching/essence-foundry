@@ -1,0 +1,52 @@
+{
+  "_id": "2a49373586b955f6",
+  "name": "Otter Slips Beneath the Ice",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Blitz",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "1",
+    "expertises": "Skirmishing, Brawling",
+    "expertisesMode": "any",
+    "tags": "damage, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range after your movement."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 2 units through occupied allied spaces. On success, deal 1 Bludgeoning Damage and move 1 unit after the attack."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "You may pass through one enemy's space during the first movement, without ending there."
+      },
+      {
+        "n": "2",
+        "html": "Until your next turn, the target cannot make movement Reactions against you on a hit."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Blitz",
+      "html": "After resolving, spend 1 Combo to enter Otter Stance: standing from Prone costs you no die, but still requires your turn and room to stand.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2a49373586b955f6"
+}

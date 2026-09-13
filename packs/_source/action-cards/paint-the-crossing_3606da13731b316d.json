@@ -1,0 +1,52 @@
+{
+  "_id": "3606da13731b316d",
+  "name": "Paint the Crossing",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Trajectory, Cadence",
+    "expertisesMode": "any",
+    "tags": "terrain, control, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "A line of 3 connected spaces within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Until your next turn, the line is difficult terrain for enemies that can detect you. This is suppressive fire, not a physical barrier."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the line to 4 spaces."
+      },
+      {
+        "n": "2",
+        "html": "One enemy currently in the line is Distracted until the start of your next turn; compare your Success Die to its Composure."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Suppression",
+      "html": "If your Locked target voluntarily crosses the line before your next turn, you may end Lock to deal 1 weapon Damage to it. This rider resolves once.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!3606da13731b316d"
+}

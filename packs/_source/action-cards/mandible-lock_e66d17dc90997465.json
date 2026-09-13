@@ -1,0 +1,52 @@
+{
+  "_id": "e66d17dc90997465",
+  "name": "Mandible Lock",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Predator",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Armament, Plasticity",
+    "expertisesMode": "any",
+    "tags": "damage, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 Piercing Damage and prevent the target from moving through your space until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Pull it 1 unit after the bite."
+      },
+      {
+        "n": "2",
+        "html": "The target must burn 1 die before voluntarily moving away from you until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Predator",
+      "html": "Assume Mandibles (upkeep 1): your first Gestalt hit against an adjacent enemy each turn may make it Slowed 1 until the start of your next turn.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e66d17dc90997465"
+}

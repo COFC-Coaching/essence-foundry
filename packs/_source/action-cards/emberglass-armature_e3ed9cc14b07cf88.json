@@ -1,0 +1,52 @@
+{
+  "_id": "e3ed9cc14b07cf88",
+  "name": "Emberglass Armature",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Fire",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Augmentation, Fabrication",
+    "expertisesMode": "any",
+    "tags": "protection, support, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target reduces its next incoming Damage by 1 until the start of your next turn. Its next successful attack before your next turn may push one damaged enemy 1 unit, as heated plates flare."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The push may be sideways instead."
+      },
+      {
+        "n": "2",
+        "html": "Also reduce the target's next incoming Fire Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Fire Thread",
+      "html": "Gain a Fire Thread. Before rolling a later Magecraft card, consume it: one target that already took Damage since its last turn takes +1 Damage from that card if hit.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e3ed9cc14b07cf88"
+}

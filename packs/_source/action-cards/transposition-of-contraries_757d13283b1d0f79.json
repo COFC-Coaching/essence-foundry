@@ -1,0 +1,52 @@
+{
+  "_id": "757d13283b1d0f79",
+  "name": "Transposition of Contraries",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Chaos",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Transmutation, Augmentation",
+    "expertisesMode": "any",
+    "tags": "control, mobility, area, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Two creatures within 5 units and 2 units of each other."
+      },
+      {
+        "label": "Effect",
+        "html": "Compare against each unwilling target. Swap their spaces only if both consent or are hit and each fits. Each hit enemy also becomes Slowed 1 until the start of your next turn, even if the swap fails."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Targets may be 3 units apart."
+      },
+      {
+        "n": "2",
+        "html": "One willing swapped creature gains +1 Fortitude until the start of your next turn and may move 1 unit."
+      }
+    ],
+    "rider": {
+      "title": "Chaos Thread",
+      "html": "Gain a Chaos Thread. Before rolling a later Magecraft card, consume it: change its Damage type to Fire, Cold, Lightning, Acid, Force or Arcane. Conditions do not change.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!757d13283b1d0f79"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "b47fba79d4540c23",
+  "name": "Rooted Mass",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Titan",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Integration, Regeneration",
+    "expertisesMode": "any",
+    "tags": "protection, support, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Reduce the next incoming Damage by 1 and resist up to 2 units of forced movement until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Suppress one Light physical Wound Condition's Movement penalty until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "An adjacent willing ally may share the forced-movement protection."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Titan",
+      "html": "Assume Rooted Mass (upkeep 0): while stationary, adjacent willing allies resist the first 1 unit of forced movement against them each round. You count as an ally for this benefit.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b47fba79d4540c23"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "79571cd23af2f7fd",
+  "name": "Borrowed Blind Spot",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Ambush",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Infiltration, Exploitation",
+    "expertisesMode": "any",
+    "tags": "damage, setup, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage. If you began in concealment, ignore 1 point of cover bonus."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit toward cover after resolving."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Damage if the target was Exposed when you declared this Action."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Ambush",
+      "html": "When the target turns its attack toward another creature before your next turn, it becomes Exposed after that attack.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!79571cd23af2f7fd"
+}

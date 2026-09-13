@@ -1,0 +1,52 @@
+{
+  "_id": "f810f340b5488c1c",
+  "name": "Leave Them Holding It",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Evasion",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sleight, Exploitation",
+    "expertisesMode": "any",
+    "tags": "mobility, suppression, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction imposes an ordinary restraint on you. Response (unopposed): Suppress that restraint during a 1-unit move. It ends if its source no longer reaches you; otherwise it resumes."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "If you escape, the restraining enemy becomes Exposed until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "41212bdcb35286d8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f810f340b5488c1c"
+}

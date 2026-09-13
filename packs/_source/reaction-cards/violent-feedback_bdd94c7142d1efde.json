@@ -1,0 +1,52 @@
+{
+  "_id": "bdd94c7142d1efde",
+  "name": "Violent Feedback",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Assault",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Telepathy, Imprint",
+    "expertisesMode": "any",
+    "tags": "damage, information, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy deals Psychic or Arcane Damage to you with an Action. Response: After its Damage, on success deal 1 Psychic Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, learn whether its Harmony or Composure is lower."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Psychic Damage if you accepted Strain for this card."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "7f44f584777fefe2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!bdd94c7142d1efde"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "79503eefdb8f455d",
+  "name": "Iron Porter, Clear the Way",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Golem",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Dominion, Banishment",
+    "expertisesMode": "any",
+    "tags": "control, damage, utility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy or unattended obstacle within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, push an enemy 2 units and suppress its ordinary benefit from the cover it leaves until the start of your next turn. An unattended light obstacle instead moves 2 units without opposition."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Deal 1 Bludgeoning Damage to a hit enemy, or 2 to an unattended obstacle."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Golem",
+      "html": "You may burn 3 Action Dice and spend 2 Mana to enter Golem Full Manifestation (FM-1G). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-1G"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!79503eefdb8f455d"
+}

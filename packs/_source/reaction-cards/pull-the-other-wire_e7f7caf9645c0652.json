@@ -1,0 +1,52 @@
+{
+  "_id": "e7f7caf9645c0652",
+  "name": "Pull the Other Wire",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Trap",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sabotage, Improvisation",
+    "expertisesMode": "any",
+    "tags": "control, setup, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self; one enemy within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: That enemy would trigger your unspent Contingency. Response (unopposed): Retarget its effect to another legal target within 1 unit of the original, or delay it until the end of that enemy's current Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit as you make the adjustment."
+      },
+      {
+        "n": "2",
+        "html": "After the Contingency resolves, one enemy it affected becomes Exposed until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "41212bdcb35286d8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e7f7caf9645c0652"
+}

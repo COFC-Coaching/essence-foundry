@@ -1,0 +1,52 @@
+{
+  "_id": "13a635b74581cf9e",
+  "name": "Wheel Cuts the Returning Road",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Finisher",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Reaving, Grappling",
+    "expertisesMode": "any",
+    "tags": "damage, control, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: A Prone or Slowed enemy voluntarily moves or stands. Response: After that movement or standing, on success deal 1 weapon Damage and push it 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, move into its vacated space."
+      },
+      {
+        "n": "2",
+        "html": "Spend 2 Combo on a hit to deal +1 weapon Damage and knock it Prone."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "f86106a69c957230",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!13a635b74581cf9e"
+}

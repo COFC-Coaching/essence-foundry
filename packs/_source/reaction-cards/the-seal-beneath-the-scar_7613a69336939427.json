@@ -1,0 +1,52 @@
+{
+  "_id": "7613a69336939427",
+  "name": "The Seal Beneath the Scar",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Imbuement",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Reagents, Inscription",
+    "expertisesMode": "any",
+    "tags": "suppression, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction fills a Core Wound on the target. Response (unopposed): After recording the Wound, suppress that new Wound Condition's numerical penalties until the start of your next turn if non-Critical. The Wound remains."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target resists 1 unit of any remaining forced movement from that Action."
+      },
+      {
+        "n": "2",
+        "html": "It gains +1 Harmony against the next attack targeting it until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "928afd1ad9675380",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!7613a69336939427"
+}

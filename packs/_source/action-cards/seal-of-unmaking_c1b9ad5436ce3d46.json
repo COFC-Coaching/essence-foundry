@@ -1,0 +1,52 @@
+{
+  "_id": "c1b9ad5436ce3d46",
+  "name": "Seal of Unmaking",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Aether",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Disjunction, Channeling",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, utility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy or its visible ordinary magical effect within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Arcane Damage to the enemy and suppress one ordinary magical numerical bonus worth 1 until the start of your next turn. An unattended ordinary effect may be targeted against Difficulty 6 instead."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Also suppress 1 point of magical Movement bonus on a hit."
+      },
+      {
+        "n": "2",
+        "html": "End the chosen ordinary bonus rather than suppressing it. Specialty Conditions are unaffected."
+      }
+    ],
+    "rider": {
+      "title": "Aether Thread",
+      "html": "Gain an Aether Thread. Before rolling a later Magecraft card, consume it: increase its Success Die by 1, to a maximum of 10. This does not generate Surges.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c1b9ad5436ce3d46"
+}

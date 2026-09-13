@@ -1,0 +1,52 @@
+{
+  "_id": "e9d56ae81e6bc0d6",
+  "name": "Liquid Rebuttal",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Water",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Transmutation, Reinforcement",
+    "expertisesMode": "any",
+    "tags": "protection, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would push, pull or knock the target Prone. Response (unopposed): Reduce forced movement by 2 units and suppress that Prone effect until the Action finishes."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The protected creature may move 1 unit after the Action."
+      },
+      {
+        "n": "2",
+        "html": "Reduce Damage from that Action by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "0b2b283e84264679",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e9d56ae81e6bc0d6"
+}

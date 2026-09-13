@@ -1,0 +1,52 @@
+{
+  "_id": "1629bfa2e77e2526",
+  "name": "Laughing Envoy, Change the Door",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Calling",
+    "subtype": "Fey",
+    "attr": "Adaptability",
+    "skill": "Calling",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Transference, Accord",
+    "expertisesMode": "any",
+    "tags": "protection, mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An attack targets the creature, before rolling. Response (unopposed): Move it up to 2 units along a clear path; it gains +1 Fortitude against that attack. Recheck target validity afterward."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore difficult terrain during the movement."
+      },
+      {
+        "n": "2",
+        "html": "Swap it with another willing creature adjacent to its starting space instead; the new legal target receives the Fortitude bonus."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "e87efeb1c809057f",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1629bfa2e77e2526"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "898d9add4e8c54b7",
+  "name": "Cranes Trade the Watch",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Guard",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Phalanx, Skirmishing",
+    "expertisesMode": "any",
+    "tags": "protection, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One willing ally within 2 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An attack targets the ally, before its roll. Response (unopposed): Move into an empty space adjacent to it and take its place as the target, if the attacker can legally target you; gain +1 Fortitude against that attack."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The ally may move 1 unit away without triggering movement Reactions."
+      },
+      {
+        "n": "2",
+        "html": "Reduce the attack's Damage to you by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "f86106a69c957230",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!898d9add4e8c54b7"
+}

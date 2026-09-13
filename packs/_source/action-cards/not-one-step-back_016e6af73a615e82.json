@@ -1,0 +1,52 @@
+{
+  "_id": "016e6af73a615e82",
+  "name": "Not One Step Back",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Vow",
+    "attr": "Anima",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Valor, Discipline",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Gain +1 Fortitude and resist your next 2 units of forced movement until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Become Rallied until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one Light Wound Condition's numerical penalties until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Vow",
+      "html": "Vow: do not voluntarily move farther from a chosen visible enemy before your next turn. Spend this Authority when it damages you to reduce that Damage by 1; retreating first discards it.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!016e6af73a615e82"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "9e17f3e749c38b83",
+  "name": "Hare Crosses the Spear",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Prowess",
+    "subtype": "Blitz",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range after your movement."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 2 units before the attack. On success, deal 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase this movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "After a hit, move 1 unit without triggering movement Reactions."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Blitz",
+      "html": "After resolving, you may spend 1 Combo to move through one adjacent willing ally's space and stop in an empty adjacent space.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!9e17f3e749c38b83"
+}

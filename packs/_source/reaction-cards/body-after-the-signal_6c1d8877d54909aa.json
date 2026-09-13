@@ -1,0 +1,52 @@
+{
+  "_id": "6c1d8877d54909aa",
+  "name": "Body After the Signal",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Assault",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Biokinesis, Telekinesis",
+    "expertisesMode": "any",
+    "tags": "damage, control, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One living enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy finishes voluntary movement while Slowed. Response: On success, deal 2 Force Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, move it 1 unit sideways."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, suppress 1 point of its next ordinary Movement bonus until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "7f44f584777fefe2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!6c1d8877d54909aa"
+}

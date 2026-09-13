@@ -1,0 +1,52 @@
+{
+  "_id": "14489d6e32e6d17c",
+  "name": "Rally at the Breach",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Standard",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Inspiration, Coordination",
+    "expertisesMode": "any",
+    "tags": "setup, support, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One visible space within 3 units; willing creatures within 1 unit of it."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Choose up to two targets, including yourself if in range. Each becomes Rallied until the start of your next turn. Mark the space as your rally point for that duration."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One target may move 1 unit toward the point."
+      },
+      {
+        "n": "2",
+        "html": "Each target reduces its next incoming Damage by 1 while adjacent to the point until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Standard",
+      "html": "Spend this Authority when a willing creature reaches the marked point before your next turn: it may suppress one ordinary Success Die penalty on its next Combat Card.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!14489d6e32e6d17c"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "9a5d39ded3a73ad5",
+  "name": "Keep Their Heads Down",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Cadence, Payload",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, area",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two enemies within ranged Weapon Range and 2 units of each other."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each target is Distracted until the start of your next turn; choose one hit target to take 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Each hit target is also Slowed 1 until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "The next Damage dealt by one hit target's ranged Action before your next turn is reduced by 1."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Suppression",
+      "html": "Choose one hit target. If it is Locked, you may end Lock when it next declares a ranged Action before your next turn to impose -1 on that Action's Success Die.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!9a5d39ded3a73ad5"
+}

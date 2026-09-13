@@ -1,0 +1,52 @@
+{
+  "_id": "0be5030b421e4fe3",
+  "name": "Trauma Lattice",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Gestalt",
+    "subtype": "Bulwark",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Regeneration, Plasticity",
+    "expertisesMode": "any",
+    "tags": "suppression, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress the numerical penalties from one Light physical Wound Condition until the start of your next turn; gain +1 Fortitude against forced movement during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Suppression lasts through the end of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one ordinary Slowed or Poison Condition for the same duration."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Bulwark",
+      "html": "Assume Lattice (upkeep 1): suppress one chosen Light physical Wound Condition's numerical penalties while this Adaptation remains. Missing structures, Critical effects and Wound spaces are unchanged.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!0be5030b421e4fe3"
+}

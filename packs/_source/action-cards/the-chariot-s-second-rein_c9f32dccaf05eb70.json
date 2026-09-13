@@ -1,0 +1,52 @@
+{
+  "_id": "c9f32dccaf05eb70",
+  "name": "The Chariot's Second Rein",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Imbuement",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Consecration, Sympathy",
+    "expertisesMode": "any",
+    "tags": "mobility, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target moves up to 2 units and resists its next 1 unit of forced movement until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "The target ignores difficult terrain during the movement."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Imbuement",
+      "html": "Rite, 2 Echoes: bind the target. Trigger: it ends voluntary movement adjacent to a willing ally or a solid obstacle. Echo: gain +1 Fortitude against the next attack targeting it before your next turn.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c9f32dccaf05eb70"
+}

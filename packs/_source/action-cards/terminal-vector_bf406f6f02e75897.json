@@ -1,0 +1,52 @@
+{
+  "_id": "bf406f6f02e75897",
+  "name": "Terminal Vector",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Execution",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Precision, Penetration",
+    "expertisesMode": "any",
+    "tags": "damage, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore 1 point of cover bonus."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Damage if the target is both Locked and already damaged since its last turn."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Execution",
+      "html": "After a hit, you may end Lock to deny the target's next ordinary damage-reduction benefit worth 1 Damage before your next turn. This does not bypass Resilience or Temporary Wounds.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!bf406f6f02e75897"
+}

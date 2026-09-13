@@ -1,0 +1,52 @@
+{
+  "_id": "e3562bacc70be54d",
+  "name": "Advance on My Mark",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Order",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Tactics, Coordination",
+    "expertisesMode": "any",
+    "tags": "damage, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range; up to two willing allies within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 weapon Damage. Independently, each chosen ally may move 1 unit toward you or the enemy; alone, you may move 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase one creature's movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "After a hit, one moved creature becomes Rallied until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Order",
+      "html": "Spend this Authority when one moved creature begins its next Action before your next turn: it ignores one ordinary -1 Success Die penalty for that Action.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e3562bacc70be54d"
+}

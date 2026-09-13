@@ -1,0 +1,52 @@
+{
+  "_id": "147e81e7efe677eb",
+  "name": "The Hanged Man's Price",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Offering",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Entreaty, Sympathy",
+    "expertisesMode": "any",
+    "tags": "damage, control, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Burn 1 additional Action Die. On success, deal 2 Necrotic Damage and make the target Slowed 2 until the start of your next turn. Your own Movement is reduced by 1 for that duration."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move the target 1 unit sideways after a hit."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Damage if you currently have a Core Wound."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Offering",
+      "html": "Rite, 2 Echoes: on a hit, the target becomes Possessed. Trigger: it deals Damage to you. Echo: impose -1 Harmony against the next attack targeting it before your next turn; neither side's Damage is undone.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!147e81e7efe677eb"
+}

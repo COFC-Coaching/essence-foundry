@@ -1,0 +1,52 @@
+{
+  "_id": "a182e318026349fe",
+  "name": "The Lantern at the Window",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Ward",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Reagents, Liturgy",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target reduces its next incoming Psychic, Arcane, Radiant or Necrotic Damage by 1 until the start of your next turn; its space sheds ordinary light during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "It gains +1 Harmony against the next attack targeting it until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one ordinary magical distraction penalty on it until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Ward",
+      "html": "Rite, 2 Echoes: bind the target. Trigger: a detected enemy within 3 units uses an Action imposing a mental Condition on it. Echo: grant +1 Composure against that Action before its roll.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!a182e318026349fe"
+}

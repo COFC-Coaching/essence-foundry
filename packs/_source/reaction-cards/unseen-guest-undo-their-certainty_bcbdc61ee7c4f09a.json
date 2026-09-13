@@ -1,0 +1,52 @@
+{
+  "_id": "bcbdc61ee7c4f09a",
+  "name": "Unseen Guest, Undo Their Certainty",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Phantom",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Dominion, Transference",
+    "expertisesMode": "any",
+    "tags": "protection, debuff, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy declares a single-target Action against you, before rolling. Response: On success, impose -1 on its Success Die and move yourself 1 unit before its roll; recheck range."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, its target space provides concealment afterward until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the enemy is Distracted after the Action until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "e87efeb1c809057f",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!bcbdc61ee7c4f09a"
+}

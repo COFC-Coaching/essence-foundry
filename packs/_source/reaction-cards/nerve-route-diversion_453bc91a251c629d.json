@@ -1,0 +1,52 @@
+{
+  "_id": "453bc91a251c629d",
+  "name": "Nerve-Route Diversion",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Chimera",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Awareness, Regeneration",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, information",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would impose an ordinary sensory or Movement-limiting Condition on you. Response (unopposed): Suppress that Condition until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Detect the source's space if it is within 3 units and not behind a solid barrier."
+      },
+      {
+        "n": "2",
+        "html": "Also reduce Damage from the Action by 1; your current Adaptation ends."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "06e138447ec657be",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!453bc91a251c629d"
+}

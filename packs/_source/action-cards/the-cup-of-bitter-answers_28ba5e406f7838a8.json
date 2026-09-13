@@ -1,0 +1,52 @@
+{
+  "_id": "28ba5e406f7838a8",
+  "name": "The Cup of Bitter Answers",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Hex",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Reagents, Entreaty",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Necrotic Damage and suppress 1 point of its ordinary accuracy bonuses until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, its next forced movement is increased by 1 unit until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, it is Distracted until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Hex",
+      "html": "Rite, 2 Echoes: on a hit, the target becomes Possessed. Trigger: it misses an Action. Echo: impose -1 Composure against the next attack before your next turn.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!28ba5e406f7838a8"
+}

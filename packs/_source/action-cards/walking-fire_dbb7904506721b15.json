@@ -1,0 +1,52 @@
+{
+  "_id": "dbb7904506721b15",
+  "name": "Walking Fire",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Ballistics",
+    "subtype": "Suppression",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage. The target is Slowed 1 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the Slow by 1."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target cannot make movement Reactions until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Suppression",
+      "html": "If the target is Locked, the first time it voluntarily moves before your next turn, you may end Lock to reduce that movement by 1 unit.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!dbb7904506721b15"
+}

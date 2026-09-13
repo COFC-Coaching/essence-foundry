@@ -1,0 +1,52 @@
+{
+  "_id": "0c41571210818e9a",
+  "name": "Shoulder to Shoulder",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Formation",
+    "attr": "Anima",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Guardianship, Coordination",
+    "expertisesMode": "any",
+    "tags": "protection, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and one adjacent willing ally, or self alone."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Each target reduces its next incoming Damage by 1 until the start of your next turn, provided it is still adjacent to you when damaged. You always qualify."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The ally may move 1 unit toward you."
+      },
+      {
+        "n": "2",
+        "html": "Each target also gains +1 Fortitude against the next melee attack targeting it until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Formation",
+      "html": "Spend this Authority when a protected creature is pushed before your next turn: another protected willing creature may follow it 1 unit; alone, you resist 1 unit of the push instead.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!0c41571210818e9a"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "ba9b42fec4f180cd",
+  "name": "Falcon Threads the Spears",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Blitz",
+    "attr": "Grace",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Skirmishing, Reaving",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, area",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two enemies encountered along a path of up to 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Move along the path; make the same attack against each target when it is within melee Weapon Range. On success, deal 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore difficult terrain along the path."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Damage to one hit target."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Blitz",
+      "html": "After resolving, spend 2 Combo to end in an empty space adjacent to either hit target without triggering movement Reactions; that space must be within 2 units.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ba9b42fec4f180cd"
+}

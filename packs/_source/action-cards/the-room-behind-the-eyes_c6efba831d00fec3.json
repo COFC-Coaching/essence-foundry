@@ -1,0 +1,52 @@
+{
+  "_id": "c6efba831d00fec3",
+  "name": "The Room Behind the Eyes",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Trance",
+    "attr": "Acuity",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "3",
+    "cost": "1",
+    "expertises": "Clairvoyance, Imprint",
+    "expertisesMode": "any",
+    "tags": "information, protection, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Until your next turn, detect moving creatures within 3 units through ordinary concealment and gain +1 Composure against sensory effects."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase detection radius by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Mark one detected enemy; ordinary concealment cannot hide its occupied space from you until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Trance",
+      "html": "Enter Inner Room Trance until the end of your next turn: the first Psionics card you use against a marked enemy may ignore 1 point of cover bonus; using this benefit ends the Trance.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c6efba831d00fec3"
+}

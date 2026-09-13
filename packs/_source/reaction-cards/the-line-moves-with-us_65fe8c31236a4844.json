@@ -1,0 +1,52 @@
+{
+  "_id": "65fe8c31236a4844",
+  "name": "The Line Moves With Us",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Formation",
+    "attr": "Adaptability",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Coordination, Guardianship",
+    "expertisesMode": "any",
+    "tags": "protection, mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and one willing ally within 2 units, or self alone."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An area Action is declared including at least one target. Response (unopposed): Each target moves 1 unit; recheck the area afterward."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One target moves 1 additional unit."
+      },
+      {
+        "n": "2",
+        "html": "Each target still in the area reduces that Action's Damage by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "bb8e7b0bcde9b2a5",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!65fe8c31236a4844"
+}

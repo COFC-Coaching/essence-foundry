@@ -1,0 +1,52 @@
+{
+  "_id": "b05b91f5a6dc6e35",
+  "name": "Under the Elbow",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Evasion",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sleight, Infiltration",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage. Move up to 2 units afterward, even on a miss; hit targets cannot make movement Reactions against this movement."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "You may pass through the hit target's space, without stopping there."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target is Slowed 2 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Evasion",
+      "html": "When the target next closes to within 1 unit of you, you may move 1 unit away without triggering its movement Reactions.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b05b91f5a6dc6e35"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "952ed02d95814797",
+  "name": "Dragon Knocks at Dawn",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Opener",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Berserking, Phalanx",
+    "expertisesMode": "any",
+    "tags": "damage, support, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 weapon Damage. One adjacent willing ally may move 1 unit toward the target after the attack."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The ally may move 2 units instead."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target is Distracted until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Opener",
+      "html": "After a hit, enter Dawn Stance: the first time each round you protect an adjacent ally with a Prowess Reaction, gain 1 Combo.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!952ed02d95814797"
+}

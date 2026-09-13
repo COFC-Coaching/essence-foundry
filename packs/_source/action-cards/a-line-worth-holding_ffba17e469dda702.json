@@ -1,0 +1,52 @@
+{
+  "_id": "ffba17e469dda702",
+  "name": "A Line Worth Holding",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Standard",
+    "attr": "Anima",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Guardianship, Discipline",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One visible space within 2 units; yourself or a willing ally adjacent to it."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Mark the space until the start of your next turn. While adjacent to it, the target gains +1 Fortitude and resists its next 1 unit of forced movement."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Choose a second willing creature adjacent to the point."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one Light Wound Condition's numerical penalties on a protected target until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Standard",
+      "html": "Spend this Authority when a protected creature remains beside the point after taking Damage: it becomes Rallied until your next turn; the Damage and Wounds still apply.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ffba17e469dda702"
+}

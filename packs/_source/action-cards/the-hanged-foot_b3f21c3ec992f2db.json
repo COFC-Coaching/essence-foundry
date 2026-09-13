@@ -1,0 +1,52 @@
+{
+  "_id": "b3f21c3ec992f2db",
+  "name": "The Hanged Foot",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Ritualism",
+    "subtype": "Hex",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "control, setup, damage",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, the target is Slowed 2 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, move the target 1 unit sideways."
+      },
+      {
+        "n": "2",
+        "html": "Deal 1 Necrotic Damage on a hit."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Hex",
+      "html": "Rite, 1 Echo: on a hit, bind the target. Trigger: it is forcibly moved by a later Action. Echo: suppress 1 point of its ordinary Fortitude bonuses against the next attack before your next turn.",
+      "meta": "ECHO LIMIT: 1; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b3f21c3ec992f2db"
+}

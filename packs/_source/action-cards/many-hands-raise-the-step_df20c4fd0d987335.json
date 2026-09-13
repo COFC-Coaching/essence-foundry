@@ -1,0 +1,52 @@
+{
+  "_id": "df20c4fd0d987335",
+  "name": "Many Hands, Raise the Step",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Golem",
+    "attr": "Adaptability",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Chorus, Transference",
+    "expertisesMode": "any",
+    "tags": "terrain, mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Two adjacent empty spaces within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Until your next turn, create temporary supported steps that let willing creatures ignore difficult terrain in those spaces. They can bridge only a 1-unit gap and vanish after the duration."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Add one connected empty space."
+      },
+      {
+        "n": "2",
+        "html": "One willing creature may move 2 units along the steps immediately."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Golem",
+      "html": "You may burn 3 Action Dice and spend 2 Mana to enter Golem Full Manifestation (FM-1G). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-1G"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!df20c4fd0d987335"
+}

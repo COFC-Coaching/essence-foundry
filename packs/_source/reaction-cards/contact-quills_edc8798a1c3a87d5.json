@@ -1,0 +1,52 @@
+{
+  "_id": "edc8798a1c3a87d5",
+  "name": "Contact Quills",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "Gestalt",
+    "subtype": "Predator",
+    "attr": "Grace",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, control, counterattack",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: The enemy misses you with a bodily melee Action. Response: On success, deal 1 Piercing Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After a hit, move 1 unit away."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the enemy is Slowed 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "06e138447ec657be",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!edc8798a1c3a87d5"
+}

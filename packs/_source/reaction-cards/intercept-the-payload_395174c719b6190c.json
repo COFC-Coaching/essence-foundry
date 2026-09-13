@@ -1,0 +1,52 @@
+{
+  "_id": "395174c719b6190c",
+  "name": "Intercept the Payload",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Precision, Penetration",
+    "expertisesMode": "any",
+    "tags": "protection, support, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or a willing ally within ranged Weapon Range and within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: A visible physical projectile Action would deal Damage to the target. Response (unopposed): Reduce that Damage by 2. This cannot intercept beams, areas or nonprojectile effects."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target may move 1 unit after the attack."
+      },
+      {
+        "n": "2",
+        "html": "Also suppress one ordinary Condition imposed by that projectile until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "654c5d2c8a2dce33",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!395174c719b6190c"
+}

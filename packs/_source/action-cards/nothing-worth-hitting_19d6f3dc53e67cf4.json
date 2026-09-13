@@ -1,0 +1,52 @@
+{
+  "_id": "19d6f3dc53e67cf4",
+  "name": "Nothing Worth Hitting",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Evasion",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Observation, Sleight",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Gain +1 Fortitude against melee attacks and suppress one ordinary Slowed Condition until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Also suppress one ordinary penalty to your Success Die until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Evasion",
+      "html": "When an enemy misses a melee attack against you, move 1 unit into a space adjacent to it; that move does not trigger movement Reactions.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!19d6f3dc53e67cf4"
+}

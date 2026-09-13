@@ -1,0 +1,52 @@
+{
+  "_id": "0b053fcfa4fbaba4",
+  "name": "Give Them No Room",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Example",
+    "attr": "Presence",
+    "skill": "Leadership",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Provocation, Valor",
+    "expertisesMode": "any",
+    "tags": "damage, control, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage and push it 1 unit away from a chosen willing creature, which may be you."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase the push by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "The target is Slowed 2 until the start of your next turn on a hit."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Example",
+      "html": "Spend this Authority when the target next approaches the chosen creature before your next turn: that creature gains +1 Fortitude against the target's next attack.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!0b053fcfa4fbaba4"
+}

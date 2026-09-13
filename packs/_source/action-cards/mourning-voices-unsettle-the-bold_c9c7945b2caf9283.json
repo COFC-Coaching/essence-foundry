@@ -1,0 +1,52 @@
+{
+  "_id": "c9c7945b2caf9283",
+  "name": "Mourning Voices, Unsettle the Bold",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Phantom",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Chorus, Dominion",
+    "expertisesMode": "any",
+    "tags": "damage, area, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two detected enemies within 4 units and 2 units of each other."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, each suffers -1 on its next Success Die until the start of your next turn. Choose one hit target to take 1 Psychic Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One hit target is Slowed 1 until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Deal 1 Psychic Damage to the second hit target as well."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Phantom",
+      "html": "You may burn 3 Action Dice and spend 2 Mana to enter Phantom Full Manifestation (FM-1P). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-1P"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c9c7945b2caf9283"
+}

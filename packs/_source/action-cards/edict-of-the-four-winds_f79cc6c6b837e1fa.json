@@ -1,0 +1,52 @@
+{
+  "_id": "f79cc6c6b837e1fa",
+  "name": "Edict of the Four Winds",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Air",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Sculpting, Channeling",
+    "expertisesMode": "any",
+    "tags": "area, control, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to three creatures in a cone of length 4."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, push each enemy 2 units. Willing targets instead move up to 2 units in a chosen direction without opposition."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase one target's movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "One hit enemy takes 1 Force Damage; willing targets gain +1 Fortitude until the start of your next turn instead."
+      }
+    ],
+    "rider": {
+      "title": "Air Thread",
+      "html": "Gain an Air Thread. Before rolling a later Magecraft card, consume it: you may move 1 unit immediately before or after that card, without triggering movement Reactions.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f79cc6c6b837e1fa"
+}

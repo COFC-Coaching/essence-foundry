@@ -1,0 +1,52 @@
+{
+  "_id": "2c9314ac0ae714bc",
+  "name": "One Mind, Two Horizons",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Projection",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Telepathy, Mesmerism",
+    "expertisesMode": "any",
+    "tags": "support, protection, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and one willing ally within 4 units, or self alone."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Share simple combat warnings until the start of your next turn. Each target ignores the next ordinary distraction penalty affecting a Combat Card during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One target may move 1 unit toward the other; alone, you may move 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Each target gains +1 Composure until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Projection",
+      "html": "If you accepted Strain, the first time a linked target is missed before your next turn, it may move 1 unit without triggering that attacker's movement Reactions.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2c9314ac0ae714bc"
+}

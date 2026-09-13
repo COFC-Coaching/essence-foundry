@@ -1,0 +1,52 @@
+{
+  "_id": "aa7716f06f955de3",
+  "name": "Stone Remembers the Blow",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Magecraft",
+    "subtype": "Earth",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Reinforcement, Fabrication",
+    "expertisesMode": "any",
+    "tags": "protection, terrain, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would deal physical Damage to the target. Response (unopposed): Reduce it by 2; afterward create a temporary low screen in an adjacent empty space until the start of your next turn, with 1 Wound and 0 Resilience."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The screen may be placed within 2 units of the target instead."
+      },
+      {
+        "n": "2",
+        "html": "The target also resists up to 2 units of forced movement from the Action."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "0b2b283e84264679",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!aa7716f06f955de3"
+}

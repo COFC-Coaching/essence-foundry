@@ -1,0 +1,52 @@
+{
+  "_id": "d89ae21a7bbfc13c",
+  "name": "Show Them the Way Out",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Leadership",
+    "subtype": "Standard",
+    "attr": "Adaptability",
+    "skill": "Leadership",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Tactics, Inspiration",
+    "expertisesMode": "any",
+    "tags": "terrain, mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "A visible line of 3 spaces beginning within 2 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Mark a route until the start of your next turn. Willing creatures moving along it ignore the first difficult space of that movement; you may move 1 unit along it immediately."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Lengthen the route by 1 space."
+      },
+      {
+        "n": "2",
+        "html": "One willing creature within 2 units of the route becomes Rallied until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Standard",
+      "html": "Spend this Authority when an enemy declares a ranged Action at a creature on the route before your next turn: that target gains +1 Fortitude against the Action.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d89ae21a7bbfc13c"
+}

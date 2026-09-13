@@ -1,0 +1,52 @@
+{
+  "_id": "032da206d871fa3e",
+  "name": "Survey the Kill Box",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Ballistics",
+    "subtype": "Targeting",
+    "attr": "Vigor",
+    "skill": "Ballistics",
+    "defense": "",
+    "min": "3",
+    "cost": "1",
+    "expertises": "Trajectory, Precision",
+    "expertisesMode": "any",
+    "tags": "setup, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self; choose a visible line of 4 spaces within ranged Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Until your next turn, your ranged attacks against creatures in the line ignore 1 point of cover bonus. You gain +1 Fortitude against ranged attacks from the line."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Bend the line once around a corner you can see."
+      },
+      {
+        "n": "2",
+        "html": "An ally within 3 units gains the same attack benefit until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Targeting",
+      "html": "Establish Lock on one visible creature in the line. If it leaves the line before your next turn, you may transfer Lock to another visible creature inside it.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!032da206d871fa3e"
+}

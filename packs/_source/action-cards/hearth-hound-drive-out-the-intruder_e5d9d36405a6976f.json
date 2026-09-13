@@ -1,0 +1,52 @@
+{
+  "_id": "e5d9d36405a6976f",
+  "name": "Hearth-Hound, Drive Out the Intruder",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Beast",
+    "attr": "Presence",
+    "skill": "Calling",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Banishment, Accord",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Radiant Damage and suppress one ordinary magical Movement bonus on it until the start of your next turn, up to 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "A willing ally adjacent to it may move 1 unit away."
+      },
+      {
+        "n": "2",
+        "html": "After a hit, end the suppressed bonus if the target is a manifestation or temporary magical construct."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Beast",
+      "html": "You may burn 3 Action Dice and spend 2 Mana to enter Beast Full Manifestation (FM-1B). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-1B"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e5d9d36405a6976f"
+}

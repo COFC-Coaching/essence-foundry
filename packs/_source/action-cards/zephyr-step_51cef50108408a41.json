@@ -1,0 +1,52 @@
+{
+  "_id": "51cef50108408a41",
+  "name": "Zephyr Step",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Magecraft",
+    "subtype": "Air",
+    "attr": "Acuity",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target moves up to 2 units along a clear supported path."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Ignore ground difficult terrain during this movement."
+      }
+    ],
+    "rider": {
+      "title": "Air Thread",
+      "html": "Gain an Air Thread. Before rolling a later Magecraft card, consume it: you may move 1 unit immediately before or after that card, without triggering movement Reactions.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!51cef50108408a41"
+}

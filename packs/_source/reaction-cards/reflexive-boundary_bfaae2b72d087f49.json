@@ -1,0 +1,52 @@
+{
+  "_id": "bfaae2b72d087f49",
+  "name": "Reflexive Boundary",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Psionics",
+    "subtype": "Barrier",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would deal Damage to you. Response (unopposed): Reduce it by 1."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Reduce its forced movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "If you accepted Strain for this card, suppress one ordinary Condition imposed by that Action until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "7f44f584777fefe2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!bfaae2b72d087f49"
+}

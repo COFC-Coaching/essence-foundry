@@ -1,0 +1,52 @@
+{
+  "_id": "4b86e8c388e336c7",
+  "name": "A Better Place to Be",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Cunning",
+    "subtype": "Evasion",
+    "attr": "Intellect",
+    "skill": "Cunning",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Deception, Sleight",
+    "expertisesMode": "any",
+    "tags": "protection, mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or an adjacent willing ally."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An area Action is declared including the target. Response (unopposed): Move the target up to 2 units along a clear path, then recheck whether it remains in the area."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Ignore difficult terrain during this movement."
+      },
+      {
+        "n": "2",
+        "html": "If still affected, reduce the Action's Damage to the target by 1."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "41212bdcb35286d8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!4b86e8c388e336c7"
+}

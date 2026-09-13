@@ -1,0 +1,52 @@
+{
+  "_id": "e1b97492ae687e63",
+  "name": "Bastion of Dust",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Magecraft",
+    "subtype": "Earth",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "terrain, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One empty space within 2 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Create a temporary low earthen screen in the space until the start of your next turn. It grants +1 cover bonus across it, has 1 Wound and 0 Resilience, and vanishes when destroyed."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Create the screen in an adjacent space instead after seeing the roll."
+      },
+      {
+        "n": "2",
+        "html": "A willing creature adjacent to it reduces its next incoming ranged Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Earth Thread",
+      "html": "Gain an Earth Thread. Before rolling a later Magecraft card, consume it: yourself or one willing target of that card reduces its next incoming Damage by 1 before the start of your next turn.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e1b97492ae687e63"
+}

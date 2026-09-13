@@ -1,0 +1,52 @@
+{
+  "_id": "34395324a8134d25",
+  "name": "Tortoise Shelters the Candle",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Prowess",
+    "subtype": "Guard",
+    "attr": "Vigor",
+    "skill": "Prowess",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Phalanx, Brawling",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one adjacent willing ally."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target reduces its next incoming Damage by 1 and its next forced movement by 1 unit until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "The target may move 1 unit toward you."
+      },
+      {
+        "n": "2",
+        "html": "Protect yourself and one adjacent willing ally instead."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Guard",
+      "html": "Spend 1 Combo to enter Tortoise Stance: while adjacent to the protected ally, you may take the first 1 Damage that would hit it before your next turn instead.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!34395324a8134d25"
+}

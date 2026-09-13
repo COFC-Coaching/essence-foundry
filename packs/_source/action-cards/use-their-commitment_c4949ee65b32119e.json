@@ -1,0 +1,52 @@
+{
+  "_id": "c4949ee65b32119e",
+  "name": "Use Their Commitment",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Cunning",
+    "subtype": "Reversal",
+    "attr": "Acuity",
+    "skill": "Cunning",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Observation, Deception",
+    "expertisesMode": "any",
+    "tags": "debuff, protection, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, impose -1 on its next Success Die until the start of your next turn; you gain +1 Fortitude against that target during the same time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After a hit, move 1 unit toward or away from it."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target becomes Exposed until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Contingency - Reversal",
+      "html": "When the target misses an attack before your next turn, it may either stay in place and become Slowed 2, or move 1 unit away from you; both expire at your next turn.",
+      "meta": "ESTABLISH: 1 PER ROUND"
+    }
+  },
+  "folder": "2f6e25a3d9e778f2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c4949ee65b32119e"
+}

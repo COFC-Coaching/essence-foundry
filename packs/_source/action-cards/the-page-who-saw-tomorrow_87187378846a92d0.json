@@ -1,0 +1,52 @@
+{
+  "_id": "87187378846a92d0",
+  "name": "The Page Who Saw Tomorrow",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Divination",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Entreaty, Sympathy",
+    "expertisesMode": "any",
+    "tags": "information, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, learn its remaining Reaction Dice and lowest Defense. You gain +1 Harmony against it until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Share the defensive benefit with one willing ally within 3 units."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, impose -1 on its next Success Die until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Divination",
+      "html": "Rite, 2 Echoes: on a hit, bind the target. Trigger: it declares an Action with at least 3 rolled dice. Echo: yourself or a willing ally within 3 units may move 1 unit before its roll.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!87187378846a92d0"
+}

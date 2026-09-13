@@ -1,0 +1,52 @@
+{
+  "_id": "299d0089c594a0a1",
+  "name": "Kinetic Puncture",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Assault",
+    "attr": "Resolve",
+    "skill": "Psionics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Telekinesis, Clairvoyance",
+    "expertisesMode": "any",
+    "tags": "damage, information, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Force Damage; ignore 1 point of cover bonus if you can detect the target's occupied space."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 Force Damage."
+      },
+      {
+        "n": "1",
+        "html": "Learn whether the target's cover is solid or only visual."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Assault",
+      "html": "If you accepted Strain and hit, the target cannot provide cover for another creature against your next Psionics Action until the start of your next turn.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!299d0089c594a0a1"
+}

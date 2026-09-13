@@ -1,0 +1,52 @@
+{
+  "_id": "10e8780a7b3619e7",
+  "name": "Run the Line",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Salvo",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Mobility, Flair",
+    "expertisesMode": "any",
+    "tags": "damage, area, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Up to two enemies within ranged Weapon Range, checked from your firing spaces."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 2 units, attacking one target before and one after this movement with the same roll. On success, each takes 1 weapon Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Movement from this card does not trigger movement Reactions from either target."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Salvo",
+      "html": "After resolving, preserve Lock through this movement even if briefly obscured, provided its target is visible at the end.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!10e8780a7b3619e7"
+}

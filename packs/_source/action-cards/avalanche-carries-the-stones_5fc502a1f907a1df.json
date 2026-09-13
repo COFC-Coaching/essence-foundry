@@ -1,0 +1,52 @@
+{
+  "_id": "5fc502a1f907a1df",
+  "name": "Avalanche Carries the Stones",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Prowess",
+    "subtype": "Blitz",
+    "attr": "Might",
+    "skill": "Prowess",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Berserking, Brawling",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range after your movement."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 3 units in a straight line. On success, deal 2 Bludgeoning Damage and push the target 1 unit."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Push 1 additional unit."
+      },
+      {
+        "n": "2",
+        "html": "Knock the target Prone if it ends beside an obstacle."
+      }
+    ],
+    "rider": {
+      "title": "Combo - Blitz",
+      "html": "After a hit, spend 1 Combo to enter Avalanche Stance: while advancing toward an enemy, the first difficult space you enter each turn costs no extra Movement.",
+      "meta": "COMBO LIMIT: 5"
+    }
+  },
+  "folder": "2e78c5ed5c7f04ea",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5fc502a1f907a1df"
+}

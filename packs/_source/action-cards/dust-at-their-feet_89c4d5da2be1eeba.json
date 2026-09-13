@@ -1,0 +1,52 @@
+{
+  "_id": "89c4d5da2be1eeba",
+  "name": "Dust at Their Feet",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 1,
+    "style": "Ballistics",
+    "subtype": "Trickshot",
+    "attr": "Grace",
+    "skill": "Ballistics",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Mobility, Penetration",
+    "expertisesMode": "any",
+    "tags": "damage, terrain, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within ranged Weapon Range beside an exposed floor or wall."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage. Independently, its space provides concealment until your next turn as debris obscures the area."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit after the shot."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, the target is Slowed 2 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Lock - Trickshot",
+      "html": "Your Lock ignores this card's concealment. When that target leaves the obscured space, you may transfer Lock to a visible enemy still inside it.",
+      "meta": "LOCK LIMIT: 1"
+    }
+  },
+  "folder": "cf9224daeb4d5858",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!89c4d5da2be1eeba"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "b2c8ea5be78c10b6",
+  "name": "Siege Osteology",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Titan",
+    "attr": "Might",
+    "skill": "Gestalt",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Armament, Integration",
+    "expertisesMode": "any",
+    "tags": "damage, control, utility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One adjacent enemy or unattended mundane barrier."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 2 Bludgeoning Damage to an enemy. An unattended barrier instead takes 2 Damage without opposition."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After a hit, push the enemy 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Damage to a barrier; against an enemy, knock it Prone instead."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Titan",
+      "html": "Assume Siege Frame (upkeep 1): your first push each turn can move an adjacent creature 1 unit sideways instead of directly away. Your Movement is reduced by 1.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b2c8ea5be78c10b6"
+}

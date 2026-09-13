@@ -1,0 +1,52 @@
+{
+  "_id": "ca3d65ed42f84883",
+  "name": "The Shared Horizon",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Projection",
+    "attr": "Acuity",
+    "skill": "Psionics",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Telepathy, Precognition",
+    "expertisesMode": "any",
+    "tags": "support, protection, suppression",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self and up to two willing allies within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Until your next turn, each target ignores its next ordinary sensory penalty and gains +1 Defense against the next attack targeting it from a detected enemy."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Each ally may move 1 unit toward you."
+      },
+      {
+        "n": "2",
+        "html": "Extend the sensory suppression through the end of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Projection",
+      "html": "If you accepted Strain, the first linked creature damaged before your next turn may move 1 unit after the Damage; this can be you.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ca3d65ed42f84883"
+}

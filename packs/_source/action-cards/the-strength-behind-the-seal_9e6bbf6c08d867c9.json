@@ -1,0 +1,52 @@
+{
+  "_id": "9e6bbf6c08d867c9",
+  "name": "The Strength Behind the Seal",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Imbuement",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Inscription, Consecration",
+    "expertisesMode": "any",
+    "tags": "protection, support, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target gains +1 Fortitude against the next attack targeting it and reduces its next incoming Damage by 1 until the start of your next turn. Its next successful attack may push one hit enemy 1 unit during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase that push by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "The target's next attack ignores 1 point of cover bonus until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Imbuement",
+      "html": "Rite, 2 Echoes: bind the target. Trigger: it pushes or pulls an enemy with a Combat Card. Echo: grant +1 Harmony against the next attack targeting it before your next turn.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!9e6bbf6c08d867c9"
+}

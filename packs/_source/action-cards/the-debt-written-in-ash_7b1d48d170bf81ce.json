@@ -1,0 +1,52 @@
+{
+  "_id": "7b1d48d170bf81ce",
+  "name": "The Debt Written in Ash",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Ritualism",
+    "subtype": "Offering",
+    "attr": "Adaptability",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Sympathy, Inscription",
+    "expertisesMode": "any",
+    "tags": "debuff, damage, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Burn 1 additional Action Die. On success, impose -1 Fortitude and -1 Composure until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Move 1 unit away after resolving."
+      },
+      {
+        "n": "2",
+        "html": "Deal 1 Necrotic Damage on a hit."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Offering",
+      "html": "Rite, 2 Echoes: on a hit, the target becomes Possessed. Trigger: it deals Damage to you with an Action. Echo: its next attack before your next turn suffers -1 on its Success Die.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!7b1d48d170bf81ce"
+}

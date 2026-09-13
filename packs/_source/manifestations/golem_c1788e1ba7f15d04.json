@@ -1,0 +1,217 @@
+{
+  "_id": "c1788e1ba7f15d04",
+  "name": "Golem",
+  "type": "npc",
+  "img": "icons/svg/mountain.svg",
+  "system": {
+    "might": 0,
+    "grace": 0,
+    "vigor": 0,
+    "intellect": 0,
+    "acuity": 0,
+    "resolve": 0,
+    "presence": 0,
+    "adaptability": 0,
+    "anima": 0,
+    "tier": 1,
+    "level": 1,
+    "role": "",
+    "gmNotes": "<p><strong>Purpose:</strong> A slow, durable body with deliberate reach and movement weaknesses.</p><p><strong>Trait &mdash; Set Foundation.</strong> Once per round, resist 1 unit of forced movement while standing on solid supported ground. Choosing to use it consumes that round's benefit even if the remaining forced movement still displaces you.</p><p><em>Full Manifestation profile — Rank 1, Nonliving. See CALLING_PROFILES.md / the Full Manifestation Guide journal for the shared entry/dismissal/defeat procedure.</em></p>",
+    "resilience": 2,
+    "movement": 2,
+    "fortitudeBonus": 5,
+    "composureBonus": 4,
+    "harmonyBonus": 3,
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ]
+  },
+  "items": [
+    {
+      "_id": "d8c7ec2ab4208c74",
+      "_key": "!actors.items!c1788e1ba7f15d04.d8c7ec2ab4208c74",
+      "name": "Mason's Palm",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 1,
+        "style": "Calling",
+        "subtype": "Golem",
+        "attr": "Presence",
+        "skill": "Calling",
+        "defense": "Fortitude",
+        "min": "2",
+        "cost": "1",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "One enemy or unattended object within 1 unit."
+          },
+          {
+            "label": "Effect",
+            "html": "On success against an enemy, deal 2 Bludgeoning Damage. An unattended object instead takes 2 Bludgeoning Damage without opposition."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "After a hit, push an enemy 1 unit."
+          },
+          {
+            "n": "2",
+            "html": "Deal +1 Damage to an unattended object, or suppress a hit enemy's ordinary Fortitude bonus until the start of your next turn."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "1425c348ab0ecb1f",
+      "_key": "!actors.items!c1788e1ba7f15d04.1425c348ab0ecb1f",
+      "name": "Span of Stone",
+      "type": "action-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 1,
+        "style": "Calling",
+        "subtype": "Golem",
+        "attr": "Anima",
+        "skill": "Calling",
+        "defense": "",
+        "min": "2",
+        "cost": "0",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "Self or one adjacent willing ally."
+          },
+          {
+            "label": "Effect",
+            "html": "Reduce the target's next incoming Damage by 1 before the start of your next turn. If protecting an ally, remain adjacent for this protection to apply."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "The target resists its next 1 unit of forced movement before that deadline."
+          },
+          {
+            "n": "2",
+            "html": "Extend the protection to one other adjacent willing ally; if alone, increase your protection by 1 instead."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    },
+    {
+      "_id": "b2e644545c6965c5",
+      "_key": "!actors.items!c1788e1ba7f15d04.b2e644545c6965c5",
+      "name": "Receive the Weight",
+      "type": "reaction-card",
+      "img": "icons/svg/card-hand.svg",
+      "system": {
+        "domain": "spiritual",
+        "rank": 1,
+        "style": "Calling",
+        "subtype": "Golem",
+        "attr": "Anima",
+        "skill": "Calling",
+        "defense": "",
+        "min": "2",
+        "cost": "1",
+        "expertises": "",
+        "expertisesMode": "any",
+        "tags": "Manifestation",
+        "flavor": "",
+        "body": [
+          {
+            "label": "Target",
+            "html": "Self or one adjacent willing ally."
+          },
+          {
+            "label": "Trigger",
+            "html": "An Action or Reaction would deal physical Damage to the target."
+          },
+          {
+            "label": "Effect",
+            "html": "Reduce that Damage by 1 and resist up to 1 unit of forced movement imposed by that card."
+          }
+        ],
+        "surges": [
+          {
+            "n": "1",
+            "html": "Prevent an ordinary Prone effect from that card."
+          },
+          {
+            "n": "2",
+            "html": "Reduce the Damage by 1 more."
+          }
+        ],
+        "rider": {
+          "title": "",
+          "html": "",
+          "meta": ""
+        }
+      },
+      "flags": {},
+      "ownership": {
+        "default": 0
+      }
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!c1788e1ba7f15d04"
+}

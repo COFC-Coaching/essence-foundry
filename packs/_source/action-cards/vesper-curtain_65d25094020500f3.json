@@ -1,0 +1,52 @@
+{
+  "_id": "65d25094020500f3",
+  "name": "Vesper Curtain",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Magecraft",
+    "subtype": "Shadow",
+    "attr": "Intellect",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Fabrication, Reinforcement",
+    "expertisesMode": "any",
+    "tags": "terrain, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "A line of 3 connected spaces within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Concentration: fill the line with a temporary shadow curtain that provides concealment, not solid cover, for up to 3 rounds."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Bend the line once."
+      },
+      {
+        "n": "2",
+        "html": "Yourself or one willing ally within 3 units gains +1 Composure against sensory effects until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Shadow Thread",
+      "html": "Gain a Shadow Thread. Before rolling a later Magecraft card, consume it: after resolving, choose two adjacent spaces within 3 units; they provide concealment until the start of your next turn.",
+      "meta": "THREAD LIMIT: 3"
+    }
+  },
+  "folder": "022752eb7d9bda7e",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!65d25094020500f3"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "043630e58ccdd18a",
+  "name": "Hollow Footsteps, Walk Beside Me",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Phantom",
+    "attr": "Adaptability",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Accord, Transference",
+    "expertisesMode": "any",
+    "tags": "mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. The target moves 2 units through ordinary difficult terrain without extra cost. It may pass through one willing creature's space, but not walls."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Increase movement by 1 unit."
+      },
+      {
+        "n": "2",
+        "html": "The movement does not trigger movement Reactions from one chosen detected enemy."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Phantom",
+      "html": "You may burn 3 Action Dice and spend 2 Mana to enter Phantom Full Manifestation (FM-1P). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-1P"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!043630e58ccdd18a"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "e609ba4c058ad174",
+  "name": "Motor Pattern Collapse",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 2,
+    "style": "Psionics",
+    "subtype": "Fracture",
+    "attr": "Intellect",
+    "skill": "Psionics",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Biokinesis, Imprint",
+    "expertisesMode": "any",
+    "tags": "damage, control, debuff",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One living enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 Psychic Damage and make it Slowed 2 until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, impose -1 on its next Success Die until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Knock the target Prone on a hit."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Fracture",
+      "html": "If you accepted Strain and hit, the target must burn 1 die before standing from Prone or ending an ordinary restraint before your next turn; this is an added cost, not a canceled Action.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e609ba4c058ad174"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "9d7b9857fd70a240",
+  "name": "The Bell That Ends the Curse",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Ritualism",
+    "subtype": "Ward",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Severance, Liturgy",
+    "expertisesMode": "any",
+    "tags": "suppression, protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress one ordinary magical Condition and one non-Critical Wound Condition's numerical penalties until the start of your next turn. No injury or Specialty Condition is removed."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Extend only the Wound suppression through the end of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "The target reduces its next incoming magical Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Ward",
+      "html": "Rite, 2 Echoes: bind the target. Trigger: the source of the suppressed ordinary Condition targets it with an Action. Echo: grant +1 to the targeted Defense against that Action.",
+      "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!9d7b9857fd70a240"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "93868e80f4c284bb",
+  "name": "Long-Strider, Carry the Pursuit",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Beast",
+    "attr": "Adaptability",
+    "skill": "Calling",
+    "defense": "Fortitude",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Accord, Transference",
+    "expertisesMode": "any",
+    "tags": "damage, mobility, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy adjacent after your movement."
+      },
+      {
+        "label": "Effect",
+        "html": "Move up to 3 units toward a visible enemy. On success, deal 1 Slashing Damage."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "An adjacent willing ally may move 1 unit toward your destination."
+      },
+      {
+        "n": "2",
+        "html": "After a hit, move 1 unit without triggering the target's movement Reactions."
+      }
+    ],
+    "rider": {
+      "title": "Full Manifestation - Beast",
+      "html": "You may burn 3 Action Dice and spend 2 Mana to enter Beast Full Manifestation (FM-1B). It replaces you; use its profile. Dice, Resources, Movement spent and recorded injuries do not refresh.",
+      "meta": "PROFILE: FM-1B"
+    }
+  },
+  "folder": "3aea103986e604d7",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!93868e80f4c284bb"
+}

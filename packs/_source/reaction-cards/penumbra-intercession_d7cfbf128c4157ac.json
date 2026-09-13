@@ -1,0 +1,52 @@
+{
+  "_id": "d7cfbf128c4157ac",
+  "name": "Penumbra Intercession",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 0,
+    "style": "Magecraft",
+    "subtype": "Shadow",
+    "attr": "Resolve",
+    "skill": "Magecraft",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "protection, suppression, terrain",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: A detected enemy's Action would deal Damage to you. Response (unopposed): Reduce that Damage by 1."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "After the Action, your space provides concealment until the start of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Suppress one ordinary visual impairment imposed by that Action until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "0b2b283e84264679",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d7cfbf128c4157ac"
+}

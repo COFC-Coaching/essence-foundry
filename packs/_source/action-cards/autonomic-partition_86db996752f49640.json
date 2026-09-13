@@ -1,0 +1,52 @@
+{
+  "_id": "86db996752f49640",
+  "name": "Autonomic Partition",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 2,
+    "style": "Gestalt",
+    "subtype": "Chimera",
+    "attr": "Vigor",
+    "skill": "Gestalt",
+    "defense": "",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Regeneration, Metabolism",
+    "expertisesMode": "any",
+    "tags": "suppression, protection",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self."
+      },
+      {
+        "label": "Effect",
+        "html": "Unopposed. Suppress one ordinary Poison Condition and one Light physical Wound Condition's numerical penalties until the start of your next turn. Gain +1 Composure against pain-based effects during that time."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Extend both suppressions through the end of your next turn."
+      },
+      {
+        "n": "2",
+        "html": "Reduce your next incoming Damage by 1 until the start of your next turn."
+      }
+    ],
+    "rider": {
+      "title": "Adaptation - Chimera",
+      "html": "Assume Partition (upkeep 1): while you maintain this Adaptation, suppress the Composure penalty from one ordinary pain Condition and ignore the penalty from Unstable. Neither Condition is removed.",
+      "meta": "ADAPTATION LIMIT: 1"
+    }
+  },
+  "folder": "b2fe12c9944d6127",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!86db996752f49640"
+}

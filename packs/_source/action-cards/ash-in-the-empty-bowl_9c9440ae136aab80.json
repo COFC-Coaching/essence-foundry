@@ -1,0 +1,52 @@
+{
+  "_id": "9c9440ae136aab80",
+  "name": "Ash in the Empty Bowl",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 0,
+    "style": "Ritualism",
+    "subtype": "Offering",
+    "attr": "Anima",
+    "skill": "Ritualism",
+    "defense": "Harmony",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "damage, debuff, control",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within 4 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Burn 1 additional Action Die before rolling. On success, deal 1 Necrotic Damage and impose -1 on its next Success Die until the start of your next turn."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "On a hit, move 1 unit away from the target."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 Necrotic Damage."
+      }
+    ],
+    "rider": {
+      "title": "Rite - Offering",
+      "html": "Rite, 1 Echo: on a hit, the target becomes Possessed. Trigger: it misses an Action. Echo: it is Slowed 2 until your next turn.",
+      "meta": "ECHO LIMIT: 1; RITE LIMIT: 3"
+    }
+  },
+  "folder": "978c8325f619ff38",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!9c9440ae136aab80"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "59fdee1865c5b85e",
+  "name": "Every Step Together",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 2,
+    "style": "Leadership",
+    "subtype": "Example",
+    "attr": "Adaptability",
+    "skill": "Leadership",
+    "defense": "Fortitude",
+    "min": "3",
+    "cost": "2",
+    "expertises": "Coordination, Inspiration",
+    "expertisesMode": "any",
+    "tags": "damage, support, mobility",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One enemy within melee Weapon Range."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, deal 1 weapon Damage. After resolving, you and one willing ally within 2 units each move up to 2 units; alone, move 2 units."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "One moved creature may ignore movement Reactions from the target."
+      },
+      {
+        "n": "2",
+        "html": "Deal +1 weapon Damage."
+      }
+    ],
+    "rider": {
+      "title": "Authority - Example",
+      "html": "Spend this Authority when one moved creature is next missed before your next turn: it becomes Rallied and may move 1 unit toward the other; alone, any direction.",
+      "meta": "AUTHORITY CAP: 1 AT R0-R2"
+    }
+  },
+  "folder": "a282a1a28b9c77ef",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!59fdee1865c5b85e"
+}

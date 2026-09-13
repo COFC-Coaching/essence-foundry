@@ -1,0 +1,52 @@
+{
+  "_id": "64e8791b74234c73",
+  "name": "Stone Brother, Take the Weight",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "spiritual",
+    "rank": 1,
+    "style": "Calling",
+    "subtype": "Golem",
+    "attr": "Anima",
+    "skill": "Calling",
+    "defense": "",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Anchoring, Vessel",
+    "expertisesMode": "any",
+    "tags": "protection, support",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "Self or one willing ally within 3 units."
+      },
+      {
+        "label": "Effect",
+        "html": "Trigger: An Action or Reaction would deal physical Damage to the target. Response (unopposed): Reduce it by 1 and resist up to 2 units of forced movement from the same Action."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Prevent the Action's ordinary Prone effect."
+      },
+      {
+        "n": "2",
+        "html": "Reduce its Damage by 1 more."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    }
+  },
+  "folder": "e87efeb1c809057f",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!64e8791b74234c73"
+}

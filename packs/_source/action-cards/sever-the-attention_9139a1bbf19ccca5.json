@@ -1,0 +1,52 @@
+{
+  "_id": "9139a1bbf19ccca5",
+  "name": "Sever the Attention",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "mental",
+    "rank": 1,
+    "style": "Psionics",
+    "subtype": "Fracture",
+    "attr": "Acuity",
+    "skill": "Psionics",
+    "defense": "Composure",
+    "min": "2",
+    "cost": "1",
+    "expertises": "Telepathy, Clairvoyance",
+    "expertisesMode": "any",
+    "tags": "debuff, information, setup",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One detected enemy within 5 units."
+      },
+      {
+        "label": "Effect",
+        "html": "On success, suppress one ordinary accuracy bonus on the target until the start of your next turn, up to 1, and reveal its occupied space to allies for that duration."
+      }
+    ],
+    "surges": [
+      {
+        "n": "1",
+        "html": "Learn which Defense the target's last attack contested."
+      },
+      {
+        "n": "2",
+        "html": "On a hit, deal 1 Psychic Damage."
+      }
+    ],
+    "rider": {
+      "title": "Strain - Fracture",
+      "html": "If you accepted Strain and hit, the target cannot benefit from ordinary concealment against your next Psionics Action until the start of your next turn.",
+      "meta": "STRAIN LIMIT: 6"
+    }
+  },
+  "folder": "8f21477433464e05",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!9139a1bbf19ccca5"
+}
