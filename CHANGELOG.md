@@ -2,6 +2,29 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.49
+
+**Movement moved to the sheet header; Action/Reaction Dice now have +/- controls; Burn Dice
+removed.** Movement previously only appeared inside the Combat tab, so switching to Core/
+Equipment/Non-Combat/Biography hid it entirely — it's now in the header next to Tier and Level,
+visible from every tab, on both the Character and NPC sheets.
+
+The Action Dice / Reaction Dice pool display in the Combat tab was read-only text; a player who
+gained bonus dice from an effect, or needed to spend some without rolling (the old Burn Dice
+button's job), had no way to do it without unlocking the sheet. Both pools now have the same
+plain +/- stepper buttons already used for Stamina/Focus/Mana, always usable regardless of the
+sheet's edit lock. Since that covers spending dice without rolling, the separate Burn Dice button,
+its dialog, and `EssenceActorSheet`/`EssenceNpcSheet#onBurnDice` were removed as redundant.
+
+- New `adjustPoolDice` sheet action (mirrors the existing `adjustResource` pattern) on both actor
+  sheets; clamps at 0, no upper bound (a pool can be grown past its normal base by an effect).
+- Removed `ESSENCE.Sheet.BurnDice` and `ESSENCE.Notify.NoDiceToBurn` from `lang/en.json` — dead
+  strings once the button using them was gone.
+
+**Not verified against a live Foundry client this session** — checked with `node --check` on the
+edited `.mjs` files and a `{{#`/`{{/` brace-balance count on the edited `.hbs` templates, per this
+project's established practice for changes that can't be exercised outside a real client.
+
 ## 0.6.48
 
 **Drag-and-drop for the Equipment tab's Signature/Temporary/Armory sections.** Previously the only

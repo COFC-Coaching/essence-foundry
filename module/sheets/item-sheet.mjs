@@ -341,8 +341,8 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
   /**
    * § Reconfiguring Equipment — "Augments are intentionally easier to replace than major
    * Components. The current standard is: burn 1 Action die to exchange an installed Augment for
-   * another compatible Augment you have available." A standalone cost-and-log action (mirrors the
-   * actor sheet's #onBurnDice pattern) rather than something auto-triggered by the Mount select
+   * another compatible Augment you have available." A standalone cost-and-log action rather than
+   * something auto-triggered by the Mount select
    * above, since that same select is also how an Augment gets installed into an empty Mount for
    * the first time (free — not an "exchange") — only the player knows which case actually applies
    * in the fiction, the same trust-based convention every other manual action on this sheet uses.

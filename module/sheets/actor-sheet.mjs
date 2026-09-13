@@ -60,10 +60,10 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       rollItem: EssenceActorSheet.#onRollItem,
       rollInitiative: EssenceActorSheet.#onRollInitiative,
       endTurn: EssenceActorSheet.#onEndTurn,
-      burnDice: EssenceActorSheet.#onBurnDice,
       applyDamage: EssenceActorSheet.#onApplyDamage,
       recoverWound: EssenceActorSheet.#onRecoverWound,
       adjustResource: EssenceActorSheet.#onAdjustResource,
+      adjustPoolDice: EssenceActorSheet.#onAdjustPoolDice,
       itemView: EssenceActorSheet.#onItemView,
       itemEdit: EssenceActorSheet.#onItemEdit,
       itemDelete: EssenceActorSheet.#onItemDelete,
@@ -647,6 +647,17 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     await this.actor.update({ [`system.playState.${field}`]: next });
   }
 
+  /** Owner/GM/player quick-adjust for the Action/Reaction Dice pools — lets dice be added (e.g. a
+   *  card or effect grants extra dice) or spent without rolling, without needing to unlock the
+   *  sheet's safety lock. */
+  static async #onAdjustPoolDice(event, target) {
+    const field = target.dataset.field; // "actionDice" or "reactionDice"
+    const delta = Number(target.dataset.delta) || 0;
+    const current = this.actor.system.playState[field] ?? 0;
+    const next = Math.max(0, current + delta);
+    await this.actor.update({ [`system.playState.${field}`]: next });
+  }
+
   /**
    * Rolls into Foundry's real Combat Tracker instead of a private pool: finds (or creates) this
    * actor's Combatant in the active encounter and sets its `initiative` so the tracker sorts it
@@ -691,62 +702,6 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     if (game.combat?.combatant?.actor?.id === this.actor.id) {
       await game.combat.nextTurn();
     }
-  }
-
-  /**
-   * Some costs (removing Burning, paying into a Rite's Echo, Extra Movement, establishing a
-   * Ballistics Lock, etc.) spend dice straight from the pool without ever rolling them — card
-   * text calls this "burning" dice. This is a standalone action (not tied to any one card)
-   * since burns can be paid any time the printed cost says so, not just on a card use.
-   */
-  static async #onBurnDice() {
-    const ps = this.actor.system.playState;
-    const pools = [
-      { key: "actionDice", label: "Action", available: ps.actionDice ?? 0 },
-      { key: "reactionDice", label: "Reaction", available: ps.reactionDice ?? 0 }
-    ].filter((p) => p.available > 0);
-
-    if (!pools.length) {
-      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.NoDiceToBurn"));
-      return;
-    }
-
-    const result = await new Promise((resolve) => {
-      new foundry.applications.api.DialogV2({
-        window: { title: "Burn Dice" },
-        content: `
-          <p>Spend dice from a pool without rolling them (e.g. to remove Burning, pay an Echo, Extra Movement, a Ballistics Lock).</p>
-          <label>Pool
-            <select name="pool">${pools.map((p) => `<option value="${p.key}">${p.label} (${p.available} available)</option>`).join("")}</select>
-          </label>
-          <label>Dice to burn <input type="number" name="count" value="1" min="1" max="${Math.max(...pools.map((p) => p.available))}" autofocus></label>
-          <label>Reason (optional) <input type="text" name="reason" placeholder="e.g. Remove Burning"></label>
-        `,
-        buttons: [{
-          action: "burn",
-          label: "Burn",
-          default: true,
-          callback: (event, button) => ({
-            pool: button.form.elements.pool.value,
-            count: Number(button.form.elements.count.value),
-            reason: button.form.elements.reason.value.trim()
-          })
-        }],
-        submit: (result) => resolve(result === "burn" ? null : result)
-      }).render(true);
-    });
-    if (!result) return;
-
-    const poolInfo = pools.find((p) => p.key === result.pool);
-    const count = Math.max(1, Math.min(poolInfo.available, Math.floor(result.count) || 1));
-
-    await this.actor.update({ [`system.playState.${result.pool}`]: poolInfo.available - count });
-
-    const flavor = result.reason ? ` — ${result.reason}` : "";
-    await ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> burns ${count} ${poolInfo.label} ${count === 1 ? "Die" : "Dice"}${flavor}.</p>`
-    });
   }
 
   /** Clicking pip i sets the current count to i+1, or to i if that pip was already the last filled one. */

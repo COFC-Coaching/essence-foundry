@@ -26,6 +26,7 @@
       </label>
       <label>{{localize "ESSENCE.Common.Tier"}} <input name="system.tier" type="number" value="{{system.tier}}" style="width:3em"></label>
       <label>{{localize "ESSENCE.Common.Level"}} <input name="system.level" type="number" value="{{system.level}}" style="width:3em"></label>
+      <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}</label>
     </div>
   </div>
 </header>
@@ -178,18 +179,22 @@
 
 <div class="combat-header">
   <div class="combat-header-left">
-    <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}</label>
     <div class="action-pool">
-      <span class="attr-label">{{localize "ESSENCE.Common.ActionDice"}}</span> {{system.playState.actionDice}}
+      <span class="attr-label">{{localize "ESSENCE.Common.ActionDice"}}</span>
+      <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="actionDice" data-delta="-1" aria-label="{{localize 'ESSENCE.Sheet.DecreaseAria' label=(localize 'ESSENCE.Common.ActionDice')}}">−</button>
+      {{system.playState.actionDice}}
+      <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="actionDice" data-delta="1" aria-label="{{localize 'ESSENCE.Sheet.IncreaseAria' label=(localize 'ESSENCE.Common.ActionDice')}}">+</button>
       &nbsp;|&nbsp;
-      <span class="attr-label">{{localize "ESSENCE.Common.ReactionDice"}}</span> {{system.playState.reactionDice}}
+      <span class="attr-label">{{localize "ESSENCE.Common.ReactionDice"}}</span>
+      <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="reactionDice" data-delta="-1" aria-label="{{localize 'ESSENCE.Sheet.DecreaseAria' label=(localize 'ESSENCE.Common.ReactionDice')}}">−</button>
+      {{system.playState.reactionDice}}
+      <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="reactionDice" data-delta="1" aria-label="{{localize 'ESSENCE.Sheet.IncreaseAria' label=(localize 'ESSENCE.Common.ReactionDice')}}">+</button>
     </div>
   </div>
   <div class="combat-header-right">
     <div class="combat-controls">
       <button type="button" data-action="rollInitiative">{{localize "ESSENCE.Sheet.RollInitiative"}}</button>
       <button type="button" data-action="endTurn">{{localize "ESSENCE.Sheet.EndTurn"}}</button>
-      <button type="button" data-action="burnDice">{{localize "ESSENCE.Sheet.BurnDice"}}</button>
     </div>
     <div class="combat-state">
       <p>{{localize "ESSENCE.Sheet.RoundLabel" round=combatRound}} — {{turnLabel system.playState.combatTurn}}</p>

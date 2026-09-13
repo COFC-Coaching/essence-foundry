@@ -155,6 +155,7 @@
 
 .essence .combat-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 6px; }
 .essence .combat-header-left { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; flex: 1 1 auto; min-width: 0; }
+.essence .action-pool { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 .essence .skill-box { border: 1px solid #555; border-radius: 4px; padding: 4px 6px; margin-bottom: 6px; }
 .essence .skill-box.gated { opacity: 0.6; border-style: dashed; }
 .essence .gate-note { font-size: 0.75em; color: #e0a020; padding-left: 4px; }
