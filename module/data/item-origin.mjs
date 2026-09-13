@@ -89,6 +89,15 @@ export class EssenceDistinctionData extends foundry.abstract.TypeDataModel {
       primaryAttr: new fields.StringField({ initial: "" }),
       unlocks: new fields.StringField({ initial: "", nullable: true }),
       benefit: new fields.HTMLField({ initial: "" }),
+      // Structured counterparts to `benefit`'s prose, read by the Character Creation Wizard to
+      // raise its Expertise/Combat Card budgets at creation time — e.g. Orator's "Gain one
+      // additional Leadership Expertise and two additional Leadership Action Cards" (see
+      // character-wizard.mjs's creationBonusFor()). Only the four ungated Distinctions
+      // (Athlete/Marksman/Strategist/Orator) grant this AT CREATION; the five gated ones
+      // (Gifted/Psyker/Arcanist/Invoker/Summoner) only grant their bonus "if acquired later," per
+      // their own benefit text, so they're left at 0 here.
+      creationExpertiseBonus: new fields.NumberField({ integer: true, initial: 0, min: 0 }),
+      creationActionCardBonus: new fields.NumberField({ integer: true, initial: 0, min: 0 }),
       origin: new fields.SchemaField({
         name: new fields.StringField({ initial: "" }),
         text: new fields.HTMLField({ initial: "" })

@@ -9,6 +9,8 @@
     "primaryAttr": "Intellect",
     "unlocks": "psionics",
     "benefit": "Gain access to the Psionics Combat Skill. If acquired later: gain access to Psionics, gain 2 pips in it, then gain one additional Psionics Expertise and two additional Psionics Action Cards.",
+    "creationExpertiseBonus": 0,
+    "creationActionCardBonus": 0,
     "origin": {
       "name": "Sacrificial Power",
       "text": "You may spend Temporary Wounds as though they were dice when using Psionics Actions or Reactions."

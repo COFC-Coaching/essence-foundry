@@ -145,7 +145,8 @@
         {{#each d.skills as |s|}}
           <div class="skill-box {{#unless s.gateOpen}}gated{{/unless}}">
             <div class="skill-head">
-              <button type="button" class="skill-roll" data-action="rollSkill" data-skill="{{s.key}}">{{s.label}}</button>
+              <span class="skill-name">{{s.label}}</span>
+              <button type="button" data-action="rollSkill" data-skill="{{s.key}}" aria-label="{{localize 'ESSENCE.Character.RollSkillAria' name=s.label}}" title="{{localize 'ESSENCE.Character.RollSkillAria' name=s.label}}"><i class="fa-solid fa-dice-d10"></i></button>
               <span class="pip-track">
                 {{#each s.pips as |filled|}}<span class="pip {{#if filled}}filled{{/if}}"></span>{{/each}}
               </span>
@@ -466,6 +467,7 @@
       <div class="nc-skill-row">
         <input name="system.nonCombatSkills.{{i}}.name" type="text" value="{{s.name}}" placeholder="{{localize 'ESSENCE.Common.Skill'}}">
         <input name="system.nonCombatSkills.{{i}}.rating" type="number" value="{{s.rating}}" style="width:3em">
+        <button type="button" data-action="rollNonCombatSkill" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Character.RollSkillAria' name=s.name}}" title="{{localize 'ESSENCE.Character.RollSkillAria' name=s.name}}"><i class="fa-solid fa-dice-d10"></i></button>
         <button type="button" data-action="deleteArrayRow" data-array="nonCombatSkills" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Character.DeleteSkillAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button>
       </div>
     {{/each}}

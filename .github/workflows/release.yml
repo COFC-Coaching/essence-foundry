@@ -32,7 +32,7 @@ jobs:
         # dev-only (Neon sync scripts, node_modules, CI config, package.json).
         run: |
           zip -r essence-system.zip \
-            system.json module templates styles lang packs LICENSE README.md \
+            system.json module templates styles lang packs LICENSE README.md CHANGELOG.md \
             -x "packs/*/LOCK"
 
       - name: Create GitHub Release

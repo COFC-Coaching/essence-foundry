@@ -9,6 +9,8 @@
     "primaryAttr": "Grace",
     "unlocks": "",
     "benefit": "Gain one additional Ballistics Expertise and two additional Ballistics Action Cards. If acquired later: instead increase Ballistics to a minimum of 2 pips, then gain one additional Ballistics Expertise and four additional Ballistics Action Cards.",
+    "creationExpertiseBonus": 1,
+    "creationActionCardBonus": 2,
     "origin": {
       "name": "Split Focus",
       "text": "You may maintain two Locks at once. If you would establish a Lock on a third creature, choose which existing Lock ends."

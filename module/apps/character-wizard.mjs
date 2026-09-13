@@ -27,6 +27,20 @@ function isBasicCard(cardSystem) {
   return !cardSystem.style;
 }
 
+/**
+ * Some Distinctions grant a bonus Expertise and/or bonus Combat Cards immediately at creation
+ * (Athlete/Marksman/Strategist/Orator's "Gain one additional [Skill] Expertise and two additional
+ * [Skill] Action Cards") — see item-origin.mjs's creationExpertiseBonus/creationActionCardBonus
+ * schema fields. The five gated Distinctions (Gifted/Psyker/Arcanist/Invoker/Summoner) only grant
+ * that bonus "if acquired later" per their own benefit text, so they read as 0 here at creation.
+ */
+function creationBonusFor(distinctionItem) {
+  return {
+    expertise: distinctionItem?.system.creationExpertiseBonus ?? 0,
+    actionCards: distinctionItem?.system.creationActionCardBonus ?? 0
+  };
+}
+
 const STEPS = [
   "Concept", "Identity", "Attributes", "Wounds", "Combat Skills",
   "Influence", "Non-Combat", "Passive Features", "Equipment", "Finalize"
@@ -285,7 +299,8 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       return { key, label: capitalize(key), value: system[key], gateDistinction, gateOpen };
     });
 
-    context.expertiseCount = EXPERTISE_COUNT;
+    const bonus = creationBonusFor(distinctionItem);
+    context.expertiseCount = EXPERTISE_COUNT + bonus.expertise;
     context.expertiseSpent = system.expertises.length;
     context.eligibleSkills = SKILLS.filter((key) => system[key] >= 1);
     context.expertisesBySkill = context.eligibleSkills.map((key) => ({
@@ -301,7 +316,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     context.ownedReactionCards = ownedCards.filter((i) => i.type === "reaction-card" && !isBasicCard(i.system));
     context.ownedBasicCards = ownedCards.filter((i) => isBasicCard(i.system));
     context.cardCount = context.ownedActionCards.length + context.ownedReactionCards.length;
-    context.cardLimit = CARD_LIMIT;
+    context.cardLimit = CARD_LIMIT + bonus.actionCards;
 
     const [actionPack, reactionPack] = await Promise.all([
       game.packs.get("essence-system.action-cards")?.getDocuments() ?? [],
@@ -426,14 +441,17 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const ncSpent = system.nonCombatSkills.reduce((sum, s) => sum + (s.rating || 0), 0);
     const signature = this.document.items.filter((i) => i.type === "equipment" && i.system.slot === "signature");
     const signatureUsed = signature.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
+    const bonus = creationBonusFor(distinctionItem);
+    const expertiseCount = EXPERTISE_COUNT + bonus.expertise;
+    const cardLimit = CARD_LIMIT + bonus.actionCards;
 
     context.checklist = [
       { label: "Species / Heritage / Distinction chosen", ok: !!(speciesItem && heritageItem && distinctionItem) },
       { label: `Attribute points spent (${attrSpent} / ${ATTRIBUTE_POOL})`, ok: attrSpent === ATTRIBUTE_POOL },
       { label: `Combat Skill points spent (${skillSpent} / ${SKILL_POOL})`, ok: skillSpent === SKILL_POOL },
-      { label: `Expertises chosen (${system.expertises.length} / ${EXPERTISE_COUNT})`, ok: system.expertises.length === EXPERTISE_COUNT },
+      { label: `Expertises chosen (${system.expertises.length} / ${expertiseCount})`, ok: system.expertises.length === expertiseCount },
       { label: `Basic Combat Cards granted (${ownedCards.filter((i) => isBasicCard(i.system)).length} / 7)`, ok: ownedCards.filter((i) => isBasicCard(i.system)).length === 7 },
-      { label: `Combat Cards chosen (${nonBasicCardCount} / ${CARD_LIMIT})`, ok: nonBasicCardCount <= CARD_LIMIT },
+      { label: `Combat Cards chosen (${nonBasicCardCount} / ${cardLimit})`, ok: nonBasicCardCount <= cardLimit },
       { label: `Non-Combat Skill points spent (${ncSpent} / ${NONCOMBAT_POOL})`, ok: ncSpent === NONCOMBAT_POOL },
       { label: `Signature Equipment within limit (${signatureUsed} / ${system.signatureEquipmentLimit})`, ok: signatureUsed <= system.signatureEquipmentLimit }
     ];
@@ -580,8 +598,10 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     if (i !== -1) {
       expertises.splice(i, 1);
     } else {
-      if (expertises.length >= EXPERTISE_COUNT) {
-        ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyChosenExpertises", { count: EXPERTISE_COUNT }));
+      const distinctionItem = this.document.items.find((it) => it.type === "distinction");
+      const expertiseCount = EXPERTISE_COUNT + creationBonusFor(distinctionItem).expertise;
+      if (expertises.length >= expertiseCount) {
+        ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyChosenExpertises", { count: expertiseCount }));
         return;
       }
       expertises.push({ name, skill });
@@ -610,8 +630,10 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const sourceItem = await pack?.getDocument(target.dataset.id);
     if (!sourceItem) return;
     const nonBasicCount = this.document.items.filter((i) => (i.type === "action-card" || i.type === "reaction-card") && !isBasicCard(i.system)).length;
-    if (nonBasicCount >= CARD_LIMIT) {
-      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyChosenCombatCards", { count: CARD_LIMIT }));
+    const distinctionItem = this.document.items.find((it) => it.type === "distinction");
+    const cardLimit = CARD_LIMIT + creationBonusFor(distinctionItem).actionCards;
+    if (nonBasicCount >= cardLimit) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyChosenCombatCards", { count: cardLimit }));
       return;
     }
     await this.document.createEmbeddedDocuments("Item", [sourceItem.toObject()]);

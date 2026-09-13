@@ -9,6 +9,8 @@
     "primaryAttr": "Adaptability",
     "unlocks": "ritualism",
     "benefit": "Gain access to the Ritualism Combat Skill. If acquired later: gain access to Ritualism, gain 2 pips in it, then gain one additional Ritualism Expertise and two additional Ritualism Action Cards.",
+    "creationExpertiseBonus": 0,
+    "creationActionCardBonus": 0,
     "origin": {
       "name": "Final Echo",
       "text": "You may maintain one additional Rite. Once per round, when you remove one of your Rites to establish another, you may resolve the removed Rite's Echo once before removing it. Ignore its Trigger and choose any valid target or area."

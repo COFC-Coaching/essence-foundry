@@ -9,6 +9,8 @@
     "primaryAttr": "Vigor",
     "unlocks": "",
     "benefit": "Gain one additional Prowess Expertise and two additional Prowess Action Cards. If acquired later: instead increase Prowess to a minimum of 2 pips, then gain one additional Prowess Expertise and four additional Prowess Action Cards.",
+    "creationExpertiseBonus": 1,
+    "creationActionCardBonus": 2,
     "origin": {
       "name": "Peak Performance",
       "text": "Increase your Resilience by 1. During your first turn, Movement that brings you closer to an enemy costs half as much Movement."

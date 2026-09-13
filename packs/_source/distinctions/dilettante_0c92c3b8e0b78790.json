@@ -9,6 +9,8 @@
     "primaryAttr": "Any",
     "unlocks": "",
     "benefit": "Whenever you gain a pip in a Combat Skill, also gain one Action Card of that Rank or lower for that Combat Skill.",
+    "creationExpertiseBonus": 0,
+    "creationActionCardBonus": 0,
     "origin": {
       "name": "Broad Reserves",
       "text": "Increase your maximum Stamina, Focus, and Mana by 5 each."

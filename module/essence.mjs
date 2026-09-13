@@ -20,6 +20,7 @@ import { capitalize, fitTitleSize, domainResource } from "./utils.mjs";
 import { syncEquipmentEffect } from "./data/equipment-effects.mjs";
 import { ROLE_BUDGETS } from "./data/monster-budgets.mjs";
 import EssenceRoleBudgetsSettings from "./apps/role-budgets-settings.mjs";
+import { registerWhatsNewSetting, checkWhatsNew } from "./apps/whats-new.mjs";
 
 /** Foundry combat's own enum values, given a display label a player should actually see. */
 const TURN_LABELS = { notStarted: "Not Started", first: "First Turn", active: "Active", ended: "Ended" };
@@ -104,6 +105,8 @@ Hooks.once("init", () => {
     type: EssenceRoleBudgetsSettings,
     restricted: true
   });
+
+  registerWhatsNewSetting();
 });
 
 /**
@@ -114,6 +117,11 @@ Hooks.once("init", () => {
  * content" re-import, unlike the compendium document's own _id) and carries `essenceConditionUuid`
  * so EssenceActor#toggleStatusEffect (module/documents/actor.mjs) knows which real Item to apply.
  */
+/** See whats-new.mjs — posts a per-client, once-per-version "what's new" chat card. */
+Hooks.once("ready", () => {
+  checkWhatsNew();
+});
+
 Hooks.once("ready", async () => {
   const pack = game.packs.get("essence-system.conditions");
   if (!pack) return;

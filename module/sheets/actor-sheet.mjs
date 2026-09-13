@@ -81,6 +81,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       contributeToGoal: EssenceActorSheet.#onContributeToGoal,
       addArrayRow: EssenceActorSheet.#onAddArrayRow,
       deleteArrayRow: EssenceActorSheet.#onDeleteArrayRow,
+      rollNonCombatSkill: EssenceActorSheet.#onRollNonCombatSkill,
       addExpertise: EssenceActorSheet.#onAddExpertise,
       toggleCombo: EssenceActorSheet.#onToggleCombo,
       clearLock: EssenceActorSheet.#onClearLock,
@@ -526,6 +527,36 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     if (!attr) return;
     const pool = (this.actor.system[attr] ?? 0) + (this.actor.system[skill] ?? 0);
     await rollEssencePool({ pool, label: `${capitalize(attr)} + ${capitalize(skill)}`, actor: this.actor });
+  }
+
+  /**
+   * A Non-Combat Skill rolls exactly like a Combat Skill's own open check (see #onRollSkill's
+   * final branch above) — pick an Attribute to pair it with, then roll Attribute + the skill's own
+   * rating as the dice pool. Unlike Combat Skills, Non-Combat Skills are freeform (name typed by
+   * the player, not one of a fixed list), so this reads the row's current name/rating directly
+   * from the actor rather than off a fixed `data-skill` key.
+   */
+  static async #onRollNonCombatSkill(event, target) {
+    const i = Number(target.dataset.index);
+    const entry = this.actor.system.nonCombatSkills[i];
+    if (!entry?.name) return;
+
+    const attr = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: `Roll ${entry.name}` },
+        content: `<select name="attr">${ATTRIBUTES.map((a) => `<option value="${a}">${capitalize(a)}</option>`).join("")}</select>`,
+        buttons: [{
+          action: "roll",
+          label: "Roll",
+          default: true,
+          callback: (event, button) => button.form.elements.attr.value
+        }],
+        submit: (result) => resolve(result ?? null)
+      }).render(true);
+    });
+    if (!attr) return;
+    const pool = (this.actor.system[attr] ?? 0) + (entry.rating ?? 0);
+    await rollEssencePool({ pool, label: `${capitalize(attr)} + ${entry.name}`, actor: this.actor });
   }
 
   /**

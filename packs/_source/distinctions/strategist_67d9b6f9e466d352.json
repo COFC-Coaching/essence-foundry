@@ -9,6 +9,8 @@
     "primaryAttr": "Resolve",
     "unlocks": "",
     "benefit": "Gain one additional Cunning Expertise and two additional Cunning Action Cards. If acquired later: instead increase Cunning to a minimum of 2 pips, then gain one additional Cunning Expertise and four additional Cunning Action Cards.",
+    "creationExpertiseBonus": 1,
+    "creationActionCardBonus": 2,
     "origin": {
       "name": "Branching Plans",
       "text": "You may establish a second Contingency each round. You may still trigger only one Contingency per round."

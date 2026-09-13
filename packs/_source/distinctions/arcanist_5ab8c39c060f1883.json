@@ -9,6 +9,8 @@
     "primaryAttr": "Acuity",
     "unlocks": "magecraft",
     "benefit": "Gain access to the Magecraft Combat Skill. If acquired later: gain access to Magecraft, gain 2 pips in it, then gain one additional Magecraft Expertise and two additional Magecraft Action Cards.",
+    "creationExpertiseBonus": 0,
+    "creationActionCardBonus": 0,
     "origin": {
       "name": "Elemental Versatility",
       "text": "The first time you use an Action Card of a given element during an encounter, gain one additional Surge for that action."

@@ -9,6 +9,8 @@
     "primaryAttr": "Anima",
     "unlocks": "calling",
     "benefit": "Gain access to the Calling Combat Skill. If acquired later: gain access to Calling, gain 2 pips in it, then gain one additional Calling Expertise and two additional Calling Action Cards.",
+    "creationExpertiseBonus": 0,
+    "creationActionCardBonus": 0,
     "origin": {
       "name": "Greater Manifestation",
       "text": "Full Manifestations cost one fewer die than normal, to a minimum cost of 2 dice."

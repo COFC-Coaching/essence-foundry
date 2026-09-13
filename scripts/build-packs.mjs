@@ -439,6 +439,10 @@ function distinctionToItem(d) {
       primaryAttr: d.primaryAttr,
       unlocks: d.unlocks || "",
       benefit: d.benefit,
+      // Structured counterpart to `benefit`'s prose — see item-origin.mjs's schema comment — read
+      // by the Character Creation Wizard to raise its Expertise/Combat Card budgets at creation.
+      creationExpertiseBonus: d.creationExpertiseBonus || 0,
+      creationActionCardBonus: d.creationActionCardBonus || 0,
       origin: d.origin
     },
     // Only a flat, unconditional stat change goes here (see activeEffects()'s comment) — the
