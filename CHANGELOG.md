@@ -2,6 +2,31 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.52
+
+**Full Manifestation profiles now have their own dedicated Actor type and sheet instead of
+borrowing the generic NPC one.** The NPC sheet carries a lot of monster-building machinery — a
+Role dropdown, the Monster Creator button, Species/Heritage/Distinction Origin pickers, Non-Combat
+Skills, Influence — none of which applies to a profile whose stats are fixed by the printed rules
+table, not hand-built. `EssenceManifestationData` (`module/data/actor-manifestation.mjs`) is a lean
+schema with just what a profile needs — Fortitude/Composure/Harmony/Resilience/Movement as plain
+numbers, a Wound track sized to its own capacity, Purpose/Trait text, and (for Elemental) its
+Declared Aspect — and `EssenceManifestationSheet` renders only that. The 8 compendium profiles and
+`module/apps/manifestation.mjs`'s swap logic were both updated for the new schema, including
+renaming the defeat-overflow counter from a repurposed Death Track field to a clear
+`overflowWounds` one. Verified live: entering, dealing damage past a Wound Track's capacity,
+resolving a defeat (correct overflow + feedback Wounds, correct severities, Broken flag set), and
+returning to the caller all behave correctly end-to-end.
+
+**Rewrote all three in-world guide journals** (Player's Guide, Game Master's Guide, and the Full
+Manifestation Guide) after checking essencesystem.com's own Quick Guide for voice and structure.
+The Full Manifestation Guide in particular had gone stale the moment the automation above shipped —
+it still described manually dragging profiles from the compendium and called out "not yet
+automated" in places that had since become one-click. Every guide was also restructured from one
+dense page into several focused, single-topic pages (Player's Guide: 1 → 7; GM's Guide: 2 → 4; Full
+Manifestation Guide: 4 → 6), matching how the actual website's guide is organized, and raw
+math/dev-process notes were replaced with plain-language explanations and one worked example.
+
 ## 0.6.51
 
 **Replaced the entire 9-Style Action/Reaction Card catalogue with a new Rank 0-2 playtest set,
