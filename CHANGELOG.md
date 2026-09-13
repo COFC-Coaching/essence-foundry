@@ -2,6 +2,25 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.50
+
+**Bulk Import now routes rows into the same compendium folders the pre-built content and the
+single-item Content Wizard use, instead of dropping every imported item unfoldered at the pack
+root.** Action/Reaction Cards are routed by their `skill` column into that Combat Style's folder
+(falling back to "Basic" for skill-less cards or unrecognized values); Equipment is routed by
+`category` into its category folder (Weapon, Armor, Consumable Kit, etc.); Chassis/Fitting/Augment
+rows go into their fixed "Chassis"/"Fitting"/"Augment" folders. Conditions are unaffected — they
+were never foldered. Folder matching is case-insensitive and applies on both create and update, so
+re-importing a row whose category/skill changed also moves it to the correct folder.
+
+- New `resolveFolderId()` in `module/apps/bulk-import.mjs`, mirroring the folder-naming rules
+  `scripts/build-packs.mjs` uses to seed those folders and `content-wizard.mjs` uses for
+  single-item creation.
+
+**Not verified against a live Foundry client this session** — checked by reading through the
+folder-seeding and single-item-wizard code paths for consistency; no live Bulk Import run was
+performed.
+
 ## 0.6.49
 
 **Movement moved to the sheet header; Action/Reaction Dice now have +/- controls; Burn Dice

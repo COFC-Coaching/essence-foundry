@@ -16,8 +16,11 @@ const { ApplicationV2 } = foundry.applications.api;
  * whatever a GM uploads — an uploaded file's header row is matched against these names, not
  * position, so reordered/extra columns still work as long as every name here is present.
  * `example` is the one illustrative data row baked into the downloaded template. `pack`/`type`/
- * `img`/`toSystem` drive the shared #runImportFor() below — one generic create-or-update loop
- * instead of a near-identical branch repeated per type.
+ * `img`/`toSystem` drive the shared #onRunImport() below — one generic create-or-update loop
+ * instead of a near-identical branch repeated per type. `folder`/`folderBy`+`folderNameFor`/
+ * `folderFallback` (see resolveFolderId()) route each row into the same per-Combat-Skill or
+ * per-category compendium folder build-packs.mjs seeds and content-wizard.mjs's single-item wizard
+ * already uses, instead of dropping every imported row unfoldered at the pack root.
  */
 const TEMPLATES = {
   "action-card": {
@@ -27,6 +30,11 @@ const TEMPLATES = {
     type: "action-card",
     img: "icons/svg/card-hand.svg",
     toSystem: cardRowToSystem,
+    // Routed into the pack's per-Combat-Skill folder (see build-packs.mjs's writeCombatSkillFolders)
+    // by the row's own `skill` column — unrecognized/blank skills fall into "Basic", same as the
+    // skill-less universal cards baked in at build time.
+    folderBy: "skill",
+    folderFallback: "Basic",
     columns: [
       "name", "domain", "rank", "style", "subtype", "attr", "skill", "defense", "min",
       "cost", "expertises", "expertises_mode", "tags", "flavor",
@@ -51,6 +59,8 @@ const TEMPLATES = {
     type: "reaction-card",
     img: "icons/svg/card-hand.svg",
     toSystem: cardRowToSystem,
+    folderBy: "skill",
+    folderFallback: "Basic",
     columns: [
       "name", "domain", "rank", "style", "subtype", "attr", "skill", "defense", "min",
       "cost", "expertises", "expertises_mode", "tags", "flavor",
@@ -75,6 +85,10 @@ const TEMPLATES = {
     type: "equipment",
     img: "icons/svg/item-bag.svg",
     toSystem: equipmentRowToSystem,
+    // Routed into the pack's per-category folder (see build-packs.mjs's writeCategoryFolders) by
+    // the row's own `category` column, normalized the same way the folder names themselves are.
+    folderBy: "category",
+    folderNameFor: categoryFolderName,
     columns: [
       "name", "category", "tier", "type", "cost", "range", "effect", "passive", "special",
       "fortitude", "resilience", "movement", "tags", "flavor", "reachBonus", "uses", "slotCost",
@@ -119,6 +133,9 @@ const TEMPLATES = {
     type: "chassis",
     img: "icons/svg/shield.svg",
     toSystem: componentRowToSystem,
+    // Chassis/Fitting/Augment each get their own fixed folder in the equipment pack (see
+    // content-wizard.mjs's identical TYPE_CONFIG.folder for the single-item wizard).
+    folder: "Chassis",
     columns: [
       "name", "category", "tier", "fortitude", "resilience", "movement", "effect",
       "passive", "special", "flavor", "grantsEquipmentCard", "compatibleFittingCategory", "mountCount"
@@ -140,6 +157,7 @@ const TEMPLATES = {
     type: "fitting",
     img: "icons/svg/item-bag.svg",
     toSystem: componentRowToSystem,
+    folder: "Fitting",
     columns: [
       "name", "category", "tier", "fortitude", "resilience", "movement", "effect",
       "passive", "special", "flavor", "grantsEquipmentCard", "handedness", "rangeModifier",
@@ -159,6 +177,7 @@ const TEMPLATES = {
     type: "augment",
     img: "icons/svg/upgrade.svg",
     toSystem: augmentRowToSystem,
+    folder: "Augment",
     columns: ["name", "kind", "compatibility", "uses", "effect", "flavor"],
     example: {
       name: "Rapid Draw", kind: "function", compatibility: "Any", uses: "2",
@@ -166,6 +185,29 @@ const TEMPLATES = {
     }
   }
 };
+
+/** "consumable-kit" -> "Consumable Kit" — matches build-packs.mjs's writeCategoryFolders naming exactly. */
+function categoryFolderName(category) {
+  return category ? category.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ") : null;
+}
+
+/**
+ * Resolves the destination Folder _id for a row within its target pack, mirroring how
+ * build-packs.mjs seeds folders (per Combat Skill for cards, per category for Equipment) and how
+ * content-wizard.mjs routes single-item creation — so a bulk-imported row lands in the same folder
+ * a GM would expect from either of those. Folder names are matched case-insensitively since a CSV
+ * column value's casing isn't guaranteed to match the seeded folder name exactly.
+ */
+function resolveFolderId(cfg, system, pack) {
+  let name = cfg.folder ?? null;
+  if (!name && cfg.folderBy) {
+    const raw = system[cfg.folderBy];
+    name = (cfg.folderNameFor ? cfg.folderNameFor(raw) : raw) || cfg.folderFallback || null;
+  }
+  if (!name) return null;
+  const byName = (n) => pack.folders.find((f) => f.name.toLowerCase() === n.toLowerCase());
+  return (byName(name) ?? (cfg.folderFallback ? byName(cfg.folderFallback) : null))?.id ?? null;
+}
 
 /** Quote a CSV field only when it needs it (RFC 4180): contains a comma, quote, or newline. */
 function csvField(value) {
@@ -442,10 +484,11 @@ export default class EssenceBulkImport extends HandlebarsApplicationMixin(Applic
     for (const [i, row] of this.#parsed.records.entries()) {
       if (!row.name) { errors.push({ row: i + 2, message: "missing name" }); continue; }
       const system = cfg.toSystem(row);
+      const folder = resolveFolderId(cfg, system, pack);
       const match = existing.find((d) => d.name === row.name);
-      if (match) { await match.update({ system }); updated++; }
+      if (match) { await match.update({ system, folder }); updated++; }
       else {
-        const [doc] = await Item.createDocuments([{ name: row.name, type: cfg.type, img: cfg.img, system }], { pack: pack.collection });
+        const [doc] = await Item.createDocuments([{ name: row.name, type: cfg.type, img: cfg.img, system, folder }], { pack: pack.collection });
         existing.push(doc);
         created++;
       }
