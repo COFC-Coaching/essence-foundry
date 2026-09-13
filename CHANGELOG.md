@@ -2,6 +2,35 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.53
+
+**Added a "What's New" chat card** (`module/apps/whats-new.mjs`) — not a native Foundry feature,
+but a common pattern other systems build for themselves. Each player and the GM now see a
+one-time, per-client styled card summarizing what changed the first time they load a session after
+an update, parsed live from `CHANGELOG.md` (now shipped in the release zip) rather than a second,
+separately-maintained summary that could drift out of sync with it. Silent on a brand-new login —
+no false "what's new" the first time a client ever connects.
+
+**Fixed a systemic double-escaped-HTML-entity bug**: 7 localization strings (`Career & Key
+Aspects`, `Attributes, Resources & Defenses`, and 5 others) stored a literal `&amp;`/`&middot;`/
+`&gt;` entity, which `{{localize}}`'s own HTML-escaping then escaped a second time, rendering as
+literal `&AMP;`-style text in section headers instead of the intended character.
+
+**Combat Skills now roll from a dedicated die-icon button** instead of clicking the skill name
+directly, matching the same die-icon pattern already used for Non-Combat Skills (added last
+release) — the name is now a plain label, and the icon button is the click target, on both the
+character and NPC sheets.
+
+**Distinction creation-time bonuses now actually apply in the Character Creation Wizard.**
+Athlete, Marksman, Strategist, and Orator each grant "+1 Expertise and +2 Action Cards" in their
+key skill immediately at creation per their printed benefit text, but the wizard's Expertise/Combat
+Card budgets were flat hardcoded constants (4 and 10) that never read this. Added structured
+`creationExpertiseBonus`/`creationActionCardBonus` fields to the Distinction schema — populated
+only for these four, since the other five gated Distinctions (Gifted/Psyker/Arcanist/Invoker/
+Summoner) only grant their bonus "if acquired later," not at creation — and wired the wizard's
+budget display and enforcement to read them. Verified live: Orator now correctly shows 5/5
+Expertises and 10/12 Combat Cards instead of 4/4 and 10/10.
+
 ## 0.6.52
 
 **Full Manifestation profiles now have their own dedicated Actor type and sheet instead of
