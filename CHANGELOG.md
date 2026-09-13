@@ -2,6 +2,40 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.51
+
+**Replaced the entire 9-Style Action/Reaction Card catalogue with a new Rank 0-2 playtest set,
+and built out Calling's Full Manifestation as a real subsystem instead of two checkboxes.** Both
+changes come from the same mechanics rework packet (`PLAYTEST_RULES.md`/`CALLING_PROFILES.md`).
+
+**Card catalogue:** every Action/Reaction Card belonging to one of the 9 Combat Styles is now
+hand-authored as CSV in `scripts/combat-cards/` (one file per domain per type), replacing the old
+Neon-sourced set — 396 cards total (33 actions + 11 reactions per Style), matching the playtest
+packet's catalogue budget exactly. The 7 skill-less "Basic" universal cards (Hide, Strike, Brace,
+etc.) are unaffected and still come from the live database. Folder placement is unchanged — a
+card's `skill` column still routes it into that Style's compendium folder automatically.
+
+**Full Manifestation:** the 8 profiles (Familiar, Sprite, Beast, Phantom, Golem, Elemental,
+Ancestor, Fey) now live in a new "Calling Full Manifestations" compendium as NPC Actors, each with
+its own Fortitude/Composure/Harmony/Resilience/Movement, a Wound track sized to its actual
+capacity (3-5, not the usual fixed 5), and its 2-3 built-in maneuvers as real Action/Reaction Card
+items. A new "Full Manifestation Guide" journal (4 pages) documents the shared entry/dismissal/
+defeat procedure and the accumulated-Damage-across-forms formula. Entering/dismissing/resolving a
+defeat is driven from each sheet's own header dropdown menu, using Foundry's own token-reassignment
+mechanism (the same approach systems like dnd5e use for Wild Shape) rather than a bespoke
+transformation layer — a character's token swaps to point at their persistent profile Actor for
+the rest of the Encounter, then swaps back.
+
+- Fixed Leadership's Authority capacity formula: `max(1, half Rank rounded up)` — the old plain
+  half-Rank formula gave 0 storage slots at Leadership Rank 0, an unusable result the playtest
+  packet explicitly calls out and patches.
+- Psionics Strain now automatically applies its provisional Composure/Harmony/Fortitude penalty
+  table (capped at 6) instead of being a bare, uncapped number the GM had to remember to act on.
+
+**Not verified against a live Foundry client this session** — checked via `node --check`,
+Handlebars brace-balance counts, and direct inspection of the compiled compendium JSON, per this
+project's established practice for changes that can't be exercised outside a real client.
+
 ## 0.6.50
 
 **Bulk Import now routes rows into the same compendium folders the pre-built content and the
