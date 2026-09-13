@@ -11,8 +11,14 @@
  * instead of running before it.
  */
 // NPCs use the exact same combat mechanics as player characters (see module/data/actor-npc.mjs),
-// so both types need the same Action Dice lifecycle management here.
-const COMBATANT_TYPES = ["character", "npc"];
+// so both types need the same Action Dice lifecycle management here. A Full Manifestation profile
+// (module/data/actor-manifestation.mjs) is "the same character for timing and Turn purposes" per
+// the official rules once manifested — it keeps sharing the caller's existing Combatant slot (see
+// module/apps/manifestation.mjs's token-swap approach), so on any of ITS later Turns it needs the
+// same per-round/per-turn dice reset as anyone else, even though entering/dismissing itself
+// deliberately does NOT grant a fresh Action Pool (that's handled by copying playState directly in
+// manifestation.mjs, not by this lifecycle hook).
+const COMBATANT_TYPES = ["character", "npc", "manifestation"];
 
 /**
  * Shared dice-commit prompt — same dialog both actor sheets used to duplicate for Roll

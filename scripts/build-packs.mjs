@@ -520,50 +520,43 @@ function manifestationManeuverToItem(m, profileName, rank, actorId) {
 }
 
 /**
- * A Full Manifestation profile, authored as an NPC Actor (EssenceNpcData — see actor-npc.mjs) so
- * it gets its own Fortitude/Composure/Harmony/Resilience/Movement, its own Wound track, and can be
- * owned/controlled by a player directly, exactly like any other NPC sheet. This template lives in
- * the "manifestations" compendium; a GM drags a copy into the world the first time a character
- * manifests that subtype, and that world copy becomes the character's own persistent record for
- * the rest of the Adventure (see CALLING_PROFILES.md's "one persistent Wound record per subtype").
- *
- * Every attribute (might/grace/vigor/...) is left at 0 rather than the schema's usual 1 — a
- * profile's own attributes are never actually rolled: CALLING_PROFILES.md's shared procedure says
- * maneuvers "use your existing... Calling Rank" and "your own Attribute ratings," i.e. the
- * CALLER's, not this template's. Leaving them at 0 makes that explicit rather than implying a
- * stat block that would otherwise sit unused and confuse a GM reading the sheet. Fortitude/
- * Composure/Harmony are instead hit exactly via the flat *Bonus fields on top of that all-0 base
- * (2 + twoLowest(0,0,0) + bonus === 2 + bonus), since the schema only exposes those three Defenses
- * as derived values, never as directly-set numbers.
+ * A Full Manifestation profile, authored as a dedicated "manifestation" Actor type
+ * (EssenceManifestationData — see module/data/actor-manifestation.mjs) rather than a generic NPC.
+ * A profile has no Species/Heritage/Distinction/Role/Non-Combat/Influence/build-a-monster tooling
+ * to show, because none of it applies — every number here comes straight off the printed profile
+ * table, not a GM's hand-built stat block, so Fortitude/Composure/Harmony/Resilience/Movement are
+ * plain fields instead of the twoLowest()-derived values a Character/NPC uses. This template lives
+ * in the "manifestations" compendium; the system auto-clones a copy into the world the first time
+ * a character manifests that subtype (see module/apps/manifestation.mjs's getOrCreateProfileActor),
+ * and that world copy becomes the character's own persistent record for the rest of the Adventure
+ * (see CALLING_PROFILES.md's "one persistent Wound record per subtype").
  *
  * `coreWounds` is sized to the profile's own Wound capacity (3-5, not the usual fixed 5) by
  * slicing the same ["Light","Light","Serious","Serious","Critical"] pattern Apply Damage already
- * assigns by slot index (see actor-sheet.mjs's SEVERITY_BY_INDEX) — Apply Damage indexes by
- * position, not by array length, so a shorter track "just works" with the existing Wound-filling
- * code with no changes there.
+ * assigns by slot index (see utils.mjs's SEVERITY_BY_INDEX) — Apply Damage indexes by position,
+ * not by array length, so a shorter track "just works" with the existing Wound-filling code.
  */
 function manifestationProfileToActor(profile) {
   const _id = stableId(`manifestation:${profile.name}`).slice(0, 16);
-  const zeroAttrs = {
-    might: 0, grace: 0, vigor: 0, intellect: 0, acuity: 0, resolve: 0,
-    presence: 0, adaptability: 0, anima: 0
-  };
   return {
     _id,
     name: profile.name,
-    type: "npc",
+    type: "manifestation",
     img: MANIFESTATION_ICONS[profile.name] ?? "icons/svg/upgrade.svg",
     system: {
-      ...zeroAttrs,
+      subtype: profile.name,
+      rank: profile.rank,
+      body: profile.body,
+      purpose: profile.purpose,
+      traitName: profile.traitName,
+      traitText: profile.traitText,
+      aspect: "",
       tier: 1,
-      level: 1,
-      role: "",
-      gmNotes: `<p><strong>Purpose:</strong> ${profile.purpose}</p><p><strong>Trait &mdash; ${profile.traitName}.</strong> ${profile.traitText}</p><p><em>Full Manifestation profile — Rank ${profile.rank}, ${profile.body}. See CALLING_PROFILES.md / the Full Manifestation Guide journal for the shared entry/dismissal/defeat procedure.</em></p>`,
+      fortitude: profile.fortitude,
+      composure: profile.composure,
+      harmony: profile.harmony,
       resilience: profile.resilience,
       movement: profile.movement,
-      fortitudeBonus: profile.fortitude - 2,
-      composureBonus: profile.composure - 2,
-      harmonyBonus: profile.harmony - 2,
       coreWounds: Array.from({ length: profile.woundCapacity }, () => ({ filled: false, domain: "", severity: "", condition: "" }))
     },
     items: profile.maneuvers.map((m) => manifestationManeuverToItem(m, profile.name, profile.rank, _id)),

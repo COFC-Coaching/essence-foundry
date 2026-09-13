@@ -3,16 +3,16 @@
   "name": "Full Manifestation Guide",
   "pages": [
     {
-      "_id": "917ef5878c1bae47",
-      "_key": "!journal.pages!60b3bcdf3c6bca2c.917ef5878c1bae47",
-      "name": "How It Works",
+      "_id": "dfe8e276eaaa36ff",
+      "_key": "!journal.pages!60b3bcdf3c6bca2c.dfe8e276eaaa36ff",
+      "name": "What Full Manifestation Is",
       "type": "text",
       "title": {
         "show": true,
         "level": 1
       },
       "text": {
-        "content": "<p>Full Manifestation is Calling's most dramatic option: instead of a summoned creature acting <em>alongside</em> you, your character is <strong>replaced</strong> by one of 8 spirit bodies for the rest of the Encounter. This page covers the shared procedure every profile follows; the mechanical details (numbers, penalties, exact wording) are drafted in the project's <code>PLAYTEST_RULES.md</code> and <code>CALLING_PROFILES.md</code> source documents, and the 8 profiles themselves live in the <strong>Calling Full Manifestations</strong> compendium as NPC Actors &mdash; see \"Running It as a GM\" for how those get assigned to a character.</p><h2>Entering</h2><p>Resolve an eligible Calling card as normal, paying its own cost. <em>After</em> it resolves, you may pay an additional toll to transform: burn <strong>3 more Action Dice</strong> plus <strong>Mana equal to the card's Rank + 1</strong> (the Summoner Origin reduces the die burn to 2). Rolled dice can't also pay this burn, and a Reaction can never manifest a form. Which of the 8 bodies you can choose is gated by Calling Rank: Rank 0 offers Familiar or Sprite, Rank 1 adds Beast/Phantom/Golem, Rank 2 adds Elemental/Ancestor/Fey.</p><h2>What Carries Over</h2><p>You are not gaining a second creature or a fresh turn. The form <strong>replaces</strong> you in your current space and uses your turn exactly as it stood: whatever Action Dice and Reaction Dice you have left remain exactly that many, your Movement already spent this turn stays spent, and your own ongoing Wounds and Conditions are still true underneath the new body &mdash; transforming heals nothing. Your Accumulated Damage pressure (see \"Damage &amp; Wounds Across Forms\") also carries over rather than resetting.</p><h2>What You Can Do While Manifested</h2><p>Only that profile's own 2-3 built-in maneuvers (Actions/Reactions, tagged <code>Manifestation</code> in the compendium so they're never confused with the 396-card catalogue) plus compatible universal Basics &mdash; not any learned card from any Style. Maneuvers use <strong>your own</strong> Calling Rank and Attribute ratings to determine dice, never a stat on the profile Actor itself; no Expertise is required and no Mastery Surge is granted. Your normal weapon and armor sit out of play and add nothing to a profile's intrinsic maneuvers.</p><h2>Leaving</h2><p>Burn 1 Action Die on your turn to voluntarily dismiss, returning to your own space (or the nearest legal empty one). You can't switch directly from one form into another &mdash; dismiss first, then use a later Calling card to enter something else. The <strong>first</strong> subtype you fully manifest into during an Encounter is locked in for that whole Encounter: you can dismiss and re-enter that same body as many times as you like, but you cannot rotate through different bodies in one fight.</p>",
+        "content": "<p>Calling represents a bond between your character and a supernatural entity &mdash; a spirit, ancestor, or other manifested power. Most Calling cards channel only a piece of that bond: a claw, a shielding wing, a borrowed sense. You stay in play, playing yourself.</p><p><strong>Full Manifestation</strong> is different. At greater commitment, your character steps aside and the entity takes their place on the battlefield &mdash; using its own combat profile, its own Actions and Reactions, and its own Wound Track. You aren't gaining a second creature standing next to you; you disappear, and it stands where you were.</p><p>Eight manifestations are available, gated by your Calling Rank: <strong>Familiar</strong> or <strong>Sprite</strong> at Rank 0; add <strong>Beast</strong>, <strong>Phantom</strong>, or <strong>Golem</strong> at Rank 1; add <strong>Elemental</strong>, <strong>Ancestor</strong>, or <strong>Fey</strong> at Rank 2. See <strong>The Eight Profiles</strong> for each one's stat block.</p>",
         "format": 1
       },
       "ownership": {
@@ -20,16 +20,16 @@
       }
     },
     {
-      "_id": "50162d8a24470663",
-      "_key": "!journal.pages!60b3bcdf3c6bca2c.50162d8a24470663",
-      "name": "Damage & Wounds Across Forms",
+      "_id": "f54be3c602fea65c",
+      "_key": "!journal.pages!60b3bcdf3c6bca2c.f54be3c602fea65c",
+      "name": "Entering a Full Manifestation",
       "type": "text",
       "title": {
         "show": true,
         "level": 1
       },
       "text": {
-        "content": "<p>Each profile has its own small Wound track (3-5 boxes, same Light/Light/Serious/Serious/Critical severity pattern as a character's usual 5-box track, just truncated). This track is <strong>separate from your own Core Wounds</strong> and, per the rules, persists for the entire Adventure &mdash; not just one fight. In this system that persistence is literal: the profile is a real NPC Actor, and its Wound boxes simply stay marked between sessions until Downtime treats them.</p><h2>The Shared Pressure Counter</h2><p>Accumulated Damage (the pressure that has to exceed Resilience before a hit becomes a real Wound) belongs to <strong>you</strong>, not to whichever body is currently active, and it does not reset just because you transformed, dismissed, or were defeated. When the next hit for amount <code>x</code> lands against whichever Resilience <code>R</code> is currently active:</p><p><code>new Wounds = max(0, D + x - R) - max(0, D - R)</code></p><p>...then <code>D</code> becomes <code>D + x</code>. This prevents switching bodies from erasing pressure you'd already built up, and prevents being charged twice for a hit you already absorbed.</p><p><strong>Worked example:</strong> D is 2 when you enter a Golem (Resilience 2). Entry itself adds no Wound. A following hit for 1 Damage causes <code>max(0, 3-2) - max(0, 2-2) = 1</code> Wound to the Golem; D becomes 3. Dismissing afterward does not reset D or undo that Wound.</p><h2>Defeat</h2><p>When a hit fills a profile's last Wound box, the form collapses immediately: any Wounds from that same hit beyond the track's remaining capacity <strong>transfer to you</strong>, and you additionally suffer <strong>1 feedback Wound</strong> just from being forced out (Temporary Wounds can absorb either). You return to your own body, and that specific subtype is marked <strong>Broken until Downtime</strong> &mdash; your other subtypes remain available. No profile ability heals, restores Resources, removes a Wound, or suppresses a Critical Wound's incapacitating effect.</p>",
+        "content": "<p>Play an eligible Calling Action as normal and pay its printed cost. If it hits &mdash; or resolves however it resolves &mdash; you may then pay an <em>additional</em> toll to fully manifest: burn <strong>3 more Action Dice</strong> (2 if you have the Summoner Origin) plus <strong>Mana equal to the card's Rank + 1</strong>. Dice you already rolled for the card can't also pay this burn, and a Reaction can never trigger a Full Manifestation.</p><p>Once you've paid it, open your sheet's header menu (the &#8942; icon, top right) and choose <strong>Full Manifestation</strong>. Pick the subtype that card's Rider names. Your token immediately swaps to that manifestation's own sheet and stat block for the rest of the Encounter.</p><p>The first subtype you manifest into during a fight is locked in for that entire fight &mdash; you can dismiss and re-enter that same body as many times as you like, but you can't switch to a different one until the Encounter ends.</p>",
         "format": 1
       },
       "ownership": {
@@ -37,16 +37,16 @@
       }
     },
     {
-      "_id": "06a290ef2e92db79",
-      "_key": "!journal.pages!60b3bcdf3c6bca2c.06a290ef2e92db79",
-      "name": "Profile Reference",
+      "_id": "8a50b5f0186a38a9",
+      "_key": "!journal.pages!60b3bcdf3c6bca2c.8a50b5f0186a38a9",
+      "name": "While You're Manifested",
       "type": "text",
       "title": {
         "show": true,
         "level": 1
       },
       "text": {
-        "content": "<table><thead><tr><th>Subtype</th><th>Rank</th><th>Body</th><th>Fortitude</th><th>Composure</th><th>Harmony</th><th>Resilience</th><th>Movement</th><th>Wound Capacity</th></tr></thead><tbody><tr><td>Familiar</td><td>0</td><td>Living</td><td>5</td><td>6</td><td>6</td><td>0</td><td>4</td><td>3</td></tr><tr><td>Sprite</td><td>0</td><td>Living</td><td>5</td><td>6</td><td>6</td><td>0</td><td>4</td><td>3</td></tr><tr><td>Beast</td><td>1</td><td>Living</td><td>7</td><td>5</td><td>6</td><td>1</td><td>4</td><td>4</td></tr><tr><td>Phantom</td><td>1</td><td>Nonliving</td><td>6</td><td>7</td><td>7</td><td>0</td><td>3</td><td>4</td></tr><tr><td>Golem</td><td>1</td><td>Nonliving</td><td>7</td><td>6</td><td>5</td><td>2</td><td>2</td><td>4</td></tr><tr><td>Elemental</td><td>2</td><td>Nonliving</td><td>7</td><td>7</td><td>8</td><td>1</td><td>3</td><td>5</td></tr><tr><td>Ancestor</td><td>2</td><td>Nonliving</td><td>8</td><td>7</td><td>8</td><td>1</td><td>3</td><td>5</td></tr><tr><td>Fey</td><td>2</td><td>Living</td><td>7</td><td>8</td><td>8</td><td>0</td><td>4</td><td>5</td></tr></tbody></table><p>A profile marked <strong>Living</strong> is a valid target for a living-only effect; one marked <strong>Nonliving</strong> is not, but otherwise still feels pain, can be restrained, and is affected by mental attacks, magic, forced movement and ordinary Conditions like anything else &mdash; being a Phantom does not confer incorporeality.</p><p>These numbers are provisional playtest values, not finalized adversary statistics &mdash; compare them against your table's actual characters before treating them as settled.</p>",
+        "content": "<p>You aren't getting a fresh turn. The manifestation picks up exactly where you left off: whatever Action Dice and Reaction Dice you had left are all it has, and any Movement you'd already spent this Turn stays spent. Your own Wounds and Conditions are all still true underneath &mdash; manifesting heals nothing.</p><p>Your card options shrink to match: only that profile's own 2-3 built-in maneuvers, plus universal Basics like Hide or Strike. Your learned catalogue &mdash; every card from every Style you know &mdash; is off the table until you return to your own body. Your normal weapon and armor sit out of play too; they add nothing to a profile's own attacks.</p><p>To leave voluntarily, open the manifestation's own header menu and choose <strong>Return to [Your Name]</strong> &mdash; this costs 1 Action Die, burned on your Turn. You return to the space you left, and can't manifest again until you play another eligible Calling card.</p>",
         "format": 1
       },
       "ownership": {
@@ -54,16 +54,50 @@
       }
     },
     {
-      "_id": "21485a449543325b",
-      "_key": "!journal.pages!60b3bcdf3c6bca2c.21485a449543325b",
-      "name": "Running It as a GM",
+      "_id": "8196025638b96b17",
+      "_key": "!journal.pages!60b3bcdf3c6bca2c.8196025638b96b17",
+      "name": "Damage, Wounds & Defeat",
       "type": "text",
       "title": {
         "show": true,
         "level": 1
       },
       "text": {
-        "content": "<p>The 8 profiles live pre-built in the <strong>Calling Full Manifestations</strong> compendium as NPC Actors, each already carrying its 2-3 maneuvers as owned Action/Reaction Cards &mdash; open one from the compendium to read its full stat block and maneuver text exactly like any other NPC.</p><h2>Assigning a Profile to a Character</h2><p>A compendium document can't hold Wounds or player ownership, so the first time a character fully manifests a given subtype, drag that profile from the compendium into the world (or duplicate it) to create <em>that character's own persistent copy</em> &mdash; this is what makes the Wound record actually persist across sessions, since it's just a normal world Actor that never gets deleted. Grant the controlling player <strong>Owner</strong> permission on it so they can open and act from it directly, the same as opening their own character's sheet. If that same character manifests the same subtype again later, reuse this same world copy rather than creating another one.</p><h2>Swapping Control</h2><p>While manifested, the simplest way to run it at the table is to swap which Actor the character's combat token represents &mdash; point the token at the profile Actor for the duration, then back at the character's own Actor on dismissal or defeat. The Combat Tracker's turn order doesn't need to change; only which sheet the player is looking at does.</p><h2>Not Yet Automated</h2><p>This guide documents the ruling, not a one-click tool &mdash; entering/dismissing/defeat and the Accumulated Damage carryover above are currently tracked by hand, the same way Contingency, Threads, and the other Combat Style Specialties are. Treat every number and interaction here as a provisional playtest draft, not finalized canon.</p>",
+        "content": "<p>Each profile has its own Wound Track (3 to 5 boxes, depending on the subtype), completely separate from your own 5 Core Wounds. It's also <strong>persistent</strong> &mdash; because your manifestation lives in Foundry as your own dedicated NPC Actor, any Wounds it takes are still there the next time you manifest that same subtype, even in a later session.</p><p>The damage pressure building toward your next Wound (your Resilience buffer) belongs to <em>you</em>, not to whichever body is currently active. It doesn't reset just because you transformed, dismissed, or were knocked out of a manifestation &mdash; so switching bodies can't be used to shrug off a hit that's already landed, and you'll never be charged twice for the same one.</p><p><strong>Example:</strong> you'd already taken 2 points of unresolved damage before manifesting your Golem (Resilience 2). Manifesting itself costs you nothing. A hit for 1 more damage now pushes your total to 3 &mdash; 1 point over Resilience &mdash; so the Golem takes exactly 1 Wound. If you'd manifested at 0 pressure instead, that same hit wouldn't have caused a Wound at all.</p><h2>Defeat</h2><p>If a hit fills a manifestation's last Wound box, it collapses immediately: you're forced back into your own body, you take <strong>1 automatic Wound</strong> from the shock, and any part of that hit's damage that didn't fit on the manifestation's track transfers to you as well (Temporary Wounds can absorb either). That specific subtype is marked <strong>Broken until Downtime</strong> &mdash; your other seven remain available. On the manifestation's own sheet, a GM or the player resolves this with the <strong>Apply Manifestation Defeat</strong> header menu option once its Wound Track is full.</p>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    },
+    {
+      "_id": "403f7311aa382c76",
+      "_key": "!journal.pages!60b3bcdf3c6bca2c.403f7311aa382c76",
+      "name": "The Eight Profiles",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<table><thead><tr><th>Subtype</th><th>Rank</th><th>Body</th><th>Fortitude</th><th>Composure</th><th>Harmony</th><th>Resilience</th><th>Movement</th><th>Wound Capacity</th></tr></thead><tbody><tr><td>Familiar</td><td>0</td><td>Living</td><td>5</td><td>6</td><td>6</td><td>0</td><td>4</td><td>3</td></tr><tr><td>Sprite</td><td>0</td><td>Living</td><td>5</td><td>6</td><td>6</td><td>0</td><td>4</td><td>3</td></tr><tr><td>Beast</td><td>1</td><td>Living</td><td>7</td><td>5</td><td>6</td><td>1</td><td>4</td><td>4</td></tr><tr><td>Phantom</td><td>1</td><td>Nonliving</td><td>6</td><td>7</td><td>7</td><td>0</td><td>3</td><td>4</td></tr><tr><td>Golem</td><td>1</td><td>Nonliving</td><td>7</td><td>6</td><td>5</td><td>2</td><td>2</td><td>4</td></tr><tr><td>Elemental</td><td>2</td><td>Nonliving</td><td>7</td><td>7</td><td>8</td><td>1</td><td>3</td><td>5</td></tr><tr><td>Ancestor</td><td>2</td><td>Nonliving</td><td>8</td><td>7</td><td>8</td><td>1</td><td>3</td><td>5</td></tr><tr><td>Fey</td><td>2</td><td>Living</td><td>7</td><td>8</td><td>8</td><td>0</td><td>4</td><td>5</td></tr></tbody></table><p>A profile marked <strong>Living</strong> is a valid target for a living-only effect; one marked <strong>Nonliving</strong> is not &mdash; but it still feels pain, can be restrained, and is affected by mental attacks, magic, and ordinary Conditions like anything else. Being a Phantom doesn't make you incorporeal.</p><p>Open any profile directly from the <strong>Calling Full Manifestations</strong> compendium to read its full stat block and maneuvers, exactly like any other NPC.</p>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    },
+    {
+      "_id": "14143176849471f1",
+      "_key": "!journal.pages!60b3bcdf3c6bca2c.14143176849471f1",
+      "name": "For Game Masters",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p>The first time a character fully manifests a given subtype, the system automatically creates that character's own persistent copy of the profile and hands the controlling player Owner permission on it &mdash; you don't need to drag anything from the compendium yourself. Every later manifestation of the same subtype reuses that same copy, which is what makes its Wound Track actually persist between sessions.</p><p>Entering, dismissing, and resolving a defeat are all one click from a sheet's own header menu &mdash; the character's token swaps to the manifestation for the duration and swaps back automatically. The only things still tracked by hand are the same ones every other Combat Style Specialty already is: paying the entry cost, and clicking <strong>Apply Manifestation Defeat</strong> once a Wound Track fills.</p>",
         "format": 1
       },
       "ownership": {

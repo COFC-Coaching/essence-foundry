@@ -1,0 +1,117 @@
+<div class="essence-sheet-root">
+<header class="sheet-header">
+  <div class="portrait-wrap">
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="editImage" title="{{localize 'ESSENCE.Sheet.PortraitTooltip'}}">
+    <button type="button" class="token-image-btn" data-action="editTokenImage" title="{{localize 'ESSENCE.Sheet.TokenImageTooltip'}}"><i class="fa-solid fa-chess-pawn"></i></button>
+  </div>
+  <div class="header-main">
+    <div class="header-actions">
+      {{#if isEditable}}
+        <button type="button" class="edit-lock-btn" data-action="toggleEditLock" aria-pressed="{{editUnlocked}}" title="{{#if editUnlocked}}{{localize 'ESSENCE.Sheet.UnlockedTooltip'}}{{else}}{{localize 'ESSENCE.Sheet.LockedTooltip'}}{{/if}}">
+          <i class="fa-solid {{#if editUnlocked}}fa-lock-open{{else}}fa-lock{{/if}}"></i> {{#if editUnlocked}}{{localize "ESSENCE.Common.Unlocked"}}{{else}}{{localize "ESSENCE.Common.Locked"}}{{/if}}
+        </button>
+      {{/if}}
+    </div>
+    <h1><input name="name" type="text" value="{{actor.name}}"></h1>
+    <div class="header-fields">
+      <span class="muted">{{system.subtype}} &mdash; Full Manifestation (Rank {{system.rank}}, {{system.body}})</span>
+      {{#if caller}}<span class="muted"> &mdash; {{localize "ESSENCE.Character.ReturnToCallerControl" name=caller.name}}</span>{{/if}}
+    </div>
+    <div class="header-fields">
+      <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}</label>
+      <label>{{localize "ESSENCE.Common.Tier"}} <input name="system.tier" type="number" value="{{system.tier}}" style="width:3em"></label>
+      {{#if (eq system.subtype "Elemental")}}
+        <label>Aspect
+          <select name="system.aspect">
+            <option value="" {{#if (eq system.aspect "")}}selected{{/if}}>&mdash;</option>
+            <option value="Fire" {{#if (eq system.aspect "Fire")}}selected{{/if}}>Fire</option>
+            <option value="Cold" {{#if (eq system.aspect "Cold")}}selected{{/if}}>Cold</option>
+            <option value="Lightning" {{#if (eq system.aspect "Lightning")}}selected{{/if}}>Lightning</option>
+          </select>
+        </label>
+      {{/if}}
+    </div>
+  </div>
+</header>
+
+<div class="wizard-pick-list">
+  <p><strong>{{localize "ESSENCE.Manifestation.PurposeLabel"}}:</strong> {{system.purpose}}</p>
+  {{#if system.traitName}}<p><strong>{{system.traitName}}.</strong> {{{system.traitText}}}</p>{{/if}}
+</div>
+
+<h3 class="section-head">{{localize "ESSENCE.Sheet.AttributesResourcesDefenses"}}</h3>
+<div class="domains grid-3">
+  <div class="domain domain-physical">
+    <h4>{{localize "ESSENCE.Common.Fortitude"}}</h4>
+    <div class="defense-row"><input class="attr-input" type="number" name="system.fortitude" value="{{system.fortitude}}"></div>
+  </div>
+  <div class="domain domain-mental">
+    <h4>{{localize "ESSENCE.Common.Composure"}}</h4>
+    <div class="defense-row"><input class="attr-input" type="number" name="system.composure" value="{{system.composure}}"></div>
+  </div>
+  <div class="domain domain-spiritual">
+    <h4>{{localize "ESSENCE.Common.Harmony"}}</h4>
+    <div class="defense-row"><input class="attr-input" type="number" name="system.harmony" value="{{system.harmony}}"></div>
+  </div>
+</div>
+
+<h3 class="section-head">{{localize "ESSENCE.Common.Wounds"}} {{#if system.defeated}}<span class="muted">&mdash; {{localize "ESSENCE.Manifestation.Defeated"}}</span>{{/if}}</h3>
+<div class="wounds-row">
+  <div class="wound-block">
+    <span class="attr-label">{{localize "ESSENCE.Common.Resilience"}}</span>
+    <input class="current-input" type="number" name="system.resilience" value="{{system.resilience}}">
+  </div>
+  <div class="wound-block">
+    <span class="attr-label">{{localize "ESSENCE.Common.CoreWounds"}}</span>
+    <span class="pip-track">
+      {{#each woundBoxes as |w|}}<button type="button" class="pip toggle {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{w.i}}" title="{{w.condition}}" aria-pressed="{{w.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreWoundAria' n=(addOne w.i)}}{{#if w.condition}}: {{w.condition}}{{/if}}"></button>{{/each}}
+    </span>
+  </div>
+  <div class="wound-block">
+    <button type="button" data-action="applyDamage">{{localize "ESSENCE.Sheet.ApplyDamage"}}</button>
+    <button type="button" data-action="recoverWound">{{localize "ESSENCE.Sheet.RecoverWound"}}</button>
+  </div>
+</div>
+{{#if system.playState.overflowWounds}}
+  <p class="muted">{{localize "ESSENCE.Manifestation.OverflowNote" n=system.playState.overflowWounds}}</p>
+{{/if}}
+
+<div class="combat-header">
+  <div class="combat-header-left">
+    <div class="action-pool">
+      <span class="attr-label">{{localize "ESSENCE.Common.ActionDice"}}</span>
+      <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="actionDice" data-delta="-1" aria-label="{{localize 'ESSENCE.Sheet.DecreaseAria' label=(localize 'ESSENCE.Common.ActionDice')}}">−</button>
+      {{system.playState.actionDice}}
+      <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="actionDice" data-delta="1" aria-label="{{localize 'ESSENCE.Sheet.IncreaseAria' label=(localize 'ESSENCE.Common.ActionDice')}}">+</button>
+      &nbsp;|&nbsp;
+      <span class="attr-label">{{localize "ESSENCE.Common.ReactionDice"}}</span>
+      <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="reactionDice" data-delta="-1" aria-label="{{localize 'ESSENCE.Sheet.DecreaseAria' label=(localize 'ESSENCE.Common.ReactionDice')}}">−</button>
+      {{system.playState.reactionDice}}
+      <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="reactionDice" data-delta="1" aria-label="{{localize 'ESSENCE.Sheet.IncreaseAria' label=(localize 'ESSENCE.Common.ReactionDice')}}">+</button>
+    </div>
+  </div>
+  <div class="combat-header-right">
+    <div class="combat-controls">
+      <button type="button" data-action="endTurn">{{localize "ESSENCE.Sheet.EndTurn"}}</button>
+    </div>
+  </div>
+</div>
+
+<h3 class="section-head">{{localize "ESSENCE.Manifestation.Maneuvers"}}</h3>
+<ul class="item-list card-list">
+  {{#each maneuvers as |item|}}
+    <li data-card-name="{{item.name}}">
+      <div class="card-row-top">
+        <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
+        <span class="card-meta muted">{{#if (eq item.type "reaction-card")}}{{localize "ESSENCE.Item.ReactionCard"}}{{else}}{{localize "ESSENCE.Item.ActionCard"}}{{/if}}</span>
+        <button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.ViewAria' name=item.name}}"><i class="fa-solid fa-eye"></i></button>
+        <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
+        <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button>
+      </div>
+      {{#if item.summary}}<p class="card-summary muted">{{item.summary}}</p>{{/if}}
+    </li>
+  {{else}}
+    <li class="muted">{{localize "ESSENCE.Manifestation.NoManeuvers"}}</li>
+  {{/each}}
+</ul>
+</div>

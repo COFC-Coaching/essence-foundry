@@ -7,8 +7,9 @@ import { SEVERITY_BY_INDEX } from "../utils.mjs";
  * transformation layer. The Combatant document, turn order, and initiative are all untouched; only
  * which Actor the token (and therefore the player's active sheet) represents changes.
  *
- * Each of the 8 profiles from CALLING_PROFILES.md lives as a template NPC Actor in the
- * "essence-system.manifestations" compendium (see scripts/calling-profiles-data.json /
+ * Each of the 8 profiles from CALLING_PROFILES.md lives as a template Actor (its own dedicated
+ * "manifestation" type — see actor-manifestation.mjs) in the "essence-system.manifestations"
+ * compendium (see scripts/calling-profiles-data.json /
  * build-packs.mjs's manifestationProfileToActor()). The FIRST time a given character manifests a
  * given subtype, this clones that template into the world — that world copy becomes the
  * character's own persistent record for the subtype (its Wounds simply stay marked between
@@ -111,9 +112,12 @@ export async function enterManifestation(actor, subtype) {
   if (!profile) return;
 
   // No fresh Action Pool, Reaction Pool, or Damage-pressure reset on entry (CALLING_PROFILES.md's
-  // shared procedure) — the profile picks up exactly where the caller's turn stood.
+  // shared procedure) — the profile picks up exactly where the caller's turn stood. Tier is synced
+  // too since EssenceManifestationData has no Attributes of its own to derive baseCombatDice from
+  // — see actor-manifestation.mjs.
   const ps = actor.system.playState;
   await profile.update({
+    "system.tier": actor.system.tier,
     "system.playState.actionDice": ps.actionDice,
     "system.playState.reactionDice": ps.reactionDice,
     "system.playState.accumulatedDamage": ps.accumulatedDamage
@@ -172,12 +176,10 @@ export async function dismissManifestation(profile) {
  * external, manual Downtime ruling — not automated here, same as Strain recovery and Core Wound
  * recovery elsewhere in this system), and returns the token to the caller.
  *
- * There is no per-hit interception of exactly how many Wounds a single blow overflowed by — Apply
- * Damage on the profile's own (identical, shared) NPC sheet already handles filling its Wound
- * track normally, and already advances ITS OWN Death Track by 1 for every Wound that didn't fit
- * once that track was full (see actor-sheet.mjs/npc-sheet.mjs's Apply Damage). That count is
- * therefore reused here as the overflow amount rather than re-deriving it, so a GM triggers this
- * once the track reads full rather than mid-resolution.
+ * The overflow count comes straight from the profile's own `playState.overflowWounds` — Apply
+ * Damage on the manifestation's own sheet (manifestation-sheet.mjs) already increments that
+ * counter for every Wound that didn't fit once its track was already full, so a GM triggers this
+ * once the track reads full rather than re-deriving the count mid-resolution.
  */
 export async function applyManifestationDefeat(profile) {
   const caller = findCaller(profile);
@@ -186,13 +188,12 @@ export async function applyManifestationDefeat(profile) {
     ui.notifications.error(`${profile.name} has no recorded caller to return to.`);
     return;
   }
-  if (!profile.system.coreWounds.length || !profile.system.coreWounds.every((w) => w.filled)) {
+  if (!profile.system.defeated) {
     ui.notifications.warn(`${profile.name}'s Wound track isn't full yet.`);
     return;
   }
 
-  const overflow = profile.system.playState.deathTrackStep ?? 0;
-  const wounds = overflow + 1; // +1 flat feedback Wound, always, per CALLING_PROFILES.md
+  const wounds = (profile.system.playState.overflowWounds ?? 0) + 1; // +1 flat feedback Wound, always, per CALLING_PROFILES.md
 
   let tempWounds = caller.system.playState.currentTemporaryWounds ?? 0;
   const coreWounds = caller.system.coreWounds.map((w) => ({ ...w }));

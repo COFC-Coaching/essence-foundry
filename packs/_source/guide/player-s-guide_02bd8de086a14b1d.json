@@ -3,16 +3,118 @@
   "name": "Player's Guide",
   "pages": [
     {
-      "_id": "ea858d2a0e8bd1be",
-      "_key": "!journal.pages!02bd8de086a14b1d.ea858d2a0e8bd1be",
-      "name": "Getting Started",
+      "_id": "0e817aa8becfd966",
+      "_key": "!journal.pages!02bd8de086a14b1d.0e817aa8becfd966",
+      "name": "Welcome to Essence",
       "type": "text",
       "title": {
         "show": true,
         "level": 1
       },
       "text": {
-        "content": "<p>Welcome to <strong>The Essence System</strong>. This page covers everything you need to play a session from inside Foundry.</p><h2>Your Character Sheet</h2><p>Open your character's sheet from the Actors sidebar tab. If you don't have a character yet, click <strong>Create Character</strong> in that same tab, then use the sheet header's <strong>wizard</strong> button (wand icon) to walk through the full 10-step Character Creation Wizard &mdash; it handles Attributes, Skills, Species/Heritage/Distinction, and starting Equipment for you.</p><h2>Attributes, Skills, and Resources</h2><p>Your 9 Attributes are grouped into three domains &mdash; Physical (Might, Grace, Vigor), Mental (Intellect, Acuity, Resolve), and Spiritual (Presence, Adaptability, Anima). Each domain has a matching Resource (Stamina, Focus, Mana) and Defense (Fortitude, Composure, Harmony), and three Combat Skills. Some skills (Gestalt, Magecraft, Psionics, Ritualism, Calling) are <strong>gated</strong> &mdash; you need the matching Distinction before you can raise them above 0.</p><h2>Rolling Dice</h2><p>Click a skill name to roll it. Outside combat you'll pick an Attribute to pair with the skill for an open check. During combat, rolling a skill or an Action/Reaction Card instead spends from your <strong>Action Dice</strong> or <strong>Reaction Dice</strong> pool &mdash; you choose how many dice to commit (at least the card's minimum, up to whatever's left in the pool), and that many d10s are rolled and deducted from the pool at once.</p><h2>Wounds</h2><p>Damage first reduces your <strong>Resilience</strong> buffer (tracked as Accumulated Damage, reset at the start of each of your Turns). Once it's exceeded, you take a Wound &mdash; either a Temporary Wound (if you have any available) or a Core Wound, filled in order: 2 Light, 2 Serious, then 1 Critical. Your Wound State (Unharmed / Lightly / Seriously / Critically Wounded) depends only on how many Core Wound boxes are filled. If you reach Critically Wounded, the Death Track starts advancing at the start of each of your Turns until it's frozen (stabilized) or reaches its end.</p><h2>Combat</h2><p>Combat runs through Foundry's own <strong>Combat Tracker</strong> (the crossed-swords tab in the sidebar). When the GM starts an encounter, click your sheet's <strong>Roll Initiative</strong> button (or the tracker's own dice icon next to your name &mdash; both do the same thing) and choose how many dice to commit: 0 passes, and whatever you don't commit carries over as extra Action Dice on your first Turn. On your Turn, spend Action Dice on cards/skills; at the end of your Turn, click <strong>End Turn</strong> to convert anything left into Reaction Dice for use on other players' Turns. <strong>Burn Dice</strong> lets you spend dice straight from a pool without rolling, for costs that call for it (removing a Condition, paying an Echo, etc.).</p><h2>Combat Style Specialties</h2><p>Each Combat Skill has its own resource-tracking mechanic (Combo for Prowess, Lock for Ballistics, Threads for Magecraft, and so on) &mdash; see the <strong>Combat Styles Reference</strong> journal for the full rules on each one. Your sheet's Combat tab shows the tracker for any specialty you're currently using.",
+        "content": "<p>Essence is a tabletop game about sharp, tactical combat and roleplay that stays entirely in your hands. When a fight breaks out, you'll manage dice pools, positioning, and a hand of cards that spell out exactly what your character can do. Outside of combat, the rules step back and your table drives the story.</p><p>This guide covers how to actually play a session <strong>from inside Foundry</strong> &mdash; your character sheet, rolling dice, and running combat through the tools this system gives you. For the full rules themselves, see the <strong>Combat Styles Reference</strong> journal and the Essence rulebook.</p><h2>Three Domains, No Classes</h2><p>Every character is built from three domains &mdash; <strong>Physical</strong> (Might, Grace, Vigor), <strong>Mental</strong> (Intellect, Acuity, Resolve), and <strong>Spiritual</strong> (Presence, Adaptability, Anima). There's no class to pick. Your Attributes, Combat Skills, Species, Heritage, Distinction, and equipment combine into a character that's genuinely yours &mdash; two people who both invest in the same Combat Skill can still play completely differently.</p><h2>Where to Start</h2><p>New to the sheet? Read <strong>Your Character Sheet</strong> next, then <strong>Combat</strong> once you're ready to fight. Everything else can wait until it comes up at the table.</p>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    },
+    {
+      "_id": "94a87dbf30b50d60",
+      "_key": "!journal.pages!02bd8de086a14b1d.94a87dbf30b50d60",
+      "name": "Your Character Sheet",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p>Open your character from the <strong>Actors</strong> sidebar tab. Don't have one yet? Click <strong>Create Character</strong>, then open the wand icon in the sheet's header to launch the Character Creation Wizard &mdash; it walks you through Attributes, Skills, Species/Heritage/Distinction, and starting Equipment step by step.</p><p>Your sheet is split into tabs: <strong>Core</strong> (Attributes, Resources, Wounds), <strong>Combat</strong> (Action/Reaction Cards, your Combat Style specialty), <strong>Equipment</strong>, <strong>Non-Combat</strong>, and <strong>Biography</strong>. Everything you need in a given moment lives on the relevant tab &mdash; you don't need to memorize the whole system, just know where to look.</p>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    },
+    {
+      "_id": "08c3ec3000d64062",
+      "_key": "!journal.pages!02bd8de086a14b1d.08c3ec3000d64062",
+      "name": "Attributes, Skills & Resources",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p>Your 9 Attributes sit inside the three domains: <strong>Physical</strong> (Might, Grace, Vigor), <strong>Mental</strong> (Intellect, Acuity, Resolve), and <strong>Spiritual</strong> (Presence, Adaptability, Anima). Each domain also has a Resource you spend to act (<strong>Stamina</strong>, <strong>Focus</strong>, <strong>Mana</strong>) and a Defense others roll against to hit you (<strong>Fortitude</strong>, <strong>Composure</strong>, <strong>Harmony</strong>).</p><p>Each domain covers three Combat Skills as well. Five of the nine &mdash; Gestalt, Magecraft, Psionics, Ritualism, and Calling &mdash; are <strong>gated</strong>: you need the matching Distinction before you can raise them above 0. Your sheet greys these out until you qualify.</p>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    },
+    {
+      "_id": "c735777203569ae3",
+      "_key": "!journal.pages!02bd8de086a14b1d.c735777203569ae3",
+      "name": "Rolling Dice",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p>Click a skill's name to roll it. Outside of combat, you'll choose an Attribute to pair it with for a straightforward check.</p><p>In combat, rolling a skill or an Action/Reaction Card spends from a pool instead &mdash; your <strong>Action Dice</strong> on your own Turn, your <strong>Reaction Dice</strong> on everyone else's. You choose how many dice to commit (at least the card's minimum, up to whatever's left in the pool); that many d10s get rolled and deducted from the pool at once.</p><p>Your highest die is your <strong>Success Die</strong>, compared against the target's Defense to see if you hit. Every other die that shows 6 or higher generates a <strong>Surge</strong>, which you spend on the bonus options printed on the card &mdash; extra damage, more range, and so on. More dice means better odds and more Surges, but fewer dice left for whatever happens next.</p>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    },
+    {
+      "_id": "5ef140ae41143c7d",
+      "_key": "!journal.pages!02bd8de086a14b1d.5ef140ae41143c7d",
+      "name": "Wounds & Recovery",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p>Essence doesn't use a hit point bar. Damage moves through three steps:</p><p>It first piles up against your <strong>Resilience</strong>, a buffer that resets at the start of each of your Turns. Once damage exceeds that buffer, you take a real <strong>Wound</strong> &mdash; a Temporary Wound if you have one available, otherwise a Core Wound. You have 5 Core Wound boxes, filled in order: 2 Light, 2 Serious, then 1 Critical.</p><p>Your <strong>Wound State</strong> (Unharmed / Lightly / Seriously / Critically Wounded) depends only on how many Core Wound boxes are filled &mdash; not on any single hit. If you fill that last Critical box, the <strong>Death Track</strong> starts advancing at the start of each of your Turns until it's stabilized or reaches its end.</p>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    },
+    {
+      "_id": "ba19f6169f3ebb28",
+      "_key": "!journal.pages!02bd8de086a14b1d.ba19f6169f3ebb28",
+      "name": "Combat",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p>Combat runs through Foundry's own <strong>Combat Tracker</strong> (the crossed-swords tab in the sidebar). When the GM starts an encounter, click your sheet's <strong>Roll Initiative</strong> button (the tracker's own dice icon next to your name does the same thing) and choose how many dice to commit: 0 passes, and whatever you hold back carries over as extra Action Dice on your first Turn.</p><p>On your Turn, spend Action Dice on cards and skills. At the end of it, click <strong>End Turn</strong> to convert whatever's left into Reaction Dice you can use on other players' Turns. <strong>Burn Dice</strong> lets you spend dice straight from a pool without rolling, for costs that call for it &mdash; clearing a Condition, paying a Rite's Echo, and so on.</p>",
+        "format": 1
+      },
+      "ownership": {
+        "default": -1
+      }
+    },
+    {
+      "_id": "0fc00840a2bb0de4",
+      "_key": "!journal.pages!02bd8de086a14b1d.0fc00840a2bb0de4",
+      "name": "Combat Style Specialties",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "content": "<p>Every Combat Skill comes with its own resource to track &mdash; Combo for Prowess, Lock for Ballistics, Threads for Magecraft, and so on through all nine. Your sheet's Combat tab shows the tracker for whichever specialty applies to you.</p><p>See the <strong>Combat Styles Reference</strong> journal for the full rules on each one, including its Expertises and card subtypes. If you're playing a Calling character who's reached Full Manifestation, see the separate <strong>Full Manifestation Guide</strong> journal.</p>",
         "format": 1
       },
       "ownership": {

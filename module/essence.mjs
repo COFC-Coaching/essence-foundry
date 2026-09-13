@@ -1,10 +1,12 @@
 import EssenceCharacterData from "./data/actor-character.mjs";
 import EssenceNpcData from "./data/actor-npc.mjs";
+import EssenceManifestationData from "./data/actor-manifestation.mjs";
 import { EssenceActionCardData, EssenceReactionCardData, EssenceConditionData, EssenceEquipmentData, EQUIPMENT_CATEGORY_LABELS } from "./data/item-card.mjs";
 import { EssenceSpeciesData, EssenceHeritageData, EssenceDistinctionData } from "./data/item-origin.mjs";
 import { EssenceChassisData, EssenceFittingData, EssenceAugmentData } from "./data/item-component.mjs";
 import EssenceActorSheet from "./sheets/actor-sheet.mjs";
 import EssenceNpcSheet from "./sheets/npc-sheet.mjs";
+import EssenceManifestationSheet from "./sheets/manifestation-sheet.mjs";
 import {
   EssenceCardSheet, EssenceConditionSheet, EssenceEquipmentSheet,
   EssenceSpeciesSheet, EssenceHeritageSheet, EssenceDistinctionSheet,
@@ -46,6 +48,7 @@ Hooks.once("init", () => {
 
   CONFIG.Actor.dataModels.character = EssenceCharacterData;
   CONFIG.Actor.dataModels.npc = EssenceNpcData;
+  CONFIG.Actor.dataModels.manifestation = EssenceManifestationData;
   CONFIG.Item.dataModels["action-card"] = EssenceActionCardData;
   CONFIG.Item.dataModels["reaction-card"] = EssenceReactionCardData;
   CONFIG.Item.dataModels.condition = EssenceConditionData;
@@ -62,6 +65,7 @@ Hooks.once("init", () => {
   const { Actors, Items } = foundry.documents.collections;
   Actors.registerSheet("essence-system", EssenceActorSheet, { types: ["character"], makeDefault: true });
   Actors.registerSheet("essence-system", EssenceNpcSheet, { types: ["npc"], makeDefault: true });
+  Actors.registerSheet("essence-system", EssenceManifestationSheet, { types: ["manifestation"], makeDefault: true });
 
   Items.registerSheet("essence-system", EssenceCardSheet, { types: ["action-card", "reaction-card"], makeDefault: true });
   Items.registerSheet("essence-system", EssenceConditionSheet, { types: ["condition"], makeDefault: true });
