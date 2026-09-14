@@ -1,7 +1,7 @@
 import EssenceCharacterData from "./data/actor-character.mjs";
 import EssenceNpcData from "./data/actor-npc.mjs";
 import EssenceManifestationData from "./data/actor-manifestation.mjs";
-import { EssenceActionCardData, EssenceReactionCardData, EssenceConditionData, EssenceEquipmentData, EQUIPMENT_CATEGORY_LABELS } from "./data/item-card.mjs";
+import { EssenceActionCardData, EssenceReactionCardData, EssenceConditionData, EssenceEquipmentData, EQUIPMENT_CATEGORY_LABELS, MODULAR_EQUIPMENT_CATEGORIES } from "./data/item-card.mjs";
 import { EssenceSpeciesData, EssenceHeritageData, EssenceDistinctionData } from "./data/item-origin.mjs";
 import { EssenceChassisData, EssenceFittingData, EssenceAugmentData } from "./data/item-component.mjs";
 import EssenceActorSheet from "./sheets/actor-sheet.mjs";
@@ -117,6 +117,9 @@ Hooks.once("init", () => {
   game.settings.register("essence-system", "prunedOrphanedExpertises", {
     scope: "world", config: false, type: Boolean, default: false
   });
+  game.settings.register("essence-system", "resyncedModularEquipmentBonusEffects", {
+    scope: "world", config: false, type: Boolean, default: false
+  });
 });
 
 /**
@@ -177,6 +180,27 @@ Hooks.once("ready", async () => {
     }
   }
   await game.settings.set("essence-system", "migratedEquipmentBonusEffects", true);
+});
+
+/**
+ * One-time migration: buildEquipmentResolver() (equipment-features.mjs) now falls back to the
+ * `essence-system.equipment` compendium when a modular equipment Item's chassisItemId/
+ * fittingItemId was never actually embedded on its owning actor (confirmed live — several owned
+ * items had those set to a compendium document's id with nothing embedded to match). Before that
+ * fix, syncEquipmentEffect() resolved 0 for such an item and correctly deleted/never created its
+ * "Equipment Bonus" effect; now that resolution can succeed, those items are still sitting there
+ * with no effect (or a stale one) until something re-triggers a sync. Same shape as the migration
+ * above — re-run once, world-wide, rather than waiting for a GM to happen to re-save every item.
+ */
+Hooks.once("ready", async () => {
+  if (!game.user.isGM) return;
+  if (game.settings.get("essence-system", "resyncedModularEquipmentBonusEffects")) return;
+  for (const actor of game.actors) {
+    for (const item of actor.items) {
+      if (item.type === "equipment" && item.system.isModular) await syncEquipmentEffect(item);
+    }
+  }
+  await game.settings.set("essence-system", "resyncedModularEquipmentBonusEffects", true);
 });
 
 /**
@@ -290,8 +314,57 @@ Hooks.on("createItem", (item) => syncEquipmentEffect(item));
 Hooks.on("updateItem", (item, changes) => {
   const sys = changes.system;
   if (!sys) return;
-  const relevant = ["fortitude", "resilience", "movement", "reachBonus", "slot"];
+  // chassisItemId/fittingItemId/isModular added alongside the modular-bonus sync below — swapping
+  // which Chassis/Fitting is assembled (or flipping isModular) changes the summed bonus just as
+  // much as editing the item's own flat fields does.
+  const relevant = ["fortitude", "resilience", "movement", "reachBonus", "slot", "chassisItemId", "fittingItemId", "isModular"];
   if (relevant.some((key) => sys[key] !== undefined)) syncEquipmentEffect(item);
+});
+
+/**
+ * A modular equipment Item's Fortitude/Resilience/Movement come from its assembled Chassis +
+ * Fitting (equipment-features.mjs), not its own flat fields — see syncEquipmentEffect's own
+ * isModular branch. Nothing re-triggers that sync when the CHASSIS or FITTING itself changes
+ * (or is deleted) while already installed, so these two hooks find every equipment Item on the
+ * same actor referencing the changed/removed Component and re-sync each one. A Component's own
+ * `category`/`effect`/etc. changing doesn't affect the bonus sum, so only the three numeric fields
+ * (and deletion) trigger this — same "only recompute when something the effect actually depends on
+ * changed" discipline as the plain-item hook above.
+ */
+function resyncEquipmentReferencing(componentItem) {
+  if (!["chassis", "fitting"].includes(componentItem.type) || !componentItem.actor) return;
+  for (const equip of componentItem.actor.items) {
+    if (equip.type !== "equipment") continue;
+    if (equip.system.chassisItemId === componentItem.id || equip.system.fittingItemId === componentItem.id) {
+      syncEquipmentEffect(equip);
+    }
+  }
+}
+Hooks.on("updateItem", (item, changes) => {
+  const sys = changes.system;
+  if (!sys) return;
+  if (["fortitude", "resilience", "movement"].some((key) => sys[key] !== undefined)) resyncEquipmentReferencing(item);
+});
+Hooks.on("deleteItem", (item) => resyncEquipmentReferencing(item));
+
+/**
+ * Melee Weapon/Ranged Weapon/Armor/Shield/Magical Implement are always an assembled Chassis +
+ * Fitting now (Source A's "no non-modular version of the five combat categories" — see
+ * MODULAR_EQUIPMENT_CATEGORIES's doc comment in item-card.mjs) — force `isModular: true` into the
+ * create/update data itself so it can't be unchecked on the sheet, rather than just defaulting it,
+ * which would leave an already-unchecked item silently wrong. Runs pre-create/pre-update (not a
+ * sheet-side guard) so it also catches a category changed via Bulk Import or a script, not just
+ * the sheet's own dropdown.
+ */
+Hooks.on("preCreateItem", (item, data) => {
+  if (item.type !== "equipment") return;
+  const category = data.system?.category ?? "gear";
+  if (MODULAR_EQUIPMENT_CATEGORIES.includes(category)) item.updateSource({ "system.isModular": true });
+});
+Hooks.on("preUpdateItem", (item, changes) => {
+  if (item.type !== "equipment") return;
+  const nextCategory = changes.system?.category ?? item.system.category;
+  if (MODULAR_EQUIPMENT_CATEGORIES.includes(nextCategory)) foundry.utils.setProperty(changes, "system.isModular", true);
 });
 
 /**

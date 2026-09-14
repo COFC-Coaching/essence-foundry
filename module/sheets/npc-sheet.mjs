@@ -2,6 +2,8 @@ import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
+import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
+import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
 import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
 import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
@@ -69,6 +71,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       itemView: EssenceNpcSheet.#onItemView,
       itemEdit: EssenceNpcSheet.#onItemEdit,
       itemDelete: EssenceNpcSheet.#onItemDelete,
+      postEquipmentToChat: EssenceNpcSheet.#onPostEquipmentToChat,
       selectOrigin: EssenceNpcSheet.#onSelectOrigin,
       clearOrigin: EssenceNpcSheet.#onClearOrigin,
       chooseGrantedItem: EssenceNpcSheet.#onChooseGrantedItem,
@@ -211,7 +214,11 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     context.combatRound = game.combat?.round ?? null;
     const system = this.actor.system;
     context.system = system;
-    context.equipmentBonusSources = computeEquipmentBonusSources(this.actor.items);
+    // See buildEquipmentResolver's own doc comment (equipment-features.mjs) — falls back to the
+    // compendium for a modular item's chassisItemId/fittingItemId that was never actually
+    // embedded on this actor.
+    const equipmentResolver = await buildEquipmentResolver(this.actor);
+    context.equipmentBonusSources = computeEquipmentBonusSources(this.actor.items, (item) => deriveEquipmentStats(equipmentResolver, item));
 
     const distinctionItem = this.actor.items.find((i) => i.type === "distinction");
     const speciesItem = this.actor.items.find((i) => i.type === "species");
@@ -277,6 +284,19 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       .filter((i) => ["chassis", "fitting", "augment"].includes(i.type))
       .map((i) => ({ id: i.id, name: i.name, type: i.type, category: i.system.category ?? "", slot: i.system.slot ?? "", tier: i.system.tier ?? null }))
       .sort((a, b) => a.type.localeCompare(b.type) || a.name.localeCompare(b.name));
+
+    // See EssenceActorSheet#_prepareContext's identical block for the full reasoning.
+    context.equipmentCards = [];
+    for (const item of equipment.filter((i) => i.system.slot === "signature")) {
+      if (item.system.isModular) {
+        for (const g of deriveEquipmentStats(equipmentResolver, item).grantedCards) {
+          context.equipmentCards.push({ source: item.name, name: g.source, effect: g.effect, uses: g.uses, usesRemaining: g.usesRemaining });
+        }
+      }
+      for (const c of item.system.equipmentCards ?? []) {
+        context.equipmentCards.push({ source: item.name, name: c.name, effect: c.effect, uses: c.uses, usesRemaining: c.usesRemaining });
+      }
+    }
 
     const speciesPack = game.packs.get("essence-system.species");
     const heritagePack = game.packs.get("essence-system.heritages");
@@ -985,6 +1005,19 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
 
   static #onItemEdit(event, target) {
     this.actor.items.get(target.dataset.itemId)?.sheet.render(true);
+  }
+
+  /** See EssenceActorSheet#onPostEquipmentToChat's identical implementation for the reasoning. */
+  static async #onPostEquipmentToChat(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (!item) return;
+    const category = EQUIPMENT_CATEGORY_LABELS[item.system.category] ?? capitalize(item.system.category);
+    const resolver = await buildEquipmentResolver(this.actor);
+    const summary = equipmentEffectSummary(resolver, item);
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${item.name}</strong> <span class="muted">(${category})</span></p>${summary ? `<p>${summary}</p>` : ""}`
+    });
   }
 
   static async #onItemDelete(event, target) {

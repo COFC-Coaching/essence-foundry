@@ -15,12 +15,9 @@
     {{#if system.tier}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Tier"}}</span><span>{{system.tier}}</span></div>{{/if}}
     {{#if system.cost}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Item.Equipment.Reach"}}</span><span>{{system.cost}}</span></div>{{/if}}
     {{#if isWornCategory}}
-      {{#if system.type}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Type"}}</span><span>{{system.type}}</span></div>{{/if}}
-      {{#if system.range}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Range"}}</span><span>{{system.range}}</span></div>{{/if}}
-      {{#if system.fortitude}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Fortitude"}}</span><span>{{system.fortitude}}</span></div>{{/if}}
-      {{#if system.resilience}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Resilience"}}</span><span>{{system.resilience}}</span></div>{{/if}}
-      {{#if system.movement}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Movement"}}</span><span>{{system.movement}}</span></div>{{/if}}
-      {{#if system.reachBonus}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Item.Equipment.ReachBonus"}}</span><span>{{system.reachBonus}}</span></div>{{/if}}
+      {{#if stats.fortitude}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Fortitude"}}</span><span>{{stats.fortitude}}</span></div>{{/if}}
+      {{#if stats.resilience}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Resilience"}}</span><span>{{stats.resilience}}</span></div>{{/if}}
+      {{#if stats.movement}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Movement"}}</span><span>{{stats.movement}}</span></div>{{/if}}
     {{/if}}
     {{#if isGear}}
       {{#if system.uses}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Uses"}}</span><span>{{system.uses}}</span></div>{{/if}}
@@ -98,18 +95,7 @@
 </div>
 
 {{#if isWornCategory}}
-  <div class="equipment-fields grid-3">
-    <label>{{localize "ESSENCE.Common.Type"}} <input name="system.type" type="text" value="{{system.type}}"></label>
-    <label>{{localize "ESSENCE.Common.Range"}} <input name="system.range" type="text" value="{{system.range}}"></label>
-    <label class="chosen-toggle"><input type="checkbox" name="system.isModular" {{#if system.isModular}}checked{{/if}}> {{localize "ESSENCE.Item.Equipment.Modular"}}</label>
-    <label>{{localize "ESSENCE.Common.Fortitude"}} <input name="system.fortitude" type="text" value="{{system.fortitude}}" placeholder="e.g. +2"></label>
-    <label>{{localize "ESSENCE.Common.Resilience"}} <input name="system.resilience" type="text" value="{{system.resilience}}" placeholder="e.g. +1"></label>
-    <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="text" value="{{system.movement}}" placeholder="e.g. -1"></label>
-    <label>{{localize "ESSENCE.Item.Equipment.ReachBonus"}} <span class="muted" title="{{localize 'ESSENCE.Item.Equipment.ReachBonusTooltip'}}">
-      <input name="system.reachBonus" type="number" value="{{system.reachBonus}}">
-    </span></label>
-  </div>
-  <p class="muted">{{localize "ESSENCE.Item.Equipment.SignatureBonusHint"}}</p>
+  <p class="muted">{{localize "ESSENCE.Item.Equipment.AlwaysModularHint"}}</p>
 {{/if}}
 
 {{#if isGear}}
@@ -137,7 +123,6 @@
 {{/if}}
 
 {{#if isWornCategory}}
-  {{#if system.isModular}}
   <h3 class="section-head">{{localize "ESSENCE.Item.Equipment.ModularAssembly"}}</h3>
     <div class="equipment-fields grid-2">
       <label>{{chassisLabel}}
@@ -212,8 +197,6 @@
       {{/if}}
     {{/if}}
   {{/if}}
-{{/if}}
-
 <h3 class="section-head">{{localize "ESSENCE.Common.Effect"}}</h3>
 <div>{{essenceEditor system.effect target="system.effect" button=true}}</div>
 <h3 class="section-head">{{localize "ESSENCE.Common.Passive"}}</h3>

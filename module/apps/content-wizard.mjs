@@ -3,9 +3,6 @@ const { ApplicationV2 } = foundry.applications.api;
 
 import { EQUIPMENT_CATEGORY_LABELS, FLAT_EQUIPMENT_CATEGORIES } from "../data/item-card.mjs";
 
-/** Categories eligible for modular assembly (matches CHASSIS_LABELS/FITTING_LABELS's own keys in item-component.mjs). */
-const MODULAR_EQUIPMENT_CATEGORIES = ["weapon", "armor", "shield", "implement"];
-
 /** Which compendium each content type is authored into, and what the default new-row shape is per array field. */
 const TYPE_CONFIG = {
   "action-card": {
@@ -129,14 +126,12 @@ export default class EssenceContentWizard extends HandlebarsApplicationMixin(App
     context.isLast = context.typeConfig ? this.#step === context.typeConfig.steps.length - 1 : false;
     context.canCreate = canCreateContent();
     if (this.#type === "equipment") {
-      // Weapon/Armor/Shield/Implement are excluded here — those four are wholesale modular now,
-      // authored as Chassis + Fitting (+ Augment) drafts instead of a flat Equipment template (see
-      // FLAT_EQUIPMENT_CATEGORIES). isWornCategory below still checks the full
-      // MODULAR_EQUIPMENT_CATEGORIES list, not just what the dropdown now offers, so a
-      // pre-existing draft authored before this restriction still renders its Fortitude/Resilience/
-      // Movement/Reach fields rather than silently losing them.
+      // MODULAR_EQUIPMENT_CATEGORIES are excluded here — those are wholesale modular now, authored
+      // as Chassis + Fitting (+ Augment) drafts instead of a flat Equipment template (see
+      // FLAT_EQUIPMENT_CATEGORIES). No isWornCategory here (unlike item-sheet.mjs's equipment
+      // sheet): this dropdown can never offer one of those categories, so there's no
+      // Fortitude/Resilience/Movement/Type/Range/isModular step to conditionally show.
       context.categoryOptions = FLAT_EQUIPMENT_CATEGORIES.map((value) => ({ value, label: EQUIPMENT_CATEGORY_LABELS[value] }));
-      context.isWornCategory = MODULAR_EQUIPMENT_CATEGORIES.includes(context.system?.category);
       context.isToolkit = context.system?.category === "toolkit";
       context.isConsumableKit = context.system?.category === "consumable-kit";
       context.isGear = context.system?.category === "gear";

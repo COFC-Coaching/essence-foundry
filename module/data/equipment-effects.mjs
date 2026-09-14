@@ -1,35 +1,36 @@
 import { parseSigned } from "../utils.mjs";
+import { deriveEquipmentStats, buildEquipmentResolver } from "./equipment-features.mjs";
 
 /**
- * Keeps a single "Equipment Bonus" ActiveEffect on an `equipment` Item in sync with its own
- * Fortitude/Resilience/Movement/Reach fields (part-viii-equipment-and-items.md never gave these a
- * mechanical delivery mechanism in code — nothing before this synced them to the actor at all).
- * Uses Foundry's own transferred-effect mechanism (`transfer: true` on an embedded ActiveEffect)
- * per the project's "check Foundry-native first" convention, rather than hand-summing these fields
- * in prepareDerivedData the way the rest of this sheet does — this is the one equipment case where
- * a genuinely native mechanism fits instead of the sheet's usual manual math.
+ * Keeps a single "Equipment Bonus" ActiveEffect on an `equipment` Item in sync with the
+ * Fortitude/Resilience/Movement/Reach it actually contributes (part-viii-equipment-and-items.md
+ * never gave these a mechanical delivery mechanism in code — nothing before this synced them to
+ * the actor at all). Uses Foundry's own transferred-effect mechanism (`transfer: true` on an
+ * embedded ActiveEffect) per the project's "check Foundry-native first" convention, rather than
+ * hand-summing these fields in prepareDerivedData the way the rest of this sheet does — this is
+ * the one equipment case where a genuinely native mechanism fits instead of the sheet's usual
+ * manual math.
  *
  * Foundry's native transfer has no "transfer only if a sibling field says so" concept, so the
  * effect's `disabled` flag is toggled manually to gate it: only equipment prepared as Signature
  * Equipment should affect the actor's active stats (see § Bringing More Than Your Signature
  * Limit — Armory/Temporary gear you own but aren't carrying for the Adventure shouldn't).
  *
- * Not a general-purpose Active Effects migration — Chassis/Fitting bonuses on assembled modular
- * items stay display-only via equipment-features.mjs, since a Chassis/Fitting has no standalone
- * existence as an actor-owned Item the way a plain equipment Item does; Foundry's transfer
- * mechanism has nothing to attach to for "an Item referenced by another Item." Only a plain
- * (non-modular) equipment Item's own printed fields are covered here.
+ * A plain (non-modular: toolkit/consumable-kit/gear) item's own printed fields are the source.
+ * A MODULAR item (weapon/ranged/armor/shield/implement — always modular as of the 2026-09-14
+ * pass, see MODULAR_EQUIPMENT_CATEGORIES) has no numbers of its own worth reading: its assembled
+ * Chassis + Fitting sum (equipment-features.mjs's deriveEquipmentStats(), the same pure function
+ * the sheet already calls for display) is the real source instead — this used to be display-only,
+ * which meant a Shell's own +Resilience looked correct on the sheet and did nothing in play.
+ * essence.mjs's updateItem/deleteItem hooks re-run this sync whenever the assembled Chassis or
+ * Fitting itself changes, not just when this item's own fields do.
  */
 
 const FLAG_SCOPE = "essence-system";
 const FLAG_KEY = "equipmentBonus";
 
-function buildChanges(system) {
+function buildChanges(fortitude, resilience, movement, reach) {
   const changes = [];
-  const fortitude = parseSigned(system.fortitude);
-  const resilience = parseSigned(system.resilience);
-  const movement = parseSigned(system.movement);
-  const reach = Number(system.reachBonus) || 0;
   // Every target here is an indirect *Bonus accumulator (actor-combatant.mjs), never the matching
   // raw editable field (system.resilience/movement/reach) directly. Those raw fields are plain
   // sheet inputs with submitOnChange:true — a transferred Active Effect that targeted them directly
@@ -53,7 +54,21 @@ function changesEqual(a, b) {
 export async function syncEquipmentEffect(item) {
   if (item.type !== "equipment" || !item.actor) return;
 
-  const changes = buildChanges(item.system);
+  const sys = item.system;
+  let fortitude, resilience, movement;
+  if (sys.isModular) {
+    const resolver = await buildEquipmentResolver(item.actor);
+    const stats = deriveEquipmentStats(resolver, item);
+    fortitude = stats.fortitude;
+    resilience = stats.resilience;
+    movement = stats.movement;
+  } else {
+    fortitude = parseSigned(sys.fortitude);
+    resilience = parseSigned(sys.resilience);
+    movement = parseSigned(sys.movement);
+  }
+  const reach = Number(sys.reachBonus) || 0;
+  const changes = buildChanges(fortitude, resilience, movement, reach);
   const disabled = item.system.slot !== "signature";
   const existing = item.effects.find((e) => e.getFlag(FLAG_SCOPE, FLAG_KEY));
 

@@ -347,6 +347,21 @@
     {{/each}}
   </ul>
 
+  {{#if equipmentCards.length}}
+    <h3 class="section-head">{{localize "ESSENCE.Sheet.EquipmentCards"}} <span class="muted">{{localize "ESSENCE.Sheet.EquipmentCardsHint"}}</span></h3>
+    <ul class="item-list card-list">
+      {{#each equipmentCards as |c|}}
+        <li>
+          <div class="card-row-top">
+            <strong>{{c.name}}</strong>
+            <span class="card-meta muted">{{c.source}}{{#if c.uses}} · {{localize "ESSENCE.Common.UsesFraction" remaining=c.usesRemaining total=c.uses}}{{/if}}</span>
+          </div>
+          <p class="card-summary">{{{c.effect}}}</p>
+        </li>
+      {{/each}}
+    </ul>
+  {{/if}}
+
   <h3 class="section-head">{{localize "ESSENCE.Sheet.Conditions"}}</h3>
   <ul class="item-list condition-list">
     {{#each conditions as |item|}}
@@ -372,19 +387,21 @@
     <p class="muted signature-overlimit-note">{{#if (gt signatureOverLimit 1)}}{{localize "ESSENCE.Sheet.OverSignatureLimitPlural" n=signatureOverLimit}}{{else}}{{localize "ESSENCE.Sheet.OverSignatureLimitSingular" n=signatureOverLimit}}{{/if}} <button type="button" data-action="spendInfluenceForSlot">{{localize "ESSENCE.Sheet.SpendInfluenceForExtraSlot"}}</button></p>
   {{/if}}
   <table class="item-table">
-    <thead><tr><th>#</th><th>{{localize "ESSENCE.Common.Item"}}</th><th>{{localize "ESSENCE.Common.Category"}}</th><th>{{localize "ESSENCE.Item.Equipment.Reach"}}</th><th>{{localize "ESSENCE.Common.Effect"}}</th><th></th></tr></thead>
+    <thead><tr><th>{{localize "ESSENCE.Common.Item"}}</th><th>{{localize "ESSENCE.Common.Category"}}</th><th>{{localize "ESSENCE.Item.Equipment.Reach"}}</th><th>{{localize "ESSENCE.Common.Effect"}}</th><th></th></tr></thead>
     <tbody>
-      {{#each signatureEquipment as |item i|}}
+      {{#each signatureEquipment as |item|}}
         <tr class="draggable-row" draggable="true" data-item-id="{{item.id}}">
-          <td>{{i}}</td><td>{{item.name}}</td><td>{{equipmentCategoryLabel item.category}}</td>
+          <td>{{item.name}}</td><td>{{equipmentCategoryLabel item.category}}</td>
           <td>
             {{item.reachCost}}
             {{#if item.overReach}}
               <span class="muted reach-warning" title="{{#if item.exceptionSource}}{{localize 'ESSENCE.Sheet.ExceedsReachException' source=item.exceptionSource}}{{else}}{{localize 'ESSENCE.Character.ExceedsReachCharacter'}}{{/if}}"><i class="fa-solid fa-triangle-exclamation"></i></span>
             {{/if}}
           </td>
-          <td>{{item.effectText}}</td>
-          <td><button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
+          <td>{{{item.effectText}}}</td>
+          <td><button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.ViewAria' name=item.name}}"><i class="fa-solid fa-eye"></i></button>
+              <button type="button" data-action="postEquipmentToChat" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Sheet.PostToChatAria' name=item.name}}"><i class="fa-solid fa-comment"></i></button>
+              <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
               <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
       {{/each}}
@@ -417,8 +434,10 @@
     <tbody>
       {{#each temporaryEquipment as |item|}}
         <tr class="draggable-row" draggable="true" data-item-id="{{item.id}}">
-          <td>{{item.name}}</td><td>{{item.type}}</td><td>{{item.effectText}}</td>
-          <td><button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
+          <td>{{item.name}}</td><td>{{item.type}}</td><td>{{{item.effectText}}}</td>
+          <td><button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.ViewAria' name=item.name}}"><i class="fa-solid fa-eye"></i></button>
+              <button type="button" data-action="postEquipmentToChat" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Sheet.PostToChatAria' name=item.name}}"><i class="fa-solid fa-comment"></i></button>
+              <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
               <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
       {{/each}}
@@ -433,8 +452,10 @@
     <tbody>
       {{#each armoryEquipment as |item|}}
         <tr class="draggable-row" draggable="true" data-item-id="{{item.id}}">
-          <td>{{item.name}}</td><td>{{equipmentCategoryLabel item.category}}</td><td>{{item.effectText}}</td>
-          <td><button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
+          <td>{{item.name}}</td><td>{{equipmentCategoryLabel item.category}}</td><td>{{{item.effectText}}}</td>
+          <td><button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.ViewAria' name=item.name}}"><i class="fa-solid fa-eye"></i></button>
+              <button type="button" data-action="postEquipmentToChat" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Sheet.PostToChatAria' name=item.name}}"><i class="fa-solid fa-comment"></i></button>
+              <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
               <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
       {{/each}}

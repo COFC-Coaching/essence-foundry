@@ -2,6 +2,8 @@ import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { EXPERTISE_DATABASE } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
+import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
+import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
 import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
 import { availableSubtypes, enterManifestation } from "../apps/manifestation.mjs";
@@ -59,6 +61,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       toggleEditLock: EssenceActorSheet.#onToggleEditLock,
       rollSkill: EssenceActorSheet.#onRollSkill,
       rollItem: EssenceActorSheet.#onRollItem,
+      postEquipmentToChat: EssenceActorSheet.#onPostEquipmentToChat,
       rollInitiative: EssenceActorSheet.#onRollInitiative,
       endTurn: EssenceActorSheet.#onEndTurn,
       applyDamage: EssenceActorSheet.#onApplyDamage,
@@ -342,7 +345,11 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     context.system = system;
     context.attributeOptions = ATTRIBUTES;
     context.skillOptions = SKILLS;
-    context.equipmentBonusSources = computeEquipmentBonusSources(this.actor.items);
+    // See buildEquipmentResolver's own doc comment — falls back to the compendium for a modular
+    // item's chassisItemId/fittingItemId that was never actually embedded on this actor, so its
+    // Effect/bonuses still resolve to something instead of silently rendering blank.
+    const equipmentResolver = await buildEquipmentResolver(this.actor);
+    context.equipmentBonusSources = computeEquipmentBonusSources(this.actor.items, (item) => deriveEquipmentStats(equipmentResolver, item));
 
     const distinctionItem = this.actor.items.find((i) => i.type === "distinction");
     const speciesItem = this.actor.items.find((i) => i.type === "species");
@@ -438,7 +445,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
         reachCost,
         exceptionSource,
         overReach,
-        effectText: item.system.effect || item.system.passive || item.system.special || ""
+        effectText: equipmentEffectSummary(equipmentResolver, item)
       };
     };
     const equipment = this.actor.items.filter((i) => i.type === "equipment");
@@ -474,6 +481,27 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       .filter((i) => ["chassis", "fitting", "augment"].includes(i.type))
       .map((i) => ({ id: i.id, name: i.name, type: i.type, category: i.system.category ?? "", slot: i.system.slot ?? "", tier: i.system.tier ?? null }))
       .sort((a, b) => a.type.localeCompare(b.type) || a.name.localeCompare(b.name));
+
+    // Equipment-granted cards (§ Function Augment Uses, § Consumable Kits, § Ordinary Equipment
+    // Cards) belong in the same card list a player reads their whole hand from, not buried on each
+    // item's own sheet — but they're deliberately never Item documents (deriveEquipmentStats'
+    // grantedCards / EssenceEquipmentData.equipmentCards are plain text), so they never touch
+    // CARD_LIMIT/nonBasicCardCount in character-wizard.mjs, which only ever counts real
+    // action-card/reaction-card Items — same "exclusion is automatic because it isn't a card Item"
+    // shape as isBasicCard's Basic-card exclusion, just one layer earlier. Scoped to Signature
+    // equipment only, matching equipment-effects.mjs's own signature-only gate (Armory/Temporary
+    // gear you own but aren't carrying for the Adventure shouldn't contribute).
+    context.equipmentCards = [];
+    for (const item of equipment.filter((i) => i.system.slot === "signature")) {
+      if (item.system.isModular) {
+        for (const g of deriveEquipmentStats(equipmentResolver, item).grantedCards) {
+          context.equipmentCards.push({ source: item.name, name: g.source, effect: g.effect, uses: g.uses, usesRemaining: g.usesRemaining });
+        }
+      }
+      for (const c of item.system.equipmentCards ?? []) {
+        context.equipmentCards.push({ source: item.name, name: c.name, effect: c.effect, uses: c.uses, usesRemaining: c.usesRemaining });
+      }
+    }
     return context;
   }
 
@@ -1468,6 +1496,26 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
   static #onItemEdit(event, target) {
     this.actor.items.get(target.dataset.itemId)?.sheet.render(true);
+  }
+
+  /**
+   * Posts an equipment Item's full description to chat — the "#" row-index column on the
+   * Signature Equipment table (and the action column on Temporary/Armory) served no purpose
+   * (reported live: "the # column is useless"), so it's replaced with this instead. Reuses
+   * equipmentEffectSummary() (equipment-features.mjs) rather than the table's own already-computed
+   * `effectText` so this also works for Armory/Temporary rows, whose table markup doesn't pass
+   * that context through to the action buttons.
+   */
+  static async #onPostEquipmentToChat(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (!item) return;
+    const category = EQUIPMENT_CATEGORY_LABELS[item.system.category] ?? capitalize(item.system.category);
+    const resolver = await buildEquipmentResolver(this.actor);
+    const summary = equipmentEffectSummary(resolver, item);
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${item.name}</strong> <span class="muted">(${category})</span></p>${summary ? `<p>${summary}</p>` : ""}`
+    });
   }
 
   static async #onItemDelete(event, target) {

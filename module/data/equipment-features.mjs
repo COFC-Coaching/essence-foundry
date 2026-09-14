@@ -17,6 +17,27 @@
 import { parseSigned } from "../utils.mjs";
 
 /**
+ * Resolves a Chassis/Fitting/Augment id to its Item for one actor, checking the actor's own
+ * embedded Items first and falling back to the shared `essence-system.equipment` compendium —
+ * confirmed live: several pre-existing owned equipment Items (Mage Armor, Sage's Focus, .357
+ * Magnum) had chassisItemId/fittingItemId set to a COMPENDIUM document's id with no matching
+ * Item actually embedded on the actor (no embedded Chassis/Fitting existed for them at all), so
+ * deriveEquipmentStats() resolved nothing and every Effect cell rendered blank. An owned item is
+ * still meant to hold its own embedded copies going forward (that's what lets a player track that
+ * copy's Augment Uses independently, per item-sheet.mjs's own chassisOptions/fittingOptions,
+ * which stay actor-scoped) — this fallback only makes already-stored references that skipped
+ * embedding still resolve to *something* displayable instead of silently showing nothing.
+ * @param {Actor} actor
+ * @returns {Promise<{get: (id: string) => Item|null}>}
+ */
+export async function buildEquipmentResolver(actor) {
+  const pack = game.packs.get("essence-system.equipment");
+  const compendiumDocs = pack ? await pack.getDocuments() : [];
+  const byCompendiumId = new Map(compendiumDocs.map((d) => [d.id, d]));
+  return { get: (id) => actor.items.get(id) ?? byCompendiumId.get(id) ?? null };
+}
+
+/**
  * @param {{get: (id: string) => Item|undefined}} items - resolves a Chassis/Fitting/Augment id to
  *   its Item. An owned equipment Item passes its actor's `actor.items` (a Foundry Collection);
  *   an unowned/compendium-authored one has no actor to embed copies into, so the sheet instead
@@ -45,11 +66,16 @@ export function deriveEquipmentStats(items, equipmentItem) {
   // single `system.effect` field used to hold in one place is now spread across the Chassis, the
   // Fitting, and any always-active Support Augment (a Function Augment's text stays out of this:
   // it's already surfaced below via grantedCards, with its own Uses tracking — repeating it here
-  // would just show the same text twice). Order mirrors § Assembling an item: Chassis first, then
-  // Fitting, then whatever Supports happen to be installed.
+  // would just show the same text twice). The same exclusion applies to a Chassis/Fitting whose
+  // OWN `effect` field grantsEquipmentCard: true — confirmed live (Sage's Focus/Projection
+  // Interface): that field is already the full merged card text (its own variant intro plus the
+  // base Equipment Card's stat block, see scripts/component-catalog-data.json), which grantedCards
+  // below surfaces on its own, so including it here too rendered the identical block twice in a
+  // row. Order mirrors § Assembling an item: Chassis first, then Fitting, then whatever Supports
+  // happen to be installed.
   const combinedEffect = [];
-  if (chassis?.system.effect) combinedEffect.push({ source: chassis.name, kind: "chassis", html: chassis.system.effect });
-  if (fitting?.system.effect) combinedEffect.push({ source: fitting.name, kind: "fitting", html: fitting.system.effect });
+  if (chassis?.system.effect && !chassis.system.grantsEquipmentCard) combinedEffect.push({ source: chassis.name, kind: "chassis", html: chassis.system.effect });
+  if (fitting?.system.effect && !fitting.system.grantsEquipmentCard) combinedEffect.push({ source: fitting.name, kind: "fitting", html: fitting.system.effect });
 
   const grantedCards = [];
   if (chassis?.system.grantsEquipmentCard) {
@@ -114,4 +140,29 @@ export function deriveEquipmentStats(items, equipmentItem) {
   }
 
   return { chassis, fitting, fortitude, resilience, movement, grantedCards, combinedEffect, mountDisplay };
+}
+
+/**
+ * One-line HTML summary of what an `equipment` Item actually does — for list/table rows (the
+ * Signature/Armory/Temporary Equipment tables on the actor/NPC sheets) that only have room for a
+ * single "Effect" cell, not the full breakdown deriveEquipmentStats() returns. A MODULAR item
+ * (weapon/ranged/armor/shield/implement — always modular, see MODULAR_EQUIPMENT_CATEGORIES) has
+ * nothing in its OWN effect/passive/special fields — those stay blank now that the real text lives
+ * on its Chassis/Fitting/Augments — so reading them directly (the pre-2026-09-14 behavior) always
+ * rendered an empty cell for a modular item. This reads combinedEffect instead for those, and
+ * falls back to the flat fields (and any Consumable Kit equipmentCards) for a non-modular item.
+ * @param {{get: (id: string) => Item|undefined}} items - same resolver deriveEquipmentStats takes.
+ * @param {Item} item - an `equipment`-type Item.
+ * @returns {string} HTML (may be empty) — render with a triple-stash, not `{{escaped}}`.
+ */
+export function equipmentEffectSummary(items, item) {
+  if (item.system.isModular) {
+    const stats = deriveEquipmentStats(items, item);
+    const pieces = stats.combinedEffect.map((ce) => `<strong>${ce.source}:</strong> ${ce.html}`);
+    const cards = stats.grantedCards.map((g) => `<strong>${g.source}:</strong> ${g.effect}`);
+    return [...pieces, ...cards].join(" ");
+  }
+  const flat = item.system.effect || item.system.passive || item.system.special || "";
+  const cards = (item.system.equipmentCards ?? []).map((c) => `<strong>${c.name}:</strong> ${c.effect}`);
+  return [flat, ...cards].filter(Boolean).join(" ");
 }

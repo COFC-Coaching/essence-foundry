@@ -10,7 +10,8 @@ const { fields } = foundry.data;
  * choices list above.
  */
 export const EQUIPMENT_CATEGORY_LABELS = {
-  weapon: "Weapon",
+  weapon: "Melee Weapon",
+  ranged: "Ranged Weapon",
   armor: "Armor",
   shield: "Shield",
   implement: "Implement",
@@ -20,16 +21,29 @@ export const EQUIPMENT_CATEGORY_LABELS = {
 };
 
 /**
+ * The five categories that are ALWAYS an assembled Chassis + Fitting (+ Augments), never a flat
+ * item with its own hardcoded stats — Melee Weapon, Ranged Weapon (its own assembled category as
+ * of 2026-09-14; previously folded into "weapon", see the design doc below), Armor, Shield,
+ * Magical Implement. `essence.mjs` force-sets `isModular: true` on create/update for any of these
+ * (an equipment Item can't be un-modular-ed by unchecking a box), and `equipment-effects.mjs`
+ * routes their Fortitude/Resilience/Movement through the assembled Chassis+Fitting sum
+ * (equipment-features.mjs) instead of the item's own flat fields, which only a
+ * toolkit/consumable-kit/gear item still uses directly. Single source of truth for every place
+ * that used to hand-roll this same five/four-item list (item-sheet.mjs, content-wizard.mjs).
+ */
+export const MODULAR_EQUIPMENT_CATEGORIES = ["weapon", "ranged", "armor", "shield", "implement"];
+
+/**
  * The subset of EQUIPMENT_CATEGORY_LABELS still authorable as a standalone, pre-fab compendium
  * `equipment` template (via the Item Creation Wizard's "Equipment" type or Bulk Import's
- * "equipment" CSV template) — weapon/armor/shield/implement are excluded as of the 2026-09-13
+ * "equipment" CSV template) — MODULAR_EQUIPMENT_CATEGORIES is excluded as of the 2026-09-13
  * Chassis/Fitting/Augment catalog import (see design/equipment-catalog-2026-09-13-migration.md):
- * those four categories are now wholesale modular, authored as Chassis + Fitting (+ Augment)
- * templates instead, one per equipment TYPE_CONFIG entry (chassis/fitting/augment) rather than one
- * flat item. This does NOT remove weapon/armor/shield/implement from the schema's own `category`
- * choices above — an actual assembled `equipment` Item (isModular: true, chassisItemId/
- * fittingItemId) still needs one of those four as what it fundamentally is; only the "author one
- * flat pre-fab item with its own hardcoded Fortitude/Effect/etc." path is retired.
+ * those categories are wholesale modular, authored as Chassis + Fitting (+ Augment) templates
+ * instead, one per equipment TYPE_CONFIG entry (chassis/fitting/augment) rather than one flat
+ * item. This does NOT remove MODULAR_EQUIPMENT_CATEGORIES from the schema's own `category` choices
+ * below — an actual assembled `equipment` Item (isModular: true, chassisItemId/fittingItemId)
+ * still needs one of those as what it fundamentally is; only the "author one flat pre-fab item
+ * with its own hardcoded Fortitude/Effect/etc." path is retired.
  */
 export const FLAT_EQUIPMENT_CATEGORIES = ["toolkit", "consumable-kit", "gear"];
 
@@ -88,15 +102,15 @@ export class EssenceEquipmentData extends foundry.abstract.TypeDataModel {
     return {
       // What this item fundamentally IS — one flat choice rather than a separate "category" +
       // "kind" pair (an earlier pass split these, which just meant picking two overlapping
-      // dropdowns to describe one thing). weapon/armor/shield/implement are the modular-eligible
-      // categories (matches CHASSIS_LABELS/FITTING_LABELS in item-component.mjs); toolkit and
-      // consumable-kit are the two non-modular Kit shapes (part-viii-equipment-and-items.md §
-      // Toolkits / § Consumable Kits — a Toolkit never has Uses, a Consumable Kit grants one or
-      // more named Equipment Cards each with its own Uses instead); gear is the catch-all for
-      // everything else (a consumable, a quest item, anything not covered above).
+      // dropdowns to describe one thing). MODULAR_EQUIPMENT_CATEGORIES (above) are always an
+      // assembled Chassis + Fitting; toolkit and consumable-kit are the two non-modular Kit shapes
+      // (part-viii-equipment-and-items.md § Toolkits / § Consumable Kits — a Toolkit never has
+      // Uses, a Consumable Kit grants one or more named Equipment Cards each with its own Uses
+      // instead); gear is the catch-all for everything else (a consumable, a quest item, anything
+      // not covered above).
       category: new fields.StringField({
         initial: "gear",
-        choices: ["weapon", "armor", "shield", "implement", "toolkit", "consumable-kit", "gear"]
+        choices: ["weapon", "ranged", "armor", "shield", "implement", "toolkit", "consumable-kit", "gear"]
       }),
       slot: new fields.StringField({ initial: "armory", choices: ["signature", "temporary", "armory"] }),
       tier: new fields.NumberField({ integer: true, nullable: true, initial: null }),
@@ -126,20 +140,17 @@ export class EssenceEquipmentData extends foundry.abstract.TypeDataModel {
       })),
       // A modular item (melee weapon/ranged weapon/armor/shield/implement) is the assembled result
       // of a Chassis + Fitting + any installed Augments (part-viii-equipment-and-items.md §
-      // Modular Equipment). Toolkits and Consumable Kits stay non-modular — isModular false,
-      // chassis/fitting fields unused — per the design's explicit no-migration decision
-      // (design/chassis-fitting-augment-system.md). ids reference embedded Items on the SAME actor
-      // (module/data/item-component.mjs).
+      // Modular Equipment). Toolkits, Consumable Kits, and Gear stay non-modular — isModular false,
+      // chassis/fitting fields unused. essence.mjs force-sets this true on create/update whenever
+      // `category` is one of MODULAR_EQUIPMENT_CATEGORIES (above); the field still exists as a real
+      // BooleanField rather than being derived, since a TypeDataModel can't reach `category` from
+      // inside its own schema definition and the sheet/effects code reads it directly. ids
+      // reference embedded Items on the SAME actor, or (for a compendium-authored, actor-less
+      // template) a sibling document in the shared `essence-system.equipment` pack — see
+      // item-sheet.mjs's #resolveComponentSource() for which source applies.
       isModular: new fields.BooleanField({ initial: false }),
       chassisItemId: new fields.StringField({ initial: "" }),
       fittingItemId: new fields.StringField({ initial: "" }),
-      // Modular but with no owning Actor yet (a compendium template being authored, not a
-      // character's actual gear) — the real Chassis/Fitting/Augment picker needs an Actor's owned
-      // Items to choose from and has nothing to offer here, so this is a plain free-text
-      // placeholder instead ("Edge Striker T2 / Swift Grip T1 / Whetstone Edge, Rapid Draw")
-      // until real compendium-level Component linking exists. Ignored once the item has an Actor
-      // and the real chassisItemId/fittingItemId/mounts fields take over.
-      modularNotes: new fields.StringField({ initial: "" }),
       // One entry per the Chassis's Mount (by index) — see EssenceChassisData#mounts in
       // item-component.mjs. `linkOn` only means anything for a Linked pair (§ Linked Mounts); it's
       // otherwise ignored.

@@ -142,8 +142,12 @@ function writeCombatSkillFolders(packName) {
   return map;
 }
 
-/** The 4 Equipment categories mapCategory() ever produces — order controls folder sort. */
-const EQUIPMENT_CATEGORIES_FOR_FOLDERS = ["weapon", "armor", "shield", "implement", "toolkit", "consumable-kit", "gear"];
+/** Every EssenceEquipmentData `category` value — order controls folder sort. "ranged" is its own
+ *  assembled-item folder as of 2026-09-14 (previously folded into "weapon"; mapCategory() below
+ *  still only ever produces "weapon" for legacy raw data, since no legacy source data used the
+ *  distinct assembled category — the playtest catalog's Launcher/Payload chassis/fittings already
+ *  carry `category: "ranged"` directly, bypassing mapCategory entirely). */
+const EQUIPMENT_CATEGORIES_FOR_FOLDERS = ["weapon", "ranged", "armor", "shield", "implement", "toolkit", "consumable-kit", "gear"];
 /**
  * Chassis/Fitting/Augment used to be their own separate (always-empty — there's no pre-authored
  * content for them, players build their own via the modular equipment system) compendium packs;
@@ -800,7 +804,7 @@ async function main() {
     // pair per its own migration ledger (see scripts/component-catalog-data.json's `basis` field on
     // each Chassis/Fitting). Only toolkit/consumable-kit/gear rows survive from the old sources —
     // the catalog explicitly leaves Toolkits and Consumable Kits outside this pass (its own D8).
-    const MIGRATED_CATEGORIES = new Set(["weapon", "armor", "shield", "implement"]);
+    const MIGRATED_CATEGORIES = new Set(["weapon", "ranged", "armor", "shield", "implement"]);
     const equipmentCards = loadRows("raw-equipment-cards.json")
       .filter((row) => !MIGRATED_CATEGORIES.has(mapCategory(row.category || row.data.category)));
     for (const row of equipmentCards) writeSourceDoc("equipment", equipmentToItem(row, equipmentFolders));

@@ -1,10 +1,7 @@
-import { deriveEquipmentStats } from "../data/equipment-features.mjs";
+import { deriveEquipmentStats, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { SUBTYPE_DATABASE } from "../data/expertise-database.mjs";
 import { CHASSIS_LABELS, FITTING_LABELS } from "../data/item-component.mjs";
-import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
-
-/** Categories eligible for modular assembly (matches CHASSIS_LABELS/FITTING_LABELS's own keys). */
-const MODULAR_EQUIPMENT_CATEGORIES = ["weapon", "armor", "shield", "implement"];
+import { EQUIPMENT_CATEGORY_LABELS, MODULAR_EQUIPMENT_CATEGORIES } from "../data/item-card.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -223,8 +220,16 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     const items = await this.#resolveComponentSource();
-    context.chassisOptions = items.all.filter((i) => i.type === "chassis");
-    context.fittingOptions = items.all.filter((i) => i.type === "fitting");
+    // Scoped to THIS item's own category — an equipment Item's category and a Component's category
+    // now share the exact same five-value enum (MODULAR_EQUIPMENT_CATEGORIES), so a Weapon's
+    // pickers only ever offer Strikers/Grips, never Shells/Rigging or Focuses/Interfaces mixed in.
+    // The currently-assigned Chassis/Fitting always stays selectable even if it no longer matches
+    // (e.g. the category was changed after assembly) so a mismatch is visible and fixable rather
+    // than silently vanishing from the dropdown. Augments aren't scoped this way — Source A leaves
+    // Augment compatibility as printed free text (`compatibility`), not a hard-coded category enum.
+    const category = context.system.category;
+    context.chassisOptions = items.all.filter((i) => i.type === "chassis" && (i.system.category === category || i.id === this.item.system.chassisItemId));
+    context.fittingOptions = items.all.filter((i) => i.type === "fitting" && (i.system.category === category || i.id === this.item.system.fittingItemId));
     context.augmentOptions = items.all.filter((i) => i.type === "augment");
     context.stats = deriveEquipmentStats(items, this.item);
     // See EssenceComponentSheet's own comment on CHASSIS_LABELS/FITTING_LABELS — once a Chassis/
@@ -261,7 +266,15 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
    */
   async #resolveComponentSource() {
     const actor = this.item.actor;
-    if (actor) return { get: (id) => actor.items.get(id), all: actor.items.contents };
+    if (actor) {
+      // `.get` also falls back to the compendium (see buildEquipmentResolver's own doc comment) —
+      // confirmed live: several owned equipment Items had chassisItemId/fittingItemId already set
+      // to a compendium id with no embedded copy on the actor at all, so Combined Effect/Fortitude
+      // etc. resolved to nothing. `.all` (the picker dropdown's OWN option list) deliberately stays
+      // actor-only, not merged — a player should only be offered Components they actually own.
+      const resolver = await buildEquipmentResolver(actor);
+      return { get: resolver.get, all: actor.items.contents };
+    }
     const pack = game.packs.get("essence-system.equipment");
     const docs = pack ? await pack.getDocuments() : [];
     const byId = new Map(docs.map((d) => [d.id, d]));

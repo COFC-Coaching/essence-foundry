@@ -33,7 +33,21 @@ class EssenceComponentData extends foundry.abstract.TypeDataModel {
       passive: new fields.HTMLField({ initial: "" }),
       special: new fields.HTMLField({ initial: "" }),
       grantsEquipmentCard: new fields.BooleanField({ initial: false }), // rarely true, mostly Fittings
-      flavor: new fields.HTMLField({ initial: "" })
+      flavor: new fields.HTMLField({ initial: "" }),
+      // Minimum-viable model for Source designation (Source A R4/D2, Source B) without pretending
+      // this system has a rules engine: when an Action uses this item as its Source, ONLY the
+      // Source's own ordinary properties automatically apply. Rather than actually wiring that
+      // into card resolution (there is no such engine — see
+      // design/equipment-catalog-2026-09-13-migration.md), each entry just names the property this
+      // Component changes when its host is the Source (free text: "range", "targeting", "area",
+      // "damage type", "forced movement", "resource", "Surges", "Reaction") and the change itself,
+      // so a table can look them up beside a card instead of re-reading the whole item sheet. A
+      // Function Augment's card is deliberately NEVER offered these (D2 isolation) — that's already
+      // expressed by EssenceAugmentData's own `kind === "function"`, not a separate flag here.
+      sourceModifiers: new fields.ArrayField(new fields.SchemaField({
+        property: new fields.StringField({ initial: "" }),
+        change: new fields.StringField({ initial: "" })
+      }))
     };
   }
 }
@@ -67,7 +81,13 @@ export class EssenceFittingData extends EssenceComponentData {
   static defineSchema() {
     return {
       ...super.defineSchema(),
-      handedness: new fields.StringField({ initial: "", choices: ["", "one-handed", "two-handed"] }),
+      // `blank: true` is required here even though "" is already listed in `choices` — Foundry's
+      // StringField rejects an empty string during validation by default whenever `choices` is set
+      // (confirmed live: embedding an armor Rigging, whose handedness is "" since armor uses no
+      // hand, onto an actor threw "handedness: may not be a blank string" and silently dropped the
+      // whole embedded-item creation with no error surfaced to the caller — createEmbeddedDocuments
+      // just returned an empty array).
+      handedness: new fields.StringField({ initial: "", blank: true, choices: ["", "one-handed", "two-handed"] }),
       rangeModifier: new fields.StringField({ initial: "" }),
       // § Reconfiguring Equipment — "a Simple Fitting Change costs approximately 1 Action die,
       // while a Structural Fitting Change costs approximately 3... The specific Fitting may state
@@ -98,7 +118,14 @@ export class EssenceAugmentData extends foundry.abstract.TypeDataModel {
       uses: new fields.NumberField({ integer: true, nullable: true, initial: null }),
       usesRemaining: new fields.NumberField({ integer: true, nullable: true, initial: null }),
       effect: new fields.HTMLField({ initial: "" }), // Function's granted Action/Reaction, or Support's modifier text
-      flavor: new fields.HTMLField({ initial: "" })
+      flavor: new fields.HTMLField({ initial: "" }),
+      // Support only (see EssenceComponentData's identical field above for the full rationale) — a
+      // Function Augment's card is isolated from Source modifiers entirely (D2), which `kind ===
+      // "function"` already expresses, so this is meaningful only when `kind === "support"`.
+      sourceModifiers: new fields.ArrayField(new fields.SchemaField({
+        property: new fields.StringField({ initial: "" }),
+        change: new fields.StringField({ initial: "" })
+      }))
     };
   }
 }
@@ -115,7 +142,7 @@ export const CHASSIS_LABELS = {
   weapon: "Striker",
   ranged: "Launcher",
   armor: "Shell",
-  shield: "Shield",
+  shield: "Guard",
   implement: "Focus"
 };
 export const FITTING_LABELS = {

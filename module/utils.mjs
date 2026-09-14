@@ -31,17 +31,24 @@ export function parseSigned(str) {
  * see what's granting a bonus instead of just a mystery final number (see the sheet's "effective"
  * notes next to Movement/Resilience/Reach). Only Signature items are listed since only those are
  * actually active (equipment-effects.mjs disables the transferred effect for anything else).
+ * @param {object|null} deriveModularStats - `(item) => {fortitude, resilience, movement}` for a
+ *   MODULAR item (weapon/ranged/armor/shield/implement — always modular, see
+ *   MODULAR_EQUIPMENT_CATEGORIES in item-card.mjs), whose own flat fields are blank; the real
+ *   numbers come from its assembled Chassis+Fitting instead (equipment-features.mjs's
+ *   deriveEquipmentStats, same function equipment-effects.mjs's sync now uses). Passed in rather
+ *   than imported directly to avoid a utils.mjs <-> equipment-features.mjs import cycle (that file
+ *   already imports parseSigned from here). Omit for a caller that never has modular items handy;
+ *   a modular item then just shows as contributing nothing, same as before this parameter existed.
  */
-export function computeEquipmentBonusSources(items) {
+export function computeEquipmentBonusSources(items, deriveModularStats = null) {
   return items
     .filter((i) => i.type === "equipment" && i.system.slot === "signature")
-    .map((i) => ({
-      name: i.name,
-      fortitude: parseSigned(i.system.fortitude),
-      resilience: parseSigned(i.system.resilience),
-      movement: parseSigned(i.system.movement),
-      reach: Number(i.system.reachBonus) || 0
-    }))
+    .map((i) => {
+      const { fortitude, resilience, movement } = i.system.isModular && deriveModularStats
+        ? deriveModularStats(i)
+        : { fortitude: parseSigned(i.system.fortitude), resilience: parseSigned(i.system.resilience), movement: parseSigned(i.system.movement) };
+      return { name: i.name, fortitude, resilience, movement, reach: Number(i.system.reachBonus) || 0 };
+    })
     .filter((b) => b.fortitude || b.resilience || b.movement || b.reach);
 }
 

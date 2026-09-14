@@ -125,19 +125,6 @@
           <label>{{localize "ESSENCE.Common.Tier"}} <input type="number" data-field="system.tier" value="{{system.tier}}" style="width:4em" min="1" max="5"></label>
           <label>{{localize "ESSENCE.Item.Equipment.Reach"}} <input type="text" data-field="system.cost" value="{{system.cost}}" style="width:5em"></label>
         </div>
-        {{#if isWornCategory}}
-          <div class="wizard-row">
-            <label>{{localize "ESSENCE.Common.Type"}} <input type="text" data-field="system.type" value="{{system.type}}"></label>
-            <label>{{localize "ESSENCE.Common.Range"}} <input type="text" data-field="system.range" value="{{system.range}}"></label>
-            <label><input type="checkbox" data-field="system.isModular" {{#if system.isModular}}checked{{/if}}> {{localize "ESSENCE.Item.Equipment.Modular"}}</label>
-          </div>
-          <div class="wizard-row">
-            <label>{{localize "ESSENCE.Common.Fortitude"}} <input type="text" data-field="system.fortitude" value="{{system.fortitude}}" style="width:5em"></label>
-            <label>{{localize "ESSENCE.Common.Resilience"}} <input type="text" data-field="system.resilience" value="{{system.resilience}}" style="width:5em"></label>
-            <label>{{localize "ESSENCE.Common.Movement"}} <input type="text" data-field="system.movement" value="{{system.movement}}" style="width:5em"></label>
-            <label>{{localize "ESSENCE.Item.Equipment.ReachBonus"}} <input type="number" data-field="system.reachBonus" value="{{system.reachBonus}}" style="width:4em"></label>
-          </div>
-        {{/if}}
         {{#if isGear}}
           <div class="wizard-row">
             <label>{{localize "ESSENCE.Common.Uses"}} <input type="number" data-field="system.uses" value="{{system.uses}}" style="width:4em" placeholder="{{localize 'ESSENCE.Common.Unlimited'}}"></label>
@@ -204,7 +191,7 @@
               <option value="weapon" {{#if (eq system.category "weapon")}}selected{{/if}}>weapon (Striker)</option>
               <option value="ranged" {{#if (eq system.category "ranged")}}selected{{/if}}>ranged (Launcher)</option>
               <option value="armor" {{#if (eq system.category "armor")}}selected{{/if}}>armor (Shell)</option>
-              <option value="shield" {{#if (eq system.category "shield")}}selected{{/if}}>shield (Shield)</option>
+              <option value="shield" {{#if (eq system.category "shield")}}selected{{/if}}>shield (Guard)</option>
               <option value="implement" {{#if (eq system.category "implement")}}selected{{/if}}>implement (Focus)</option>
             </select>
           </label>
