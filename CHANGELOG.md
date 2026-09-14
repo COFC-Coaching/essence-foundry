@@ -2,6 +2,25 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.57
+
+**Replaced the flat combat-equipment catalog with a full Chassis/Fitting/Augment system** —
+imported a new playtest catalog (30 Chassis, 30 Fittings, 24 Augments) into the equipment
+compendium, retiring the old 26 flat weapon/armor/shield/implement items in favor of the modular
+system the schema already supported but had no content for. "Handling" is renamed to "Grip"
+throughout. Flat authoring of weapon/armor/shield/implement equipment (Bulk Import, Item Creation
+Wizard) is retired in favor of assembling a Chassis + Fitting (+ Augments) instead — Toolkits,
+Consumable Kits, and Gear are unaffected.
+
+**Assembled items now show a combined Effect** built from their Chassis, Fitting, and any
+installed always-active Support Augment, instead of requiring each piece to be opened separately
+to see what the finished item actually does.
+
+**Compendium-authored (unowned) equipment items can now pick real Chassis/Fitting/Augments** —
+previously only an item already owned by a character could use the real pickers; authoring one
+straight in the compendium (e.g. via the Item Creation Wizard) fell back to a free-text
+placeholder. Both cases now resolve from the same shared equipment library.
+
 ## 0.6.56
 
 **Fixed the Combat tab's Action/Reaction Card Sort control undoing itself** — reported live as
