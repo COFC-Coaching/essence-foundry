@@ -13,7 +13,10 @@
     <p class="muted">{{localize "ESSENCE.Wizard.Character.ConceptHint"}}</p>
     <label>{{localize "ESSENCE.Wizard.Character.ConceptBackground"}}{{essenceEditor system.concept target="system.concept" button=true}}</label>
     <div class="wizard-row">
+      <label>{{localize "ESSENCE.Wizard.Character.CharacterName"}} <input type="text" name="name" value="{{actor.name}}"></label>
       <label>{{localize "ESSENCE.Wizard.Character.PlayerName"}} <input type="text" name="system.playerName" value="{{system.playerName}}"></label>
+    </div>
+    <div class="wizard-row">
       <label>{{localize "ESSENCE.Common.Tier"}} <input type="number" name="system.tier" value="{{system.tier}}" style="width:4em"></label>
       <label>{{localize "ESSENCE.Common.Level"}} <input type="number" name="system.level" value="{{system.level}}" style="width:4em"></label>
     </div>

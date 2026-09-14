@@ -141,7 +141,13 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   #applyEditable() {
     const body = this.element.querySelector(".window-content") ?? this.element;
     if (!this.isEditable) {
-      for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) el.disabled = true;
+      // See EssenceActorSheet#applyEditable — [data-card-filter]/[data-card-sort] are pure
+    // client-side view controls with no `name` attribute, so the safety lock has nothing to
+    // protect by disabling them.
+    for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) {
+      if (el.matches("[data-card-filter], [data-card-sort]")) continue;
+      el.disabled = true;
+    }
       for (const el of body.querySelectorAll("button[data-action], a[data-action]")) {
         el.classList.add("locked");
         el.style.pointerEvents = "none";
@@ -149,7 +155,13 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       return;
     }
     if (this.#editUnlocked) return;
-    for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) el.disabled = true;
+    // See EssenceActorSheet#applyEditable — [data-card-filter]/[data-card-sort] are pure
+    // client-side view controls with no `name` attribute, so the safety lock has nothing to
+    // protect by disabling them.
+    for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) {
+      if (el.matches("[data-card-filter], [data-card-sort]")) continue;
+      el.disabled = true;
+    }
   }
 
   static #onToggleEditLock() {
@@ -161,6 +173,10 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   #wireCardControls() {
     const input = this.element.querySelector("[data-card-filter]");
     input?.addEventListener("input", (e) => {
+      // See EssenceActorSheet#wireCardControls — stops this reaching the form-level
+      // submitOnChange listener, which otherwise re-rendered the whole sheet on every keystroke/
+      // selection and silently undid the filter/sort just applied.
+      e.stopPropagation();
       const q = e.currentTarget.value.trim().toLowerCase();
       for (const li of this.element.querySelectorAll(".card-list li[data-card-name]")) {
         const haystack = `${li.dataset.cardName} ${li.dataset.cardSummary ?? ""}`.toLowerCase();
@@ -169,7 +185,8 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     });
 
     for (const select of this.element.querySelectorAll("[data-card-sort]")) {
-      select.addEventListener("change", () => {
+      select.addEventListener("change", (e) => {
+        e.stopPropagation();
         const list = this.element.querySelector(`.card-list[data-card-list="${select.dataset.cardSort}"]`);
         if (!list) return;
         const key = select.value;
