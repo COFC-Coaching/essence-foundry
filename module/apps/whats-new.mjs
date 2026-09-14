@@ -8,7 +8,8 @@
  *
  * Scope is "client" (per browser/user profile), not "world": every player and the GM each see the
  * card once on their own next login after an update, rather than once total for the whole world or
- * every single time anyone loads the game.
+ * every single time anyone loads the game. Also registers a manual "/whatsnew" chat command (see
+ * handleWhatsNewChatCommand) so anyone can pull the current version's card back up on demand.
  */
 
 const SETTING_KEY = "lastSeenVersion";
@@ -83,22 +84,41 @@ async function buildCard(version) {
   `;
 }
 
-/** Call once from the "ready" hook. */
+/**
+ * Call once from the "ready" hook. Shows on EVERY version mismatch, including a client's very
+ * first-ever visit to a world — deliberately not special-cased away. An earlier version of this
+ * skipped the card whenever `lastSeen` had never been set before, meaning to avoid spamming a
+ * brand-new player with historical announcements — but since nobody's `lastSeen` had ever been set
+ * before THIS feature's own first release, that logic silently skipped the card for every existing
+ * user of every existing world on the one update where it mattered most (confirmed live: a GM
+ * updating an existing world to the version that introduced this never saw it, while a player who'd
+ * separately already triggered a stored value did). A brand-new player seeing one orientation card
+ * on their first join is a perfectly fine trade-off for actually being reliable for existing users.
+ */
 export async function checkWhatsNew() {
   const currentVersion = game.system.version;
   const lastSeen = game.settings.get("essence-system", SETTING_KEY);
-  if (lastSeen === currentVersion) return;
-
-  // A brand-new world/user (no lastSeen recorded yet) has nothing to compare against and nothing
-  // useful to announce — just baseline them to the current version silently instead of showing a
-  // card on their very first-ever login.
-  if (lastSeen) {
-    const content = await buildCard(currentVersion);
-    await ChatMessage.create({
-      whisper: [game.user.id],
-      speaker: { alias: "The Essence System" },
-      content
-    });
-  }
+  if (lastSeen !== currentVersion) await showWhatsNew(currentVersion);
   await game.settings.set("essence-system", SETTING_KEY, currentVersion);
+}
+
+/** Posts the card for `version` (defaults to the currently-installed version) unconditionally —
+ *  used both by checkWhatsNew() above and by the manual "/whatsnew" chat command below, so anyone
+ *  (a GM who wants to double check, a player who dismissed it too fast) can pull it back up on
+ *  demand without needing another version bump. */
+export async function showWhatsNew(version = game.system.version) {
+  const content = await buildCard(version);
+  await ChatMessage.create({
+    whisper: [game.user.id],
+    speaker: { alias: "The Essence System" },
+    content
+  });
+}
+
+/** Lets any user type /whatsnew in chat to redisplay the current version's card on demand — see
+ *  showWhatsNew()'s doc comment. Registered once from essence.mjs's "chatMessage" hook. */
+export function handleWhatsNewChatCommand(message) {
+  if (!/^\/whatsnew\b/i.test(message.trim())) return true;
+  showWhatsNew();
+  return false;
 }

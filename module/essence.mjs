@@ -20,7 +20,7 @@ import { capitalize, fitTitleSize, domainResource } from "./utils.mjs";
 import { syncEquipmentEffect } from "./data/equipment-effects.mjs";
 import { ROLE_BUDGETS } from "./data/monster-budgets.mjs";
 import EssenceRoleBudgetsSettings from "./apps/role-budgets-settings.mjs";
-import { registerWhatsNewSetting, checkWhatsNew } from "./apps/whats-new.mjs";
+import { registerWhatsNewSetting, checkWhatsNew, handleWhatsNewChatCommand } from "./apps/whats-new.mjs";
 
 /** Foundry combat's own enum values, given a display label a player should actually see. */
 const TURN_LABELS = { notStarted: "Not Started", first: "First Turn", active: "Active", ended: "Ended" };
@@ -121,6 +121,11 @@ Hooks.once("init", () => {
 Hooks.once("ready", () => {
   checkWhatsNew();
 });
+
+/** Lets any user type /whatsnew to redisplay the current version's card on demand — see
+ *  whats-new.mjs's handleWhatsNewChatCommand(). Returning false suppresses the normal "send this
+ *  as a chat message" behavior, matching every other slash-command hook's contract. */
+Hooks.on("chatMessage", (chatLog, message) => handleWhatsNewChatCommand(message));
 
 Hooks.once("ready", async () => {
   const pack = game.packs.get("essence-system.conditions");
