@@ -2,6 +2,19 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.56
+
+**Fixed the Combat tab's Action/Reaction Card Sort control undoing itself** — reported live as
+sorting "just breaking." The Sort/filter controls have no `name` attribute (nothing there is actor
+data to save), but their change/input events still bubbled up to the sheet's own
+form-level auto-save listener, which triggered a full re-render on every selection — silently
+rebuilding the card list from scratch and undoing whatever sort was just applied. Also freed the
+Sort/filter controls from the sheet's edit-lock: nothing about picking a sort order needs the same
+protection as editing a build value, so there was no reason it required unlocking the sheet first.
+
+**Added a Character Name field to the Character Wizard's first step** — only Player Name was there
+before, so naming the actual character had to happen somewhere else first.
+
 ## 0.6.55
 
 **Fixed equipment Fortitude/Resilience/Movement/Reach bonuses silently compounding forever** —
