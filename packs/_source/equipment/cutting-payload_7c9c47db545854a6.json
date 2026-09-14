@@ -1,0 +1,29 @@
+{
+  "_id": "7c9c47db545854a6",
+  "name": "Cutting Payload",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "ranged",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>Weapon Damage dealt by this item has the Slashing type unless the Action explicitly replaces it. Ordinary ammunition is abstracted.</p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>A reusable, setting-neutral ammunition profile.</p>",
+    "grantsEquipmentCard": false,
+    "handedness": "",
+    "rangeModifier": "",
+    "reconfigureCategory": "simple",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!7c9c47db545854a6"
+}

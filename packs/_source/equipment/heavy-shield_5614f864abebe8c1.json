@@ -1,0 +1,31 @@
+{
+  "_id": "5614f864abebe8c1",
+  "name": "Heavy Shield",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "shield",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>When you use a Reaction through this Shield that increases Fortitude, you may burn 1 additional Reaction die to increase that Defense by an additional 2 for the creatures protected by that Reaction.</p>",
+    "passive": "",
+    "special": "<p>The burned die is not rolled and generates no Surge.</p>",
+    "flavor": "<p>A more expensive, stronger physical response.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Grip"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5614f864abebe8c1"
+}

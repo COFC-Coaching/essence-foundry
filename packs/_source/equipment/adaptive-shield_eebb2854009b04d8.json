@@ -1,0 +1,34 @@
+{
+  "_id": "eebb2854009b04d8",
+  "name": "Adaptive Shield",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "shield",
+    "slot": "armory",
+    "tier": 2,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>During Recovery or Downtime, choose Fortitude, Composure, or Harmony. When you use a Reaction through this Shield that increases that Defense, you may burn 1 additional Reaction die to increase it by an additional 1. This Shield has two independent mounts.</p>",
+    "passive": "",
+    "special": "<p>The ordinary defensive benefit is deliberately less efficient than a dedicated Tier 1 Shield; versatility and mounts are the advantage.</p>",
+    "flavor": "<p>Reconfigurable defense and Augment capacity.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      },
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Grip"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!eebb2854009b04d8"
+}

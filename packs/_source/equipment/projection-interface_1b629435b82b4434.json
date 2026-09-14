@@ -1,0 +1,29 @@
+{
+  "_id": "1b629435b82b4434",
+  "name": "Projection Interface",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "implement",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p><strong>This Interface's effect:</strong> Gain Equipment Projection. Choose its Physical, Mental, or Spiritual profile during Recovery or Downtime; record the choice on the item.</p><p><strong>Equipment Projection</strong> (EC02)</p><p><em>ACTION &bull; Roll 2+ &bull; USES — &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Equipment + Profile vs Profile</p><p><strong>Range / Targeting:</strong> 6 units / Single creature</p><p><strong>Effect:</strong> Use the profile recorded on the Interface. Physical: Grace vs Fortitude; deal 1 Force Damage on a hit. Mental: Acuity vs Composure; deal 1 Psychic Damage on a hit. Spiritual: Adaptability vs Harmony; deal 1 Radiant Damage on a hit. This is an ordinary Source attack, not a Function Augment.</p><p><strong>Surge 1: After resolving the attack, move 1 unit. Once per use; does not require a hit.</strong></p><p><strong>Surge 2: Deal +1 Damage to the hit target. Once per use.</strong></p><p><em>Design note: Channeling Interface increases Range to 8. Profiles are a catalog convention, not a universal relation between Damage type and Defense.</em></p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>A basic ranged capability across any of the three domains.</p>",
+    "grantsEquipmentCard": true,
+    "handedness": "one-handed",
+    "rangeModifier": "",
+    "reconfigureCategory": "simple",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1b629435b82b4434"
+}

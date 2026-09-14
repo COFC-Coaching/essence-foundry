@@ -1,0 +1,31 @@
+{
+  "_id": "a4aed0c7cf94ea00",
+  "name": "Reinforced Shell",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "armor",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "+1",
+    "resilience": "+1",
+    "movement": "",
+    "effect": "<p>While worn, gain +1 Resilience and +1 Fortitude.</p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>General physical protection.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Rigging"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!a4aed0c7cf94ea00"
+}

@@ -1,0 +1,29 @@
+{
+  "_id": "1b45920d5af2c3db",
+  "name": "Braced Rigging",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "armor",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>Reduce each push or pull that would move you by 1 unit, to a minimum of 0. This does not affect teleportation.</p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>Holding formation and resisting displacement.</p>",
+    "grantsEquipmentCard": false,
+    "handedness": "",
+    "rangeModifier": "",
+    "reconfigureCategory": "structural",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1b45920d5af2c3db"
+}

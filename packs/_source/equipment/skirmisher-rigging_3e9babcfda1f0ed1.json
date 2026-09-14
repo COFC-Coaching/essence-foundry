@@ -1,0 +1,29 @@
+{
+  "_id": "3e9babcfda1f0ed1",
+  "name": "Skirmisher Rigging",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "armor",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>After you voluntarily move at least 4 units during your Turn, gain +1 Fortitude until the start of your next Turn. Count normal and granted Movement; do not count teleportation.</p>",
+    "passive": "",
+    "special": "<p>Voluntary movement and teleportation exclusions are explicit draft timing clarifications.</p>",
+    "flavor": "<p>Protection earned through active movement.</p>",
+    "grantsEquipmentCard": false,
+    "handedness": "",
+    "rangeModifier": "",
+    "reconfigureCategory": "structural",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!3e9babcfda1f0ed1"
+}

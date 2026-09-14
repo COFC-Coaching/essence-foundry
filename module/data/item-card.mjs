@@ -19,6 +19,20 @@ export const EQUIPMENT_CATEGORY_LABELS = {
   gear: "Gear"
 };
 
+/**
+ * The subset of EQUIPMENT_CATEGORY_LABELS still authorable as a standalone, pre-fab compendium
+ * `equipment` template (via the Item Creation Wizard's "Equipment" type or Bulk Import's
+ * "equipment" CSV template) — weapon/armor/shield/implement are excluded as of the 2026-09-13
+ * Chassis/Fitting/Augment catalog import (see design/equipment-catalog-2026-09-13-migration.md):
+ * those four categories are now wholesale modular, authored as Chassis + Fitting (+ Augment)
+ * templates instead, one per equipment TYPE_CONFIG entry (chassis/fitting/augment) rather than one
+ * flat item. This does NOT remove weapon/armor/shield/implement from the schema's own `category`
+ * choices above — an actual assembled `equipment` Item (isModular: true, chassisItemId/
+ * fittingItemId) still needs one of those four as what it fundamentally is; only the "author one
+ * flat pre-fab item with its own hardcoded Fortitude/Effect/etc." path is retired.
+ */
+export const FLAT_EQUIPMENT_CATEGORIES = ["toolkit", "consumable-kit", "gear"];
+
 /** Shared schema pieces for action-card / reaction-card, mirroring CombatCard in card-builder.ts */
 class EssenceCardData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -122,7 +136,7 @@ export class EssenceEquipmentData extends foundry.abstract.TypeDataModel {
       // Modular but with no owning Actor yet (a compendium template being authored, not a
       // character's actual gear) — the real Chassis/Fitting/Augment picker needs an Actor's owned
       // Items to choose from and has nothing to offer here, so this is a plain free-text
-      // placeholder instead ("Edge Striker T2 / Swift Handling T1 / Whetstone Edge, Rapid Draw")
+      // placeholder instead ("Edge Striker T2 / Swift Grip T1 / Whetstone Edge, Rapid Draw")
       // until real compendium-level Component linking exists. Ignored once the item has an Actor
       // and the real chassisItemId/fittingItemId/mounts fields take over.
       modularNotes: new fields.StringField({ initial: "" }),

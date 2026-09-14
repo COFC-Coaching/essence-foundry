@@ -1,0 +1,29 @@
+{
+  "_id": "a6b801fa0c997090",
+  "name": "Heavy Grip",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>A successful attack using this weapon that rolls at least 4 dice inflicts 1 additional Wound on each successfully hit target after its other effects resolve. Use the weapon’s Damage domain for this Wound. Temporary Wounds absorb it normally.</p>",
+    "passive": "",
+    "special": "<p>Preserves an additional Wound, not additional Damage. Burned dice do not count. No once-per-turn cap. Applying this to every hit target is an explicit draft interpretation; high-priority playtest.</p>",
+    "flavor": "<p>A large commitment converts directly into additional injury.</p>",
+    "grantsEquipmentCard": false,
+    "handedness": "two-handed",
+    "rangeModifier": "Melee 1",
+    "reconfigureCategory": "simple",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!a6b801fa0c997090"
+}

@@ -1,0 +1,31 @@
+{
+  "_id": "ffba5c6fd6090df4",
+  "name": "Fortress Shell",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "armor",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "+2",
+    "movement": "-4",
+    "effect": "<p>While worn, gain +2 Resilience and reduce your base Movement by 4 units, to a minimum of 0.</p>",
+    "passive": "",
+    "special": "<p>Protection and its movement penalty remain on the same component.</p>",
+    "flavor": "<p>High sustained protection with a substantial mobility cost.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Rigging"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ffba5c6fd6090df4"
+}

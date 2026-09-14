@@ -1,0 +1,20 @@
+{
+  "_id": "4dec5d7ad634ea28",
+  "name": "Anchoring",
+  "type": "augment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "kind": "support",
+    "compatibility": "Any modular category",
+    "uses": null,
+    "usesRemaining": null,
+    "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p>While this item is active, another creature cannot teleport you or exchange your position with another space or creature unless you are willing. Ordinary forced movement still affects you.</p>",
+    "flavor": "<p>A categorical answer to hostile spatial displacement.</p>"
+  },
+  "folder": "3216b00ec364f4c1",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!4dec5d7ad634ea28"
+}

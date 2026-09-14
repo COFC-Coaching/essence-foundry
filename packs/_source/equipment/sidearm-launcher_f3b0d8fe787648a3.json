@@ -1,0 +1,31 @@
+{
+  "_id": "f3b0d8fe787648a3",
+  "name": "Sidearm Launcher",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "ranged",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>Attacks using this weapon ignore any penalty for making ranged attacks against adjacent targets. The Payload supplies weapon Damage type.</p>",
+    "passive": "",
+    "special": "<p>This removes an applicable penalty; it does not create a new universal adjacent-target penalty.</p>",
+    "flavor": "<p>Close-range ranged combat.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Payload"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f3b0d8fe787648a3"
+}

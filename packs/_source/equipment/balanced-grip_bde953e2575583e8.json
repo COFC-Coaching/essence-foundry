@@ -1,0 +1,29 @@
+{
+  "_id": "bde953e2575583e8",
+  "name": "Balanced Grip",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>Once per turn, after rolling an attack using this weapon as its Source and before choosing the Success Die, reroll one of those dice. Use the new result.</p>",
+    "passive": "",
+    "special": "<p>Uses the catalog’s one-reroll-per-die convention; see D5.</p>",
+    "flavor": "<p>Reliable one-handed attacks.</p>",
+    "grantsEquipmentCard": false,
+    "handedness": "one-handed",
+    "rangeModifier": "Melee 1",
+    "reconfigureCategory": "simple",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!bde953e2575583e8"
+}

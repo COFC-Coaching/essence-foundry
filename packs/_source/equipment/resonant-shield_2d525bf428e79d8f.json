@@ -1,0 +1,31 @@
+{
+  "_id": "2d525bf428e79d8f",
+  "name": "Resonant Shield",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "shield",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>When you use a Reaction through this Shield that increases Harmony, increase that Defense by an additional 1 for each protected creature.</p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>Active spiritual defense.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Grip"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2d525bf428e79d8f"
+}

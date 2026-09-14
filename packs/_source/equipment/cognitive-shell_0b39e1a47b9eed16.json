@@ -1,0 +1,34 @@
+{
+  "_id": "0b39e1a47b9eed16",
+  "name": "Cognitive Shell",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "armor",
+    "slot": "armory",
+    "tier": 2,
+    "fortitude": "",
+    "resilience": "+1",
+    "movement": "",
+    "effect": "<p>While worn, gain +1 Resilience and +1 Composure. This Shell has two independent mounts.</p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>Protection against mental attacks while retaining a general Damage buffer.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      },
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Rigging"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!0b39e1a47b9eed16"
+}

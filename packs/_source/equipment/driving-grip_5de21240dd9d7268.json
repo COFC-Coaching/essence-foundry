@@ -1,0 +1,29 @@
+{
+  "_id": "5de21240dd9d7268",
+  "name": "Driving Grip",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>Once per turn, after a successful attack using this weapon, push or pull one successfully hit target 1 unit.</p>",
+    "passive": "",
+    "special": "<p>The movement need not deal Damage; the attack must hit.</p>",
+    "flavor": "<p>One-handed positioning control.</p>",
+    "grantsEquipmentCard": false,
+    "handedness": "one-handed",
+    "rangeModifier": "Melee 1",
+    "reconfigureCategory": "simple",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5de21240dd9d7268"
+}

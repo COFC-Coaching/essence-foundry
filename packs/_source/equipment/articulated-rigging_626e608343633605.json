@@ -1,0 +1,29 @@
+{
+  "_id": "626e608343633605",
+  "name": "Articulated Rigging",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "armor",
+    "slot": "armory",
+    "tier": 2,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "+2",
+    "effect": "<p>Reduce the base Movement penalty imposed by this Shell by 2 units, to a minimum penalty of 0. Once per turn, ignore the additional Movement cost of Difficult Terrain for up to 2 units you move.</p>",
+    "passive": "",
+    "special": "<p>Does not reduce penalties from other items or effects.</p>",
+    "flavor": "<p>Mitigating heavy armor and difficult ground.</p>",
+    "grantsEquipmentCard": false,
+    "handedness": "",
+    "rangeModifier": "",
+    "reconfigureCategory": "structural",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!626e608343633605"
+}

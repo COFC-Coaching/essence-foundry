@@ -221,7 +221,7 @@
           <label>{{localize "ESSENCE.Common.Fortitude"}} <input type="text" data-field="system.fortitude" value="{{system.fortitude}}" style="width:5em" placeholder="e.g. +2"></label>
           <label>{{localize "ESSENCE.Common.Resilience"}} <input type="text" data-field="system.resilience" value="{{system.resilience}}" style="width:5em" placeholder="e.g. +1"></label>
           <label>{{localize "ESSENCE.Common.Movement"}} <input type="text" data-field="system.movement" value="{{system.movement}}" style="width:5em" placeholder="e.g. -1"></label>
-          <label>{{localize "ESSENCE.Item.Component.CompatibleFittingCategory"}} <input type="text" data-field="system.compatibleFittingCategory" value="{{system.compatibleFittingCategory}}" placeholder="e.g. Handling, Payload, Rigging, Interface"></label>
+          <label>{{localize "ESSENCE.Item.Component.CompatibleFittingCategory"}} <input type="text" data-field="system.compatibleFittingCategory" value="{{system.compatibleFittingCategory}}" placeholder="e.g. Grip, Payload, Rigging, Interface"></label>
         </div>
       {{/if}}
     {{/if}}
@@ -262,10 +262,10 @@
         <div class="wizard-row">
           <label>{{localize "ESSENCE.Common.Category"}}
             <select data-field="system.category">
-              <option value="weapon" {{#if (eq system.category "weapon")}}selected{{/if}}>weapon (Handling)</option>
+              <option value="weapon" {{#if (eq system.category "weapon")}}selected{{/if}}>weapon (Grip)</option>
               <option value="ranged" {{#if (eq system.category "ranged")}}selected{{/if}}>ranged (Payload)</option>
               <option value="armor" {{#if (eq system.category "armor")}}selected{{/if}}>armor (Rigging)</option>
-              <option value="shield" {{#if (eq system.category "shield")}}selected{{/if}}>shield (Handling)</option>
+              <option value="shield" {{#if (eq system.category "shield")}}selected{{/if}}>shield (Grip)</option>
               <option value="implement" {{#if (eq system.category "implement")}}selected{{/if}}>implement (Interface)</option>
             </select>
           </label>

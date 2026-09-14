@@ -1,0 +1,31 @@
+{
+  "_id": "d963ea71f8f65c32",
+  "name": "Hooked Striker",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": 2,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>Choose Slashing or Piercing each time you declare a weapon attack using this item. Once per turn, when that attack successfully pushes or pulls a creature, increase that forced movement by 1 unit against one affected creature.</p>",
+    "passive": "",
+    "special": "<p>The extra movement requires an existing push or pull; it does not create one.</p>",
+    "flavor": "<p>Movement control and flexible physical Damage.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Grip"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d963ea71f8f65c32"
+}

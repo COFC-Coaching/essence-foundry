@@ -42,6 +42,16 @@
     {{/if}}
   {{/if}}
 
+  {{#if stats.combinedEffect.length}}
+    <div class="card-view-line">
+      <div class="card-view-label">{{localize "ESSENCE.Item.Equipment.CombinedEffect"}}</div>
+      <ul>
+        {{#each stats.combinedEffect as |ce|}}
+          <li><strong>{{ce.source}}</strong> — {{{ce.html}}}</li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/if}}
   {{#if system.effect}}
     <div class="card-view-line">
       <div class="card-view-label">{{localize "ESSENCE.Common.Effect"}}</div>
@@ -129,7 +139,6 @@
 {{#if isWornCategory}}
   {{#if system.isModular}}
   <h3 class="section-head">{{localize "ESSENCE.Item.Equipment.ModularAssembly"}}</h3>
-  {{#if item.actor}}
     <div class="equipment-fields grid-2">
       <label>{{chassisLabel}}
         <select class="chassis-select">
@@ -148,12 +157,25 @@
         </select>
       </label>
     </div>
-    <p class="muted">{{localize "ESSENCE.Item.Equipment.AssignFreeHint" chassisLabel=chassisLabel fittingLabel=fittingLabel}}</p>
-    <button type="button" data-action="reconfigureFittingCost"><i class="fa-solid fa-dice"></i> {{localize "ESSENCE.Common.Pay"}} {{fittingLabel}} {{localize "ESSENCE.Item.Component.Reconfigure"}} {{localize "ESSENCE.Item.Equipment.CostSuffix"}} ({{#if stats.fitting}}{{#if stats.fitting.system.reconfigureCostOverride}}{{stats.fitting.system.reconfigureCostOverride}}{{else}}{{#if (eq stats.fitting.system.reconfigureCategory "structural")}}3{{else}}1{{/if}}{{/if}}{{else}}1{{/if}} {{#if (eq stats.fitting.system.reconfigureCategory "structural")}}{{localize "ESSENCE.Item.Equipment.ActionDice"}}{{else}}{{localize "ESSENCE.Item.Equipment.ActionDie"}}{{/if}})</button>
+    {{#if item.actor}}
+      <p class="muted">{{localize "ESSENCE.Item.Equipment.AssignFreeHint" chassisLabel=chassisLabel fittingLabel=fittingLabel}}</p>
+      <button type="button" data-action="reconfigureFittingCost"><i class="fa-solid fa-dice"></i> {{localize "ESSENCE.Common.Pay"}} {{fittingLabel}} {{localize "ESSENCE.Item.Component.Reconfigure"}} {{localize "ESSENCE.Item.Equipment.CostSuffix"}} ({{#if stats.fitting}}{{#if stats.fitting.system.reconfigureCostOverride}}{{stats.fitting.system.reconfigureCostOverride}}{{else}}{{#if (eq stats.fitting.system.reconfigureCategory "structural")}}3{{else}}1{{/if}}{{/if}}{{else}}1{{/if}} {{#if (eq stats.fitting.system.reconfigureCategory "structural")}}{{localize "ESSENCE.Item.Equipment.ActionDice"}}{{else}}{{localize "ESSENCE.Item.Equipment.ActionDie"}}{{/if}})</button>
+    {{else}}
+      <p class="muted">{{localize "ESSENCE.Item.Equipment.TemplateAssignHint" chassisLabel=chassisLabel fittingLabel=fittingLabel}}</p>
+    {{/if}}
 
     {{#if stats.chassis}}
       <h4>{{localize "ESSENCE.Item.Equipment.DerivedFrom" chassisLabel=chassisLabel fittingLabel=fittingLabel}}</h4>
       <p>{{localize "ESSENCE.Common.Fortitude"}} {{stats.fortitude}} · {{localize "ESSENCE.Common.Resilience"}} {{stats.resilience}} · {{localize "ESSENCE.Common.Movement"}} {{stats.movement}}</p>
+
+      {{#if stats.combinedEffect.length}}
+        <h4>{{localize "ESSENCE.Item.Equipment.CombinedEffect"}}</h4>
+        <ul>
+          {{#each stats.combinedEffect as |ce|}}
+            <li><strong>{{ce.source}}</strong> — {{{ce.html}}}</li>
+          {{/each}}
+        </ul>
+      {{/if}}
 
       <h4>{{localize "ESSENCE.Item.Component.AugmentMounts"}}</h4>
       <ol class="mounts">
@@ -173,7 +195,9 @@
                 {{localize "ESSENCE.Item.Equipment.Link"}} {{#if m.linkOn}}{{localize "ESSENCE.Common.On"}}{{else}}{{localize "ESSENCE.Common.Off"}}{{/if}}
               </button>
             {{/if}}
-            <button type="button" data-action="swapAugmentCost"><i class="fa-solid fa-dice"></i> {{localize "ESSENCE.Item.Equipment.PayAugmentSwapCost"}}</button>
+            {{#if ../item.actor}}
+              <button type="button" data-action="swapAugmentCost"><i class="fa-solid fa-dice"></i> {{localize "ESSENCE.Item.Equipment.PayAugmentSwapCost"}}</button>
+            {{/if}}
           </li>
         {{/each}}
       </ol>
@@ -187,11 +211,6 @@
         </ul>
       {{/if}}
     {{/if}}
-  {{else}}
-    <label>{{localize "ESSENCE.Item.Equipment.ChassisFittingAugments"}} <span class="muted">{{localize "ESSENCE.Item.Equipment.FreeTextHint"}}</span>
-      <textarea name="system.modularNotes" rows="2" placeholder="e.g. Chassis: Edge Striker T2, Fitting: Swift Handling T1, Augments: Whetstone Edge, Rapid Draw">{{system.modularNotes}}</textarea>
-    </label>
-  {{/if}}
   {{/if}}
 {{/if}}
 

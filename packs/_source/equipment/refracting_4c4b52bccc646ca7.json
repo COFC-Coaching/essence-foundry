@@ -1,0 +1,20 @@
+{
+  "_id": "4c4b52bccc646ca7",
+  "name": "Refracting",
+  "type": "augment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "kind": "support",
+    "compatibility": "Ranged Weapon / Magical Implement",
+    "uses": null,
+    "usesRemaining": null,
+    "effect": "<p><strong>Requirement:</strong> The host must supply an ordinary ranged Source Action with a numeric Range.</p><p>Once per turn, an ordinary ranged Source Action may follow a path with one bend in an empty space you can detect. You must detect the target; both path segments must be unobstructed and their combined length cannot exceed the Action’s Range. Measure directional cover from the final segment.</p><p>Does not increase Range, bend a melee attack, alter an area’s shape, or bypass a sealed wall.</p>",
+    "flavor": "<p>Attacking around an intervening obstacle without seeing through it.</p>"
+  },
+  "folder": "3216b00ec364f4c1",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!4c4b52bccc646ca7"
+}

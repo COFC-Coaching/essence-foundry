@@ -1,0 +1,34 @@
+{
+  "_id": "5876f72bb521e046",
+  "name": "Socketed Striker",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": 2,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>Choose Slashing, Piercing, or Bludgeoning when this Chassis is acquired. That is its weapon Damage type. It has two independent mounts and no additional inherent effect.</p>",
+    "passive": "",
+    "special": "<p>The chosen Damage type is part of this Chassis; changing it requires a different Chassis.</p>",
+    "flavor": "<p>Augment capacity instead of a stronger ordinary attack.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      },
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Grip"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5876f72bb521e046"
+}

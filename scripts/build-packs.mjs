@@ -389,6 +389,96 @@ function extraEquipmentToItem(e, folderMap) {
   };
 }
 
+/**
+ * Playtest draft 0.1 catalog (2026-09-13, "Essence_Equipment_Catalog") — 30 Chassis + 30 Fittings
+ * + 24 Augments (12 Support + 12 Function) replacing the 26 flat combat-equipment rows that used
+ * to come from raw-equipment-cards.json/extra-equipment-data.json (see the `wants("equipment")`
+ * block below: weapon/armor/shield/implement rows from both those sources are now skipped —
+ * migrated 1:1 into this catalog per its own migration ledger — while toolkit/consumable-kit/gear
+ * rows from the same two sources are untouched, since the catalog explicitly leaves those alone).
+ * Source data lives in scripts/component-catalog-data.json, hand-built from the catalog
+ * spreadsheet/doc (stableId() keeps every id deterministic across re-runs, same convention as
+ * extraEquipmentToItem above).
+ */
+function chassisToItem(c, folderMap) {
+  const _id = stableId(`chassis:${c.id}`);
+  return {
+    _id,
+    name: c.name,
+    type: "chassis",
+    img: "icons/svg/shield.svg",
+    system: {
+      category: c.category,
+      slot: "armory",
+      tier: c.tier,
+      fortitude: c.fortitude || "",
+      resilience: c.resilience || "",
+      movement: c.movement || "",
+      effect: c.effect || "",
+      passive: "",
+      special: c.special || "",
+      flavor: c.flavor || "",
+      grantsEquipmentCard: !!c.grantsEquipmentCard,
+      mounts: Array.from({ length: c.mountCount || 1 }, () => ({ linkedWith: null })),
+      compatibleFittingCategory: c.compatibleFittingCategory || ""
+    },
+    folder: folderMap ? (folderMap["chassis"] ?? null) : null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
+function fittingToItem(f, folderMap) {
+  const _id = stableId(`fitting:${f.id}`);
+  return {
+    _id,
+    name: f.name,
+    type: "fitting",
+    img: "icons/svg/item-bag.svg",
+    system: {
+      category: f.category,
+      slot: "armory",
+      tier: f.tier,
+      fortitude: f.fortitude || "",
+      resilience: f.resilience || "",
+      movement: f.movement || "",
+      effect: f.effect || "",
+      passive: "",
+      special: f.special || "",
+      flavor: f.flavor || "",
+      grantsEquipmentCard: !!f.grantsEquipmentCard,
+      handedness: f.handedness || "",
+      rangeModifier: f.rangeModifier || "",
+      reconfigureCategory: f.reconfigureCategory || "simple",
+      reconfigureCostOverride: null
+    },
+    folder: folderMap ? (folderMap["fitting"] ?? null) : null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
+function augmentToItem(a, folderMap) {
+  const _id = stableId(`augment:${a.id}`);
+  return {
+    _id,
+    name: a.name,
+    type: "augment",
+    img: "icons/svg/upgrade.svg",
+    system: {
+      kind: a.kind,
+      compatibility: a.compatibility || "Any",
+      uses: a.uses ?? null,
+      usesRemaining: a.uses ?? null,
+      effect: (a.effect || "") + (a.special || ""),
+      flavor: a.flavor || ""
+    },
+    folder: folderMap ? (folderMap["augment"] ?? null) : null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
 function speciesToItem(s) {
   return {
     _id: stableId(`species:${s.name}`),
@@ -700,17 +790,33 @@ async function main() {
 
   if (wants("equipment")) {
     const equipmentFolders = writeCategoryFolders("equipment", EQUIPMENT_CATEGORIES_FOR_FOLDERS);
-    // Chassis/Fitting/Augment folders (see COMPONENT_TYPES_FOR_FOLDERS) — no source data writes
-    // any items into them here since there's no pre-authored content for those types; they exist
-    // so a GM-authored one (via content-wizard.mjs) has somewhere to land.
-    writeCategoryFolders("equipment", COMPONENT_TYPES_FOR_FOLDERS);
+    // Chassis/Fitting/Augment folders (see COMPONENT_TYPES_FOR_FOLDERS) — the playtest catalog
+    // below is the first pre-authored content for these types; a GM-authored one (via
+    // content-wizard.mjs) lands in these same folders alongside it.
+    const componentFolders = writeCategoryFolders("equipment", COMPONENT_TYPES_FOR_FOLDERS);
 
-    const equipmentCards = loadRows("raw-equipment-cards.json");
+    // The old flat weapon/armor/shield/implement rows are retired: the playtest catalog below
+    // (chassisData/fittingData/augmentData) migrates every one of them 1:1 into a Chassis+Fitting
+    // pair per its own migration ledger (see scripts/component-catalog-data.json's `basis` field on
+    // each Chassis/Fitting). Only toolkit/consumable-kit/gear rows survive from the old sources —
+    // the catalog explicitly leaves Toolkits and Consumable Kits outside this pass (its own D8).
+    const MIGRATED_CATEGORIES = new Set(["weapon", "armor", "shield", "implement"]);
+    const equipmentCards = loadRows("raw-equipment-cards.json")
+      .filter((row) => !MIGRATED_CATEGORIES.has(mapCategory(row.category || row.data.category)));
     for (const row of equipmentCards) writeSourceDoc("equipment", equipmentToItem(row, equipmentFolders));
 
-    const extraEquipment = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "extra-equipment-data.json"), "utf8"));
+    const extraEquipment = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "extra-equipment-data.json"), "utf8"))
+      .filter((e) => !MIGRATED_CATEGORIES.has(mapCategory(e.category)));
     for (const e of extraEquipment) writeSourceDoc("equipment", extraEquipmentToItem(e, equipmentFolders));
-    equipmentCount = equipmentCards.length + extraEquipment.length;
+
+    const { chassis, fittings, augments } = JSON.parse(
+      fs.readFileSync(path.join(ROOT, "scripts", "component-catalog-data.json"), "utf8")
+    );
+    for (const c of chassis) writeSourceDoc("equipment", chassisToItem(c, componentFolders));
+    for (const f of fittings) writeSourceDoc("equipment", fittingToItem(f, componentFolders));
+    for (const a of augments) writeSourceDoc("equipment", augmentToItem(a, componentFolders));
+
+    equipmentCount = equipmentCards.length + extraEquipment.length + chassis.length + fittings.length + augments.length;
   }
 
   if (wants("species") || wants("heritages") || wants("distinctions")) {

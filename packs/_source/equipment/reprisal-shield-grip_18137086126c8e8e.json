@@ -1,0 +1,29 @@
+{
+  "_id": "18137086126c8e8e",
+  "name": "Reprisal Shield Grip",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "shield",
+    "slot": "armory",
+    "tier": 2,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p><strong>This Grip's effect:</strong> Gain Equipment Guard, targeting yourself. After the triggering attack resolves, if it failed to hit you and the attacker is adjacent, push the attacker 1 unit.</p><p><strong>Equipment Guard</strong> (EC01)</p><p><em>REACTION &bull; Roll 2+ &bull; USES — &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Equipment + Vigor / Resolve / Anima; automatic effect</p><p><strong>Range / Targeting:</strong> Self; expanded by Grip / One protected creature; Braced Grip may protect two</p><p><strong>Trigger:</strong> Another character declares an attack targeting a creature this Shield’s Grip can protect; use before the attack is rolled.</p><p><strong>Effect:</strong> Choose a Defense contested by the triggering attack: Fortitude uses Vigor, Composure uses Resolve, or Harmony uses Anima. Increase that Defense by 1 for the protected creature against the triggering attack. Apply this Shield’s compatible properties. Roll only to generate Surges; the base increase is automatic.</p><p><strong>Surge 1: Increase the same Defense by an additional 1 against the triggering attack. Once per use.</strong></p><p><em>Design note: Uses one Reaction against that Action. The dice cap uses the selected Attribute under D1.</em></p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>Turning a failed close attack into separation.</p>",
+    "grantsEquipmentCard": true,
+    "handedness": "one-handed",
+    "rangeModifier": "",
+    "reconfigureCategory": "simple",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!18137086126c8e8e"
+}

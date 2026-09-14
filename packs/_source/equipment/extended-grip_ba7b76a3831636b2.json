@@ -1,0 +1,29 @@
+{
+  "_id": "ba7b76a3831636b2",
+  "name": "Extended Grip",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>An enemy beginning a voluntary movement within this weapon’s melee Range must spend 1 additional unit of that movement the first time it increases its distance from you. Apply this once to each distinct movement, not to every step.</p>",
+    "passive": "",
+    "special": "<p>Draft clarification of “when moving away”: once per distinct movement. It does not affect forced movement or teleportation; multiple copies do not tax the same movement repeatedly.</p>",
+    "flavor": "<p>Longer engagement distance and costly withdrawal.</p>",
+    "grantsEquipmentCard": false,
+    "handedness": "two-handed",
+    "rangeModifier": "Melee 2",
+    "reconfigureCategory": "simple",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ba7b76a3831636b2"
+}

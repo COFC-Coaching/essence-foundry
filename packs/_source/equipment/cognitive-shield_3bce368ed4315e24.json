@@ -1,0 +1,31 @@
+{
+  "_id": "3bce368ed4315e24",
+  "name": "Cognitive Shield",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "shield",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>When you use a Reaction through this Shield that increases Composure, increase that Defense by an additional 1 for each protected creature.</p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>Active mental defense.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Grip"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!3bce368ed4315e24"
+}

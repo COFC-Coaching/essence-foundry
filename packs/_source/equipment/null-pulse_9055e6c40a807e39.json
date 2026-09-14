@@ -1,0 +1,20 @@
+{
+  "_id": "9055e6c40a807e39",
+  "name": "Null Pulse",
+  "type": "augment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "kind": "function",
+    "compatibility": "Any modular category",
+    "uses": 2,
+    "usesRemaining": 2,
+    "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p><strong>Null Pulse</strong> (EC09)</p><p><em>ACTION &bull; Roll 2+ &bull; USES 2 &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Equipment + Resolve vs Composure</p><p><strong>Range / Targeting:</strong> 6 units / Sphere 1; every creature in the area</p><p><strong>Effect:</strong> Each successfully affected creature cannot use Reactions until the start of your next Turn. This does not cancel a Reaction already declared or stop Actions on its own Turn.</p><p><strong>Surge 1: Deal 1 Psychic Damage to each successfully affected creature. Once per use.</strong></p><p><strong>Surge 2: Reduce each successfully affected creature’s Composure by 1 for the same duration. Once per use.</strong></p><p><em>Design note: No persuasion, loyalty change, interrogation effect, or out-of-Combat behavioral compulsion.</em></p>",
+    "flavor": "<p>Opening a brief interval in which enemies cannot react.</p>"
+  },
+  "folder": "3216b00ec364f4c1",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!9055e6c40a807e39"
+}

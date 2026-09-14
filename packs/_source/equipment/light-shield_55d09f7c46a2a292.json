@@ -1,0 +1,31 @@
+{
+  "_id": "55d09f7c46a2a292",
+  "name": "Light Shield",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "shield",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>When you use a Reaction through this Shield that increases Fortitude, increase that Defense by an additional 1 for each creature protected by that Reaction.</p>",
+    "passive": "",
+    "special": "<p>“Through this Shield” follows the Source convention; applies to compatible learned Reactions as well as Equipment Guard.</p>",
+    "flavor": "<p>Efficient physical active defense.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Grip"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!55d09f7c46a2a292"
+}

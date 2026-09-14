@@ -1,0 +1,31 @@
+{
+  "_id": "f5159c90af2db93f",
+  "name": "Balanced Shell",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "armor",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "+1",
+    "movement": "",
+    "effect": "<p>While worn, gain +1 Resilience. If you are wearing this Shell when Combat begins, gain 1 Temporary Wound. Remove any unspent Temporary Wound granted this way when Combat ends.</p>",
+    "passive": "",
+    "special": "<p>A given Shell grants this only once per Combat. Wearing it later or refitting it does not grant another.</p>",
+    "flavor": "<p>A small buffer against both ordinary harm and direct Wounds.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Rigging"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f5159c90af2db93f"
+}

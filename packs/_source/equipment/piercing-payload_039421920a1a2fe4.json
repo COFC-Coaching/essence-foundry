@@ -1,0 +1,29 @@
+{
+  "_id": "039421920a1a2fe4",
+  "name": "Piercing Payload",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "ranged",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>Weapon Damage dealt by this item has the Piercing type unless the Action explicitly replaces it. Ordinary ammunition is abstracted.</p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>A reusable, setting-neutral ammunition profile.</p>",
+    "grantsEquipmentCard": false,
+    "handedness": "",
+    "rangeModifier": "",
+    "reconfigureCategory": "simple",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!039421920a1a2fe4"
+}

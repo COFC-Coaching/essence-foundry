@@ -1,7 +1,7 @@
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ApplicationV2 } = foundry.applications.api;
 
-import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
+import { EQUIPMENT_CATEGORY_LABELS, FLAT_EQUIPMENT_CATEGORIES } from "../data/item-card.mjs";
 
 /** Categories eligible for modular assembly (matches CHASSIS_LABELS/FITTING_LABELS's own keys in item-component.mjs). */
 const MODULAR_EQUIPMENT_CATEGORIES = ["weapon", "armor", "shield", "implement"];
@@ -129,7 +129,13 @@ export default class EssenceContentWizard extends HandlebarsApplicationMixin(App
     context.isLast = context.typeConfig ? this.#step === context.typeConfig.steps.length - 1 : false;
     context.canCreate = canCreateContent();
     if (this.#type === "equipment") {
-      context.categoryOptions = Object.entries(EQUIPMENT_CATEGORY_LABELS).map(([value, label]) => ({ value, label }));
+      // Weapon/Armor/Shield/Implement are excluded here — those four are wholesale modular now,
+      // authored as Chassis + Fitting (+ Augment) drafts instead of a flat Equipment template (see
+      // FLAT_EQUIPMENT_CATEGORIES). isWornCategory below still checks the full
+      // MODULAR_EQUIPMENT_CATEGORIES list, not just what the dropdown now offers, so a
+      // pre-existing draft authored before this restriction still renders its Fortitude/Resilience/
+      // Movement/Reach fields rather than silently losing them.
+      context.categoryOptions = FLAT_EQUIPMENT_CATEGORIES.map((value) => ({ value, label: EQUIPMENT_CATEGORY_LABELS[value] }));
       context.isWornCategory = MODULAR_EQUIPMENT_CATEGORIES.includes(context.system?.category);
       context.isToolkit = context.system?.category === "toolkit";
       context.isConsumableKit = context.system?.category === "consumable-kit";

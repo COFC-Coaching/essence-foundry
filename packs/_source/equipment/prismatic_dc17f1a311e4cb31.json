@@ -1,0 +1,20 @@
+{
+  "_id": "dc17f1a311e4cb31",
+  "name": "Prismatic",
+  "type": "augment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "kind": "support",
+    "compatibility": "Melee Weapon / Ranged Weapon / Magical Implement",
+    "uses": null,
+    "usesRemaining": null,
+    "effect": "<p><strong>Requirement:</strong> The host must be usable as Source for a damaging Action.</p><p>Before rolling an ordinary damaging Action using the host as Source, you may replace all Damage it deals with Fire or Cold, chosen for that Action. The targeted Defense and all printed Conditions remain unchanged.</p><p>This sample contains the fixed pair Fire/Cold. Other fixed pairs can be separate discoveries; the user does not choose freely from every Damage type.</p>",
+    "flavor": "<p>Changing Damage type rather than simply increasing output.</p>"
+  },
+  "folder": "3216b00ec364f4c1",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!dc17f1a311e4cb31"
+}

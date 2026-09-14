@@ -1,0 +1,31 @@
+{
+  "_id": "2187e1c88a37f6cf",
+  "name": "Concussive Striker",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": 2,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>This item deals Bludgeoning weapon Damage. Once per turn, after a weapon attack using it causes at least one Wound to a creature, reduce that creature’s Fortitude by 1 until the start of your next Turn.</p>",
+    "passive": "",
+    "special": "<p>A Wound absorbed by a Temporary Wound qualifies. This debuff occurs after the attack and cannot improve its own hit result.</p>",
+    "flavor": "<p>A follow-through tool that opens a wounded target to the team.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Grip"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2187e1c88a37f6cf"
+}

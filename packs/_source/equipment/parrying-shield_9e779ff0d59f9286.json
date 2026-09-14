@@ -1,0 +1,31 @@
+{
+  "_id": "9e779ff0d59f9286",
+  "name": "Parrying Shield",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "shield",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>When you use a Reaction through this Shield that increases Fortitude against a melee attack, gain 1 free Surge for that Reaction.</p>",
+    "passive": "",
+    "special": "<p>The item occupies its printed hand allocation; its appearance does not make a hand free.</p>",
+    "flavor": "<p>Reliable access to a defensive Surge in close combat.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Grip"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!9e779ff0d59f9286"
+}

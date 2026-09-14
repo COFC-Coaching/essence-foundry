@@ -1,0 +1,31 @@
+{
+  "_id": "0a558a6fa206220f",
+  "name": "Suppressive Launcher",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "ranged",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>Once per turn, when you declare an attack using this weapon, choose one target of that attack. Reduce its base Movement by 2 units, to a minimum of 0, until the start of your next Turn. This does not require the attack to hit.</p>",
+    "passive": "",
+    "special": "<p>Declaration timing and base Movement are draft clarifications. The original effect did not require a successful hit.</p>",
+    "flavor": "<p>Reliable movement pressure from a one-handed platform.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Payload"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!0a558a6fa206220f"
+}

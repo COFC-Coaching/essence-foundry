@@ -1,0 +1,31 @@
+{
+  "_id": "b88ab819bff9a74b",
+  "name": "Reservoir Focus",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "implement",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>If you are holding this Implement with both hands when Combat begins and at the start of your first Turn, add 2 dice to your Action Pool at that first Turn’s start. This Focus requires a two-handed Interface.</p>",
+    "passive": "",
+    "special": "<p>The start-of-Combat holding requirement prevents handoff/refitting refreshes. Added dice do not increase maximum rolled dice.</p><p>Requires a two-handed Interface.</p>",
+    "flavor": "<p>Opening-turn commitment.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Interface"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b88ab819bff9a74b"
+}

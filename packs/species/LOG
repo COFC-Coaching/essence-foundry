@@ -1,3 +1,5 @@
-2026/09/08-21:50:28.178 a8c0 Recovering log #23
-2026/09/08-21:50:28.183 a8c0 Delete type=0 #23
-2026/09/08-21:50:28.183 a8c0 Delete type=3 #21
+2026/09/13-22:37:31.732 b068 Delete type=3 #1
+2026/09/13-22:37:31.741 adfc Level-0 table #5: started
+2026/09/13-22:37:31.749 adfc Level-0 table #5: 15930 bytes OK
+2026/09/13-22:37:31.750 adfc Delete type=0 #3
+2026/09/13-22:37:31.750 adfc Manual compaction at level-0 from '!items!2b894c73d0b77007' @ 72057594037927935 : 1 .. '!items!fde755e6fa53def1' @ 0 : 0; will stop at (end)

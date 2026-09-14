@@ -7,12 +7,12 @@ const { fields } = foundry.data;
  * any installed Augments; see EssenceEquipmentData in item-card.mjs for the assembled-item side of
  * this relationship (chassisItemId/fittingItemId/mounts).
  *
- * Category names differ per equipment type in the printed rules (Striker/Handling for Melee,
- * Launcher/Payload for Ranged, Shell/Rigging for Armor, Shield/Handling for Shields, Focus/
+ * Category names differ per equipment type in the printed rules (Striker/Grip for Melee,
+ * Launcher/Payload for Ranged, Shell/Rigging for Armor, Shield/Grip for Shields, Focus/
  * Interface for Magical Implements — see CHASSIS_LABELS/FITTING_LABELS below) but that's flavor
  * text over the same mechanical shape — `category` here is the equipment-type key, not the
  * Chassis/Fitting's in-fiction name (which lives on `item.name`, e.g. "Edge Striker" or "Extended
- * Handling").
+ * Grip").
  */
 class EssenceComponentData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -51,7 +51,7 @@ export class EssenceChassisData extends EssenceComponentData {
       mounts: new fields.ArrayField(new fields.SchemaField({
         linkedWith: new fields.NumberField({ integer: true, nullable: true, initial: null })
       }), { initial: [{ linkedWith: null }] }),
-      // Free text naming which Fitting category this Chassis accepts (e.g. "Handling", "Payload",
+      // Free text naming which Fitting category this Chassis accepts (e.g. "Grip", "Payload",
       // "Rigging", "Interface") — printed compatibility, not a hard-coded enum (§ Augment
       // Compatibility uses the same "printed on the item, no universal chart" convention).
       compatibleFittingCategory: new fields.StringField({ initial: "" })
@@ -119,9 +119,9 @@ export const CHASSIS_LABELS = {
   implement: "Focus"
 };
 export const FITTING_LABELS = {
-  weapon: "Handling",
+  weapon: "Grip",
   ranged: "Payload",
   armor: "Rigging",
-  shield: "Handling",
+  shield: "Grip",
   implement: "Interface"
 };

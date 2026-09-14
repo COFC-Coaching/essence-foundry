@@ -1,0 +1,20 @@
+{
+  "_id": "2f95b9cb5b1bc24a",
+  "name": "Selective",
+  "type": "augment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "kind": "support",
+    "compatibility": "Melee Weapon / Ranged Weapon / Magical Implement",
+    "uses": null,
+    "usesRemaining": null,
+    "effect": "<p><strong>Requirement:</strong> The host must be usable as Source for a damaging area Action.</p><p>When an ordinary area Action using this item as Source deals Damage, you may exempt any number of willing allies in its area from that Damage. Its other effects, including forced movement and Conditions, still apply normally.</p><p>Unlike Shaping Focus, this does not exclude a creature from every effect. It does not modify a Function Augment.</p>",
+    "flavor": "<p>Reducing collateral Damage without making the whole effect harmless.</p>"
+  },
+  "folder": "3216b00ec364f4c1",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2f95b9cb5b1bc24a"
+}

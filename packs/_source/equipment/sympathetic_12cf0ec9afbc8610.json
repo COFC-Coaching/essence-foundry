@@ -1,0 +1,20 @@
+{
+  "_id": "12cf0ec9afbc8610",
+  "name": "Sympathetic",
+  "type": "augment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "kind": "support",
+    "compatibility": "Any modular category",
+    "uses": null,
+    "usesRemaining": null,
+    "effect": "<p><strong>Requirement:</strong> The host must have a temporary Defense increase that can apply to its user.</p><p>When this item’s ordinary property or Equipment Card would temporarily increase one of your Defenses, you may give that increase to one adjacent willing ally instead. Preserve its duration and scope. A bonus restricted to one attack can be transferred only to an ally targeted by that attack.</p><p>Does not transfer permanent Shell bonuses, remove a drawback, or duplicate a bonus. Function Augments are not modified.</p>",
+    "flavor": "<p>Sharing protection without duplicating it.</p>"
+  },
+  "folder": "3216b00ec364f4c1",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!12cf0ec9afbc8610"
+}

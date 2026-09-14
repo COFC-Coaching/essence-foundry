@@ -1,0 +1,20 @@
+{
+  "_id": "27c2da5ee272ff04",
+  "name": "Echoing",
+  "type": "augment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "kind": "support",
+    "compatibility": "Melee Weapon / Ranged Weapon / Magical Implement",
+    "uses": null,
+    "usesRemaining": null,
+    "effect": "<p><strong>Requirement:</strong> The host must be usable as Source for a damaging Action.</p><p>Once per turn, after an ordinary Source Action deals Damage to a creature, leave a visible echo in one space that creature occupies. Before the start of your next Turn, the first different creature entering that space takes 1 Damage of the type just dealt, then the echo ends. An unused echo ends at the start of your next Turn.</p><p>Affects allies as well as enemies. Echo Damage is not an attack, repeats no Rider, and triggers no Source on-hit property or further echo.</p>",
+    "flavor": "<p>A hit leaves a small, temporary positioning hazard.</p>"
+  },
+  "folder": "3216b00ec364f4c1",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!27c2da5ee272ff04"
+}

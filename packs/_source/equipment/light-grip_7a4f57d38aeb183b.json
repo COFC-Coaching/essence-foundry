@@ -1,0 +1,29 @@
+{
+  "_id": "7a4f57d38aeb183b",
+  "name": "Light Grip",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>After resolving an attack using this weapon as its Source, you may move 1 unit. This is granted Movement, not an increase to your remaining normal Movement.</p>",
+    "passive": "",
+    "special": "<p>No once-per-turn limit has been added. Ordinary Movement restrictions and Reaction triggers still apply.</p>",
+    "flavor": "<p>Repeated short repositioning.</p>",
+    "grantsEquipmentCard": false,
+    "handedness": "one-handed",
+    "rangeModifier": "Melee 1",
+    "reconfigureCategory": "simple",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!7a4f57d38aeb183b"
+}

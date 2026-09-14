@@ -1,10 +1,10 @@
 /**
  * Derives the assembled stats/display info for one modular `equipment` Item from its resolved
- * Chassis/Fitting/Augment embedded Items — mirrors module/data/origin-features.mjs's pattern
- * exactly (a pure function over already-resolved sibling Items, called from the sheet's own
- * _prepareContext, NOT baked into EssenceEquipmentData#prepareDerivedData()) because a
- * TypeDataModel can't reach across to sibling embedded Items on the same Actor during its own
- * data preparation — same constraint origin-features.mjs already works around.
+ * Chassis/Fitting/Augment Items — mirrors module/data/origin-features.mjs's pattern exactly (a
+ * pure function over already-resolved sibling Items, called from the sheet's own _prepareContext,
+ * NOT baked into EssenceEquipmentData#prepareDerivedData()) because a TypeDataModel can't reach
+ * across to sibling Items during its own data preparation — same constraint origin-features.mjs
+ * already works around.
  *
  * This function is Chassis/Fitting-only display math (their bonuses have no standalone existence
  * outside an assembled equipment Item, so they can't drive a real transferred Active Effect the
@@ -17,24 +17,39 @@
 import { parseSigned } from "../utils.mjs";
 
 /**
- * @param {Actor} actor - the owning actor (embedded Items are resolved via actor.items.get)
+ * @param {{get: (id: string) => Item|undefined}} items - resolves a Chassis/Fitting/Augment id to
+ *   its Item. An owned equipment Item passes its actor's `actor.items` (a Foundry Collection);
+ *   an unowned/compendium-authored one has no actor to embed copies into, so the sheet instead
+ *   passes a plain `Map` built from `essence-system.equipment` pack documents — either way, this
+ *   function only ever needs `.get(id)`, so it doesn't care which.
  * @param {Item} equipmentItem - an `equipment`-type Item with isModular data (chassisItemId,
  *   fittingItemId, mounts)
  * @returns {{
  *   chassis: Item|null, fitting: Item|null,
  *   fortitude: number, resilience: number, movement: number,
  *   grantedCards: Array<{source: string, kind: string, effect: string, uses: number|null, usesRemaining: number|null}>,
+ *   combinedEffect: Array<{source: string, kind: string, html: string}>,
  *   mountDisplay: Array<{index: number, linkedWith: number|null, augment: Item|null, linkOn: boolean, partnerAugment: Item|null}>
  * }}
  */
-export function deriveEquipmentStats(actor, equipmentItem) {
+export function deriveEquipmentStats(items, equipmentItem) {
   const sys = equipmentItem.system;
-  const chassis = sys.chassisItemId ? (actor.items.get(sys.chassisItemId) ?? null) : null;
-  const fitting = sys.fittingItemId ? (actor.items.get(sys.fittingItemId) ?? null) : null;
+  const chassis = sys.chassisItemId ? (items.get(sys.chassisItemId) ?? null) : null;
+  const fitting = sys.fittingItemId ? (items.get(sys.fittingItemId) ?? null) : null;
 
   const fortitude = parseSigned(chassis?.system.fortitude) + parseSigned(fitting?.system.fortitude);
   const resilience = parseSigned(chassis?.system.resilience) + parseSigned(fitting?.system.resilience);
   const movement = parseSigned(chassis?.system.movement) + parseSigned(fitting?.system.movement);
+
+  // combinedEffect is the assembled item's OWN rules text — what an old flat (pre-modular) item's
+  // single `system.effect` field used to hold in one place is now spread across the Chassis, the
+  // Fitting, and any always-active Support Augment (a Function Augment's text stays out of this:
+  // it's already surfaced below via grantedCards, with its own Uses tracking — repeating it here
+  // would just show the same text twice). Order mirrors § Assembling an item: Chassis first, then
+  // Fitting, then whatever Supports happen to be installed.
+  const combinedEffect = [];
+  if (chassis?.system.effect) combinedEffect.push({ source: chassis.name, kind: "chassis", html: chassis.system.effect });
+  if (fitting?.system.effect) combinedEffect.push({ source: fitting.name, kind: "fitting", html: fitting.system.effect });
 
   const grantedCards = [];
   if (chassis?.system.grantsEquipmentCard) {
@@ -51,10 +66,10 @@ export function deriveEquipmentStats(actor, equipmentItem) {
   const chassisMounts = chassis?.system.mounts ?? [];
   const mountDisplay = chassisMounts.map((mount, index) => {
     const install = sys.mounts?.[index] ?? { augmentItemId: "", linkOn: true };
-    const augment = install.augmentItemId ? (actor.items.get(install.augmentItemId) ?? null) : null;
+    const augment = install.augmentItemId ? (items.get(install.augmentItemId) ?? null) : null;
     const linkedWith = mount.linkedWith ?? null;
     const partnerInstall = linkedWith !== null ? (sys.mounts?.[linkedWith] ?? null) : null;
-    const partnerAugment = partnerInstall?.augmentItemId ? (actor.items.get(partnerInstall.augmentItemId) ?? null) : null;
+    const partnerAugment = partnerInstall?.augmentItemId ? (items.get(partnerInstall.augmentItemId) ?? null) : null;
     return { index, linkedWith, isLinked: linkedWith !== null, augment, linkOn: install.linkOn ?? true, partnerAugment };
   });
 
@@ -82,7 +97,9 @@ export function deriveEquipmentStats(actor, equipmentItem) {
     }
     // Unlinked (or Link Off): each installed Augment stands on its own. A Function shows as a
     // granted card with its Uses; an unlinked Support "modifies the Chassis directly" per its own
-    // printed text rather than granting a card, so it's surfaced on mountDisplay only.
+    // printed text — always active while this item is, same as the Chassis/Fitting's own printed
+    // text above, so it joins combinedEffect rather than grantedCards (which is Uses-tracked cards
+    // only).
     if (m.augment.system.kind === "function") {
       grantedCards.push({
         source: m.augment.name,
@@ -91,8 +108,10 @@ export function deriveEquipmentStats(actor, equipmentItem) {
         uses: m.augment.system.uses,
         usesRemaining: m.augment.system.usesRemaining
       });
+    } else if (m.augment.system.effect) {
+      combinedEffect.push({ source: m.augment.name, kind: "augment", html: m.augment.system.effect });
     }
   }
 
-  return { chassis, fitting, fortitude, resilience, movement, grantedCards, mountDisplay };
+  return { chassis, fitting, fortitude, resilience, movement, grantedCards, combinedEffect, mountDisplay };
 }

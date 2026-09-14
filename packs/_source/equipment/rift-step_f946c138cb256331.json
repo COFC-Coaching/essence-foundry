@@ -1,0 +1,20 @@
+{
+  "_id": "f946c138cb256331",
+  "name": "Rift Step",
+  "type": "augment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "kind": "function",
+    "compatibility": "Any modular category",
+    "uses": 2,
+    "usesRemaining": 2,
+    "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p><strong>Rift Step</strong> (EC07)</p><p><em>ACTION &bull; Burn 2 &bull; USES 2 &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Automatic; burn the printed dice</p><p><strong>Range / Targeting:</strong> 6 units / Self; optionally one adjacent willing ally</p><p><strong>Effect:</strong> Teleport to an unoccupied space you can see within 6 units. You may take one adjacent willing ally, placing it in a legal unoccupied space adjacent to your destination. Both destinations must be within 6 units of your starting space. This teleport does not require a traversable path between start and destination.</p><p><em>Design note: No roll or Surges. Does not grant sight through barriers; neither traveler can take additional creatures.</em></p>",
+    "flavor": "<p>A limited escape or coordinated crossing.</p>"
+  },
+  "folder": "3216b00ec364f4c1",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f946c138cb256331"
+}

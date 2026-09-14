@@ -1,0 +1,20 @@
+{
+  "_id": "d62b24cd7511e53e",
+  "name": "Phase Step",
+  "type": "augment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "kind": "support",
+    "compatibility": "Any modular category",
+    "uses": null,
+    "usesRemaining": null,
+    "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p>During the first voluntary movement you take on each turn, you may pass through one creature-occupied space. You must finish in a legal unoccupied space and have enough granted or normal Movement to do so. This does not bypass walls, terrain costs, hazards, or Reaction triggers.</p>",
+    "flavor": "<p>Moving through a blocked battle line without gaining extra distance.</p>"
+  },
+  "folder": "3216b00ec364f4c1",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d62b24cd7511e53e"
+}

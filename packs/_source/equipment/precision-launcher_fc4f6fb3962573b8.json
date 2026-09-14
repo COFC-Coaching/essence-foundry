@@ -1,0 +1,31 @@
+{
+  "_id": "fc4f6fb3962573b8",
+  "name": "Precision Launcher",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "ranged",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>Attacks using this weapon ignore cover. They still require a legal target and a path the effect can traverse; this property does not penetrate solid barriers or reveal undetected creatures.</p>",
+    "passive": "",
+    "special": "<p>The broad cover benefit is retained. The barrier/detection distinction follows S1 Valid Targets.</p>",
+    "flavor": "<p>Long-range attacks against protected positions.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Payload"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!fc4f6fb3962573b8"
+}

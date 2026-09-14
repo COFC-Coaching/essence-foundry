@@ -1,0 +1,34 @@
+{
+  "_id": "c9bdb76175694781",
+  "name": "Socketed Launcher",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "ranged",
+    "slot": "armory",
+    "tier": 2,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>This Launcher has two independent mounts. Its Payload supplies weapon Damage type; it has no other inherent attack benefit.</p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>A customizable platform that trades ordinary performance for mounts.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      },
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Payload"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c9bdb76175694781"
+}

@@ -1,0 +1,29 @@
+{
+  "_id": "52f7f7b5c2e6d96d",
+  "name": "Scout Rigging",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "armor",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "+2",
+    "effect": "<p>While this armor is worn, increase your base Movement by 2 units.</p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>Mobility on any Shell.</p>",
+    "grantsEquipmentCard": false,
+    "handedness": "",
+    "rangeModifier": "",
+    "reconfigureCategory": "structural",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!52f7f7b5c2e6d96d"
+}

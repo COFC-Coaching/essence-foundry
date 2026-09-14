@@ -1,0 +1,20 @@
+{
+  "_id": "b4d18d99dad4f52f",
+  "name": "Bulwark Field",
+  "type": "augment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "kind": "function",
+    "compatibility": "Any modular category",
+    "uses": 2,
+    "usesRemaining": 2,
+    "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p><strong>Bulwark Field</strong> (EC12)</p><p><em>ACTION &bull; Burn 3 &bull; USES 2 &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Automatic; burn the printed dice</p><p><strong>Range / Targeting:</strong> 6 units / Sphere 1 centered on a point you can see</p><p><strong>Effect:</strong> Create an immobile field until the start of your next Turn. Every creature inside it gains +2 Resilience while inside. This includes enemies. Leaving ends the bonus; reentering restores the bonus but does not reset accumulated Damage or restore Wounds. Overlapping Bulwark Fields do not stack.</p><p><em>Design note: Changing Resilience causes no retroactive Wounds or healing. The field is not a solid barrier and does not block targeting.</em></p>",
+    "flavor": "<p>A fixed, temporary protected position.</p>"
+  },
+  "folder": "3216b00ec364f4c1",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b4d18d99dad4f52f"
+}

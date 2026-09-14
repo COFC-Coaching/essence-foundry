@@ -1,0 +1,20 @@
+{
+  "_id": "60e7a1282049b9fd",
+  "name": "Suspended",
+  "type": "augment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "kind": "support",
+    "compatibility": "Any modular category",
+    "uses": null,
+    "usesRemaining": null,
+    "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p>While this item is active, you may end Movement unsupported in midair if you are adjacent to a solid vertical surface and no more than 3 units above a supporting floor or ground. You remain there without falling. This grants no Movement, flight, or ability to pass through a surface.</p><p>If the item becomes inactive or the conditions stop being met, ordinary falling rules apply. Multiple copies do not increase the permitted height.</p>",
+    "flavor": "<p>Holding an unusual position beside a wall.</p>"
+  },
+  "folder": "3216b00ec364f4c1",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!60e7a1282049b9fd"
+}

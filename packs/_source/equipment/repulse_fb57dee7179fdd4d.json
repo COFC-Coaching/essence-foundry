@@ -1,0 +1,20 @@
+{
+  "_id": "fb57dee7179fdd4d",
+  "name": "Repulse",
+  "type": "augment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "kind": "function",
+    "compatibility": "Any modular category",
+    "uses": 3,
+    "usesRemaining": 3,
+    "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p><strong>Repulse</strong> (EC06)</p><p><em>ACTION &bull; Roll 2+ &bull; USES 3 &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Equipment + Might vs Fortitude</p><p><strong>Range / Targeting:</strong> Self / Cone 3; every creature in the cone</p><p><strong>Effect:</strong> Each successfully affected creature takes 1 Force Damage and is pushed 2 units directly away from you.</p><p><strong>Surge 1: Push one successfully affected creature 1 additional unit. Once per use.</strong></p><p><strong>Surge 2: Deal +1 Force Damage to each successfully affected creature. Once per use.</strong></p>",
+    "flavor": "<p>A short cone of force and displacement.</p>"
+  },
+  "folder": "3216b00ec364f4c1",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!fb57dee7179fdd4d"
+}

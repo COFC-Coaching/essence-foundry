@@ -1,0 +1,29 @@
+{
+  "_id": "de21a02ff1d2c11e",
+  "name": "Driving Payload",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "ranged",
+    "slot": "armory",
+    "tier": 2,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>This item deals Bludgeoning weapon Damage. Once per turn, after an attack with it successfully hits, push one hit target 1 unit.</p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>Ranged forced movement without a new learned card.</p>",
+    "grantsEquipmentCard": false,
+    "handedness": "",
+    "rangeModifier": "",
+    "reconfigureCategory": "simple",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!de21a02ff1d2c11e"
+}

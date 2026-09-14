@@ -1,0 +1,31 @@
+{
+  "_id": "36474e537b1c524e",
+  "name": "Siege Shell",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "armor",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>At the end of your Turn, if you have not moved during that Turn, gain +3 Resilience until you move or the start of your next Turn, whichever happens first.</p>",
+    "passive": "",
+    "special": "<p>Movement includes forced movement and teleportation. Changing Resilience is not retroactive and never resets accumulated Damage; see D6.</p>",
+    "flavor": "<p>Holding a position under pressure.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Rigging"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!36474e537b1c524e"
+}

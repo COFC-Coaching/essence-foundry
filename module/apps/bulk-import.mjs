@@ -1,4 +1,5 @@
 import { canCreateContent } from "./content-wizard.mjs";
+import { FLAT_EQUIPMENT_CATEGORIES } from "../data/item-card.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ApplicationV2 } = foundry.applications.api;
@@ -97,16 +98,19 @@ const TEMPLATES = {
     // No `slot` or `quantity` column — both are properties of an owned COPY of an item (which
     // Signature/Temporary/Armory slot it's carried in; how many you happen to have), assigned once
     // a player actually acquires it, not properties of the template being authored here. `category`
-    // (weapon/armor/shield/implement/toolkit/consumable-kit/gear — see item-card.mjs) is what this
-    // item fundamentally is; a Toolkit never has Uses regardless of what this row's `uses` column
+    // only accepts toolkit/consumable-kit/gear (see FLAT_EQUIPMENT_CATEGORIES in item-card.mjs) —
+    // weapon/armor/shield/implement are wholesale modular as of the 2026-09-13 catalog import, and
+    // must be authored as Chassis + Fitting (+ Augment) rows via those templates below instead of a
+    // flat Equipment row. A row submitted with one of those four falls back to `gear`
+    // (equipmentRowToSystem). A Toolkit never has Uses regardless of what this row's `uses` column
     // says. A Consumable Kit's actual granted Equipment Cards are richer than a flat CSV row
     // supports well (each needs its own name/effect/Uses), so authoring those stays on the Item
     // Creation Wizard/item sheet — this template can only mark a row `category: consumable-kit`,
     // not populate its cards.
     example: {
-      name: "Example Blade", category: "weapon", tier: "1", type: "Melee, 1h",
-      cost: "1", range: "reach", effect: "On a hit, deal 1 weapon damage.", passive: "", special: "",
-      fortitude: "", resilience: "", movement: "", tags: "melee", flavor: "", reachBonus: "0",
+      name: "Example Kit", category: "gear", tier: "", type: "",
+      cost: "1", range: "", effect: "", passive: "A small, quietly useful piece of gear.", special: "",
+      fortitude: "", resilience: "", movement: "", tags: "", flavor: "", reachBonus: "0",
       uses: "", slotCost: "1", isModular: "false"
     }
   },
@@ -147,7 +151,7 @@ const TEMPLATES = {
     example: {
       name: "Edge Striker", category: "weapon", tier: "2", fortitude: "", resilience: "",
       movement: "", effect: "", passive: "", special: "", flavor: "", grantsEquipmentCard: "false",
-      compatibleFittingCategory: "Handling", mountCount: "2"
+      compatibleFittingCategory: "Grip", mountCount: "2"
     }
   },
   fitting: {
@@ -164,7 +168,7 @@ const TEMPLATES = {
       "reconfigureCategory", "reconfigureCostOverride"
     ],
     example: {
-      name: "Swift Handling", category: "weapon", tier: "1", fortitude: "", resilience: "",
+      name: "Swift Grip", category: "weapon", tier: "1", fortitude: "", resilience: "",
       movement: "", effect: "", passive: "One-handed, positioning bonus.", special: "", flavor: "",
       grantsEquipmentCard: "false", handedness: "one-handed", rangeModifier: "",
       reconfigureCategory: "simple", reconfigureCostOverride: ""
@@ -292,16 +296,16 @@ function cardRowToSystem(row) {
   };
 }
 
-const EQUIPMENT_CATEGORIES = ["weapon", "armor", "shield", "implement", "toolkit", "consumable-kit", "gear"];
-
 /** No `slot`/`quantity` here — both are per-owned-copy properties (which Signature/Temporary/
  *  Armory slot it's carried in; how many you own) assigned once a player acquires the item, not
  *  properties of the template being authored/imported. Omitting them from the returned object
  *  means an update() leaves an existing item's own slot/quantity untouched, and a newly-created
- *  item just gets the schema's defaults (armory / 1). */
+ *  item just gets the schema's defaults (armory / 1). A row submitting weapon/armor/shield/
+ *  implement here falls back to "gear" — see FLAT_EQUIPMENT_CATEGORIES's comment in item-card.mjs
+ *  for why those four aren't accepted through this flat template any more. */
 function equipmentRowToSystem(row) {
   return {
-    category: EQUIPMENT_CATEGORIES.includes(row.category) ? row.category : "gear",
+    category: FLAT_EQUIPMENT_CATEGORIES.includes(row.category) ? row.category : "gear",
     tier: row.tier ? Number(row.tier) : null,
     type: row.type || "",
     cost: row.cost || "",

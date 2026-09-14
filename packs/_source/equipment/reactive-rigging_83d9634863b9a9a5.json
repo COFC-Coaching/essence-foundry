@@ -1,0 +1,29 @@
+{
+  "_id": "83d9634863b9a9a5",
+  "name": "Reactive Rigging",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "armor",
+    "slot": "armory",
+    "tier": 2,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p><strong>This Rigging's effect:</strong> While this armor is worn, you may use the Defensive Step Equipment Reaction.</p><p><strong>Defensive Step</strong> (EC04)</p><p><em>REACTION &bull; Roll 2+ &bull; USES — &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Equipment + Vigor; automatic effect</p><p><strong>Range / Targeting:</strong> Self / Self</p><p><strong>Trigger:</strong> Another character declares an attack against your Fortitude; use before the attack is rolled.</p><p><strong>Effect:</strong> Increase your Fortitude by 1 against the triggering attack. Roll only to generate Surges.</p><p><strong>Surge 1: After the triggering attack resolves, move 1 unit. Once per use.</strong></p><p><em>Design note: This Reaction does not provide a second Reaction window for its user against the same Action.</em></p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>An equipment-based physical defense with repositioning.</p>",
+    "grantsEquipmentCard": true,
+    "handedness": "",
+    "rangeModifier": "",
+    "reconfigureCategory": "structural",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!83d9634863b9a9a5"
+}

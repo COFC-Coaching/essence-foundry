@@ -1,0 +1,20 @@
+{
+  "_id": "c3446cc9f407f266",
+  "name": "Momentum Sink",
+  "type": "augment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "kind": "support",
+    "compatibility": "Armor / Shield",
+    "uses": null,
+    "usesRemaining": null,
+    "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p>Once per turn, when a push or pull would move you, you may redirect the full movement along a different straight path on a surface you can traverse. The entire distance must be legal; otherwise use the original movement. This does not reduce distance or change teleportation.</p><p>Apply reductions such as Braced Rigging first. The remaining full distance must fit the new path; a nearby wall cannot turn this into automatic immunity.</p>",
+    "flavor": "<p>Redirecting force instead of resisting it.</p>"
+  },
+  "folder": "3216b00ec364f4c1",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c3446cc9f407f266"
+}

@@ -222,11 +222,11 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    const actor = this.item.actor;
-    context.chassisOptions = actor ? actor.items.filter((i) => i.type === "chassis") : [];
-    context.fittingOptions = actor ? actor.items.filter((i) => i.type === "fitting") : [];
-    context.augmentOptions = actor ? actor.items.filter((i) => i.type === "augment") : [];
-    context.stats = actor ? deriveEquipmentStats(actor, this.item) : null;
+    const items = await this.#resolveComponentSource();
+    context.chassisOptions = items.all.filter((i) => i.type === "chassis");
+    context.fittingOptions = items.all.filter((i) => i.type === "fitting");
+    context.augmentOptions = items.all.filter((i) => i.type === "augment");
+    context.stats = deriveEquipmentStats(items, this.item);
     // See EssenceComponentSheet's own comment on CHASSIS_LABELS/FITTING_LABELS — once a Chassis/
     // Fitting is assigned, ITS category is the authority on which in-fiction term to show (a
     // weapon's Chassis could be melee "weapon" or "ranged", which this equipment Item's own
@@ -246,6 +246,26 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
     context.isConsumableKit = context.system.category === "consumable-kit";
     context.isGear = context.system.category === "gear";
     return context;
+  }
+
+  /**
+   * Resolves the pool of Chassis/Fitting/Augment Items this equipment Item can assemble from, and
+   * gives deriveEquipmentStats() a `.get(id)` it can use regardless of where that pool came from.
+   * An OWNED equipment Item still assembles from the actor's own embedded Chassis/Fitting/Augment
+   * copies (unchanged). An UNOWNED one (authored straight in the compendium, e.g. via the Item
+   * Creation Wizard, with no actor to embed real copies into) now assembles directly from the
+   * shared `essence-system.equipment` pack's own Chassis/Fitting/Augment library instead of falling
+   * back to the old free-text `modularNotes` placeholder — every Chassis/Fitting/Augment in this
+   * system lives in that one pack (see COMPONENT_TYPES_FOR_FOLDERS in build-packs.mjs), so this is
+   * simply the system's full component catalog, not actor-scoped.
+   */
+  async #resolveComponentSource() {
+    const actor = this.item.actor;
+    if (actor) return { get: (id) => actor.items.get(id), all: actor.items.contents };
+    const pack = game.packs.get("essence-system.equipment");
+    const docs = pack ? await pack.getDocuments() : [];
+    const byId = new Map(docs.map((d) => [d.id, d]));
+    return { get: (id) => byId.get(id) ?? null, all: docs };
   }
 
   /**
@@ -326,8 +346,8 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
    */
   static async #onToggleMountLink(event, target) {
     const i = Number(target.dataset.mountIndex);
-    const actor = this.item.actor;
-    const chassis = actor && this.item.system.chassisItemId ? actor.items.get(this.item.system.chassisItemId) : null;
+    const items = await this.#resolveComponentSource();
+    const chassis = this.item.system.chassisItemId ? items.get(this.item.system.chassisItemId) : null;
     const partnerIndex = chassis?.system.mounts?.[i]?.linkedWith ?? null;
     const mounts = this.item.system.mounts.map((m) => ({ ...m }));
     const maxIndex = Math.max(i, partnerIndex ?? 0);
@@ -472,8 +492,8 @@ export class EssenceComponentSheet extends EssenceItemSheetBase {
   };
 
   /**
-   * Category names differ per equipment type (Striker/Handling for Melee Weapon, Launcher/Payload
-   * for Ranged, Shell/Rigging for Armor, Shield/Handling for Shields, Focus/Interface for Magical
+   * Category names differ per equipment type (Striker/Grip for Melee Weapon, Launcher/Payload
+   * for Ranged, Shell/Rigging for Armor, Shield/Grip for Shields, Focus/Interface for Magical
    * Implements — see CHASSIS_LABELS/FITTING_LABELS in item-component.mjs). The sheet should show
    * these instead of the generic words "Chassis"/"Fitting" wherever a category is known — both for
    * the category dropdown's own option labels (every category, since the player is choosing among

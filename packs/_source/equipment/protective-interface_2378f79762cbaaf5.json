@@ -1,0 +1,29 @@
+{
+  "_id": "2378f79762cbaaf5",
+  "name": "Protective Interface",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "implement",
+    "slot": "armory",
+    "tier": 2,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p><strong>This Interface's effect:</strong> Gain the Equipment Screen Reaction. It protects Composure or Harmony, not Fortitude.</p><p><strong>Equipment Screen</strong> (EC05)</p><p><em>REACTION &bull; Roll 2+ &bull; USES — &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Equipment + Resolve / Anima; automatic effect</p><p><strong>Range / Targeting:</strong> 3 units / Self or one willing ally</p><p><strong>Trigger:</strong> Another character declares an attack contesting Composure or Harmony against the target; use before the attack is rolled.</p><p><strong>Effect:</strong> Choose the contested Defense: Composure uses Resolve, Harmony uses Anima. Increase that Defense by 1 for the target against the triggering attack. Roll only to generate Surges.</p><p><strong>Surge 1: After the triggering attack resolves, the protected creature may move 1 unit. Once per use.</strong></p><p><em>Design note: Can target yourself. Does not increase Fortitude or grant an extra Reaction.</em></p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>Short-range mental and spiritual protection.</p>",
+    "grantsEquipmentCard": true,
+    "handedness": "one-handed",
+    "rangeModifier": "",
+    "reconfigureCategory": "simple",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2378f79762cbaaf5"
+}

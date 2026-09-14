@@ -1,0 +1,20 @@
+{
+  "_id": "6ea0f0736392a403",
+  "name": "Convergence",
+  "type": "augment",
+  "img": "icons/svg/upgrade.svg",
+  "system": {
+    "kind": "function",
+    "compatibility": "Any modular category",
+    "uses": 1,
+    "usesRemaining": 1,
+    "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p><strong>Convergence</strong> (EC17)</p><p><em>ACTION &bull; Roll 4+ &bull; USES 1 &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Equipment + Presence vs Harmony</p><p><strong>Range / Targeting:</strong> 8 units / Sphere 2; every creature in the area</p><p><strong>Effect:</strong> Each successfully affected creature takes 3 Radiant Damage.</p><p><strong>Surge 1: Pull one successfully affected creature 1 unit toward the center of the area. Once per use.</strong></p><p><strong>Surge 2: Deal +1 Radiant Damage to each successfully affected creature. Once per use.</strong></p><p><em>Design note: Hits allies too. Ordinary Support Augments do not reshape or select targets for this Function under D2.</em></p><p>Major treasure. Four rolled dice may be inaccessible to a low-Attribute user under D1.</p>",
+    "flavor": "<p>A major area payoff with one Adventure-limited Use.</p>"
+  },
+  "folder": "3216b00ec364f4c1",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!6ea0f0736392a403"
+}

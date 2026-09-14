@@ -1,0 +1,34 @@
+{
+  "_id": "bae26a42244086bd",
+  "name": "Conduit Focus",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "implement",
+    "slot": "armory",
+    "tier": 2,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>This Focus has two independent mounts and no additional inherent numerical benefit. Its Interface and the Actions it supplies determine how it operates.</p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>An Augment platform for any Implement user.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      },
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Interface"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!bae26a42244086bd"
+}

@@ -1,0 +1,34 @@
+{
+  "_id": "c1b5290985a4d28c",
+  "name": "Resonant Shell",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "armor",
+    "slot": "armory",
+    "tier": 2,
+    "fortitude": "",
+    "resilience": "+1",
+    "movement": "",
+    "effect": "<p>While worn, gain +1 Resilience and +1 Harmony. This Shell has two independent mounts.</p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>Protection against spiritual attacks while retaining a general Damage buffer.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      },
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Rigging"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c1b5290985a4d28c"
+}

@@ -1,0 +1,31 @@
+{
+  "_id": "cd1185893c45b033",
+  "name": "Edge Striker",
+  "type": "chassis",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": 1,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>Weapon Damage dealt using this item has the Slashing type unless the Action explicitly replaces it. Grip determines hand use and melee Range.</p>",
+    "passive": "",
+    "special": "",
+    "flavor": "<p>A simple damage-type foundation; the Grip supplies the tactical behavior.</p>",
+    "grantsEquipmentCard": false,
+    "mounts": [
+      {
+        "linkedWith": null
+      }
+    ],
+    "compatibleFittingCategory": "Grip"
+  },
+  "folder": "4f1d10ac0a6b27c0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!cd1185893c45b033"
+}

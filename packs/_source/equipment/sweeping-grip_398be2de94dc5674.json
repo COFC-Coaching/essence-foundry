@@ -1,0 +1,29 @@
+{
+  "_id": "398be2de94dc5674",
+  "name": "Sweeping Grip",
+  "type": "fitting",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "category": "weapon",
+    "slot": "armory",
+    "tier": 2,
+    "fortitude": "",
+    "resilience": "",
+    "movement": "",
+    "effect": "<p>Once per turn, when declaring a single-target damaging Action with this weapon, you may include one additional legal target. Both targets must be within this weapon’s Range and within 1 unit of each other. Roll at least 3 dice and resolve one roll against both targets.</p>",
+    "passive": "",
+    "special": "<p>Use the same Effect and Surges for both targets. The Action and its Rider each resolve once; see D4.</p>",
+    "flavor": "<p>A controlled two-target alternative to Heavy Grip.</p>",
+    "grantsEquipmentCard": false,
+    "handedness": "two-handed",
+    "rangeModifier": "Melee 1",
+    "reconfigureCategory": "simple",
+    "reconfigureCostOverride": null
+  },
+  "folder": "d174e886ce945b8c",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!398be2de94dc5674"
+}
