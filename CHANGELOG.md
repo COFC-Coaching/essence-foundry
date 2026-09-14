@@ -2,6 +2,48 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.55
+
+**Fixed equipment Fortitude/Resilience/Movement/Reach bonuses silently compounding forever** —
+reported live: a single Fortress Armor item with a -4 Movement modifier drove one character's
+Movement from 10 down to 2, and a separate +2 Resilience item drove another character's Resilience
+up to 8. The bonus was applied as a transferred Active Effect targeting the exact same raw field
+that's also a directly-editable sheet input — every unrelated form save wrote the already-adjusted
+displayed number back as the new "base," which then got the effect re-applied on top of *that*,
+compounding a little more on every save. Resilience/Movement/Reach now accumulate into their own
+indirect bonus fields instead (matching how Fortitude already worked), and a one-time migration
+rebuilds every already-affected item's effect and stops touching the raw field going forward.
+Already-corrupted characters' raw Movement/Resilience values from before this fix still need a
+manual correction, since exactly how many times they compounded isn't recoverable.
+
+**Added an "Active Equipment Bonuses" line to the sheet** listing exactly which equipped item is
+granting which Fortitude/Resilience/Movement/Reach bonus, instead of leaving the final number a
+mystery.
+
+**Fixed Expertises silently over-counting after respeccing a Combat Skill** — lowering a Combat
+Skill's rank back to 0 in the Wizard left any Expertise already picked under it in place; it
+disappeared from the by-skill list (which only shows skills at rank 1+) but still counted toward
+the Expertises total, sometimes blocking a legitimate later pick. Lowering a skill to 0 now clears
+its Expertises, and a one-time migration cleans up any already-orphaned ones.
+
+**Players can now create their own Equipment/Action Card items by default** — Foundry's "Create
+Items" permission defaults to Gamemaster-only, which also blocked Players from building their own
+homebrew gear. Granted once per world on first load after this update; a GM who deliberately turns
+it back off afterward won't have it silently re-enabled.
+
+## 0.6.54
+
+**Fixed the "What's New" chat card silently not appearing for existing users** — reported live: a
+GM updating an established world to v0.6.53 never saw the card, while a player who'd separately
+already triggered a stored value did. The card's per-client "have I seen this version" setting had
+never been set for *anyone* before v0.6.53 introduced it, and the code read "no stored value yet"
+as "brand-new user, don't show it" — meaning it reliably skipped the card for every existing user's
+first login on the very release that introduced it. Removed that special case entirely: the card
+now shows on any version mismatch, including a client's very first visit (a brand-new player seeing
+one orientation card is a fine trade-off for the feature actually being reliable). Also added a
+manual `/whatsnew` chat command so anyone can pull up the current version's card on demand, without
+waiting on the automatic trigger.
+
 ## 0.6.53
 
 **Added a "What's New" chat card** (`module/apps/whats-new.mjs`) — not a native Foundry feature,
