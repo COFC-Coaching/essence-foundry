@@ -184,8 +184,10 @@
     </tbody>
   </table>
 {{/if}}
-<button type="button" data-action="addReachTrigger"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.AddReachTrigger"}}</button>
-<button type="button" data-action="resetAdventureUses" title="{{localize 'ESSENCE.Sheet.ResetAdventureUsesTooltip'}}">{{localize "ESSENCE.Sheet.ResetAdventureUses"}}</button>
+<div class="button-row">
+  <button type="button" data-action="addReachTrigger"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.AddReachTrigger"}}</button>
+  <button type="button" data-action="resetAdventureUses" title="{{localize 'ESSENCE.Sheet.ResetAdventureUsesTooltip'}}">{{localize "ESSENCE.Sheet.ResetAdventureUses"}}</button>
+</div>
 
 <div class="combat-header">
   <div class="combat-header-left">
@@ -325,10 +327,13 @@
       <button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.ViewAria' name=item.name}}"><i class="fa-solid fa-eye"></i></button>
       <button type="button" data-action="postEquipmentToChat" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Sheet.PostToChatAria' name=item.name}}"><i class="fa-solid fa-comment"></i></button>
       <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
+      <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="temporary" title="{{localize 'ESSENCE.Sheet.MoveToTemporary'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToTemporaryAria' name=item.name}}"><i class="fa-solid fa-clock"></i></button>
+      <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="armory" title="{{localize 'ESSENCE.Sheet.MoveToArmory'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToArmoryAria' name=item.name}}"><i class="fa-solid fa-warehouse"></i></button>
       <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button>
     </li>
   {{/each}}
 </ul>
+<button type="button" data-action="createEquipment" data-slot="signature"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.AddItem"}}</button>
 </div>
 
 {{#if itemGrants.length}}
@@ -357,10 +362,13 @@
       <button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.ViewAria' name=item.name}}"><i class="fa-solid fa-eye"></i></button>
       <button type="button" data-action="postEquipmentToChat" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Sheet.PostToChatAria' name=item.name}}"><i class="fa-solid fa-comment"></i></button>
       <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
+      <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="signature" title="{{localize 'ESSENCE.Sheet.MoveToSignature'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToSignatureAria' name=item.name}}"><i class="fa-solid fa-star"></i></button>
+      <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="armory" title="{{localize 'ESSENCE.Sheet.MoveToArmory'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToArmoryAria' name=item.name}}"><i class="fa-solid fa-warehouse"></i></button>
       <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button>
     </li>
   {{/each}}
 </ul>
+<button type="button" data-action="createEquipment" data-slot="temporary"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.AddItem"}}</button>
 </div>
 
 <div class="equipment-drop-zone" data-drop-slot="armory">
@@ -371,10 +379,13 @@
       <button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.ViewAria' name=item.name}}"><i class="fa-solid fa-eye"></i></button>
       <button type="button" data-action="postEquipmentToChat" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Sheet.PostToChatAria' name=item.name}}"><i class="fa-solid fa-comment"></i></button>
       <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
+      <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="signature" title="{{localize 'ESSENCE.Sheet.MoveToSignature'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToSignatureAria' name=item.name}}"><i class="fa-solid fa-star"></i></button>
+      <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="temporary" title="{{localize 'ESSENCE.Sheet.MoveToTemporary'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToTemporaryAria' name=item.name}}"><i class="fa-solid fa-clock"></i></button>
       <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button>
     </li>
   {{/each}}
 </ul>
+<button type="button" data-action="createEquipment" data-slot="armory"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.AddItem"}}</button>
 </div>
 
 <h3 class="section-head">{{localize "ESSENCE.Sheet.ComponentsAugments"}} <span class="muted">{{localize "ESSENCE.Sheet.ComponentsAugmentsHint"}}</span></h3>

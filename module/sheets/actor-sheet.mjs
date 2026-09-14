@@ -62,6 +62,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       rollSkill: EssenceActorSheet.#onRollSkill,
       rollItem: EssenceActorSheet.#onRollItem,
       postEquipmentToChat: EssenceActorSheet.#onPostEquipmentToChat,
+      moveEquipmentSlot: EssenceActorSheet.#onMoveEquipmentSlot,
+      createEquipment: EssenceActorSheet.#onCreateEquipment,
       rollInitiative: EssenceActorSheet.#onRollInitiative,
       endTurn: EssenceActorSheet.#onEndTurn,
       applyDamage: EssenceActorSheet.#onApplyDamage,
@@ -1516,6 +1518,42 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content: `<p><strong>${item.name}</strong> <span class="muted">(${category})</span></p>${summary ? `<p>${summary}</p>` : ""}`
     });
+  }
+
+  /**
+   * Moves an equipment Item between the Signature/Temporary/Armory tables — same underlying change
+   * as dragging its row into a different `[data-drop-slot]` zone (`_onDropItem` above), added as an
+   * explicit button per row because native HTML5 drag-and-drop between three separately-scrolling
+   * tables is fragile to actually land (confirmed live: a real mouse drag between zones didn't
+   * register). No Signature-capacity block here, matching drag-and-drop's own behavior — the
+   * sheet's existing "over Signature limit" note and Spend-Influence button already handle that
+   * reactively once the move lands, rather than refusing the move up front.
+   */
+  static async #onMoveEquipmentSlot(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    const slot = target.dataset.slot;
+    if (!item || !["signature", "temporary", "armory"].includes(slot)) return;
+    await item.update({ "system.slot": slot });
+  }
+
+  /**
+   * "+ Add Item" for each of the three Equipment tables — previously the only way to get an item
+   * into Temporary (or any slot) was dragging one in from a compendium/another actor; there was no
+   * way to just create a new one straight in a slot (reported live: "I need to be able to add to
+   * the Temporary Items"). Creates a blank `equipment` Item (category defaults to "gear" — the
+   * sheet's own Category dropdown covers picking a real one) and opens it straight into its edit
+   * view, matching the Item Creation Wizard's own "create then immediately edit" flow.
+   */
+  static async #onCreateEquipment(event, target) {
+    const slot = target.dataset.slot;
+    if (!["signature", "temporary", "armory"].includes(slot)) return;
+    const [created] = await this.actor.createEmbeddedDocuments("Item", [{
+      name: game.i18n.localize("ESSENCE.Sheet.NewEquipmentName"),
+      type: "equipment",
+      img: "icons/svg/item-bag.svg",
+      system: { slot }
+    }]);
+    created?.sheet.render(true);
   }
 
   static async #onItemDelete(event, target) {

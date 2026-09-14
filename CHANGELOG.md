@@ -2,6 +2,32 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.59
+
+**Equipment can now move between Signature, Temporary, and Armory** — Move buttons on every
+Equipment row (character and NPC sheets) reassign an item's slot without dragging; native
+drag-and-drop between the three zones is still available as well. Temporary Items and Armory can
+now also be added to directly from the sheet (a "+ Add Item" button per table, matching Signature),
+and the Character Creation Wizard's Equipment step can now stock the Armory, not just Signature.
+Equipment rows also got a View button so a card can be read in full without entering edit mode.
+
+**Cleaned up the Equipment tables and their icon buttons, then carried the same pass across the
+rest of both sheets** — reported live as "why are you using different icons? It's ugly... it's not
+just this one table, it's the overall sheet." Root cause: several action buttons (View, Post-to-
+Chat, Move) had been added to the templates without ever being added to the CSS rule that strips
+Foundry's default boxed-button chrome, so they rendered inconsistently next to the plain-icon
+Edit/Delete buttons in the same row. Fixed the allowlist, then found and fixed the same class of
+gap wherever else it existed: skill roll buttons (Combat and Non-Combat tabs) had no styling of
+their own and fell back to the same boxed look; every "add a new row" button (Add Skill, Add
+Expertise, Add Reach Trigger, Add Body Line, ...) now shares one consistent amber-outlined
+treatment instead of only Equipment's "+ Add Item" having it; a long Equipment Effect cell (an
+entire assembled card's text inline in a table row) now clamps to a short preview with a fade,
+deferring full detail to the View button instead of dumping a wall of text into the table; every
+item sheet's title (Equipment, Chassis/Fitting, Augment, Condition, Species, Heritage, Distinction)
+now scales down for a long name the way Action/Reaction Cards already did, instead of rendering at
+the browser's raw oversized default; and the NPC sheet's window was 120px too narrow for its own
+3-column attribute layout, clipping the Spiritual column under a horizontal scrollbar.
+
 ## 0.6.58
 
 **Fixed the Chassis/Fitting pickers showing every category mixed together** — building a Weapon

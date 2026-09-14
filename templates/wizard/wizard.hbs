@@ -337,6 +337,14 @@
       {{/each}}
     </ul>
 
+    <h3 class="section-head">{{localize "ESSENCE.Wizard.ArmoryLoadout" used=armoryUsed limit=armoryLimit}}</h3>
+    <ul class="item-list">
+      {{#each armoryItems as |item|}}
+        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{localize "ESSENCE.Item.Equipment.Reach"}} {{item.system.cost}}</span>
+          <button type="button" data-action="toggleEquipment" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
+      {{/each}}
+    </ul>
+
     {{#if itemGrants.length}}
       <h3 class="section-head">{{localize "ESSENCE.Sheet.ItemGrants"}} <span class="muted">{{localize "ESSENCE.Sheet.ItemGrantsExamples"}}</span></h3>
       <ul class="item-list">
@@ -369,7 +377,9 @@
     </div>
     <ul class="item-list wizard-scroll-list">
       {{#each browsableEquipment as |item|}}
-        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{equipmentCategoryLabel item.system.category}} &middot; {{localize "ESSENCE.Item.Equipment.Reach"}} {{item.system.cost}}</span> <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.AddAria' name=item.name}}"><i class="fa-solid fa-plus"></i></button></li>
+        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{equipmentCategoryLabel item.system.category}} &middot; {{localize "ESSENCE.Item.Equipment.Reach"}} {{item.system.cost}}</span>
+          <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" data-slot="signature" aria-label="{{localize 'ESSENCE.Wizard.AddToSignatureAria' name=item.name}}" title="{{localize 'ESSENCE.Wizard.AddToSignature'}}"><i class="fa-solid fa-star"></i></button>
+          <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" data-slot="armory" aria-label="{{localize 'ESSENCE.Wizard.AddToArmoryAria' name=item.name}}" title="{{localize 'ESSENCE.Wizard.AddToArmory'}}"><i class="fa-solid fa-warehouse"></i></button></li>
       {{/each}}
     </ul>
   {{/if}}

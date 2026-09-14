@@ -1,7 +1,7 @@
 import { EXPERTISE_DATABASE, SUBTYPE_DATABASE } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
-import { capitalize, computeReachGate } from "../utils.mjs";
+import { capitalize, computeReachGate, computeSlotUsage } from "../utils.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 
@@ -396,15 +396,22 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     // in utils.mjs). Soft, non-blocking flag only — the Wizard still lets you add an over-Reach
     // item, same as the character sheet does.
     context.reach = system.effectiveReach ?? system.reach;
-    context.signatureItems = owned.filter((i) => i.system.slot === "signature").map((i) => ({
+    const equipmentRow = (i) => ({
       id: i.id,
       uuid: i.uuid,
       name: i.name,
       system: i.system,
       overReach: computeReachGate(i.system, context.reach).overReach
-    }));
+    });
+    context.signatureItems = owned.filter((i) => i.system.slot === "signature").map(equipmentRow);
     context.signatureUsed = context.signatureItems.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
     context.signatureLimit = system.signatureEquipmentLimit;
+    // Armory (§ Armory and Signature Capacity) — previously the Wizard only ever let a player add
+    // to Signature; there was no way to stock the Armory during character creation at all, so
+    // every new character started with an empty one regardless of what they'd bought/found.
+    context.armoryItems = owned.filter((i) => i.system.slot === "armory").map(equipmentRow);
+    context.armoryUsed = computeSlotUsage(this.document.items, "armory");
+    context.armoryLimit = system.armoryLimit;
     // Item Grants (Quartermaster's Due, Internal Compartment, ...) — see item-grants.mjs and
     // EssenceActorSheet#_prepareContext for the full reasoning.
     context.itemGrants = deriveActiveGrants({ speciesItem: context.speciesItem, heritageItem: context.heritageItem }, owned);
@@ -702,6 +709,11 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     await this.document.update({ "system.passiveFeatures": passiveFeatures });
   }
 
+  /** `data-slot` ("signature" or "armory") picks which capacity this Library "+" button adds to —
+   *  see the two separate buttons per row in wizard.hbs's Equipment Library list. Missing/unknown
+   *  values default to "signature" for backward compatibility with any other caller. Only Signature
+   *  has a hard capacity check here (Armory's own over-limit handling is the Temporary-Influence
+   *  spend on the actor sheet, not a Wizard-time block — see computeSlotUsage/armoryLimit). */
   static async #onToggleEquipment(event, target) {
     const existing = this.document.items.get(target.dataset.itemId);
     if (existing) {
@@ -711,15 +723,18 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const pack = game.packs.get(target.dataset.pack);
     const sourceItem = await pack?.getDocument(target.dataset.id);
     if (!sourceItem) return;
-    const owned = this.document.items.filter((i) => i.type === "equipment" && i.system.slot === "signature");
-    const used = owned.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
-    const cost = sourceItem.system.slotCost || 1;
-    if (used + cost > this.document.system.signatureEquipmentLimit) {
-      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ExceedsSignatureLimit"));
-      return;
+    const slot = target.dataset.slot === "armory" ? "armory" : "signature";
+    if (slot === "signature") {
+      const owned = this.document.items.filter((i) => i.type === "equipment" && i.system.slot === "signature");
+      const used = owned.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
+      const cost = sourceItem.system.slotCost || 1;
+      if (used + cost > this.document.system.signatureEquipmentLimit) {
+        ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ExceedsSignatureLimit"));
+        return;
+      }
     }
     const data = sourceItem.toObject();
-    data.system.slot = "signature";
+    data.system.slot = slot;
     await this.document.createEmbeddedDocuments("Item", [data]);
   }
 

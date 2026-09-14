@@ -1,4 +1,16 @@
 .essence .essence-sheet-root { display: flex; flex-direction: column; height: 100%; padding: 4px 8px; overflow-y: auto; }
+/* .essence-sheet-root is a column flexbox, so any element placed directly inside it — rather than
+   inside a section/div wrapper, as everything else on every sheet is — inherits the column's
+   default cross-axis stretch and silently becomes full sheet-width. Invisible on a div or table
+   (full width is already their normal layout), but on a <button> it reads as a giant colored bar
+   (found live on the NPC sheet's tabless single-column layout: "+ Add Reach Trigger" stretched
+   edge-to-edge once it got the amber add-row treatment below, though the underlying full-width
+   sizing predates that and was just easier to miss as a plain gray button). Belt-and-suspenders
+   fix: the NPC sheet's own instance is now wrapped in .button-row (below) to match how every other
+   loose action button on every sheet is already grouped, and this catches any future bare button
+   left unwrapped as a direct child of the flex root. */
+.essence .essence-sheet-root > button { align-self: flex-start; }
+.essence .button-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 .essence input:disabled, .essence select:disabled, .essence textarea:disabled { opacity: 0.65; cursor: not-allowed; }
 
 /* Give rich-text (<prose-mirror>) fields the same visible box our text inputs already have —
@@ -185,21 +197,67 @@
 
 .essence .item-list { list-style: none; padding: 0; }
 .essence .item-list li { display: flex; align-items: center; gap: 6px; padding: 2px 0; }
-/* Delete is irreversible (no document undo in Foundry) and otherwise sits one icon-width from
-   the roll button every card row uses every turn — give it its own color and a little breathing
-   room so it doesn't read as "just another icon" next to Edit. The confirmation dialog in
-   #onItemDelete is the actual safety net; this is just making the danger visible before the click. */
-.essence button[data-action="itemDelete"] { color: #ef5350; margin-left: 4px; }
-/* itemEdit/itemDelete/deleteArrayRow were plain <a> icons — unlabeled and not keyboard-reachable.
-   Converted to real <button>s (see pip toggles above for the same fix); this strips button chrome
-   so they still read as inline icons, not boxed buttons. */
+/* Every icon-only row action (View/Post-to-Chat/Edit/Move/Delete on Equipment and Card rows,
+   deleteArrayRow, toggleCard/toggleEquipment on Wizard picks) shares one ghost-icon treatment.
+   This used to be a shorter allowlist covering only itemEdit/itemDelete/deleteArrayRow/
+   toggleCard/toggleEquipment — itemView, postEquipmentToChat, and moveEquipmentSlot were added
+   later without being added here, so Foundry core's default `button` chrome (a solid min-height
+   box) rendered those three as mismatched boxed buttons sitting next to the plain-icon ones in
+   the exact same row (reported live: "why are you using different icons? It's ugly"). One shared
+   rule now, sized and hoverable, so any future row action added to this list gets the same look
+   automatically instead of silently falling back to core's box again. */
+.essence button[data-action="itemView"],
 .essence button[data-action="itemEdit"],
 .essence button[data-action="itemDelete"],
+.essence button[data-action="postEquipmentToChat"],
+.essence button[data-action="moveEquipmentSlot"],
 .essence button[data-action="deleteArrayRow"],
 .essence button[data-action="toggleCard"],
 .essence button[data-action="toggleEquipment"] {
-  background: none; border: none; padding: 0; margin: 0; font: inherit; color: inherit;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.7em; height: 1.7em; min-height: 0; padding: 0; margin: 0; flex: 0 0 auto;
+  font: inherit; font-size: 0.95em; color: #aaa; background: none; border: none; border-radius: 4px;
   cursor: pointer; -webkit-appearance: none; appearance: none; line-height: 1;
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+.essence button[data-action="itemView"]:hover,
+.essence button[data-action="itemEdit"]:hover,
+.essence button[data-action="postEquipmentToChat"]:hover,
+.essence button[data-action="moveEquipmentSlot"]:hover,
+.essence button[data-action="deleteArrayRow"]:hover,
+.essence button[data-action="toggleCard"]:hover,
+.essence button[data-action="toggleEquipment"]:hover {
+  background: rgba(249, 168, 37, 0.15); color: #f9a825;
+}
+/* Delete is irreversible (no document undo in Foundry) and otherwise sits one icon-width from
+   the roll button every card row uses every turn — give it its own color so it doesn't read as
+   "just another icon" next to Edit/Move. The confirmation dialog in #onItemDelete is the actual
+   safety net; this is just making the danger visible before the click. */
+.essence button[data-action="itemDelete"] { color: #ef5350; }
+.essence button[data-action="itemDelete"]:hover { background: rgba(239, 83, 80, 0.15); color: #ef5350; }
+/* Adjacent action icons in a table cell otherwise touch edge-to-edge once boxed — .item-list li
+   already has its own gap (see the base .item-list li rule) so doesn't need this too. */
+.essence .item-table td button + button { margin-left: 2px; }
+/* Skill roll buttons (Combat tab's per-skill dice-d10 icon in .skill-head, Non-Combat's per-row
+   dice-d10 next to a custom skill's rating) had no rule of their own, so — like itemView/
+   postEquipmentToChat/moveEquipmentSlot before this pass — they fell back to Foundry core's boxed
+   button chrome and sat as a visibly chunky square next to plain text and the ghost-icon trash
+   button in the same row. Unlike View/Edit/Delete these ARE the primary action of their row (the
+   only way to roll that skill), so they get the ghost icon buttons' compact sizing but keep an
+   amber tint rather than going fully invisible — "the one thing in this row you're meant to
+   click" instead of just another row utility. */
+.essence button[data-action="rollSkill"],
+.essence button[data-action="rollNonCombatSkill"] {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.8em; height: 1.8em; min-height: 0; padding: 0; margin: 0; flex: 0 0 auto;
+  font: inherit; font-size: 1em; color: #f9a825; background: rgba(249, 168, 37, 0.08);
+  border: 1px solid rgba(249, 168, 37, 0.4); border-radius: 4px;
+  cursor: pointer; -webkit-appearance: none; appearance: none; line-height: 1;
+  transition: background-color 0.1s ease, border-color 0.1s ease;
+}
+.essence button[data-action="rollSkill"]:hover,
+.essence button[data-action="rollNonCombatSkill"]:hover {
+  background: rgba(249, 168, 37, 0.25); border-color: #f9a825;
 }
 .essence button.link-button {
   background: none; border: none; padding: 0; margin: 0; font: inherit; color: #f9a825;
@@ -234,9 +292,35 @@
 .essence .condition-section { font-size: 0.85em; margin: 2px 0; }
 .essence .condition-label { font-weight: bold; text-transform: uppercase; font-size: 0.85em; opacity: 0.8; margin-right: 4px; }
 
+/* A full-grid HTML table (border on every cell, all four sides) reads as a spreadsheet, not part
+   of a card-game sheet — every other boxed element in this system (domain, skill-box, card-view,
+   origin-card) uses ONE border around a whole group, never a grid inside it. Rows separate with a
+   single hairline underneath instead; the header gets the same hairline plus this system's
+   established small-caps .section-head voice rather than a shaded, fully-bordered header row. */
 .essence .item-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 0.9em; }
-.essence .item-table th, .essence .item-table td { border: 1px solid #555; padding: 2px 6px; text-align: left; }
-.essence .item-table th { background: rgba(255,255,255,0.05); }
+.essence .item-table th, .essence .item-table td { padding: 6px 8px; text-align: left; vertical-align: top; }
+.essence .item-table th {
+  padding-top: 0; padding-bottom: 4px; border-bottom: 1px solid #555;
+  font-size: 0.78em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.65; font-weight: normal;
+}
+.essence .item-table tbody tr { border-bottom: 1px solid rgba(255,255,255,0.08); }
+.essence .item-table tbody tr:last-child { border-bottom: none; }
+/* Rows in the Equipment tables are draggable and individually actionable (View/Edit/Move/Delete),
+   so unlike a plain data table they benefit from the same "this row responds" cue a card-list row
+   gets nowhere else in this system currently — a quiet highlight, not a shift in layout. */
+.essence .item-table tbody tr:hover { background: rgba(255,255,255,0.03); }
+.essence .item-table td p:first-child { margin-top: 0; }
+.essence .item-table td p:last-child { margin-bottom: 0; }
+.essence .item-table td p { margin: 0 0 4px; }
+/* An assembled equipment item's Effect cell can hold an entire merged card (requirement, name,
+   resolution, range, trigger, effect, two surge tiers, design note) — a scanning table row should
+   preview that, not carry it in full; the View button already opens the same content as a clean
+   read-only card. Clamp to a few lines and fade the cut edge instead of hard-cropping mid-word. */
+.essence .item-table .effect-clamp {
+  max-height: 4.4em; overflow: hidden; position: relative;
+  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 1.2em), transparent 100%);
+  mask-image: linear-gradient(to bottom, black calc(100% - 1.2em), transparent 100%);
+}
 .essence .item-table .origin-feature-row { background: rgba(249, 168, 37, 0.06); }
 .essence .item-table .origin-feature-row td:first-child { font-weight: bold; }
 /* Equipment tab's Signature/Temporary/Armory drop zones (see resolveEquipmentDropSlot in
@@ -245,6 +329,21 @@
    Items directory. */
 .essence .draggable-row { cursor: grab; }
 .essence .draggable-row:active { cursor: grabbing; }
+/* Every "add a new row" button system-wide (+ Add Item, Add Skill, Add Expertise, Add Mount, Add
+   Body Line, Add Adaptation, ...) shares one plus-icon-first, labeled-button markup convention
+   already — matching on that (rather than an ever-growing data-action allowlist, the trap the
+   row-action ghost-icon rule above fell into once) means any future "add a row" button gets this
+   look automatically. These are secondary actions, so they get a quiet amber outline instead of
+   Foundry core's plain gray button box — same language as the read/edit toggle elsewhere in this
+   system. Excludes toggleCard/toggleEquipment (Monster Creator's compendium pick lists): those
+   are icon-only quick-adds inside an already-compact row, not a labeled block-level row-adder,
+   and keep the smaller ghost-icon treatment from the rule above instead. */
+.essence button:has(> i.fa-plus:first-child):not([data-action="toggleCard"]):not([data-action="toggleEquipment"]) {
+  margin-top: 2px; background: rgba(249, 168, 37, 0.08); border: 1px solid #f9a825; color: #f9a825;
+}
+.essence button:has(> i.fa-plus:first-child):not([data-action="toggleCard"]):not([data-action="toggleEquipment"]):hover {
+  background: rgba(249, 168, 37, 0.2);
+}
 
 .essence .career-row { margin-bottom: 8px; }
 .essence .career-row label { display: flex; flex-direction: column; gap: 2px; }

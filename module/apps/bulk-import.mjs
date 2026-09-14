@@ -99,9 +99,9 @@ const TEMPLATES = {
     // Signature/Temporary/Armory slot it's carried in; how many you happen to have), assigned once
     // a player actually acquires it, not properties of the template being authored here. `category`
     // only accepts toolkit/consumable-kit/gear (see FLAT_EQUIPMENT_CATEGORIES in item-card.mjs) —
-    // weapon/armor/shield/implement are wholesale modular as of the 2026-09-13 catalog import, and
-    // must be authored as Chassis + Fitting (+ Augment) rows via those templates below instead of a
-    // flat Equipment row. A row submitted with one of those four falls back to `gear`
+    // weapon/ranged/armor/shield/implement are wholesale modular (MODULAR_EQUIPMENT_CATEGORIES),
+    // and must be authored as Chassis + Fitting (+ Augment) rows via those templates below instead
+    // of a flat Equipment row. A row submitted with one of those five falls back to `gear`
     // (equipmentRowToSystem). A Toolkit never has Uses regardless of what this row's `uses` column
     // says. A Consumable Kit's actual granted Equipment Cards are richer than a flat CSV row
     // supports well (each needs its own name/effect/Uses), so authoring those stays on the Item

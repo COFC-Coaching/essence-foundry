@@ -36,7 +36,7 @@ function pips(value, max = 5) {
 export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["essence", "actor", "npc"],
-    position: { width: 640, height: 720 },
+    position: { width: 760, height: 720 },
     form: { submitOnChange: true },
     // Scoped to .draggable-row rather than a bare [data-item-id] selector — see the matching
     // comment in actor-sheet.mjs's DEFAULT_OPTIONS.
@@ -72,6 +72,8 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       itemEdit: EssenceNpcSheet.#onItemEdit,
       itemDelete: EssenceNpcSheet.#onItemDelete,
       postEquipmentToChat: EssenceNpcSheet.#onPostEquipmentToChat,
+      moveEquipmentSlot: EssenceNpcSheet.#onMoveEquipmentSlot,
+      createEquipment: EssenceNpcSheet.#onCreateEquipment,
       selectOrigin: EssenceNpcSheet.#onSelectOrigin,
       clearOrigin: EssenceNpcSheet.#onClearOrigin,
       chooseGrantedItem: EssenceNpcSheet.#onChooseGrantedItem,
@@ -1018,6 +1020,27 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content: `<p><strong>${item.name}</strong> <span class="muted">(${category})</span></p>${summary ? `<p>${summary}</p>` : ""}`
     });
+  }
+
+  /** See EssenceActorSheet#onMoveEquipmentSlot's identical implementation for the reasoning. */
+  static async #onMoveEquipmentSlot(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    const slot = target.dataset.slot;
+    if (!item || !["signature", "temporary", "armory"].includes(slot)) return;
+    await item.update({ "system.slot": slot });
+  }
+
+  /** See EssenceActorSheet#onCreateEquipment's identical implementation for the reasoning. */
+  static async #onCreateEquipment(event, target) {
+    const slot = target.dataset.slot;
+    if (!["signature", "temporary", "armory"].includes(slot)) return;
+    const [created] = await this.actor.createEmbeddedDocuments("Item", [{
+      name: game.i18n.localize("ESSENCE.Sheet.NewEquipmentName"),
+      type: "equipment",
+      img: "icons/svg/item-bag.svg",
+      system: { slot }
+    }]);
+    created?.sheet.render(true);
   }
 
   static async #onItemDelete(event, target) {
