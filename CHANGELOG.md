@@ -2,6 +2,32 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.58
+
+**Fixed the Chassis/Fitting pickers showing every category mixed together** — building a Weapon
+showed Armor Shells, Shield Guards, and Implement Focuses alongside the Strikers/Grips that
+actually apply, since the picker wasn't scoped to the equipment item's own category. Ranged Weapon
+now gets its own assembled category instead of folding into Weapon, matching the split that
+already existed one layer down (Striker vs Launcher), which is what makes the category filter
+exact instead of approximate.
+
+**Melee/Ranged Weapon, Armor, Shield, and Implement can no longer be un-modular'd** — always
+assembled from a Chassis + Fitting now, with the now-pointless Type/Range/Reach Bonus fields and
+Modular checkbox removed from their equipment sheet.
+
+**Fixed blank Effect columns and missing stat bonuses on existing equipment** — several owned
+items had their Chassis/Fitting reference set to a compendium document with no matching copy
+actually embedded on the actor, so resolution silently found nothing (no Effect text, and no
+Fortitude/Resilience/Movement bonus reaching the character in play, not just on the sheet). Odds
+are decent this affects your own characters too — a one-time migration re-syncs every existing
+modular item's Active Effect on next load. Also fixed a Chassis/Fitting's Combined Effect text
+showing up twice when that Component's own effect field was already the full granted-card text.
+
+**Equipment tables get real actions instead of a useless row-index column** — the Signature/
+Armory/Temporary Equipment tables (both character and NPC sheets) now have View and Post-to-Chat
+buttons per row. Equipment-granted cards (from a Signature item's Function Augments or Consumable
+Kit) now also show in the actor's own card list, tagged as not counting against Card Count.
+
 ## 0.6.57
 
 **Replaced the flat combat-equipment catalog with a full Chassis/Fitting/Augment system** —
