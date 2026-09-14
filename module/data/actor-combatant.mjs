@@ -56,6 +56,16 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
       fortitudeBonus: new fields.NumberField({ integer: true, initial: 0 }),
       composureBonus: new fields.NumberField({ integer: true, initial: 0 }),
       harmonyBonus: new fields.NumberField({ integer: true, initial: 0 }),
+      // Equipment's own Resilience/Movement/Reach modifiers (equipment-effects.mjs) land here, NOT
+      // on resilience/movement/reach directly below — those are plain editable sheet inputs with
+      // submitOnChange:true, so a transferred Active Effect targeting them directly would get its
+      // own already-applied result written back as the new "base" on the next unrelated form
+      // submit, then re-applied on top of THAT — silently compounding every time. Confirmed live:
+      // a single -4 Movement item alone drove a Tier 1 character's Movement from 10 to 2. Mirrors
+      // the fortitudeBonus/composureBonus/harmonyBonus pattern already used for Defenses above.
+      resilienceBonus: new fields.NumberField({ integer: true, initial: 0 }),
+      movementBonus: new fields.NumberField({ integer: true, initial: 0 }),
+      reachBonus: new fields.NumberField({ integer: true, initial: 0 }),
 
       // Harm / wound track
       resilience: new fields.NumberField({ integer: true, initial: 0 }),
@@ -259,14 +269,22 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
     // Base combat dice pool: Tier + 5 (see play-mode.ts)
     this.baseCombatDice = 5 + (this.tier || 0);
 
-    // Each point of Combo increases Movement by 1 unit (part-iv-combat.md § Combo).
-    this.totalMovement = this.movement + (this.specialties?.combo ?? 0);
+    // Each point of Combo increases Movement by 1 unit (part-iv-combat.md § Combo), and equipment's
+    // own Movement modifier (movementBonus, see its schema comment above) folds in here too rather
+    // than touching the raw, sheet-editable `movement` field directly.
+    this.totalMovement = this.movement + (this.movementBonus ?? 0) + (this.specialties?.combo ?? 0);
 
-    // Reach as actually usable right now for equipment-gating purposes: base Reach plus any
-    // currently-active Adventure-Limited Reach Triggers (Letters of Standing et al. treat Reach as
-    // "1 higher" only "for the current Scene" — see reachTriggers above). Equipment tier checks and
-    // the sheet's Signature Equipment header both read this, never the raw `reach` field directly.
-    this.effectiveReach = this.reach + (this.reachTriggers ?? [])
+    // Resilience as actually usable for Apply Damage's math — base plus equipment's own Resilience
+    // modifier (resilienceBonus). Apply Damage (actor-sheet.mjs/npc-sheet.mjs) reads this, never
+    // the raw `resilience` field directly.
+    this.effectiveResilience = this.resilience + (this.resilienceBonus ?? 0);
+
+    // Reach as actually usable right now for equipment-gating purposes: base Reach plus equipment's
+    // own Reach modifier (reachBonus) plus any currently-active Adventure-Limited Reach Triggers
+    // (Letters of Standing et al. treat Reach as "1 higher" only "for the current Scene" — see
+    // reachTriggers above). Equipment tier checks and the sheet's Signature Equipment header both
+    // read this, never the raw `reach` field directly.
+    this.effectiveReach = this.reach + (this.reachBonus ?? 0) + (this.reachTriggers ?? [])
       .filter((t) => t.active)
       .reduce((sum, t) => sum + (t.tempBonus || 0), 0);
 

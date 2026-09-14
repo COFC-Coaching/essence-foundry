@@ -24,6 +24,27 @@ export function parseSigned(str) {
   return Number.isFinite(n) ? n : 0;
 }
 
+/**
+ * Lists every currently-worn (Signature slot) Equipment item contributing a nonzero Fortitude/
+ * Resilience/Movement/Reach modifier — the same fields equipment-effects.mjs turns into a
+ * transferred Active Effect on *Bonus accumulator fields, surfaced here so a player/GM can actually
+ * see what's granting a bonus instead of just a mystery final number (see the sheet's "effective"
+ * notes next to Movement/Resilience/Reach). Only Signature items are listed since only those are
+ * actually active (equipment-effects.mjs disables the transferred effect for anything else).
+ */
+export function computeEquipmentBonusSources(items) {
+  return items
+    .filter((i) => i.type === "equipment" && i.system.slot === "signature")
+    .map((i) => ({
+      name: i.name,
+      fortitude: parseSigned(i.system.fortitude),
+      resilience: parseSigned(i.system.resilience),
+      movement: parseSigned(i.system.movement),
+      reach: Number(i.system.reachBonus) || 0
+    }))
+    .filter((b) => b.fortitude || b.resilience || b.movement || b.reach);
+}
+
 /** A card's Domain determines which resource pool its Cost is paid from — see the Domain/
  *  Resource/Defense grouping used throughout the sheet (actor-sheet.mjs's DOMAINS constant). */
 const DOMAIN_RESOURCE = { physical: "Stamina", mental: "Focus", spiritual: "Mana" };

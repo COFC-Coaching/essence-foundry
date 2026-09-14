@@ -30,10 +30,17 @@ function buildChanges(system) {
   const resilience = parseSigned(system.resilience);
   const movement = parseSigned(system.movement);
   const reach = Number(system.reachBonus) || 0;
+  // Every target here is an indirect *Bonus accumulator (actor-combatant.mjs), never the matching
+  // raw editable field (system.resilience/movement/reach) directly. Those raw fields are plain
+  // sheet inputs with submitOnChange:true — a transferred Active Effect that targeted them directly
+  // would get its own already-applied result written back as the new "base" on the very next
+  // unrelated form submit, then re-applied on top of THAT, silently compounding every time this
+  // sheet re-saves. Confirmed live: a single -4 Movement item alone drove a Tier 1 character's
+  // Movement from 10 to 2, and a single +2 Resilience item drove another's Resilience to 8.
   if (fortitude) changes.push({ key: "system.fortitudeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: String(fortitude) });
-  if (resilience) changes.push({ key: "system.resilience", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: String(resilience) });
-  if (movement) changes.push({ key: "system.movement", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: String(movement) });
-  if (reach) changes.push({ key: "system.reach", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: String(reach) });
+  if (resilience) changes.push({ key: "system.resilienceBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: String(resilience) });
+  if (movement) changes.push({ key: "system.movementBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: String(movement) });
+  if (reach) changes.push({ key: "system.reachBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: String(reach) });
   return changes;
 }
 

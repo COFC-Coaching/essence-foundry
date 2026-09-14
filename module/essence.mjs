@@ -107,6 +107,16 @@ Hooks.once("init", () => {
   });
 
   registerWhatsNewSetting();
+
+  game.settings.register("essence-system", "grantedItemCreatePermission", {
+    scope: "world", config: false, type: Boolean, default: false
+  });
+  game.settings.register("essence-system", "migratedEquipmentBonusEffects", {
+    scope: "world", config: false, type: Boolean, default: false
+  });
+  game.settings.register("essence-system", "prunedOrphanedExpertises", {
+    scope: "world", config: false, type: Boolean, default: false
+  });
 });
 
 /**
@@ -126,6 +136,69 @@ Hooks.once("ready", () => {
  *  whats-new.mjs's handleWhatsNewChatCommand(). Returning false suppresses the normal "send this
  *  as a chat message" behavior, matching every other slash-command hook's contract. */
 Hooks.on("chatMessage", (chatLog, message) => handleWhatsNewChatCommand(message));
+
+/**
+ * Foundry's core "Create Items" world permission (the one that actually gates a Player creating a
+ * new Equipment/Action Card/etc. Item document — not the same thing as owning their own character,
+ * which already lets them add existing Items to it) defaults to Gamemaster-only. Players building
+ * homebrew Equipment or Action Cards for their own character is normal for this system, so a GM's
+ * world is nudged to allow it out of the box on first load after upgrading, without silently
+ * overriding a GM who has already deliberately configured permissions differently.
+ */
+Hooks.once("ready", async () => {
+  if (!game.user.isGM) return;
+  if (game.settings.get("essence-system", "grantedItemCreatePermission")) return;
+  const permissions = game.settings.get("core", "permissions") ?? {};
+  const itemCreate = permissions.ITEM_CREATE ?? [];
+  if (!itemCreate.includes(CONST.USER_ROLES.PLAYER)) {
+    await game.settings.set("core", "permissions", {
+      ...permissions,
+      ITEM_CREATE: [...itemCreate, CONST.USER_ROLES.PLAYER]
+    });
+  }
+  await game.settings.set("essence-system", "grantedItemCreatePermission", true);
+});
+
+/**
+ * One-time migration: every equipment Item's transferred "Equipment Bonus" ActiveEffect that was
+ * ever synced before this version targeted system.resilience/movement/reach DIRECTLY (see
+ * equipment-effects.mjs's buildChanges doc comment for why that was wrong) — those effect documents
+ * already exist on disk with the old `changes` array baked in, and nothing re-triggers
+ * syncEquipmentEffect for an item that isn't itself being created/updated right now. Re-running it
+ * for every equipment Item once, world-wide, rebuilds each stale effect onto the new indirect
+ * *Bonus fields without waiting for a GM to happen to re-save every piece of gear by hand.
+ */
+Hooks.once("ready", async () => {
+  if (!game.user.isGM) return;
+  if (game.settings.get("essence-system", "migratedEquipmentBonusEffects")) return;
+  for (const actor of game.actors) {
+    for (const item of actor.items) {
+      if (item.type === "equipment") await syncEquipmentEffect(item);
+    }
+  }
+  await game.settings.set("essence-system", "migratedEquipmentBonusEffects", true);
+});
+
+/**
+ * One-time migration: character-wizard.mjs's #onAdjustSkill let a Combat Skill's rank drop back to
+ * 0 without clearing any Expertise the player had already picked under it (fixed going forward —
+ * see that function's comment), so an Expertise already orphaned this way is invisible in the
+ * wizard's by-skill breakdown (which only lists skills at rank >= 1) yet still counts toward the
+ * Expertises total, silently inflating it (confirmed live: "EXPERTISES (5 / 4)" with only 4
+ * actually visible/chosen anywhere). The fix above stops new orphans; this sweeps existing ones off
+ * every character actor once.
+ */
+Hooks.once("ready", async () => {
+  if (!game.user.isGM) return;
+  if (game.settings.get("essence-system", "prunedOrphanedExpertises")) return;
+  for (const actor of game.actors) {
+    if (actor.type !== "character") continue;
+    const expertises = actor.system.expertises ?? [];
+    const pruned = expertises.filter((e) => (actor.system[e.skill] ?? 0) >= 1);
+    if (pruned.length !== expertises.length) await actor.update({ "system.expertises": pruned });
+  }
+  await game.settings.set("essence-system", "prunedOrphanedExpertises", true);
+});
 
 Hooks.once("ready", async () => {
   const pack = game.packs.get("essence-system.conditions");

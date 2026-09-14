@@ -587,7 +587,15 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const gateOpen = !gateDistinction || distinctionItem?.system.unlocks === key;
     if (delta > 0 && (!gateOpen || current >= SKILL_MAX_AT_CREATION || spent >= SKILL_POOL)) return;
     if (delta < 0 && current <= 0) return;
-    await this.document.update({ [`system.${key}`]: current + delta });
+    const newValue = current + delta;
+    const updates = { [`system.${key}`]: newValue };
+    // Dropping a Combat Skill back to 0 un-eligibles it for Expertises (see #prepareCombatSkills'
+    // eligibleSkills filter), but any Expertise the player already picked under it doesn't clear
+    // itself — left alone it becomes an invisible entry that still counts against the Expertises
+    // total (confirmed live: "EXPERTISES (5 / 4)" with only 4 actually visible/chosen anywhere),
+    // silently blocking a legitimate pick elsewhere. Pruning it here keeps the count honest.
+    if (newValue === 0) updates["system.expertises"] = system.expertises.filter((e) => e.skill !== key);
+    await this.document.update(updates);
   }
 
   static async #onToggleExpertise(event, target) {

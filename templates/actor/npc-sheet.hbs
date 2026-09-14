@@ -26,7 +26,7 @@
       </label>
       <label>{{localize "ESSENCE.Common.Tier"}} <input name="system.tier" type="number" value="{{system.tier}}" style="width:3em"></label>
       <label>{{localize "ESSENCE.Common.Level"}} <input name="system.level" type="number" value="{{system.level}}" style="width:3em"></label>
-      <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}</label>
+      <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}{{#if (ne system.totalMovement system.movement)}} <span class="muted">{{localize "ESSENCE.Character.EffectiveMovementNote" n=system.totalMovement}}</span>{{/if}}</label>
     </div>
   </div>
 </header>
@@ -88,6 +88,7 @@
   <div class="wound-block">
     <span class="attr-label">{{localize "ESSENCE.Common.Resilience"}}</span>
     <input class="current-input" type="number" name="system.resilience" value="{{system.resilience}}">
+    {{#if (ne system.effectiveResilience system.resilience)}}<span class="muted">{{localize "ESSENCE.Sheet.EffectiveResilienceNote" n=system.effectiveResilience}}</span>{{/if}}
   </div>
   <div class="wound-block">
     <span class="attr-label">{{localize "ESSENCE.Common.TemporaryWounds"}}</span>
@@ -106,6 +107,14 @@
     <button type="button" data-action="recoverWound">{{localize "ESSENCE.Sheet.RecoverWound"}}</button>
   </div>
 </div>
+{{#if equipmentBonusSources.length}}
+  <div class="muted equipment-bonus-sources">
+    {{localize "ESSENCE.Sheet.EquipmentBonusSourcesLabel"}}:
+    {{#each equipmentBonusSources as |b|}}
+      <span class="equipment-bonus-source">{{b.name}} ({{#if b.fortitude}}{{localize "ESSENCE.Common.Fortitude"}} {{b.fortitude}}{{/if}}{{#if b.resilience}}{{#if b.fortitude}}, {{/if}}{{localize "ESSENCE.Common.Resilience"}} {{b.resilience}}{{/if}}{{#if b.movement}}{{#if (or b.fortitude b.resilience)}}, {{/if}}{{localize "ESSENCE.Common.Movement"}} {{b.movement}}{{/if}}{{#if b.reach}}{{#if (or b.fortitude b.resilience b.movement)}}, {{/if}}{{localize "ESSENCE.Sheet.Reach"}} {{b.reach}}{{/if}}){{#unless @last}}; {{/unless}}</span>
+    {{/each}}
+  </div>
+{{/if}}
 {{#if (eq system.woundState "Critically Wounded")}}
   <div class="wounds-row">
     <div class="wound-block">

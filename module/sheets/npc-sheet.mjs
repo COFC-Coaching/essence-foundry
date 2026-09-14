@@ -3,7 +3,7 @@ import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, resetAdventureUses, resolveEquipmentDropSlot, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
 import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -194,6 +194,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     context.combatRound = game.combat?.round ?? null;
     const system = this.actor.system;
     context.system = system;
+    context.equipmentBonusSources = computeEquipmentBonusSources(this.actor.items);
 
     const distinctionItem = this.actor.items.find((i) => i.type === "distinction");
     const speciesItem = this.actor.items.find((i) => i.type === "species");
@@ -576,7 +577,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     if (!result) return;
 
     const sys = this.actor.system;
-    const resilience = sys.resilience ?? 0;
+    const resilience = sys.effectiveResilience ?? sys.resilience ?? 0;
     const prevAccumulated = sys.playState.accumulatedDamage ?? 0;
 
     let wounds;
