@@ -510,9 +510,12 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // grantedCards / EssenceEquipmentData.equipmentCards are plain text), so they never touch
     // CARD_LIMIT/nonBasicCardCount in character-wizard.mjs, which only ever counts real
     // action-card/reaction-card Items — same "exclusion is automatic because it isn't a card Item"
-    // shape as isBasicCard's Basic-card exclusion, just one layer earlier. Scoped to Signature
-    // equipment only, matching equipment-effects.mjs's own signature-only gate (Armory/Temporary
-    // gear you own but aren't carrying for the Adventure shouldn't contribute).
+    // shape as isBasicCard's Basic-card exclusion, just one layer earlier. Covers every owned
+    // equipment Item regardless of Signature/Temporary/Armory — unlike the passive Fortitude/
+    // Resilience/Movement bonuses equipment-effects.mjs gates to Signature only, a card here is
+    // something the player actively chooses to spend a Use/roll on, not a background bonus that
+    // needs "currently carried" to make sense; Armory gear's kit/augment cards should still be
+    // usable, not hidden just because that item isn't this Adventure's prepared loadout.
     // summary mirrors cardSummary()'s own truncation, just off a flat effect string instead of a
     // Card's sectioned `body` — same "short line collapsed, full text on demand" shape a real
     // Combat Card gets from its own `summary` field above.
@@ -521,7 +524,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       return text.length > 140 ? `${text.slice(0, 139)}…` : text;
     };
     context.equipmentCards = [];
-    for (const item of equipment.filter((i) => i.system.slot === "signature")) {
+    for (const item of equipment) {
       if (item.system.isModular) {
         for (const g of deriveEquipmentStats(equipmentResolver, item).grantedCards) {
           context.equipmentCards.push({ source: item.name, name: g.source, effect: g.effect, summary: equipmentCardSummary(g.effect), uses: g.uses, usesRemaining: g.usesRemaining, itemId: g.itemId ?? null, cardIndex: null });

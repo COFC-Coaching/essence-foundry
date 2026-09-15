@@ -2,6 +2,15 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.69
+
+**Equipment Cards now show for every owned equipment item, not just Signature.** 0.6.68 scoped the
+new collapsible/rollable card list to Signature-slot equipment only, mirroring the passive Fortitude/
+Resilience/Movement bonus gate — but a card is something a player actively chooses to spend a Use or
+roll on, not a background bonus that needs "currently carried" to make sense. A Consumable Kit or
+Function Augment sitting in the Armory should still be usable. Dropped the Signature-only filter on
+both the PC and NPC/Monster sheets.
+
 ## 0.6.68
 
 **Equipment Cards now look and act like Combat Cards** — the granted-by-Signature-Equipment cards

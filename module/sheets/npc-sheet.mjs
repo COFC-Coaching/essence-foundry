@@ -320,7 +320,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       return text.length > 140 ? `${text.slice(0, 139)}…` : text;
     };
     context.equipmentCards = [];
-    for (const item of equipment.filter((i) => i.system.slot === "signature")) {
+    for (const item of equipment) {
       if (item.system.isModular) {
         for (const g of deriveEquipmentStats(equipmentResolver, item).grantedCards) {
           context.equipmentCards.push({ source: item.name, name: g.source, effect: g.effect, summary: equipmentCardSummary(g.effect), uses: g.uses, usesRemaining: g.usesRemaining, itemId: g.itemId ?? null, cardIndex: null });
