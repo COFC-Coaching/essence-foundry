@@ -2,6 +2,20 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.63
+
+**"Grant Recovery" on the character sheet** — a GM-adjudicated Adventure Recovery action, added
+next to Apply Damage/Recover Wound. Part III: Playing the Game deliberately gives Recovery no fixed
+formula ("Recovery occurs when circumstances provide enough safety, time, treatment, supplies, or
+support" — narrative, not a session boundary or a percentage), and Part VII (where the numeric
+Stamina/Focus/Mana restoration and Wound-treatment timing were meant to live) is still an unfinished
+placeholder in the source rules. Rather than invent a canon-less formula, this hands the GM a lever
+instead: a dialog where they set what percentage of Stamina/Focus/Mana this particular Recovery
+restores, plus an optional checkbox to also recover a chosen number of Core Wounds (reusing Recover
+Wound's existing reverse-order rule — most severe filled Wound first). Posts a chat summary so the
+Recovery is visible to the table, matching Part III's framing that Recovery is something that
+happens in the game world, not a mechanical tick.
+
 ## 0.6.62
 
 **The Reduced Enemy Engine, for Mook and Normal Grade** — the piece the original design doc

@@ -68,6 +68,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       endTurn: EssenceActorSheet.#onEndTurn,
       applyDamage: EssenceActorSheet.#onApplyDamage,
       recoverWound: EssenceActorSheet.#onRecoverWound,
+      grantRecovery: EssenceActorSheet.#onGrantRecovery,
       adjustResource: EssenceActorSheet.#onAdjustResource,
       adjustPoolDice: EssenceActorSheet.#onAdjustPoolDice,
       itemView: EssenceActorSheet.#onItemView,
@@ -981,6 +982,95 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content: `<p><strong>${this.actor.name}</strong> recovers from their <strong>${recovered.condition}</strong>.</p>`
+    });
+  }
+
+  /**
+   * A Recovery per part-iii-playing-the-game.md § Recovery During an Adventure: "a meaningful
+   * opportunity... to regain some renewable capability," granted only when "circumstances provide
+   * enough safety, time, treatment, supplies, or support" — deliberately not tied to a session
+   * boundary or a fixed formula. Part VII (where the numeric Stamina/Focus/Mana restoration and
+   * Wound treatment timing were meant to live) is still an unfinished placeholder, so rather than
+   * invent a canon-less percentage, this hands the GM a lever: they judge from the fiction how much
+   * this particular Recovery restores and enter it here. Wound recovery reuses #onRecoverWound's
+   * same reverse-order rule (most severe filled Wound first), just repeated per the GM's count.
+   */
+  static async #onGrantRecovery() {
+    const result = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: "Grant Recovery" },
+        content: `
+          <p class="muted">Per Part III, Recovery follows what the situation provides — judge how much this one grants.</p>
+          <label>Stamina / Focus / Mana Restored <input type="number" name="pct" value="25" min="0" max="100" autofocus> %</label>
+          <label style="display:flex;align-items:center;gap:6px;">
+            <input type="checkbox" name="healWounds"> Recover Core Wounds
+          </label>
+          <label>Core Wounds to Recover <input type="number" name="woundCount" value="1" min="1" max="5"></label>
+        `,
+        buttons: [{
+          action: "grant",
+          label: "Grant Recovery",
+          default: true,
+          callback: (event, button) => ({
+            pct: Math.min(100, Math.max(0, Math.floor(Number(button.form.elements.pct.value)) || 0)),
+            healWounds: button.form.elements.healWounds.checked,
+            woundCount: Math.max(1, Math.floor(Number(button.form.elements.woundCount.value)) || 1)
+          })
+        }],
+        submit: (result) => resolve(result === "grant" ? null : result)
+      }).render(true);
+    });
+    if (!result) return;
+
+    const sys = this.actor.system;
+    const update = {};
+    const resourceLog = [];
+
+    for (const key of ["stamina", "focus", "mana"]) {
+      const resource = sys.resources[key];
+      const restored = Math.round(resource.max * (result.pct / 100));
+      const next = Math.min(resource.max, resource.value + restored);
+      const gained = next - resource.value;
+      if (gained <= 0) continue;
+      const field = `current${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+      update[`system.playState.${field}`] = next;
+      resourceLog.push(`+${gained} ${key.charAt(0).toUpperCase()}${key.slice(1)}`);
+    }
+
+    const woundsRecovered = [];
+    if (result.healWounds) {
+      const coreWounds = sys.coreWounds.map((w) => ({ ...w }));
+      for (let n = 0; n < result.woundCount; n++) {
+        let slot = -1;
+        for (let i = coreWounds.length - 1; i >= 0; i--) {
+          if (coreWounds[i].filled) { slot = i; break; }
+        }
+        if (slot === -1) break;
+        woundsRecovered.push(coreWounds[slot].condition);
+        coreWounds[slot] = { filled: false, domain: "", severity: "", condition: "" };
+        if (slot === 4) {
+          update["system.playState.deathTrackStep"] = 0;
+          update["system.playState.deathTrackFrozen"] = false;
+        }
+      }
+      update["system.coreWounds"] = coreWounds;
+      update["system.playState.currentCoreWounds"] = coreWounds.filter((w) => w.filled).length;
+    }
+
+    if (!resourceLog.length && !woundsRecovered.length) {
+      ui.notifications.info(game.i18n.format("ESSENCE.Notify.NothingToRecover", { name: this.actor.name }));
+      return;
+    }
+
+    await this.actor.update(update);
+
+    const parts = [];
+    if (resourceLog.length) parts.push(resourceLog.join(", "));
+    if (woundsRecovered.length) parts.push(`recovers from ${woundsRecovered.join(", ")}`);
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> secures a Recovery: ${parts.join("; ")}.</p>`
     });
   }
 
