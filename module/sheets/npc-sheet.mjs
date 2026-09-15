@@ -5,7 +5,7 @@ import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQu
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
 import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -68,6 +68,12 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       activateReachTrigger: EssenceNpcSheet.#onActivateReachTrigger,
       deactivateReachTrigger: EssenceNpcSheet.#onDeactivateReachTrigger,
       resetAdventureUses: EssenceNpcSheet.#onResetAdventureUses,
+      addTactic: EssenceNpcSheet.#onAddTactic,
+      deleteTactic: EssenceNpcSheet.#onDeleteTactic,
+      addLeaderAbility: EssenceNpcSheet.#onAddLeaderAbility,
+      deleteLeaderAbility: EssenceNpcSheet.#onDeleteLeaderAbility,
+      addBossAbility: EssenceNpcSheet.#onAddBossAbility,
+      deleteBossAbility: EssenceNpcSheet.#onDeleteBossAbility,
       itemView: EssenceNpcSheet.#onItemView,
       itemEdit: EssenceNpcSheet.#onItemEdit,
       itemDelete: EssenceNpcSheet.#onItemDelete,
@@ -245,6 +251,11 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       defenseLabel: d.defense,
       defenseValue: system.defenses[d.defense]
     }));
+
+    context.headerLabel = buildEnemyHeaderLabel(system);
+    context.tactics = (system.tactics ?? []).map((text, i) => ({ text, i }));
+    context.leaderAbilities = (system.leaderAbilities ?? []).map((a, i) => ({ ...a, i }));
+    context.bossAbilities = (system.bossAbilities ?? []).map((a, i) => ({ ...a, i }));
 
     context.temporaryWoundPips = pips(system.playState.currentTemporaryWounds, system.temporaryWoundsAvailable);
     context.deathTrackPips = pips(system.playState.deathTrackStep, 5);
@@ -996,6 +1007,43 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content: `<p><strong>${this.actor.name}</strong> resets Reach Triggers, Augment Uses, and Equipment Card Uses for a new Adventure.</p>`
     });
+  }
+
+  /** Mook Tactics is an ordered list of plain instructions (design doc § Mook) — add/delete rather
+   *  than a generic array-row helper since that's all this list needs. */
+  static async #onAddTactic() {
+    const tactics = [...(this.actor.system.tactics ?? []), ""];
+    await this.actor.update({ "system.tactics": tactics });
+  }
+
+  static async #onDeleteTactic(event, target) {
+    const tactics = [...(this.actor.system.tactics ?? [])];
+    tactics.splice(Number(target.dataset.index), 1);
+    await this.actor.update({ "system.tactics": tactics });
+  }
+
+  /** Leader/Boss abilities (design doc §§ Leader, Boss) — same add/delete-by-index shape as
+   *  Tactics above, just with a name + rich-text field per entry instead of plain text. */
+  static async #onAddLeaderAbility() {
+    const abilities = [...(this.actor.system.leaderAbilities ?? []), { name: "", text: "" }];
+    await this.actor.update({ "system.leaderAbilities": abilities });
+  }
+
+  static async #onDeleteLeaderAbility(event, target) {
+    const abilities = [...(this.actor.system.leaderAbilities ?? [])];
+    abilities.splice(Number(target.dataset.index), 1);
+    await this.actor.update({ "system.leaderAbilities": abilities });
+  }
+
+  static async #onAddBossAbility() {
+    const abilities = [...(this.actor.system.bossAbilities ?? []), { name: "", text: "" }];
+    await this.actor.update({ "system.bossAbilities": abilities });
+  }
+
+  static async #onDeleteBossAbility(event, target) {
+    const abilities = [...(this.actor.system.bossAbilities ?? [])];
+    abilities.splice(Number(target.dataset.index), 1);
+    await this.actor.update({ "system.bossAbilities": abilities });
   }
 
   /** See EssenceActorSheet#onItemView — same "eye" View button, same reasoning. */

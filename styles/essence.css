@@ -197,6 +197,13 @@
 
 .essence .item-list { list-style: none; padding: 0; }
 .essence .item-list li { display: flex; align-items: center; gap: 6px; padding: 2px 0; }
+
+/* Enemy identity header caption ("Tier 3 Elite — Controller (Leader)", see buildEnemyHeaderLabel
+   in utils.mjs) and Mook's ordered Tactics list — both share the NPC sheet and Monster Wizard. */
+.essence .npc-header-label, .essence .wizard-header-label { margin: 0 0 4px; font-size: 0.85em; }
+.essence .npc-tactics-list, .essence .wizard-tactics-list { padding-left: 1.4em; margin: 4px 0; }
+.essence .npc-tactics-list li, .essence .wizard-tactics-list li { display: flex; align-items: center; gap: 6px; padding: 2px 0; }
+.essence .npc-tactics-list input[type="text"], .essence .wizard-tactics-list input[type="text"] { flex: 1; }
 /* Every icon-only row action (View/Post-to-Chat/Edit/Move/Delete on Equipment and Card rows,
    deleteArrayRow, toggleCard/toggleEquipment on Wizard picks) shares one ghost-icon treatment.
    This used to be a shorter allowlist covering only itemEdit/itemDelete/deleteArrayRow/
@@ -213,7 +220,10 @@
 .essence button[data-action="moveEquipmentSlot"],
 .essence button[data-action="deleteArrayRow"],
 .essence button[data-action="toggleCard"],
-.essence button[data-action="toggleEquipment"] {
+.essence button[data-action="toggleEquipment"],
+.essence button[data-action="deleteTactic"],
+.essence button[data-action="deleteLeaderAbility"],
+.essence button[data-action="deleteBossAbility"] {
   display: inline-flex; align-items: center; justify-content: center;
   width: 1.7em; height: 1.7em; min-height: 0; padding: 0; margin: 0; flex: 0 0 auto;
   font: inherit; font-size: 0.95em; color: #aaa; background: none; border: none; border-radius: 4px;
@@ -233,8 +243,14 @@
    the roll button every card row uses every turn — give it its own color so it doesn't read as
    "just another icon" next to Edit/Move. The confirmation dialog in #onItemDelete is the actual
    safety net; this is just making the danger visible before the click. */
-.essence button[data-action="itemDelete"] { color: #ef5350; }
-.essence button[data-action="itemDelete"]:hover { background: rgba(239, 83, 80, 0.15); color: #ef5350; }
+.essence button[data-action="itemDelete"],
+.essence button[data-action="deleteTactic"],
+.essence button[data-action="deleteLeaderAbility"],
+.essence button[data-action="deleteBossAbility"] { color: #ef5350; }
+.essence button[data-action="itemDelete"]:hover,
+.essence button[data-action="deleteTactic"]:hover,
+.essence button[data-action="deleteLeaderAbility"]:hover,
+.essence button[data-action="deleteBossAbility"]:hover { background: rgba(239, 83, 80, 0.15); color: #ef5350; }
 /* Adjacent action icons in a table cell otherwise touch edge-to-edge once boxed — .item-list li
    already has its own gap (see the base .item-list li rule) so doesn't need this too. */
 .essence .item-table td button + button { margin-left: 2px; }
@@ -264,6 +280,21 @@
   cursor: pointer; -webkit-appearance: none; appearance: none; text-decoration: none;
 }
 .essence button.link-button:hover { text-decoration: underline; }
+/* The NPC sheet's "(open Species — e.g. to choose Adaptations)" Origin-tab button reuses
+   data-action="itemEdit" for its click behavior (see npc-sheet.hbs), which everywhere else on
+   this sheet is a bare pencil-icon button and gets forced into a fixed 1.7em icon-sized square by
+   the ghost-icon rule below. That rule squashed this one's actual sentence of text into the same
+   tiny square, so the text overflowed outside its own box and visually overlapped the row above
+   it (reported live via screenshot) — a pre-existing bug, not introduced by this pass, that only
+   shows once an NPC actually has a Species/speciesItem set (before that, the button doesn't
+   render at all, so the sheet never appeared to have display issue). This selector is more
+   specific than the plain `button[data-action="itemEdit"]` one, so it wins regardless of source
+   order and restores this one instance to plain auto-sized link-button text. */
+.essence button.link-button[data-action="itemEdit"] {
+  width: auto; height: auto; min-height: 0; padding: 0; display: inline;
+  font: inherit; font-size: inherit; color: #f9a825; background: none;
+}
+.essence button.link-button[data-action="itemEdit"]:hover { background: none; color: #f9a825; text-decoration: underline; }
 /* Card list rows previously showed name only — choosing an action mid-turn meant opening the
    card to check its cost/skill. The Wizard already surfaces this when building a hand; same
    metadata + search here, for the hand you're actually playing from. */

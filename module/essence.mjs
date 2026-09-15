@@ -18,8 +18,8 @@ import EssenceContentWizard, { canCreateContent } from "./apps/content-wizard.mj
 import EssenceBulkImport from "./apps/bulk-import.mjs";
 import { capitalize, fitTitleSize, domainResource } from "./utils.mjs";
 import { syncEquipmentEffect } from "./data/equipment-effects.mjs";
-import { ROLE_BUDGETS } from "./data/monster-budgets.mjs";
-import EssenceRoleBudgetsSettings from "./apps/role-budgets-settings.mjs";
+import { GRADE_BUDGETS } from "./data/monster-budgets.mjs";
+import EssenceGradeBudgetsSettings from "./apps/grade-budgets-settings.mjs";
 import { registerWhatsNewSetting, checkWhatsNew, handleWhatsNewChatCommand } from "./apps/whats-new.mjs";
 
 /** Foundry combat's own enum values, given a display label a player should actually see. */
@@ -89,20 +89,20 @@ Hooks.once("init", () => {
   Handlebars.registerHelper("fitTitleSize", (text, options) => fitTitleSize(text, options.hash));
   Handlebars.registerHelper("domainResource", domainResource);
 
-  // Homebrew Role (Minion/Standard/Elite/Nemesis) budget table the Monster Creator auto-fills
-  // stat blocks from — see monster-budgets.mjs's own doc comment on why this is meant to be
-  // GM-tunable. `config: false` since this is an Object setting with no sensible single-control
-  // UI; `restricted: true` on the menu means only a GM (Foundry's own permission check, not a
-  // custom one) can even open the settings app that edits it.
-  game.settings.register("essence-system", "roleBudgets", {
-    scope: "world", config: false, type: Object, default: ROLE_BUDGETS
+  // Homebrew Grade (Mook/Normal/Elite) budget table the Monster Creator auto-fills stat blocks
+  // from — see monster-budgets.mjs's own doc comment on why this is meant to be GM-tunable.
+  // `config: false` since this is an Object setting with no sensible single-control UI;
+  // `restricted: true` on the menu means only a GM (Foundry's own permission check, not a custom
+  // one) can even open the settings app that edits it.
+  game.settings.register("essence-system", "gradeBudgets", {
+    scope: "world", config: false, type: Object, default: GRADE_BUDGETS
   });
-  game.settings.registerMenu("essence-system", "roleBudgetsMenu", {
-    name: "ESSENCE.Settings.RoleBudgets.Title",
-    label: "ESSENCE.Settings.RoleBudgets.MenuLabel",
-    hint: "ESSENCE.Settings.RoleBudgets.Hint",
+  game.settings.registerMenu("essence-system", "gradeBudgetsMenu", {
+    name: "ESSENCE.Settings.GradeBudgets.Title",
+    label: "ESSENCE.Settings.GradeBudgets.MenuLabel",
+    hint: "ESSENCE.Settings.GradeBudgets.Hint",
     icon: "fa-solid fa-scale-balanced",
-    type: EssenceRoleBudgetsSettings,
+    type: EssenceGradeBudgetsSettings,
     restricted: true
   });
 
@@ -119,6 +119,15 @@ Hooks.once("init", () => {
   });
   game.settings.register("essence-system", "resyncedModularEquipmentBonusEffects", {
     scope: "world", config: false, type: Boolean, default: false
+  });
+  game.settings.register("essence-system", "migratedRoleToGrade", {
+    scope: "world", config: false, type: Boolean, default: false
+  });
+  // Legacy setting kept registered (but otherwise unused) solely so the migration below can read
+  // whatever a GM had already customized before "roleBudgets" was replaced by "gradeBudgets" —
+  // default {} rather than the old ROLE_BUDGETS module export, which no longer exists.
+  game.settings.register("essence-system", "roleBudgets", {
+    scope: "world", config: false, type: Object, default: {}
   });
 });
 
@@ -222,6 +231,47 @@ Hooks.once("ready", async () => {
     if (pruned.length !== expertises.length) await actor.update({ "system.expertises": pruned });
   }
   await game.settings.set("essence-system", "prunedOrphanedExpertises", true);
+});
+
+/**
+ * One-time migration: system.role (Minion/Standard/Elite/Nemesis) was replaced by system.grade
+ * (Mook/Normal/Elite) — see actor-npc.mjs and Things To Work On/Enemies and NPC's.txt. Grade is no
+ * longer in the NPC schema, so `actor.system.role` reads as undefined post-upgrade; the old value
+ * still exists in the raw persisted source until something writes over it, so it's read off
+ * `actor._source` here rather than the prepared data. Minion→Mook and Standard→Normal are 1:1;
+ * Elite and Nemesis both collapse to Elite, since Grade no longer distinguishes a mid-tier "mini-
+ * boss" from "the boss" — eliteType (Champion/Leader/Boss) and the design doc's Elite-Only Ability
+ * Principle are what carry that distinction now. Also migrates the old "roleBudgets" world setting
+ * (keyed Minion/Standard/Elite/Nemesis) to the new "gradeBudgets" setting the Monster Creator
+ * actually reads, using the same collapse — but only if a GM had actually customized it; an
+ * untouched roleBudgets setting is just monster-budgets.mjs's old defaults and gradeBudgets already
+ * has its own current defaults, so leave those alone rather than overwriting with a stale shape.
+ */
+Hooks.once("ready", async () => {
+  if (!game.user.isGM) return;
+  if (game.settings.get("essence-system", "migratedRoleToGrade")) return;
+
+  const ROLE_TO_GRADE = { Minion: "Mook", Standard: "Normal", Elite: "Elite", Nemesis: "Elite" };
+  for (const actor of game.actors) {
+    if (actor.type !== "npc") continue;
+    const oldRole = actor._source.system.role;
+    if (!oldRole || actor.system.grade) continue;
+    await actor.update({ "system.grade": ROLE_TO_GRADE[oldRole] ?? "" });
+  }
+
+  const oldRoleBudgets = game.settings.get("essence-system", "roleBudgets");
+  const hasCustomValue = ["Minion", "Standard", "Elite", "Nemesis"].some((role) =>
+    Object.keys(oldRoleBudgets?.[role] ?? {}).length > 0
+  );
+  if (hasCustomValue) {
+    await game.settings.set("essence-system", "gradeBudgets", {
+      Mook: { ...oldRoleBudgets.Minion },
+      Normal: { ...oldRoleBudgets.Standard },
+      Elite: { ...oldRoleBudgets.Nemesis, ...oldRoleBudgets.Elite }
+    });
+  }
+
+  await game.settings.set("essence-system", "migratedRoleToGrade", true);
 });
 
 Hooks.once("ready", async () => {

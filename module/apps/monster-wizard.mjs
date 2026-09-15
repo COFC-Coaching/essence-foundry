@@ -1,6 +1,6 @@
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
-import { getRoleBudget } from "../data/monster-budgets.mjs";
-import { capitalize } from "../utils.mjs";
+import { getGradeBudget } from "../data/monster-budgets.mjs";
+import { capitalize, buildEnemyHeaderLabel } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { DocumentSheetV2 } = foundry.applications.api;
@@ -47,7 +47,7 @@ function pickRandom(arr, n) {
  * A GM-facing analog to the Character Wizard: same "write directly to the actor" approach, but
  * for the NPC's smaller surface (no Non-Combat, Influence, Expertises, or Passive Features — the
  * NPC sheet doesn't expose those either) plus an Auto-Generate step that fills the whole stat
- * block from Role + Tier using the homebrew budgets in monster-budgets.mjs, since the rules don't
+ * block from Grade + Tier using the homebrew budgets in monster-budgets.mjs, since the rules don't
  * define one. Every auto-filled value is a normal actor.update()/createEmbeddedDocuments() call
  * and stays fully hand-editable afterward, same as the Character Wizard.
  */
@@ -73,7 +73,9 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
       adjustSkill: EssenceMonsterWizard.#onAdjustSkill,
       toggleCard: EssenceMonsterWizard.#onToggleCard,
       toggleEquipment: EssenceMonsterWizard.#onToggleEquipment,
-      previewItem: EssenceMonsterWizard.#onPreviewItem
+      previewItem: EssenceMonsterWizard.#onPreviewItem,
+      addTactic: EssenceMonsterWizard.#onAddTactic,
+      deleteTactic: EssenceMonsterWizard.#onDeleteTactic
     }
   };
 
@@ -92,7 +94,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
   }
 
   get title() {
-    return `Monster Creator: ${this.document.name}`;
+    return `Monster Creator: ${this.document.name} (${buildEnemyHeaderLabel(this.document.system)})`;
   }
 
   _onRender(context, options) {
@@ -128,7 +130,9 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     context.isFirst = this.#step === 0;
     context.isLast = this.#step === STEPS.length - 1;
     context.emphasis = this.#emphasis;
-    context.budget = getRoleBudget(system.role);
+    context.budget = getGradeBudget(system.grade);
+    context.headerLabel = buildEnemyHeaderLabel(system);
+    context.tactics = (system.tactics ?? []).map((text, i) => ({ text, i }));
 
     const speciesItem = actor.items.find((i) => i.type === "species");
     const distinctionItem = actor.items.find((i) => i.type === "distinction");
@@ -272,6 +276,19 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     doc?.sheet.render(true);
   }
 
+  /** Mook Tactics is an ordered list of plain instructions (design doc § Mook) — add/delete rather
+   *  than a generic array-row helper since that's all this list needs. */
+  static async #onAddTactic() {
+    const tactics = [...(this.document.system.tactics ?? []), ""];
+    await this.document.update({ "system.tactics": tactics });
+  }
+
+  static async #onDeleteTactic(event, target) {
+    const tactics = [...(this.document.system.tactics ?? [])];
+    tactics.splice(Number(target.dataset.index), 1);
+    await this.document.update({ "system.tactics": tactics });
+  }
+
   static async #onSelectOrigin(event, target) {
     const pack = game.packs.get(target.dataset.pack);
     const sourceItem = await pack?.getDocument(target.dataset.id);
@@ -286,7 +303,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     const key = target.dataset.attr;
     const delta = Number(target.dataset.delta);
     const system = this.document.system;
-    const budget = getRoleBudget(system.role);
+    const budget = getGradeBudget(system.grade);
     const current = system[key];
     const spent = ATTRIBUTES.reduce((sum, k) => sum + (system[k] - 1), 0);
     if (delta > 0 && (current >= budget.attributeMax || spent >= budget.attributePool)) return;
@@ -298,7 +315,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     const key = target.dataset.skill;
     const delta = Number(target.dataset.delta);
     const system = this.document.system;
-    const budget = getRoleBudget(system.role);
+    const budget = getGradeBudget(system.grade);
     const current = system[key];
     const spent = SKILLS.reduce((sum, k) => sum + system[k], 0);
     const gateDistinction = SKILL_GATE[key];
@@ -318,7 +335,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     const pack = game.packs.get(target.dataset.pack);
     const sourceItem = await pack?.getDocument(target.dataset.id);
     if (!sourceItem) return;
-    const budget = getRoleBudget(this.document.system.role);
+    const budget = getGradeBudget(this.document.system.grade);
     const owned = this.document.items.filter((i) => i.type === "action-card" || i.type === "reaction-card");
     const isReaction = sourceItem.type === "reaction-card";
     const count = owned.filter((i) => i.type === sourceItem.type).length;
@@ -339,7 +356,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     const pack = game.packs.get(target.dataset.pack);
     const sourceItem = await pack?.getDocument(target.dataset.id);
     if (!sourceItem) return;
-    const budget = getRoleBudget(this.document.system.role);
+    const budget = getGradeBudget(this.document.system.grade);
     const count = this.document.items.filter((i) => i.type === "equipment").length;
     if (count >= budget.equipmentCount) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyAtEquipmentBudget", { budget: budget.equipmentCount }));
@@ -356,7 +373,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
 
   async #rollAttributes() {
     const system = this.document.system;
-    const budget = getRoleBudget(system.role);
+    const budget = getGradeBudget(system.grade);
     const domain = DOMAINS.find((d) => d.key === this.#emphasis);
     const emphasisAttrs = domain?.attrs ?? [];
     const alloc = distributePoints(budget.attributePool, () => budget.attributeMax - 1, ATTRIBUTES, emphasisAttrs);
@@ -372,7 +389,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
 
   async #rollSkills() {
     const system = this.document.system;
-    const budget = getRoleBudget(system.role);
+    const budget = getGradeBudget(system.grade);
     const distinctionItem = this.document.items.find((i) => i.type === "distinction");
     const eligible = SKILLS.filter((k) => {
       const gate = SKILL_GATE[k];
@@ -387,7 +404,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
   }
 
   /** Deletes and re-picks every Combat Card, favoring the Skills the Attribute/Skill roll landed
-   *  on so a Nemesis built around Ritualism tends to get Ritualism cards, not a random spread. */
+   *  on so an Elite built around Ritualism tends to get Ritualism cards, not a random spread. */
   static async #onRerollCards() {
     await this.#rollCards();
     this.render();
@@ -396,7 +413,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
   async #rollCards() {
     const document = this.document;
     const system = document.system;
-    const budget = getRoleBudget(system.role);
+    const budget = getGradeBudget(system.grade);
     const distinctionItem = document.items.find((i) => i.type === "distinction");
     const existing = document.items.filter((i) => i.type === "action-card" || i.type === "reaction-card");
     if (existing.length) await document.deleteEmbeddedDocuments("Item", existing.map((i) => i.id));
@@ -443,7 +460,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
 
   async #rollEquipment() {
     const document = this.document;
-    const budget = getRoleBudget(document.system.role);
+    const budget = getGradeBudget(document.system.grade);
     const existing = document.items.filter((i) => i.type === "equipment");
     if (existing.length) await document.deleteEmbeddedDocuments("Item", existing.map((i) => i.id));
 
@@ -457,11 +474,11 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
 
   /** The one-button path: rolls Attributes and Skills (in that order, since Card selection reads
    *  the Skill ranks Attributes don't affect), sets Resilience/Temporary Wounds/Equipment Limit
-   *  from the Role budget, then rolls Cards and Equipment. Safe to run more than once — each part
+   *  from the Grade budget, then rolls Cards and Equipment. Safe to run more than once — each part
    *  simply overwrites whatever was there before. */
   static async #onAutoGenerate() {
     const document = this.document;
-    const budget = getRoleBudget(document.system.role);
+    const budget = getGradeBudget(document.system.grade);
     await this.#rollAttributes();
     await this.#rollSkills();
     await document.update({
@@ -471,7 +488,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     });
     await this.#rollCards();
     await this.#rollEquipment();
-    ui.notifications.info(game.i18n.format("ESSENCE.Notify.StatBlockGenerated", { name: document.name, role: document.system.role || game.i18n.localize("ESSENCE.Item.Monster.RoleStandard") }));
+    ui.notifications.info(game.i18n.format("ESSENCE.Notify.StatBlockGenerated", { name: document.name, grade: document.system.grade || game.i18n.localize("ESSENCE.Item.Monster.GradeNormal") }));
     this.render();
   }
 }

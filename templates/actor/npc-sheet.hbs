@@ -14,22 +14,91 @@
       {{/if}}
     </div>
     <h1><input name="name" type="text" value="{{actor.name}}"></h1>
+    <p class="muted npc-header-label">{{headerLabel}}</p>
     <div class="header-fields">
-      <label>{{localize "ESSENCE.Item.Monster.Role"}}
-        <select name="system.role">
-          <option value="" {{#if (eq system.role "")}}selected{{/if}}></option>
-          <option value="Minion" {{#if (eq system.role "Minion")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.RoleMinion"}}</option>
-          <option value="Standard" {{#if (eq system.role "Standard")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.RoleStandard"}}</option>
-          <option value="Elite" {{#if (eq system.role "Elite")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.RoleElite"}}</option>
-          <option value="Nemesis" {{#if (eq system.role "Nemesis")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.RoleNemesis"}}</option>
+      <label>{{localize "ESSENCE.Item.Monster.Grade"}}
+        <select name="system.grade">
+          <option value="" {{#if (eq system.grade "")}}selected{{/if}}></option>
+          <option value="Mook" {{#if (eq system.grade "Mook")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.GradeMook"}}</option>
+          <option value="Normal" {{#if (eq system.grade "Normal")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.GradeNormal"}}</option>
+          <option value="Elite" {{#if (eq system.grade "Elite")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.GradeElite"}}</option>
         </select>
       </label>
+      <label>{{localize "ESSENCE.Item.Monster.BattlefieldRole"}}
+        <select name="system.battlefieldRole">
+          <option value="" {{#if (eq system.battlefieldRole "")}}selected{{/if}}></option>
+          <option value="Defender" {{#if (eq system.battlefieldRole "Defender")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleDefender"}}</option>
+          <option value="Striker" {{#if (eq system.battlefieldRole "Striker")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleStriker"}}</option>
+          <option value="Controller" {{#if (eq system.battlefieldRole "Controller")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleController"}}</option>
+          <option value="Artillery" {{#if (eq system.battlefieldRole "Artillery")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleArtillery"}}</option>
+          <option value="Skirmisher" {{#if (eq system.battlefieldRole "Skirmisher")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleSkirmisher"}}</option>
+          <option value="Support" {{#if (eq system.battlefieldRole "Support")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleSupport"}}</option>
+        </select>
+      </label>
+      {{#if (eq system.grade "Elite")}}
+        <label>{{localize "ESSENCE.Item.Monster.EliteType"}}
+          <select name="system.eliteType">
+            <option value="" {{#if (eq system.eliteType "")}}selected{{/if}}></option>
+            <option value="Champion" {{#if (eq system.eliteType "Champion")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.EliteTypeChampion"}}</option>
+            <option value="Leader" {{#if (eq system.eliteType "Leader")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.EliteTypeLeader"}}</option>
+            <option value="Boss" {{#if (eq system.eliteType "Boss")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.EliteTypeBoss"}}</option>
+          </select>
+        </label>
+      {{/if}}
       <label>{{localize "ESSENCE.Common.Tier"}} <input name="system.tier" type="number" value="{{system.tier}}" style="width:3em"></label>
       <label>{{localize "ESSENCE.Common.Level"}} <input name="system.level" type="number" value="{{system.level}}" style="width:3em"></label>
       <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}{{#if (ne system.totalMovement system.movement)}} <span class="muted">{{localize "ESSENCE.Character.EffectiveMovementNote" n=system.totalMovement}}</span>{{/if}}</label>
     </div>
   </div>
 </header>
+
+{{#if (eq system.grade "Mook")}}
+  <h3 class="section-head">{{localize "ESSENCE.Item.Monster.Tactics"}}</h3>
+  <p class="muted">{{localize "ESSENCE.Item.Monster.TacticsHint"}}</p>
+  <ol class="npc-tactics-list">
+    {{#each tactics as |t|}}
+      <li>
+        <input type="text" name="system.tactics.{{t.i}}" value="{{t.text}}">
+        <button type="button" data-action="deleteTactic" data-index="{{t.i}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=t.text}}"><i class="fa-solid fa-trash"></i></button>
+      </li>
+    {{/each}}
+  </ol>
+  <button type="button" data-action="addTactic"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Item.Monster.AddTactic"}}</button>
+{{/if}}
+
+{{#if (eq system.eliteType "Leader")}}
+  <h3 class="section-head">{{localize "ESSENCE.Item.Monster.LeaderAbilities"}}</h3>
+  <p class="muted">{{localize "ESSENCE.Item.Monster.LeaderAbilitiesHint"}}</p>
+  <table class="item-table">
+    <tbody>
+      {{#each leaderAbilities as |a|}}
+        <tr>
+          <td><input type="text" name="system.leaderAbilities.{{a.i}}.name" value="{{a.name}}" placeholder="{{localize 'ESSENCE.Common.Name'}}"></td>
+          <td>{{essenceEditor a.text target=(concat "system.leaderAbilities." a.i ".text") button=true}}</td>
+          <td><button type="button" data-action="deleteLeaderAbility" data-index="{{a.i}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=a.name}}"><i class="fa-solid fa-trash"></i></button></td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <button type="button" data-action="addLeaderAbility"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Item.Monster.AddAbility"}}</button>
+{{/if}}
+
+{{#if (eq system.eliteType "Boss")}}
+  <h3 class="section-head">{{localize "ESSENCE.Item.Monster.BossAbilities"}}</h3>
+  <p class="muted">{{localize "ESSENCE.Item.Monster.BossAbilitiesHint"}}</p>
+  <table class="item-table">
+    <tbody>
+      {{#each bossAbilities as |a|}}
+        <tr>
+          <td><input type="text" name="system.bossAbilities.{{a.i}}.name" value="{{a.name}}" placeholder="{{localize 'ESSENCE.Common.Name'}}"></td>
+          <td>{{essenceEditor a.text target=(concat "system.bossAbilities." a.i ".text") button=true}}</td>
+          <td><button type="button" data-action="deleteBossAbility" data-index="{{a.i}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=a.name}}"><i class="fa-solid fa-trash"></i></button></td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <button type="button" data-action="addBossAbility"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Item.Monster.AddAbility"}}</button>
+{{/if}}
 
 <h3 class="section-head">{{localize "ESSENCE.Sheet.Origin"}}</h3>
 <div class="wizard-pick-list">

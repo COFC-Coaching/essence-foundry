@@ -2,6 +2,29 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.60
+
+**NPC "Role" (Minion/Standard/Elite/Nemesis) is now "Grade" (Mook/Normal/Elite), plus two new
+identity tags: battlefield Role and Elite Type** — the old field was doing two unrelated jobs at
+once (how tough an enemy is, and how much bookkeeping it costs the GM to run) and had no basis in
+the rules text. Grade now covers the second job alone; a separate battlefield Role field
+(Defender/Striker/Controller/Artillery/Skirmisher/Support) is purely descriptive; and an Elite
+gets an Elite Type (Champion/Leader/Boss) shown alongside it. The NPC sheet header and the Monster
+Creator now both show a shared "Tier 3 Elite — Controller (Leader)"-style label built from one
+function, so the two can't drift out of sync. The Monster Creator's Grade budget table collapsed
+from 4 rows to 3 (Mook keeps the old Minion numbers, Normal keeps Standard, Elite takes over the
+old Nemesis numbers) and moved to a "Grade Budgets" settings menu, replacing "Role Budgets". A
+Mook additionally gets an ordered, plain-text Tactics list; a Leader or Boss Elite gets a matching
+Command/Boss Abilities list. Existing worlds migrate the old Role value and any customized Role
+Budgets setting automatically on first load.
+
+**Fixed two display bugs surfaced while building the above** — a long-standing one where the NPC
+sheet's "(open Species — e.g. to choose Adaptations)" Origin button was squashed into a 1.7em icon
+square by a CSS rule meant for pencil-icon buttons, overflowing its text into the row above once a
+Species was actually selected; and a new one where the Leader/Boss Ability rows' rich-text editor
+collapsed to an unusable 14px sliver in a flex list, fixed by moving those rows to the same table
+layout Passive Features already uses successfully.
+
 ## 0.6.59
 
 **Equipment can now move between Signature, Temporary, and Armory** — Move buttons on every

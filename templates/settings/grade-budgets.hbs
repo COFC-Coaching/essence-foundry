@@ -1,0 +1,23 @@
+<p class="hint">{{localize "ESSENCE.Settings.GradeBudgets.Hint"}}</p>
+<table class="grade-budgets-table">
+  <thead>
+    <tr>
+      <th>{{localize "ESSENCE.Settings.GradeBudgets.FieldLabel"}}</th>
+      {{#each gradeNames as |grade|}}<th>{{grade}}</th>{{/each}}
+    </tr>
+  </thead>
+  <tbody>
+    {{#each fields as |f|}}
+      <tr>
+        <td>{{localize f.labelKey}}</td>
+        {{#each f.cells as |c|}}
+          <td><input type="number" name="{{c.grade}}.{{f.field}}" value="{{c.value}}"></td>
+        {{/each}}
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+<footer class="sheet-footer">
+  <button type="button" data-action="resetDefaults"><i class="fa-solid fa-arrow-rotate-left"></i> {{localize "ESSENCE.Settings.GradeBudgets.ResetDefaults"}}</button>
+  <button type="submit"><i class="fa-solid fa-save"></i> {{localize "ESSENCE.Common.Save"}}</button>
+</footer>

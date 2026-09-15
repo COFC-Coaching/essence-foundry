@@ -11,18 +11,41 @@
   {{#if (eq step 0)}}
     <h2>{{localize "ESSENCE.Wizard.Monster.Concept"}}</h2>
     <p class="muted">{{localize "ESSENCE.Wizard.Monster.ConceptHint"}}</p>
+    <p class="wizard-header-label">{{headerLabel}}</p>
     <div class="wizard-row">
-      <label>{{localize "ESSENCE.Item.Monster.Role"}}
-        <select name="system.role">
-          <option value="" {{#if (eq system.role "")}}selected{{/if}}></option>
-          <option value="Minion" {{#if (eq system.role "Minion")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.RoleMinion"}}</option>
-          <option value="Standard" {{#if (eq system.role "Standard")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.RoleStandard"}}</option>
-          <option value="Elite" {{#if (eq system.role "Elite")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.RoleElite"}}</option>
-          <option value="Nemesis" {{#if (eq system.role "Nemesis")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.RoleNemesis"}}</option>
+      <label>{{localize "ESSENCE.Item.Monster.Grade"}}
+        <select name="system.grade">
+          <option value="" {{#if (eq system.grade "")}}selected{{/if}}></option>
+          <option value="Mook" {{#if (eq system.grade "Mook")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.GradeMook"}}</option>
+          <option value="Normal" {{#if (eq system.grade "Normal")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.GradeNormal"}}</option>
+          <option value="Elite" {{#if (eq system.grade "Elite")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.GradeElite"}}</option>
         </select>
       </label>
       <label>{{localize "ESSENCE.Common.Tier"}} <input type="number" name="system.tier" value="{{system.tier}}" style="width:4em"></label>
       <label>{{localize "ESSENCE.Common.Level"}} <input type="number" name="system.level" value="{{system.level}}" style="width:4em"></label>
+    </div>
+    <div class="wizard-row">
+      <label>{{localize "ESSENCE.Item.Monster.BattlefieldRole"}}
+        <select name="system.battlefieldRole">
+          <option value="" {{#if (eq system.battlefieldRole "")}}selected{{/if}}></option>
+          <option value="Defender" {{#if (eq system.battlefieldRole "Defender")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleDefender"}}</option>
+          <option value="Striker" {{#if (eq system.battlefieldRole "Striker")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleStriker"}}</option>
+          <option value="Controller" {{#if (eq system.battlefieldRole "Controller")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleController"}}</option>
+          <option value="Artillery" {{#if (eq system.battlefieldRole "Artillery")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleArtillery"}}</option>
+          <option value="Skirmisher" {{#if (eq system.battlefieldRole "Skirmisher")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleSkirmisher"}}</option>
+          <option value="Support" {{#if (eq system.battlefieldRole "Support")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleSupport"}}</option>
+        </select>
+      </label>
+      {{#if (eq system.grade "Elite")}}
+        <label>{{localize "ESSENCE.Item.Monster.EliteType"}}
+          <select name="system.eliteType">
+            <option value="" {{#if (eq system.eliteType "")}}selected{{/if}}></option>
+            <option value="Champion" {{#if (eq system.eliteType "Champion")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.EliteTypeChampion"}}</option>
+            <option value="Leader" {{#if (eq system.eliteType "Leader")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.EliteTypeLeader"}}</option>
+            <option value="Boss" {{#if (eq system.eliteType "Boss")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.EliteTypeBoss"}}</option>
+          </select>
+        </label>
+      {{/if}}
     </div>
 
     <h3 class="section-head">{{localize "ESSENCE.Wizard.Monster.DomainEmphasis"}}</h3>
@@ -34,7 +57,7 @@
       <button type="button" class="{{#if (eq emphasis "spiritual")}}chosen{{/if}}" data-action="setEmphasis" data-domain="spiritual">{{localize "ESSENCE.Common.Spiritual"}}</button>
     </div>
 
-    <h3 class="section-head">{{localize "ESSENCE.Wizard.Monster.Budget"}} — {{#if system.role}}{{system.role}}{{else}}{{localize "ESSENCE.Item.Monster.RoleStandardDefault"}}{{/if}}</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Wizard.Monster.Budget"}} — {{#if system.grade}}{{system.grade}}{{else}}{{localize "ESSENCE.Item.Monster.GradeNormalDefault"}}{{/if}}</h3>
     <div class="wizard-row">
       <span>{{localize "ESSENCE.Wizard.Monster.AttributePts" pts=budget.attributePool max=budget.attributeMax}}</span>
       <span>{{localize "ESSENCE.Wizard.Monster.SkillPts" pts=budget.skillPool max=budget.skillMax}}</span>
@@ -44,6 +67,20 @@
 
     <button type="button" class="wizard-generate" data-action="autoGenerate"><i class="fa-solid fa-dice-d20"></i> {{localize "ESSENCE.Wizard.Monster.AutoGenerate"}}</button>
     <p class="muted">{{localize "ESSENCE.Wizard.Monster.AutoGenerateHint"}}</p>
+
+    {{#if (eq system.grade "Mook")}}
+      <h3 class="section-head">{{localize "ESSENCE.Item.Monster.Tactics"}}</h3>
+      <p class="muted">{{localize "ESSENCE.Item.Monster.TacticsHint"}}</p>
+      <ol class="wizard-tactics-list">
+        {{#each tactics as |t|}}
+          <li>
+            <input type="text" name="system.tactics.{{t.i}}" value="{{t.text}}">
+            <button type="button" data-action="deleteTactic" data-index="{{t.i}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=t.text}}"><i class="fa-solid fa-trash"></i></button>
+          </li>
+        {{/each}}
+      </ol>
+      <button type="button" data-action="addTactic"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Item.Monster.AddTactic"}}</button>
+    {{/if}}
 
     <h3 class="section-head">{{localize "ESSENCE.Wizard.Monster.GmNotes"}}</h3>
     {{essenceEditor system.gmNotes target="system.gmNotes" button=true}}
@@ -136,7 +173,7 @@
   {{!-- ============ STEP 6: COMBAT CARDS ============ --}}
   {{#if (eq step 5)}}
     <h2>{{localize "ESSENCE.Common.CombatCards"}}</h2>
-    <p class="muted">{{localize "ESSENCE.Wizard.Monster.RoleBudgetCards" action=actionCardBudget reaction=reactionCardBudget}}</p>
+    <p class="muted">{{localize "ESSENCE.Wizard.Monster.GradeBudgetCards" action=actionCardBudget reaction=reactionCardBudget}}</p>
     <button type="button" data-action="rerollCards"><i class="fa-solid fa-dice"></i> {{localize "ESSENCE.Wizard.Monster.RerollCards"}}</button>
     <div class="wizard-two-col">
       <div>
@@ -174,7 +211,7 @@
   {{!-- ============ STEP 7: EQUIPMENT ============ --}}
   {{#if (eq step 6)}}
     <h2>{{localize "ESSENCE.Item.EquipmentLabel"}}</h2>
-    <p class="muted">{{localize "ESSENCE.Wizard.Monster.RoleBudgetItems" n=equipmentBudget}}</p>
+    <p class="muted">{{localize "ESSENCE.Wizard.Monster.GradeBudgetItems" n=equipmentBudget}}</p>
     <button type="button" data-action="rerollEquipment"><i class="fa-solid fa-dice"></i> {{localize "ESSENCE.Wizard.Monster.RerollEquipment"}}</button>
     <h3 class="section-head">{{localize "ESSENCE.Wizard.Loadout"}} — {{equipmentItems.length}} / {{equipmentBudget}}</h3>
     <ul class="item-list">
@@ -196,7 +233,7 @@
   {{!-- ============ STEP 8: FINALIZE ============ --}}
   {{#if (eq step 7)}}
     <h2>{{localize "ESSENCE.Wizard.Finalize"}}</h2>
-    <p class="muted">{{actor.name}} — {{#if system.role}}{{system.role}}{{else}}{{localize "ESSENCE.Item.Monster.RoleStandard"}}{{/if}}, {{localize "ESSENCE.Common.Tier"}} {{system.tier}}, {{localize "ESSENCE.Common.Level"}} {{system.level}}.</p>
+    <p class="muted">{{actor.name}} — {{headerLabel}}, {{localize "ESSENCE.Common.Level"}} {{system.level}}.</p>
     <div class="wizard-row">
       <span>{{localize "ESSENCE.Common.Stamina"}} {{resources.stamina.max}}</span>
       <span>{{localize "ESSENCE.Common.Focus"}} {{resources.focus.max}}</span>

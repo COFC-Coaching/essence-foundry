@@ -4,6 +4,22 @@ export function capitalize(str) {
 }
 
 /**
+ * "Tier 3 Elite — Controller (Leader)" — the enemy-identity header format from Things To Work
+ * On/Enemies and NPC's.txt (see its "Example headers" list). Shared between the NPC sheet header
+ * and the Monster Wizard's Concept step so both read the same three-tag identity (Tier/Grade,
+ * battlefieldRole, eliteType) the same way. Falls back gracefully as fields are left blank —
+ * a brand-new NPC with nothing set yet just shows "Tier 1".
+ */
+export function buildEnemyHeaderLabel(system) {
+  const parts = [`Tier ${system.tier ?? 1}`];
+  if (system.grade) parts.push(system.grade);
+  let label = parts.join(" ");
+  if (system.battlefieldRole) label += ` — ${system.battlefieldRole}`;
+  if (system.grade === "Elite" && system.eliteType) label += ` (${system.eliteType})`;
+  return label;
+}
+
+/**
  * A title font-size (px) that shrinks as `text` gets longer, so a long item name doesn't overlap
  * a fixed-width sibling button next to it (e.g. a Card's name field next to its Edit/View toggle)
  * instead of just clipping or overflowing at a fixed size. Purely length-based — cheap and good
