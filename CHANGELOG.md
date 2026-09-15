@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.64
+
+**Cleaned up the Mook/Normal Combat section's labels** — removed a leftover implementation note
+("Reduced Engine (Mook/Normal) — Fixed Attack and Defenses are printed pool sizes...") that was
+being rendered on the actual sheet instead of staying in code comments, and renamed "Fixed Attack"/
+"Fixed Defenses" to plain "Attack"/"Defense" so the section reads like a normal stat block instead
+of exposing internal engine terminology.
+
 ## 0.6.63
 
 **"Grant Recovery" on the character sheet** — a GM-adjudicated Adventure Recovery action, added
