@@ -2,6 +2,12 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.67
+
+**Renamed the wizard launcher button to "NPC Creator" on the People sheet** — it's the same shared
+creation wizard as before, just relabeled per-sheet: the People/NPC Actor type now reads "NPC
+Creator," while the Monster Actor type keeps "Monster Creator."
+
 ## 0.6.66
 
 **People/NPC sheet: one Equipment container, same as Monster** — extends 0.6.65's Monster-only

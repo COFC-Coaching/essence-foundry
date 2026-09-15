@@ -195,6 +195,7 @@
   "ESSENCE.Sheet.GmNotesHint": "(tactics, behavior, reminders)",
 
   "ESSENCE.Npc.MonsterCreator": "Monster Creator",
+  "ESSENCE.Npc.NpcCreator": "NPC Creator",
   "ESSENCE.Npc.MonsterCreatorTooltip": "Auto-generate or hand-build a stat block",
 
   "ESSENCE.Character.TabCore": "Core",

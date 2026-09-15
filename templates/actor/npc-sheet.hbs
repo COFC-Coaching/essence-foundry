@@ -6,7 +6,7 @@
   </div>
   <div class="header-main">
     <div class="header-actions">
-      <button type="button" class="wizard-launch" data-action="openWizard" title="{{localize 'ESSENCE.Npc.MonsterCreatorTooltip'}}"><i class="fa-solid fa-dragon"></i> {{localize "ESSENCE.Npc.MonsterCreator"}}</button>
+      <button type="button" class="wizard-launch" data-action="openWizard" title="{{localize 'ESSENCE.Npc.MonsterCreatorTooltip'}}"><i class="fa-solid fa-dragon"></i> {{localize "ESSENCE.Npc.NpcCreator"}}</button>
       {{#if isEditable}}
         <button type="button" class="edit-lock-btn" data-action="toggleEditLock" aria-pressed="{{editUnlocked}}" title="{{#if editUnlocked}}{{localize 'ESSENCE.Sheet.UnlockedTooltip'}}{{else}}{{localize 'ESSENCE.Sheet.LockedTooltip'}}{{/if}}">
           <i class="fa-solid {{#if editUnlocked}}fa-lock-open{{else}}fa-lock{{/if}}"></i> {{#if editUnlocked}}{{localize "ESSENCE.Common.Unlocked"}}{{else}}{{localize "ESSENCE.Common.Locked"}}{{/if}}
