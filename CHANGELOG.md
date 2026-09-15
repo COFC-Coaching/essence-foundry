@@ -2,6 +2,19 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.68
+
+**Equipment Cards now look and act like Combat Cards** — the granted-by-Signature-Equipment cards
+(Consumable Kit cards, Function Augment cards, and cards granted by a Chassis/Fitting) used to dump
+their entire effect text inline every time, with no way to interact with them beyond reading. They
+now collapse to a title + one-line summary just like an Action/Reaction Card, with a chevron toggle
+to expand the full text on demand, and the title itself is a button that rolls the card. Since these
+cards are prose-only (no domain/defense/dice-min schema the way a real Card has), rolling prompts
+for the Domain and dice count directly, then resolves through the same target/defense picker and
+dice roller every other roll in this system uses. Spends the card's own Uses first when it tracks
+any, resolved back to its real source Item (the Consumable Kit equipment Item, or the specific
+mounted Augment) so the count actually persists.
+
 ## 0.6.67
 
 **Renamed the wizard launcher button to "NPC Creator" on the People sheet** — it's the same shared

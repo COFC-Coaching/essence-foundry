@@ -178,6 +178,7 @@
   "ESSENCE.Sheet.NoReactionCards": "No Reaction Cards — drag one from the compendium.",
   "ESSENCE.Sheet.EquipmentCards": "Equipment Cards",
   "ESSENCE.Sheet.EquipmentCardsHint": "(granted by Signature Equipment — does not count against Card Count)",
+  "ESSENCE.Sheet.ExpandCardAria": "Expand {name}",
   "ESSENCE.Sheet.Conditions": "Conditions",
   "ESSENCE.Sheet.SignatureEquipment": "Signature Equipment",
   "ESSENCE.Sheet.Equipment": "Equipment",
@@ -624,6 +625,7 @@
   "ESSENCE.Notify.StatBlockGenerated": "{name}: stat block generated from the {grade} budget.",
   "ESSENCE.Notify.AbilityAlreadyUsedThisRound": "{name} has already been used this round.",
   "ESSENCE.Notify.AbilityNoUsesRemaining": "{name} has no uses remaining this Combat.",
+  "ESSENCE.Notify.NoUsesRemaining": "{name} has no Uses remaining.",
 
   "ESSENCE.Notify.EndOfDeathTrack": "{name} has reached the end of the Death Track.",
 

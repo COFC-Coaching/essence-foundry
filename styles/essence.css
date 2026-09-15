@@ -305,6 +305,13 @@
 /* There's a full sheet-width of empty space next to a card's name/meta — put the card's own
    Effect text there instead of making a GM/player reopen it mid-turn just to check what it does. */
 .essence .card-list .card-summary { margin: 0 0 4px; font-size: 0.8em; font-style: italic; }
+/* Equipment Cards are prose-only (no structured body sections like a real Combat Card), so the
+   full text is too long to always show inline — collapsed to the same one-line summary a Combat
+   Card gets, with this toggle revealing the rest on demand instead of dumping every paragraph. */
+.essence .card-expand-toggle { flex: 0 0 auto; }
+.essence .card-expand-toggle i { transition: transform 0.15s ease; }
+.essence .card-expand-toggle.expanded i { transform: rotate(180deg); }
+.essence .card-summary-full { font-size: 0.9em; margin: 0 0 4px; }
 /* Universal actions (Hide, Strike, Brace, ...) have no Combat Skill, so they'd otherwise be
    scattered through the skill-gated hand below with no cost/skill metadata to sort or scan by —
    pull them into their own always-available row of quick-roll buttons instead. */

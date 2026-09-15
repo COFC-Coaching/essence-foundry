@@ -5,7 +5,7 @@ import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQu
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
 import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -47,6 +47,8 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       toggleEditLock: EssenceNpcSheet.#onToggleEditLock,
       rollSkill: EssenceNpcSheet.#onRollSkill,
       rollItem: EssenceNpcSheet.#onRollItem,
+      rollEquipmentCard: EssenceNpcSheet.#onRollEquipmentCard,
+      toggleEquipmentCard: EssenceNpcSheet.#onToggleEquipmentCard,
       rollInitiative: EssenceNpcSheet.#onRollInitiative,
       endTurn: EssenceNpcSheet.#onEndTurn,
       applyDamage: EssenceNpcSheet.#onApplyDamage,
@@ -313,16 +315,20 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     context.itemGrants = deriveActiveGrants({ speciesItem, heritageItem }, equipment);
 
     // See EssenceActorSheet#_prepareContext's identical block for the full reasoning.
+    const equipmentCardSummary = (effect) => {
+      const text = stripHtml(effect);
+      return text.length > 140 ? `${text.slice(0, 139)}…` : text;
+    };
     context.equipmentCards = [];
     for (const item of equipment.filter((i) => i.system.slot === "signature")) {
       if (item.system.isModular) {
         for (const g of deriveEquipmentStats(equipmentResolver, item).grantedCards) {
-          context.equipmentCards.push({ source: item.name, name: g.source, effect: g.effect, uses: g.uses, usesRemaining: g.usesRemaining });
+          context.equipmentCards.push({ source: item.name, name: g.source, effect: g.effect, summary: equipmentCardSummary(g.effect), uses: g.uses, usesRemaining: g.usesRemaining, itemId: g.itemId ?? null, cardIndex: null });
         }
       }
-      for (const c of item.system.equipmentCards ?? []) {
-        context.equipmentCards.push({ source: item.name, name: c.name, effect: c.effect, uses: c.uses, usesRemaining: c.usesRemaining });
-      }
+      (item.system.equipmentCards ?? []).forEach((c, cardIndex) => {
+        context.equipmentCards.push({ source: item.name, name: c.name, effect: c.effect, summary: equipmentCardSummary(c.effect), uses: c.uses, usesRemaining: c.usesRemaining, itemId: item.id, cardIndex });
+      });
     }
 
     const speciesPack = game.packs.get("essence-system.species");
@@ -513,6 +519,76 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     await this.actor.update(update);
     const bonusSurges = hasMastery(sys, this.actor.system.expertises) ? 1 : 0;
     await rollEssencePool({ pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges });
+  }
+
+  /** See EssenceActorSheet#onRollEquipmentCard — same reasoning, same implementation. */
+  static async #onRollEquipmentCard(event, target) {
+    const name = target.dataset.cardName;
+    const itemId = target.dataset.itemId || null;
+    const cardIndex = target.dataset.cardIndex !== "" ? Number(target.dataset.cardIndex) : null;
+
+    const result = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: `Use ${name}` },
+        content: `
+          <label>Domain
+            <select name="domain">
+              <option value="physical">Physical</option>
+              <option value="mental">Mental</option>
+              <option value="spiritual">Spiritual</option>
+            </select>
+          </label>
+          <label>Dice <input type="number" name="dice" value="2" min="1" autofocus></label>
+        `,
+        buttons: [{
+          action: "roll",
+          label: "Roll",
+          default: true,
+          callback: (event, button) => ({
+            domain: button.form.elements.domain.value,
+            dice: Math.max(1, Math.floor(Number(button.form.elements.dice.value)) || 1)
+          })
+        }],
+        submit: (result) => resolve(result === "roll" ? null : result)
+      }).render(true);
+    });
+    if (!result) return;
+
+    if (itemId) {
+      const item = this.actor.items.get(itemId);
+      if (item) {
+        if (cardIndex !== null) {
+          const cards = (item.system.equipmentCards ?? []).map((c) => ({ ...c }));
+          const card = cards[cardIndex];
+          if (card?.uses != null) {
+            if ((card.usesRemaining ?? 0) <= 0) {
+              ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoUsesRemaining", { name }));
+              return;
+            }
+            card.usesRemaining -= 1;
+            await item.update({ "system.equipmentCards": cards });
+          }
+        } else if (item.system.uses != null) {
+          if ((item.system.usesRemaining ?? 0) <= 0) {
+            ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoUsesRemaining", { name }));
+            return;
+          }
+          await item.update({ "system.usesRemaining": item.system.usesRemaining - 1 });
+        }
+      }
+    }
+
+    const domain = DOMAINS.find((d) => d.key === result.domain);
+    const { defense, targets } = await EssenceNpcSheet.#resolveTargets(domain.defense);
+    await rollEssencePool({ pool: result.dice, defense, targets, label: name, actor: this.actor });
+  }
+
+  /** See EssenceActorSheet#onToggleEquipmentCard — same reasoning, same implementation. */
+  static #onToggleEquipmentCard(event, target) {
+    const full = target.closest("li")?.querySelector(".card-summary-full");
+    if (!full) return;
+    full.hidden = !full.hidden;
+    target.classList.toggle("expanded", !full.hidden);
   }
 
   /** See EssenceActorSheet#warnIfLikelySecondReaction — same approximate check, same reasoning. */

@@ -48,7 +48,7 @@ export async function buildEquipmentResolver(actor) {
  * @returns {{
  *   chassis: Item|null, fitting: Item|null,
  *   fortitude: number, resilience: number, movement: number,
- *   grantedCards: Array<{source: string, kind: string, effect: string, uses: number|null, usesRemaining: number|null}>,
+ *   grantedCards: Array<{source: string, kind: string, itemId: string, effect: string, uses: number|null, usesRemaining: number|null}>,
  *   combinedEffect: Array<{source: string, kind: string, html: string}>,
  *   mountDisplay: Array<{index: number, linkedWith: number|null, augment: Item|null, linkOn: boolean, partnerAugment: Item|null}>
  * }}
@@ -79,10 +79,10 @@ export function deriveEquipmentStats(items, equipmentItem) {
 
   const grantedCards = [];
   if (chassis?.system.grantsEquipmentCard) {
-    grantedCards.push({ source: chassis.name, kind: "chassis", effect: chassis.system.effect, uses: null, usesRemaining: null });
+    grantedCards.push({ source: chassis.name, kind: "chassis", itemId: chassis.id, effect: chassis.system.effect, uses: null, usesRemaining: null });
   }
   if (fitting?.system.grantsEquipmentCard) {
-    grantedCards.push({ source: fitting.name, kind: "fitting", effect: fitting.system.effect, uses: null, usesRemaining: null });
+    grantedCards.push({ source: fitting.name, kind: "fitting", itemId: fitting.id, effect: fitting.system.effect, uses: null, usesRemaining: null });
   }
 
   // Mounts are defined on the Chassis (Mount count/Linked pairing is a Chassis property, § Augment
@@ -114,6 +114,7 @@ export function deriveEquipmentStats(items, equipmentItem) {
         grantedCards.push({
           source: support ? `${fn.name} (linked with ${support.name})` : fn.name,
           kind: "augment",
+          itemId: fn.id,
           effect: fn.system.effect,
           uses: fn.system.uses,
           usesRemaining: fn.system.usesRemaining
@@ -130,6 +131,7 @@ export function deriveEquipmentStats(items, equipmentItem) {
       grantedCards.push({
         source: m.augment.name,
         kind: "augment",
+        itemId: m.augment.id,
         effect: m.augment.system.effect,
         uses: m.augment.system.uses,
         usesRemaining: m.augment.system.usesRemaining

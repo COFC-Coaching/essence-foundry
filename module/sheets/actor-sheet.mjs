@@ -5,7 +5,7 @@ import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQu
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
 import { availableSubtypes, enterManifestation } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -61,6 +61,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       toggleEditLock: EssenceActorSheet.#onToggleEditLock,
       rollSkill: EssenceActorSheet.#onRollSkill,
       rollItem: EssenceActorSheet.#onRollItem,
+      rollEquipmentCard: EssenceActorSheet.#onRollEquipmentCard,
+      toggleEquipmentCard: EssenceActorSheet.#onToggleEquipmentCard,
       postEquipmentToChat: EssenceActorSheet.#onPostEquipmentToChat,
       moveEquipmentSlot: EssenceActorSheet.#onMoveEquipmentSlot,
       createEquipment: EssenceActorSheet.#onCreateEquipment,
@@ -511,16 +513,23 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // shape as isBasicCard's Basic-card exclusion, just one layer earlier. Scoped to Signature
     // equipment only, matching equipment-effects.mjs's own signature-only gate (Armory/Temporary
     // gear you own but aren't carrying for the Adventure shouldn't contribute).
+    // summary mirrors cardSummary()'s own truncation, just off a flat effect string instead of a
+    // Card's sectioned `body` — same "short line collapsed, full text on demand" shape a real
+    // Combat Card gets from its own `summary` field above.
+    const equipmentCardSummary = (effect) => {
+      const text = stripHtml(effect);
+      return text.length > 140 ? `${text.slice(0, 139)}…` : text;
+    };
     context.equipmentCards = [];
     for (const item of equipment.filter((i) => i.system.slot === "signature")) {
       if (item.system.isModular) {
         for (const g of deriveEquipmentStats(equipmentResolver, item).grantedCards) {
-          context.equipmentCards.push({ source: item.name, name: g.source, effect: g.effect, uses: g.uses, usesRemaining: g.usesRemaining });
+          context.equipmentCards.push({ source: item.name, name: g.source, effect: g.effect, summary: equipmentCardSummary(g.effect), uses: g.uses, usesRemaining: g.usesRemaining, itemId: g.itemId ?? null, cardIndex: null });
         }
       }
-      for (const c of item.system.equipmentCards ?? []) {
-        context.equipmentCards.push({ source: item.name, name: c.name, effect: c.effect, uses: c.uses, usesRemaining: c.usesRemaining });
-      }
+      (item.system.equipmentCards ?? []).forEach((c, cardIndex) => {
+        context.equipmentCards.push({ source: item.name, name: c.name, effect: c.effect, summary: equipmentCardSummary(c.effect), uses: c.uses, usesRemaining: c.usesRemaining, itemId: item.id, cardIndex });
+      });
     }
     return context;
   }
@@ -742,6 +751,89 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     await this.actor.update(update);
     const bonusSurges = hasMastery(sys, this.actor.system.expertises) ? 1 : 0;
     await rollEssencePool({ pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges });
+  }
+
+  /**
+   * Equipment Cards (granted by Signature Equipment — see the equipmentCards context loop above)
+   * are prose-only: unlike a real action-card/reaction-card Item, they carry no domain/defense/min
+   * dice schema to build a pool from automatically. Rather than leave them un-rollable, this asks
+   * for the Domain and dice count directly — the same information the card's own printed text
+   * already states in words ("Roll 2+", "Physical: Grace vs Fortitude...") — then rolls through the
+   * same resolver every other roll in this system uses. Uses (when the card tracks them) are spent
+   * first via the card's real source Item, resolved from `itemId`/`cardIndex` set in the
+   * equipmentCards context loop — `cardIndex` is null for a modular grantedCard's Uses (tracked as
+   * a top-level field on its own Item, per deriveEquipmentStats), and set for a flat
+   * `equipmentCards` array entry (Uses live inside that array, addressed by index).
+   */
+  static async #onRollEquipmentCard(event, target) {
+    const name = target.dataset.cardName;
+    const itemId = target.dataset.itemId || null;
+    const cardIndex = target.dataset.cardIndex !== "" ? Number(target.dataset.cardIndex) : null;
+
+    const result = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: `Use ${name}` },
+        content: `
+          <label>Domain
+            <select name="domain">
+              <option value="physical">Physical</option>
+              <option value="mental">Mental</option>
+              <option value="spiritual">Spiritual</option>
+            </select>
+          </label>
+          <label>Dice <input type="number" name="dice" value="2" min="1" autofocus></label>
+        `,
+        buttons: [{
+          action: "roll",
+          label: "Roll",
+          default: true,
+          callback: (event, button) => ({
+            domain: button.form.elements.domain.value,
+            dice: Math.max(1, Math.floor(Number(button.form.elements.dice.value)) || 1)
+          })
+        }],
+        submit: (result) => resolve(result === "roll" ? null : result)
+      }).render(true);
+    });
+    if (!result) return;
+
+    if (itemId) {
+      const item = this.actor.items.get(itemId);
+      if (item) {
+        if (cardIndex !== null) {
+          const cards = (item.system.equipmentCards ?? []).map((c) => ({ ...c }));
+          const card = cards[cardIndex];
+          if (card?.uses != null) {
+            if ((card.usesRemaining ?? 0) <= 0) {
+              ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoUsesRemaining", { name }));
+              return;
+            }
+            card.usesRemaining -= 1;
+            await item.update({ "system.equipmentCards": cards });
+          }
+        } else if (item.system.uses != null) {
+          if ((item.system.usesRemaining ?? 0) <= 0) {
+            ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoUsesRemaining", { name }));
+            return;
+          }
+          await item.update({ "system.usesRemaining": item.system.usesRemaining - 1 });
+        }
+      }
+    }
+
+    const domain = DOMAINS.find((d) => d.key === result.domain);
+    const { defense, targets } = await EssenceActorSheet.#resolveTargets(domain.defense);
+    await rollEssencePool({ pool: result.dice, defense, targets, label: name, actor: this.actor });
+  }
+
+  /** Purely a display toggle — no actor data involved, so a plain DOM mutation is enough; no need
+   *  to route this through an actor update just to re-show text that was already sent to the client
+   *  in `effect`. */
+  static #onToggleEquipmentCard(event, target) {
+    const full = target.closest("li")?.querySelector(".card-summary-full");
+    if (!full) return;
+    full.hidden = !full.hidden;
+    target.classList.toggle("expanded", !full.hidden);
   }
 
   /**
