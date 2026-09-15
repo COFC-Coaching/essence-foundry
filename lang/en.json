@@ -191,8 +191,6 @@
   "ESSENCE.Sheet.NotYetChosen": "— not yet chosen",
   "ESSENCE.Sheet.ChooseItem": "Choose Item",
   "ESSENCE.Sheet.TemporaryItems": "Temporary Items",
-  "ESSENCE.Sheet.ComponentsAugments": "Components & Augments",
-  "ESSENCE.Sheet.ComponentsAugmentsHint": "(loose Chassis/Fittings ½ slot each; Augments 0)",
   "ESSENCE.Sheet.GmNotes": "GM Notes",
   "ESSENCE.Sheet.GmNotesHint": "(tactics, behavior, reminders)",
 
@@ -280,8 +278,6 @@
   "ESSENCE.Character.Backstory": "Backstory",
   "ESSENCE.Character.GeneralNotes": "General Notes",
   "ESSENCE.Character.ExceedsReachCharacter": "Reach cost exceeds this character's current Reach. Non-blocking.",
-  "ESSENCE.Character.ComponentsAugmentsHint": "(loose Chassis/Fittings cost ½ slot each; Augments cost 0 — see Reach and Reconfiguring Equipment)",
-  "ESSENCE.Character.ModularAssemblyHint": "To assemble a modular item, open a weapon/armor/guard/implement Equipment card's own sheet (Edit) and use its Chassis/Fitting/Mount fields — assigning a Component there also spends any applicable Reconfiguration cost.",
 
   "ESSENCE.Chat.Pool": "Pool",
   "ESSENCE.Chat.VsDefense": "vs Defense {defense}",

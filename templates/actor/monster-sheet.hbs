@@ -402,16 +402,6 @@
 <button type="button" data-action="createEquipment" data-slot="signature"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.AddItem"}}</button>
 </div>
 
-<h3 class="section-head">{{localize "ESSENCE.Sheet.ComponentsAugments"}} <span class="muted">{{localize "ESSENCE.Sheet.ComponentsAugmentsHint"}}</span></h3>
-<ul class="item-list">
-  {{#each componentItems as |c|}}
-    <li>{{c.name}} <span class="muted">{{capitalize c.type}} · {{capitalize c.slot}}{{#if c.tier}} · {{localize "ESSENCE.Common.Tier"}} {{c.tier}}{{/if}}</span>
-      <button type="button" data-action="itemEdit" data-item-id="{{c.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=c.name}}"><i class="fa-solid fa-pen"></i></button>
-      <button type="button" data-action="itemDelete" data-item-id="{{c.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=c.name}}"><i class="fa-solid fa-trash"></i></button>
-    </li>
-  {{/each}}
-</ul>
-
 <h3 class="section-head">{{localize "ESSENCE.Sheet.Reach"}}</h3>
 <div class="wizard-row">
   <label>{{localize "ESSENCE.Sheet.Reach"}} <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>

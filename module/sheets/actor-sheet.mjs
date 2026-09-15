@@ -434,7 +434,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // Reach gating (see computeReachGate() in utils.mjs and design/reach-and-economy.md): an
     // equipment Item's `system.cost` field IS its Reach requirement — unrelated to `system.tier`,
     // which is a Chassis/Fitting/Component sophistication rating for the modular assembly system
-    // (see the componentItems mapping below). Soft warning only, per this project's non-blocking
+    // (see componentView below). Soft warning only, per this project's non-blocking
     // convention — never prevents assigning the item, just flags it. A non-empty
     // reachExceptionSource (Quartermaster's Due, Internal Compartment, ...) raises the allowed
     // ceiling by that feature's own stated margin instead of suppressing the check outright.
@@ -451,10 +451,40 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
         effectText: equipmentEffectSummary(equipmentResolver, item)
       };
     };
+    // Chassis/Fitting/Augment are "just a part of Equipment or things that go into the Armory" —
+    // not a separate inventory concept — so they're folded into the same three Signature/Temporary/
+    // Armory lists Equipment uses, rather than a fourth standalone section. Chassis/Fitting carry
+    // their own real `system.slot` (item-component.mjs — same signature/temporary/armory
+    // vocabulary computeSlotUsage already reads), so they bucket normally; Augments have no slot at
+    // all (they're never "carried" independently of what they're mounted in) and always land in
+    // Armory. `category` here reuses the equipmentCategoryLabel helper's own capitalize() fallback
+    // (unrecognized keys just render as-is) rather than needing a second label lookup.
+    const componentView = (item) => ({
+      id: item.id,
+      name: item.name,
+      category: capitalize(item.type),
+      type: item.system.category ? capitalize(item.system.category) : "",
+      reachCost: null,
+      exceptionSource: "",
+      overReach: false,
+      effectText: equipmentEffectSummary(equipmentResolver, item)
+    });
     const equipment = this.actor.items.filter((i) => i.type === "equipment");
-    context.signatureEquipment = equipment.filter((i) => i.system.slot === "signature").map(equipmentView);
-    context.armoryEquipment = equipment.filter((i) => i.system.slot === "armory").map(equipmentView);
-    context.temporaryEquipment = equipment.filter((i) => i.system.slot === "temporary").map(equipmentView);
+    const chassisAndFittings = this.actor.items.filter((i) => ["chassis", "fitting"].includes(i.type));
+    const augments = this.actor.items.filter((i) => i.type === "augment").map(componentView);
+    context.signatureEquipment = [
+      ...equipment.filter((i) => i.system.slot === "signature").map(equipmentView),
+      ...chassisAndFittings.filter((i) => i.system.slot === "signature").map(componentView)
+    ];
+    context.temporaryEquipment = [
+      ...equipment.filter((i) => i.system.slot === "temporary").map(equipmentView),
+      ...chassisAndFittings.filter((i) => i.system.slot === "temporary").map(componentView)
+    ];
+    context.armoryEquipment = [
+      ...equipment.filter((i) => i.system.slot === "armory").map(equipmentView),
+      ...chassisAndFittings.filter((i) => i.system.slot === "armory").map(componentView),
+      ...augments
+    ];
 
     // Armory/Signature capacity accounting (part-viii-equipment-and-items.md § Armory and
     // Signature Capacity) — previously nothing read armoryLimit/signatureEquipmentLimit against
@@ -471,19 +501,6 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // from the actor's Heritage Legacy / chosen Species Adaptations, not a separate persisted list,
     // so nothing here goes stale if the player swaps Heritage/Species or un-chooses an Adaptation.
     context.itemGrants = deriveActiveGrants({ speciesItem, heritageItem }, equipment);
-
-    // Chassis/Fitting/Augment are their own embedded Item sub-types (design/chassis-fitting-
-    // augment-system.md), not fields nested in `equipment` — list them here so a spare Component
-    // sitting loose in the Armory is actually visible somewhere on the sheet. Assigning one to a
-    // specific equipment Item (chassisItemId/fittingItemId/mounts) is done from that equipment
-    // Item's own sheet (see EssenceEquipmentSheet in item-sheet.mjs) rather than duplicated here,
-    // to avoid adding to the actor-sheet/npc-sheet duplication debt build-history already flags —
-    // the assignment UI is fundamentally a property of the equipment Item, not of which actor
-    // sheet happens to have it open.
-    context.componentItems = this.actor.items
-      .filter((i) => ["chassis", "fitting", "augment"].includes(i.type))
-      .map((i) => ({ id: i.id, name: i.name, type: i.type, category: i.system.category ?? "", slot: i.system.slot ?? "", tier: i.system.tier ?? null }))
-      .sort((a, b) => a.type.localeCompare(b.type) || a.name.localeCompare(b.name));
 
     // Equipment-granted cards (§ Function Augment Uses, § Consumable Kits, § Ordinary Equipment
     // Cards) belong in the same card list a player reads their whole hand from, not buried on each

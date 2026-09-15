@@ -2,6 +2,20 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.66
+
+**People/NPC sheet: one Equipment container, same as Monster** — extends 0.6.65's Monster-only
+change to the People/NPC Actor type as well. NPCs and Monsters ("enemies") never had a real reason
+to keep the PC's Signature/Temporary/Armory loadout-preparation split; both now show one flat
+Equipment list, with Chassis/Fitting/Augment items folded directly into it instead of a separate
+"Components & Augments" section. Removed the now-dead Signature-limit warning and its "spend
+Influence for an extra slot" action from the NPC sheet, since there's no limit concept left to warn
+about. The Player Character sheet is unchanged — Signature/Temporary/Armory is a real Planning-phase
+PC mechanic (part-iii-playing-the-game.md § Preparing Equipment) — but Components/Augments now
+appear inside those same three lists there too, rather than a fourth standalone section, since a
+loose Chassis/Fitting/Augment was never a different kind of inventory, just another item sitting in
+one of the same three places.
+
 ## 0.6.65
 
 **Monster sheet: one Equipment section, not three** — the Signature/Temporary/Armory three-way

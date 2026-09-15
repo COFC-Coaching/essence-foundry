@@ -472,21 +472,6 @@
   </table>
   <button type="button" data-action="createEquipment" data-slot="armory"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.AddItem"}}</button>
   </div>
-
-  <h3 class="section-head">{{localize "ESSENCE.Sheet.ComponentsAugments"}} <span class="muted">{{localize "ESSENCE.Character.ComponentsAugmentsHint"}}</span></h3>
-  <table class="item-table">
-    <thead><tr><th>{{localize "ESSENCE.Common.Item"}}</th><th>{{localize "ESSENCE.Common.Type"}}</th><th>{{localize "ESSENCE.Common.Category"}}</th><th>{{localize "ESSENCE.Common.Slot"}}</th><th>{{localize "ESSENCE.Common.Tier"}}</th><th></th></tr></thead>
-    <tbody>
-      {{#each componentItems as |c|}}
-        <tr>
-          <td>{{c.name}}</td><td>{{capitalize c.type}}</td><td>{{c.category}}</td><td>{{capitalize c.slot}}</td><td>{{c.tier}}</td>
-          <td><button type="button" data-action="itemEdit" data-item-id="{{c.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=c.name}}"><i class="fa-solid fa-pen"></i></button>
-              <button type="button" data-action="itemDelete" data-item-id="{{c.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=c.name}}"><i class="fa-solid fa-trash"></i></button></td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-  <p class="muted">{{localize "ESSENCE.Character.ModularAssemblyHint"}}</p>
 </section>
 
 {{!-- ============ NON-COMBAT: career, skills, influence, features ============ --}}

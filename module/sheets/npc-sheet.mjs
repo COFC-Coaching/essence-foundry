@@ -5,7 +5,7 @@ import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQu
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
 import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -61,7 +61,6 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       toggleCoreInfluence: EssenceNpcSheet.#onToggleCoreInfluence,
       applyInfluenceInjury: EssenceNpcSheet.#onApplyInfluenceInjury,
       recoverInfluenceInjury: EssenceNpcSheet.#onRecoverInfluenceInjury,
-      spendInfluenceForSlot: EssenceNpcSheet.#onSpendInfluenceForSlot,
       contributeToGoal: EssenceNpcSheet.#onContributeToGoal,
       addReachTrigger: EssenceNpcSheet.#onAddReachTrigger,
       deleteReachTrigger: EssenceNpcSheet.#onDeleteReachTrigger,
@@ -82,7 +81,6 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       itemEdit: EssenceNpcSheet.#onItemEdit,
       itemDelete: EssenceNpcSheet.#onItemDelete,
       postEquipmentToChat: EssenceNpcSheet.#onPostEquipmentToChat,
-      moveEquipmentSlot: EssenceNpcSheet.#onMoveEquipmentSlot,
       createEquipment: EssenceNpcSheet.#onCreateEquipment,
       selectOrigin: EssenceNpcSheet.#onSelectOrigin,
       clearOrigin: EssenceNpcSheet.#onClearOrigin,
@@ -284,9 +282,14 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     context.reactionCards = allReactionCards.filter((i) => i.system.skill).map(cardView);
     context.conditions = this.actor.items.filter((i) => i.type === "condition");
 
-    // Split by slot + show usage against the limit, same as EssenceActorSheet — see that class's
-    // _prepareContext comment for why Component assignment UI lives on the equipment Item's own
-    // sheet instead of being duplicated here.
+    // An NPC/Monster has one Equipment container, not the PC's Signature/Temporary/Armory
+    // loadout-preparation split (see part-iii-playing-the-game.md § Preparing Equipment — a
+    // Planning-phase concept that doesn't apply to an adversary). Chassis/Fitting/Augment are
+    // likewise "just a part of Equipment," not a separate inventory concept, so they're folded
+    // into the same flat list. Everything here still lives in the "signature" slot under the hood
+    // (see #onCreateEquipment/EssenceActorSheet's identical _onDropItem override) purely so
+    // equipment-effects.mjs's active-bonus gate treats it as equipped rather than silently inert —
+    // the GM never sees or manages that distinction.
     // See EssenceActorSheet#_prepareContext for the full Reach-gating reasoning (computeReachGate()
     // in utils.mjs) — same soft, non-blocking over-Reach flag here, reading effectiveReach (base
     // Reach + any active Reach Triggers) rather than raw system.reach.
@@ -294,18 +297,20 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       const { reachCost, exceptionSource, overReach } = computeReachGate(item.system, system.effectiveReach);
       return { id: item.id, name: item.name, system: item.system, reachCost, exceptionSource, overReach };
     };
+    const componentView = (item) => ({
+      id: item.id,
+      name: item.name,
+      system: { category: capitalize(item.type) },
+      reachCost: null,
+      exceptionSource: "",
+      overReach: false
+    });
     const equipment = this.actor.items.filter((i) => i.type === "equipment");
-    context.signatureEquipment = equipment.filter((i) => i.system.slot === "signature").map(equipmentView);
-    context.armoryEquipment = equipment.filter((i) => i.system.slot === "armory");
-    context.temporaryEquipment = equipment.filter((i) => i.system.slot === "temporary");
-    context.signatureUsed = computeSlotUsage(this.actor.items, "signature");
-    context.armoryUsed = computeSlotUsage(this.actor.items, "armory");
-    context.signatureOverLimit = Math.max(0, Math.floor(context.signatureUsed) - system.signatureEquipmentLimit);
+    context.equipment = [
+      ...equipment.map(equipmentView),
+      ...this.actor.items.filter((i) => ["chassis", "fitting", "augment"].includes(i.type)).map(componentView)
+    ];
     context.itemGrants = deriveActiveGrants({ speciesItem, heritageItem }, equipment);
-    context.componentItems = this.actor.items
-      .filter((i) => ["chassis", "fitting", "augment"].includes(i.type))
-      .map((i) => ({ id: i.id, name: i.name, type: i.type, category: i.system.category ?? "", slot: i.system.slot ?? "", tier: i.system.tier ?? null }))
-      .sort((a, b) => a.type.localeCompare(b.type) || a.name.localeCompare(b.name));
 
     // See EssenceActorSheet#_prepareContext's identical block for the full reasoning.
     context.equipmentCards = [];
@@ -832,22 +837,6 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     });
   }
 
-  /** See EssenceActorSheet#onSpendInfluenceForSlot — same rule, same reasoning. */
-  static async #onSpendInfluenceForSlot() {
-    const sys = this.actor.system;
-    const max = sys.temporaryInfluence ?? 5;
-    const current = sys.playState.currentTemporaryInfluence ?? 0;
-    if (current >= max) {
-      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoTempInfluenceSlots", { name: this.actor.name }));
-      return;
-    }
-    await this.actor.update({ "system.playState.currentTemporaryInfluence": current + 1 });
-    await ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> spends 1 Temporary Influence to prepare an additional Signature slot beyond their normal limit.</p>`
-    });
-  }
-
   /** See EssenceActorSheet#onContributeToGoal — same rule, same reasoning. */
   static async #onContributeToGoal() {
     const result = await new Promise((resolve) => {
@@ -1131,14 +1120,6 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content: `<p><strong>${item.name}</strong> <span class="muted">(${category})</span></p>${summary ? `<p>${summary}</p>` : ""}`
     });
-  }
-
-  /** See EssenceActorSheet#onMoveEquipmentSlot's identical implementation for the reasoning. */
-  static async #onMoveEquipmentSlot(event, target) {
-    const item = this.actor.items.get(target.dataset.itemId);
-    const slot = target.dataset.slot;
-    if (!item || !["signature", "temporary", "armory"].includes(slot)) return;
-    await item.update({ "system.slot": slot });
   }
 
   /** See EssenceActorSheet#onCreateEquipment's identical implementation for the reasoning. */
