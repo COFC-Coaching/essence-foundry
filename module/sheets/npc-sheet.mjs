@@ -72,8 +72,12 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       deleteTactic: EssenceNpcSheet.#onDeleteTactic,
       addLeaderAbility: EssenceNpcSheet.#onAddLeaderAbility,
       deleteLeaderAbility: EssenceNpcSheet.#onDeleteLeaderAbility,
-      addBossAbility: EssenceNpcSheet.#onAddBossAbility,
-      deleteBossAbility: EssenceNpcSheet.#onDeleteBossAbility,
+      addSoloAbility: EssenceNpcSheet.#onAddSoloAbility,
+      deleteSoloAbility: EssenceNpcSheet.#onDeleteSoloAbility,
+      rollFixedAttack: EssenceNpcSheet.#onRollFixedAttack,
+      addAbility: EssenceNpcSheet.#onAddAbility,
+      deleteAbility: EssenceNpcSheet.#onDeleteAbility,
+      useAbility: EssenceNpcSheet.#onUseAbility,
       itemView: EssenceNpcSheet.#onItemView,
       itemEdit: EssenceNpcSheet.#onItemEdit,
       itemDelete: EssenceNpcSheet.#onItemDelete,
@@ -255,7 +259,12 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     context.headerLabel = buildEnemyHeaderLabel(system);
     context.tactics = (system.tactics ?? []).map((text, i) => ({ text, i }));
     context.leaderAbilities = (system.leaderAbilities ?? []).map((a, i) => ({ ...a, i }));
-    context.bossAbilities = (system.bossAbilities ?? []).map((a, i) => ({ ...a, i }));
+    context.soloAbilities = (system.soloAbilities ?? []).map((a, i) => ({ ...a, i }));
+
+    // Reduced Engine (module/data/actor-adversary.mjs) — Mook/Normal only. isReduced gates the
+    // template between the full dice-pool/Combat Card engine and the Fixed Attack/Abilities one.
+    context.isReduced = system.grade === "Mook" || system.grade === "Normal";
+    context.abilities = (system.abilities ?? []).map((a, i) => ({ ...a, i }));
 
     context.temporaryWoundPips = pips(system.playState.currentTemporaryWounds, system.temporaryWoundsAvailable);
     context.deathTrackPips = pips(system.playState.deathTrackStep, 5);
@@ -1022,7 +1031,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     await this.actor.update({ "system.tactics": tactics });
   }
 
-  /** Leader/Boss abilities (design doc §§ Leader, Boss) — same add/delete-by-index shape as
+  /** Leader/Solo abilities (design doc §§ Leader, Solo) — same add/delete-by-index shape as
    *  Tactics above, just with a name + rich-text field per entry instead of plain text. */
   static async #onAddLeaderAbility() {
     const abilities = [...(this.actor.system.leaderAbilities ?? []), { name: "", text: "" }];
@@ -1035,15 +1044,69 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     await this.actor.update({ "system.leaderAbilities": abilities });
   }
 
-  static async #onAddBossAbility() {
-    const abilities = [...(this.actor.system.bossAbilities ?? []), { name: "", text: "" }];
-    await this.actor.update({ "system.bossAbilities": abilities });
+  static async #onAddSoloAbility() {
+    const abilities = [...(this.actor.system.soloAbilities ?? []), { name: "", text: "" }];
+    await this.actor.update({ "system.soloAbilities": abilities });
   }
 
-  static async #onDeleteBossAbility(event, target) {
-    const abilities = [...(this.actor.system.bossAbilities ?? [])];
+  static async #onDeleteSoloAbility(event, target) {
+    const abilities = [...(this.actor.system.soloAbilities ?? [])];
     abilities.splice(Number(target.dataset.index), 1);
-    await this.actor.update({ "system.bossAbilities": abilities });
+    await this.actor.update({ "system.soloAbilities": abilities });
+  }
+
+  /** Reduced Engine (module/data/actor-adversary.mjs) — the whole point of "fixed" is that this
+   *  pool size is printed on the stat block instead of rebuilt from Attribute + Skill, NOT that
+   *  the roll is skipped: this still rolls real dice through the exact same resolver a PC's
+   *  Combat Card roll uses (rollEssencePool), against the target's real Defense. */
+  static async #onRollFixedAttack(event, target) {
+    const domainKey = target.dataset.domain;
+    const domain = DOMAINS.find((d) => d.key === domainKey);
+    const pool = this.actor.system.fixedAttack[domainKey];
+    const { defense, targets } = await EssenceNpcSheet.#resolveTargets(domain.defense);
+    await rollEssencePool({ pool, defense, targets, label: `${capitalize(domainKey)} Attack`, actor: this.actor });
+  }
+
+  /** See #onAddLeaderAbility/#onAddSoloAbility — same add/delete-by-index shape, for the
+   *  Reduced Engine's frequency-tagged Ability list (Mook/Normal only, but harmless to expose
+   *  the buttons regardless — an empty list is just an empty list on any other Grade). */
+  static async #onAddAbility() {
+    const abilities = [...(this.actor.system.abilities ?? []), { name: "", text: "", frequency: "atWill", usesMax: 1, usesRemaining: 1, usedThisRound: false }];
+    await this.actor.update({ "system.abilities": abilities });
+  }
+
+  static async #onDeleteAbility(event, target) {
+    const abilities = [...(this.actor.system.abilities ?? [])];
+    abilities.splice(Number(target.dataset.index), 1);
+    await this.actor.update({ "system.abilities": abilities });
+  }
+
+  /** "At Will" tracks nothing and just posts to chat. "1 per Round" and "X per Combat" enforce
+   *  their own limit here and reset on the normal combat cadence — see EssenceCombat#_onStartTurn
+   *  (perRound) and #_onStartRound (perCombat) in documents/combat.mjs. */
+  static async #onUseAbility(event, target) {
+    const i = Number(target.dataset.index);
+    const abilities = [...(this.actor.system.abilities ?? [])];
+    const ability = abilities[i];
+    if (!ability) return;
+
+    if (ability.frequency === "perRound" && ability.usedThisRound) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AbilityAlreadyUsedThisRound", { name: ability.name || "Ability" }));
+      return;
+    }
+    if (ability.frequency === "perCombat" && ability.usesRemaining <= 0) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AbilityNoUsesRemaining", { name: ability.name || "Ability" }));
+      return;
+    }
+
+    if (ability.frequency === "perRound") abilities[i] = { ...ability, usedThisRound: true };
+    else if (ability.frequency === "perCombat") abilities[i] = { ...ability, usesRemaining: ability.usesRemaining - 1 };
+    await this.actor.update({ "system.abilities": abilities });
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> uses <strong>${ability.name || "an Ability"}</strong>.</p>${ability.text ? `<p>${ability.text}</p>` : ""}`
+    });
   }
 
   /** See EssenceActorSheet#onItemView — same "eye" View button, same reasoning. */

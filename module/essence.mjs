@@ -244,7 +244,7 @@ Hooks.once("ready", async () => {
  * still exists in the raw persisted source until something writes over it, so it's read off
  * `actor._source` here rather than the prepared data. Minion→Mook and Standard→Normal are 1:1;
  * Elite and Nemesis both collapse to Elite, since Grade no longer distinguishes a mid-tier "mini-
- * boss" from "the boss" — eliteType (Champion/Leader/Boss) and the design doc's Elite-Only Ability
+ * boss" from "the boss" — eliteType (Champion/Leader/Solo) and the design doc's Elite-Only Ability
  * Principle are what carry that distinction now. Also migrates the old "roleBudgets" world setting
  * (keyed Minion/Standard/Elite/Nemesis) to the new "gradeBudgets" setting the Monster Creator
  * actually reads, using the same collapse — but only if a GM had actually customized it; an

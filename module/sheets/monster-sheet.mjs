@@ -3,7 +3,7 @@ import { MONSTER_TYPES_LOW, MONSTER_TYPES_HIGH } from "../data/monster-types.mjs
 
 /**
  * The Monster Actor type's sheet — everything EssenceNpcSheet already does (Attributes, Skills,
- * Wounds, Combat Cards, Equipment, Tactics/Leader/Boss Abilities, the Monster Wizard launcher)
+ * Wounds, Combat Cards, Equipment, Tactics/Leader/Solo Abilities, the Monster Wizard launcher)
  * reused verbatim by extending it, since none of that logic is Person-specific. Only the template
  * differs: monster-sheet.hbs swaps the Species/Heritage Origin section for a Monster Type badge
  * (kept minimal, just a Distinction pick-list, so gated Combat Skills like Magecraft/Ritualism

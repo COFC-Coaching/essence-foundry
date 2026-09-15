@@ -7,7 +7,8 @@ const GRADES = ["Mook", "Normal", "Elite"];
 const FIELDS = [
   "attributePool", "attributeMax", "skillPool", "skillMax",
   "resilienceBase", "resiliencePerTier", "temporaryWoundsAvailable",
-  "actionCards", "reactionCards", "equipmentCount"
+  "actionCards", "reactionCards", "equipmentCount",
+  "fixedAttackBase", "fixedAttackPerTier", "fixedDefenseBase", "fixedDefensePerTier"
 ];
 
 /**

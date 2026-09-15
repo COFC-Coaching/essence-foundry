@@ -1,5 +1,5 @@
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
-import { getGradeBudget } from "../data/monster-budgets.mjs";
+import { getGradeBudget, computeFixedAttack, computeFixedDefense } from "../data/monster-budgets.mjs";
 import { MONSTER_TYPES_LOW, MONSTER_TYPES_HIGH } from "../data/monster-types.mjs";
 import { capitalize, buildEnemyHeaderLabel } from "../utils.mjs";
 
@@ -490,18 +490,37 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
   /** The one-button path: rolls Attributes and Skills (in that order, since Card selection reads
    *  the Skill ranks Attributes don't affect), sets Resilience/Temporary Wounds/Equipment Limit
    *  from the Grade budget, then rolls Cards and Equipment. Safe to run more than once — each part
-   *  simply overwrites whatever was there before. */
+   *  simply overwrites whatever was there before.
+   *
+   *  Mook/Normal Grade uses the Reduced Engine (module/data/actor-adversary.mjs) instead — no
+   *  Attributes/Skills point-buy or Combat Card draw, since neither exists on that Grade's sheet.
+   *  Fixed Attack and Fixed Defenses fill from the same Grade+Tier budget formula the sheet's own
+   *  Roll button reads; Abilities stay hand-authored (there's no Ability compendium to draw from,
+   *  same as Tactics/GM Notes always being manual). Equipment still rolls either way. */
   static async #onAutoGenerate() {
     const document = this.document;
-    const budget = getGradeBudget(document.system.grade);
-    await this.#rollAttributes();
-    await this.#rollSkills();
+    const grade = document.system.grade;
+    const budget = getGradeBudget(grade);
+    const tier = document.system.tier;
+    const isReduced = grade === "Mook" || grade === "Normal";
+
+    if (isReduced) {
+      const attack = computeFixedAttack(grade, tier);
+      const defense = computeFixedDefense(grade, tier);
+      await document.update({
+        "system.fixedAttack": { physical: attack, mental: attack, spiritual: attack },
+        "system.fixedDefenses": { fortitude: defense, composure: defense, harmony: defense }
+      });
+    } else {
+      await this.#rollAttributes();
+      await this.#rollSkills();
+    }
     await document.update({
-      "system.resilience": budget.resilienceBase + Math.max(0, document.system.tier || 0) * budget.resiliencePerTier,
+      "system.resilience": budget.resilienceBase + Math.max(0, tier || 0) * budget.resiliencePerTier,
       "system.temporaryWoundsAvailable": budget.temporaryWoundsAvailable,
       "system.signatureEquipmentLimit": budget.equipmentCount
     });
-    await this.#rollCards();
+    if (!isReduced) await this.#rollCards();
     await this.#rollEquipment();
     ui.notifications.info(game.i18n.format("ESSENCE.Notify.StatBlockGenerated", { name: document.name, grade: document.system.grade || game.i18n.localize("ESSENCE.Item.Monster.GradeNormal") }));
     this.render();

@@ -118,12 +118,18 @@ export default class EssenceCombat extends Combat {
       // their own first Turn arrives (see part-iv-combat.md § Starting Reaction Pools). This
       // starting pool clears normally once the combatant's own first Turn begins (_onStartTurn
       // below always resets reactionDice to 0 there).
-      await actor.update({
+      const update = {
         "system.playState.combatStarted": true,
         "system.playState.combatTurn": "notStarted",
         "system.playState.actionDice": null,
         "system.playState.reactionDice": actor.system.baseCombatDice
-      });
+      };
+      // Reduced Engine "X per Combat" Abilities (module/data/actor-adversary.mjs) refill once,
+      // here, at the true start of combat — never mid-combat, unlike "per Round" below.
+      if (actor.system.abilities?.length) {
+        update["system.abilities"] = actor.system.abilities.map((a) => ({ ...a, usesRemaining: a.usesMax }));
+      }
+      await actor.update(update);
     }
   }
 
@@ -149,6 +155,12 @@ export default class EssenceCombat extends Combat {
     // next Turn (see part-iv-combat.md § Contingency).
     if (actor.system.specialties?.contingency) {
       update["system.specialties.contingency"] = "";
+    }
+
+    // Reduced Engine "1 per Round" Abilities (module/data/actor-adversary.mjs) re-enable at the
+    // start of every one of this actor's own Turns, same cadence as Action Dice above.
+    if (actor.system.abilities?.some((a) => a.usedThisRound)) {
+      update["system.abilities"] = actor.system.abilities.map((a) => ({ ...a, usedThisRound: false }));
     }
 
     // While a Critical Wound remains untreated, the Death Track advances 1 step at the start of

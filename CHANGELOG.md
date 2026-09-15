@@ -2,6 +2,28 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.62
+
+**The Reduced Enemy Engine, for Mook and Normal Grade** — the piece the original design doc
+flagged as unfinished. A Mook or Normal no longer needs an Attribute grid or Combat Cards to fight:
+`fixedAttack` (a printed dice-pool size per Domain) and `fixedDefenses` (flat Fortitude/Composure/
+Harmony) replace the build-fresh-every-time formulas, while a frequency-tagged Abilities list (At
+Will / 1 per Round / X per Combat) replaces Action/Reaction Cards and MP tracking. None of this
+skips rolling — the sheet's Fixed Attack button still rolls real dice through the same resolver a
+PC's Combat Card uses; only the *pool size* is precalculated instead of rebuilt. Calibrated so a
+Tier 1 Mook/Normal's pool lands at 2 (an ordinary 2d10 PC Action's effectiveness) and its Resilience
+lands at 2, matching the Encounter & Adventure Building Primer's own Tier 1 Enemy Chassis numbers
+exactly — both use the same base+(perTier×Tier) formula shape the Grade budget table already used
+for Resilience, and both are GM-tunable from the same Grade Budgets settings menu. The Monster
+Creator's Auto-Generate now fills Fixed Attack/Defenses for Mook/Normal instead of running the
+point-buy path; Elite is unaffected.
+
+**Elite Type's third value is "Solo," not "Boss"** — confirmed directly: encounters come in three
+classes (Minor/Severe/Critical), and Critical has a subdivision called a "Boss" encounter, built
+from *either* a Leader-type Elite or a Solo-type Elite. Boss was never itself an Elite Type. Renamed
+throughout — schema, the sheet's Elite Type dropdown and ability list (`soloAbilities`), the wizard,
+and every lang key — so "Boss" now means only the encounter class, matching the source design docs.
+
 ## 0.6.61
 
 **New Monster Actor type, for creature-shaped adversaries** — People (the existing NPC/Adversary
