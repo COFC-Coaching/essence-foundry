@@ -180,6 +180,7 @@
   "ESSENCE.Sheet.EquipmentCardsHint": "(granted by Signature Equipment — does not count against Card Count)",
   "ESSENCE.Sheet.Conditions": "Conditions",
   "ESSENCE.Sheet.SignatureEquipment": "Signature Equipment",
+  "ESSENCE.Sheet.Equipment": "Equipment",
   "ESSENCE.Sheet.OverSignatureLimitPlural": "Over your Signature Limit by {n} full slots — spend 1 Temporary Influence per extra slot to cover it.",
   "ESSENCE.Sheet.OverSignatureLimitSingular": "Over your Signature Limit by {n} full slot — spend 1 Temporary Influence per extra slot to cover it.",
   "ESSENCE.Sheet.SpendInfluenceForExtraSlot": "Spend Influence for Extra Slot",

@@ -1,5 +1,6 @@
 import EssenceNpcSheet from "./npc-sheet.mjs";
 import { MONSTER_TYPES_LOW, MONSTER_TYPES_HIGH } from "../data/monster-types.mjs";
+import { computeReachGate } from "../utils.mjs";
 
 /**
  * The Monster Actor type's sheet — everything EssenceNpcSheet already does (Attributes, Skills,
@@ -33,6 +34,19 @@ export default class EssenceMonsterSheet extends EssenceNpcSheet {
     const context = await super._prepareContext(options);
     context.monsterTypesLow = MONSTER_TYPES_LOW;
     context.monsterTypesHigh = MONSTER_TYPES_HIGH;
+
+    // A Monster doesn't need the People sheet's Signature/Temporary/Armory split — that's a PC
+    // loadout-preparation concept (see part-iii-playing-the-game.md § Preparing Equipment) that
+    // doesn't apply to a creature. Every equipment Item the Monster owns is just "what it has,"
+    // shown as one flat list; new/dropped items still land in the "signature" slot under the hood
+    // (see #onCreateEquipment/_onDropItem) so equipment-effects.mjs's active-bonus gate still
+    // treats everything here as equipped rather than silently inert.
+    context.equipment = this.actor.items
+      .filter((i) => i.type === "equipment")
+      .map((item) => {
+        const { reachCost, exceptionSource, overReach } = computeReachGate(item.system, context.system.effectiveReach);
+        return { id: item.id, name: item.name, system: item.system, reachCost, exceptionSource, overReach };
+      });
     return context;
   }
 

@@ -2,6 +2,15 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.65
+
+**Monster sheet: one Equipment section, not three** — the Signature/Temporary/Armory three-way
+split is a PC loadout-preparation concept (choosing what to carry vs. leave in storage between
+Adventures) that doesn't apply to a creature. The Monster sheet now shows a single flat "Equipment"
+list with everything the Monster owns; new items still land in the "signature" slot under the hood
+so equipment bonuses stay active, but the GM never sees or manages that distinction. The People/NPC
+sheet is unchanged — this only affects the Monster Actor type.
+
 ## 0.6.64
 
 **Cleaned up the Mook/Normal Combat section's labels** — removed a leftover implementation note
