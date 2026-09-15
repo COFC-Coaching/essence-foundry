@@ -1,11 +1,13 @@
 import EssenceCharacterData from "./data/actor-character.mjs";
 import EssenceNpcData from "./data/actor-npc.mjs";
+import EssenceMonsterData from "./data/actor-monster.mjs";
 import EssenceManifestationData from "./data/actor-manifestation.mjs";
 import { EssenceActionCardData, EssenceReactionCardData, EssenceConditionData, EssenceEquipmentData, EQUIPMENT_CATEGORY_LABELS, MODULAR_EQUIPMENT_CATEGORIES } from "./data/item-card.mjs";
 import { EssenceSpeciesData, EssenceHeritageData, EssenceDistinctionData } from "./data/item-origin.mjs";
 import { EssenceChassisData, EssenceFittingData, EssenceAugmentData } from "./data/item-component.mjs";
 import EssenceActorSheet from "./sheets/actor-sheet.mjs";
 import EssenceNpcSheet from "./sheets/npc-sheet.mjs";
+import EssenceMonsterSheet from "./sheets/monster-sheet.mjs";
 import EssenceManifestationSheet from "./sheets/manifestation-sheet.mjs";
 import {
   EssenceCardSheet, EssenceConditionSheet, EssenceEquipmentSheet,
@@ -49,6 +51,7 @@ Hooks.once("init", () => {
 
   CONFIG.Actor.dataModels.character = EssenceCharacterData;
   CONFIG.Actor.dataModels.npc = EssenceNpcData;
+  CONFIG.Actor.dataModels.monster = EssenceMonsterData;
   CONFIG.Actor.dataModels.manifestation = EssenceManifestationData;
   CONFIG.Item.dataModels["action-card"] = EssenceActionCardData;
   CONFIG.Item.dataModels["reaction-card"] = EssenceReactionCardData;
@@ -66,6 +69,7 @@ Hooks.once("init", () => {
   const { Actors, Items } = foundry.documents.collections;
   Actors.registerSheet("essence-system", EssenceActorSheet, { types: ["character"], makeDefault: true });
   Actors.registerSheet("essence-system", EssenceNpcSheet, { types: ["npc"], makeDefault: true });
+  Actors.registerSheet("essence-system", EssenceMonsterSheet, { types: ["monster"], makeDefault: true });
   Actors.registerSheet("essence-system", EssenceManifestationSheet, { types: ["manifestation"], makeDefault: true });
 
   Items.registerSheet("essence-system", EssenceCardSheet, { types: ["action-card", "reaction-card"], makeDefault: true });
@@ -338,7 +342,7 @@ Hooks.on("deleteCombat", async (combat) => {
   if (!game.user.isActiveGM) return;
   for (const combatant of combat.combatants) {
     const actor = combatant.actor;
-    if (actor?.type !== "character" && actor?.type !== "npc") continue;
+    if (!["character", "npc", "monster"].includes(actor?.type)) continue;
     const update = {
       "system.playState.combatStarted": false,
       "system.playState.combatTurn": "notStarted"

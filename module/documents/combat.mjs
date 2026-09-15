@@ -10,15 +10,16 @@
  * *before* awaiting its own round/turn update, so an async hook listener races the transition
  * instead of running before it.
  */
-// NPCs use the exact same combat mechanics as player characters (see module/data/actor-npc.mjs),
-// so both types need the same Action Dice lifecycle management here. A Full Manifestation profile
+// NPCs and Monsters both use the exact same combat mechanics as player characters (see
+// module/data/actor-adversary.mjs, the shared base both extend), so all three types need the
+// same Action Dice lifecycle management here. A Full Manifestation profile
 // (module/data/actor-manifestation.mjs) is "the same character for timing and Turn purposes" per
 // the official rules once manifested — it keeps sharing the caller's existing Combatant slot (see
 // module/apps/manifestation.mjs's token-swap approach), so on any of ITS later Turns it needs the
 // same per-round/per-turn dice reset as anyone else, even though entering/dismissing itself
 // deliberately does NOT grant a fresh Action Pool (that's handled by copying playState directly in
 // manifestation.mjs, not by this lifecycle hook).
-const COMBATANT_TYPES = ["character", "npc", "manifestation"];
+const COMBATANT_TYPES = ["character", "npc", "monster", "manifestation"];
 
 /**
  * Shared dice-commit prompt — same dialog both actor sheets used to duplicate for Roll
@@ -53,8 +54,8 @@ export default class EssenceCombat extends Combat {
   /**
    * Routes every entry point that rolls Initiative — the sheet's Roll Initiative button, the
    * Combat Tracker's per-combatant dice icon, and its Roll All/Roll NPCs buttons all call this
-   * single method — through our dice-commit flow instead of a flat formula roll, for character
-   * and npc combatants. Anything else (a plain monster token with no essence-system actor type)
+   * single method — through our dice-commit flow instead of a flat formula roll, for character,
+   * npc, and monster combatants. Anything else (a plain token with no essence-system actor type)
    * falls back to core's own roll.
    */
   async rollInitiative(ids, options = {}) {

@@ -1,5 +1,6 @@
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import { getGradeBudget } from "../data/monster-budgets.mjs";
+import { MONSTER_TYPES_LOW, MONSTER_TYPES_HIGH } from "../data/monster-types.mjs";
 import { capitalize, buildEnemyHeaderLabel } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -75,7 +76,8 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
       toggleEquipment: EssenceMonsterWizard.#onToggleEquipment,
       previewItem: EssenceMonsterWizard.#onPreviewItem,
       addTactic: EssenceMonsterWizard.#onAddTactic,
-      deleteTactic: EssenceMonsterWizard.#onDeleteTactic
+      deleteTactic: EssenceMonsterWizard.#onDeleteTactic,
+      setMonsterType: EssenceMonsterWizard.#onSetMonsterType
     }
   };
 
@@ -133,6 +135,12 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     context.budget = getGradeBudget(system.grade);
     context.headerLabel = buildEnemyHeaderLabel(system);
     context.tactics = (system.tactics ?? []).map((text, i) => ({ text, i }));
+    // Monsters (module/data/actor-monster.mjs) share every step of this wizard except Origin —
+    // a creature gets a Monster Type tag instead of a Species, though it keeps Distinction (still
+    // the only way to unlock a gated Combat Skill like Magecraft for a spellcasting creature).
+    context.isMonster = actor.type === "monster";
+    context.monsterTypesLow = MONSTER_TYPES_LOW;
+    context.monsterTypesHigh = MONSTER_TYPES_HIGH;
 
     const speciesItem = actor.items.find((i) => i.type === "species");
     const distinctionItem = actor.items.find((i) => i.type === "distinction");
@@ -152,7 +160,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
 
   async #prepareOrigin(context) {
     const [species, distinctions] = await Promise.all([
-      game.packs.get("essence-system.species")?.getDocuments() ?? [],
+      context.isMonster ? [] : (game.packs.get("essence-system.species")?.getDocuments() ?? []),
       game.packs.get("essence-system.distinctions")?.getDocuments() ?? []
     ]);
     context.speciesOptions = species.sort((a, b) => a.name.localeCompare(b.name));
@@ -287,6 +295,13 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     const tactics = [...(this.document.system.tactics ?? [])];
     tactics.splice(Number(target.dataset.index), 1);
     await this.document.update({ "system.tactics": tactics });
+  }
+
+  /** Monster Type is picked the same "button pick-list" way Species is for a Person — see
+   *  EssenceMonsterSheet's identical #onSetMonsterType, which this mirrors so the wizard and the
+   *  sheet behave identically. */
+  static async #onSetMonsterType(event, target) {
+    await this.document.update({ "system.monsterType": target.dataset.type });
   }
 
   static async #onSelectOrigin(event, target) {

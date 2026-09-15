@@ -2,6 +2,24 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.6.61
+
+**New Monster Actor type, for creature-shaped adversaries** — People (the existing NPC/Adversary
+type) are built from a Species/Heritage/Distinction Origin, same as a player character; that's the
+wrong shape for a beast, a spirit, or an elemental. The new Monster type shares every identity and
+budget concept a Person has (Tier/Grade/Role/Elite Type, the Grade budget table, Tactics and
+Leader/Boss Abilities) via a new shared `EssenceAdversaryData` base class, but swaps Species/
+Heritage/Distinction for a single Monster Type tag (Familiar/Sprite/Beast/Phantom/Golem/Elemental/
+Ancestor/Fey at Mook-Normal Grade; Dragon/Fiend/Celestial/Abomination/Leviathan/Avatar/Outsider/
+Colossus/Primordial once Grade is Elite) and gets its own compact sheet with the Species/Heritage/
+Influence/full-Reach sections dropped — keeping just a small Distinction picker so a spellcasting
+creature can still unlock a gated Combat Skill. The Monster Creator wizard is the same tool used
+for People, branching only at the Origin step, so building either kind of adversary feels like one
+cohesive workflow rather than two separate tools. Also fixed two spots that keyed off
+`actor.type === "npc"` specifically (the Combat Tracker's Action Dice lifecycle, and the
+end-of-combat reset) that would have silently left every Monster combatant out of initiative and
+turn dice entirely.
+
 ## 0.6.60
 
 **NPC "Role" (Minion/Standard/Elite/Nemesis) is now "Grade" (Mook/Normal/Elite), plus two new
