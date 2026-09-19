@@ -2,6 +2,38 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.7.4
+
+**Broader UI/CSS cleanup pass, following up on 0.7.3's Attribute-tooltip fix.** 0.7.3 fixed one
+instance of permanently-visible reminder text cluttering the sheet; this pass found and fixed the
+same class of problem everywhere else it was hiding, plus general CSS health issues turned up while
+auditing every actor sheet template against `styles/essence.css`.
+
+- **More visible-sentence-to-tooltip conversions**, matching the pattern 0.7.3 established
+  (`title="..."` on the nearest label, not a permanent `<div>`/`<p>`): the Core Influence label's
+  Recovery note, the Reach field's origin/purpose hint, the Armory/Equipment section's "used
+  allocation" flag legend, and the Reach Triggers section's Breach-cost note — each was a full
+  explanatory sentence sitting permanently under a compact field on the Character, NPC, and/or
+  Monster sheet. The Reach Pressure line now shows a short "Pressure X / Y" status with the full
+  explanation on hover, instead of both crammed into one always-visible line. The NPC/Monster
+  sheets' Tactics, Leader Abilities, Solo Abilities, and Abilities section hints moved the same way.
+- **Fixed a stale, factually wrong hint.** The Abilities section's hint text still claimed
+  plain-text Abilities "replace Combat Cards for this Grade" — true before the V6 sync's Phase 3
+  (0.6.79), which made every Grade roll real Combat/Reaction Cards and kept Abilities as a
+  supplement on top, not a Mook/Normal-only substitute. The displayed text never caught up; fixed.
+- **Missing styling for several Phase 6/7 additions.** `reconfigureItem`, `releaseItem`, and the
+  used/unused allocation flag toggle were added to every equipment row without being added to the
+  shared ghost-icon button rule, so they rendered as mismatched boxed buttons next to the
+  already-styled View/Edit/Move/Delete icons — the exact bug this file's own comments already
+  document fixing once before for three earlier additions. The Resistances/Vulnerabilities block
+  (0.6.85) had no layout or tag styling at all. The over-Reach warning icon was accidentally muted
+  to the same low-emphasis gray as ordinary secondary text instead of this system's amber warning
+  color. A Reach Triggers sub-header and the active-Thread-effects list were both missing rules a
+  sibling element nearby already had (a smaller section heading, a bulletless list). All fixed.
+- **Removed dead CSS.** Four rules for an `.origin-card`/`.origin-cards` layout with no template or
+  script reference anywhere in the codebase — predates this project's build-history, superseded by
+  the General Features & Benefits table.
+
 ## 0.7.3
 
 **Character sheet no longer buries the Attributes block in explanation text.** The five new

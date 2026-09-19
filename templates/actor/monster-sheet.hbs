@@ -53,8 +53,7 @@
 </header>
 
 {{#if (eq system.grade "Mook")}}
-  <h3 class="section-head">{{localize "ESSENCE.Item.Monster.Tactics"}}</h3>
-  <p class="muted">{{localize "ESSENCE.Item.Monster.TacticsHint"}}</p>
+  <h3 class="section-head" title="{{localize 'ESSENCE.Item.Monster.TacticsHint'}}">{{localize "ESSENCE.Item.Monster.Tactics"}}</h3>
   <ol class="npc-tactics-list">
     {{#each tactics as |t|}}
       <li>
@@ -67,8 +66,7 @@
 {{/if}}
 
 {{#if (eq system.eliteType "Leader")}}
-  <h3 class="section-head">{{localize "ESSENCE.Item.Monster.LeaderAbilities"}}</h3>
-  <p class="muted">{{localize "ESSENCE.Item.Monster.LeaderAbilitiesHint"}}</p>
+  <h3 class="section-head" title="{{localize 'ESSENCE.Item.Monster.LeaderAbilitiesHint'}}">{{localize "ESSENCE.Item.Monster.LeaderAbilities"}}</h3>
   <table class="item-table">
     <tbody>
       {{#each leaderAbilities as |a|}}
@@ -84,8 +82,7 @@
 {{/if}}
 
 {{#if (eq system.eliteType "Solo")}}
-  <h3 class="section-head">{{localize "ESSENCE.Item.Monster.SoloAbilities"}}</h3>
-  <p class="muted">{{localize "ESSENCE.Item.Monster.SoloAbilitiesHint"}}</p>
+  <h3 class="section-head" title="{{localize 'ESSENCE.Item.Monster.SoloAbilitiesHint'}}">{{localize "ESSENCE.Item.Monster.SoloAbilities"}}</h3>
   <table class="item-table">
     <tbody>
       {{#each soloAbilities as |a|}}
@@ -214,8 +211,7 @@
 </div>
 {{> "systems/essence-system/templates/actor/parts/death-track.hbs"}}
 
-  <h3 class="section-head">{{localize "ESSENCE.Item.Monster.Abilities"}}</h3>
-  <p class="muted">{{localize "ESSENCE.Item.Monster.AbilitiesHint"}}</p>
+  <h3 class="section-head" title="{{localize 'ESSENCE.Item.Monster.AbilitiesHint'}}">{{localize "ESSENCE.Item.Monster.Abilities"}}</h3>
   <table class="item-table">
     <tbody>
       {{#each abilities as |a|}}
@@ -371,8 +367,7 @@
   {{/each}}
 </ul>
 <div class="equipment-drop-zone" data-drop-slot="inventory">
-<h3 class="section-head">{{localize "ESSENCE.Sheet.Equipment"}}</h3>
-<p class="muted used-flag-hint"><i class="fa-solid fa-flag"></i> {{localize "ESSENCE.Sheet.UsedThisAdventureHint"}}</p>
+<h3 class="section-head">{{localize "ESSENCE.Sheet.Equipment"}} <i class="fa-solid fa-flag muted" title="{{localize 'ESSENCE.Sheet.UsedThisAdventureHint'}}"></i></h3>
 <ul class="item-list">
   {{#each equipment as |item|}}
     <li class="draggable-row" draggable="true" data-item-id="{{item.id}}">{{item.name}} <span class="muted">{{equipmentCategoryLabel item.system.category}}</span>

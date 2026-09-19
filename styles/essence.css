@@ -120,6 +120,11 @@
 .essence section.tab.active { display: block; }
 
 .essence .section-head { margin: 10px 0 4px; padding-bottom: 2px; border-bottom: 1px solid #555; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.05em; }
+/* One step down from .section-head, for a sub-list header nested under a tab's own section (e.g.
+   the Non-Combat tab's "Adventure-Limited Reach Triggers" table, character-sheet.hbs) — was a bare
+   <h4> with no rule of its own, so it fell back to the browser's bold/oversized default instead of
+   this system's small-caps section-header voice. */
+.essence .section-subhead { margin: 8px 0 4px; padding-bottom: 2px; border-bottom: 1px solid #444; text-transform: uppercase; font-size: 0.8em; letter-spacing: 0.05em; opacity: 0.85; font-weight: normal; }
 .essence .muted { opacity: 0.7; font-weight: normal; text-transform: none; }
 
 .essence .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -158,12 +163,24 @@
 
 .essence .wounds-row, .essence .influence-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 8px; }
 .essence .wound-block { display: flex; align-items: center; gap: 8px; }
-
-.essence .origin-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
-.essence .origin-card { border: 1px solid #555; border-radius: 4px; padding: 6px 8px; font-size: 0.85em; }
-.essence .origin-card-head { font-weight: bold; margin-bottom: 4px; }
-.essence .origin-trait { margin-bottom: 4px; opacity: 0.9; }
-.essence .origin-trait strong { display: block; }
+/* Resistances/Vulnerabilities (0.6.85) shipped with no layout rules of its own at all — the row and
+   its two label+tags+add-button blocks rendered as plain unstyled block-level text with no gap
+   between items. Same flex/gap treatment as .wounds-row/.wound-block above, just under its own
+   names since a Resistance/Vulnerability list isn't a wound. */
+.essence .resistances-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 8px; }
+.essence .resistance-block { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+/* A Resistance/Vulnerability entry (damage type + optional source + remove button) had no pill
+   treatment at all, unlike every other small labeled chip in this system (.thread-chip, .pip.labeled)
+   — reusing .thread-chip's own pill shape/sizing here rather than inventing a second one. */
+.essence .tag {
+  display: inline-flex; align-items: center; gap: 4px; font-size: 0.8em; padding: 2px 8px;
+  border-radius: 10px; border: 1px solid #888; background: transparent;
+}
+.essence .tag button {
+  background: none; border: none; padding: 0; margin: 0; font: inherit; color: inherit;
+  cursor: pointer; line-height: 1;
+}
+.essence .tag button:hover { color: #ef5350; }
 
 .essence .combat-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 6px; }
 .essence .combat-header-left { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; flex: 1 1 auto; min-width: 0; }
@@ -171,6 +188,12 @@
 .essence .skill-box { border: 1px solid #555; border-radius: 4px; padding: 4px 6px; margin-bottom: 6px; }
 .essence .skill-box.gated { opacity: 0.6; border-style: dashed; }
 .essence .gate-note { font-size: 0.75em; color: #e0a020; padding-left: 4px; }
+/* An equipment row's over-Reach warning icon carries .muted (opacity 0.7) alongside it for spacing,
+   which washed out the exclamation-triangle to the same low-emphasis gray as ordinary secondary
+   text — the opposite of what a warning icon should read as. Restores full opacity and this
+   system's own amber warning color (same one .gate-note already uses for "this is locked/blocked"
+   text) so it actually reads as a warning again. */
+.essence .reach-warning { opacity: 1; color: #e0a020; }
 .essence .skill-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
 .essence .skill-name { flex: 1; text-align: left; text-transform: capitalize; }
 .essence .skill-expertises { margin-top: 4px; padding-left: 4px; border-left: 2px solid #555; }
@@ -194,6 +217,11 @@
   background: transparent; color: inherit; cursor: pointer;
 }
 .essence .thread-chip.active { background: #f9a825; border-color: #f9a825; color: #000; font-weight: bold; }
+/* The active-Thread-effects list under the Threads chips had no list-style reset, so it showed the
+   browser's default bullet+indent — every other small list in this system (.item-list,
+   .npc-tactics-list, .wizard-checklist) is already bulletless, so this one was the odd one out. */
+.essence .active-thread-effects { list-style: none; padding: 0; margin: 4px 0 0; }
+.essence .active-thread-effects li { margin-bottom: 2px; }
 
 .essence .item-list { list-style: none; padding: 0; }
 .essence .item-list li { display: flex; align-items: center; gap: 6px; padding: 2px 0; }
@@ -223,7 +251,10 @@
 .essence button[data-action="toggleEquipment"],
 .essence button[data-action="deleteTactic"],
 .essence button[data-action="deleteLeaderAbility"],
-.essence button[data-action="deleteBossAbility"] {
+.essence button[data-action="deleteBossAbility"],
+.essence button[data-action="reconfigureItem"],
+.essence button[data-action="releaseItem"],
+.essence button.used-toggle {
   display: inline-flex; align-items: center; justify-content: center;
   width: 1.7em; height: 1.7em; min-height: 0; padding: 0; margin: 0; flex: 0 0 auto;
   font: inherit; font-size: 0.95em; color: #aaa; background: none; border: none; border-radius: 4px;
@@ -236,9 +267,16 @@
 .essence button[data-action="moveEquipmentSlot"]:hover,
 .essence button[data-action="deleteArrayRow"]:hover,
 .essence button[data-action="toggleCard"]:hover,
-.essence button[data-action="toggleEquipment"]:hover {
+.essence button[data-action="toggleEquipment"]:hover,
+.essence button[data-action="reconfigureItem"]:hover,
+.essence button[data-action="releaseItem"]:hover,
+.essence button.used-toggle:hover {
   background: rgba(249, 168, 37, 0.15); color: #f9a825;
 }
+/* used-toggle (Phase 6, 0.6.101) marks an Inventory/Temporary/Armory row's committed-allocation flag —
+   same ghost-icon sizing as its row neighbors above, but an amber fill when toggled on so "this item's
+   allocation is locked for the Adventure" reads as a real state, not just another idle icon. */
+.essence button.used-toggle.used { color: #f9a825; background: rgba(249, 168, 37, 0.12); }
 /* Delete is irreversible (no document undo in Foundry) and otherwise sits one icon-width from
    the roll button every card row uses every turn — give it its own color so it doesn't read as
    "just another icon" next to Edit/Move. The confirmation dialog in #onItemDelete is the actual
@@ -527,6 +565,13 @@
 /* Rules' own printed-card convention: "the first section is boxed and shaded." */
 .essence .condition-view-section-primary {
   border: 1px solid #c62828; border-radius: 4px; padding: 6px 8px; background: rgba(198, 40, 40, 0.12);
+}
+/* The Condition edit-form's own classification badge (Ordinary/Specialty/Wound/Consequence/Cover/
+   Other, added 0.6.102) had "badge" in its class name but no badge styling — it rendered as plain
+   muted text. Small pill treatment, reusing this system's established tag/chip shape. */
+.essence .condition-classification-badge {
+  display: inline-block; font-size: 0.8em; padding: 2px 8px; border-radius: 10px;
+  border: 1px solid #666; background: rgba(255,255,255,0.04);
 }
 
 /* Equipment (including Toolkits/Consumable Kits) — #42a5f5, steel blue. */

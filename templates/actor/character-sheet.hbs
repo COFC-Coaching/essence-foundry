@@ -479,8 +479,7 @@
   </div>
 
   <div class="equipment-drop-zone" data-drop-slot="armory">
-  <h3 class="section-head">{{localize "ESSENCE.Item.Equipment.Armory"}} <span class="muted">({{armoryUsed}} / {{system.armoryLimit}})</span></h3>
-  <p class="muted used-flag-hint"><i class="fa-solid fa-flag"></i> {{localize "ESSENCE.Sheet.UsedThisAdventureHint"}}</p>
+  <h3 class="section-head">{{localize "ESSENCE.Item.Equipment.Armory"}} <span class="muted">({{armoryUsed}} / {{system.armoryLimit}}) <i class="fa-solid fa-flag" title="{{localize 'ESSENCE.Sheet.UsedThisAdventureHint'}}"></i></span></h3>
   <table class="item-table">
     <thead><tr><th>{{localize "ESSENCE.Common.Item"}}</th><th>{{localize "ESSENCE.Common.Category"}}</th><th>{{localize "ESSENCE.Common.Notes"}}</th><th></th></tr></thead>
     <tbody>
@@ -542,7 +541,7 @@
       </span>
     </div>
     <div class="wound-block">
-      <span class="attr-label">{{localize "ESSENCE.Sheet.CoreInfluence"}}</span>
+      <span class="attr-label" title="{{localize 'ESSENCE.Sheet.InfluenceRecoveryNote'}}">{{localize "ESSENCE.Sheet.CoreInfluence"}}</span>
       <span class="pip-track">
         {{#each system.coreInfluence as |c i|}}
           <button type="button" class="pip toggle labeled {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}" title="{{c.condition}}" aria-pressed="{{c.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreInfluenceAria' n=(addOne i)}}{{#if c.condition}}: {{c.condition}}{{/if}}">{{lookup ../coreInfluenceLabels i}}</button>
@@ -567,17 +566,14 @@
       {{/if}}
     </div>
   </div>
-  <p class="muted influence-recovery-note">{{localize "ESSENCE.Sheet.InfluenceRecoveryNote"}}</p>
-
   <h3 class="section-head">{{localize "ESSENCE.Sheet.Reach"}}</h3>
-  <p class="muted">{{localize "ESSENCE.Character.ReachHint"}}</p>
   <div class="influence-row">
     <div class="wound-block">
-      <label>{{localize "ESSENCE.Sheet.Reach"}} <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>
+      <label title="{{localize 'ESSENCE.Character.ReachHint'}}">{{localize "ESSENCE.Sheet.Reach"}} <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>
       {{#if (gt system.effectiveReach system.reach)}}
         <span class="muted">{{localize "ESSENCE.Sheet.EffectiveReachNote" n=system.effectiveReach}}</span>
       {{/if}}
-      <span class="muted">{{localize "ESSENCE.Sheet.ReachPressureNote" n=system.reachPressure max=system.effectiveReach}}</span>
+      <span class="muted" title="{{localize 'ESSENCE.Sheet.ReachPressureNote' n=system.reachPressure max=system.effectiveReach}}">{{localize "ESSENCE.Sheet.ReachPressureShort" n=system.reachPressure max=system.effectiveReach}}</span>
     </div>
   </div>
 
@@ -603,10 +599,9 @@
       </tbody>
     </table>
   {{/if}}
-  <button type="button" data-action="addArrayRow" data-array="reachTriggers"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.AddReachTrigger"}}</button>
+  <button type="button" data-action="addArrayRow" data-array="reachTriggers" title="{{localize 'ESSENCE.Character.ReachTriggerBreachNote'}}"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.AddReachTrigger"}}</button>
   <button type="button" data-action="resetAdventureUses" title="{{localize 'ESSENCE.Sheet.ResetAdventureUsesTooltip'}}">{{localize "ESSENCE.Sheet.ResetAdventureUses"}}</button>
   <button type="button" data-action="newEncounter" title="{{localize 'ESSENCE.Sheet.NewEncounterTooltip'}}">{{localize "ESSENCE.Sheet.NewEncounter"}}</button>
-  <p class="muted">{{localize "ESSENCE.Character.ReachTriggerBreachNote"}}</p>
 
   <h3 class="section-head">{{localize "ESSENCE.Character.GeneralFeaturesBenefits"}}</h3>
   <table class="item-table">

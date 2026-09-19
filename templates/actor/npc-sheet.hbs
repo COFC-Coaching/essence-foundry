@@ -53,8 +53,7 @@
 </header>
 
 {{#if (eq system.grade "Mook")}}
-  <h3 class="section-head">{{localize "ESSENCE.Item.Monster.Tactics"}}</h3>
-  <p class="muted">{{localize "ESSENCE.Item.Monster.TacticsHint"}}</p>
+  <h3 class="section-head" title="{{localize 'ESSENCE.Item.Monster.TacticsHint'}}">{{localize "ESSENCE.Item.Monster.Tactics"}}</h3>
   <ol class="npc-tactics-list">
     {{#each tactics as |t|}}
       <li>
@@ -67,8 +66,7 @@
 {{/if}}
 
 {{#if (eq system.eliteType "Leader")}}
-  <h3 class="section-head">{{localize "ESSENCE.Item.Monster.LeaderAbilities"}}</h3>
-  <p class="muted">{{localize "ESSENCE.Item.Monster.LeaderAbilitiesHint"}}</p>
+  <h3 class="section-head" title="{{localize 'ESSENCE.Item.Monster.LeaderAbilitiesHint'}}">{{localize "ESSENCE.Item.Monster.LeaderAbilities"}}</h3>
   <table class="item-table">
     <tbody>
       {{#each leaderAbilities as |a|}}
@@ -84,8 +82,7 @@
 {{/if}}
 
 {{#if (eq system.eliteType "Solo")}}
-  <h3 class="section-head">{{localize "ESSENCE.Item.Monster.SoloAbilities"}}</h3>
-  <p class="muted">{{localize "ESSENCE.Item.Monster.SoloAbilitiesHint"}}</p>
+  <h3 class="section-head" title="{{localize 'ESSENCE.Item.Monster.SoloAbilitiesHint'}}">{{localize "ESSENCE.Item.Monster.SoloAbilities"}}</h3>
   <table class="item-table">
     <tbody>
       {{#each soloAbilities as |a|}}
@@ -218,7 +215,7 @@
     </span>
   </div>
   <div class="wound-block">
-    <span class="attr-label">{{localize "ESSENCE.Sheet.CoreInfluence"}}</span>
+    <span class="attr-label" title="{{localize 'ESSENCE.Sheet.InfluenceRecoveryNote'}}">{{localize "ESSENCE.Sheet.CoreInfluence"}}</span>
     <span class="pip-track">
       {{#each system.coreInfluence as |c i|}}<button type="button" class="pip toggle labeled {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}" title="{{c.condition}}" aria-pressed="{{c.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreInfluenceAria' n=(addOne i)}}{{#if c.condition}}: {{c.condition}}{{/if}}">{{lookup ../coreInfluenceLabels i}}</button>{{/each}}
     </span>
@@ -229,17 +226,15 @@
     <button type="button" data-action="contributeToGoal">{{localize "ESSENCE.Sheet.ContributeToSharedGoal"}}</button>
   </div>
 </div>
-<p class="muted influence-recovery-note">{{localize "ESSENCE.Sheet.InfluenceRecoveryNote"}}</p>
 
 <h3 class="section-head">{{localize "ESSENCE.Sheet.Reach"}}</h3>
-<p class="muted">{{localize "ESSENCE.Sheet.ReachHint"}}</p>
 <div class="influence-row">
   <div class="wound-block">
-    <label>{{localize "ESSENCE.Sheet.Reach"}} <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>
+    <label title="{{localize 'ESSENCE.Sheet.ReachHint'}}">{{localize "ESSENCE.Sheet.Reach"}} <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>
     {{#if (gt system.effectiveReach system.reach)}}
       <span class="muted">{{localize "ESSENCE.Sheet.EffectiveReachNote" n=system.effectiveReach}}</span>
     {{/if}}
-    <span class="muted">{{localize "ESSENCE.Sheet.ReachPressureNote" n=system.reachPressure max=system.effectiveReach}}</span>
+    <span class="muted" title="{{localize 'ESSENCE.Sheet.ReachPressureNote' n=system.reachPressure max=system.effectiveReach}}">{{localize "ESSENCE.Sheet.ReachPressureShort" n=system.reachPressure max=system.effectiveReach}}</span>
   </div>
 </div>
 {{#if reachTriggers.length}}
@@ -269,8 +264,7 @@
   <button type="button" data-action="newEncounter" title="{{localize 'ESSENCE.Sheet.NewEncounterTooltip'}}">{{localize "ESSENCE.Sheet.NewEncounter"}}</button>
 </div>
 
-  <h3 class="section-head">{{localize "ESSENCE.Item.Monster.Abilities"}}</h3>
-  <p class="muted">{{localize "ESSENCE.Item.Monster.AbilitiesHint"}}</p>
+  <h3 class="section-head" title="{{localize 'ESSENCE.Item.Monster.AbilitiesHint'}}">{{localize "ESSENCE.Item.Monster.Abilities"}}</h3>
   <table class="item-table">
     <tbody>
       {{#each abilities as |a|}}
@@ -426,8 +420,7 @@
   {{/each}}
 </ul>
 <div class="equipment-drop-zone" data-drop-slot="inventory">
-<h3 class="section-head">{{localize "ESSENCE.Sheet.Equipment"}}</h3>
-<p class="muted used-flag-hint"><i class="fa-solid fa-flag"></i> {{localize "ESSENCE.Sheet.UsedThisAdventureHint"}}</p>
+<h3 class="section-head">{{localize "ESSENCE.Sheet.Equipment"}} <i class="fa-solid fa-flag muted" title="{{localize 'ESSENCE.Sheet.UsedThisAdventureHint'}}"></i></h3>
 <ul class="item-list">
   {{#each equipment as |item|}}
     <li class="draggable-row" draggable="true" data-item-id="{{item.id}}">{{item.name}} <span class="muted">{{equipmentCategoryLabel item.system.category}}</span>
