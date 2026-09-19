@@ -7,11 +7,11 @@
     "description": "Naturally born peoples — humans, smallfolk, giant-blooded peoples, orcish and goblinoid peoples, and other broadly mortal lineages. They vary dramatically in stature, proportions, endurance, and sensory ability.",
     "nature": {
       "name": "Adaptive Physiology",
-      "text": "Choose two Mortal Adaptations."
+      "text": "Choose two Mortal Traits."
     },
-    "adaptationLabel": "Mortal Adaptation",
-    "adaptationCount": 2,
-    "adaptations": [
+    "traitLabel": "Mortal Trait",
+    "traitCount": 2,
+    "traits": [
       {
         "name": "Compact Frame",
         "text": "You may move through spaces occupied by substantially larger creatures, though you cannot end your movement in an occupied space. You can also pass through narrow openings and comfortably use spaces designed for creatures roughly half your height, provided your equipment fits.",

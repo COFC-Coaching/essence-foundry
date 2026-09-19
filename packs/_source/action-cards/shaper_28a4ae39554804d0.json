@@ -1,0 +1,53 @@
+{
+  "_id": "28a4ae39554804d0",
+  "name": "Shaper",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "",
+    "subtype": "",
+    "attr": "",
+    "skill": "",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "species",
+    "flavor": "<p>Planarborn with Shaper Species Trait.</p>",
+    "body": [
+      {
+        "label": "Requirement",
+        "html": "Planarborn with Shaper."
+      },
+      {
+        "label": "Range",
+        "html": "Adjacent."
+      },
+      {
+        "label": "Target",
+        "html": "One unoccupied space containing a small amount of ordinary material or energy associated with your Origin."
+      },
+      {
+        "label": "Effect",
+        "html": "Burn 2 Action dice. Once per Turn. Create or remove 1 unit of Difficult Terrain, form a simple shape, or make a comparable environmental change. Maintain only one altered space; establishing another ends the previous maintained alteration."
+      }
+    ],
+    "surges": [],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    },
+    "speciesGranted": true,
+    "cooldownFrequency": "perRound"
+  },
+  "folder": "8f1cb97c10476c47",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!28a4ae39554804d0"
+}

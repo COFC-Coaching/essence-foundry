@@ -1,0 +1,46 @@
+{
+  "_id": "e3a885bdc1a88bfa",
+  "name": "High Cover",
+  "type": "condition",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "classification": "cover",
+    "sections": [
+      {
+        "label": "COVER",
+        "html": "Cover: <b>High Cover</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "+2 Fortitude against an attack this Cover could plausibly obstruct. Cover modifies Fortitude only — never Composure or Harmony. Creatures do not provide Cover by default. Whether the attack's source is magical or mundane does not determine whether Cover applies."
+      }
+    ]
+  },
+  "effects": [
+    {
+      "_id": "aa7e978ca8c51721",
+      "_key": "!items.effects!e3a885bdc1a88bfa.aa7e978ca8c51721",
+      "name": "High Cover: Fortitude +2",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.fortitudeBonus",
+          "mode": 2,
+          "value": "2",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!e3a885bdc1a88bfa"
+}

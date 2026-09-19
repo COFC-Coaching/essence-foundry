@@ -15,9 +15,9 @@
         "count": 1
       }
     },
-    "adaptationLabel": "Verdant Adaptation",
-    "adaptationCount": 1,
-    "adaptations": [
+    "traitLabel": "Verdant Trait",
+    "traitCount": 1,
+    "traits": [
       {
         "name": "Barked Form",
         "text": "While Rooted, increase your Resilience by 1. This bonus ends immediately when you cease being Rooted.",
@@ -50,7 +50,7 @@
       },
       {
         "name": "Symbiotic Growth",
-        "text": "You possess an additional vine, tendril, branch, or symbiotic organism. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Signature Equipment Limit, and the growth does not grant additional Actions.",
+        "text": "You possess an additional vine, tendril, branch, or symbiotic organism. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Inventory Limit, and the growth does not grant additional Actions.",
         "chosen": false
       },
       {

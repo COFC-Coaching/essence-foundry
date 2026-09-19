@@ -1,6 +1,6 @@
 {
-  "_id": "9336fcc2403b45cf",
-  "name": "Medical Pack",
+  "_id": "6a8bff6efc7eb08c",
+  "name": "Munitions Pack",
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
@@ -10,7 +10,7 @@
     "type": "Consumable",
     "cost": "1",
     "range": "",
-    "effect": "Gain the 'Medkit' Action Card. Each use of the card consumes 1 charge.",
+    "effect": "Gain the 'Heavy Munitions' Action Card. Each use of the card consumes 1 charge.",
     "passive": "",
     "special": "",
     "fortitude": "",
@@ -29,5 +29,5 @@
   "ownership": {
     "default": 0
   },
-  "_key": "!items!9336fcc2403b45cf"
+  "_key": "!items!6a8bff6efc7eb08c"
 }

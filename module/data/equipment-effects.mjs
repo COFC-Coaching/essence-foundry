@@ -12,8 +12,8 @@ import { deriveEquipmentStats, buildEquipmentResolver } from "./equipment-featur
  * manual math.
  *
  * Foundry's native transfer has no "transfer only if a sibling field says so" concept, so the
- * effect's `disabled` flag is toggled manually to gate it: only equipment prepared as Signature
- * Equipment should affect the actor's active stats (see § Bringing More Than Your Signature
+ * effect's `disabled` flag is toggled manually to gate it: only equipment prepared as Inventory
+ * Equipment should affect the actor's active stats (see § Bringing More Than Your Inventory
  * Limit — Armory/Temporary gear you own but aren't carrying for the Adventure shouldn't).
  *
  * A plain (non-modular: toolkit/consumable-kit/gear) item's own printed fields are the source.
@@ -69,7 +69,7 @@ export async function syncEquipmentEffect(item) {
   }
   const reach = Number(sys.reachBonus) || 0;
   const changes = buildChanges(fortitude, resilience, movement, reach);
-  const disabled = item.system.slot !== "signature";
+  const disabled = item.system.slot !== "inventory";
   const existing = item.effects.find((e) => e.getFlag(FLAG_SCOPE, FLAG_KEY));
 
   if (!changes.length) {

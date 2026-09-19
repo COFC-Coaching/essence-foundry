@@ -7,7 +7,7 @@
     "description": "Grew up in a smithy, workshop, mill, studio, construction yard, or another household centered on skilled production.",
     "legacy": {
       "name": "Inherited Tools",
-      "text": "Choose one ordinary toolkit during character creation. It does not count against your Signature Equipment Limit. You may replace it at the end of any adventure or during significant downtime."
+      "text": "Choose one ordinary toolkit during character creation. It does not count against your Inventory Limit. You may replace it at the end of any adventure or during significant downtime."
     },
     "familiarity": {
       "name": "Workshop Rhythm",

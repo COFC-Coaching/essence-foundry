@@ -6,7 +6,7 @@
   "system": {
     "description": "Characters whose capabilities are part of what they are rather than something learned. They unleash these qualities through powerful transformations, quickly shifting form to fill whatever role is needed.",
     "keyCombatSkill": "Gestalt",
-    "primaryAttr": "Might",
+    "primaryAttr": "Vigor",
     "unlocks": "gestalt",
     "benefit": "Gain access to the Gestalt Combat Skill. If acquired later: gain access to Gestalt, gain 2 pips in it, then gain one additional Gestalt Expertise and two additional Gestalt Action Cards.",
     "creationExpertiseBonus": 0,

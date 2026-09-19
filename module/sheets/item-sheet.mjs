@@ -2,19 +2,20 @@ import { deriveEquipmentStats, buildEquipmentResolver } from "../data/equipment-
 import { SUBTYPE_DATABASE } from "../data/expertise-database.mjs";
 import { CHASSIS_LABELS, FITTING_LABELS } from "../data/item-component.mjs";
 import { EQUIPMENT_CATEGORY_LABELS, MODULAR_EQUIPMENT_CATEGORIES } from "../data/item-card.mjs";
+import { fittingReconfigureCost } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
 
 /**
- * The 9 Combat Skills, in the same fixed order used throughout the sheets (actor-sheet.mjs's
+ * The 9 Combat Styles, in the same fixed order used throughout the sheets (actor-sheet.mjs's
  * DOMAINS constant groups them by domain; this flat list is just for a plain <select>).
  * Capitalized ("Magecraft", not "magecraft") to match how `system.skill` is actually stored on
  * every existing Action/Reaction Card (confirmed against live compendium data) — SUBTYPE_DATABASE
  * and EXPERTISE_DATABASE's own keys are lowercase, so any lookup into either always needs
  * `.toLowerCase()` first; see subtypesForSkill() below rather than indexing SUBTYPE_DATABASE directly.
  */
-const COMBAT_SKILLS = ["Prowess", "Ballistics", "Gestalt", "Cunning", "Magecraft", "Psionics", "Leadership", "Ritualism", "Calling"];
+const COMBAT_STYLES = ["Prowess", "Ballistics", "Gestalt", "Cunning", "Magecraft", "Psionics", "Leadership", "Ritualism", "Calling"];
 
 /** SUBTYPE_DATABASE's keys are lowercase; `skillName` as actually stored on a card is capitalized
  *  ("Magecraft") — normalize here so every lookup site doesn't have to remember to. */
@@ -23,7 +24,7 @@ function subtypesForSkill(skillName) {
 }
 
 const ARRAY_ROW_DEFAULTS = {
-  adaptations: { name: "", text: "", chosen: false },
+  traits: { name: "", text: "", chosen: false },
   body: { label: "", html: "" },
   surges: { n: "1", html: "" },
   sections: { label: "", html: "" }
@@ -138,8 +139,8 @@ export class EssenceCardSheet extends EssenceItemSheetBase {
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    context.skillOptions = COMBAT_SKILLS.map((key) => ({ key, label: key }));
-    // Action Subtypes are nested under the card's own Combat Skill (each skill has its own fixed
+    context.skillOptions = COMBAT_STYLES.map((key) => ({ key, label: key }));
+    // Action Subtypes are nested under the card's own Combat Style (each skill has its own fixed
     // set — see expertise-database.mjs's SUBTYPE_DATABASE) rather than being free text — a Basic/
     // Universal card (no skill set) has no subtype list to offer. If the stored subtype isn't in
     // the current skill's list (stale data, or the skill was just changed), it's still included so
@@ -372,13 +373,14 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
   }
 
   /**
-   * § Reconfiguring Equipment — "Augments are intentionally easier to replace than major
-   * Components. The current standard is: burn 1 Action die to exchange an installed Augment for
-   * another compatible Augment you have available." A standalone cost-and-log action rather than
-   * something auto-triggered by the Mount select
-   * above, since that same select is also how an Augment gets installed into an empty Mount for
-   * the first time (free — not an "exchange") — only the player knows which case actually applies
-   * in the fiction, the same trust-based convention every other manual action on this sheet uses.
+   * V6 Reconfigure (design/v6-revision-delta.md §3.1, superseding plan §4.9's V5-shaped "burn 1
+   * Action die" reading) — Augment exchange is now one of Reconfigure's choices, at the same flat
+   * 3 Action dice as every other choice ("Choose one: ready, stow, recover, or hand over... swap
+   * one such item... or exchange one installed Augment or one combat-replaceable Fitting"). A
+   * standalone cost-and-log action rather than something auto-triggered by the Mount select above,
+   * since that same select is also how an Augment gets installed into an empty Mount for the first
+   * time (free — not an "exchange") — only the player knows which case actually applies in the
+   * fiction, the same trust-based convention every other manual action on this sheet uses.
    */
   static async #onSwapAugmentCost() {
     const actor = this.item.actor;
@@ -386,25 +388,29 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
       ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.NotOwnedNoActionDicePool"));
       return;
     }
+    const cost = 3;
     const available = actor.system.playState.actionDice ?? 0;
-    if (available < 1) {
+    if (available < cost) {
       ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.NoActionDiceForAugmentSwap"));
       return;
     }
-    await actor.update({ "system.playState.actionDice": available - 1 });
+    await actor.update({ "system.playState.actionDice": available - cost });
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),
-      content: `<p><strong>${actor.name}</strong> burns 1 Action Die to swap an Augment on <strong>${this.item.name}</strong>.</p>`
+      content: `<p><strong>${actor.name}</strong> uses Reconfigure (burns ${cost} Action Dice) to swap an Augment on <strong>${this.item.name}</strong>.</p>`
     });
   }
 
   /**
-   * § Reconfiguring Equipment — "a Simple Fitting Change costs approximately 1 Action die, while a
-   * Structural Fitting Change costs approximately 3 Action dice. The specific Fitting may state
-   * otherwise" (reconfigureCostOverride, see item-component.mjs). Uses the CURRENTLY installed
-   * Fitting's own category/override to determine cost — that's the Fitting whose printed text
-   * actually governs how hard it is to remove (e.g. "a ranged Payload might be exchanged very
-   * quickly" vs. one that "requires substantial disassembly").
+   * V6 Reconfigure — exchanging a Fitting is one of Reconfigure's choices, at the same flat 3
+   * Action dice as every other choice, unless this Fitting states its own override
+   * (`reconfigureCostOverride`, see item-component.mjs). `reconfigureCategory` no longer selects a
+   * cost tier (V5's "Simple = 1 die / Structural = 3 dice" is gone) — it now only says whether this
+   * Fitting is combat-replaceable or out-of-Combat only, so a "structural" Fitting mid-Combat gets a
+   * soft warning (never a block, matching this project's own established warn-not-block convention —
+   * see build-history's "normal operating limit, not an absolute prohibition" precedent) rather than
+   * a different price. Uses the CURRENTLY installed Fitting, since that's the one whose printed text
+   * actually governs how hard it is to remove.
    */
   static async #onReconfigureFittingCost() {
     const actor = this.item.actor;
@@ -413,22 +419,25 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
       return;
     }
     const fitting = this.item.system.fittingItemId ? actor.items.get(this.item.system.fittingItemId) : null;
-    const cost = fitting?.system.reconfigureCostOverride ?? (fitting?.system.reconfigureCategory === "structural" ? 3 : 1);
+    const { cost, outOfCombatOnly } = fittingReconfigureCost(fitting);
     const available = actor.system.playState.actionDice ?? 0;
     if (available < cost) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.FittingChangeCost", { cost, unit: cost === 1 ? game.i18n.localize("ESSENCE.Item.Equipment.ActionDie") : game.i18n.localize("ESSENCE.Item.Equipment.ActionDice"), available }));
       return;
     }
+    if (outOfCombatOnly && game.combat) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.StructuralFittingInCombat", { name: fitting.name }));
+    }
     await actor.update({ "system.playState.actionDice": available - cost });
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),
-      content: `<p><strong>${actor.name}</strong> burns ${cost} Action ${cost === 1 ? "Die" : "Dice"} to change the Fitting on <strong>${this.item.name}</strong>.</p>`
+      content: `<p><strong>${actor.name}</strong> uses Reconfigure (burns ${cost} Action ${cost === 1 ? "Die" : "Dice"}) to change the Fitting on <strong>${this.item.name}</strong>.</p>`
     });
   }
 }
 
 /**
- * A Species Nature and each of its Adaptations may carry an optional nested "sub-choice" (see
+ * A Species Nature and each of its Traits may carry an optional nested "sub-choice" (see
  * item-origin.mjs's subChoiceField() comment) — e.g. Mortal-Kin's Keen ("choose two: low-light
  * vision, keen hearing, keen scent"). `subChoice.options` is an ArrayField(StringField), which has
  * no natural single-`<input name>` binding for Foundry's default form submission (same ArrayField
@@ -446,17 +455,18 @@ export class EssenceSpeciesSheet extends EssenceItemSheetBase {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.natureOptionsText = (context.system.nature.subChoice?.options ?? []).join(", ");
-    context.adaptationOptionsText = context.system.adaptations.map((a) => (a.subChoice?.options ?? []).join(", "));
+    context.traitOptionsText = context.system.traits.map((a) => (a.subChoice?.options ?? []).join(", "));
     return context;
   }
 
   _onRender(context, options) {
     super._onRender(context, options);
     this.#wireSubChoiceOptions();
+    this.#wireTraitFields();
   }
 
   /**
-   * Every `.subchoice-options-field` (one per Nature + one per Adaptation row) has no `name`
+   * Every `.subchoice-options-field` (one per Nature + one per Trait row) has no `name`
    * attribute — same reasoning as EssenceCardSheet#wireSkillSelect: the field is a single
    * comma-separated text box standing in for an ArrayField(StringField) with no natural
    * single-input binding, so it needs a manual change listener + explicit item.update() rather than
@@ -465,9 +475,41 @@ export class EssenceSpeciesSheet extends EssenceItemSheetBase {
   #wireSubChoiceOptions() {
     for (const el of this.element.querySelectorAll(".subchoice-options-field")) {
       el.addEventListener("change", async (event) => {
-        const path = event.currentTarget.dataset.path; // e.g. "nature" or "adaptations.2"
+        const path = event.currentTarget.dataset.path; // e.g. "nature" or "traits.2"
         const options = event.currentTarget.value.split(",").map((s) => s.trim()).filter((s) => s.length);
         await this.item.update({ [`system.${path}.subChoice.options`]: options });
+      });
+    }
+  }
+
+  /**
+   * Fix for the project's own documented ArrayField dotted-path bug (build-history's "Recurring bug
+   * patterns" #1, first hit in v0.6.18's Expertise editor): a `name="system.traits.{{i}}.field"`
+   * input relying on submitOnChange's default form serialization replaces the WHOLE traits[i]
+   * element with just that one field, silently resetting every sibling field on that row (chosen,
+   * name, subChoice.*) back to its schema default. The `chosen`/`name`/`subChoice.label`/
+   * `subChoice.type`/`subChoice.count` inputs in species-sheet.hbs therefore carry no `name`
+   * attribute — only `class="trait-field" data-index data-field` — and are wired here with the same
+   * "explicit change listener does a full read-modify-write of the ENTIRE array, one item.update()"
+   * pattern EssenceComponentSheet's Mounts editor (#wireMountLinkSelects, and #onAddMount/
+   * #onDeleteMount) and #wireSubChoiceOptions just above already establish for this project.
+   * The Trait's body text (`a.text`, rendered via `essenceEditor`) is left as a normal named
+   * `<prose-mirror>` and out of scope here — see this method's caller-side note in build-history for
+   * the judgment call on why it wasn't folded into this same fix.
+   */
+  #wireTraitFields() {
+    for (const el of this.element.querySelectorAll(".trait-field")) {
+      el.addEventListener("change", async (event) => {
+        const target = event.currentTarget;
+        const i = Number(target.dataset.index);
+        const field = target.dataset.field;
+        const rows = this.item.system.traits.map((row) => foundry.utils.deepClone(row));
+        if (!rows[i]) return;
+        const value = target.type === "checkbox" ? target.checked
+          : target.type === "number" ? Number(target.value)
+          : target.value;
+        foundry.utils.setProperty(rows[i], field, value);
+        await this.item.update({ "system.traits": rows });
       });
     }
   }

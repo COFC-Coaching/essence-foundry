@@ -1,0 +1,26 @@
+{
+  "_id": "90b0707e09e2ca5a",
+  "name": "Dazed",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "classification": "ordinary",
+    "sections": [
+      {
+        "label": "ORDINARY CONDITION",
+        "html": "<b>Dazed</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "The first Action you play on each of your Turns and the first Reaction you play between your Turns each require 1 additional burned die. Dazed never prevents you from acting; it increases the immediate commitment required."
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!90b0707e09e2ca5a"
+}

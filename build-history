@@ -1656,3 +1656,1292 @@ worked before this session (per the earlier Foundry-native audit) without any `d
 declared, which is consistent with drop-acceptance being unconditional and only drag-*start*
 requiring the selector — but this reasoning hasn't been confirmed against an actual running client.
 Flagged as the first thing to check in a live pass. v0.6.48, see CHANGELOG.md.
+
+### 2026-09-17 — V6 sync Phase 1 complete: the three renames (0.6.71–0.6.73)
+
+Finished Phase 1 of `design/v6-foundry-implementation-plan.md` (0.6.70 Combat Skill→Style was already
+done and committed-in-spirit before this session; picked up mid-0.6.71 after a prior agent was cut
+off by a rate limit). Per the plan's note, there are no live games on this module right now, so every
+rename here went straight into the schema with no transitional dual-enum window and no migration
+step — see §2 of the plan for when that changes.
+
+**0.6.71 — Species Adaptations → Species Traits.** The prior agent had actually finished nearly
+everything (schema, sheets, wizard, item-grants, lang/en.json, all 9 species pack files) before being
+cut off — verified via a full `speciesAdaptations`/`adaptationLabel`/`adaptationCount`/`adaptations`
+grep across `module/`, `templates/`, `lang/`, `scripts/`, `styles/` that came back with exactly one
+straggler: `scripts/build-packs.mjs`'s `speciesToItem()` was still reading `s.adaptationLabel`/
+`s.adaptationCount`/`s.adaptations` off `origin-data.json` rows that the prior agent had already
+renamed to `traitLabel`/`traitCount`/`traits` — a silent breakage that wouldn't have surfaced until
+the next full pack rebuild produced `undefined` fields. Fixed. Confirmed Gestalt's unrelated
+"Adaptation" Specialty (`specialties.adaptation`, `ESSENCE.Character.Adaptation*` lang keys) was
+correctly left alone throughout — it's a different mechanic that happens to share the old word.
+
+**0.6.72 — Signature → Inventory**, the biggest-blast-radius rename in the phase (per the plan's own
+risk ranking): `signatureEquipmentLimit` → `inventoryLimit`, and the `slot` enum's `"signature"` value
+→ `"inventory"` across `item-card.mjs` (Equipment) and `item-component.mjs` (Chassis/Fitting). Traced
+the full drag-and-drop chain end to end before touching anything, since this was flagged as the
+highest-risk item: `data-drop-slot="inventory"` container → `resolveEquipmentDropSlot()` (already
+generic, reads whatever's in the `data-drop-slot` attribute) → `item.update({"system.slot": dropSlot})`
+→ `equipment-effects.mjs`'s `disabled = item.system.slot !== "inventory"` gate on the transferred
+Active Effect. Every link in that chain uses the dropped-in string value rather than a hardcoded
+literal except the two endpoints (the template attribute and the effects-gate comparison), so the
+rename was mechanically a find-and-replace of `"signature"` → `"inventory"` (and `Signature` →
+`Inventory` in labels/comments/lang keys/the CSS class name) across ~15 files, done with a scripted
+sed pass per file and verified afterward with a full case-insensitive `signature` grep across
+`module/`, `templates/`, `lang/`, `scripts/*.mjs`, `styles/` (zero hits left) plus a lang-key
+leaf/prefix collision check (the exact class of bug that broke 0.6.46 — see that entry above; zero
+collisions here). Deliberately did NOT touch the `"Signature Equipment Limit"` prose phrase baked into
+Heritage/Species rules text in `scripts/origin-data.json` (Stitched Form, Quartermaster's Due, etc.)
+or any `packs/_source/**` content — the plan's own §4.7 explicitly schedules that content sweep for
+Phase 2 (0.6.74), not this rename phase, and no `packs/_source/equipment|chassis|fittings` file had
+`"slot": "signature"` stored as data (only `"armory"` or unset), so there was nothing live to migrate
+there either.
+
+**0.6.73 — Artillery → Blaster, Colossus → Titan, Scene → Encounter.** All three were small and
+independent. Artillery/Colossus are both schema `choices` enums (`actor-adversary.mjs`'s
+`battlefieldRole`, `monster-types.mjs`'s `MONSTER_TYPES_HIGH`) with the Monster/NPC/Wizard `<select>`
+options either literal (`battlefieldRole`, 3 templates) or fully data-driven off the constant
+(`monsterType`, zero template changes needed). Scene → Encounter was the one requiring judgment calls
+per-occurrence rather than a blanket replace: `getSceneControlButtons` in `essence.mjs`,
+`manifestation.mjs`'s "needs a placed token on the current scene" check, and every `token?.scene?.id`
+reference in `actor-sheet.mjs`/`npc-sheet.mjs` are genuine Foundry Scene-document usages and were left
+untouched; only the Reach Trigger lifecycle term ("End Scene" button/lang key, "usable only this
+Scene," "for the current Scene," the doc comments describing Reach Trigger duration) was renamed to
+Encounter, in both `actor-sheet.mjs` and its near-identical `npc-sheet.mjs` copy (same
+sheet-duplication debt tracked elsewhere in this document).
+
+**Verification across all three**: every `.mjs` file in `module/` and `scripts/` passes `node --check`
+(not just the touched ones — a full-tree pass, since a stray sed could in principle have corrupted an
+untouched file's encoding); every touched `.hbs` file's `{{#`/`{{/` counts still balance; `lang/en.json`
+parses as valid JSON with zero leaf/prefix key collisions. No live Foundry client available in this
+session, so — consistent with every prior non-interactive session in this history — the drag-and-drop
+chain and the Active Effects gate were verified by *reading* the code path, not by clicking through it
+live. `system.json` bumped 0.6.70→0.6.71→0.6.72→0.6.73 with one CHANGELOG entry each; nothing
+committed to git, left for the user to review.
+
+**Remaining Phase 1 debt**: none — all four renames in the plan's Phase 1 (0.6.70–0.6.73) are done.
+Phase 2 (0.6.74, pure data: Distinction primaryAttr fixes, SUBTYPE_DATABASE re-derivation, Strain
+table, etc.) is next per the plan's §8 build order, not started this session.
+
+### 2026-09-18 — V6 sync Phase 2 complete: six data fixes (0.6.74)
+
+Finished Phase 2 of `design/v6-foundry-implementation-plan.md` §4 — six independent, data-only
+corrections, all landing in one version since none of them touch shared logic.
+
+1. **Distinction Primary Attribute swaps.** `scripts/origin-data.json`'s four wrong entries (Athlete
+   Vigor→Might, Gifted Might→Vigor, Strategist Resolve→Intellect, Psyker Intellect→Resolve) were
+   confirmed against the plan before editing, and the other five gated Distinctions verified already
+   correct. Edited the authoritative `origin-data.json`, then ran
+   `node scripts/build-packs.mjs --only=distinctions` — this scopes cleanly (source-doc regen +
+   compile for exactly the `distinctions` pack, confirmed by the script's own `--only` implementation
+   and its console summary line reporting 0 for every other pack), so no other pack content was
+   touched. `packs/_source/distinctions/*.json` now reflect the fix.
+2. **Psionics Strain penalty table.** The old table (Composure at 2, Harmony at 4, Fortitude at 6)
+   was a provisional playtest table per its own doc comment, not V6. Replaced with V6 Appendix D's
+   real table: `STRAIN_PENALTY_THRESHOLDS = [{ min: 3, composure: 1 }]` (Harmony/Fortitude untouched
+   at any threshold) plus a new `STRAIN_EXTRA_BURNED_DIE_AT = 5` constant. Added a derived
+   `this.psionicsBurnSurcharge` boolean in `actor-combatant.mjs#prepareDerivedData`, surfaced as a
+   small note next to the Strain field on `character-sheet.hbs` (new lang key
+   `ESSENCE.Character.StrainBurnSurcharge`) — the burned-die requirement itself isn't enforced
+   anywhere in the roll-commit flow (that's a logic change, out of scope for this data-only phase);
+   this just makes the condition visible to the player so they remember to apply it by hand, same
+   manual-trust convention as every other Specialty tracker on this sheet.
+3. **SUBTYPE_DATABASE re-derivation.** Re-checked all nine Combat Styles against V6 Appendix J
+   (fetched fresh from the V6 book text, not trusted from memory or the plan's paraphrase) and found
+   the plan's summary matched the book exactly. Removed prowess's spurious "Stance", gestalt's
+   "Mimic", cunning's "Diversion", psionics's "Resonance", leadership's "Signal", ritualism's
+   "Circle"; added magecraft's missing Light/Shadow/Chaos (now all ten Thread families); expanded
+   calling from its old Rank-0-2-only 8 entries to the full 17 named in Appendix J's Rank 0-5 table.
+   Updated the file's doc comment to cite V6 Appendix J explicitly as the new source of truth and to
+   record *why* this correction is right this time where the 2026-09-08 attempt (reverted, see that
+   session's entry above) was wrong — V6 resolved the V5-era contradiction between the rulebook and
+   the spreadsheet in the book itself, so there's no more authority conflict for a future session to
+   rediscover. Verified `packs/_source/conditions/stance_*.json` (the retained Prowess Specialty
+   Condition) is a wholly separate compendium Item with zero code path connecting it to
+   `SUBTYPE_DATABASE` — removing the subtype list entry doesn't touch it.
+4. **Deleted `INFLUENCE_RECOVERY_TIME`.** Removed the constant from `utils.mjs` and all six call
+   sites across `actor-sheet.mjs` (3) and `npc-sheet.mjs` (3), plus the unused import in both files.
+   Each site's chat-log line lost its "(recovers in 1 day/week/month)" parenthetical rather than
+   being replaced with new text — V6 states plainly that Essence doesn't use a universal day/week/
+   month schedule, and the plan is explicit that a replacement (the Influence Consequence Card's own
+   repair requirement, §6.6) is separate, not-yet-built work, so printing nothing is more honest than
+   printing a guess.
+5. **Temporary Influence / Temporary Wounds cap comments.** Both fields already had no `max` set on
+   their schema (`temporaryWoundsAvailable`, `temporaryInfluence` are both plain `NumberField`s with
+   only `initial`), and the sheet's pip rendering already sizes itself dynamically off the live field
+   value rather than a hardcoded 5-box count — so there was no rendering change needed, only stale
+   doc comments claiming a "hard ceiling of 5" that V6 removed. Fixed both comments. **Judgment
+   call, deliberately not touched**: `EssenceActorSheet#onSpendInfluenceForSlot` (renamed
+   `#onPayInventorySupport` in the plan's §5.3.5) has a real `current >= max` guard clause that
+   blocks spending Temporary Influence for an extra Inventory slot once `temporaryInfluence` (5) is
+   reached. This genuinely enforces a cap in behavior, not just a comment — but it's inseparable from
+   the 3-layer Reach-pressure/Temporary-Influence/Core-Influence sequence the plan schedules as its
+   own later logic phase (§5.3), so ripping out just the guard now would leave `#onSpendInfluenceForSlot`
+   half-migrated to a rule that doesn't exist yet in this codebase. Left it in place and left a
+   pointer comment on the `temporaryInfluence` schema field so a future session picking up §5.3 finds
+   it immediately instead of re-discovering it by testing.
+6. **Manifestation Rank ceiling.** `actor-manifestation.mjs`'s `rank` field widened from `max: 2` to
+   `max: 5`, matching V6's Rank 0-5 entry-cost table. Purely a ceiling change — no Rank 3-5 profile
+   stat blocks exist yet (`packs/_source/manifestations/` still only has the original 8 Rank 0-2
+   profiles), and the plan is explicit this content is deprioritized (§6.10/§9.4), so this was scoped
+   to exactly "unblock authoring," nothing more.
+
+**Verification**: grepped for every removed/renamed symbol (`INFLUENCE_RECOVERY_TIME`, the old Strain
+threshold shape, `"Stance"`/`"Mimic"`/`"Diversion"`/`"Resonance"`/`"Signal"`/`"Circle"` as live
+`SUBTYPE_DATABASE` entries) — all clean, only survive in explanatory comments now. `node --check`
+across every `.mjs` file in `module/` and `scripts/` (full tree, not just touched files) all pass;
+`lang/en.json` and `scripts/origin-data.json` both parse as valid JSON; ran this repo's own
+leaf/prefix lang-key collision check (the exact bug class that broke 0.6.46, see that entry above) —
+zero collisions; `character-sheet.hbs`'s `{{#`/`{{/` counts balance. No live Foundry client available
+in this session, so the new Strain-surcharge note's actual rendering is unverified beyond template
+syntax, consistent with every other non-interactive session in this history.
+
+Nothing committed to git — `system.json` bumped to 0.6.74 with one CHANGELOG entry, left for the user
+to review alongside the still-uncommitted Phase 1 renames.
+
+**Next up per the plan's §8 build order**: Phase 3+ (the logic changes — Wound State/Death Track
+rewrite, minimum dice commitment, Reach pressure, Recovery automation, etc.) was explicitly out of
+scope for this session.
+
+### 2026-09-18 — V6 sync Phase 3 complete: the Wound/Death Track core + enemy resolution engine (0.6.75–0.6.79)
+
+Finished Phase 3 of `design/v6-foundry-implementation-plan.md` §5.1/§6.4/§4.8/§5.1.4/§9.5 — the
+largest phase in the whole plan, landing in five versions. No live games on this module, so no
+migration concerns for any of it (matches Phase 1/2's precedent).
+
+**0.6.75 — Wound State by highest severity + active-healing lowest-first.** Rewrote
+`EssenceCombatantData#prepareDerivedData` (`actor-combatant.mjs`) to derive `woundState` from the
+highest-severity FILLED Core Wound space instead of counting filled spaces — a
+`SEVERITY_RANK` map built from `utils.mjs`'s existing `SEVERITY_BY_INDEX` (reused, not duplicated)
+gives the rank order. Exposed `coreWoundsFilled` as a separate derived value since the Death Track
+rewrite needs "all five filled" as a distinct signal from "worst severity." Confirmed the three
+sheet templates and `combat.mjs`'s Death Track gate needed no code change at this step — they
+compare against the literal string `"Critically Wounded"`, which is still the correct top-rank
+label, so the actual governing-condition swap (occupancy vs. severity) was deliberately deferred to
+0.6.76 where the plan schedules it. Inverted `#onRecoverWound` (both sheets) and
+`#onGrantRecovery`'s wound loop from a backward (most-severe-first) to a forward (least-severe-first)
+scan for active healing; documented `#onToggleCoreWound` as the order-free natural-recovery path
+per the plan's suggestion, rather than building a second UI for it.
+
+**0.6.76 — Death Track rewrite, the largest single logic change in the whole plan.** Replaced
+`playState.deathTrackFrozen` (Boolean) with `playState.deathTrackState` (StringField, choices
+`["none","dying","stabilized"]`, default `"none"`). Governance moved from "possesses a Critical
+Wound" to "all coreWounds spaces filled" (`combat.mjs`'s turn-start advance now checks
+`coreWoundsFilled === coreWounds.length && deathTrackState === "dying"` instead of the old
+Critical-Wound check). Activation at 0/5 happens inside `#onApplyDamage` (both sheets) via a
+`wasFull`/`nowFull` transition check — filling the 5th space sets state to `"dying"` without
+advancing the step; the first real advance happens at the next Turn start, per the plan. An extra
+Wound landing on an already-full track (the pre-existing `slot === -1` overflow branch) now also
+forces state to `"dying"` if it was `"stabilized"`, breaking Stabilization. Added a shared
+`deathTrackAfterWoundRemoval(currentState, slot)` pure helper in `utils.mjs` (used by
+`#onRecoverWound` and `#onGrantRecovery` in both sheets) implementing the plan's asymmetric rule:
+removing the Critical Wound (slot 4) resets the step to 0; removing any OTHER Wound while the track
+was governing sets state to `"none"` but preserves the step. Renamed the manual GM Frozen checkbox
+to `#onToggleDeathTrackStabilized`, toggling between `"dying"`/`"stabilized"` — the plan's
+explicitly sanctioned stand-in for the not-yet-built Stabilize Basic Action Card. Added
+`EssenceActor#reduceDeathTrack()` (`documents/actor.mjs`) as a ready extension point for Recovery's
+−1 effect — **deliberately NOT wired into `#onGrantRecovery` yet**, since the plan schedules that
+specific wiring as part of 0.6.82's broader Recovery-dialog rewrite (25% rounded up, clear Strain,
+etc.) and doing it here risked being redone. Added `context.deathTrackActive` (both sheets) as the
+new "all 5 filled" gate the three templates branch on, replacing the old
+`{{#if (eq system.woundState "Critically Wounded")}}`.
+
+**0.6.77 — Wound Cards, a new subsystem.** V6 Appendix E's nine fallback Wound Cards (Physical/
+Mental/Spiritual × Light/Serious/Critical) are now real Condition Items with real Active Effects
+for their flat, unconditional half (Movement/Composure/Harmony penalties on `movementBonus`/
+`composureBonus`/`harmonyBonus` — deliberately NOT the raw `movement`/`composure`/`harmony` fields,
+since that's the exact compounding-Active-Effect bug this project already found and fixed once for
+equipment; Physical Critical's "halve Movement" and every Serious/Critical tier's extra-burned-die
+note stay reminder text only, since neither is a flat additive change). **Judgment call on where
+this data lives**: `conditionToItem()`/`packs/_source/conditions/*.json` turned out to be
+Neon-sourced (`raw-condition-cards.json`), NOT hand-authored as the plan's §7.1 table claims —
+running `build-packs.mjs --only=conditions` clears and fully regenerates that pack from the Neon
+cache alone, which would have silently wiped any hand-written Wound Card JSON files dropped
+directly into `packs/_source/conditions/`. Added a `WOUND_CARDS` array + `woundCardToItem()` to
+`build-packs.mjs` itself instead (same "hand-authored data hardcoded in the script" pattern already
+used for species/heritages/distinctions), so a `--only=conditions` rebuild regenerates all 30
+conditions (21 Neon + 9 Wound Cards) safely and repeatably. Sanity-checked the cache's row count
+(21) against the pre-existing compendium's count (21) before rebuilding, per the known cache-
+staleness gap. Added `attachWoundCard()`/`removeWoundCard()`/`WOUND_CARD_NAMES` to `utils.mjs`,
+reusing `EssenceActor#toggleStatusEffect`'s existing "clone from compendium by lookup, flag with an
+identifying value, createEmbeddedDocuments" pattern rather than inventing a second one — wired into
+`#onApplyDamage` (attach, matched by domain+severity), `#onRecoverWound`, `#onGrantRecovery`, and
+`#onToggleCoreWound` (remove, flagged by Core Wound slot index) in both sheets.
+
+**0.6.78 — Enemy simplified Wounds.** Added `woundCapacity` (Mook 2 / Normal 4 / Elite 5) to
+`monster-budgets.mjs`'s `GRADE_BUDGETS`; verified `getGradeBudget`'s `{...defaults, ...stored}`
+merge already handles an old stored override missing the new field correctly (plain object spread,
+no code change needed). `EssenceAdversaryData#prepareDerivedData` (`actor-adversary.mjs`) now
+always sets `usesSimplifiedWounds = true` and re-views `coreWounds` at the Grade's own capacity each
+prepare cycle (pads short arrays, drops excess on a Grade downgrade — a view-only truncation that
+only becomes permanent data loss if the sheet's own read-modify-write logic later persists the
+shorter array back), overriding `woundState` to `"Defeated"`/`""` instead of the Light/Serious/
+Critical label. Simplified `npc-sheet.mjs`'s `#onApplyDamage`/`#onRecoverWound`/`#onToggleCoreWound`
+(shared by both NPC and Monster actor types) to drop severity assignment, Wound Card attachment, and
+Death Track interaction entirely, since every adversary now takes this path unconditionally — left
+the now-dead `#onToggleDeathTrack`/`#onToggleDeathTrackStabilized` handlers in place (harmless;
+`deathTrackActive` in context already keeps that UI from ever rendering for an adversary) rather
+than risk removing something still wired to a registered action. Updated `npc-sheet.hbs`/
+`monster-sheet.hbs`'s Wounds header and pip track to show a flat `filled/capacity` counter and drop
+the per-space severity title/aria-label when `usesSimplifiedWounds`. Exposed `woundCapacity` in the
+Grade Budgets GM settings menu (`grade-budgets-settings.mjs`) alongside the rest of the point-buy
+numbers.
+
+**0.6.79 — Enemy resolution engine, the highest-judgment item in the phase, but ultimately
+unambiguous once traced.** Read `actor-adversary.mjs`, `npc-sheet.mjs`, and both `npc-sheet.hbs`/
+`monster-sheet.hbs` fully before touching anything. Key discovery: `#onRollItem` (the real Combat
+Card roll handler) was ALREADY grade-agnostic — it commits N dice from the shared Action/Reaction
+Pool (`baseCombatDice = 5 + tier`, identical for every Grade) and was never gated by `isReduced` at
+all. What `isReduced` actually gated was the *template*: Mook/Normal sheets showed a completely
+different "Fixed Attack" block (flat printed dice-pool number + `#onRollFixedAttack`, which bypassed
+the Action Pool and rolled unlimited dice directly) INSTEAD OF the Attributes/Combat Styles grid and
+Combat Card/header section entirely — so a Mook or Normal literally had no UI path to ever play a
+real Card, even though the code to do so already existed and worked. Confirmed `monster-budgets.mjs`
+`GRADE_BUDGETS` already had per-Grade `attributePool`/`attributeMax`/`skillPool`/`skillMax`/
+`actionCards`/`reactionCards` values sized appropriately smaller for Mook/Normal than Elite — i.e.
+the "use existing budget data, don't invent new balance numbers" instruction was fully satisfiable,
+no ambiguity to flag. Removed the `isReduced` gate from both templates (now always show the normal
+Attributes/Skills grid, Combat header, and Card lists, on every Grade) and simplified
+`monster-wizard.mjs#onAutoGenerate` to always call `#rollAttributes()`/`#rollSkills()`/`#rollCards()`
+for every Grade instead of branching to a flat fixed-attack/fixed-defense fill for Mook/Normal — both
+`#rollAttributes`/`#rollSkills`/`#rollCards` already read per-Grade budget numbers generically with
+zero Elite-only assumptions, confirming this was a template/wiring problem, not a missing-data one.
+
+**Removed outright rather than deprecated-in-place**: `fixedAttack`/`fixedDefenses` schema fields
+(`actor-adversary.mjs`), `REDUCED_ENGINE_DEFAULTS`/`computeFixedAttack`/`computeFixedDefense`
+(`monster-budgets.mjs`), `#onRollFixedAttack` (`npc-sheet.mjs`), and their four dead lang keys. Since
+there are no live games, there is no persisted Actor data anywhere that could reference these fields
+— the "no live games right now" premise that let Phase 1's renames skip a migration window applies
+identically here, so keeping unused deprecated fields around would only have been extra surface area
+with no compatibility benefit. `abilities` (the frequency-tagged special-ability list) was KEPT,
+since it's a genuinely reusable GM-facing reference list independent of the resolution engine — its
+`isReduced` gate was removed too, so it's now available on every Grade as a supplement alongside
+real Cards rather than a Mook/Normal-only Card substitute. Rewrote `actor-adversary.mjs`'s class doc
+comment to describe the new reality (every Grade rolls; only Wounds are simplified, and that applies
+to every Grade) in place of the old "Elite gets the full engine, Mook/Normal use the Reduced Engine"
+framing the plan flagged as needing correction.
+
+**Verification across all five versions**: every `.mjs` file under `module/` and `scripts/` (full
+tree, not just touched files) passes `node --check`; every touched `.hbs` file's `{{#`/`{{/` counts
+balance; `lang/en.json` parses as valid JSON with zero leaf/prefix key collisions (the 0.6.46 bug
+class); every `packs/_source/conditions/*.json` file parses as valid JSON; `system.json` parses and
+reports `0.6.79`. Ran `node scripts/build-packs.mjs --only=conditions` for real (not just a dry
+read) to produce the nine new Wound Card compendium entries and their compiled LevelDB pack — this
+is the one step in the whole V6 sync so far that actually executed a build script rather than only
+hand-editing JSON, and it worked cleanly on the first attempt. No live Foundry client available in
+this session, so — consistent with every other session in this history — the actual rendered
+Wound/Death Track UI, the Active Effects' in-game numeric result, and the enemy Card-roll flow are
+unverified beyond static analysis.
+
+**Deliberately left as hooks for later phases, not built now**: the Stabilize Basic Action Card
+(Phase 7 per the plan) — `#onToggleDeathTrackStabilized`'s manual checkbox is the sanctioned stand-in
+until then; wiring `EssenceActor#reduceDeathTrack()` into `#onGrantRecovery` (Phase 5/0.6.82's job,
+per the plan's own table) — the method exists and is ready to call. Also not touched, correctly out
+of scope per the task: `module/apps/manifestation.mjs`'s own Death Track advance branch (around its
+`applyManifestationDefeat` logic) still writes `deathTrackStep` directly without going through the
+new `deathTrackState` transitions — Calling/Manifestation content is explicitly deprioritized
+elsewhere in the plan (§6.10/§9.4), so this was left as a known, narrow gap rather than expanding
+scope to fix it; flagging it here so a future Calling-focused session doesn't rediscover it by
+testing. No genuine design ambiguity was hit in 0.6.79 worth stopping for — the resolution-engine
+change turned out to be a template/wiring problem sitting on top of already-correct, already-generic
+underlying code and data, not a "what should the numbers be" problem.
+
+Nothing committed to git — `system.json` bumped 0.6.74→0.6.79 across five versions, each with its
+own CHANGELOG entry, left for the user to review alongside the still-uncommitted Phases 1-2.
+
+### 2026-09-18 — Seven code-review findings fixed on top of the still-uncommitted 0.6.79 Phase 3 work
+
+A code-review pass over Phases 1-3's uncommitted diff surfaced seven confirmed findings, fixed in
+dependency order (the plan's own review-severity numbering put the consumer, Finding 1, before its
+dependency, Finding 2 — fixed 2 first). No version bump, no new CHANGELOG entry — these are
+corrections folded into the existing uncommitted 0.6.79 diff, per instruction.
+
+**Findings 1+2 — Death Track wound-FILL transitions, unified into one shared helper.** Added
+`deathTrackAfterWoundFilled(currentState, wasFull, nowFull)` to `utils.mjs`, the fill-side
+counterpart to the existing `deathTrackAfterWoundRemoval`. Two cases: not-full→full activates at
+step 0 (`{deathTrackState: "dying", deathTrackStep: 0}`, no step returned means "the caller advances
+it itself"); already-full (an overflow Wound landing with no empty space left) returns
+`{deathTrackState: "dying"}` only, breaking Stabilization, while the caller keeps advancing
+`deathTrackStep` itself since a single action can produce several overflow Wounds in one loop.
+Rewired `#onApplyDamage` (`actor-sheet.mjs`) to call this helper for both its overflow branch and its
+post-loop wasFull/nowFull check instead of the inline logic it had (behavior unchanged — confirmed
+by tracing both branches produce the identical result the old inline code did). `#onToggleCoreWound`
+(`actor-sheet.mjs`), which previously did nothing to the Death Track at all on either direction, now
+calls `deathTrackAfterWoundRemoval` on a clearing toggle (mirroring `#onRecoverWound`) and
+`deathTrackAfterWoundFilled` on a filling toggle that completes the 5th space (mirroring
+`#onApplyDamage`) — genuinely a bug fix, not just a refactor, since a GM/owner manually clearing or
+filling the last Core Wound pip previously left `deathTrackState` permanently out of sync.
+`applyManifestationDefeat` (`manifestation.mjs`) had the same gap `build-history`'s 0.6.79 entry
+flagged as a known, deliberately-deferred narrow gap: it advanced `deathTrackStep` on a
+Manifestation-feedback overflow Wound but never touched `deathTrackState` at all, so a caller's Death
+Track could accumulate step advances while showing `"none"`. Now computes `wasFull`/`nowFull` around
+its fill loop and calls the same shared helper for both the overflow branch and the initial-fill
+transition, and the caller update now includes `system.playState.deathTrackState`. Verified
+`combat.mjs`'s turn-start advance logic (`coreWoundsFilled === coreWounds.length && deathTrackState
+=== "dying"`) is untouched and still correct against the new helper's output shape.
+
+**Finding 3 — adversary Core Wound data-loss fix, more involved than a quick patch as flagged.**
+`EssenceAdversaryData#prepareDerivedData`'s `coreWounds` re-view at the current Grade's
+`woundCapacity` is explicitly documented there as a VIEW-only resize; `npc-sheet.mjs`'s
+`#onApplyDamage`/`#onRecoverWound`/`#onToggleCoreWound` were reading AND writing that same derived
+view, so any stored Wound data beyond the current capacity (e.g. Wounds an Elite had before a GM
+downgraded it to Mook) was silently and permanently deleted on the next Wound action. Added a shared
+`EssenceNpcSheet.#storedCoreWoundsAndCapacity(actor)` that reads `actor._source.system.coreWounds`
+(Foundry's standard un-derived accessor) and pads — never truncates — it up to the current capacity,
+returning a fresh working copy plus the capacity number; every handler now finds/fills/clears/counts
+only within `coreWounds.slice(0, capacity)` (the only indices the sheet ever renders a pip for) but
+always writes the FULL array back, so any excess stored slots ride along untouched.
+`EssenceManifestationData#coreWounds`'s "any length just works" pattern was the reference per the
+task, confirming the only actual gap was resizing the stored array instead of the derived one — no
+schema change was needed anywhere.
+
+**Finding 4 — "Signature Equipment Limit" → "Inventory Limit" post-rename stragglers.** Found all 10
+occurrences in `scripts/origin-data.json` (2 more than the 8 lines flagged — Warcamp Raised's
+Quartermaster's Due and Artisan Household's Inherited Tools Heritage Legacy features carried the same
+stale phrase) and replaced every one. Ran `node scripts/build-packs.mjs --only=species` AND
+`--only=heritages` (heritages needed too, once the extra 2 occurrences were found there) to
+regenerate `packs/_source/species/*.json`, `packs/_source/heritages/*.json`, and both compiled
+LevelDB packs from the corrected source. Confirmed zero remaining "Signature" occurrences anywhere
+under `scripts/` or `packs/_source/` afterward.
+
+**Finding 5 — Species Traits editor ArrayField dotted-path fix, following the project's own
+documented pattern.** `species-sheet.hbs`'s per-Trait `chosen`/`name`/`subChoice.label`/
+`subChoice.type`/`subChoice.count` inputs had `name="system.traits.{{i}}.field"` attributes — the
+exact shape `build-history`'s "Recurring bug patterns" #1 already documents as silently wiping
+sibling fields on submit. Removed every one of those `name` attributes, added
+`class="trait-field" data-index data-field"` instead, and wired a single `#wireTraitFields()`
+listener in `item-sheet.mjs`'s `EssenceSpeciesSheet` that does a full read-modify-write of the entire
+`system.traits` array per change — the same pattern `#wireSubChoiceOptions` (right above it, already
+in this file) and `EssenceComponentSheet`'s Mounts editor already established, just applied to a
+5-field row instead of a single comma-separated text box. **Deviation flagged**: the Trait's own body
+text field (`a.text`, rendered via the `essenceEditor`/`<prose-mirror>` helper with a `name=` target)
+was left untouched and out of scope, per the finding's own line list (35/36/40/42/48, not 37) — but
+it also carries a `name="system.traits.{{i}}.text"` attribute and, as best as can be determined by
+static reading, appears to be subject to the SAME ArrayField dotted-path submission behavior as the
+fields that were fixed, since it's just another named form-associated element inside the same
+`submitOnChange` form. Not fixed here since it was explicitly out of the finding's listed scope, but
+flagged for a follow-up look — if confirmed, it'd need the richer `essenceEditor` `button=true`
+rendering to keep working while also going through this same manual-listener path, which is more
+involved than the five plain-input fields and felt like scope creep to solve unprompted.
+
+**Finding 6 — Death Track partial extraction; no prior partial convention existed to follow.**
+Grepped for `loadTemplates`/`registerPartial` first, per the task's own suggestion to check
+`essence.mjs` — found nothing; this project had never used a Handlebars partial before. Established
+one: `foundry.applications.handlebars.loadTemplates([...])` in `essence.mjs`'s init hook, registering
+each `templates/actor/parts/*.hbs` file under its own full path as the partial key, referenced from
+sheet templates as `{{> "systems/essence-system/templates/actor/parts/death-track.hbs"}}`. Extracted
+`death-track.hbs` (the pip track/state label/Stabilized checkbox, identical across
+character-sheet.hbs/npc-sheet.hbs/monster-sheet.hbs down to the byte, confirmed by diffing all three
+blocks before touching anything) and, since it was easy and also flagged in the finding,
+`wounds-header.hbs` (the Wounds section `<h3>`, identical between npc-sheet.hbs/monster-sheet.hbs
+only — character-sheet.hbs's own header is meaningfully different and was left alone). Pure
+extraction, not a behavior change: every variable the partials reference (`deathTrackActive`,
+`deathTrackPips`, `system.playState.deathTrackState`, `system.usesSimplifiedWounds`,
+`system.coreWoundsFilled`, `system.woundState`) was confirmed present in all three sheets' contexts
+before extracting — `EssenceMonsterSheet extends EssenceNpcSheet` and inherits `_prepareContext`
+unchanged, so the npc/monster context shape is identical by construction, not just by observation.
+Brace-balance-checked all five touched/created `.hbs` files afterward.
+
+**Finding 7 — batched Wound Card attach/remove.** Split `attachWoundCard`'s compendium-index lookup
+into a private `resolveWoundCardItemData(domain, severity)` and added `attachWoundCards(actor,
+fills)` (`utils.mjs`), which resolves every fill's item data in parallel via `Promise.all` and makes
+ONE `createEmbeddedDocuments` call for all of them. Added `removeWoundCards(actor, slots)`
+similarly — one pass over `actor.items` building a slot→Item map (rather than `removeWoundCard`'s own
+linear scan, previously repeated once per slot) and one `deleteEmbeddedDocuments` call for every
+match. `#onApplyDamage` and `#onGrantRecovery` (`actor-sheet.mjs`) now call the batched versions;
+`#onToggleCoreWound` and `#onRecoverWound` were left calling the original single-item
+`attachWoundCard`/`removeWoundCard` unchanged, per the task's own note that those are legitimately
+single-Wound operations already. `attachWoundCard` (singular) is no longer called anywhere in
+`actor-sheet.mjs` after this change (only `removeWoundCard` singular still is, by the two single-Wound
+handlers) but was kept exported from `utils.mjs` rather than deleted, since it's still a reasonable
+single-item API and nothing in the task asked for its removal.
+
+**Verification**: every `.mjs` file under `module/` and `scripts/` passes `node --check`; every
+touched/created `.hbs` file's `{{#`/`{{/` counts balance; `lang/en.json`, `system.json`, and
+`scripts/origin-data.json` parse as valid JSON; every `packs/_source/**/*.json` file parses as valid
+JSON; `system.json` still reports `0.6.79` (unchanged, per instruction). Ran
+`node scripts/build-packs.mjs --only=species` and `--only=heritages` for real, producing the
+corrected compiled LevelDB packs. No live Foundry client available in this session, so — consistent
+with every prior session in this history — the actual rendered sheets, the Wound Card
+attach/remove flow, and the Species Traits editor's live change-listener behavior are unverified
+beyond static analysis and the project's own established patterns.
+
+Nothing committed to git — left unstaged, folded into the same still-uncommitted 0.6.79 working tree
+Phases 1-3 already left behind, for the user to review as one diff.
+
+### 2026-09-19 — Phase 4: Influence & Reach (0.6.80-0.6.81), on top of the still-uncommitted Phase 1-3 work
+
+Read this document's own "Recent sessions" (the full V5-sync + V6-sync history above, especially the
+Phase 3 review-fixes entry documenting where the 9 Wound Cards ended up) and
+`design/v6-foundry-implementation-plan.md` §5.3/§6.6/§8's Phase 4 line before starting. Built both
+0.6.80 and 0.6.81 in one sitting, same "several versions in one session" pattern Phase 3 used.
+
+**0.6.80 — Reach pressure, 3-layer resolution, Influence Breach, deleted `standing`'s old count
+basis.** Added `system.reachPressure` (`NumberField{integer, initial:0, min:0}`) to
+`EssenceCombatantData` (`actor-combatant.mjs`) as its own accumulator, separate from
+`reach`/`effectiveReach` — confirmed those two derivations are untouched; Reach pressure is tracked
+alongside them, not folded into the existing formula, per V6's explicit "Reach does not decrease as
+pressure accumulates. Record the accumulated pressure instead." Rewrote `#onApplyInfluenceInjury` in
+both `actor-sheet.mjs` and `npc-sheet.mjs` from the old 2-layer Temp→Core spend (with a "Voluntary"
+checkbox) to V6's 3-layer sequence: **Ordinary pressure** — Reach absorbs first (up to
+`effectiveReach − reachPressure`), then Temporary Influence, then Core Influence; **Influence
+Breach** — skips Reach, goes straight to Temporary Influence then Core Influence. The dialog's old
+"Voluntary (skip Temporary Influence)" checkbox is gone, replaced with a Pressure Type `<select>`
+(Ordinary pressure / Influence Breach) — matches the project's existing DialogV2 pattern (see
+`#onApplyDamage`'s Breach checkbox) just as a select instead, since this is now a genuine 2-way
+branch rather than a boolean.
+
+Added `#computeOrdinaryPressure` (a private static helper, duplicated per-sheet per this project's
+established actor-sheet/npc-sheet convention — see `#computeInfluenceOverextension`, which already
+lived only in `actor-sheet.mjs` before this session and needed adding to `npc-sheet.mjs` too, since
+NPCs now have three ordinary-pressure call sites of their own). `#computeInfluenceOverextension`
+(the pre-existing Breach-only, skip-Reach helper) is unchanged in shape but now also returns
+`filledSlots` for Consequence Card attachment (see 0.6.81 below). Both helpers are now used by
+`#onApplyInfluenceInjury`, `#onContributeToGoal`, and (Breach-only) a Reach Trigger's second-and-later
+Adventure use.
+
+Added `"system.reachPressure": 0` to `resetAdventureUses()` (`utils.mjs`) — the existing shared
+manual "start a new Adventure" button both sheets call.
+
+Replaced `standing`'s derivation in `actor-combatant.mjs#prepareDerivedData` — previously a count of
+filled Core Influence boxes against fixed thresholds, citing the now-deleted "Standing by Injury
+State" table — with a highest-occupied-severity read, exactly mirroring how `woundState` was reworked
+in Phase 3 (reused the same `SEVERITY_RANK` lookup already built for Wounds, just applied to
+`coreInfluence` instead of `coreWounds`, since Core Influence has no domain axis to also branch on).
+`this.standing`'s displayed VALUES are unchanged (`"Undamaged"/"Light Injury"/"Serious Injury"/
+"Critical Injury"`) and it's still read from `{{system.standing}}` in `character-sheet.hbs`/
+`npc-sheet.hbs` exactly as before, so no template edit was needed for this specific piece — only the
+derivation basis (severity vs. count) changed.
+
+Re-framed `#onContributeToGoal` per the plan's own low-risk assessment: read the method fully first,
+confirmed its existing doc comment already argued for a per-character, non-pooled model before V6
+existed, so the BEHAVIOUR needed no rewrite — only the doc comment (dropped every "§ Collaborative
+Influence Pooling"/"Pooling" citation, since V6 deleted that section outright) and routing the actual
+spend through `#computeOrdinaryPressure` instead of a bespoke inline Temp→Core loop it had
+previously. No V5-era "pooling"/"collaborative" wording was found in any button label or lang key —
+only in the doc comment — so no UI text needed changing beyond the comment itself.
+
+**0.6.81 — Influence Consequence Cards + inventory-over-limit pressure.** Verified Appendix F's exact
+text in the v6.md scratchpad before building (the plan's paraphrase matched): Light "Strained
+Position" (Reach −1, but explicitly SCOPED to "the sphere harmed... only when that sphere is directly
+relevant" — a real condition, not a flat change), Serious "Compromised Standing" (Reach −1
+*generally* — genuinely unconditional — plus one blocked relationship, reminder text), Critical
+"Crisis of Standing" (Reach cannot absorb pressure in the collapsed sphere — a scoped, mechanical-but-
+conditional effect with no existing field to express it — plus a major access loss, reminder text).
+
+**Where the 3 cards ended up, and why**: same discovery Phase 3's Wound Cards session already made
+and documented — `packs/_source/conditions/` is fully Neon-sourced (`raw-condition-cards.json`) and
+gets wiped/regenerated wholesale by `--only=conditions`, so hand-authored JSON dropped directly into
+that folder wouldn't survive a re-sync. Followed the exact same pattern Phase 3 established for Wound
+Cards: added a `CONSEQUENCE_CARDS` array + `consequenceCardToItem()` function directly in
+`scripts/build-packs.mjs` (same file, right above `loadRows()`, next to `WOUND_CARDS`/
+`woundCardToItem()`), wired into the same `if (wants("conditions"))` block that already writes the 21
+Neon-sourced Conditions and 9 Wound Cards. Only "Compromised Standing" (Serious) gets a real
+`transfer: true` Active Effect (`system.reachBonus` ADD −1) via the file's own `activeEffects()`
+helper — "Strained Position" and "Crisis of Standing" both get an empty `activeEffects: []` array and
+stay reminder-text-only sections, following this file's own pre-existing convention (documented on
+`activeEffects()`'s doc comment) that only a genuinely flat, unconditional stat change becomes a real
+Active Effect — exactly the same tier-by-tier judgment call Phase 3's session made for Wound Cards'
+Critical tier having no Active Effect either. Ran `node scripts/build-packs.mjs --only=conditions`
+for real this session (Foundry Virtual Tabletop was running live throughout, per `tasklist`, but the
+compile step completed cleanly with no `EPERM`/`EBUSY` this time — worth noting for a future session
+that this isn't a guaranteed blocker, just a possible one) — 33 conditions total now (21 Neon + 9
+Wound Cards + 3 Consequence Cards), confirmed by the script's own count line and by listing the three
+new `_source` files by their generated slugs (`strained-position_*.json` etc.).
+
+**Wiring**: added `CONSEQUENCE_CARD_NAMES`, `attachConsequenceCard`/`removeConsequenceCard` (single),
+and `attachConsequenceCards`/`removeConsequenceCards` (batched) to `utils.mjs`, generalizing the
+Wound Card resolver rather than duplicating its compendium-index lookup a second time:
+`resolveWoundCardItemData(domain, severity)` was split into a shared `resolveConditionItemDataByName(name)`
+that both the Wound Card and Consequence Card resolvers now call, since the only real difference
+between the two lookups is how the target Condition's NAME gets computed (domain+severity vs.
+severity-only) — the compendium-fetch logic itself is identical and was genuinely trivial to share,
+unlike the attach/remove flag-and-create logic, which stays as a parallel (not shared) pair per type
+since each needs its own flag key (`woundCardSlot` vs. `consequenceCardSlot`) and its own name-lookup
+table. One genuine advantage found while wiring this in: unlike a Wound (whose Damage domain is only
+known at the moment Apply Damage is actually rolled), a Core Influence space's severity is ALWAYS
+derivable purely from its slot index (`SEVERITY_BY_INDEX`) — so every fill path, including the manual
+pip toggle (`#onToggleCoreInfluence`), can attach the correct card, not just the dialog-driven paths.
+Wired into `#onApplyInfluenceInjury` (batched attach for however many slots one Injury fills),
+`#onContributeToGoal`, a Reach Trigger's Breach-cost fill, `#onToggleCoreInfluence` (attach on
+manual fill, remove on manual clear — both directions, since severity is always known), and
+`#onRecoverInfluenceInjury` (remove). The "all five Core Influence spaces filled" case is still
+explicitly left as GM adjudication — `#computeOrdinaryPressure`/`#computeInfluenceOverextension` both
+already print "the GM adjudicates any further consequence" when `coreInfluence.findIndex` comes back
+empty, unchanged from before this session, per the plan's own instruction not to invent a full-track
+mechanic V6 itself hasn't defined yet.
+
+**Inventory-over-limit pressure**: confirmed the field/variable names were already renamed
+`signature`→`inventory` in an earlier phase (`context.inventoryOverLimit`, `system.inventoryLimit`) —
+changed `Math.floor` to `Math.ceil` in `actor-sheet.mjs`'s `_prepareContext` (this field only exists
+on the Character sheet; NPCs have no Inventory-over-limit UI at all, confirmed by grepping
+`npc-sheet.mjs` for `computeSlotUsage`/`inventoryUsed`/`inventoryOverLimit` and finding no matches —
+so this half of 0.6.81 is Character-sheet-only, correctly out of scope for NPCs). Renamed
+`#onSpendInfluenceForSlot` to `#onPayInventorySupport` (updated the `actions` map key too, from
+`spendInfluenceForSlot` to `payInventorySupport`, and the one template reference in
+`character-sheet.hbs`) — a clean rename since the method has no other internal callers and its old
+name no longer matched what it does (it no longer just increments Temporary Influence). Rewrote it to
+route through `#computeOrdinaryPressure` and removed the old `current >= max` hard-refusal guard,
+since Temporary Influence has no universal cap in V6 and overflow past whatever capacity is available
+now correctly spills into Core Influence like any other overextension instead of just refusing.
+
+**Judgment call — the multi-actor payer dropdown**: grepped the whole `module/` tree for any existing
+"pick another actor" UI pattern (`game.actors`, "payer", a `<select name="actorId">`, etc.) before
+building this — found none; every existing `game.actors.get(id)` call site in this codebase resolves
+an ALREADY-KNOWN id (a Calling manifestation's caller, mostly), not a fresh player-facing picker.
+Rather than invent new drag/target infrastructure for a single small feature, added a plain
+`<select>` of `game.actors` filtered to owned Character/NPC/Monster actors other than the acting one,
+defaulting to "(self)" — the simplest reasonable version, explicitly flagged here as a judgment call
+per the task's own instruction to flag it rather than over-engineer it. If a real multi-actor-picker
+pattern gets built elsewhere in this codebase later (e.g. for targeting an ally with a Leadership
+card), this dropdown should probably be rebuilt against that shared pattern instead of staying its
+own one-off.
+
+**Also fixed in passing**: `ESSENCE.Sheet.InfluenceRecoveryNote`'s lang string was still printing V5's
+deleted "Recovery: Light — 1 day · Serious — 1 week · Critical — 1 month" schedule — a straggler the
+V6 sync's Phase 2 (data-only pass, §4.4 of the plan) was supposed to delete but apparently missed (no
+`INFLUENCE_RECOVERY_TIME` constant exists anywhere in the current `utils.mjs`, so the JS-side removal
+did happen at some point — only this one lang string survived). Squarely in scope for this session
+since it's the exact line the plan's own §4.4 recommended replacing with "the Influence Consequence
+Card's own repair requirement once §6.6 lands" — which is exactly what 0.6.81 ships — so replaced it
+rather than leaving a second, more misleading version of the same stale text sitting one section above
+the very Consequence Cards that make it wrong. Also added a `ESSENCE.Sheet.ReachPressureNote` display
+line next to the Reach field on both sheets (not explicitly requested by the task, but Reach pressure
+would otherwise be an entirely invisible accumulator with no way for a player/GM to see how close a
+character is to it overflowing into Temporary/Core Influence — a low-risk, clearly-in-spirit addition
+matching how `EffectiveReachNote` already surfaces a related derived number the same way).
+
+**Verification**: every `.mjs` file under `module/` and `scripts/` passes `node --check`; every
+touched `.hbs` file's `{{#`/`{{/` counts balance (checked file-by-file, not just touched files, across
+the whole `templates/` tree); `lang/en.json` and `system.json` parse as valid JSON; every
+`packs/_source/**/*.json` file (all 33 conditions plus everything else) parses as valid JSON; grepped
+for stray "Signature"/"Voluntary"/"pooling" references post-rename and found only historical mentions
+in doc comments and design docs, no live stragglers. `node scripts/build-packs.mjs --only=conditions`
+was run for real (not just a dry read), producing genuinely updated `packs/_source/conditions/*.json`
+and a freshly recompiled `packs/conditions` LevelDB store. No live Foundry client UI check was done
+this session (the running Foundry process was left alone, not logged into) — the actual rendered
+Pressure Type selector, the Reach Pressure note's live display, the Consequence Card attach/detach
+flow, and the multi-actor payer dropdown are unverified beyond static analysis and the project's own
+established patterns, consistent with most prior sessions in this history.
+
+`system.json` bumped 0.6.79→0.6.81 across both versions in this session, each with its own CHANGELOG
+entry. Nothing committed to git — left unstaged, folded into the same still-uncommitted working tree
+Phases 1-3 (and this Phase 4) already left behind, for the user to review as one diff.
+
+### 2026-09-19 — Phase 5: Combat resolution, Recovery, Damage, and Cover (0.6.82-0.6.86)
+
+Read this document's own history plus `design/v6-foundry-implementation-plan.md` §5.2/§5.4/§5.6/
+§6.2/§6.3 before starting, per the task's own instruction — especially how Phase 3/4 built the
+Wound Card / Influence Consequence Card subsystem (`attachWoundCards`/`removeWoundCards`/
+`attachConsequenceCard(s)`/`removeConsequenceCard(s)`, `resolveConditionItemDataByName`) as the
+model for Cover. Built five versions in one sitting, same "several versions per session" pattern
+Phases 3-4 used.
+
+**0.6.82 — Recovery.** Fixed `Math.round` → `Math.ceil` for the 25%-of-max restoration (V6: "rounded
+up"). Wired in the three pieces the current implementation didn't do yet: Death Track reduction
+(`EssenceActor#reduceDeathTrack()`, already built and left as a ready extension point by the Phase 3
+review-fix pass — just needed the call site), clearing `specialties.strain` outright, and removing 1
+Manifestation Wound. The last one is the scope call worth flagging: Manifestation Wounds live on a
+per-subtype persistent profile Actor (`specialties.manifestationRecords[].actorId`,
+`module/apps/manifestation.mjs`), not on the character itself, so a new
+`#reduceOneManifestationWound()` helper resolves the character's currently-ACTIVE manifestation only
+(`specialties.activeManifestation`) and clears the first filled slot in that profile's own
+`coreWounds` array — deliberately not a "most severe first" pick (no established severity-ordering
+convention exists for this specific array), not a walk of every recorded manifestation regardless of
+active state, and not any new Manifestation bookkeeping beyond that single decrement, consistent with
+Calling/Summoner content being explicitly deprioritized (plan §9.4/§6.10). Confirmed by rereading the
+current code that Recovery still correctly does NOT touch Temporary Wounds, Temporary Influence, Core
+Influence, Reach pressure, or Consumable Kits — added a note in the dialog copy instead of code, per
+the task. Also added the "one fictional opportunity = one Recovery, cannot be subdivided" line to the
+dialog.
+
+**0.6.83 — 2-die minimum, Rank-0-floor advisory, Free Dice plumbing, Equipment Card consolidation.**
+Read the actual current dialog code before touching it, since the task warned the plan's line
+references had already shifted: `cardMin = Math.max(2, parseInt(sys.min, 10) || 1)` in both sheets'
+`#onRollItem` (Combat/Reaction Cards only — Initiative's own `min: 0` in combat.mjs and the
+non-combat open Skill roll's `min: 1` in `#onRollSkill` were deliberately left untouched, since the
+task and the plan both call these out as exceptions). Added a `#maxRolledDiceNote()` advisory helper
+(`Math.max(2, attr + styleRank)`) shown as plain text in the commit dialog, not enforced — matches
+this project's "warn, never block" convention. Folded the Equipment Card roll flow
+(`#onRollEquipmentCard`, the v0.6.68 special case) into the same shared dice-commit pattern: it now
+spends from the Action Dice pool with the same 2-die floor, where before it had its own free-typed
+"Dice" number field with no pool interaction at all — this was a real, previously-unnoticed gap (an
+Equipment Card roll never touched `playState.actionDice`), not just a rules-sync change. Equipment
+Cards still ask for Domain up front (a separate small dialog before the dice-commit dialog), since
+they carry no `attr`/`skill`/`defense` schema to derive it from automatically — the max-rolled-dice
+advisory is skipped for them for the same reason (flagged, not silently guessed at). Added a
+`freeDice` parameter to `rollEssencePool` (rolled alongside the committed Pool, can become the
+Success Die or generate Surges, excluded from the minimum-commitment check by construction since that
+check only ever sees `pool`) — plumbing only, no dialog wired to it yet, per the task's explicit
+"minimal" scope; needed later for Leadership's Rallied condition and non-combat Cooperation.
+
+**0.6.84 — Unopposed cards, unaware Reaction tax, "one response per chain" wording.** Added an
+explicit `system.unopposed` BooleanField to the card schema (`item-card.mjs`) rather than inferring
+it from an empty `system.defense` — read `essence-roll.mjs`'s `openRoll` logic first and confirmed
+the plan's own warning was correct: an empty Defense already means "roll open, GM adjudicates," a
+materially different case from Unopposed's fully-authoritative auto-success, so conflating the two
+signals would have been wrong. `resolveCombatRoll` takes a new `unopposed` parameter: when true,
+`successDieIndex = -1` (no die reserved) and every face ≥6 grants a Surge, including whichever die
+would otherwise have been the Success Die. Exposed on the card sheet as a checkbox plus a read-view
+badge. Grepped the whole codebase for an existing "unaware blocks Reaction" hard check before
+building the tax and found none — the block was apparently only ever documented as a V5 rule, never
+enforced in code — so this is new functionality, not a block-to-tax conversion: a checkbox on the
+Reaction commit dialog (`#promptDiceCount` gained an optional `extraCheckbox` parameter, returning
+`{count, extra}` instead of a bare number when used) that burns 1 additional Reaction die beyond
+whatever's committed to the roll. Renamed the "one Reaction per Action" schema comment, doc comments,
+and the `SecondReactionWarning` lang string to describe V6's actual (stricter) "one response per
+chain" rule — deliberately did NOT build a chain tracker, per the plan's own explicit recommendation
+(§5.2.7/§6.8); this stays the same approximate per-Turn-per-actor proxy as before, just correctly
+labeled now.
+
+**0.6.85 — Resistance/Vulnerability, the Breach fix, and the Resilience mid-interval bug.** Added
+`resistances`/`vulnerabilities` ArrayFields (`{damageType, source}`) to `EssenceCombatantData` (the
+shared Character/NPC/Monster base) plus a small dialog-based add/remove UI on both sheets — used a
+prompt dialog rather than an inline array editor with per-row `name=` attributes, deliberately
+avoiding this project's own documented ArrayField dotted-path submission bug (build-history's
+"Recurring bug patterns" #1); there's nothing here worth a full read-modify-write change-listener
+editor for what's normally a 0-2 entry list. Added `applyResistanceVulnerability(actor, damageType,
+amount)` to `utils.mjs` (±2, min 0) and wired it into both sheets' `#onApplyDamage` BEFORE the
+Resilience/Breach math, fixing the Breach branch along the way — it previously used `result.amount`
+directly, skipping Resistance/Vulnerability entirely instead of only skipping Resilience.
+
+The Resilience mid-interval bug was the most involved item in this phase, as flagged going in. Read
+the existing prev/new-wounds delta calculation carefully: it recomputed `prevWounds = prevAccumulated
+- resilience` using whatever Resilience is CURRENT at the moment of a new Apply Damage call, not the
+Resilience that was actually in effect when the earlier portion of `accumulatedDamage` had already
+been converted to Wounds — so a mid-Turn-interval Resilience change (gear swap, a buff) could
+silently rewrite how many Wounds an earlier Apply Damage call "should have" produced. Fixed by adding
+`playState.accumulatedDamageWounds` — the count of Wounds ALREADY extracted, stored rather than
+re-derived — so each new Apply Damage call only ever computes the DELTA from that stored count using
+the current Resilience for the NEW total, never retroactively touching what already converted. Reset
+alongside `accumulatedDamage` in `EssenceCombat#_onStartTurn`, same boundary. Traced through by hand:
+Resilience 3, take 2 Damage (0 Wounds, accumulated=2, stored=0); Resilience drops to 1 mid-interval,
+take 2 more Damage (accumulated=4, newWounds=max(0,4-1)=3, delta=3-0=3 Wounds this call) — the FULL
+3 Wounds land on the second call where the Resilience drop was actually felt, and the first call's
+already-resolved "0 Wounds" stays untouched, which is the correct V6 behavior; the pre-fix code would
+have gotten the same total here by coincidence but genuinely breaks on a Resilience INCREASE
+mid-interval (verified by hand: Resilience 1→3 mid-interval, the old code's `prevWounds` recompute
+would have retroactively erased Wounds the first call had already applied).
+
+**0.6.86 — Cover.** Built exactly as the plan recommended: two Condition Items (Low Cover +1
+Fortitude, High Cover +2 Fortitude), added to `scripts/build-packs.mjs` right next to
+`WOUND_CARDS`/`CONSEQUENCE_CARDS` (same file, same hand-authored-content convention, since Cover is
+new V6 content with no Neon table) and wired into the same `wants("conditions")` block. Confirmed
+before building that `essence.mjs`'s "ready" hook already registers EVERY entry in the conditions
+compendium as a Token HUD status effect (it iterates the whole pack index, not a curated subset) —
+so Cover needed zero new Token HUD wiring, exactly the "reuses the existing pipeline with zero new
+code" the plan predicted. Ran `node scripts/build-packs.mjs --only=conditions` for real, producing 35
+total conditions (21 Neon + 9 Wound Cards + 3 Consequence Cards + 2 Cover Cards) and a freshly
+recompiled `packs/conditions` LevelDB store.
+
+**Verification across all five versions**: every `.mjs` file under `module/` and `scripts/` passes
+`node --check`; every `.hbs` file under `templates/` (whole tree, not just touched files) has
+balanced `{{#`/`{{/` counts; `lang/en.json`, `system.json`, and every `packs/_source/**/*.json` file
+parse as valid JSON. No live Foundry client available this session, so — consistent with every prior
+session in this history — the actual rendered dialogs (the unaware-tax checkbox, the Resistance/
+Vulnerability add/remove UI, the advisory max-rolled-dice text), the Unopposed roll's chat-card
+rendering, and the Token HUD's new Cover icons are unverified beyond static analysis and this
+project's own established patterns.
+
+`system.json` bumped 0.6.81→0.6.86 across five versions in this session, each with its own CHANGELOG
+entry. Nothing committed to git — left unstaged, folded into the same still-uncommitted working tree
+Phases 1-4 already left behind, for the user to review as one diff.
+
+### 2026-09-19 — V6 revision correction pass, 0.6.97–0.6.99
+
+A newer draft of the V6 rulebook arrived after Phases 1–5 shipped. A full delta audit
+(`design/v6-revision-delta.md`) compared old vs. new book text against the shipped code and found
+three things already built that the revised text now contradicts or leaves incomplete, plus one
+brand-new mechanic. This session built exactly those four items, one version each, per the delta
+report's own suggested sequencing (§7).
+
+**0.6.97 — Resistance/Vulnerability cancellation + Damage-type keying.** The 0.6.85 build
+(`applyResistanceVulnerability`, `utils.mjs`) had both counted wrong: it applied a matching
+Resistance and Vulnerability of the same type in sequence instead of cancelling them, and it keyed
+both off the Apply Damage dialog's Physical/Mental/Spiritual **Domain** field instead of a named
+Damage type. The revised text is explicit on both points, plus prints a "does not stack; cancels
+matching Vulnerability" quick-reference row. Rewrote the function's cancellation branch (checks for
+both first, returns the amount unchanged with a log line if so) and its doc comment (which had
+previously stated the wrong reading out loud, as a warning for whoever touched it next — worth
+noting as a real trap: a stale doc comment that describes the WRONG rule as intentional is worse
+than no comment, since it actively discourages a future session from questioning it). Added a
+`DAMAGE_TYPES` export (the 12 printed types) and rewired both sheets' Apply Damage dialog to ask for
+Damage Type alongside Domain (Domain stays — it still drives Wound Card domain/label, a genuinely
+separate concern from what Resistance/Vulnerability matches against), and both sheets'
+Resistance/Vulnerability entry dialogs to offer the 12-type list instead of the three domains.
+Non-stacking (multiple same-type Resistance sources only reduce once) was already correct by
+construction (a `.some()` check) — verified, not changed, per the delta report's own note that this
+one was already right by accident.
+
+**0.6.98 — Recovery: Anima bonus + Adaptability reroll restore.** `#onGrantRecovery`
+(`actor-sheet.mjs`) had the 25%-rounded-up Resource restoration correct but was missing two V6
+effects layered on top of it. Added an Anima-distribution step to the Grant Recovery dialog: three
+new numeric inputs (Stamina/Focus/Mana extra), clamped in the dialog's own submit callback so their
+sum can never exceed the actor's Anima score even if a player maxes out all three fields
+individually, then clamped again per-Resource against its max when actually applied — any points
+that can't land are logged as lost, never banked. Added `playState.adaptabilityRerollAvailable`
+(a `BooleanField`, deliberately never a counter — the book's "an unused use does not stack with the
+restored one" is what makes a boolean the correct shape here, not carefulness) to the shared
+`EssenceCombatantData` base, alongside a checkbox toggle on the Character sheet next to Apply
+Damage/Recover Wound/Grant Recovery, matching the existing Stabilized-checkbox pattern. Grant
+Recovery now restores it automatically and reports it in the chat summary; NPCs weren't given the
+toggle since Adaptability's reroll is a PC-facing Non-Combat benefit with no NPC-sheet equivalent to
+attach it to (same reasoning the delta report itself gives for putting the field on the shared base
+without needing NPC-side UI for it).
+
+**0.6.99 — Deathless Death Track = 7, plus Acting While Dying.** Two changes bundled together since
+both touch the Death Track state machine Phase 3 built. First, every one of the five places the
+module hardcoded the Death Track's ceiling as a literal `5` (the `deathTrackStep` schema `max`,
+`combat.mjs`'s turn-start advance, `#onApplyDamage`'s overflow-Wound branch,
+`applyManifestationDefeat`'s feedback-Wound overflow, and both sheets' `deathTrackPips` display) —
+plus a sixth site the delta report's own line citations didn't call out but which is clearly the
+same bug class: `combat.mjs`'s death-trigger check (`next >= 5`), which would have declared a
+Deathless character dead at step 5 instead of 7 even after every other site was fixed. Introduced
+`deriveDeathTrackMax(speciesItem)` in `origin-features.mjs` (the same file/pattern
+`deriveOriginFeatures` already uses to resolve a character's Species item) and a `deathTrackMax`
+derived field on `EssenceCombatantData`, computed once in `prepareDerivedData()` from the actor's
+own `species` item via `this.parent.items`, rather than hardcoding a "name === Deathless" string
+comparison at each of the six sites — every one of them now reads `system.deathTrackMax` instead.
+Schema `max` raised to 7 (the ceiling has to allow the highest anyone can reach; the derived value
+gates whether any given character's actual cap is 5 or 7). Rewrote Deathless Nature's text in
+`scripts/origin-data.json` — it still carried V5's "increase its starting value by 1" sentence,
+which was wrong in a NEW way under V6 (V5 raised the starting value; V6 raises the threshold) — and
+ran `node scripts/build-packs.mjs --only=species` for real, producing a freshly recompiled
+`packs/species` LevelDB store. Updated the implementation plan's §9.1 (now marked answered/built,
+not "in progress"), §4.7's Deathless bullet, and §5.1.3's table row to match, plus §7.2's now-stale
+"new design pending" note on the Species misc content-sweep row.
+
+Second, built "Acting While Dying" from scratch (no prior code, no prior placeholder) — the first
+Action or Reaction Card played each Combat Round while Dying advances the Death Track by 1 after
+that card's roll resolves, capped at once per Round even across stopping/restarting Dying within it,
+firing regardless of whether the roll succeeded, failed, or was interrupted. Added
+`playState.dyingExertionRound` (stores the Combat Round number the advance was last charged for, so
+it naturally re-arms next Round with no separate reset step needed) and a
+`deathTrackAfterCardWhileDying(currentState, dyingExertionRound, currentCombatRound)` helper in
+`utils.mjs`, matching the existing `deathTrackAfterWoundFilled`/`deathTrackAfterWoundRemoval`
+signature convention. Hooked into `actor-sheet.mjs` via a shared `#applyDyingExertion(actor)`
+private method called unconditionally right after `rollEssencePool` resolves, from both
+`#onRollItem` (Combat/Reaction Cards) and `#onRollEquipmentCard` (Equipment Cards) — the two exact
+call sites the delta report named, confirmed still at their cited responsibility even though the
+report's own line numbers had drifted from Phase 4/5 work landing since the report was written.
+Scoped to actor-sheet.mjs only, per the task: NPCs use the simplified Wound model and never engage
+the Death Track at all (`usesSimplifiedWounds`), so there's no NPC-side card-roll path that needs
+this hook.
+
+**Judgment calls worth flagging**: (1) Equipment Cards were included as an Acting-While-Dying
+trigger alongside Combat/Reaction Cards, even though a different part of the same delta report
+(§3.2) says Equipment Cards are explicitly NOT "Combat Cards" for rules that specifically name one —
+but the task's own instructions named `#onRollEquipmentCard`'s call site directly as one of the two
+hook points, and Equipment Cards are still unambiguously "cards a player plays" that could plausibly
+read as an Action, so this follows the explicit instruction rather than re-litigating that
+cross-reference; worth a second look if this ever reads as over-eager. (2) `deathTrackMax` detection
+matches the Species Item's own `name` ("Deathless") rather than its Nature's `name`
+("Deathless Nature") — the species name is the more stable identifier of the two and is what
+`packs/_source/species/deathless_*.json` uses as its top-level `name`. (3) The Anima-distribution UI
+is three plain number inputs rather than anything fancier (a shared "distribute N points" widget
+doesn't exist anywhere in this codebase yet) — matches the project's existing preference for the
+simplest dialog shape that satisfies the rule, same call as every other Grant Recovery field.
+
+**Verification**: every `.mjs` file touched passes `node --check`; `templates/actor/character-sheet.hbs`
+(and the shared `death-track.hbs` partial) have balanced `{{#`/`{{/` counts; `system.json`,
+`lang/en.json`, and `scripts/origin-data.json` parse as valid JSON. No live Foundry client available
+this session — the new Damage Type select, the Anima-distribution dialog, the Adaptability checkbox,
+and the Acting-While-Dying chat message are unverified beyond static analysis, consistent with every
+prior session in this history that lacked a live client.
+
+`system.json` bumped 0.6.86→0.6.99 across three versions in this session (0.6.87–0.6.96 intentionally
+skipped, reserved for the not-yet-built Phase 6/7 work the delta report's §7 sequencing describes).
+Nothing committed to git — left unstaged, folded into the same still-uncommitted working tree prior
+sessions already left behind, for the user to review as one diff.
+
+### 2026-09-19 — Phase 6: Reconfigure, used-vs-unused equipment, Ordinary Conditions (0.6.100–0.6.102)
+
+Read this document's own history (especially the Phase 3/4/5 Wound/Consequence/Cover Card pipeline
+pattern) plus `design/v6-foundry-implementation-plan.md` §4.9/§5.7/§6.5 and
+`design/v6-revision-delta.md` §3.1/§3.2/§3.5/§6 before starting, per the task's own instruction that
+the delta report overrides the original plan's Phase 6 description wherever they disagree. Confirmed
+first that Reconfigure/the modular equipment sheet still carried V5's cost tiering verbatim (1 die
+Augment swap, 1-or-3-die Fitting change) — none of Phases 1-5 had touched it, so this really was
+still-open Phase 6 work, not something already migrated. Built three versions in one sitting, same
+"several versions per session" pattern every prior V6-sync phase used.
+
+**0.6.100 — Reconfigure's widened scope.** Per delta report §3.1, V6 replaces the "swap or exchange"
+Reconfigure with one Basic Action whose choices now also include ready/stow/recover/hand-over, all
+at the same flat 3 Action dice (Augment swap 1→3, Fitting change's old 1-or-3 tier→flat 3). Fixed
+`#onSwapAugmentCost`/`#onReconfigureFittingCost` (`item-sheet.mjs`) to the flat cost via a new shared
+`fittingReconfigureCost()` helper (`utils.mjs`, also used by the equipment sheet's button label so
+displayed and charged cost can never drift). `reconfigureCategory`'s MEANING changed (values
+unchanged) — "Simple"/"Structural" no longer select a cost tier, they now flag whether a Fitting
+exchange is combat-replaceable or out-of-Combat-only; a structural change attempted mid-Combat now
+gets a soft `ui.notifications.warn` (never a block, matching the project's standing
+warn-not-block convention). Added genuinely new actor-level actions — `reconfigureItem` (a dialog:
+ready/stow/recover/hand-over/swap, burn 3 dice, chat-logged) and `releaseItem` (the book's "falls
+where released," zero-cost, no prior drop/unequip control existed) — to Character, NPC, and Monster
+equipment rows. Confirmed (not rebuilt): Chassis change already correctly requires no
+Recovery/Downtime (`#wireModularSelects`'s chassisSelect handler is a bare `item.update()`).
+
+**Judgment call — Hand Over's actor picker.** No shared multi-actor-picker component exists in this
+codebase (0.6.81's own note already flagged this as a first-of-its-kind judgment call for
+`#onPayInventorySupport`). Reused that exact plain-`<select>`-of-owned-actors shape rather than
+inventing a new pattern. This is now the SECOND feature needing this shape (delta report §4.8
+already predicted a second and third would show up) — strengthens the case for eventually
+extracting a shared component, still not built here since the task scoped this to "note it."
+
+**0.6.101 — Used-vs-unused preparation commitment, plus a real Armory-capacity bug fix.** The
+central new V6 equipment rule (delta report §3.5): unused prepared equipment's allocation can
+transfer to an equal-capacity replacement on Armory access; used equipment's allocation stays
+committed for the rest of the Adventure "even if stored, lent, depleted, lost, or replaced." Added
+`usedThisAdventure` (`BooleanField`) to `EssenceEquipmentData` (`item-card.mjs`) and the shared
+`EssenceComponentData` base (`item-component.mjs`, covers loose Chassis/Fitting) — checked
+`resetAdventureUses` first for anything resembling this and found nothing, confirmed genuinely new.
+Set automatically the first time an item's Equipment Card is rolled (`#onRollEquipmentCard`, both
+sheets); also added a manual toggle (`toggleItemUsed`) for every use the code has no hook for (worn
+and hit, used as a Card's Source, rolled as part of a Combat/Reaction Card). Cleared by
+`resetAdventureUses` at the "new Adventure" boundary, alongside its existing resets.
+
+**Judgment call — visible badge over automated enforcement.** This system has no "held in hand" vs
+"stowed" state machine to hang real Armory-access-swap enforcement off of, and building one wasn't
+in scope. Per the task's own suggested fallback, and consistent with this project's established
+warn/inform-don't-over-automate convention (Armory over-limit is already a warning, not a block —
+see Phase 3's own explicit decision), shipped a visible flag badge (a toggleable flag icon) on every
+equipment row across Character/NPC/Monster sheets plus a static hint line explaining the rule, and
+left the actual "does this swap honor the rule" judgment to the table. **Lending needed no special-
+case code**: `usedThisAdventure` lives on the Item itself, which stays owned by whichever Actor
+embeds it regardless of who's currently using it in the fiction — "lending commits the lender's
+allocation, not the borrower's" (delta report §3.5) is correct by construction, confirmed rather
+than built.
+
+**Real bug found while verifying prerequisites**: delta report §3.5 says Armory-inclusive-of-
+Inventory (V6: "It is not eight reserve items plus four carried items") was already built per the
+original plan — it wasn't. `actor-sheet.mjs`'s `armoryUsed` only ever summed the "armory" slot
+bucket on its own, so a full Inventory (4) plus full Armory (8) silently allowed 12 total instead of
+8. Fixed to `inventoryUsed + armoryUsed`. Flagging this discrepancy per the task's own instruction
+to trust the code over the plan/delta report when they disagree. Verified, not rebuilt: "Exceptional
+Loot Does Not Charge Rent" already works via the existing generic `reachExceptionSource`/
+`reachExceptionMargin` fields (no dedicated `foundLoot` flag needed, despite the plan sketching one
+— the generic mechanism the plan itself said to prefer reusing already covers it); Quartermaster's
+Due and the equipment capacity table are unaffected.
+
+**0.6.102 — Ordinary Condition catalog.** Confirmed via `scripts/.cache/raw-condition-cards.json`
+(21 Neon rows) that only Burning and Dazed overlap V6's 8-item ordinary list by name, and all 9
+Specialty Conditions (Stance/Lock/Unstable/Exposed/Concentration/Strain/Rallied/Possessed/Broken)
+already exist — confirming the plan's own inventory. Diffing Burning/Dazed's actual stored text
+against the book (not just checking names matched, per the task's own instruction to verify against
+the book) found both were genuinely wrong: Neon's Burning fires at Turn END and auto-implies from
+Fire Damage (V6 explicitly forbids that inference); Neon's Dazed reduces a future roll's max dice
+instead of taxing 1 additional burned die — a different mechanic. Fixed at the pipeline level
+(`scripts/build-packs.mjs`'s `ORDINARY_CONDITIONS`, excluding the two wrong Neon rows by name before
+conversion) rather than patched in the shipped compendium, the same "fix source data at the pipeline
+so a re-sync can't reintroduce it" pattern used for 0.5.12's stray-Effect cards and 0.6.20's
+miscategorized Surges. Added the 6 missing ordinary Conditions with the book's exact text; only
+Restrained's flat "-1 Fortitude" qualified for a real Active Effect under this file's own
+flat-unconditional-only convention (`activeEffects()`'s doc comment) — everything else (Blinded,
+Immobilized's Movement-override, Prone's scoped Fortitude swing, Silenced, Weakened's Damage-dealt
+reduction, which this schema has no AE target for) stays reminder text.
+
+Added a `classification` field (`ordinary`/`specialty`/`wound`/`consequence`/`cover`/`other`) to
+`EssenceConditionData` (`item-card.mjs`) — no prior tagging scheme existed at all (conditions were a
+flat, unlabeled list) — tagging every Condition, including the ~10 kept-but-non-canonical ones
+(Bleeding, Chilled, Concussed, Corroded, Displaced, Distorted, Punctured, Revealed, Shocked,
+Withered) as "Other" rather than leaving them ambiguous, per V6's own "deliberately restrictive
+rather than exhaustive" allowance to keep extra Conditions. Purely a label — nothing branches on it.
+Added V6's stacking rule and the "Participation" resolution rule (delta report §2.8: old design
+guidance became a real resolution rule — a Condition restricts only what it names, never a blanket
+Turn-skip) to the in-world Player & GM Guide's existing "Conditions & Content" page. Ran
+`node scripts/build-packs.mjs --only=conditions` AND `--only=guide` for real, producing 41
+Conditions (up from 35) and a refreshed Guide compendium.
+
+**Verification across all three versions**: every `.mjs` file under `module/` and `scripts/` (whole
+tree) passes `node --check`; every `.hbs` file under `templates/` (whole tree) has balanced
+`{{#`/`{{/` counts; `system.json`, `lang/en.json`, `scripts/guide-data.json`, and every
+`packs/_source/**/*.json` file parse as valid JSON. `--only=conditions` and `--only=guide` were run
+for real (not dry reads), producing genuinely rebuilt `packs/conditions` and `packs/guide` LevelDB
+stores. No live Foundry client available this session — the Reconfigure dialog's actor/item
+pickers, the used/unused flag badges, and the Condition classification select are unverified beyond
+static analysis and this project's established patterns, consistent with every prior session in
+this history that lacked a live client.
+
+`system.json` bumped 0.6.99→0.6.102 across three versions in this session. Nothing committed to
+git — left unstaged, folded into the same still-uncommitted working tree prior sessions already
+left behind, for the user to review as one diff.
+
+### 2026-09-19 — Phase 7: remaining V6 mechanics, 0.6.103–0.6.108
+
+Read this document fully (especially the Recurring bug patterns and the Phase 6 session's own
+"trust the code over the plan" precedent) plus `design/v6-foundry-implementation-plan.md`'s §5.5,
+§6.12, §6.7, §6.8 and Phase 7 build-order lines, and `design/v6-revision-delta.md`'s §2.5, §2.6,
+§3.3, §3.4, and §6, before starting — per the task's own instruction that the delta report overrides
+the original plan's Phase 7 scope wherever they disagree (the 7th Basic Card, Perform Task, and the
+Intellect/Presence Attribute benefits). Built six versions in one sitting, same "several versions per
+session" pattern every prior V6-sync phase used.
+
+**0.6.103 — Key Aspect rolls, Cooperation free dice, non-combat Surge suppression.** Added a roll
+button per Key Aspect on the Character sheet (Attribute + 5, replacing not stacking with a
+Non-Combat Skill Rank), matching `#onRollNonCombatSkill`'s existing attribute-picker pattern via a
+new shared `#promptAttrAndCooperation` helper. That same helper also asks for "Free dice from
+Cooperation" on every non-combat roll (Key Aspect, Non-Combat Skill, the plain open Attribute check)
+— no shared multi-actor-picker component exists in this codebase (0.6.81/0.6.100 both already
+flagged this gap), so rather than build real cross-actor UI, the lead roller just declares the total
+helper-die count directly; the GM/table still tracks who actually helped. Added a reusable `nonCombat`
+flag to `rollEssencePool` (`essence-roll.mjs`) that suppresses the chat card's Surge section
+entirely, built reusable from the start since Perform Task (next version) needed the identical
+behavior from inside a Combat Card's roll path.
+
+**0.6.104 — Magecraft Thread effects + the 7 Basic Combat Cards.** Added a `THREAD_EFFECTS` lookup
+(`expertise-database.mjs`) for all ten Threads, rendered as chip tooltips and a summary list beneath
+the chips for currently-stored Threads on the Character sheet — confirmed unchanged from the original
+plan, pure reminder text, no new mechanics. Rebuilt the universal Basic Combat Card catalog from
+scratch: auditing the Neon-sourced "skill-less" cards this catalog used to source from (Basic Shot,
+Strike, Brace, Dash, Disengage, Hide, Shove) against the book found a genuine, previously-unnoticed
+content bug — their stored body text is internally misaligned (e.g. "Hide"'s Effect line describes a
+push/pull with no connection to hiding, "Basic Shot"'s Effect describes firing "your sidearm...
+point-blank" under a ranged-weapon card) — the same source-data-quality bug class build-history's
+Recurring bug patterns #4 already documents, a fresh not-yet-discovered instance of it. Rather than
+hand-patch six garbled rows, all seven canonical V6 Basic Cards (Basic Melee Attack, Basic Ranged
+Attack, Defend, Dash, Reconfigure, Stabilize, and the new Perform Task) are now hand-authored in
+`build-packs.mjs` with the book's exact playtest text, and the six stale Neon rows are excluded from
+the skill-less filter so there's exactly one authoritative Basic set (`node scripts/build-packs.mjs
+--only=action-cards,reaction-cards` run for real, producing 307 action cards / 100 reaction cards).
+Reconfigure's Item entry doesn't duplicate its actual mechanic — that still lives in the actor-level
+`reconfigureItem`/`releaseItem` actions built in Phase 6's 0.6.100 — it exists so Reconfigure is
+represented in the wizard's card-budget/browser catalog like every other Basic Card.
+
+Perform Task is the first Basic Card whose own roll runs the NON-COMBAT path (Attribute + Non-Combat
+Skill, or Attribute + 5 for a Key Aspect) from inside Combat. Routed entirely through a dedicated
+`#onPerformTask` handler rather than threading a special case through the ordinary card-roll flow,
+since its cost shape is genuinely different: it burns a flat 2 Action dice unconditionally (even on
+failure/interruption) BEFORE the roll, and the roll itself consumes no further Action dice and uses
+no Combat Style maximum — two separate, independently-triggered pool operations, not one commit-and-
+roll like every other card. Added a `nonCombatTask` schema flag (routes the card here) and a separate
+`noSurges` flag (reuses 0.6.103's `nonCombat` suppression for cards whose text just says "no
+Surges," like Stabilize, without changing their roll path) — kept as two flags rather than one,
+since Perform Task changes WHERE the roll comes from and Stabilize only changes whether Surges show.
+Also fixed `#maxRolledDiceNote` (both Character and NPC sheets) per design/v6-revision-delta.md §2.5:
+a card with a printed `rollLimit` now uses it verbatim; the floor-of-2 on rolled dice now only
+applies to Basic/Rank 0 cards, not every card, which is what the OLD code incorrectly did.
+
+**0.6.105 — Combat/Reaction Card cooldowns + explicit "New Encounter" button.** Extended the
+adversary `abilities` array's proven `frequency`/`usesRemaining`/`usedThisRound` shape to player (and
+Elite-NPC) Combat/Reaction Cards via two new schema fields (`cooldownFrequency`: none/perRound/
+perEncounter, `cooldownUsed`: boolean) rather than inventing a second mechanism, per the plan's own
+explicit instruction. A cooldown starts the instant a card is PLAYED (dice committed, before the roll
+resolves — so a failed/interrupted use still starts it) via a new `applyCardCooldown()` (`utils.mjs`)
+that marks every Item the actor owns sharing that card's exact name and type together, since the
+cooldown belongs to the TECHNIQUE, not the physical printed copy. `perRound` cooldowns clear
+automatically in `combat.mjs`'s `_onStartTurn`, the same cadence the adversary "1 per Round" reset
+already uses. `perEncounter` cooldowns do NOT clear on any Combat-start hook — per V6, "Combat
+beginning inside an existing Encounter does not restart the Encounter" — so a new explicit "New
+Encounter" button (beside "Reset All for New Adventure" on Character/NPC/Monster sheets, matching
+its exact UI placement/pattern) is the only thing that resets them, calling a new
+`resetEncounterCooldowns()` (`utils.mjs`). Flagged, not fixed: the EXISTING adversary `perCombat`
+frequency already resets at every new Combat's Round 1 (`_onStartRound`), which is arguably the same
+Encounter-vs-Combat conflation this version was built to avoid for player cards — out of scope for
+this task (adversaries are typically single-encounter-lived, lower risk), left as a discrepancy for a
+future session rather than silently rebuilt here.
+
+**0.6.106 — Species Combat Cards.** Checked `scripts/origin-data.json`'s Shaper/True Breath/Ink
+Cloud/Spore Cloud entries before assuming this was unbuilt, per the task's own instruction — they
+were still V5-era free-text Trait descriptions with no Card behind them at all, confirming genuinely
+new work. Hand-authored all four as real Combat Card Items (`SPECIES_CARDS` in `build-packs.mjs`,
+same pattern as 0.6.104's `BASIC_CARDS`) with the book's exact text, each tagged `speciesGranted:
+true`. Chose an explicit flag over `isBasicCard()`'s empty-`style` check per the plan's own guidance
+(Species Cards DO have thematic Style ties) — and had to fix `isBasicCard()` itself to EXCLUDE
+`speciesGranted` cards, since all four also carry an empty `style` and would otherwise have been
+auto-granted to every character by the "Grant Basic Cards" button regardless of whether they actually
+have the matching Species Trait. Updated every `character-wizard.mjs` card-count/card-browser call
+site that filters by `isBasicCard`/style to also account for `speciesGranted` — found four separate
+spots that would each have mis-handled Species Cards (counted toward the 10-card budget, offered in
+the general ranked-card browser, or double-counted) if only the top-level flag had been added without
+auditing every consumer. Auto-grant/revoke wired into `#onToggleTraitChosen` (choosing Shaper etc. as
+one of the character's selected Species Traits grants the matching Card; un-choosing removes it),
+reusing the existing "create embedded copy from compendium" pattern `#onGrantBasicCards` already
+established.
+
+**0.6.107 — Expertise limit, Advancement Points, Intellect's Skill grant.** The task flagged the
+Expertise-limit rule as "possibly already partially built" — checking the actual code found this
+did NOT hold: `character-wizard.mjs` only ever enforced a flat 4-total creation budget, and the main
+Character sheet's own `#onAddExpertise` had NO cap enforcement at all, anywhere. Built the real V6
+rule as a LAYER on top of (not a replacement for) that unchanged 4-total budget, per the book's own
+worked example (Mara picks exactly 4 Expertises total, individually capped per Style): a Style's
+Expertise limit equals its Rank, +1 if it's the Style tied to the character's Distinction
+(`item-origin.mjs`'s existing `keyCombatSkill` field). Enforced in both the wizard's
+`#onToggleExpertise` and the live sheet's `#onAddExpertise`, since the book states this limit is
+standing, not creation-only. Added a read-only `advancementPoints` derived field
+(`actor-combatant.mjs#prepareDerivedData`) at the confirmed `(Tier-1)*10 + (Level-1)`, max 49 formula
+— verified by hand that this formula already produces "only the initial Tier 1/Level 1 starting
+position is exempt" with no special-casing needed (Tier 2/Level 1 correctly yields 10, not 0), shown
+on the Character sheet header, intentionally inert until the Skill Tree exists to spend it.
+
+Built Intellect's new benefit from scratch (no prior code at all): one free Rank-1 Non-Combat Skill
+per point of permanent Intellect, added as a sub-step INSIDE the wizard's existing Non-Combat step
+(per the delta report's own explicit "do not insert a new step" instruction, since `STEPS` is
+positionally indexed elsewhere) rather than a new top-level step. Added a `source` field
+(`""`/`"intellect"`) to the `nonCombatSkills` schema entry so a future retraining pass can recompute
+these grants without re-harvesting them, per the book's own caution. Had to rebuild the ordinary
+5-point pool's spend calculation to exclude each Intellect-granted entry's free baseline Rank 1 (only
+the portion ABOVE that baseline draws from the pool), and had to add hidden `system.nonCombatSkills.
+{{i}}.source` inputs to BOTH the Intellect and ordinary loops in `wizard.hbs` — this codebase's own
+documented ArrayField dotted-path bug (Recurring bug patterns #1: a submit-on-change form
+reconstructs the WHOLE array from whatever `system.nonCombatSkills.*.*` inputs are present, so any
+sub-field only ever rendered as a bare span silently resets to its schema default on the next form
+change) would otherwise have wiped every entry's `source` tag back to `""` the first time any other
+field on the step changed.
+
+**0.6.108 — Mixed-Domain Damage + Presence's Adventure grant.** Extended `#onApplyDamage`'s single
+Domain dropdown to three per-domain amount fields (Spiritual/Mental/Physical); the resulting Wounds'
+domain labels now follow the Spiritual → Mental → Physical → repeat cycle (skipping domains with 0
+submitted) via a small domain queue built from the submitted amounts, popped in submission order as
+each Wound is created — deliberately did NOT split Resistance/Vulnerability/Resilience/accumulated-
+Damage math per-domain, since this system has always modeled that math as one domain-agnostic total
+(confirmed unchanged by design/v6-revision-delta.md §6) and the task's own scope explicitly said not
+to build a second per-domain Resilience track. Judgment call, flagged rather than guessed at: which
+submitted points "become" this call's delta Wounds vs. get absorbed into Resilience isn't specified
+by the book for a mixed submission — this implementation treats the FIRST N submitted points (in
+Spiritual→Mental→Physical order) as the ones that became Wounds this call, a reasonable simplification
+worth a second look if it ever reads as load-bearing rather than cosmetic labeling. Scoped to
+`actor-sheet.mjs` only per the task; `npc-sheet.mjs` has its own separate `#onApplyDamage` for the
+simplified-Wounds enemy model, which has no domain axis to cycle.
+
+Built Presence's grant as a genuinely separate bucket, not folded into the scalar `temporaryInfluence`
+counter, since design/v6-revision-delta.md §2.7 identifies this as the first Influence grant that
+actually NEEDS an expiry the scalar can't represent — added `playState.presenceGrantRemaining`
+(NumberField) and `playState.presenceGrantActive` (BooleanField, whether the once-per-Adventure grant
+is still takeable) to `actor-combatant.mjs`. A "Take Grant" button appears on the Character sheet
+while active; taking it sets `presenceGrantRemaining` to the actor's permanent Presence and flips
+`presenceGrantActive` false so it can't be taken twice. `resetAdventureUses()` (`utils.mjs`) — the
+task's own suggested hook point, alongside the existing `reachPressure: 0` reset — both expires any
+unspent remainder (back to 0) and makes the grant takeable again for the new Adventure. Deliberately
+did NOT build spend-priority logic (which bucket pays an Influence cost first) or a general
+expiring-Influence-grant framework — spending the Presence bucket down is a manual +/- stepper,
+matching how this system already tracks every other Influence counter by hand.
+
+**Verification across all six versions**: every `.mjs` file under `module/` and `scripts/` (whole
+tree) passes `node --check`; every `.hbs` file under `templates/` (whole tree) has balanced
+`{{#`/`{{/` counts; `system.json`, `lang/en.json`, and every `packs/_source/**/*.json` file parse as
+valid JSON. `node scripts/build-packs.mjs --only=action-cards,reaction-cards` was run for real
+(twice — once for the Basic Cards, once more after adding Species Cards), producing genuinely
+rebuilt `packs/action-cards`/`packs/reaction-cards` LevelDB stores with 307 action cards and 100
+reaction cards. No live Foundry client available this session — the Key Aspect roll buttons, the
+Cooperation free-dice prompt, the Perform Task dialog, the cooldown warning/New Encounter buttons,
+the Species Trait auto-grant, the per-Style Expertise limit warning, the Advancement Points display,
+the Intellect Skills wizard sub-step, the Mixed-Domain Damage dialog, and the Presence Grant button
+are all unverified beyond static analysis and this project's established patterns, consistent with
+every prior session in this history that lacked a live client.
+
+`system.json` bumped 0.6.102→0.6.108 across six versions in this session (skipping straight from
+0.6.102 to 0.6.103, no migration-framework version reserved — still explicitly deferred until the
+module is next used at a real table). Nothing committed to git — left unstaged, folded into the same
+still-uncommitted working tree prior sessions already left behind, for the user to review as one
+diff.
+
+### 2026-09-19 — Phase 8: the remaining five Attribute benefits, 0.7.1
+
+Read this document's Phase 6/7 sessions (especially the 0.6.98/0.6.107/0.6.108 entries covering
+Anima/Adaptability/Intellect/Presence — this codebase's own style guide for how a per-Attribute
+benefit gets built) before starting. The task supplied the exact V6 book text verbatim for the five
+remaining benefits (Might/Grace/Vigor/Acuity/Resolve) and explicitly scoped all five as
+GM-adjudicated reference values, not automated timers/rolls/triggers — matching how this codebase
+already displays other simple derived-only numbers (Advancement Points, effective Reach) rather than
+over-building.
+
+**Computed all five in `EssenceCombatantData#prepareDerivedData`** (`actor-combatant.mjs`, the
+shared base both PC and NPC/Monster actors use — same reasoning `deathTrackMax`/`advancementPoints`
+already establish there): `exceptionalLoad` (50 x Might), `runningJumpDistance` (Grace, 1:1),
+`extremeExertionMinutes`/`extremeExertionRounds` (Vigor, and 6x Vigor), `sustainedAttentionHours`
+(Resolve, 1:1), and `extendedSensesBonus`/`preciseVisionRange` (the Acuity 1-2/3-4/5 -> +0/+1/+2
+step function, and 10x Acuity). Wired a small `ATTR_BENEFIT` lookup in `actor-sheet.mjs` (keyed by
+the same five Attribute keys the existing `DOMAINS`/`attrs.map` loop already iterates) that formats
+one localized sentence per Attribute via `game.i18n.format`, attached as a new `benefit` field on
+each attr-row's context object, and rendered as a `{{#if a.benefit}}` muted note directly under that
+Attribute's existing row in `character-sheet.hbs` — no new template section, just one line under the
+input/pip-track that's already there. Character-sheet only: checked `npc-sheet.mjs`/
+`monster-sheet.mjs` first and confirmed their attr-row is a bare label + input with nothing
+comparable to extend, so no UI was added there, consistent with how Adaptability's reroll checkbox
+is already PC-only for the identical reason.
+
+**Real discrepancy caught and flagged, not silently followed**: the task's own "What to build"
+section stated Vigor's derived value as "6 x Vigor minutes," but the task's own verbatim book text
+two paragraphs above it — and its own worked example ("Vigor 3 permits three minutes, or eighteen
+Rounds") — both say the opposite: minutes = Vigor (not 6x Vigor), and Rounds = 6x Vigor (since one
+minute is six Rounds). Implemented per the book text/worked example (`extremeExertionMinutes = Vigor`,
+`extremeExertionRounds = 6 * Vigor`), the same "trust the book/code over a paraphrased summary when
+they disagree" precedent this document's own Phase 6 entry established. Worth a second look if this
+was actually a deliberate reinterpretation rather than a paraphrasing slip.
+
+**Acuity's Sense-data-structure finding** (the one benefit with real mechanical logic per the task):
+checked `scripts/origin-data.json` for every Sense-granting Trait (Keen/Heightened Instincts/
+Sensor Suite/Draconic Core/Deathless Nature, etc.) and confirmed they are all free-text Trait
+`text` strings with detection ranges baked into prose ("Within 2 units, creatures and objects cannot
+remain Hidden...") — no structured numeric range field exists anywhere in the Species data, and
+`EssenceCombatantData.senses` itself is a plain `ArrayField(StringField)`. This makes reliably
+detecting "does this character have an eligible finite-range specialty Sense" (needed to pick
+between the +bonus branch and the 10x-Acuity precise-vision fallback) impossible from structured
+data alone, per the task's own explicit instruction not to guess which branch applies. Shipped both
+values together in one reference line ("+X unit(s) to a finite-range specialty Sense... or Y units
+of precise natural vision if you have none") and left the branch decision to the table, rather than
+building a prose-parser or a guessed heuristic.
+
+**No Species carrying-capacity override found**: searched `scripts/origin-data.json` for anything
+that could override Might's 50-lb-per-point baseline (the book's own "Specific Species benefits can
+override this baseline" clause) — Powerful Build, Dense Form, and Quadrupedal Frame all grant
+qualitative "counts as substantially larger" carrying language, but none state a numeric override of
+the per-point rate. Flagged per the task's own instruction rather than building a general
+override-resolution system for a case that doesn't currently exist in the data.
+
+**Verification**: every `.mjs` file under `module/` and `scripts/` (whole tree) passes
+`node --check`; every `.hbs` file under `templates/` (whole tree) has balanced `{{#`/`{{/` counts;
+`system.json` and `lang/en.json` parse as valid JSON. No live Foundry client available this session —
+the five new attr-row benefit notes are unverified beyond static analysis and this project's
+established patterns, consistent with every prior session in this history that lacked a live client.
+
+**Version note**: `system.json` was still at 0.6.108 when this session started, per its own read of
+the task instructions. Partway through, the working tree's `system.json`/`CHANGELOG.md`/`README.md`
+changed underneath this session to 0.7.0 (a "V5 to V6 rules sync complete" milestone entry —
+uncommitted, presumably concurrent work in the same working tree; `git log` still shows HEAD at
+0.6.69, so none of this is committed either). Per this task's own explicit instruction ("if current
+version is 0.7.0, use 0.7.1"), re-targeted this session's version to 0.7.1 and moved its CHANGELOG.md
+entry above the 0.7.0 entry rather than fighting the concurrent edit. `system.json` bumped
+0.7.0→0.7.1. Nothing committed to git — left unstaged, folded into the same still-uncommitted working
+tree prior sessions already left behind, for the user to review as one diff.
+
+
+### 2026-09-19 — Phase 8 (final): full pack rebuild, guide/wiki consistency pass, 0.7.0
+
+Per Phase 8's own scoping note (verified read-only against Neon just before this session): the
+original plan's Phase 8 assumed a large Neon Combat Card terminology sweep would be needed. All 261
+live Neon combat_cards rows (194 action + 67 reaction) already contain zero V5 terms (Combat Skill,
+Signature, per-Scene, Artillery, Colossus) -- that sweep was genuinely not needed, and Neon was not
+written to at any point in this session, only read from (fetch-from-neon.mjs, to refresh a 10-day-
+stale local cache before rebuilding).
+
+**Full pack rebuild.** Refreshed scripts/.cache/ from Neon (261 combat card rows, 21 ordinary
+condition rows, 0 equipment rows -- the last is expected and correct, not a wipe: equipment_cards has
+been legitimately empty in Neon since an earlier phase replaced its 26 flat rows with Augments/
+Chassis/Fittings, see build-packs.mjs's own doc comments), then ran a full unscoped
+`node scripts/build-packs.mjs` for the first time in this whole V6 sync (every prior phase used
+`--only=`). Produced 307 action cards, 100 reaction cards, 41 conditions, 89 equipment, 9 species, 9
+heritages, 10 distinctions, 9 combat styles, 8 manifestation profiles, 3 guide entries -- matching
+every phase's own previously-reported counts (41 conditions in particular, confirmed against Phase
+6's 0.6.102 entry). All ten packs compiled cleanly with no errors and nothing dropped to 0
+unexpectedly.
+
+**Guide journal corrections (scripts/guide-data.json).** Corrected specific passages left stale by
+earlier phases, none of which had touched this file except Phase 6's Conditions update: Player's
+Guide "Attributes, Skills & Resources" (Combat Skills -> Combat Styles, Phase 1); "Wounds & Recovery"
+(Wound State now reads by highest-severity filled box, not count, per Phase 3's 0.6.75; added the
+Dying/Stabilized Death Track states, Acting While Dying, and the Deathless threshold-of-7, per Phase
+3's 0.6.76 and the correction pass's 0.6.99); "Rolling Dice" (noted the 2-die floor, Phase 5's
+0.6.83); "Combat" (added a line on per-Round/per-Encounter Card cooldowns and the New Encounter
+button, Phase 7's 0.6.105). Game Master's Guide "Running Combat" (corrected the claim that ending a
+Combat resets everything Encounter-scoped -- per 0.6.105, a Combat can start and stop inside the same
+ongoing Encounter, and only the explicit New Encounter button clears per-Encounter state). Left the
+GM Guide's "Role Budget System" page alone -- its Minion/Standard/Elite/Nemesis table is stale against
+the current Mook/Normal/Elite GRADE_BUDGETS in monster-budgets.mjs, but that Grade collapse predates
+this entire V6 sync (already in HEAD before Phase 1 started) and isn't a V6 rules change, so fixing it
+was out of this phase's scope -- flagging it here for a future non-V6 documentation pass. Ran
+`node scripts/build-packs.mjs --only=guide` for real to recompile the Guide compendium pack from the
+corrected source.
+
+**Wiki mirror (essence-foundry.wiki, found locally as a sibling directory,
+../essence-foundry-wiki, cloned from the essence-foundry.wiki GitHub repo).** This mirror turned out
+to be far more stale than the in-world guide journals -- it hadn't been touched by any phase of this
+sync at all and still carried V5 terminology throughout (112 "Combat Skill", 34 "Signature Equipment",
+46 "Adaptation" instances). Ran a careful terminology sweep (Combat Skill -> Combat Style, excluding
+every genuine "Non-Combat Skill"; Signature Equipment/Item/Loadout/Limit -> Inventory; Species
+"Adaptation" -> "Trait", scoped to Part II's Species sections only, leaving Gestalt's unrelated
+Adaptation Specialty mechanic in Part IV untouched, matching Phase 1's own 0.6.71 precedent) plus
+targeted mechanical corrections: Wound State by severity and the Death Track's Dying/Stabilized states
+plus Acting While Dying plus the Deathless threshold-of-7 (Part IV, mirroring guide-data.json's fix
+and origin-data.json's own 0.6.99 correction -- the wiki's Deathless Nature text still had V5's wrong
+"increase its starting value by 1" line, replaced with V6's actual "Death Track ends at 7, not a
+higher starting value" rule); Conditions stacking and the Participation rule (Part IV); Reconfigure's
+widened scope and flat 3-Action-die cost, replacing the old 1-die Augment/1-or-3-die Fitting tiering
+(Part VIII, per Phase 6's 0.6.100); the used-vs-unused equipment allocation rule and the
+Armory-inclusive-of-Inventory fix (Part VIII, per Phase 6's 0.6.101); and Reach's role absorbing
+ordinary Influence pressure before Temporary Influence, the Ordinary-pressure/Influence-Breach
+distinction, and Influence Consequence Cards (Part V, per Phase 4's 0.6.80/0.6.81) -- the old
+day/week/month Influence recovery schedule and the entire "Collaborative Influence Pooling" section (a
+mechanic V6 deleted outright per Phase 4's own 0.6.80 finding) were both replaced, the latter
+rewritten to describe the real per-character Reach/Temporary Influence/Core Influence sequence instead
+of a pooled number. Species Combat Card frequency wording (True Breath/Ink Cloud/Spore Cloud, "Once
+per scene" -> "Once per Encounter") was also corrected to match the cooldownFrequency: "perEncounter"
+Phase 7's 0.6.106 actually shipped.
+
+**Deliberately not touched in the wiki, flagged rather than guessed at**: Appendix A's per-Style
+"Action Subtypes" tables (Opener/Blitz/Chain/... for Prowess, etc.) resemble but do not match
+expertise-database.mjs's corrected SUBTYPE_DATABASE (Blitz/Breaker/Finisher/Guard/Opener for Prowess,
+5 entries, no "Reaction" row) -- the two lists have different shapes and only partial overlap, so they
+may genuinely be two different concepts (a card's Action Subtype classification vs. a Calling-style
+manifestation/subtype tag) rather than one being a stale copy of the other. Did not edit this without
+being able to confirm which is true against the actual V6 book text; worth a dedicated follow-up.
+Resistance/Vulnerability's cancellation rule and Cover were also not added to the wiki -- neither has
+any existing passage in it to correct (Resistance/Vulnerability is mentioned only in passing, Cover
+isn't mentioned at all), and the task's instruction was to correct specific wrong passages, not author
+new sections from scratch.
+
+**A gap found and self-resolved mid-session while checking build-history's own completeness**:
+CHANGELOG.md had a 0.6.109 entry ("the remaining five per-Attribute benefits: Might, Grace, Vigor,
+Acuity, Resolve") with real, already-shipped code behind it (actor-combatant.mjs's
+Might/Grace/Vigor/Resolve/Acuity derived-value block, confirmed present) but no build-history session
+entry at all -- a real gap between the Phase 7 (0.6.108) entry and this one. Before this could be
+written up, system.json and CHANGELOG.md changed on disk (external to this session) to resequence
+that entry as 0.7.1, positioned after this session's own 0.7.0 milestone entry, with its own text
+updated to reference "the 0.7.0 'V5 to V6 sync complete' milestone below" -- so the module now ships
+at 0.7.1, not 0.7.0. Noting this rather than fighting it: 0.7.0 remains the correct "sync complete"
+milestone entry this session wrote; 0.7.1 is a real, distinct follow-up already reflected in
+CHANGELOG.md. No build-history entry exists for that 0.7.1 Attribute-benefits work either -- still
+worth a future session's attention if it wants this document fully gapless.
+
+**Version and changelog**: this session bumped system.json 0.6.109 -> 0.7.0 (version-minor, per the
+plan's own instruction that this is the point the shipped content becomes V6 rather than
+V5-with-V6-code) with one comprehensive CHANGELOG.md entry summarizing the whole eight-phase sync
+rather than just this session's own work, matching the milestone-version convention the plan itself
+specifies. (See the note above on the subsequent, external 0.7.1 resequencing.)
+
+**Verification**: no .mjs files were changed by this session (monster-budgets.mjs and expertise-
+database.mjs were only read; system.json was only version-bumped) -- system.json, scripts/
+guide-data.json, and every packs/_source/**/*.json file parse as valid JSON; the full build-packs.mjs
+run completed with no errors and expected row counts. The wiki mirror's Markdown was hand-verified
+section by section (each edited block re-read after editing) but has no automated syntax check
+comparable to this repo's .hbs/.mjs checks. Nothing committed to git in either repository -- left
+unstaged, folded into the same still-uncommitted working tree every prior V6-sync phase already left
+behind, for the user to review as one diff.
+
+
+### 2026-09-19 -- Pre-release audit caught a real content-loss bug: 5 Consumable Kits silently deleted
+
+Before cutting the v0.7.1 release (the /cut-release skill's own working-tree check), reviewed the
+full uncommitted diff by hand rather than committing it blind. Found 14 deleted `packs/_source`
+files. Nine were already-documented, correct exclusions (the 7 garbled Neon "Basic" rows Phase 7's
+own build-history entry explains, plus the old pre-fix Burning/Dazed condition rows Phase 3/5
+replaced) -- verified against their citing comments in build-packs.mjs and confirmed legitimate.
+
+The other five were not: Medical Pack, Explorer's Kit, Explosives Pack, Munitions Pack, and Potion
+Pack (all Consumable Kit / Toolkit equipment) had no replacement anywhere in the diff, and grepping
+for their names across every current source file (component-catalog-data.json,
+extra-equipment-data.json, even at the last released commit) turned up nothing -- they predated the
+current equipment-generation pipeline entirely, as orphaned legacy `packs/_source` files with no
+JSON source counterpart. 0.7.0 was this sync's first-ever *unscoped* `build-packs.mjs` run (every
+prior phase used `--only=`); the unscoped path clears the whole `packs/_source` directory before
+regenerating (see the `fs.rmSync(SOURCE_DIR, ...)` at the top of `main()`), so anything with no
+source data to regenerate from was silently dropped as collateral damage. The 0.7.0 session's own
+report had verified Neon's `equipment_cards` table being empty was "expected, not a stale-cache
+wipe" -- true as far as it went, but it didn't check whether the full-directory clear also ate
+files with no source-data counterpart at all, which is exactly what happened here.
+
+Fixed by adding all five as proper hand-authored entries to `extra-equipment-data.json` (matching
+the existing Toolkit/Consumable-Kit entries' shape, `uses` field included) rather than trying to
+resurrect the old `_source` files directly -- they need to survive the next unscoped rebuild, not
+just this one. Re-ran `node scripts/build-packs.mjs --only=equipment`: 89 -> 94 equipment items,
+JSON valid, no other packs touched. Folded into the still-uncommitted 0.7.1 CHANGELOG entry rather
+than minting a new version, since nothing has shipped yet.
+
+Lesson for future unscoped rebuilds: `--only=`-scoped rebuilds (every phase before 0.7.0 used them)
+can't surface this class of bug, because they only ever touch the one pack directory named -- an
+orphaned legacy file in a *different* pack directory just sits there untouched, silently surviving
+right up until the first time someone runs a full rebuild. The first unscoped run after a long
+scoped-only stretch is exactly when to expect this and check for it, the way this session did by
+reading the full `git status` deletion list by hand rather than trusting row-count comparisons
+alone (row counts went up, not down, once the fix landed -- a straightforward "did the count drop"
+check would have caught this immediately, and should be standard practice after any unscoped
+rebuild going forward).

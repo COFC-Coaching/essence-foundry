@@ -1,0 +1,50 @@
+{
+  "_id": "497bf06a14ab9649",
+  "name": "Unmoored Essence",
+  "type": "condition",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "classification": "wound",
+    "sections": [
+      {
+        "label": "WOUND — Spiritual Light",
+        "html": "Wound Condition: <b>Unmoored Essence</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "-1 Harmony."
+      },
+      {
+        "label": "NATURAL RECOVERY",
+        "html": "A stable spiritual environment, anchor, or equivalent support plus one appropriate Recovery opportunity."
+      }
+    ]
+  },
+  "effects": [
+    {
+      "_id": "3aa4500ac67a4d0b",
+      "_key": "!items.effects!497bf06a14ab9649.3aa4500ac67a4d0b",
+      "name": "Unmoored Essence: Harmony -1",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.harmonyBonus",
+          "mode": 2,
+          "value": "-1",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!497bf06a14ab9649"
+}

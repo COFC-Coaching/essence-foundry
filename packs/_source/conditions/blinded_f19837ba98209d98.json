@@ -1,0 +1,26 @@
+{
+  "_id": "f19837ba98209d98",
+  "name": "Blinded",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "classification": "ordinary",
+    "sections": [
+      {
+        "label": "ORDINARY CONDITION",
+        "html": "<b>Blinded</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "Ordinary sight cannot detect creatures, points, or details farther than 1 unit. Sight-dependent targeting or abilities fail unless another Sense provides the required information. Other Senses can compensate normally."
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f19837ba98209d98"
+}

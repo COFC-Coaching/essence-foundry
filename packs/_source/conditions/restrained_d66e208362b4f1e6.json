@@ -1,0 +1,46 @@
+{
+  "_id": "d66e208362b4f1e6",
+  "name": "Restrained",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "classification": "ordinary",
+    "sections": [
+      {
+        "label": "ORDINARY CONDITION",
+        "html": "<b>Restrained</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "You cannot voluntarily leave your current space and suffer -1 Fortitude. You can still act, use Reactions, and attack unless the source of the restraint specifically prevents a required limb, item, or other action."
+      }
+    ]
+  },
+  "effects": [
+    {
+      "_id": "b45b5b9003dd74fc",
+      "_key": "!items.effects!d66e208362b4f1e6.b45b5b9003dd74fc",
+      "name": "Restrained: Fortitude -1",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.fortitudeBonus",
+          "mode": 2,
+          "value": "-1",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d66e208362b4f1e6"
+}

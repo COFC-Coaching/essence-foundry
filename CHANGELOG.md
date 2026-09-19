@@ -2,6 +2,568 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.7.1
+
+**The remaining five per-Attribute benefits: Might, Grace, Vigor, Acuity, Resolve.** Completes the
+set of 9 new V6 Attribute benefits (Anima, Adaptability, Intellect, and Presence shipped in earlier
+Phase 6-7 sessions, before the 0.7.0 "V5 to V6 sync complete" milestone below). All five are
+GM-adjudicated reference values, matching how this system already displays other derived-only
+numbers like Advancement Points or effective Reach — a computed value with a short reminder shown on
+the Character sheet, not an automated timer or roll. Might's "Exceptional loads" shows carrying
+capacity as 50 lb per point of Might, in addition to normal equipment. Grace's "Running jumps" shows
+a 1:1 unit distance with a 2-unit run-up reminder. Vigor's "Extreme exertion" shows the
+hold-breath/extreme-effort limit as Vigor minutes (also showing the 6x-Vigor Rounds equivalent, per
+the book's own worked example — note this is Vigor minutes, not 6x Vigor minutes, despite how the
+book's "equal to six times Vigor Rounds" clause can misread at a glance). Resolve's "Sustained
+attention" shows a 1:1 hour limit before a strain roll. Acuity's "Extended senses" is the one
+genuinely mechanical benefit of the five — it would normally add a bonus (+0 at Acuity 1-2, +1 at
+3-4, +2 at 5) directly to a Species-granted Sense's finite detection range, but Species Senses are
+stored as free-text Trait prose with no structured numeric range field to modify, so the sheet
+instead shows the bonus as a manual reference alongside the alternative "precise natural vision"
+fallback (10x Acuity units, for a character with no eligible finite-range Sense) and lets the
+player/GM apply whichever branch actually fits, since the system has no reliable way to determine
+which branch applies from structured data. All five derived values live on the shared combatant data
+model (`EssenceCombatantData`) since NPCs/Monsters share the same Attribute fields, but the sheet
+display itself is Character-only — the NPC/Monster sheets' attr-row has no comparable
+derived-Attribute display to extend.
+
+**Also restored five Consumable Kit equipment items** (Medical Pack, Explorer's Kit, Explosives
+Pack, Munitions Pack, Potion Pack) that a pre-release audit found had been silently deleted by
+0.7.0's full unscoped pack rebuild. They predated the current equipment-generation pipeline (not
+present in Neon's `equipment_cards` table, `component-catalog-data.json`, or
+`extra-equipment-data.json` even at the last released commit), so the first-ever unscoped
+`build-packs.mjs` run — which clears the entire source directory before regenerating — dropped them
+as collateral damage with no source data to regenerate from. Added them to
+`extra-equipment-data.json` as proper hand-authored entries so future rebuilds won't repeat this.
+Equipment pack count: 89 -> 94.
+
+## 0.7.0
+
+**V5 to V6 rules sync complete.** This closes out the eight-phase project (0.6.70 through 0.6.109,
+plus a correction pass for a late rulebook revision) that carried this module's terminology and
+mechanics from V5 to V6: the Combat Style/Inventory/Encounter renames, the Wound State and Death
+Track rewrite (severity-based state, Dying/Stabilized, Deathless's wider threshold, Acting While
+Dying), Reach pressure and Influence Consequence Cards, Recovery's full V6 effect list, Resistance/
+Vulnerability cancellation, Cover, the 2-die minimum and Rank-0 floor, Reconfigure's widened scope
+and used-vs-unused equipment preparation, the Ordinary Condition catalog and stacking rules, Key
+Aspect rolls, Card cooldowns, Species Combat Cards, and the creation-rule fixes (Expertise limits,
+Advancement Points, Intellect's and Presence's grants). Version-minor because this is the point
+where the shipped *content*, not just the code, actually reflects V6 — not another patch in that
+series.
+
+This release itself did three things rather than add new mechanics: ran a full, unscoped
+`build-packs.mjs` rebuild to confirm every phase's hand-authored content actually compiles together
+correctly (no stale cache, no dropped packs); corrected the in-world Player's Guide, Game Master's
+Guide, and the `essence-foundry.wiki` mirror so their prose matches what the code now actually does,
+rather than describing V5-era mechanics or a mid-sync intermediate state; and gave this document's
+own "Recent sessions" log a final read-through for consistency. No new mechanics, no version-specific
+migration — there are still no live games on this module, so the "no migration window" precedent
+every phase in this sync relied on still applies here.
+
+## 0.6.108
+
+**Mixed-Domain Damage, and Presence's per-Adventure Temporary Influence grant.** Apply Damage's
+single Domain dropdown is now three per-domain amount fields (Spiritual/Mental/Physical); when the
+resulting Wounds are assigned to Core Wound spaces, their domain label now follows V6's
+Spiritual -> Mental -> Physical -> repeat cycle (skipping domains with 0 submitted) instead of a
+single flat domain for the whole application. The underlying Resistance/Vulnerability, Breach, and
+Resilience math is unchanged — this system has always modeled accumulated Damage/Resilience as one
+domain-agnostic pool, and Mixed-Domain Damage only changes which domain label each resulting Wound
+gets, not a second per-domain Resilience track.
+
+Built Presence's new benefit: once per Adventure, a "Take Grant" button on the Character sheet
+grants Temporary Influence equal to permanent Presence, tracked in its own small bucket
+(`playState.presenceGrantRemaining`/`presenceGrantActive`) rather than folded into the ordinary
+Temporary Influence counter, since it has its own expiry the scalar can't represent. "Reset All for
+New Adventure" both expires any unspent portion and makes the grant takeable again for the new
+Adventure. Deliberately minimal — one bucket for this one grant, not a general expiring-Influence-
+grant framework; spending it down is a manual +/- stepper, matching how this system already tracks
+Influence spend by hand everywhere else.
+
+## 0.6.107
+
+**Creation rules: a real per-Style Expertise limit, Advancement Points, and Intellect's Skill
+grant.** The V6 Expertise rule turned out not to be "partially built" as expected — checking the
+actual code found only a flat 4-total creation budget and NO per-Style enforcement anywhere,
+including on the main Character sheet's own Add Expertise button, which had no cap at all. Built the
+real rule now: a Style's Expertise limit equals its Rank, +1 if it's the Style tied to the
+character's Distinction — enforced both in the Character Wizard and on the live Character sheet, on
+top of (not replacing) the unchanged 4-total creation budget the book's own worked example confirms.
+
+Added a read-only `advancementPoints` derived field — `(Tier-1) x 10 + (Level-1)`, capped at 49,
+shown on the Character sheet header — intentionally inert until the Skill Tree node system (still
+explicitly blocked/deprioritized) exists to spend it on.
+
+Built Intellect's new benefit from scratch: one free Rank-1 Non-Combat Skill per point of permanent
+Intellect, chosen before spending the ordinary 5 Skill Points, tagged `source: "intellect"` on the
+Skill entry so a future retraining pass can recompute these grants without re-harvesting them. The
+Character Wizard's Non-Combat Skills step now has a dedicated "Skills from Intellect" sub-section
+above the ordinary point-spend section, per the book's own ordering.
+
+## 0.6.106
+
+**Species Combat Cards.** The four Species Traits that grant a unique unranked Combat Card (Shaper,
+True Breath, Ink Cloud, Spore Cloud) genuinely weren't built yet — `scripts/origin-data.json`'s
+entries for them were still V5-era free-text Trait descriptions with no Card behind them. All four
+are now real Combat Card Items with the book's exact playtest text, tagged `speciesGranted: true`
+so they never count against the Character Wizard's 10-card selection budget (a new, explicit flag
+rather than reusing the empty-`style` check Basic Cards use, since Species Cards do have thematic
+Style ties). Choosing the matching Species Trait in the wizard now auto-grants the Card (and
+un-choosing it removes it again), the same "grant on selection" pattern Basic Cards already use.
+
+## 0.6.105
+
+**Combat/Reaction Card cooldowns, and an explicit "New Encounter" button.** Player and Elite-NPC
+Combat/Reaction Cards can now carry a `perRound` or `perEncounter` cooldown, mirroring the shape
+adversary special abilities already used. A cooldown starts the moment a card is played — even on a
+failed or interrupted use — and belongs to the technique itself: a second printed copy of the same
+card is on cooldown too, not just the physical copy that was played. `perRound` cooldowns clear
+automatically at the start of the owning actor's own next Turn, the same cadence adversary "1 per
+Round" abilities already use. `perEncounter` cooldowns do NOT clear automatically when a new Combat
+starts — per V6, "Combat beginning inside an existing Encounter does not restart the Encounter" — so
+a new "New Encounter" button (beside "Reset All for New Adventure" on the Character, NPC, and
+Monster sheets) is the only thing that clears them.
+
+## 0.6.104
+
+**Magecraft Thread effects, and the universal Basic Combat Cards catalog — now all seven, including
+the new Perform Task.** Every Magecraft Thread family (Fire, Water, Earth, Air, Time, Space, Light,
+Shadow, Aether, Chaos) now shows its printed effect text on the Character sheet, both as a chip
+tooltip and as a summary line beneath the chips for each Thread currently stored. Rebuilt the
+universal Basic Combat Card catalog from the book's exact text: Basic Melee Attack, Basic Ranged
+Attack, Defend, Dash, Reconfigure, Stabilize, and the brand-new Perform Task. Auditing the existing
+Neon-sourced "skill-less" cards this catalog used to pull from (Basic Shot, Strike, Brace, Dash,
+Disengage, Hide, Shove) turned up a real, previously-unnoticed content bug — their stored body text
+is internally misaligned (e.g. "Hide"'s Effect line describes a push/pull with no connection to
+hiding) — the same source-data-quality bug class flagged twice before in this project's history.
+Rather than patch six garbled rows individually, all seven Basic Cards are now hand-authored with
+the book's playtest text, and the stale Neon rows are excluded so there's exactly one authoritative
+Basic set.
+
+Perform Task is the first Basic Card that runs the Non-Combat roll path (Attribute + Non-Combat
+Skill, or Attribute + 5 for a Key Aspect) from inside Combat: it burns a flat 2 Action dice
+unconditionally, then rolls the task separately with no further Action dice spent and no Surges
+generated, reusing last version's `nonCombat` suppression flag. Stabilize's "no Surges" text uses
+the same flag via a new `noSurges` schema field. Also fixed `#maxRolledDiceNote`'s advisory text
+(both Character and NPC sheets) per the revised rule: a card with a printed roll limit now uses that
+limit verbatim; the floor-of-2 on rolled dice now only applies to Basic and Rank 0 cards, not every
+card, as the old code incorrectly did.
+
+## 0.6.103
+
+**Key Aspect rolls, Cooperation free dice, and non-combat rolls no longer show Surges.** Each Key
+Aspect on the Character sheet now has its own roll button (a d10 icon next to the field, matching
+Non-Combat Skills) that rolls the relevant Attribute + 5 — V6's single largest non-combat buff,
+which REPLACES a Non-Combat Skill Rank rather than stacking with it. Every non-combat roll (Key
+Aspect, Non-Combat Skill, and the plain open Attribute check) now also asks for "Free dice from
+Cooperation" — each character meaningfully helping the roll grants 1 free die to the lead roller,
+using the `freeDice` plumbing already added to the dice engine back in 0.6.83. And since V6 grants
+no Surges on non-combat rolls unless a rule states otherwise, the chat card for these rolls now
+shows "No Surges — non-combat roll" instead of a Surge count or spend options. This suppression is
+built as a reusable `nonCombat` flag on `rollEssencePool`, not a one-off, since Perform Task (next
+version) needs the identical behavior from inside a Combat Card's roll path.
+
+## 0.6.102
+
+**The Ordinary Condition catalog is complete — 6 new Conditions added, all 41 Conditions now
+classified.** V6 Appendix C prints 8 baseline "Ordinary Conditions": Blinded, Burning, Dazed,
+Immobilized, Prone, Restrained, Silenced, and Weakened. Only Burning and Dazed previously existed
+by name in the Conditions compendium — and, caught while verifying this pass, both had genuinely
+wrong V5-era text inherited from the Neon database: Burning fired at the end of a Turn instead of
+the start and auto-implied itself from Fire Damage (V6: "Fire Damage does not automatically cause
+Burning"), and Dazed reduced a future roll's maximum dice instead of taxing 1 additional burned
+die — a different mechanic entirely. Both are now hand-authored with the book's exact text, fixed
+at the pipeline level (`scripts/build-packs.mjs`) so a future Neon re-sync can't silently
+reintroduce the old wording, the same pattern this project has used for prior source-data bugs.
+Added the 6 missing ordinary Conditions (Blinded, Immobilized, Prone, Restrained, Silenced,
+Weakened) with the book's exact playtest text; only Restrained's flat "-1 Fortitude" qualifies for
+a real Active Effect under this system's own convention, everything else stays reminder text.
+
+Every Condition Item now carries a `classification` (Ordinary/Specialty/Wound/Influence
+Consequence/Cover/Other), shown on the Condition sheet and editable there — purely a label, nothing
+branches on it. This preserves the ~10 additional Conditions this system already had beyond V6's
+8-item baseline (Bleeding, Chilled, Concussed, Corroded, Displaced, Distorted, Punctured, Revealed,
+Shocked, Withered) as "Other" rather than miscategorizing them, per the book's own "deliberately
+restrictive rather than exhaustive" allowance — kept, not deleted. The 9 Specialty Conditions
+(Stance, Lock, Unstable, Exposed, Concentration, Strain, Rallied, Possessed, Broken) were confirmed
+already complete from earlier phases; no changes needed there. Also added V6's Condition stacking
+rule and the "Participation" resolution rule (a Condition restricts only the capabilities it names,
+never a blanket skip-your-Turn) to the in-world Player & GM Guide's Conditions & Content page.
+Conditions and Guide compendiums rebuilt for real (`--only=conditions`, `--only=guide`) — 41
+Conditions total (up from 35).
+
+## 0.6.101
+
+**Used-vs-unused preparation commitment — the central new V6 equipment rule, and a real
+Armory-capacity bug fix.** A prepared item's Inventory/Armory allocation now tracks whether it's
+been meaningfully used this Adventure: an item that's only ever been prepared, never used, can
+freely transfer its allocation to an equal-capacity replacement when Armory access is regained; a
+USED item's allocation stays committed for the rest of the Adventure "even if stored, lent,
+depleted, lost, or replaced" (`design/v6-revision-delta.md` §3.5). New `usedThisAdventure` field on
+every `equipment`/`chassis`/`fitting` Item, set automatically the first time its Equipment Card is
+rolled, and toggleable by hand for every other kind of "use" this system has no hook for (worn and
+hit, used as a Card's Source, etc.) — consistent with this project's warn/inform-don't-over-automate
+convention, this is a visible flag badge on every equipment row (Character, NPC, and Monster
+sheets) rather than automated capacity-lock enforcement, since there's nothing in this codebase
+resembling a "held in hand" state machine to hang real enforcement off of. Cleared for everyone by
+the existing "start a new Adventure" reset button. Lending needed no special-case code: the flag
+lives on the Item itself, which stays owned by whoever's Actor embeds it regardless of who's
+currently using it in the fiction, so "lending commits the lender's allocation, not the
+borrower's" (§3.5) is already correct by construction.
+
+Also fixed a real, previously-unnoticed gap while verifying this rule's prerequisites: the Armory
+figure shown on the Character sheet only ever summed items explicitly slotted "Armory," when V6 is
+explicit that "It is not eight reserve items plus four carried items" — Armory's 8 slots are
+inclusive of the 4 Inventory ones. A character carrying a full Inventory and a full Armory
+previously showed room for 12 total instead of 8. Armory now displays `inventoryUsed + armoryUsed`
+against `armoryLimit`, matching what the original implementation plan's own audit expected to
+already be true. Verified (not rebuilt): "Exceptional Loot Does Not Charge Rent" already works via
+the existing generic `reachExceptionSource`/`reachExceptionMargin` fields (no dedicated flag
+needed); Quartermaster's Due and the equipment capacity table are unaffected and correct as-is.
+
+## 0.6.100
+
+**Reconfigure's scope widened to match the revised V6 book — it's no longer just a swap/exchange
+action.** A newer V6 draft (`design/v6-revision-delta.md` §3.1) widens the Basic Action Reconfigure
+beyond swapping a complete item or exchanging a Fitting/Augment: it now also covers readying an
+item into an empty hand, stowing it, recovering it from the ground within reach, and handing it to
+an adjacent willing creature — all at the same flat 3 Action dice. A new "Reconfigure" button on
+each Inventory/Temporary/Armory equipment row (Character sheet) and the Equipment list (NPC sheet)
+opens a dialog to choose which of the five; Hand Over and Swap each prompt for a target (a plain
+actor picker for Hand Over, reusing the same simple pattern `payInventorySupport` established —
+this is now the second feature needing one, strengthening the case for eventually building a
+shared component). Also added "Release Item," a genuinely new zero-cost action (no prior
+drop/unequip control existed) for the book's "simply releasing a held item during your own Turn
+requires no Action: it falls where released."
+
+Exchanging an installed Augment or a Fitting is unaffected in shape (still lives on the equipment
+Item's own sheet) but the cost is corrected: both used to follow V5's tiered pricing (1 die for an
+Augment swap, 1 or 3 for a Fitting depending on category) — V6 replaces this with a flat 3 dice for
+either, with per-item overrides still honored. `reconfigureCategory`'s meaning changed to match:
+"Simple"/"Structural" no longer select a cost tier, they now say whether a Fitting can be
+exchanged mid-Combat or only outside it — attempting a structural (out-of-combat-only) Fitting
+change during an active Combat now shows a soft warning, never a block, matching this system's
+"normal operating limit, not an absolute prohibition" convention throughout. Confirmed Chassis
+changes still correctly require no Recovery/Downtime (already built, unchanged).
+
+## 0.6.99
+
+**Deathless Nature's Death Track threshold resolves to 7 instead of 5, and a new "Acting While
+Dying" exertion mechanic.** Both changes touch the same Death Track state machine, so they ship
+together. A revised V6 draft finally delivered the rule this system's own §9.1 decision log had
+been waiting on: Deathless characters' Death Track now ends at 7, not 5 (Core Wounds are
+unaffected — still five spaces). Every one of the five places in the module that hardcoded the
+Death Track's ceiling as a literal `5` — the schema cap, the Combat Tracker's turn-start advance,
+Apply Damage's overflow-Wound branch, Full Manifestation defeat's feedback-Wound overflow, and
+both the Character and NPC sheets' pip display — now reads a single derived `deathTrackMax`
+instead (5 normally, 7 for a character with the Deathless species), computed once rather than
+re-checked at each site. The Deathless species' own Nature text was also rewritten — it still
+carried V5's now-superseded "increase its starting value by 1" wording.
+
+Also new: while Dying, the first Action or Reaction Card played each Combat Round now advances the
+Death Track by 1 after that card's roll resolves — including a failed or interrupted roll — capped
+at once per Round even if the character stops and restarts Dying within it. Ordinary Movement never
+triggers this. A new `playState.dyingExertionRound` field remembers which Round's advance has
+already fired.
+
+## 0.6.98
+
+**Correction: Recovery was missing two of V6's effects — the Anima Resource bonus and the
+Adaptability reroll restore.** Grant Recovery's dialog now lets the player distribute up to their
+Anima score in additional Stamina/Focus/Mana points (on top of the existing 25%-rounded-up
+restoration) across three new numeric fields, clamped so the total never exceeds Anima and no
+single Resource ever exceeds its max — any points that can't land because every Resource is
+already full are simply lost, not banked for a later Recovery, per the book's own wording.
+
+Also added `playState.adaptabilityRerollAvailable`, a plain boolean (never a counter, since an
+unused use explicitly does not stack with a freshly-restored one) tracking a character's one
+Adaptability Exploration reroll. A new checkbox next to Apply Damage/Recover Wound/Grant Recovery
+on the Character sheet lets a player mark it used and see when it's available again; Grant
+Recovery now restores it automatically. Dialog copy and the Recovery chat summary both mention
+both effects.
+
+## 0.6.97
+
+**Correction: Resistance and Vulnerability of the same Damage type now cancel, and both key off
+named Damage types instead of Physical/Mental/Spiritual domains.** A revised draft of the V6
+rulebook reached us after 0.6.85 shipped, and it contradicts what 0.6.85 built on two points: a
+matching Resistance and Vulnerability of the same type no longer both apply in sequence — they
+now cancel outright, leaving the Damage unchanged — and both are now matched against one of the 12
+printed Damage types (Bludgeoning, Piercing, Slashing, Fire, Cold, Lightning, Acid, Force, Psychic,
+Arcane, Radiant, Necrotic), never against a Physical/Mental/Spiritual domain or a Combat Style, per
+the book's own explicit "domains and Combat Styles do not qualify as types."
+
+Apply Damage on both the Character and NPC sheet now asks for a Damage Type in addition to Domain
+(Domain still drives which Wound Card gets attached; Damage Type is what Resistance/Vulnerability
+actually checks), and the Resistance/Vulnerability entry dialogs on both sheets now offer the same
+12-type list instead of the three domains. Multiple Resistance sources of the same type still only
+reduce Damage once — that was already correct and needed no change.
+
+## 0.6.86
+
+**Cover.** Added Low Cover (+1 Fortitude) and High Cover (+2 Fortitude) as two new Condition Items,
+built exactly like the Wound/Influence Consequence Cards before them — a real transferred Active
+Effect on Fortitude only (never Composure or Harmony), toggled on/off per token through the same
+Token HUD every other Condition in this system already uses. No new plumbing: every Condition in
+the compendium is already registered as a Token HUD status automatically.
+
+## 0.6.85
+
+**Resistance/Vulnerability, a Breach fix, and a real Resilience bug fix.** Actors can now carry
+Resistances and Vulnerabilities (a short damage-type + source list, added/removed from the Wounds
+section on both the Character and NPC sheet) — Resistance reduces matching Damage by 2 (min 0),
+Vulnerability increases it by 2, both applied before Resilience or Breach conversion. Breach Damage
+now correctly still gets adjusted by Resistance/Vulnerability — it only bypasses Resilience, not
+these — where it previously skipped both.
+
+Fixed a real bug in how accumulated ordinary Damage converts to Wounds: a mid-combat change to a
+character's Resilience (equipment swapped, a buff applied) could previously retroactively rewrite
+how much of that Turn-interval's *already-accumulated* Damage counted as Wounds, because the
+conversion was re-derived from scratch using the *current* Resilience on every Apply Damage call
+instead of remembering what had already been converted. Now stores the already-converted Wound
+count (`playState.accumulatedDamageWounds`, reset alongside `accumulatedDamage` at the start of each
+Turn) so a Resilience change never creates or removes Wounds retroactively — only affects Damage
+from that point forward, matching V6's explicit "remaining protection = current Resilience minus
+accumulated ordinary Damage, minimum 0."
+
+## 0.6.84
+
+**Unopposed cards, an unaware-target tax instead of a block, and "one response per chain" wording.**
+Cards can now be flagged Unopposed (a new checkbox on the card sheet, and `system.unopposed` in
+data) — an Unopposed card auto-succeeds, reserves no die as the Success Die, and every rolled 6+
+grants a Surge, including the die that would otherwise have been "spent" meeting Defense. This is a
+new, explicit flag rather than being inferred from a blank Defense field, since a blank Defense
+already means something else in this system (an open roll the GM adjudicates).
+
+Using a Reaction Card against an unaware target no longer needs a hard block that never actually
+existed in code — it's now a real option: a checkbox on the Reaction commit dialog that burns 1
+additional Reaction die on top of whatever's committed to the roll. The "second Reaction" warning's
+text and doc comments now describe V6's actual (stricter) rule, "one response per chain," instead of
+V5's "one Reaction per Action" — still the same approximate per-Turn proxy as before, just correctly
+labeled; a real reaction-chain tracker remains explicitly out of scope.
+
+## 0.6.83
+
+**Combat and Equipment Cards now enforce V6's 2-die minimum commitment, and show an advisory maximum.**
+Every Combat Card and Equipment Card commit dialog now floors at 2 dice (a card's own printed
+minimum can only raise that floor, never lower it) — Initiative still allows 0 (Pass) and a
+non-combat open Skill roll still allows 1, unchanged. The commit dialog also now shows an advisory
+line for a card's normal maximum rolled dice (Attribute + Style Rank, floored at 2 for Rank 0) —
+informational only, matching this system's "warn, never block" convention; committing more is still
+allowed. Equipment Cards' dice-commit dialog was folded into the same flow Combat Cards use instead
+of its own free-typed, pool-less "Dice" field from v0.6.68 — Equipment Cards now spend from the
+Action Dice pool exactly like a real Combat Card, since V6 confirms they use identical rules.
+
+Added a `freeDice` parameter to `rollEssencePool` (dice rolled without leaving the Pool, which may
+exceed the normal maximum and can become the Success Die or generate Surges, but never count toward
+a minimum commitment) — plumbing only, not yet exposed through any dialog. Needed by Leadership's
+Rallied condition and non-combat Cooperation, both still to come.
+
+## 0.6.82
+
+**Recovery now applies V6's actual numbers instead of leaving everything to GM judgment.** Grant
+Recovery restores 25% of max Stamina/Focus/Mana rounded *up* (was rounded to nearest), and now also
+reduces the Death Track by 1 (for any non-Dying character, including a Stabilized character sitting
+on a full Core Wound track), clears Psionic Strain outright, and removes 1 Manifestation Wound from
+the character's currently active Full Manifestation profile, if any. Still correctly does not
+restore Temporary Wounds or Temporary Influence, clear Core Influence, reset Reach pressure, or
+refill Consumable Kits — the dialog now says so directly, along with V6's "one fictional opportunity
+= one Recovery, cannot be subdivided" note.
+
+## 0.6.81
+
+**Influence Consequence Cards, and inventory over-limit now pushes real Influence pressure instead
+of a flat spend.** Filling a Core Influence space now attaches a real Condition Item — one of three
+new Influence Consequence Cards (Strained Position for Light, Compromised Standing for Serious,
+Crisis of Standing for Critical), matched automatically by severity — the Influence equivalent of
+0.6.77's Wound Cards. Compromised Standing applies a real Reach −1 automatically; Strained Position
+and Crisis of Standing are both scoped to a chosen sphere rather than a flat number, so they print
+as reminder text instead (same convention as every other conditional Condition in this system). The
+card is removed automatically when that Core Influence space recovers.
+
+Preparing an additional Inventory slot beyond the normal limit now pays 1 ordinary Influence
+pressure — Reach absorbs it first — instead of unconditionally adding 1 Temporary Influence with a
+hard cap. The over-limit count itself now rounds *up* on the total (4.5 slots over becomes 1
+pressure, 5.5 becomes 2) instead of down. Another character can now pay that support cost with their
+own Reach/Influence instead of the equipment's owner always footing it — a simple payer dropdown on
+the same dialog.
+
+## 0.6.80
+
+**Influence now has three layers of pressure instead of two, and Reach absorbs the first one.**
+Ordinary Influence pressure (an overextended negotiation, an accumulating social debt) is now
+absorbed by remaining Reach capacity first, then spills into Temporary Influence, then Core
+Influence — Reach itself never goes down; the game just remembers how much pressure has piled up
+against it (`reachPressure`, reset at an Adventure boundary along with Reach Triggers). Influence
+Breach still skips Reach entirely and goes straight to Temporary Influence, same as before. Apply
+Influence Injury's old "Voluntary" checkbox is gone — replaced with a Pressure Type choice (Ordinary
+pressure vs. Influence Breach), since that's the actual branch point now.
+
+Standing no longer reads off how many Core Influence spaces are filled — like Wound State before it,
+it now reads the highest severity among them. Contribute to Shared Goal keeps its existing
+per-character behavior (Essence was never going to get a pooled Team Influence track, and this
+system's own design already matched that) but now spends through the same Reach-first sequence,
+and its documentation no longer cites the deleted Collaborative Influence Pooling rule.
+
+## 0.6.79
+
+**Every enemy now rolls dice like a player, including Mooks and Normals.** The old "Reduced
+Engine" — a fixed printed dice-pool size and flat Defenses instead of real Attributes, Skills, and
+Combat Cards — is gone. Mook and Normal NPCs and Monsters now get the same Attributes/Combat
+Styles grid, Action/Reaction Card list, and dice-commit roll flow Elites and Characters already
+use; the Monster Creator's Auto-Generate button now rolls real Attribute and Skill points and
+draws real Cards for every Grade instead of filling in flat Attack/Defense numbers for Mook and
+Normal. Only the point budget differs by Grade now (a Mook has far fewer Attribute and Skill
+points than an Elite) — the resolution mechanic itself is identical across all three. The
+optional frequency-tagged Ability list (At Will / 1 per Round / X per Combat) that used to be a
+Mook/Normal-only substitute for Cards is now available on every Grade as a plain supplemental
+reference, layered alongside Cards rather than replacing them. This only touches how enemies
+*fight* — the simplified Wound capacity from 0.6.78 (Mook 2 / Normal 4 / Elite 5, no Wound Cards
+or Death Track) is unaffected and still applies to every Grade.
+
+## 0.6.78
+
+**Enemies use a simpler Wound model now.** Mooks, Normals, and Elites (including Champions,
+Leaders, and Solos) no longer get the full player-facing Light/Serious/Critical Wound track,
+Wound Cards, or the Death Track — the rulebook is explicit that these are a Player Character-only
+subsystem. Instead, every enemy grade now tracks a flat filled/capacity Wound counter: Mook 2,
+Normal 4, Elite 5 (a Solo keeps the standard Elite capacity of five). The NPC and Monster sheets'
+Wounds section shows that counter directly, and once it's full the enemy simply reads "Defeated."
+Wound capacity by Grade is also now GM-tunable from the same Grade Budgets settings menu the rest
+of the Mook/Normal/Elite point-buy numbers already live in.
+
+## 0.6.77
+
+**Wounds now come with a real Wound Card instead of a generic label.** Filling a Core Wound space
+used to just generate a display string like "Light Physical Wound" with no mechanical effect
+attached. Now it also attaches a real Condition Item — one of nine new Wound Cards (Impaired Body,
+Debilitated Body, Catastrophic Injury for Physical; Disrupted Mind, Cognitive Trauma, Fractured
+Consciousness for Mental; Unmoored Essence, Spiritual Trauma, Severed Essence for Spiritual, one
+per severity) — matched automatically by the Wound's domain and severity. Light and Serious Wound
+Cards apply a real Movement/Composure/Harmony penalty automatically; Serious and Critical cards
+also print a reminder about the extra burned die their domain's Actions/Reactions now cost (that
+part can't be expressed as a flat automatic effect, so it stays as printed text on the card, same
+as every other conditional Condition in this system). The Wound Card is removed automatically when
+that Core Wound is recovered, by any of the three ways a Wound can clear (Recover Wound, Grant
+Recovery, or the manual pip toggle).
+
+## 0.6.76
+
+**The Death Track has been rebuilt from the ground up.** It used to activate whenever a character
+had a Critical Wound and used one on/off "Frozen" switch. Now:
+
+- It activates only once **all five** Core Wound spaces are filled — starting at step 0, without
+  immediately advancing. The countdown itself only starts ticking at the beginning of the
+  character's next Turn, same as before.
+- It now has three real states instead of one on/off switch: **none**, **Dying** (actively
+  advancing), and **Stabilized** (frozen — replaces the old "Frozen" checkbox, now labeled
+  "Stabilized" on the sheet). A dedicated Stabilize action is planned for a later update; for now a
+  GM can still flip a character between Dying and Stabilized by hand from the sheet.
+- Taking an extra Wound while Stabilized and already at full Core Wounds breaks Stabilization —
+  back to Dying — and advances the track by one step.
+- Recovering the Critical Wound still resets the track's step count to 0. Recovering any *other*
+  Core Wound while the track was active now also stops it from automatically advancing, but — new
+  in V6 — no longer wipes out the recorded step count. It stays there, ready to pick back up if the
+  character takes another Critical Wound later.
+- The sheet's Wound section now only shows the Death Track once all five Core Wound spaces are
+  filled, not merely on a Critical Wound label.
+
+Recovery reducing the Death Track by 1 is part of V6 too, but that's arriving alongside the rest of
+Recovery's numeric overhaul in a future update — this release lays the groundwork (a
+`reduceDeathTrack()` actor method exists and is ready to be called) without changing what Grant
+Recovery does today.
+
+## 0.6.75
+
+**Wound State now reads the worst Wound, not the most Wounds.** Previously "Critically Wounded"
+meant 5 Core Wounds filled, no matter their severity. Now it's governed purely by the highest
+severity currently occupied — one filled Critical space alone reads as Critically Wounded, exactly
+as the rulebook describes, while a character with four Light/Serious Wounds and one open Critical
+space reads as Seriously Wounded. The filled-space count is still tracked internally (the Death
+Track needs it), it just no longer drives the label shown on the sheet.
+
+**Actively healing a Wound now clears the lightest one first.** Recover Wound and Grant Recovery's
+wound-healing option both used to clear the most severe Wound first; that's now inverted to match
+the rulebook — Light before Serious before Critical. The individual Wound pips on the sheet remain
+an order-free toggle for natural recovery or GM adjudication, unaffected by this change.
+
+## 0.6.74
+
+**Six small V6 data corrections**, all bundled together since none of them touch live game logic:
+
+- **Four Distinctions had the wrong Primary Attribute.** Athlete is now Might (was Vigor), Gifted is
+  now Vigor (was Might), Strategist is now Intellect (was Resolve), and Psyker is now Resolve (was
+  Intellect) — the other five gated Distinctions were already correct. Regenerated the Distinctions
+  compendium from the fixed source data.
+- **Psionics Strain's penalty table was wrong.** It used to knock Composure at 2 Strain, then
+  Harmony at 4, then Fortitude at 6. The rulebook only ever touches Composure: −1 at 3-4 Strain, and
+  at 5-6 your Psionics cards also need 1 additional burned die — shown as a new note on the sheet
+  next to the Strain field.
+- **The Subtype Family lists for all nine Combat Styles were re-checked against the rulebook** and
+  corrected: Prowess drops a stray "Stance" entry (the Prowess Specialty Condition of the same name
+  is unaffected), Gestalt drops "Mimic," Cunning drops "Diversion," Psionics drops "Resonance,"
+  Leadership drops "Signal," Ritualism drops "Circle," Magecraft gains its missing Light/Shadow/Chaos
+  families (all ten now present), and Calling expands from 8 entries to the full 17 named families.
+- **Removed the Influence recovery-time text** ("recovers in 1 day/week/month") from the Apply
+  Influence Injury chat log — the rulebook doesn't use a universal day/week/month schedule for
+  anything, so that line was printing a rule that no longer exists.
+- **Corrected two stale doc comments** about Temporary Wounds and Temporary Influence "hard
+  ceilings" of 5 — neither field actually enforces one, and the rulebook confirms there isn't meant
+  to be a universal cap on either.
+- **Widened the Manifestation Rank ceiling from 2 to 5**, matching the rulebook's full 0-5 entry-cost
+  table (the Rank 3-5 manifestation profiles themselves aren't written yet, so this just clears the
+  way for future authoring — it doesn't add new manifestation content).
+
+## 0.6.73
+
+**Three more V6 vocabulary renames.** The Monster/NPC "Artillery" battlefield role is now
+"Blaster," the Monster Type "Colossus" is now "Titan," and the Reach Trigger lifecycle term "Scene"
+is now "Encounter" ("End Scene" is now "End Encounter," and Reach Triggers that used to say
+"usable only this Scene" now say "usable only this Encounter"). Foundry's own Scene *documents* —
+the maps/canvases you place tokens on — are unaffected; this only touches the rules term for a
+mechanical time unit, which V6 renamed to avoid confusion with that same Foundry concept.
+
+All three are display text and schema enum values only — no existing NPC, Monster, or Reach Trigger
+changed behavior underneath.
+
+## 0.6.72
+
+**Signature Equipment is now Inventory.** The biggest of the V6 vocabulary renames: the "Signature"
+loadout slot on the Character sheet, its Wizard step, and every NPC/Monster equipment list are now
+"Inventory" — Inventory Equipment, Inventory Limit, "Move to Inventory," the over-limit warning, and
+the drag-and-drop drop zone all say Inventory instead of Signature. Under the hood, the `slot` value
+stored on every equipment/Chassis/Fitting item changed from `"signature"` to `"inventory"` — worn
+gear's Fortitude/Resilience/Movement/Reach bonuses, the Armory/Temporary/Inventory slot-usage count,
+and drag-and-drop between the three sections all still work exactly as they did, just under the new
+name. Non-Combat Skills are untouched — this is the Equipment-preparation term, not a skill name.
+
+This is a rename, not a new rule: what counts as "prepared for the Adventure" versus "left in the
+Armory" hasn't changed, and no existing equipment moved slots.
+
+## 0.6.71
+
+**Species Adaptations are now Species Traits.** Another V6 rulebook rename: the Species sheet's
+"Adaptation label"/"choose N" picker and its list of options are now called Traits everywhere —
+the Character Wizard's inline picker, the Species item sheet, and the General Features & Benefits
+table all say "Trait" instead of "Adaptation." Gestalt's Combat Style keeps its own unrelated
+"Adaptation" Specialty (Predator, Bulwark, Titan, and friends) exactly as it was — that's a
+different mechanic that just happens to share the old word, and V6 doesn't touch it.
+
+This is display text and field names only. Existing characters' chosen Traits, and anything they
+grant (like a Construct's Internal Compartment or a Craftfolk's Inherited Tools), keep working
+exactly as they did — nothing about how they're chosen or what they do changed underneath.
+
+## 0.6.70
+
+**Combat Skills are now Combat Styles.** The V6 rulebook renamed them, so the sheets, both wizards,
+the card sheets, and the settings forms say "Combat Style" (and "Style Points," "Style Rank") wherever
+they used to say "Combat Skill." Prowess, Ballistics, Gestalt, Cunning, Magecraft, Psionics,
+Leadership, Ritualism, and Calling are all unchanged — only the word for the category moved.
+
+This is display text only. Nothing about your characters changed underneath: existing Ranks,
+Expertises, and Cards all keep working exactly as they did. Non-Combat Skills are a separate thing
+and keep their own name for now.
+
 ## 0.6.69
 
 **Equipment Cards now show for every owned equipment item, not just Signature.** 0.6.68 scoped the

@@ -1,0 +1,26 @@
+{
+  "_id": "5df36b67e0a7327e",
+  "name": "Prone",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "classification": "ordinary",
+    "sections": [
+      {
+        "label": "ORDINARY CONDITION",
+        "html": "<b>Prone</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "Standing costs 2 units of Movement. While Prone, your voluntary Movement costs double. You gain +1 Fortitude against physically obstructable attacks originating more than 1 unit away and suffer -1 Fortitude against adjacent physical attacks."
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5df36b67e0a7327e"
+}

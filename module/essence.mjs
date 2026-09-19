@@ -18,7 +18,7 @@ import EssenceCombat from "./documents/combat.mjs";
 import EssenceActor from "./documents/actor.mjs";
 import EssenceContentWizard, { canCreateContent } from "./apps/content-wizard.mjs";
 import EssenceBulkImport from "./apps/bulk-import.mjs";
-import { capitalize, fitTitleSize, domainResource } from "./utils.mjs";
+import { capitalize, fitTitleSize, domainResource, fittingReconfigureCost } from "./utils.mjs";
 import { syncEquipmentEffect } from "./data/equipment-effects.mjs";
 import { GRADE_BUDGETS } from "./data/monster-budgets.mjs";
 import EssenceGradeBudgetsSettings from "./apps/grade-budgets-settings.mjs";
@@ -48,6 +48,18 @@ function essenceEditorHelper(content, options) {
 
 Hooks.once("init", () => {
   console.log("Essence System | Initializing");
+
+  // Shared partials (Finding 6 / build-history): the Death Track block was hand-copied
+  // byte-for-byte across character-sheet.hbs/npc-sheet.hbs/monster-sheet.hbs, and the Wounds
+  // section header separately duplicated between npc-sheet.hbs/monster-sheet.hbs. This project has
+  // no prior Handlebars-partial convention to follow, so this establishes one: register each
+  // "parts/*.hbs" file under its own path as the partial key, then `{{> "that same path"}}` from
+  // any sheet template. foundry.applications.handlebars.loadTemplates both compiles/caches the
+  // template AND registers it as a partial when given an array of paths.
+  foundry.applications.handlebars.loadTemplates([
+    "systems/essence-system/templates/actor/parts/death-track.hbs",
+    "systems/essence-system/templates/actor/parts/wounds-header.hbs"
+  ]);
 
   CONFIG.Actor.dataModels.character = EssenceCharacterData;
   CONFIG.Actor.dataModels.npc = EssenceNpcData;
@@ -92,6 +104,7 @@ Hooks.once("init", () => {
   Handlebars.registerHelper("turnLabel", (turn) => TURN_LABELS[turn] ?? capitalize(turn ?? ""));
   Handlebars.registerHelper("fitTitleSize", (text, options) => fitTitleSize(text, options.hash));
   Handlebars.registerHelper("domainResource", domainResource);
+  Handlebars.registerHelper("fittingReconfigureCost", fittingReconfigureCost);
 
   // Homebrew Grade (Mook/Normal/Elite) budget table the Monster Creator auto-fills stat blocks
   // from — see monster-budgets.mjs's own doc comment on why this is meant to be GM-tunable.
@@ -217,7 +230,7 @@ Hooks.once("ready", async () => {
 });
 
 /**
- * One-time migration: character-wizard.mjs's #onAdjustSkill let a Combat Skill's rank drop back to
+ * One-time migration: character-wizard.mjs's #onAdjustSkill let a Combat Style's rank drop back to
  * 0 without clearing any Expertise the player had already picked under it (fixed going forward —
  * see that function's comment), so an Expertise already orphaned this way is invisible in the
  * wizard's by-skill breakdown (which only lists skills at rank >= 1) yet still counts toward the

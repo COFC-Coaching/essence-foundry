@@ -96,7 +96,7 @@ const TEMPLATES = {
       "isModular"
     ],
     // No `slot` or `quantity` column — both are properties of an owned COPY of an item (which
-    // Signature/Temporary/Armory slot it's carried in; how many you happen to have), assigned once
+    // Inventory/Temporary/Armory slot it's carried in; how many you happen to have), assigned once
     // a player actually acquires it, not properties of the template being authored here. `category`
     // only accepts toolkit/consumable-kit/gear (see FLAT_EQUIPMENT_CATEGORIES in item-card.mjs) —
     // weapon/ranged/armor/shield/implement are wholesale modular (MODULAR_EQUIPMENT_CATEGORIES),
@@ -144,7 +144,7 @@ const TEMPLATES = {
       "name", "category", "tier", "fortitude", "resilience", "movement", "effect",
       "passive", "special", "flavor", "grantsEquipmentCard", "compatibleFittingCategory", "mountCount"
     ],
-    // No `slot` column — which Signature/Temporary/Armory slot a Component sits in is assigned
+    // No `slot` column — which Inventory/Temporary/Armory slot a Component sits in is assigned
     // once a player actually owns it, not a property of the template. `mountCount` creates that
     // many independent Mounts (§ Augment Mounts) — a Linked Mount pair is a rarer, more specific
     // shape not worth CSV-izing; add one after import via the item sheet.
@@ -197,7 +197,7 @@ function categoryFolderName(category) {
 
 /**
  * Resolves the destination Folder _id for a row within its target pack, mirroring how
- * build-packs.mjs seeds folders (per Combat Skill for cards, per category for Equipment) and how
+ * build-packs.mjs seeds folders (per Combat Style for cards, per category for Equipment) and how
  * content-wizard.mjs routes single-item creation — so a bulk-imported row lands in the same folder
  * a GM would expect from either of those. Folder names are matched case-insensitively since a CSV
  * column value's casing isn't guaranteed to match the seeded folder name exactly.
@@ -296,7 +296,7 @@ function cardRowToSystem(row) {
   };
 }
 
-/** No `slot`/`quantity` here — both are per-owned-copy properties (which Signature/Temporary/
+/** No `slot`/`quantity` here — both are per-owned-copy properties (which Inventory/Temporary/
  *  Armory slot it's carried in; how many you own) assigned once a player acquires the item, not
  *  properties of the template being authored/imported. Omitting them from the returned object
  *  means an update() leaves an existing item's own slot/quantity untouched, and a newly-created

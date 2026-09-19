@@ -21,7 +21,7 @@
     {{else}}
       {{#if system.handedness}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Item.Component.Handedness"}}</span><span>{{system.handedness}}</span></div>{{/if}}
       {{#if system.rangeModifier}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Item.Component.RangeModifier"}}</span><span>{{system.rangeModifier}}</span></div>{{/if}}
-      <div><span class="card-view-statlabel">{{localize "ESSENCE.Item.Component.Reconfigure"}}</span><span>{{system.reconfigureCategory}}{{#if system.reconfigureCostOverride}} ({{localize "ESSENCE.Item.Component.OverrideValue" value=system.reconfigureCostOverride}}){{/if}}</span></div>
+      <div><span class="card-view-statlabel">{{localize "ESSENCE.Item.Component.Reconfigure"}}</span><span>{{#if (eq system.reconfigureCategory "structural")}}{{localize "ESSENCE.Item.Component.ReconfigureStructural"}}{{else}}{{localize "ESSENCE.Item.Component.ReconfigureSimple"}}{{/if}}{{#if system.reconfigureCostOverride}} ({{localize "ESSENCE.Item.Component.OverrideValue" value=system.reconfigureCostOverride}}){{/if}}</span></div>
     {{/if}}
   </div>
 
@@ -69,7 +69,7 @@
   </label>
   <label>{{localize "ESSENCE.Common.Slot"}}
     <select name="system.slot">
-      <option value="signature" {{#if (eq system.slot "signature")}}selected{{/if}}>signature</option>
+      <option value="inventory" {{#if (eq system.slot "inventory")}}selected{{/if}}>inventory</option>
       <option value="temporary" {{#if (eq system.slot "temporary")}}selected{{/if}}>temporary</option>
       <option value="armory" {{#if (eq system.slot "armory")}}selected{{/if}}>armory</option>
     </select>

@@ -1,0 +1,50 @@
+{
+  "_id": "d12b8fae7b55e5c1",
+  "name": "Impaired Body",
+  "type": "condition",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "classification": "wound",
+    "sections": [
+      {
+        "label": "WOUND — Physical Light",
+        "html": "Wound Condition: <b>Impaired Body</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "Movement -1 unit."
+      },
+      {
+        "label": "NATURAL RECOVERY",
+        "html": "Relevant treatment and one appropriate Recovery opportunity."
+      }
+    ]
+  },
+  "effects": [
+    {
+      "_id": "e62dd527d48afe73",
+      "_key": "!items.effects!d12b8fae7b55e5c1.e62dd527d48afe73",
+      "name": "Impaired Body: Movement -1",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.movementBonus",
+          "mode": 2,
+          "value": "-1",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d12b8fae7b55e5c1"
+}

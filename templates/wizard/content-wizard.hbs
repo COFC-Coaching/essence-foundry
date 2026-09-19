@@ -53,7 +53,7 @@
         </div>
         <div class="wizard-row">
           <label>{{localize "ESSENCE.Common.Attribute"}} <input type="text" data-field="system.attr" value="{{system.attr}}"></label>
-          <label>{{localize "ESSENCE.Common.Skill"}} <input type="text" data-field="system.skill" value="{{system.skill}}"></label>
+          <label>{{localize "ESSENCE.Common.Style"}} <input type="text" data-field="system.skill" value="{{system.skill}}"></label>
           <label>{{localize "ESSENCE.Common.Defense"}} <input type="text" data-field="system.defense" value="{{system.defense}}" placeholder="Fortitude/Composure/Harmony"></label>
         </div>
         <div class="wizard-row">
@@ -197,7 +197,7 @@
           </label>
           <label>{{localize "ESSENCE.Common.Slot"}}
             <select data-field="system.slot">
-              <option value="signature" {{#if (eq system.slot "signature")}}selected{{/if}}>signature</option>
+              <option value="inventory" {{#if (eq system.slot "inventory")}}selected{{/if}}>inventory</option>
               <option value="temporary" {{#if (eq system.slot "temporary")}}selected{{/if}}>temporary</option>
               <option value="armory" {{#if (eq system.slot "armory")}}selected{{/if}}>armory</option>
             </select>
@@ -258,7 +258,7 @@
           </label>
           <label>{{localize "ESSENCE.Common.Slot"}}
             <select data-field="system.slot">
-              <option value="signature" {{#if (eq system.slot "signature")}}selected{{/if}}>signature</option>
+              <option value="inventory" {{#if (eq system.slot "inventory")}}selected{{/if}}>inventory</option>
               <option value="temporary" {{#if (eq system.slot "temporary")}}selected{{/if}}>temporary</option>
               <option value="armory" {{#if (eq system.slot "armory")}}selected{{/if}}>armory</option>
             </select>

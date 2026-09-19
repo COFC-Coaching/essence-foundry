@@ -147,8 +147,11 @@ export default class EssenceCombat extends Combat {
       "system.playState.actionDice": base - (isFirst ? (ps.initiativeDice || 0) : 0),
       "system.playState.reactionDice": 0,
       // Accumulated Damage resets at the start of each of the character's own Turns
-      // (see part-iv-combat.md § Resilience).
-      "system.playState.accumulatedDamage": 0
+      // (see part-iv-combat.md § Resilience) — accumulatedDamageWounds (0.6.85, plan §5.6) resets
+      // alongside it, since it's just the already-extracted-Wounds count derived from the same
+      // interval's accumulated Damage.
+      "system.playState.accumulatedDamage": 0,
+      "system.playState.accumulatedDamageWounds": 0
     };
 
     // A Cunning Contingency not used by its Trigger expires at the start of the character's
@@ -163,12 +166,28 @@ export default class EssenceCombat extends Combat {
       update["system.abilities"] = actor.system.abilities.map((a) => ({ ...a, usedThisRound: false }));
     }
 
-    // While a Critical Wound remains untreated, the Death Track advances 1 step at the start of
-    // every one of the character's Turns (see part-iv-combat.md § The Death Track).
-    if (actor.system.woundState === "Critically Wounded" && !ps.deathTrackFrozen) {
-      const next = Math.min(5, (ps.deathTrackStep ?? 0) + 1);
+    // V6 §6.8 (plan): a player/NPC Combat or Reaction Card with `cooldownFrequency: "perRound"`
+    // (item-card.mjs) re-enables at the start of every one of this actor's own Turns too — same
+    // cadence as the adversary "1 per Round" reset just above, same reasoning. "perEncounter" cards
+    // are deliberately NOT touched here (see utils.mjs's resetEncounterCooldowns doc comment).
+    const perRoundCards = actor.items?.filter((i) => (i.type === "action-card" || i.type === "reaction-card") && i.system.cooldownFrequency === "perRound" && i.system.cooldownUsed) ?? [];
+    for (const card of perRoundCards) await card.update({ "system.cooldownUsed": false });
+
+    // V6: the Death Track advances 1 step at the start of every one of the character's own Turns
+    // while all 5 Core Wound spaces are filled AND the character is actively "dying" — governed by
+    // occupancy (system.coreWoundsFilled), not by possessing a Critical Wound specifically, and
+    // NOT while "stabilized" (see actor-combatant.mjs's deathTrackState schema comment for the full
+    // state model). Adversaries never use the Death Track at all (V6 §2415) — see actor-adversary.mjs.
+    const usesDeathTrack = !actor.system.usesSimplifiedWounds;
+    const trackIsFull = actor.system.coreWoundsFilled === actor.system.coreWounds.length;
+    if (usesDeathTrack && trackIsFull && ps.deathTrackState === "dying") {
+      // V6 Deathless Nature (design/v6-revision-delta.md §2.3): the cap is 7 for a Deathless
+      // character, 5 otherwise — see actor-combatant.mjs's deathTrackMax (derived once, read here
+      // rather than re-hardcoded). Governs both the advance's ceiling and the death trigger below.
+      const max = actor.system.deathTrackMax ?? 5;
+      const next = Math.min(max, (ps.deathTrackStep ?? 0) + 1);
       update["system.playState.deathTrackStep"] = next;
-      if (next >= 5) {
+      if (next >= max) {
         ui.notifications.error(game.i18n.format("ESSENCE.Notify.EndOfDeathTrack", { name: actor.name }));
         await ChatMessage.create({
           speaker: ChatMessage.getSpeaker({ actor }),

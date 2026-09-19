@@ -1,0 +1,50 @@
+{
+  "_id": "2ee2961d302859bf",
+  "name": "Cognitive Trauma",
+  "type": "condition",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "classification": "wound",
+    "sections": [
+      {
+        "label": "WOUND — Mental Serious",
+        "html": "Wound Condition: <b>Cognitive Trauma</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "-1 Composure. The first Mental Action on each of your Turns and first Mental Reaction between your Turns require 1 additional burned die."
+      },
+      {
+        "label": "NATURAL RECOVERY",
+        "html": "Relevant mental care and support plus post-Adventure Downtime rest and healing, or qualifying active healing. Mid-Adventure Recovery alone is insufficient."
+      }
+    ]
+  },
+  "effects": [
+    {
+      "_id": "da8156394abb27a4",
+      "_key": "!items.effects!2ee2961d302859bf.da8156394abb27a4",
+      "name": "Cognitive Trauma: Composure -1",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.composureBonus",
+          "mode": 2,
+          "value": "-1",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!2ee2961d302859bf"
+}

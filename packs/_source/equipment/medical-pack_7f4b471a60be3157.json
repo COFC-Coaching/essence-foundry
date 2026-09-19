@@ -1,6 +1,6 @@
 {
-  "_id": "349511d09ada40bf",
-  "name": "Potion Pack",
+  "_id": "7f4b471a60be3157",
+  "name": "Medical Pack",
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
@@ -10,7 +10,7 @@
     "type": "Consumable",
     "cost": "1",
     "range": "",
-    "effect": "Gain the 'Concoction' Action Card. Each use of the card consumes 1 charge.",
+    "effect": "Gain the 'Medkit' Action Card. Each use of the card consumes 1 charge.",
     "passive": "",
     "special": "",
     "fortitude": "",
@@ -19,7 +19,7 @@
     "tags": "consumable",
     "flavor": "",
     "reachBonus": 0,
-    "uses": 3,
+    "uses": 5,
     "slotCost": 1,
     "isModular": false,
     "quantity": 1
@@ -29,5 +29,5 @@
   "ownership": {
     "default": 0
   },
-  "_key": "!items!349511d09ada40bf"
+  "_key": "!items!7f4b471a60be3157"
 }

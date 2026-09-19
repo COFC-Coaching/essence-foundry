@@ -1,0 +1,23 @@
+{{!--
+  V6 Death Track block (part-iv-combat.md § The Death Track) — pip track, state label, Stabilized
+  checkbox. Shared by character-sheet.hbs/npc-sheet.hbs/monster-sheet.hbs, which were previously
+  hand-copied byte-for-byte across all three (see build-history). Pure extraction — every variable
+  used here (`deathTrackActive`, `deathTrackPips`, `system.playState.deathTrackState`) is already
+  present in every context that includes this partial: EssenceActorSheet#_prepareContext directly,
+  and EssenceNpcSheet#_prepareContext (inherited unchanged by EssenceMonsterSheet) the same way.
+--}}
+{{#if deathTrackActive}}
+  <div class="wounds-row">
+    <div class="wound-block">
+      <span class="attr-label">{{localize "ESSENCE.Sheet.DeathTrack"}} <span class="muted">— {{localize (concat "ESSENCE.Sheet.DeathTrackState" (capitalize system.playState.deathTrackState))}}</span></span>
+      <span class="pip-track">
+        {{#each deathTrackPips as |filled i|}}<button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleDeathTrack" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="{{localize 'ESSENCE.Sheet.DeathTrackStepAria' n=(addOne i)}}"></button>{{/each}}
+      </span>
+    </div>
+    <div class="wound-block">
+      <label style="display:flex;align-items:center;gap:4px;">
+        <input type="checkbox" data-action="toggleDeathTrackStabilized" {{#if (eq system.playState.deathTrackState "stabilized")}}checked{{/if}}> {{localize "ESSENCE.Sheet.Stabilized"}}
+      </label>
+    </div>
+  </div>
+{{/if}}

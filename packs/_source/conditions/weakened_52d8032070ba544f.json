@@ -1,0 +1,26 @@
+{
+  "_id": "52d8032070ba544f",
+  "name": "Weakened",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "classification": "ordinary",
+    "sections": [
+      {
+        "label": "ORDINARY CONDITION",
+        "html": "<b>Weakened</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "Damage you deal is reduced by 1, minimum 0. This modifies Damage after the card determines its amount but before the target applies Resistance, Vulnerability, Resilience, or Breach."
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!52d8032070ba544f"
+}

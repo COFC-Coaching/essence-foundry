@@ -1,4 +1,4 @@
-import { SEVERITY_BY_INDEX } from "../utils.mjs";
+import { SEVERITY_BY_INDEX, deathTrackAfterWoundFilled } from "../utils.mjs";
 
 /**
  * Calling's Full Manifestation, built on Foundry's own native mechanism for "this token is
@@ -198,15 +198,35 @@ export async function applyManifestationDefeat(profile) {
   let tempWounds = caller.system.playState.currentTemporaryWounds ?? 0;
   const coreWounds = caller.system.coreWounds.map((w) => ({ ...w }));
   let deathTrackStep = caller.system.playState.deathTrackStep ?? 0;
+  let deathTrackState = caller.system.playState.deathTrackState ?? "none";
+  const wasFull = coreWounds.length > 0 && coreWounds.every((w) => w.filled);
   const log = [];
   for (let i = 0; i < wounds; i++) {
     if (tempWounds > 0) { tempWounds -= 1; log.push("1 Wound absorbed by a Temporary Wound."); continue; }
     const slot = coreWounds.findIndex((w) => !w.filled);
-    if (slot === -1) { deathTrackStep = Math.min(5, deathTrackStep + 1); log.push("Core Wound track already full — Death Track advances instead."); continue; }
+    if (slot === -1) {
+      // V6: same "already full" overflow handling as #onApplyDamage (actor-sheet.mjs) — shared via
+      // deathTrackAfterWoundFilled rather than reimplemented, since this call site previously
+      // advanced deathTrackStep but never actually activated deathTrackState. Ceiling is
+      // deathTrackMax (5, or 7 for Deathless — design/v6-revision-delta.md §2.3).
+      deathTrackStep = Math.min(caller.system.deathTrackMax ?? 5, deathTrackStep + 1);
+      const overflowChange = deathTrackAfterWoundFilled(deathTrackState, true, true);
+      if (overflowChange) deathTrackState = overflowChange.deathTrackState;
+      log.push("Core Wound track already full — Death Track advances instead.");
+      continue;
+    }
     const severity = SEVERITY_BY_INDEX[slot];
     const label = `${severity} Manifestation-Feedback Wound`;
     coreWounds[slot] = { filled: true, domain: "spiritual", severity, condition: label };
     log.push(`Core Wound filled: <strong>${label}</strong>.`);
+  }
+  // V6: activate the Death Track at step 0 if this transfer is what completed the 5th Core Wound
+  // space — same wasFull/nowFull transition #onApplyDamage checks.
+  const nowFull = coreWounds.length > 0 && coreWounds.every((w) => w.filled);
+  const fillChange = deathTrackAfterWoundFilled(deathTrackState, wasFull, nowFull);
+  if (fillChange) {
+    deathTrackState = fillChange.deathTrackState;
+    if (fillChange.deathTrackStep !== undefined) deathTrackStep = fillChange.deathTrackStep;
   }
 
   const records = caller.system.specialties.manifestationRecords.map((r) => ({ ...r }));
@@ -220,6 +240,7 @@ export async function applyManifestationDefeat(profile) {
     "system.coreWounds": coreWounds,
     "system.playState.currentCoreWounds": coreWounds.filter((w) => w.filled).length,
     "system.playState.deathTrackStep": deathTrackStep,
+    "system.playState.deathTrackState": deathTrackState,
     "system.specialties.manifestationRecords": records
   });
 

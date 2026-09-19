@@ -60,6 +60,255 @@ const CONDITION_EFFECTS = {
   CHILLED: [{ label: "Chilled: Movement -2", key: "system.movement", mode: AE_ADD, value: -2 }]
 };
 
+/**
+ * V6 Appendix E "Baseline Fallback Wound Cards — Playtest" (plan §6.4): the nine authoritative
+ * fallback Wound Cards, one per Damage domain × severity, attached to a filled Core Wound space by
+ * module/utils.mjs#attachWoundCard (matched by exact `name` — keep these in sync with
+ * WOUND_CARD_NAMES there). Hand-authored here rather than Neon-sourced, since Wound Cards are new
+ * V6 content with no upstream database table — same "hand-authored data hardcoded in this script"
+ * pattern already used for species/heritages/distinctions (scripts/origin-data.json), just inlined
+ * since there are only nine entries. Only the flat, unconditional half of each effect (the
+ * Movement/Composure/Harmony penalty) becomes a real Active Effect; the "1 additional burned die"
+ * escalation on every Serious/Critical card, and Physical Critical's "halve Movement" (not a flat
+ * additive change), stay reminder text only — this file's own CONDITION_EFFECTS convention above.
+ */
+const WOUND_CARDS = [
+  { domain: "Physical", severity: "Light", name: "Impaired Body",
+    effect: "Movement -1 unit.",
+    recovery: "Relevant treatment and one appropriate Recovery opportunity.",
+    activeEffects: [{ label: "Impaired Body: Movement -1", key: "system.movementBonus", mode: AE_ADD, value: -1 }] },
+  { domain: "Physical", severity: "Serious", name: "Debilitated Body",
+    effect: "Movement -2 units. The first Physical Action on each of your Turns and first Physical Reaction between your Turns require 1 additional burned die.",
+    recovery: "Relevant physical treatment plus post-Adventure Downtime rest and healing, or qualifying active healing. Mid-Adventure Recovery alone is insufficient.",
+    activeEffects: [{ label: "Debilitated Body: Movement -2", key: "system.movementBonus", mode: AE_ADD, value: -2 }] },
+  { domain: "Physical", severity: "Critical", name: "Catastrophic Injury",
+    effect: "Halve Movement, rounded up. Physical Actions and Reactions require 1 additional burned die.",
+    recovery: "Stabilize: end ongoing harm and provide appropriate medical treatment or equivalent supernatural aid. Recovery: extended safe treatment appropriate to the injury, or qualifying Critical healing. Exact duration remains to be finalized.",
+    activeEffects: [] },
+  { domain: "Mental", severity: "Light", name: "Disrupted Mind",
+    effect: "-1 Composure.",
+    recovery: "A safe opportunity to recover from the cause plus one appropriate Recovery opportunity.",
+    activeEffects: [{ label: "Disrupted Mind: Composure -1", key: "system.composureBonus", mode: AE_ADD, value: -1 }] },
+  { domain: "Mental", severity: "Serious", name: "Cognitive Trauma",
+    effect: "-1 Composure. The first Mental Action on each of your Turns and first Mental Reaction between your Turns require 1 additional burned die.",
+    recovery: "Relevant mental care and support plus post-Adventure Downtime rest and healing, or qualifying active healing. Mid-Adventure Recovery alone is insufficient.",
+    activeEffects: [{ label: "Cognitive Trauma: Composure -1", key: "system.composureBonus", mode: AE_ADD, value: -1 }] },
+  { domain: "Mental", severity: "Critical", name: "Fractured Consciousness",
+    effect: "-2 Composure. Mental Actions and Reactions require 1 additional burned die.",
+    recovery: "Stabilize: contain the ongoing cognitive or psychic cause and provide appropriate professional, relational, technological, or supernatural support. Recovery: extended safe treatment appropriate to the injury, or qualifying Critical healing. Exact duration remains to be finalized.",
+    activeEffects: [{ label: "Fractured Consciousness: Composure -2", key: "system.composureBonus", mode: AE_ADD, value: -2 }] },
+  { domain: "Spiritual", severity: "Light", name: "Unmoored Essence",
+    effect: "-1 Harmony.",
+    recovery: "A stable spiritual environment, anchor, or equivalent support plus one appropriate Recovery opportunity.",
+    activeEffects: [{ label: "Unmoored Essence: Harmony -1", key: "system.harmonyBonus", mode: AE_ADD, value: -1 }] },
+  { domain: "Spiritual", severity: "Serious", name: "Spiritual Trauma",
+    effect: "-1 Harmony. The first Spiritual Action on each of your Turns and first Spiritual Reaction between your Turns require 1 additional burned die.",
+    recovery: "Relevant ritual, relational, spiritual, or supernatural care plus post-Adventure Downtime rest and healing, or qualifying active healing. Mid-Adventure Recovery alone is insufficient.",
+    activeEffects: [{ label: "Spiritual Trauma: Harmony -1", key: "system.harmonyBonus", mode: AE_ADD, value: -1 }] },
+  { domain: "Spiritual", severity: "Critical", name: "Severed Essence",
+    effect: "-2 Harmony. Spiritual Actions and Reactions require 1 additional burned die.",
+    recovery: "Stabilize: contain the ongoing spiritual cause and establish an appropriate anchor through a person, rite, vessel, place, or equivalent method. Recovery: extended safe treatment appropriate to the injury, or qualifying Critical healing. Exact duration remains to be finalized.",
+    activeEffects: [{ label: "Severed Essence: Harmony -2", key: "system.harmonyBonus", mode: AE_ADD, value: -2 }] }
+];
+
+function woundCardToItem(wc) {
+  const _id = stableId(`wound-card:${wc.domain}:${wc.severity}`).slice(0, 16);
+  return {
+    _id,
+    name: wc.name,
+    type: "condition",
+    img: "icons/svg/regen.svg",
+    system: {
+      classification: "wound",
+      sections: [
+        { label: `WOUND — ${wc.domain} ${wc.severity}`, html: `Wound Condition: <b>${wc.name}</b>.` },
+        { label: "EFFECT", html: wc.effect },
+        { label: "NATURAL RECOVERY", html: wc.recovery }
+      ]
+    },
+    effects: activeEffects(_id, wc.activeEffects),
+    folder: null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
+/**
+ * V6 Appendix F "Baseline Fallback Consequences — Playtest" (plan §6.6): the three authoritative
+ * fallback Influence Consequence Cards, one per Core Influence severity (unlike Wound Cards there
+ * is no domain axis here — Core Influence is a single severity-only track), attached to a filled
+ * Core Influence space by module/utils.mjs#attachConsequenceCard (matched by exact `name` — keep in
+ * sync with CONSEQUENCE_CARD_NAMES there). Hand-authored here for the same reason WOUND_CARDS is:
+ * this is new V6 content with no upstream Neon table. Only Compromised Standing (Serious) becomes a
+ * real Active Effect — it's the one entry that's genuinely unconditional ("Reach as 1 lower
+ * generally"); Strained Position (Light) and Crisis of Standing (Critical) are both explicitly
+ * SCOPED to "the sphere harmed"/"the primary sphere of collapse," which this file's own
+ * activeEffects()/CONDITION_EFFECTS convention reserves for reminder text only, same treatment as
+ * Wound Cards' Critical tier.
+ */
+const CONSEQUENCE_CARDS = [
+  { severity: "Light", name: "Strained Position",
+    effect: "Choose the sphere harmed by this consequence. Treat Reach as 1 lower (minimum 0) only when that sphere is directly relevant.",
+    recovery: "Take a concrete corrective action appropriate to the harm, then receive a suitable Downtime opportunity for the correction to take effect.",
+    activeEffects: [] },
+  { severity: "Serious", name: "Compromised Standing",
+    effect: "Treat Reach as 1 lower generally. In addition, choose one relevant contact, supplier, institution, relationship, or access route that is unavailable until specifically repaired.",
+    recovery: "Resolve the specific blocked relationship or obligation and complete a meaningful corrective process. This may require several Downtime opportunities or a focused undertaking.",
+    activeEffects: [{ label: "Compromised Standing: Reach -1", key: "system.reachBonus", mode: AE_ADD, value: -1 }] },
+  { severity: "Critical", name: "Crisis of Standing",
+    effect: "Choose the primary sphere of collapse. Reach cannot absorb ordinary Influence pressure within that sphere; pressure there proceeds directly to Temporary Influence, then Core Influence. One major relationship, institution, or source of access is also unavailable.",
+    recovery: "Critical recovery requires a major corrective undertaking appropriate to the cause: repayment, public vindication, fulfilled obligation, restored institution, reconciliation, or a comparable change. Time alone is insufficient.",
+    activeEffects: [] }
+];
+
+function consequenceCardToItem(cc) {
+  const _id = stableId(`consequence-card:${cc.severity}`).slice(0, 16);
+  return {
+    _id,
+    name: cc.name,
+    type: "condition",
+    img: "icons/svg/degen.svg",
+    system: {
+      classification: "consequence",
+      sections: [
+        { label: `INFLUENCE CONSEQUENCE — ${cc.severity}`, html: `Influence Consequence: <b>${cc.name}</b>.` },
+        { label: "EFFECT", html: cc.effect },
+        { label: "RECOVERY", html: cc.recovery }
+      ]
+    },
+    effects: activeEffects(_id, cc.activeEffects),
+    folder: null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
+/**
+ * V6 §6.3 (plan): Cover — Low Cover grants +1 Fortitude, High Cover +2, against whatever attack the
+ * Cover could plausibly obstruct; Cover modifies Fortitude only (never Composure/Harmony); creatures
+ * don't provide Cover by default; and the attack's source (magical vs mundane) doesn't determine
+ * whether Cover applies. Built exactly like WOUND_CARDS/CONSEQUENCE_CARDS above — two Condition
+ * Items with a real transferred Active Effect on `system.fortitudeBonus` — per the plan's own
+ * explicit recommendation, this reuses the existing Token HUD -> Condition Item pipeline (every
+ * entry in this "conditions" pack is auto-registered as a Token HUD status by essence.mjs's "ready"
+ * hook) with zero new code. Unlike Wound/Consequence Cards' conditional tiers, this stays a flat,
+ * unconditional Active Effect while the Condition is active — Cover is inherently transient and the
+ * GM/player toggles it on/off via the Token HUD only while it's actually relevant (the same
+ * trust-based convention every other Condition in this system already uses, e.g. Chilled's flat
+ * Movement -2 while active), not something that needs per-attack scoping logic.
+ */
+const COVER_CARDS = [
+  { name: "Low Cover", bonus: 1,
+    effect: "+1 Fortitude against an attack this Cover could plausibly obstruct. Cover modifies Fortitude only — never Composure or Harmony. Creatures do not provide Cover by default. Whether the attack's source is magical or mundane does not determine whether Cover applies." },
+  { name: "High Cover", bonus: 2,
+    effect: "+2 Fortitude against an attack this Cover could plausibly obstruct. Cover modifies Fortitude only — never Composure or Harmony. Creatures do not provide Cover by default. Whether the attack's source is magical or mundane does not determine whether Cover applies." }
+];
+
+function coverCardToItem(cc) {
+  const _id = stableId(`cover:${cc.name}`).slice(0, 16);
+  return {
+    _id,
+    name: cc.name,
+    type: "condition",
+    img: "icons/svg/shield.svg",
+    system: {
+      classification: "cover",
+      sections: [
+        { label: "COVER", html: `Cover: <b>${cc.name}</b>.` },
+        { label: "EFFECT", html: cc.effect }
+      ]
+    },
+    effects: activeEffects(_id, [{ label: `${cc.name}: Fortitude +${cc.bonus}`, key: "system.fortitudeBonus", mode: AE_ADD, value: cc.bonus }]),
+    folder: null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
+/**
+ * V6's 8 printed "Ordinary Conditions — Playtest" (plan §6.5; exact text confirmed against the
+ * revised book, delta report §6: "all eight effect texts are word-for-word identical" between the
+ * plan's snapshot and the revision, so this is built straight from the book, no plan-vs-delta
+ * reconciliation needed). The Neon-sourced `raw-condition-cards.json` already has entries named
+ * BURNING and DAZED (see conditionToItem below) — but their text is V5-era and genuinely
+ * contradicts V6 in both cases: Neon's Burning triggers "at the end of your turn" and auto-implies
+ * itself from Fire Damage (V6 explicitly says "Fire Damage does not automatically cause Burning");
+ * Neon's Dazed reduces the NEXT roll's maximum dice (a roll-limit mechanic V6 doesn't use for this
+ * Condition at all) instead of taxing 1 additional burned die. Same "source-data quality" bug class
+ * build-history's Recurring bug patterns #4 already documents (10 miscategorized Surges in 0.6.20,
+ * stray Effect text in 0.5.12) — fixed the same way: hand-authored here (like WOUND_CARDS above) and
+ * excluded from the Neon pass below (`wants("conditions")`), so a future Neon re-sync can't
+ * reintroduce the wrong text. Only Restrained's "-1 Fortitude" is a genuinely flat, unconditional
+ * stat change per this file's activeEffects()/CONDITION_EFFECTS convention — every other entry's
+ * numeric effect is either non-additive (Immobilized's Movement=0 override, Weakened's Damage-dealt
+ * reduction, which this schema has no AE target for) or explicitly scoped/conditional (Prone,
+ * Blinded, Silenced, Dazed's burned-die tax, Burning's per-Turn Damage), so those stay reminder
+ * text only, same treatment WOUND_CARDS' Critical tier and CONSEQUENCE_CARDS' scoped entries get.
+ */
+const ORDINARY_CONDITIONS = [
+  { name: "Blinded",
+    effect: "Ordinary sight cannot detect creatures, points, or details farther than 1 unit. Sight-dependent targeting or abilities fail unless another Sense provides the required information. Other Senses can compensate normally.",
+    activeEffects: [] },
+  { name: "Burning",
+    effect: "At the start of your Turn, suffer 1 Physical Fire Damage. During your Turn, you may burn 2 Action dice to extinguish yourself when doing so is physically possible. Appropriate external aid or environmental circumstances can also end Burning.",
+    activeEffects: [] },
+  { name: "Dazed",
+    effect: "The first Action you play on each of your Turns and the first Reaction you play between your Turns each require 1 additional burned die. Dazed never prevents you from acting; it increases the immediate commitment required.",
+    activeEffects: [] },
+  { name: "Immobilized",
+    effect: "Your voluntary Movement is 0 and you cannot gain voluntary extra Movement. You may still take Actions and Reactions normally, and forced movement can still move you unless the source of Immobilized says otherwise.",
+    activeEffects: [] },
+  { name: "Prone",
+    effect: "Standing costs 2 units of Movement. While Prone, your voluntary Movement costs double. You gain +1 Fortitude against physically obstructable attacks originating more than 1 unit away and suffer -1 Fortitude against adjacent physical attacks.",
+    activeEffects: [] },
+  { name: "Restrained",
+    effect: "You cannot voluntarily leave your current space and suffer -1 Fortitude. You can still act, use Reactions, and attack unless the source of the restraint specifically prevents a required limb, item, or other action.",
+    activeEffects: [{ label: "Restrained: Fortitude -1", key: "system.fortitudeBonus", mode: AE_ADD, value: -1 }] },
+  { name: "Silenced",
+    effect: "You cannot speak or intentionally produce a usable voice. Abilities requiring speech, command words, audible performance, or other explicit vocalization cannot be used. Silenced does not prevent non-vocal Actions or Reactions.",
+    activeEffects: [] },
+  { name: "Weakened",
+    effect: "Damage you deal is reduced by 1, minimum 0. This modifies Damage after the card determines its amount but before the target applies Resistance, Vulnerability, Resilience, or Breach.",
+    activeEffects: [] }
+];
+
+function ordinaryConditionToItem(oc) {
+  const _id = stableId(`ordinary-condition:${oc.name}`).slice(0, 16);
+  return {
+    _id,
+    name: oc.name,
+    type: "condition",
+    img: "icons/svg/skull.svg",
+    system: {
+      classification: "ordinary",
+      sections: [
+        { label: "ORDINARY CONDITION", html: `<b>${oc.name}</b>.` },
+        { label: "EFFECT", html: oc.effect }
+      ]
+    },
+    effects: activeEffects(_id, oc.activeEffects),
+    folder: null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
+/**
+ * The 9 Specialty Conditions (plan §6.5/Appendix D) already exist as Neon rows by name (STANCE,
+ * LOCK, UNSTABLE, EXPOSED, CONCENTRATION, STRAIN, RALLIED, POSSESSED, BROKEN — confirmed against
+ * scripts/.cache/raw-condition-cards.json). Used by conditionToItem below purely to tag
+ * `classification` so the ~10 other kept-but-not-canonical Conditions (Bleeding, Chilled,
+ * Concussed, Corroded, Displaced, Distorted, Punctured, Revealed, Shocked, Withered) read as
+ * "other" instead of silently defaulting to "ordinary" — V6 explicitly permits these to exist
+ * alongside its 8-item baseline ("deliberately restrictive rather than exhaustive"), so they're
+ * kept, just correctly labeled as non-canonical rather than miscategorized as one of the 8.
+ */
+const SPECIALTY_CONDITION_NAMES = new Set(["STANCE", "LOCK", "UNSTABLE", "EXPOSED", "CONCENTRATION", "STRAIN", "RALLIED", "POSSESSED", "BROKEN"]);
+
+function classifyCondition(name) {
+  return SPECIALTY_CONDITION_NAMES.has((name || "").toUpperCase()) ? "specialty" : "other";
+}
+
 function loadRows(file) {
   const raw = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", ".cache", file), "utf8"));
   return raw[0].rows;
@@ -105,7 +354,7 @@ function writeSourceDoc(packName, doc, collection = "items") {
 }
 
 /**
- * The 9 Combat Skills, same fixed set item-sheet.mjs's COMBAT_SKILLS uses (capitalized, matching
+ * The 9 Combat Skills, same fixed set item-sheet.mjs's COMBAT_STYLES uses (capitalized, matching
  * how system.skill is actually stored on every card — see that file's comment on the casing
  * gotcha found during the Phase 1 live-verification pass; don't reintroduce a lowercase mismatch
  * here).
@@ -238,6 +487,182 @@ function cardToItem(row, type, folderMap) {
 }
 
 /**
+ * The 7 universal V6 Basic Combat Cards (plan §7.2, corrected to 7 by design/v6-revision-delta.md
+ * §3.3: Basic Melee Attack, Basic Ranged Attack, Defend, Dash, Reconfigure, Stabilize, and the new
+ * Perform Task). `raw-combat-cards.json`'s skill-less rows (Basic Shot, Strike, Brace, Dash,
+ * Disengage, Hide, Shove) were checked against this set first — a real content-quality discrepancy
+ * was found, not just a naming difference: their `body` text is internally misaligned (e.g. "Basic
+ * Shot"'s Effect line describes firing "your sidearm... point-blank," "Strike"'s Target/Effect read
+ * as a melee attack under the wrong name, "Hide"'s Effect describes a push/pull with no relation to
+ * hiding), the same "source-data quality issue in the Neon-backed compendiums" bug class
+ * build-history's Recurring bug patterns #4 flags — this is a fresh, not-yet-discovered instance of
+ * it, confirming that note's own prediction. Rather than hand-patch six garbled rows (risking a
+ * partial, undiscovered fix) or leave two conflicting "Basic" catalogs (one canon, one broken) live
+ * at once, all 7 are hand-authored here with the book's exact "Playtest" text, and the six stale
+ * Neon rows are excluded from the skill-less filter below (same pattern as the Burning/Dazed
+ * exclusion above) — one authoritative Basic set. Reconfigure already exists as actor-level actions
+ * (`reconfigureItem`/`releaseItem`, actor-sheet.mjs, built in Phase 6's 0.6.100) — this Item entry
+ * exists so it's represented in the wizard's card-budget/card-browser catalog like every other
+ * Basic Card, not to duplicate its mechanic; using it from an Item row still just reads its text.
+ */
+const BASIC_CARDS = [
+  { kind: "action", name: "Basic Melee Attack", domain: "physical", attr: "might", skill: "prowess", defense: "fortitude", min: "2",
+    body: [
+      { label: "Target", html: "One creature within the Range of a melee Source you can use." },
+      { label: "Effect", html: "Roll against Fortitude, committing at least 2 Action dice. The maximum is Might + Prowess, or 2 if that sum is lower. If the Source explicitly permits another Physical Attribute, substitute it for Might. On success, deal 1 Physical Damage of a type appropriate to the Source. An unarmed attack uses Range 1 and can always use Bludgeoning." }
+    ],
+    surges: [{ n: "2", html: "Deal +1 Damage." }] },
+  { kind: "action", name: "Basic Ranged Attack", domain: "physical", attr: "grace", skill: "ballistics", defense: "fortitude", min: "2",
+    body: [
+      { label: "Target", html: "One creature within the Range of a ranged Source you can use." },
+      { label: "Effect", html: "Roll against Fortitude, committing at least 2 Action dice. The maximum is Grace + Ballistics, or 2 if that sum is lower. On success, deal 1 Physical Damage of a type appropriate to the Source." }
+    ],
+    surges: [{ n: "2", html: "Deal +1 Damage." }] },
+  { kind: "reaction", name: "Defend", domain: "physical", attr: "", skill: "", defense: "", min: "2", unopposed: true,
+    body: [
+      { label: "Trigger", html: "You are targeted by an opposed Action or Reaction." },
+      { label: "Effect", html: "Choose the Endurance Attribute of the targeted Defense: Vigor for Fortitude, Resolve for Composure, or Anima for Harmony. Roll at least 2 Reaction dice, up to that Attribute; if the Attribute is 1, your maximum is 2 instead. This Reaction is unopposed. Gain +1 to the targeted Defense against the triggering card." }
+    ],
+    surges: [{ n: "2", html: "Increase that Defense by an additional +1 against the triggering card." }] },
+  { kind: "action", name: "Dash", domain: "physical", attr: "", skill: "", defense: "", min: "2",
+    body: [
+      { label: "Effect", html: "Burn 2 Action dice to move up to 4 additional units. This movement is voluntary and follows ordinary terrain and movement restrictions. It is in addition to normal Movement for the Turn." }
+    ],
+    surges: [] },
+  { kind: "action", name: "Reconfigure", domain: "physical", attr: "", skill: "", defense: "", min: "3",
+    body: [
+      { label: "Effect", html: "Burn 3 Action dice. Choose one: ready, stow, recover, or hand over one complete physically accessible combat-ready item; swap one such item you are using for another; or exchange one installed Augment or one combat-replaceable Fitting for a compatible replacement physically available to you. No roll is required." },
+      { label: "Effect", html: "This includes drawing into an empty hand, picking up an item within reach, or handing a held item to an adjacent willing creature. A recipient can immediately use it only if the required hands and other handling requirements are already satisfied; any further swap or preparation uses that recipient's own Reconfigure. Prepared items and Temporary Equipment use the same handling procedure without changing their Inventory accounting. Reconfigure cannot reach an item left elsewhere, waive compatibility, or complete major structural rebuilding." }
+    ],
+    surges: [] },
+  { kind: "action", name: "Stabilize", domain: "physical", attr: "", skill: "", defense: "", min: "3", noSurges: true,
+    body: [
+      { label: "Effect", html: "Burn 3 Action dice while adjacent to a full-track Dying or Stabilized target. You must satisfy the immediate treatment requirements printed by that target's Critical Wound Card. If those requirements are met, Stabilization succeeds automatically. This Action does not heal a Wound and has no Surges." },
+      { label: "Effect", html: "Treatment follows the Critical Wound Card. It may require a Medical Toolkit, ritual support, a spiritual anchor, removal of an ongoing cause, another specific tool, or a combination appropriate to the Wound." }
+    ],
+    surges: [] },
+  { kind: "action", name: "Perform Task", domain: "physical", attr: "", skill: "", defense: "", min: "2", nonCombatTask: true, noSurges: true,
+    body: [
+      { label: "Effect", html: "Burn 2 Action dice. Attempt one ordinary task that can reasonably be performed in a brief action, such as operating a reachable mechanism, opening a lock with suitable tools, or making one step of a repair. You must have the necessary access, tools, and capability. A routine feasible task succeeds without a roll. For meaningful uncertainty, the GM states the Difficulty, result, and foreseeable consequences before you commit." },
+      { label: "Effect", html: "If a roll is needed, roll the full relevant Attribute + Non-Combat Skill, or Attribute + 5 for a directly applicable Key Aspect, at the normal card-roll step. This task roll does not consume further Action dice or use a Combat Style maximum. Use the normal Non-Combat success rules; it generates no Surges. Resolve legal Reactions before applying the task result. The two burned Action dice remain spent even if the attempt fails or is interrupted." },
+      { label: "Effect", html: "Use Perform Task for meaningful handling of ordinary objects. Ready, recover, stow, swap, or hand over combat equipment with Reconfigure instead. Perform Task cannot replace an attack, Reconfigure, Stabilize, or another defined Action to bypass its costs or requirements. Outside Combat, use the normal task procedure without an Action Pool cost." }
+    ],
+    surges: [] }
+];
+
+/** Neon skill-less "Basic" rows whose stored body text is misaligned/garbled (see BASIC_CARDS'
+ *  own doc comment) — excluded so BASIC_CARDS is the sole source of the universal Basic set. */
+const STALE_BASIC_CARD_NAMES = ["Basic Shot", "Strike", "Brace", "Dash", "Disengage", "Hide", "Shove"];
+
+function basicCardToItem(bc, folderMap) {
+  const type = bc.kind === "reaction" ? "reaction-card" : "action-card";
+  const _id = stableId(`basic-card:${bc.name}`).slice(0, 16);
+  return {
+    _id,
+    name: bc.name,
+    type,
+    img: "icons/svg/card-hand.svg",
+    system: {
+      domain: bc.domain || "physical",
+      rank: 0,
+      style: "",
+      subtype: "",
+      attr: bc.attr || "",
+      skill: bc.skill || "",
+      defense: bc.defense || "",
+      unopposed: !!bc.unopposed,
+      min: bc.min ?? "",
+      cost: "",
+      expertises: "",
+      expertisesMode: "any",
+      tags: "",
+      flavor: "",
+      body: bc.body,
+      surges: bc.surges,
+      rider: { title: "", html: "", meta: "" },
+      nonCombatTask: !!bc.nonCombatTask,
+      noSurges: !!bc.noSurges
+    },
+    folder: folderMap ? (folderMap[BASIC_FOLDER_NAME] ?? null) : null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
+/**
+ * V6 §6.7 (plan, confirmed unchanged by design/v6-revision-delta.md §6): four Species Traits grant
+ * a unique unranked Combat Card that does NOT count against the 10 learned-card selection budget.
+ * `scripts/origin-data.json`'s Shaper/True Breath/Ink Cloud/Spore Cloud entries (checked before
+ * building this — they were still V5-era free-text Trait descriptions with no Card of their own,
+ * confirming this genuinely wasn't built yet) each now cross-reference "Gain the [X] Species Combat
+ * Card"; these four entries ARE that Card, hand-authored with the book's exact playtest text
+ * (v6_gdoc.txt), same pattern as BASIC_CARDS above. Each requires its granting Species (a soft
+ * reminder in the card's own text, not a hard runtime gate — this system has no other precedent for
+ * "you must own Item X to use Item Y" enforcement). Shaper is Once per Turn (cooldownFrequency:
+ * "perRound"); the other three are Once per Encounter.
+ */
+const SPECIES_CARDS = [
+  { name: "Shaper", requirement: "Planarborn with Shaper Species Trait.", cooldownFrequency: "perRound",
+    body: [
+      { label: "Requirement", html: "Planarborn with Shaper." },
+      { label: "Range", html: "Adjacent." },
+      { label: "Target", html: "One unoccupied space containing a small amount of ordinary material or energy associated with your Origin." },
+      { label: "Effect", html: "Burn 2 Action dice. Once per Turn. Create or remove 1 unit of Difficult Terrain, form a simple shape, or make a comparable environmental change. Maintain only one altered space; establishing another ends the previous maintained alteration." }
+    ] },
+  { name: "True Breath", requirement: "Dragonkin with True Breath Species Trait.", cooldownFrequency: "perEncounter",
+    body: [
+      { label: "Requirement", html: "Dragonkin with True Breath." },
+      { label: "Area", html: "A 2-unit cone originating from you." },
+      { label: "Effect", html: "Burn 2 Action dice. Once per Encounter. Release your Draconic Lineage. Choose one: make the affected spaces Difficult Terrain until the start of your next Turn; clear ordinary smoke or loose material from them; or create an appropriate visual obstruction until the start of your next Turn. This card does not directly cause Damage." }
+    ] },
+  { name: "Ink Cloud", requirement: "Tideborn with Ink Cloud Species Trait; you must be submerged.", cooldownFrequency: "perEncounter",
+    body: [
+      { label: "Requirement", html: "Tideborn with Ink Cloud; you must be submerged." },
+      { label: "Range", html: "Adjacent." },
+      { label: "Effect", html: "Burn 2 Action dice. Once per Encounter. Fill one adjacent hex with opaque ink. Ordinary sight cannot pass through it. The cloud ends at the start of your next Turn or when dispersed by a strong current." }
+    ] },
+  { name: "Spore Cloud", requirement: "Verdant with Spore Cloud Species Trait.", cooldownFrequency: "perEncounter",
+    body: [
+      { label: "Requirement", html: "Verdant with Spore Cloud." },
+      { label: "Range", html: "Adjacent." },
+      { label: "Effect", html: "Burn 2 Action dice. Once per Encounter. Fill one adjacent hex with spores, pollen, or drifting growth. It blocks ordinary sight until the start of your next Turn." }
+    ] }
+];
+
+function speciesCardToItem(sc, folderId) {
+  const _id = stableId(`species-card:${sc.name}`).slice(0, 16);
+  return {
+    _id,
+    name: sc.name,
+    type: "action-card",
+    img: "icons/svg/card-hand.svg",
+    system: {
+      domain: "physical",
+      rank: 0,
+      style: "",
+      subtype: "",
+      attr: "",
+      skill: "",
+      defense: "",
+      min: "2",
+      cost: "",
+      expertises: "",
+      expertisesMode: "any",
+      tags: "species",
+      flavor: `<p>${sc.requirement}</p>`,
+      body: sc.body,
+      surges: [],
+      rider: { title: "", html: "", meta: "" },
+      speciesGranted: true,
+      cooldownFrequency: sc.cooldownFrequency
+    },
+    folder: folderId ?? null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
+/**
  * The 396-card Rank 0-2 playtest catalogue (PLAYTEST_RULES.md) replacing the previous
  * Neon-sourced Style catalogue — hand-authored per domain/type as CSV in scripts/combat-cards/,
  * using the exact same column shape as bulk-import.mjs's downloadable templates (so the same CSV
@@ -307,6 +732,7 @@ function conditionToItem(row) {
     type: "condition",
     img: "icons/svg/skull.svg",
     system: {
+      classification: classifyCondition(row.name),
       sections: (d.sections || []).map((s) => ({ label: s.label || "", html: s.html || "" }))
     },
     effects: activeEffects(_id, CONDITION_EFFECTS[row.name] || []),
@@ -492,13 +918,13 @@ function speciesToItem(s) {
     system: {
       description: s.description,
       nature: s.nature,
-      adaptationLabel: s.adaptationLabel,
-      adaptationCount: s.adaptationCount,
+      traitLabel: s.traitLabel,
+      traitCount: s.traitCount,
       // subChoice passed through verbatim when present (see item-origin.mjs's subChoiceField()) —
       // defaults to {label:"",type:"none",options:[],count:1,selected:[]} via the schema itself
-      // when an adaptation's origin-data.json entry has no subChoice at all, so omitting it here
-      // for adaptations without one is safe.
-      adaptations: s.adaptations.map((a) => ({ name: a.name, text: a.text, chosen: false, ...(a.subChoice ? { subChoice: a.subChoice } : {}) })),
+      // when a trait's origin-data.json entry has no subChoice at all, so omitting it here
+      // for traits without one is safe.
+      traits: s.traits.map((a) => ({ name: a.name, text: a.text, chosen: false, ...(a.subChoice ? { subChoice: a.subChoice } : {}) })),
       subspecies: s.subspecies || []
     },
     folder: null,
@@ -764,13 +1190,35 @@ async function main() {
     // playtest catalogue below (see PLAYTEST_CARD_FILES/playtestCardCsvToItem) — the hard mechanics
     // rework in PLAYTEST_RULES.md/CALLING_PROFILES.md made a straight content-only re-fetch
     // insufficient, so this filters raw-combat-cards.json down to just the still-current Basics.
-    const combatCards = loadRows("raw-combat-cards.json").filter((row) => !(row.data.skill || row.skill));
+    const combatCards = loadRows("raw-combat-cards.json").filter((row) => !(row.data.skill || row.skill) && !STALE_BASIC_CARD_NAMES.includes(row.name));
     for (const row of combatCards) {
       const type = row.kind === "reaction" ? "reaction-card" : "action-card";
       const pack = row.kind === "reaction" ? "reaction-cards" : "action-cards";
       const folderMap = row.kind === "reaction" ? reactionCardFolders : actionCardFolders;
       writeSourceDoc(pack, cardToItem(row, type, folderMap));
       if (type === "action-card") actionCount++; else reactionCount++;
+    }
+
+    // The 7 universal V6 Basic Combat Cards — see BASIC_CARDS' own doc comment for why these
+    // replace the (garbled) Neon skill-less rows wholesale rather than patching them.
+    for (const bc of BASIC_CARDS) {
+      const type = bc.kind === "reaction" ? "reaction-card" : "action-card";
+      const pack = bc.kind === "reaction" ? "reaction-cards" : "action-cards";
+      const folderMap = bc.kind === "reaction" ? reactionCardFolders : actionCardFolders;
+      writeSourceDoc(pack, basicCardToItem(bc, folderMap));
+      if (type === "action-card") actionCount++; else reactionCount++;
+    }
+
+    // The 4 V6 Species Combat Cards (Shaper/True Breath/Ink Cloud/Spore Cloud) — see SPECIES_CARDS'
+    // own doc comment. Given their own folder rather than "Basic" since they're not part of the
+    // universal Basic set (isBasicCard() would wrongly include them if left with an empty `style`
+    // AND no folder distinction) — `speciesGranted: true` is what actually excludes them from the
+    // wizard's 10-card budget; the folder is purely for compendium-browser organization.
+    const speciesCardFolderId = stableId("folder:action-cards:Species");
+    writeSourceDoc("action-cards", { _id: speciesCardFolderId, name: "Species", type: "Item", folder: null, sorting: "a", color: null, flags: {} }, "folders");
+    for (const sc of SPECIES_CARDS) {
+      writeSourceDoc("action-cards", speciesCardToItem(sc, speciesCardFolderId));
+      actionCount++;
     }
 
     for (const [file, kind] of PLAYTEST_CARD_FILES) {
@@ -787,9 +1235,16 @@ async function main() {
   }
 
   if (wants("conditions")) {
-    const conditionCards = loadRows("raw-condition-cards.json");
+    // BURNING/DAZED excluded here — see ORDINARY_CONDITIONS' own doc comment for why their Neon
+    // text is V5-era and genuinely wrong under V6; ORDINARY_CONDITIONS supplies the correct
+    // replacement for both (plus the 6 other ordinary Conditions V6 prints) below.
+    const conditionCards = loadRows("raw-condition-cards.json").filter((row) => !["BURNING", "DAZED"].includes((row.name || "").toUpperCase()));
     for (const row of conditionCards) writeSourceDoc("conditions", conditionToItem(row));
-    conditionCount = conditionCards.length;
+    for (const oc of ORDINARY_CONDITIONS) writeSourceDoc("conditions", ordinaryConditionToItem(oc));
+    for (const wc of WOUND_CARDS) writeSourceDoc("conditions", woundCardToItem(wc));
+    for (const cc of CONSEQUENCE_CARDS) writeSourceDoc("conditions", consequenceCardToItem(cc));
+    for (const cov of COVER_CARDS) writeSourceDoc("conditions", coverCardToItem(cov));
+    conditionCount = conditionCards.length + ORDINARY_CONDITIONS.length + WOUND_CARDS.length + CONSEQUENCE_CARDS.length + COVER_CARDS.length;
   }
 
   if (wants("equipment")) {

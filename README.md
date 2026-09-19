@@ -9,7 +9,7 @@ identically in Foundry.
 
 See [CHANGELOG.md](CHANGELOG.md) for the full history. Currently working:
 
-- Full character sheet: Attributes, derived Resources/Defenses, Combat Skills (with Distinction
+- Full character sheet: Attributes, derived Resources/Defenses, Combat Styles (with Distinction
   gating), Expertises, Non-Combat Skills, Career, Biography.
 - Species / Heritage / Distinction Items whose traits populate the sheet automatically.
 - The complete Wound system: Resilience, Temporary/Core Wounds, Wound Conditions, Wound State,

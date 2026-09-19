@@ -15,9 +15,9 @@
         "count": 1
       }
     },
-    "adaptationLabel": "Dragonkin Adaptation",
-    "adaptationCount": 1,
-    "adaptations": [
+    "traitLabel": "Dragonkin Trait",
+    "traitCount": 1,
+    "traits": [
       {
         "name": "Burrowing Claws",
         "text": "Gain Burrow 5 through loose earth, sand, snow, or similarly workable material.",
@@ -25,7 +25,7 @@
       },
       {
         "name": "Draconic Armament",
-        "text": "Choose claws, horns, fangs, or a tail as a natural weapon. It counts as a basic one-handed weapon, does not count against your Signature Equipment Limit, and cannot be disarmed. You must leave one hand or equivalent limb free while using it.",
+        "text": "Choose claws, horns, fangs, or a tail as a natural weapon. It counts as a basic one-handed weapon, does not count against your Inventory Limit, and cannot be disarmed. You must leave one hand or equivalent limb free while using it.",
         "chosen": false,
         "subChoice": {
           "label": "Natural Weapon",
@@ -56,12 +56,12 @@
       },
       {
         "name": "True Breath",
-        "text": "Once per scene, release your Draconic Lineage in a 2-unit cone. You may make the affected spaces difficult terrain, clear ordinary smoke or loose material from them, or create an appropriate visual obstruction until the start of your next turn. This Adaptation does not directly cause Damage.",
+        "text": "Once per scene, release your Draconic Lineage in a 2-unit cone. You may make the affected spaces difficult terrain, clear ordinary smoke or loose material from them, or create an appropriate visual obstruction until the start of your next turn. This Trait does not directly cause Damage.",
         "chosen": false
       },
       {
         "name": "Wings",
-        "text": "While falling, you may glide using your full Movement and may Dash normally. You cannot gain height through this Adaptation or remain airborne without descending.",
+        "text": "While falling, you may glide using your full Movement and may Dash normally. You cannot gain height through this Trait or remain airborne without descending.",
         "chosen": false
       }
     ],

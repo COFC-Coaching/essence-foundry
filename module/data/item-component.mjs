@@ -18,10 +18,10 @@ class EssenceComponentData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       category: new fields.StringField({ initial: "weapon", choices: ["weapon", "ranged", "armor", "shield", "implement"] }),
-      // Loose Chassis/Fittings occupy Armory/Signature capacity at half a slot each (§ Armory and
-      // Signature Capacity) — same slot vocabulary as EssenceEquipmentData's own `slot` field, so
+      // Loose Chassis/Fittings occupy Armory/Inventory capacity at half a slot each (§ Armory and
+      // Inventory Capacity) — same slot vocabulary as EssenceEquipmentData's own `slot` field, so
       // computeSlotUsage (utils.mjs) can read it identically regardless of item type.
-      slot: new fields.StringField({ initial: "armory", choices: ["signature", "temporary", "armory"] }),
+      slot: new fields.StringField({ initial: "armory", choices: ["inventory", "temporary", "armory"] }),
       tier: new fields.NumberField({ integer: true, initial: 1, min: 1, max: 5 }),
       // Inherent bonuses this Component contributes when assembled. Stored as signed-text
       // ("+2"/"-1") rather than NumberFields to match EssenceEquipmentData's existing
@@ -47,7 +47,13 @@ class EssenceComponentData extends foundry.abstract.TypeDataModel {
       sourceModifiers: new fields.ArrayField(new fields.SchemaField({
         property: new fields.StringField({ initial: "" }),
         change: new fields.StringField({ initial: "" })
-      }))
+      })),
+      // See EssenceEquipmentData's identical field (item-card.mjs) for the full rationale — a
+      // LOOSE Chassis/Fitting (½-slot, unassembled) carries its own Inventory/Armory allocation
+      // exactly like a complete equipment Item does, so it needs the same used-vs-unused tracking.
+      // An assembled Chassis/Fitting's usage is reflected on the assembled equipment Item's own
+      // flag instead (the equipment Item is what actually gets rolled/used), not duplicated here.
+      usedThisAdventure: new fields.BooleanField({ initial: false })
     };
   }
 }
@@ -89,10 +95,16 @@ export class EssenceFittingData extends EssenceComponentData {
       // just returned an empty array).
       handedness: new fields.StringField({ initial: "", blank: true, choices: ["", "one-handed", "two-handed"] }),
       rangeModifier: new fields.StringField({ initial: "" }),
-      // § Reconfiguring Equipment — "a Simple Fitting Change costs approximately 1 Action die,
-      // while a Structural Fitting Change costs approximately 3... The specific Fitting may state
-      // otherwise," so the default lives on the sheet/reconfig action and this field only holds an
-      // override when the Fitting's own printed text specifies a different die cost.
+      // V6 (design/v6-revision-delta.md §3.1, correcting plan §4.9's V5-shaped reading): Reconfigure
+      // is now ONE Basic Action that always burns 3 Action dice, whichever of its choices you pick
+      // (ready/stow/recover/hand over/swap a complete item, or exchange this Fitting/an Augment).
+      // There is no more "Simple = 1 die / Structural = 3 dice" cost tier — `reconfigureCategory`'s
+      // VALUES are unchanged ("simple"/"structural") but its MEANING changed: it now says whether
+      // this Fitting can be exchanged mid-Combat ("simple" = combat-replaceable) or only outside
+      // Combat ("structural" = out-of-combat only), same distinction the old V5 tiering was already
+      // gesturing at with its "structural" name, just no longer tied to cost. See
+      // #onReconfigureFittingCost (item-sheet.mjs) for the flat-3 cost and the soft in-Combat warning
+      // this now drives instead of a cost lookup.
       reconfigureCategory: new fields.StringField({ initial: "simple", choices: ["simple", "structural"] }),
       reconfigureCostOverride: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 })
     };
@@ -103,7 +115,7 @@ export class EssenceFittingData extends EssenceComponentData {
  * Augments are exceptional modifications installed into a Chassis Mount (§ Augments). A Function
  * Augment grants an Equipment Action/Reaction with limited Uses; a Support Augment is an
  * always-active modifier with no Uses (§ Function and Support Augments). Augments never consume
- * Armory/Signature capacity (§ Augment Ownership) — computeSlotUsage (utils.mjs) always counts
+ * Armory/Inventory capacity (§ Augment Ownership) — computeSlotUsage (utils.mjs) always counts
  * them at 0 regardless of where they're kept.
  */
 export class EssenceAugmentData extends foundry.abstract.TypeDataModel {

@@ -14,6 +14,6 @@
  */
 export const MONSTER_TYPES_LOW = ["Familiar", "Sprite", "Beast", "Phantom", "Golem", "Elemental", "Ancestor", "Fey"];
 
-export const MONSTER_TYPES_HIGH = ["Dragon", "Fiend", "Celestial", "Abomination", "Leviathan", "Avatar", "Outsider", "Colossus", "Primordial"];
+export const MONSTER_TYPES_HIGH = ["Dragon", "Fiend", "Celestial", "Abomination", "Leviathan", "Avatar", "Outsider", "Titan", "Primordial"];
 
 export const MONSTER_TYPES = [...MONSTER_TYPES_LOW, ...MONSTER_TYPES_HIGH];

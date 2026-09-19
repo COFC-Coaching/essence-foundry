@@ -1,0 +1,46 @@
+{
+  "_id": "78dea2ecc31e92fa",
+  "name": "Stabilize",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "",
+    "subtype": "",
+    "attr": "",
+    "skill": "",
+    "defense": "",
+    "unopposed": false,
+    "min": "3",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Effect",
+        "html": "Burn 3 Action dice while adjacent to a full-track Dying or Stabilized target. You must satisfy the immediate treatment requirements printed by that target's Critical Wound Card. If those requirements are met, Stabilization succeeds automatically. This Action does not heal a Wound and has no Surges."
+      },
+      {
+        "label": "Effect",
+        "html": "Treatment follows the Critical Wound Card. It may require a Medical Toolkit, ritual support, a spiritual anchor, removal of an ongoing cause, another specific tool, or a combination appropriate to the Wound."
+      }
+    ],
+    "surges": [],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    },
+    "nonCombatTask": false,
+    "noSurges": true
+  },
+  "folder": "490568d9eb375ca8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!78dea2ecc31e92fa"
+}

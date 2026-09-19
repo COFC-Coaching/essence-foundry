@@ -1,0 +1,49 @@
+{
+  "_id": "071de258daec954a",
+  "name": "True Breath",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "",
+    "subtype": "",
+    "attr": "",
+    "skill": "",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "species",
+    "flavor": "<p>Dragonkin with True Breath Species Trait.</p>",
+    "body": [
+      {
+        "label": "Requirement",
+        "html": "Dragonkin with True Breath."
+      },
+      {
+        "label": "Area",
+        "html": "A 2-unit cone originating from you."
+      },
+      {
+        "label": "Effect",
+        "html": "Burn 2 Action dice. Once per Encounter. Release your Draconic Lineage. Choose one: make the affected spaces Difficult Terrain until the start of your next Turn; clear ordinary smoke or loose material from them; or create an appropriate visual obstruction until the start of your next Turn. This card does not directly cause Damage."
+      }
+    ],
+    "surges": [],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    },
+    "speciesGranted": true,
+    "cooldownFrequency": "perEncounter"
+  },
+  "folder": "8f1cb97c10476c47",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!071de258daec954a"
+}

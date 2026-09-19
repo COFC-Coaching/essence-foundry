@@ -280,7 +280,7 @@
   cursor: pointer; -webkit-appearance: none; appearance: none; text-decoration: none;
 }
 .essence button.link-button:hover { text-decoration: underline; }
-/* The NPC sheet's "(open Species — e.g. to choose Adaptations)" Origin-tab button reuses
+/* The NPC sheet's "(open Species — e.g. to choose Traits)" Origin-tab button reuses
    data-action="itemEdit" for its click behavior (see npc-sheet.hbs), which everywhere else on
    this sheet is a bare pencil-icon button and gets forced into a fixed 1.7em icon-sized square by
    the ghost-icon rule below. That rule squashed this one's actual sentence of text into the same
@@ -312,7 +312,7 @@
 .essence .card-expand-toggle i { transition: transform 0.15s ease; }
 .essence .card-expand-toggle.expanded i { transform: rotate(180deg); }
 .essence .card-summary-full { font-size: 0.9em; margin: 0 0 4px; }
-/* Universal actions (Hide, Strike, Brace, ...) have no Combat Skill, so they'd otherwise be
+/* Universal actions (Hide, Strike, Brace, ...) have no Combat Style, so they'd otherwise be
    scattered through the skill-gated hand below with no cost/skill metadata to sort or scan by —
    pull them into their own always-available row of quick-roll buttons instead. */
 .essence .basic-action-grid { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 10px; }
@@ -361,14 +361,14 @@
 }
 .essence .item-table .origin-feature-row { background: rgba(249, 168, 37, 0.06); }
 .essence .item-table .origin-feature-row td:first-child { font-weight: bold; }
-/* Equipment tab's Signature/Temporary/Armory drop zones (see resolveEquipmentDropSlot in
+/* Equipment tab's Inventory/Temporary/Armory drop zones (see resolveEquipmentDropSlot in
    utils.mjs) — draggable-row is both the drag source (existing owned items, to move between zones)
    and, via its parent .equipment-drop-zone, the drop target for new items from a compendium/the
    Items directory. */
 .essence .draggable-row { cursor: grab; }
 .essence .draggable-row:active { cursor: grabbing; }
 /* Every "add a new row" button system-wide (+ Add Item, Add Skill, Add Expertise, Add Mount, Add
-   Body Line, Add Adaptation, ...) shares one plus-icon-first, labeled-button markup convention
+   Body Line, Add Trait, ...) shares one plus-icon-first, labeled-button markup convention
    already — matching on that (rather than an ever-growing data-action allowlist, the trap the
    row-action ghost-icon rule above fell into once) means any future "add a row" button gets this
    look automatically. These are secondary actions, so they get a quiet amber outline instead of
@@ -389,6 +389,8 @@
 .essence .key-aspects-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
 .essence .key-aspects-row label { display: flex; flex-direction: column; gap: 2px; }
 .essence .key-aspects-row input { width: 100%; }
+.essence .key-aspect-row { display: flex; align-items: flex-end; gap: 4px; }
+.essence .key-aspect-row label { flex: 1; }
 .essence .nc-skill-row { display: flex; gap: 6px; align-items: center; margin-bottom: 2px; }
 .essence .nc-skill-row input[type="text"] { flex: 1; }
 .essence .array-rows { margin-bottom: 8px; }
@@ -593,14 +595,14 @@
   background: rgba(249, 168, 37, 0.15); border-color: #f9a825; color: #f9a825;
 }
 .essence .wizard-generate:hover { background: rgba(249, 168, 37, 0.3); }
-/* Wizard's inline Species Nature/Adaptation picker (character-wizard.mjs, Identity step) — replaces
-   the old "(open — choose Adaptations here)" link out to the Species Item's own authoring sheet. */
+/* Wizard's inline Species Nature/Trait picker (character-wizard.mjs, Identity step) — replaces
+   the old "(open — choose Traits here)" link out to the Species Item's own authoring sheet. */
 .essence .wizard-origin-picker { border: 1px solid #555; border-radius: 4px; padding: 6px 10px; margin: 6px 0 12px; }
 .essence .wizard-origin-text { font-size: 0.9em; color: #ccc; margin: 2px 0 4px; }
-.essence .wizard-adaptation-list { list-style: none; padding: 0; margin: 0; }
-.essence .wizard-adaptation-row { border-top: 1px solid #444; padding: 6px 0; }
-.essence .wizard-adaptation-row:first-child { border-top: none; }
-.essence .wizard-adaptation-row .chosen-toggle { display: flex; align-items: center; gap: 6px; }
+.essence .wizard-trait-list { list-style: none; padding: 0; margin: 0; }
+.essence .wizard-trait-row { border-top: 1px solid #444; padding: 6px 0; }
+.essence .wizard-trait-row:first-child { border-top: none; }
+.essence .wizard-trait-row .chosen-toggle { display: flex; align-items: center; gap: 6px; }
 .essence .wizard-subchoice { margin: 4px 0 2px 1.4em; padding: 4px 8px; background: rgba(249, 168, 37, 0.08); border-radius: 4px; }
 .essence .wizard-subchoice .subchoice-option { display: inline-flex; align-items: center; gap: 4px; margin-right: 12px; }
 

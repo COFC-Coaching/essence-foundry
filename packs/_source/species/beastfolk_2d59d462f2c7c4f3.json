@@ -22,9 +22,9 @@
         "count": 1
       }
     },
-    "adaptationLabel": "Beastfolk Adaptation",
-    "adaptationCount": 1,
-    "adaptations": [
+    "traitLabel": "Beastfolk Trait",
+    "traitCount": 1,
+    "traits": [
       {
         "name": "Burrower",
         "text": "Gain Burrow 5 through loose soil, sand, snow, or similarly workable material. You cannot burrow through solid stone, worked flooring, or reinforced structures.",
@@ -37,12 +37,12 @@
       },
       {
         "name": "Glider",
-        "text": "While falling, you may glide using your full Movement and may Dash normally. You cannot gain height through this Adaptation or remain airborne without descending.",
+        "text": "While falling, you may glide using your full Movement and may Dash normally. You cannot gain height through this Trait or remain airborne without descending.",
         "chosen": false
       },
       {
         "name": "Natural Armament",
-        "text": "Choose claws, horns, fangs, a tail, mandibles, or another natural weapon. It counts as a basic one-handed weapon, does not count against your Signature Equipment Limit, and cannot be disarmed. You must leave one hand or equivalent limb free while using it.",
+        "text": "Choose claws, horns, fangs, a tail, mandibles, or another natural weapon. It counts as a basic one-handed weapon, does not count against your Inventory Limit, and cannot be disarmed. You must leave one hand or equivalent limb free while using it.",
         "chosen": false,
         "subChoice": {
           "label": "Natural Weapon",
@@ -60,7 +60,7 @@
       },
       {
         "name": "Prehensile Limb",
-        "text": "You possess a tail, trunk, secondary arm, or similar limb. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Signature Equipment Limit, and the limb does not grant additional Actions.",
+        "text": "You possess a tail, trunk, secondary arm, or similar limb. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Inventory Limit, and the limb does not grant additional Actions.",
         "chosen": false
       },
       {

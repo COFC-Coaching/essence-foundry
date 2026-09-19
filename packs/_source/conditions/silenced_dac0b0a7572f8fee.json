@@ -1,0 +1,26 @@
+{
+  "_id": "dac0b0a7572f8fee",
+  "name": "Silenced",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "classification": "ordinary",
+    "sections": [
+      {
+        "label": "ORDINARY CONDITION",
+        "html": "<b>Silenced</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "You cannot speak or intentionally produce a usable voice. Abilities requiring speech, command words, audible performance, or other explicit vocalization cannot be used. Silenced does not prevent non-vocal Actions or Reactions."
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!dac0b0a7572f8fee"
+}

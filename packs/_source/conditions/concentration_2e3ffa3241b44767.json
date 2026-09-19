@@ -4,6 +4,7 @@
   "type": "condition",
   "img": "icons/svg/skull.svg",
   "system": {
+    "classification": "specialty",
     "sections": [
       {
         "label": "SPECIALTY CONDITION",

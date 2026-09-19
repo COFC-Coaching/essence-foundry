@@ -1,14 +1,14 @@
 /**
- * Heritage Legacies and Species Adaptations that let a character choose a specific Equipment item
+ * Heritage Legacies and Species Traits that let a character choose a specific Equipment item
  * as a standing benefit (part-ii-character-creation.md's Warcamp Raised "Quartermaster's Due";
  * Constructs' "Internal Compartment"/"Integrated Tool"; Craftfolk's "Inherited Tools") — as opposed
- * to Reach Triggers (see actor-combatant.mjs), which grant a temporary Scene/Adventure-scoped
+ * to Reach Triggers (see actor-combatant.mjs), which grant a temporary Encounter/Adventure-scoped
  * boost rather than a persistent item choice. Generic and data-driven (one registry entry per
  * named feature) rather than one bespoke button per feature, per the design discussion in
  * build-history — a future rulebook feature of the same shape (choose one item meeting a Reach/
  * type constraint) only needs a new registry entry here, not new code.
  *
- * Deliberately keyed by the Legacy/Adaptation's own name rather than a separate "grant id" field
+ * Deliberately keyed by the Legacy/Trait's own name rather than a separate "grant id" field
  * on Heritage/Species — those names are already the display text players see, and matching against
  * them (rather than introducing a parallel identifier) means a Heritage/Species document doesn't
  * need any awareness that a grant exists at all.
@@ -20,7 +20,7 @@
  * `reachMargin`: added to the actor's effectiveReach when picking (0 for "does not exceed Reach").
  * `exactCost`: when set, only items whose Reach cost equals this value qualify (Internal
  * Compartment's "a cost of 1"); reachMargin is ignored in that case.
- * `countsAgainstLimit`: whether the granted item still spends a Signature Equipment slot — false
+ * `countsAgainstLimit`: whether the granted item still spends an Inventory Equipment slot — false
  * sets the granted item's `system.slotCost` to 0 so computeSlotUsage() doesn't charge for it.
  */
 export const ITEM_GRANT_REGISTRY = {
@@ -69,7 +69,7 @@ export function reachQualifiesForGrant(system, grant, effectiveReach) {
 }
 
 /**
- * Which of the actor's Heritage Legacy / chosen Species Adaptations name a feature in the
+ * Which of the actor's Heritage Legacy / chosen Species Traits name a feature in the
  * registry — one row per matching name, each carrying its own registry config plus whichever
  * already-owned Equipment item (if any) currently fulfills it (matched by `reachExceptionSource`,
  * the same field the Reach-gating exception already uses — see computeReachGate() in utils.mjs).
@@ -79,7 +79,7 @@ export function reachQualifiesForGrant(system, grant, effectiveReach) {
 export function deriveActiveGrants({ speciesItem, heritageItem }, ownedEquipment) {
   const names = [];
   if (heritageItem?.system.legacy?.name) names.push(heritageItem.system.legacy.name);
-  for (const a of speciesItem?.system.adaptations ?? []) {
+  for (const a of speciesItem?.system.traits ?? []) {
     if (a.chosen) names.push(a.name);
   }
   return names

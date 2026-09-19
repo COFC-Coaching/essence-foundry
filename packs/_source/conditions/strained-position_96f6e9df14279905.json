@@ -1,0 +1,30 @@
+{
+  "_id": "96f6e9df14279905",
+  "name": "Strained Position",
+  "type": "condition",
+  "img": "icons/svg/degen.svg",
+  "system": {
+    "classification": "consequence",
+    "sections": [
+      {
+        "label": "INFLUENCE CONSEQUENCE — Light",
+        "html": "Influence Consequence: <b>Strained Position</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "Choose the sphere harmed by this consequence. Treat Reach as 1 lower (minimum 0) only when that sphere is directly relevant."
+      },
+      {
+        "label": "RECOVERY",
+        "html": "Take a concrete corrective action appropriate to the harm, then receive a suitable Downtime opportunity for the correction to take effect."
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!96f6e9df14279905"
+}

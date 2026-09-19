@@ -146,7 +146,7 @@ export function deriveEquipmentStats(items, equipmentItem) {
 
 /**
  * One-line HTML summary of what an `equipment` Item actually does — for list/table rows (the
- * Signature/Armory/Temporary Equipment tables on the actor/NPC sheets) that only have room for a
+ * Inventory/Armory/Temporary Equipment tables on the actor/NPC sheets) that only have room for a
  * single "Effect" cell, not the full breakdown deriveEquipmentStats() returns. A MODULAR item
  * (weapon/ranged/armor/shield/implement — always modular, see MODULAR_EQUIPMENT_CATEGORIES) has
  * nothing in its OWN effect/passive/special fields — those stay blank now that the real text lives

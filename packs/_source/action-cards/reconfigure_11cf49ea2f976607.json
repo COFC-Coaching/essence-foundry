@@ -1,0 +1,46 @@
+{
+  "_id": "11cf49ea2f976607",
+  "name": "Reconfigure",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "",
+    "subtype": "",
+    "attr": "",
+    "skill": "",
+    "defense": "",
+    "unopposed": false,
+    "min": "3",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Effect",
+        "html": "Burn 3 Action dice. Choose one: ready, stow, recover, or hand over one complete physically accessible combat-ready item; swap one such item you are using for another; or exchange one installed Augment or one combat-replaceable Fitting for a compatible replacement physically available to you. No roll is required."
+      },
+      {
+        "label": "Effect",
+        "html": "This includes drawing into an empty hand, picking up an item within reach, or handing a held item to an adjacent willing creature. A recipient can immediately use it only if the required hands and other handling requirements are already satisfied; any further swap or preparation uses that recipient's own Reconfigure. Prepared items and Temporary Equipment use the same handling procedure without changing their Inventory accounting. Reconfigure cannot reach an item left elsewhere, waive compatibility, or complete major structural rebuilding."
+      }
+    ],
+    "surges": [],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    },
+    "nonCombatTask": false,
+    "noSurges": false
+  },
+  "folder": "490568d9eb375ca8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!11cf49ea2f976607"
+}

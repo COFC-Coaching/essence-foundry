@@ -1,0 +1,50 @@
+{
+  "_id": "5092c26368581299",
+  "name": "Perform Task",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "",
+    "subtype": "",
+    "attr": "",
+    "skill": "",
+    "defense": "",
+    "unopposed": false,
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Effect",
+        "html": "Burn 2 Action dice. Attempt one ordinary task that can reasonably be performed in a brief action, such as operating a reachable mechanism, opening a lock with suitable tools, or making one step of a repair. You must have the necessary access, tools, and capability. A routine feasible task succeeds without a roll. For meaningful uncertainty, the GM states the Difficulty, result, and foreseeable consequences before you commit."
+      },
+      {
+        "label": "Effect",
+        "html": "If a roll is needed, roll the full relevant Attribute + Non-Combat Skill, or Attribute + 5 for a directly applicable Key Aspect, at the normal card-roll step. This task roll does not consume further Action dice or use a Combat Style maximum. Use the normal Non-Combat success rules; it generates no Surges. Resolve legal Reactions before applying the task result. The two burned Action dice remain spent even if the attempt fails or is interrupted."
+      },
+      {
+        "label": "Effect",
+        "html": "Use Perform Task for meaningful handling of ordinary objects. Ready, recover, stow, swap, or hand over combat equipment with Reconfigure instead. Perform Task cannot replace an attack, Reconfigure, Stabilize, or another defined Action to bypass its costs or requirements. Outside Combat, use the normal task procedure without an Action Pool cost."
+      }
+    ],
+    "surges": [],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    },
+    "nonCombatTask": true,
+    "noSurges": true
+  },
+  "folder": "490568d9eb375ca8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5092c26368581299"
+}

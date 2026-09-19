@@ -8,7 +8,7 @@ const { fields } = foundry.data;
  * Distinction/Role/Non-Combat/Influence/Expertise data here — none of it applies. Per the official
  * rules, "the profile supplies no extra Attributes": a maneuver's dice come from the CALLER's own
  * Calling Rank and Attribute, never a stat stored here, so this schema doesn't carry the usual 9
- * Attributes or 9 Combat Skills at all.
+ * Attributes or 9 Combat Styles at all.
  *
  * Fortitude/Composure/Harmony are plain numbers here (not derived from Attributes via the usual
  * twoLowest() formula) because a profile simply doesn't have Attributes to derive them from — the
@@ -17,8 +17,14 @@ const { fields } = foundry.data;
 export default class EssenceManifestationData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
-      subtype: new fields.StringField({ initial: "" }), // Familiar/Sprite/Beast/Phantom/Golem/Elemental/Ancestor/Fey
-      rank: new fields.NumberField({ integer: true, initial: 0, min: 0, max: 2 }),
+      // 17 named families across Ranks 0-5 (V6 Appendix H/J) — only the Rank 0-2 families below
+      // have authored profile stat blocks today; Rank 3-5 profiles (Dragon/Fiend/Celestial/
+      // Abomination/Leviathan/Avatar/Outsider/Titan/Primordial) are deprioritized, see
+      // v6-foundry-implementation-plan.md §6.10/§9.4.
+      subtype: new fields.StringField({ initial: "" }), // Familiar/Sprite/Beast/Phantom/Golem/Elemental/Ancestor/Fey/...
+      // V6's entry-cost table covers Ranks 0-5 (was 0-2 only). Widened harmlessly — the 17
+      // profile stat blocks this unblocks authoring for don't exist yet (see comment above).
+      rank: new fields.NumberField({ integer: true, initial: 0, min: 0, max: 5 }),
       body: new fields.StringField({ initial: "Living", choices: ["Living", "Nonliving"] }),
       purpose: new fields.StringField({ initial: "" }),
       traitName: new fields.StringField({ initial: "" }),

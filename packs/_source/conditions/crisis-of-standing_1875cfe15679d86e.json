@@ -1,0 +1,30 @@
+{
+  "_id": "1875cfe15679d86e",
+  "name": "Crisis of Standing",
+  "type": "condition",
+  "img": "icons/svg/degen.svg",
+  "system": {
+    "classification": "consequence",
+    "sections": [
+      {
+        "label": "INFLUENCE CONSEQUENCE — Critical",
+        "html": "Influence Consequence: <b>Crisis of Standing</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "Choose the primary sphere of collapse. Reach cannot absorb ordinary Influence pressure within that sphere; pressure there proceeds directly to Temporary Influence, then Core Influence. One major relationship, institution, or source of access is also unavailable."
+      },
+      {
+        "label": "RECOVERY",
+        "html": "Critical recovery requires a major corrective undertaking appropriate to the cause: repayment, public vindication, fulfilled obligation, restored institution, reconciliation, or a comparable change. Time alone is insufficient."
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!1875cfe15679d86e"
+}

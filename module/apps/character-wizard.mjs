@@ -12,7 +12,7 @@ const ATTRIBUTES = ["might", "grace", "vigor", "intellect", "acuity", "resolve",
 const SKILLS = ["prowess", "ballistics", "gestalt", "cunning", "magecraft", "psionics", "leadership", "ritualism", "calling"];
 const SKILL_GATE = { gestalt: "Gifted", magecraft: "Arcanist", psionics: "Psyker", ritualism: "Invoker", calling: "Summoner" };
 
-/** part-ii-character-creation.md § Assigning Attributes / Assigning Combat Skill Points / Non-Combat Skills. */
+/** part-ii-character-creation.md § Assigning Attributes / Assigning Combat Style Points / Non-Combat Skills. */
 const ATTRIBUTE_POOL = 7;
 const ATTRIBUTE_MAX = 3;
 const SKILL_POOL = 5;
@@ -22,9 +22,48 @@ const NONCOMBAT_POOL = 5;
 const NONCOMBAT_MAX = 2;
 const CARD_LIMIT = 10;
 
-/** part-iv-combat.md § Basic Combat Cards — identified by an empty system.style (no Combat Style tie). */
+/**
+ * part-iv-combat.md § Basic Combat Cards — identified by an empty system.style (no Combat Style
+ * tie). Explicitly excludes `speciesGranted` cards (see isSpeciesCard below): those also carry an
+ * empty `style`, but they're a Species Trait grant, not part of the universal Basic set — without
+ * this exclusion, #onGrantBasicCards would hand every character every Species Combat Card
+ * regardless of whether they actually have the matching Species Trait.
+ */
 function isBasicCard(cardSystem) {
-  return !cardSystem.style;
+  return !cardSystem.style && !cardSystem.speciesGranted;
+}
+
+/**
+ * V6 §6.7 (plan, confirmed unchanged by design/v6-revision-delta.md §6): a Species Trait's unique
+ * unranked Combat Card does NOT count against the 10 learned-card selection, same as a Basic card,
+ * but tracked with its own explicit flag rather than folded into isBasicCard()'s empty-style check
+ * — Species cards DO have thematic Style ties per the plan's own guidance, so "no Style" isn't a
+ * reliable signal for them the way it is for the universal Basic set.
+ */
+function isSpeciesCard(cardSystem) {
+  return !!cardSystem.speciesGranted;
+}
+
+/** The four Species Trait names that grant a Species Combat Card of the same name (see
+ *  scripts/build-packs.mjs's SPECIES_CARDS) — checked in #onToggleTraitChosen. */
+const SPECIES_CARD_TRAIT_NAMES = ["Shaper", "True Breath", "Ink Cloud", "Spore Cloud"];
+
+/**
+ * V6 (design/v6-revision-delta.md's own task framing; book text: "Your Expertise limit for a Style
+ * equals its Rank, increased by 1 if you possess the associated Distinction") — a PER-STYLE cap,
+ * layered on top of (not replacing) the overall "Choose 4 Expertises" creation budget
+ * (EXPERTISE_COUNT, unchanged — the book's own worked example still picks exactly 4 total). Checked
+ * the actual current code before building this: `character-wizard.mjs` only ever enforced the flat
+ * 4-total budget above; no per-Style rank-based sub-limit existed anywhere (the main Character
+ * sheet's own #onAddExpertise, actor-sheet.mjs, has no cap enforcement at all). The task's framing
+ * that this was "already partially built" does not hold against the actual code — flagging the
+ * discrepancy per this project's standing practice rather than silently trusting the framing.
+ * `keyCombatSkill` is item-origin.mjs's own field for "the Style associated with the Distinction."
+ */
+function expertiseLimitForSkill(system, skill, distinctionItem) {
+  const rank = system[skill] ?? 0;
+  const bonus = distinctionItem?.system.keyCombatSkill === skill ? 1 : 0;
+  return rank + bonus;
 }
 
 /**
@@ -42,7 +81,7 @@ function creationBonusFor(distinctionItem) {
 }
 
 const STEPS = [
-  "Concept", "Identity", "Attributes", "Wounds", "Combat Skills",
+  "Concept", "Identity", "Attributes", "Wounds", "Combat Styles",
   "Influence", "Non-Combat", "Passive Features", "Equipment", "Finalize"
 ];
 
@@ -52,7 +91,7 @@ function pips(value, max = 5) {
 
 /**
  * Walks the same 10 steps as the web app's character-builder.tsx (Concept, Identity, Attributes,
- * Wounds, Combat Skills, Influence, Non-Combat, Passive Features, Equipment, Finalize), writing
+ * Wounds, Combat Styles, Influence, Non-Combat, Passive Features, Equipment, Finalize), writing
  * directly to an existing Actor rather than building a separate draft — every choice here is a
  * normal actor.update()/createEmbeddedDocuments() call, so closing and reopening the wizard loses
  * nothing and the main sheet already reflects every choice live.
@@ -81,13 +120,14 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       toggleTempInfluence: EssenceCharacterWizard.#onToggleTempInfluence,
       toggleCoreInfluence: EssenceCharacterWizard.#onToggleCoreInfluence,
       addNonCombatSkill: EssenceCharacterWizard.#onAddNonCombatSkill,
+      addIntellectSkill: EssenceCharacterWizard.#onAddIntellectSkill,
       deleteNonCombatSkill: EssenceCharacterWizard.#onDeleteNonCombatSkill,
       adjustNonCombatRating: EssenceCharacterWizard.#onAdjustNonCombatRating,
       addPassiveFeature: EssenceCharacterWizard.#onAddPassiveFeature,
       deletePassiveFeature: EssenceCharacterWizard.#onDeletePassiveFeature,
       toggleEquipment: EssenceCharacterWizard.#onToggleEquipment,
       previewItem: EssenceCharacterWizard.#onPreviewItem,
-      toggleAdaptationChosen: EssenceCharacterWizard.#onToggleAdaptationChosen,
+      toggleTraitChosen: EssenceCharacterWizard.#onToggleTraitChosen,
       toggleSubChoiceOption: EssenceCharacterWizard.#onToggleSubChoiceOption,
       chooseGrantedItem: EssenceCharacterWizard.#onChooseGrantedItem
     }
@@ -140,7 +180,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
   }
 
   /**
-   * Free-text sub-choice inputs (Nature or an Adaptation's "type: free" sub-choice, e.g. Dragonkin's
+   * Free-text sub-choice inputs (Nature or an Trait's "type: free" sub-choice, e.g. Dragonkin's
    * Draconic Lineage) write to the embedded Species Item, not `this.document` (the Actor) — plain
    * submitOnChange only serializes fields under the wizard's own bound document, so these need a
    * manual "change" listener and an explicit speciesItem.update(), same reasoning as #wireSelect.
@@ -150,7 +190,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     if (!speciesItem) return;
     for (const el of this.element.querySelectorAll(".subchoice-free-text")) {
       el.addEventListener("change", async (event) => {
-        const path = event.currentTarget.dataset.path; // "nature" or "adaptations.<i>"
+        const path = event.currentTarget.dataset.path; // "nature" or "traits.<i>"
         const value = event.currentTarget.value.trim();
         await speciesItem.update({ [`system.${path}.subChoice.selected`]: value ? [value] : [] });
       });
@@ -163,7 +203,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
    * auto-refreshes on that — same reason search focus needs manual restoration in #wireSearch. A
    * freshly-rendered element always starts at scrollTop 0, so without this, picking a card near
    * the bottom of a long Qualifying Cards / Equipment Library list (or scrolled partway down a
-   * tall step like Combat Skills) yanks the view back to the very top on every single pick —
+   * tall step like Combat Styles) yanks the view back to the very top on every single pick —
    * exactly the "jerking up" the user reported. There are two independent scroll containers to
    * restore: `.wizard-body` (the whole step's content area) and, on steps that have one, the
    * inner `.wizard-scroll-list`. Both are kept live via their own 'scroll' listener so the
@@ -251,8 +291,8 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     context.heritageOptions = heritages.sort((a, b) => a.name.localeCompare(b.name));
     context.distinctionOptions = distinctions.sort((a, b) => a.name.localeCompare(b.name));
 
-    // Inline Adaptation picker (replaces the old "(open — choose Adaptations here)" link that sent
-    // players to the Species Item's own GM-authoring sheet — see build-history). Adaptation rows
+    // Inline Trait picker (replaces the old "(open — choose Traits here)" link that sent
+    // players to the Species Item's own GM-authoring sheet — see build-history). Trait rows
     // carry their own index so the toggle/sub-choice actions below know which array entry to write.
     // Fixed-list sub-choice options are precomputed with their checked/disabled state here rather
     // than via an "includes" Handlebars helper (this project has none registered, and core Foundry
@@ -268,13 +308,13 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
         }));
       };
       context.natureSubChoiceOptions = sp.nature.subChoice?.type === "fixed" ? buildSubChoiceOptions(sp.nature.subChoice) : [];
-      context.adaptationRows = sp.adaptations.map((a, i) => ({
+      context.traitRows = sp.traits.map((a, i) => ({
         ...a,
         i,
         subChoiceOptions: a.subChoice?.type === "fixed" ? buildSubChoiceOptions(a.subChoice) : []
       }));
-      context.adaptationChosenCount = sp.adaptations.filter((a) => a.chosen).length;
-      context.adaptationCap = sp.adaptationCount;
+      context.traitChosenCount = sp.traits.filter((a) => a.chosen).length;
+      context.traitCap = sp.traitCount;
     }
   }
 
@@ -312,9 +352,10 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     }));
 
     const ownedCards = this.document.items.filter((i) => i.type === "action-card" || i.type === "reaction-card");
-    context.ownedActionCards = ownedCards.filter((i) => i.type === "action-card" && !isBasicCard(i.system));
-    context.ownedReactionCards = ownedCards.filter((i) => i.type === "reaction-card" && !isBasicCard(i.system));
-    context.ownedBasicCards = ownedCards.filter((i) => isBasicCard(i.system));
+    context.ownedActionCards = ownedCards.filter((i) => i.type === "action-card" && !isBasicCard(i.system) && !isSpeciesCard(i.system));
+    context.ownedReactionCards = ownedCards.filter((i) => i.type === "reaction-card" && !isBasicCard(i.system) && !isSpeciesCard(i.system));
+    context.ownedBasicCards = ownedCards.filter((i) => isBasicCard(i.system) && !isSpeciesCard(i.system));
+    context.ownedSpeciesCards = ownedCards.filter((i) => isSpeciesCard(i.system));
     context.cardCount = context.ownedActionCards.length + context.ownedReactionCards.length;
     context.cardLimit = CARD_LIMIT + bonus.actionCards;
 
@@ -343,9 +384,12 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const toBrowserEntry = (type) => (doc) =>
       ({ id: doc.id, uuid: doc.uuid, name: doc.name, system: doc.system, type, pack: `essence-system.${type}s` });
 
+    // Species Combat Cards (speciesGranted) are excluded here too — they're a Species Trait grant,
+    // not a pickable ranked selection; a character gains them automatically (or via a dedicated
+    // grant flow), never by spending one of the 10 card picks in this browser.
     let combined = [
-      ...actionPack.filter((d) => !isBasicCard(d.system) && !ownedNames.has(d.name) && qualifies(d.system)).map(toBrowserEntry("action-card")),
-      ...reactionPack.filter((d) => !isBasicCard(d.system) && !ownedNames.has(d.name) && qualifies(d.system)).map(toBrowserEntry("reaction-card"))
+      ...actionPack.filter((d) => !isBasicCard(d.system) && !isSpeciesCard(d.system) && !ownedNames.has(d.name) && qualifies(d.system)).map(toBrowserEntry("action-card")),
+      ...reactionPack.filter((d) => !isBasicCard(d.system) && !isSpeciesCard(d.system) && !ownedNames.has(d.name) && qualifies(d.system)).map(toBrowserEntry("reaction-card"))
     ];
 
     if (search) combined = combined.filter((c) => c.name.toLowerCase().includes(search));
@@ -382,11 +426,26 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
 
   #prepareNonCombat(context) {
     const system = context.system;
-    const spent = system.nonCombatSkills.reduce((sum, s) => sum + (s.rating || 0), 0);
+    // design/v6-revision-delta.md §3.4 (Intellect): "Gain one different Non-Combat Skill at Rank 1
+    // per point of permanent Intellect... make these selections BEFORE spending the ordinary 5
+    // Skill Points." A sub-step inside this existing Non-Combat step (per the delta report's own
+    // "add the sub-step inside the existing step; do not insert a new step" guidance), shown first.
+    // Only the free Rank-1 grant itself is exempt from the 5-point pool — points spent RAISING an
+    // Intellect-granted Skill beyond Rank 1 (up to the Rank-2 starting cap) still draw from it.
+    context.intellectSkillCount = system.intellect ?? 0;
+    context.intellectEntries = system.nonCombatSkills
+      .map((s, i) => ({ ...s, i }))
+      .filter((s) => s.source === "intellect");
+    context.intellectRemaining = context.intellectSkillCount - context.intellectEntries.length;
+
+    const ordinarySpend = system.nonCombatSkills.reduce((sum, s) => {
+      const baseline = s.source === "intellect" ? 1 : 0;
+      return sum + Math.max(0, (s.rating || 0) - baseline);
+    }, 0);
     context.nonCombatPool = NONCOMBAT_POOL;
-    context.nonCombatSpent = spent;
-    context.nonCombatRemaining = NONCOMBAT_POOL - spent;
-    context.nonCombatEntries = system.nonCombatSkills.map((s, i) => ({ ...s, i }));
+    context.nonCombatSpent = ordinarySpend;
+    context.nonCombatRemaining = NONCOMBAT_POOL - ordinarySpend;
+    context.nonCombatEntries = system.nonCombatSkills.map((s, i) => ({ ...s, i })).filter((s) => s.source !== "intellect");
   }
 
   async #prepareEquipment(context) {
@@ -403,11 +462,11 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       system: i.system,
       overReach: computeReachGate(i.system, context.reach).overReach
     });
-    context.signatureItems = owned.filter((i) => i.system.slot === "signature").map(equipmentRow);
-    context.signatureUsed = context.signatureItems.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
-    context.signatureLimit = system.signatureEquipmentLimit;
-    // Armory (§ Armory and Signature Capacity) — previously the Wizard only ever let a player add
-    // to Signature; there was no way to stock the Armory during character creation at all, so
+    context.inventoryItems = owned.filter((i) => i.system.slot === "inventory").map(equipmentRow);
+    context.inventoryUsed = context.inventoryItems.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
+    context.inventoryLimit = system.inventoryLimit;
+    // Armory (§ Armory and Inventory Capacity) — previously the Wizard only ever let a player add
+    // to Inventory; there was no way to stock the Armory during character creation at all, so
     // every new character started with an empty one regardless of what they'd bought/found.
     context.armoryItems = owned.filter((i) => i.system.slot === "armory").map(equipmentRow);
     context.armoryUsed = computeSlotUsage(this.document.items, "armory");
@@ -444,10 +503,12 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const attrSpent = ATTRIBUTES.reduce((sum, key) => sum + (system[key] - 1), 0);
     const skillSpent = SKILLS.reduce((sum, key) => sum + system[key], 0);
     const ownedCards = this.document.items.filter((i) => i.type === "action-card" || i.type === "reaction-card");
-    const nonBasicCardCount = ownedCards.filter((i) => !isBasicCard(i.system)).length;
-    const ncSpent = system.nonCombatSkills.reduce((sum, s) => sum + (s.rating || 0), 0);
-    const signature = this.document.items.filter((i) => i.type === "equipment" && i.system.slot === "signature");
-    const signatureUsed = signature.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
+    const nonBasicCardCount = ownedCards.filter((i) => !isBasicCard(i.system) && !isSpeciesCard(i.system)).length;
+    const ncSpent = system.nonCombatSkills.reduce((sum, s) => sum + Math.max(0, (s.rating || 0) - (s.source === "intellect" ? 1 : 0)), 0);
+    const intellectGranted = system.nonCombatSkills.filter((s) => s.source === "intellect").length;
+    const intellectCount = system.intellect ?? 0;
+    const inventory = this.document.items.filter((i) => i.type === "equipment" && i.system.slot === "inventory");
+    const inventoryUsed = inventory.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
     const bonus = creationBonusFor(distinctionItem);
     const expertiseCount = EXPERTISE_COUNT + bonus.expertise;
     const cardLimit = CARD_LIMIT + bonus.actionCards;
@@ -455,12 +516,13 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     context.checklist = [
       { label: "Species / Heritage / Distinction chosen", ok: !!(speciesItem && heritageItem && distinctionItem) },
       { label: `Attribute points spent (${attrSpent} / ${ATTRIBUTE_POOL})`, ok: attrSpent === ATTRIBUTE_POOL },
-      { label: `Combat Skill points spent (${skillSpent} / ${SKILL_POOL})`, ok: skillSpent === SKILL_POOL },
+      { label: `Combat Style points spent (${skillSpent} / ${SKILL_POOL})`, ok: skillSpent === SKILL_POOL },
       { label: `Expertises chosen (${system.expertises.length} / ${expertiseCount})`, ok: system.expertises.length === expertiseCount },
       { label: `Basic Combat Cards granted (${ownedCards.filter((i) => isBasicCard(i.system)).length} / 7)`, ok: ownedCards.filter((i) => isBasicCard(i.system)).length === 7 },
       { label: `Combat Cards chosen (${nonBasicCardCount} / ${cardLimit})`, ok: nonBasicCardCount <= cardLimit },
       { label: `Non-Combat Skill points spent (${ncSpent} / ${NONCOMBAT_POOL})`, ok: ncSpent === NONCOMBAT_POOL },
-      { label: `Signature Equipment within limit (${signatureUsed} / ${system.signatureEquipmentLimit})`, ok: signatureUsed <= system.signatureEquipmentLimit }
+      { label: `Skills granted from Intellect (${intellectGranted} / ${intellectCount})`, ok: intellectGranted === intellectCount },
+      { label: `Inventory Equipment within limit (${inventoryUsed} / ${system.inventoryLimit})`, ok: inventoryUsed <= system.inventoryLimit }
     ];
     context.resources = system.resources;
     context.defenses = system.defenses;
@@ -506,35 +568,58 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
   }
 
   /**
-   * Inline Adaptation checkbox, capped at `adaptationCount` (mirrors #onToggleExpertise's
-   * capped-array shape). Writes the whole `adaptations` array back to the embedded Species Item —
+   * Inline Trait checkbox, capped at `traitCount` (mirrors #onToggleExpertise's
+   * capped-array shape). Writes the whole `traits` array back to the embedded Species Item —
    * same read-modify-write pattern as EssenceItemSheetBase#onAddArrayRow/#onDeleteArrayRow
    * (item-sheet.mjs) and this file's own #onToggleCoreInfluence, just targeting speciesItem instead
    * of the Actor.
    */
-  static async #onToggleAdaptationChosen(event, target) {
+  static async #onToggleTraitChosen(event, target) {
     const speciesItem = this.document.items.find((i) => i.type === "species");
     if (!speciesItem) return;
     const i = Number(target.dataset.index);
-    const adaptations = speciesItem.system.adaptations.map((a) => foundry.utils.deepClone(a));
-    const row = adaptations[i];
+    const traits = speciesItem.system.traits.map((a) => foundry.utils.deepClone(a));
+    const row = traits[i];
     if (!row) return;
     if (!row.chosen) {
-      const chosenCount = adaptations.filter((a) => a.chosen).length;
-      if (chosenCount >= speciesItem.system.adaptationCount) {
-        ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyChosenAdaptations", { count: speciesItem.system.adaptationCount, label: speciesItem.system.adaptationLabel }));
+      const chosenCount = traits.filter((a) => a.chosen).length;
+      if (chosenCount >= speciesItem.system.traitCount) {
+        ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyChosenTraits", { count: speciesItem.system.traitCount, label: speciesItem.system.traitLabel }));
         return;
       }
     }
     row.chosen = !row.chosen;
-    await speciesItem.update({ "system.adaptations": adaptations });
+    await speciesItem.update({ "system.traits": traits });
+    // V6 §6.7 (plan): choosing one of the four Species Traits that grants a Species Combat Card
+    // (Shaper/True Breath/Ink Cloud/Spore Cloud — see scripts/build-packs.mjs's SPECIES_CARDS)
+    // auto-grants that Card the same way #onGrantBasicCards grants the universal Basic set;
+    // un-choosing the Trait removes it again. Matched by exact name, same convention this file's
+    // ITEM_GRANT_REGISTRY-adjacent code already uses elsewhere.
+    if (SPECIES_CARD_TRAIT_NAMES.includes(row.name)) {
+      await EssenceCharacterWizard.#syncSpeciesCombatCard(this.document, row.name, row.chosen);
+    }
+  }
+
+  /** See #onToggleTraitChosen's doc comment above. */
+  static async #syncSpeciesCombatCard(actor, name, shouldHave) {
+    const owned = actor.items.find((i) => i.type === "action-card" && i.name === name && i.system.speciesGranted);
+    if (shouldHave && !owned) {
+      const pack = game.packs.get("essence-system.action-cards");
+      const index = await pack?.getIndex();
+      const entry = index?.find((e) => e.name === name);
+      if (!entry) return;
+      const doc = await pack.getDocument(entry._id);
+      if (doc) await actor.createEmbeddedDocuments("Item", [doc.toObject()]);
+    } else if (!shouldHave && owned) {
+      await owned.delete();
+    }
   }
 
   /**
    * Fixed-list sub-choice checkbox (e.g. Keen's three named Senses), shared between Nature and any
-   * Adaptation via `data-scope` ("nature" | "adaptation") + `data-index` (adaptation rows only).
+   * Trait via `data-scope` ("nature" | "trait") + `data-index` (trait rows only).
    * Capped at the sub-choice's own `count`, same disable-once-full convention as Combat Cards'
-   * CARD_LIMIT and #onToggleAdaptationChosen above — this is a clean single-purpose picker, not a
+   * CARD_LIMIT and #onToggleTraitChosen above — this is a clean single-purpose picker, not a
    * combat action, so the brief calls for disabling further checkboxes rather than just warning.
    */
   static async #onToggleSubChoiceOption(event, target) {
@@ -562,13 +647,13 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       if (selected) await speciesItem.update({ "system.nature.subChoice.selected": selected });
     } else {
       const i = Number(target.dataset.index);
-      const adaptations = speciesItem.system.adaptations.map((a) => foundry.utils.deepClone(a));
-      const row = adaptations[i];
+      const traits = speciesItem.system.traits.map((a) => foundry.utils.deepClone(a));
+      const row = traits[i];
       if (!row) return;
       const selected = applySelection(row.subChoice);
       if (!selected) return;
       row.subChoice.selected = selected;
-      await speciesItem.update({ "system.adaptations": adaptations });
+      await speciesItem.update({ "system.traits": traits });
     }
   }
 
@@ -596,7 +681,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     if (delta < 0 && current <= 0) return;
     const newValue = current + delta;
     const updates = { [`system.${key}`]: newValue };
-    // Dropping a Combat Skill back to 0 un-eligibles it for Expertises (see #prepareCombatSkills'
+    // Dropping a Combat Style back to 0 un-eligibles it for Expertises (see #prepareCombatSkills'
     // eligibleSkills filter), but any Expertise the player already picked under it doesn't clear
     // itself — left alone it becomes an invisible entry that still counts against the Expertises
     // total (confirmed live: "EXPERTISES (5 / 4)" with only 4 actually visible/chosen anywhere),
@@ -617,6 +702,14 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       const expertiseCount = EXPERTISE_COUNT + creationBonusFor(distinctionItem).expertise;
       if (expertises.length >= expertiseCount) {
         ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyChosenExpertises", { count: expertiseCount }));
+        return;
+      }
+      // V6 per-Style Expertise limit (see expertiseLimitForSkill's own doc comment): a Style's
+      // Rank, +1 if it's the Style tied to the character's Distinction.
+      const styleLimit = expertiseLimitForSkill(this.document.system, skill, distinctionItem);
+      const styleChosen = expertises.filter((e) => e.skill === skill).length;
+      if (styleChosen >= styleLimit) {
+        ui.notifications.warn(`${capitalize(skill)}'s Expertise limit is ${styleLimit} (its Rank${distinctionItem?.system.keyCombatSkill === skill ? ", +1 for your Distinction" : ""}).`);
         return;
       }
       expertises.push({ name, skill });
@@ -673,7 +766,24 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
 
   static async #onAddNonCombatSkill() {
     const nonCombatSkills = this.document.system.nonCombatSkills.map((s) => ({ ...s }));
-    nonCombatSkills.push({ name: "", rating: 0 });
+    nonCombatSkills.push({ name: "", rating: 0, source: "" });
+    await this.document.update({ "system.nonCombatSkills": nonCombatSkills });
+  }
+
+  /**
+   * design/v6-revision-delta.md §3.4: "Gain one different Non-Combat Skill at Rank 1 per point of
+   * permanent Intellect... Each selection must be a Skill you do not already possess." One free
+   * Rank-1 entry per point of Intellect, tagged `source: "intellect"` — see #prepareNonCombat.
+   */
+  static async #onAddIntellectSkill() {
+    const nonCombatSkills = this.document.system.nonCombatSkills.map((s) => ({ ...s }));
+    const intellectCount = this.document.system.intellect ?? 0;
+    const haveCount = nonCombatSkills.filter((s) => s.source === "intellect").length;
+    if (haveCount >= intellectCount) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.IntellectSkillsAlreadyGranted", { count: intellectCount }));
+      return;
+    }
+    nonCombatSkills.push({ name: "", rating: 1, source: "intellect" });
     await this.document.update({ "system.nonCombatSkills": nonCombatSkills });
   }
 
@@ -688,11 +798,16 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const i = Number(target.dataset.index);
     const delta = Number(target.dataset.delta);
     const nonCombatSkills = this.document.system.nonCombatSkills.map((s) => ({ ...s }));
-    const spent = nonCombatSkills.reduce((sum, s) => sum + (s.rating || 0), 0);
-    const current = nonCombatSkills[i].rating || 0;
+    const row = nonCombatSkills[i];
+    // An Intellect-granted Skill's Rank 1 is free (not paid from the 5-point pool) — only the
+    // portion ABOVE that baseline counts against `spent`/NONCOMBAT_POOL below, and the rating can
+    // never drop below that baseline via this stepper (removing the grant entirely is a delete).
+    const baseline = row.source === "intellect" ? 1 : 0;
+    const spent = nonCombatSkills.reduce((sum, s) => sum + Math.max(0, (s.rating || 0) - (s.source === "intellect" ? 1 : 0)), 0);
+    const current = row.rating || 0;
     if (delta > 0 && (current >= NONCOMBAT_MAX || spent >= NONCOMBAT_POOL)) return;
-    if (delta < 0 && current <= 0) return;
-    nonCombatSkills[i].rating = current + delta;
+    if (delta < 0 && current <= baseline) return;
+    row.rating = current + delta;
     await this.document.update({ "system.nonCombatSkills": nonCombatSkills });
   }
 
@@ -709,9 +824,9 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     await this.document.update({ "system.passiveFeatures": passiveFeatures });
   }
 
-  /** `data-slot` ("signature" or "armory") picks which capacity this Library "+" button adds to —
+  /** `data-slot` ("inventory" or "armory") picks which capacity this Library "+" button adds to —
    *  see the two separate buttons per row in wizard.hbs's Equipment Library list. Missing/unknown
-   *  values default to "signature" for backward compatibility with any other caller. Only Signature
+   *  values default to "inventory" for backward compatibility with any other caller. Only Inventory
    *  has a hard capacity check here (Armory's own over-limit handling is the Temporary-Influence
    *  spend on the actor sheet, not a Wizard-time block — see computeSlotUsage/armoryLimit). */
   static async #onToggleEquipment(event, target) {
@@ -723,13 +838,13 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const pack = game.packs.get(target.dataset.pack);
     const sourceItem = await pack?.getDocument(target.dataset.id);
     if (!sourceItem) return;
-    const slot = target.dataset.slot === "armory" ? "armory" : "signature";
-    if (slot === "signature") {
-      const owned = this.document.items.filter((i) => i.type === "equipment" && i.system.slot === "signature");
+    const slot = target.dataset.slot === "armory" ? "armory" : "inventory";
+    if (slot === "inventory") {
+      const owned = this.document.items.filter((i) => i.type === "equipment" && i.system.slot === "inventory");
       const used = owned.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
       const cost = sourceItem.system.slotCost || 1;
-      if (used + cost > this.document.system.signatureEquipmentLimit) {
-        ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ExceedsSignatureLimit"));
+      if (used + cost > this.document.system.inventoryLimit) {
+        ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ExceedsInventoryLimit"));
         return;
       }
     }
@@ -776,7 +891,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
 
     const chosen = this.document.items.get(chosenId);
     await chosen.update({
-      "system.slot": "signature",
+      "system.slot": "inventory",
       "system.reachExceptionSource": sourceName,
       "system.reachExceptionMargin": grant.reachMargin,
       "system.slotCost": grant.countsAgainstLimit ? 1 : 0

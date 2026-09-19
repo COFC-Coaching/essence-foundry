@@ -1,33 +1,33 @@
 {
-  "_id": "e3051fc784f8446f",
-  "name": "Explorer's Kit",
+  "_id": "8a898718d92076c7",
+  "name": "Potion Pack",
   "type": "equipment",
   "img": "icons/svg/item-bag.svg",
   "system": {
-    "category": "toolkit",
+    "category": "consumable-kit",
     "slot": "armory",
     "tier": null,
-    "type": "Passive",
+    "type": "Consumable",
     "cost": "1",
     "range": "",
-    "effect": "",
-    "passive": "You carry ordinary travel and emergency supplies, such as food, water, torches, rope, containers, and similar miscellaneous items.",
+    "effect": "Gain the 'Concoction' Action Card. Each use of the card consumes 1 charge.",
+    "passive": "",
     "special": "",
     "fortitude": "",
     "resilience": "",
     "movement": "",
-    "tags": "toolkit",
+    "tags": "consumable",
     "flavor": "",
     "reachBonus": 0,
-    "uses": null,
+    "uses": 3,
     "slotCost": 1,
     "isModular": false,
     "quantity": 1
   },
-  "folder": "1ea4ede42a0af5a5",
+  "folder": "ce2bb523a719e8fc",
   "flags": {},
   "ownership": {
     "default": 0
   },
-  "_key": "!items!e3051fc784f8446f"
+  "_key": "!items!8a898718d92076c7"
 }

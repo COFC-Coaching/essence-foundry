@@ -1,0 +1,51 @@
+{
+  "_id": "b72da3aed83fb1e8",
+  "name": "Basic Melee Attack",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "",
+    "subtype": "",
+    "attr": "might",
+    "skill": "prowess",
+    "defense": "fortitude",
+    "unopposed": false,
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Target",
+        "html": "One creature within the Range of a melee Source you can use."
+      },
+      {
+        "label": "Effect",
+        "html": "Roll against Fortitude, committing at least 2 Action dice. The maximum is Might + Prowess, or 2 if that sum is lower. If the Source explicitly permits another Physical Attribute, substitute it for Might. On success, deal 1 Physical Damage of a type appropriate to the Source. An unarmed attack uses Range 1 and can always use Bludgeoning."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Deal +1 Damage."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    },
+    "nonCombatTask": false,
+    "noSurges": false
+  },
+  "folder": "490568d9eb375ca8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!b72da3aed83fb1e8"
+}

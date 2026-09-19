@@ -6,7 +6,7 @@
   "system": {
     "description": "Characters whose minds operate beyond ordinary limits. Abilities may manifest as telekinetic force, mental influence, expanded perception, projected thought, or other expressions of focused consciousness.",
     "keyCombatSkill": "Psionics",
-    "primaryAttr": "Intellect",
+    "primaryAttr": "Resolve",
     "unlocks": "psionics",
     "benefit": "Gain access to the Psionics Combat Skill. If acquired later: gain access to Psionics, gain 2 pips in it, then gain one additional Psionics Expertise and two additional Psionics Action Cards.",
     "creationExpertiseBonus": 0,

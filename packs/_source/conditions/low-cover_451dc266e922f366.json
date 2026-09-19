@@ -1,0 +1,46 @@
+{
+  "_id": "451dc266e922f366",
+  "name": "Low Cover",
+  "type": "condition",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "classification": "cover",
+    "sections": [
+      {
+        "label": "COVER",
+        "html": "Cover: <b>Low Cover</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "+1 Fortitude against an attack this Cover could plausibly obstruct. Cover modifies Fortitude only — never Composure or Harmony. Creatures do not provide Cover by default. Whether the attack's source is magical or mundane does not determine whether Cover applies."
+      }
+    ]
+  },
+  "effects": [
+    {
+      "_id": "854fb082aed4b2fb",
+      "_key": "!items.effects!451dc266e922f366.854fb082aed4b2fb",
+      "name": "Low Cover: Fortitude +1",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.fortitudeBonus",
+          "mode": 2,
+          "value": "1",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!451dc266e922f366"
+}

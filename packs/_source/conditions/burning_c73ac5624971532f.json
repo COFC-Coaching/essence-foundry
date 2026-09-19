@@ -1,0 +1,26 @@
+{
+  "_id": "c73ac5624971532f",
+  "name": "Burning",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "classification": "ordinary",
+    "sections": [
+      {
+        "label": "ORDINARY CONDITION",
+        "html": "<b>Burning</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "At the start of your Turn, suffer 1 Physical Fire Damage. During your Turn, you may burn 2 Action dice to extinguish yourself when doing so is physically possible. Appropriate external aid or environmental circumstances can also end Burning."
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!c73ac5624971532f"
+}

@@ -1,0 +1,49 @@
+{
+  "_id": "478b421881227373",
+  "name": "Ink Cloud",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "",
+    "subtype": "",
+    "attr": "",
+    "skill": "",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "species",
+    "flavor": "<p>Tideborn with Ink Cloud Species Trait; you must be submerged.</p>",
+    "body": [
+      {
+        "label": "Requirement",
+        "html": "Tideborn with Ink Cloud; you must be submerged."
+      },
+      {
+        "label": "Range",
+        "html": "Adjacent."
+      },
+      {
+        "label": "Effect",
+        "html": "Burn 2 Action dice. Once per Encounter. Fill one adjacent hex with opaque ink. Ordinary sight cannot pass through it. The cloud ends at the start of your next Turn or when dispersed by a strong current."
+      }
+    ],
+    "surges": [],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    },
+    "speciesGranted": true,
+    "cooldownFrequency": "perEncounter"
+  },
+  "folder": "8f1cb97c10476c47",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!478b421881227373"
+}

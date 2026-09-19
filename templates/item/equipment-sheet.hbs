@@ -85,7 +85,7 @@
   {{#if item.actor}}
     <label>{{localize "ESSENCE.Common.Slot"}}
       <select name="system.slot">
-        <option value="signature" {{#if (eq system.slot "signature")}}selected{{/if}}>{{localize "ESSENCE.Item.Equipment.Signature"}}</option>
+        <option value="inventory" {{#if (eq system.slot "inventory")}}selected{{/if}}>{{localize "ESSENCE.Item.Equipment.Inventory"}}</option>
         <option value="temporary" {{#if (eq system.slot "temporary")}}selected{{/if}}>{{localize "ESSENCE.Item.Equipment.Temporary"}}</option>
         <option value="armory" {{#if (eq system.slot "armory")}}selected{{/if}}>{{localize "ESSENCE.Item.Equipment.Armory"}}</option>
       </select>
@@ -144,7 +144,9 @@
     </div>
     {{#if item.actor}}
       <p class="muted">{{localize "ESSENCE.Item.Equipment.AssignFreeHint" chassisLabel=chassisLabel fittingLabel=fittingLabel}}</p>
-      <button type="button" data-action="reconfigureFittingCost"><i class="fa-solid fa-dice"></i> {{localize "ESSENCE.Common.Pay"}} {{fittingLabel}} {{localize "ESSENCE.Item.Component.Reconfigure"}} {{localize "ESSENCE.Item.Equipment.CostSuffix"}} ({{#if stats.fitting}}{{#if stats.fitting.system.reconfigureCostOverride}}{{stats.fitting.system.reconfigureCostOverride}}{{else}}{{#if (eq stats.fitting.system.reconfigureCategory "structural")}}3{{else}}1{{/if}}{{/if}}{{else}}1{{/if}} {{#if (eq stats.fitting.system.reconfigureCategory "structural")}}{{localize "ESSENCE.Item.Equipment.ActionDice"}}{{else}}{{localize "ESSENCE.Item.Equipment.ActionDie"}}{{/if}})</button>
+      {{#with (fittingReconfigureCost stats.fitting) as |rc|}}
+      <button type="button" data-action="reconfigureFittingCost"><i class="fa-solid fa-dice"></i> {{localize "ESSENCE.Common.Pay"}} {{fittingLabel}} {{localize "ESSENCE.Item.Component.Reconfigure"}} {{localize "ESSENCE.Item.Equipment.CostSuffix"}} ({{rc.cost}} {{#if (eq rc.cost 1)}}{{localize "ESSENCE.Item.Equipment.ActionDie"}}{{else}}{{localize "ESSENCE.Item.Equipment.ActionDice"}}{{/if}}){{#if rc.outOfCombatOnly}} <span class="muted">{{localize "ESSENCE.Item.Component.ReconfigureStructural"}}</span>{{/if}}</button>
+      {{/with}}
     {{else}}
       <p class="muted">{{localize "ESSENCE.Item.Equipment.TemplateAssignHint" chassisLabel=chassisLabel fittingLabel=fittingLabel}}</p>
     {{/if}}

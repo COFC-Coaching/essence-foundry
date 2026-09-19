@@ -1,0 +1,50 @@
+{
+  "_id": "431dc30cbb823e5c",
+  "name": "Compromised Standing",
+  "type": "condition",
+  "img": "icons/svg/degen.svg",
+  "system": {
+    "classification": "consequence",
+    "sections": [
+      {
+        "label": "INFLUENCE CONSEQUENCE — Serious",
+        "html": "Influence Consequence: <b>Compromised Standing</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "Treat Reach as 1 lower generally. In addition, choose one relevant contact, supplier, institution, relationship, or access route that is unavailable until specifically repaired."
+      },
+      {
+        "label": "RECOVERY",
+        "html": "Resolve the specific blocked relationship or obligation and complete a meaningful corrective process. This may require several Downtime opportunities or a focused undertaking."
+      }
+    ]
+  },
+  "effects": [
+    {
+      "_id": "53eb77d0a47a6d55",
+      "_key": "!items.effects!431dc30cbb823e5c.53eb77d0a47a6d55",
+      "name": "Compromised Standing: Reach -1",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.reachBonus",
+          "mode": 2,
+          "value": "-1",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!431dc30cbb823e5c"
+}

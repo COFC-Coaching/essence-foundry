@@ -51,4 +51,22 @@ export default class EssenceActor extends Actor {
     const [created] = await this.createEmbeddedDocuments("Item", [itemData]);
     return created;
   }
+
+  /**
+   * V6: a Recovery reduces the Death Track by 1 for a non-Dying character, including a Stabilized
+   * character sitting on a full Core Wound track (part-iv-combat.md § Recovery). Deliberately a
+   * standalone actor-level operation rather than being called from Grant Recovery yet — the plan's
+   * Phase 5 (0.6.82) is where Recovery's full V6 numbers (25% rounded up, clear Strain, etc.) land,
+   * so this is left as a ready extension point for that session to call rather than half-wiring it
+   * here. A "dying" character is excluded on purpose: the whole point of an actively-advancing Death
+   * Track is that it doesn't get quietly walked back by an unrelated Recovery grant.
+   */
+  async reduceDeathTrack() {
+    const ps = this.system.playState;
+    if (!ps || ps.deathTrackState === "dying") return false;
+    const step = ps.deathTrackStep ?? 0;
+    if (step <= 0) return false;
+    await this.update({ "system.playState.deathTrackStep": step - 1 });
+    return true;
+  }
 }

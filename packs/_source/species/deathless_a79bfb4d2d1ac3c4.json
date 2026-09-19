@@ -7,11 +7,11 @@
     "description": "Characters who continue to exist after ordinary biological life has ended, or are sustained between life and death. May depend upon necromancy, spiritual force, hunger, memory, shadow, or unfinished purpose.",
     "nature": {
       "name": "Deathless Nature",
-      "text": "You do not need to breathe or eat and do not sleep in the ordinary manner. Ordinary biological diseases and poisons do not affect you, though you must still rest and recover normally. When your Critical Wound activates the Death Track, increase its starting value by 1. Sense: Low-Light Vision."
+      "text": "You do not need to breathe or eat and do not sleep in the ordinary manner. Ordinary biological diseases and poisons do not affect you, though you must still rest and recover normally. Deathless Nature - Playtest: your Death Track ends at 7 instead of 5. When all five Core Wound spaces first fill, become Dying at 0/7; reaching 7 causes death. Advancement of the Death Track, exertion while Dying, additional Wounds, Stabilization, retained progress, and recovery otherwise follow the normal rules. Your Core Wound track still has five spaces. Sense: Low-Light Vision."
     },
-    "adaptationLabel": "Deathless Adaptation",
-    "adaptationCount": 1,
-    "adaptations": [
+    "traitLabel": "Deathless Trait",
+    "traitCount": 1,
+    "traits": [
       {
         "name": "Borrowed Life",
         "text": "After one minute of preparation, you may imitate the visible signs of life, including warmth, breathing, coloration, and a heartbeat. Ordinary observation cannot identify you as Deathless, though deliberate medical or supernatural examination may reveal your nature.",
@@ -39,7 +39,7 @@
       },
       {
         "name": "Stitched Form",
-        "text": "You possess an additional arm, skeletal limb, tendril, or other appendage. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Signature Equipment Limit, and the limb does not grant additional Actions.",
+        "text": "You possess an additional arm, skeletal limb, tendril, or other appendage. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Inventory Limit, and the limb does not grant additional Actions.",
         "chosen": false
       },
       {

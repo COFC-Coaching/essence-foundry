@@ -1,0 +1,50 @@
+{
+  "_id": "f04aaf870dd347eb",
+  "name": "Severed Essence",
+  "type": "condition",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "classification": "wound",
+    "sections": [
+      {
+        "label": "WOUND — Spiritual Critical",
+        "html": "Wound Condition: <b>Severed Essence</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "-2 Harmony. Spiritual Actions and Reactions require 1 additional burned die."
+      },
+      {
+        "label": "NATURAL RECOVERY",
+        "html": "Stabilize: contain the ongoing spiritual cause and establish an appropriate anchor through a person, rite, vessel, place, or equivalent method. Recovery: extended safe treatment appropriate to the injury, or qualifying Critical healing. Exact duration remains to be finalized."
+      }
+    ]
+  },
+  "effects": [
+    {
+      "_id": "8d23b7f91e2aaed7",
+      "_key": "!items.effects!f04aaf870dd347eb.8d23b7f91e2aaed7",
+      "name": "Severed Essence: Harmony -2",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.harmonyBonus",
+          "mode": 2,
+          "value": "-2",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f04aaf870dd347eb"
+}

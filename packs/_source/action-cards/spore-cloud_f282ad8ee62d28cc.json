@@ -1,0 +1,49 @@
+{
+  "_id": "f282ad8ee62d28cc",
+  "name": "Spore Cloud",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "",
+    "subtype": "",
+    "attr": "",
+    "skill": "",
+    "defense": "",
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "species",
+    "flavor": "<p>Verdant with Spore Cloud Species Trait.</p>",
+    "body": [
+      {
+        "label": "Requirement",
+        "html": "Verdant with Spore Cloud."
+      },
+      {
+        "label": "Range",
+        "html": "Adjacent."
+      },
+      {
+        "label": "Effect",
+        "html": "Burn 2 Action dice. Once per Encounter. Fill one adjacent hex with spores, pollen, or drifting growth. It blocks ordinary sight until the start of your next Turn."
+      }
+    ],
+    "surges": [],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    },
+    "speciesGranted": true,
+    "cooldownFrequency": "perEncounter"
+  },
+  "folder": "8f1cb97c10476c47",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!f282ad8ee62d28cc"
+}

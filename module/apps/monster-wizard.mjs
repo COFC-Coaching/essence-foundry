@@ -1,5 +1,5 @@
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
-import { getGradeBudget, computeFixedAttack, computeFixedDefense } from "../data/monster-budgets.mjs";
+import { getGradeBudget } from "../data/monster-budgets.mjs";
 import { MONSTER_TYPES_LOW, MONSTER_TYPES_HIGH } from "../data/monster-types.mjs";
 import { capitalize, buildEnemyHeaderLabel } from "../utils.mjs";
 
@@ -15,7 +15,7 @@ const DOMAINS = [
   { key: "spiritual", label: "Spiritual", attrs: ["presence", "adaptability", "anima"], skills: ["leadership", "ritualism", "calling"] }
 ];
 
-const STEPS = ["Concept", "Origin", "Attributes", "Combat Skills", "Wounds", "Combat Cards", "Equipment", "Finalize"];
+const STEPS = ["Concept", "Origin", "Attributes", "Combat Styles", "Wounds", "Combat Cards", "Equipment", "Finalize"];
 
 /** Weighted-random point-buy: emphasis-domain keys are 3x as likely to receive the next point,
  *  so auto-generated stat blocks lean toward the chosen domain without ever excluding the rest. */
@@ -137,7 +137,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     context.tactics = (system.tactics ?? []).map((text, i) => ({ text, i }));
     // Monsters (module/data/actor-monster.mjs) share every step of this wizard except Origin —
     // a creature gets a Monster Type tag instead of a Species, though it keeps Distinction (still
-    // the only way to unlock a gated Combat Skill like Magecraft for a spellcasting creature).
+    // the only way to unlock a gated Combat Style like Magecraft for a spellcasting creature).
     context.isMonster = actor.type === "monster";
     context.monsterTypesLow = MONSTER_TYPES_LOW;
     context.monsterTypesHigh = MONSTER_TYPES_HIGH;
@@ -492,35 +492,27 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
    *  from the Grade budget, then rolls Cards and Equipment. Safe to run more than once — each part
    *  simply overwrites whatever was there before.
    *
-   *  Mook/Normal Grade uses the Reduced Engine (module/data/actor-adversary.mjs) instead — no
-   *  Attributes/Skills point-buy or Combat Card draw, since neither exists on that Grade's sheet.
-   *  Fixed Attack and Fixed Defenses fill from the same Grade+Tier budget formula the sheet's own
-   *  Roll button reads; Abilities stay hand-authored (there's no Ability compendium to draw from,
-   *  same as Tactics/GM Notes always being manual). Equipment still rolls either way. */
+   *  V6 (plan §5.1.4/§9.5): every Grade now rolls dice the same way — the old Mook/Normal Reduced
+   *  Engine (fixed printed dice-pool sizes and flat Defenses instead of Attributes/Skills/Cards) is
+   *  retired as the resolution model. Attribute/Skill point pools and Action/Reaction Card counts
+   *  already existed per-Grade in monster-budgets.mjs (Mook's is just much smaller than Elite's),
+   *  so this now runs identically for every Grade — only the budget numbers differ. Abilities stay
+   *  hand-authored (there's no Ability compendium to draw from, same as Tactics/GM Notes always
+   *  being manual). Equipment still rolls the same for every Grade, as before. */
   static async #onAutoGenerate() {
     const document = this.document;
     const grade = document.system.grade;
     const budget = getGradeBudget(grade);
     const tier = document.system.tier;
-    const isReduced = grade === "Mook" || grade === "Normal";
 
-    if (isReduced) {
-      const attack = computeFixedAttack(grade, tier);
-      const defense = computeFixedDefense(grade, tier);
-      await document.update({
-        "system.fixedAttack": { physical: attack, mental: attack, spiritual: attack },
-        "system.fixedDefenses": { fortitude: defense, composure: defense, harmony: defense }
-      });
-    } else {
-      await this.#rollAttributes();
-      await this.#rollSkills();
-    }
+    await this.#rollAttributes();
+    await this.#rollSkills();
     await document.update({
       "system.resilience": budget.resilienceBase + Math.max(0, tier || 0) * budget.resiliencePerTier,
       "system.temporaryWoundsAvailable": budget.temporaryWoundsAvailable,
-      "system.signatureEquipmentLimit": budget.equipmentCount
+      "system.inventoryLimit": budget.equipmentCount
     });
-    if (!isReduced) await this.#rollCards();
+    await this.#rollCards();
     await this.#rollEquipment();
     ui.notifications.info(game.i18n.format("ESSENCE.Notify.StatBlockGenerated", { name: document.name, grade: document.system.grade || game.i18n.localize("ESSENCE.Item.Monster.GradeNormal") }));
     this.render();

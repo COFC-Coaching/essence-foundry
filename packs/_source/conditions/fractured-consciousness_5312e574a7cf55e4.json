@@ -1,0 +1,50 @@
+{
+  "_id": "5312e574a7cf55e4",
+  "name": "Fractured Consciousness",
+  "type": "condition",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "classification": "wound",
+    "sections": [
+      {
+        "label": "WOUND — Mental Critical",
+        "html": "Wound Condition: <b>Fractured Consciousness</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "-2 Composure. Mental Actions and Reactions require 1 additional burned die."
+      },
+      {
+        "label": "NATURAL RECOVERY",
+        "html": "Stabilize: contain the ongoing cognitive or psychic cause and provide appropriate professional, relational, technological, or supernatural support. Recovery: extended safe treatment appropriate to the injury, or qualifying Critical healing. Exact duration remains to be finalized."
+      }
+    ]
+  },
+  "effects": [
+    {
+      "_id": "84eb0972149f565b",
+      "_key": "!items.effects!5312e574a7cf55e4.84eb0972149f565b",
+      "name": "Fractured Consciousness: Composure -2",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.composureBonus",
+          "mode": 2,
+          "value": "-2",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!5312e574a7cf55e4"
+}

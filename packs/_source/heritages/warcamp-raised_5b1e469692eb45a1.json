@@ -7,7 +7,7 @@
     "description": "Raised among soldiers, camp followers, quartermasters, healers, and families that traveled with an army or lived around a permanent garrison.",
     "legacy": {
       "name": "Quartermaster's Due",
-      "text": "You may select one Main-Hand, Off-Hand, or Armor item whose Availability is no more than 1 higher than your Reach. It still counts against your Signature Equipment Limit. You may replace it at the end of an adventure or during significant downtime."
+      "text": "You may select one Main-Hand, Off-Hand, or Armor item whose Availability is no more than 1 higher than your Reach. It still counts against your Inventory Limit. You may replace it at the end of an adventure or during significant downtime."
     },
     "familiarity": {
       "name": "Camp Discipline",

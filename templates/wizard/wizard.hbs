@@ -38,7 +38,7 @@
       {{/each}}
     </ul>
 
-    {{!-- Inline Adaptation picker — replaces the old link out to the Species Item's own GM-
+    {{!-- Inline Trait picker — replaces the old link out to the Species Item's own GM-
          authoring sheet. Resets automatically on Species switch since selectOrigin deletes the
          stale embedded Item and creates a fresh copy from the compendium (see origin-select.mjs). --}}
     {{#if speciesItem}}
@@ -64,13 +64,13 @@
           </div>
         {{/if}}
 
-        <h4 class="section-head">{{speciesItem.system.adaptationLabel}}s <span class="muted">{{localize "ESSENCE.Wizard.Character.ChosenFraction" chosen=adaptationChosenCount total=adaptationCap}}</span></h4>
-        <ol class="wizard-adaptation-list">
-          {{#each adaptationRows as |a|}}
-            <li class="wizard-adaptation-row">
+        <h4 class="section-head">{{speciesItem.system.traitLabel}}s <span class="muted">{{localize "ESSENCE.Wizard.Character.ChosenFraction" chosen=traitChosenCount total=traitCap}}</span></h4>
+        <ol class="wizard-trait-list">
+          {{#each traitRows as |a|}}
+            <li class="wizard-trait-row">
               <label class="chosen-toggle">
-                <input type="checkbox" data-action="toggleAdaptationChosen" data-index="{{a.i}}"
-                  {{#if a.chosen}}checked{{else if (gte ../adaptationChosenCount ../adaptationCap)}}disabled{{/if}}>
+                <input type="checkbox" data-action="toggleTraitChosen" data-index="{{a.i}}"
+                  {{#if a.chosen}}checked{{else if (gte ../traitChosenCount ../traitCap)}}disabled{{/if}}>
                 <strong>{{a.name}}</strong>
               </label>
               <div class="wizard-origin-text">{{{a.text}}}</div>
@@ -80,7 +80,7 @@
                     <span class="muted">{{a.subChoice.label}} {{localize "ESSENCE.Wizard.Character.ChosenFraction" chosen=a.subChoice.selected.length total=a.subChoice.count}}</span>
                     {{#each a.subChoiceOptions as |opt|}}
                       <label class="subchoice-option">
-                        <input type="checkbox" data-action="toggleSubChoiceOption" data-scope="adaptation" data-index="{{a.i}}" data-option="{{opt.value}}"
+                        <input type="checkbox" data-action="toggleSubChoiceOption" data-scope="trait" data-index="{{a.i}}" data-option="{{opt.value}}"
                           {{#if opt.checked}}checked{{/if}} {{#if opt.disabled}}disabled{{/if}}>
                         {{opt.value}}
                       </label>
@@ -89,7 +89,7 @@
                 {{else if (eq a.subChoice.type "free")}}
                   <div class="wizard-subchoice">
                     <label>{{a.subChoice.label}}
-                      <input type="text" class="subchoice-free-text" data-path="adaptations.{{a.i}}" value="{{lookup a.subChoice.selected 0}}" placeholder="{{localize 'ESSENCE.Wizard.Character.DescribeYour' label=a.subChoice.label}}">
+                      <input type="text" class="subchoice-free-text" data-path="traits.{{a.i}}" value="{{lookup a.subChoice.selected 0}}" placeholder="{{localize 'ESSENCE.Wizard.Character.DescribeYour' label=a.subChoice.label}}">
                     </label>
                   </div>
                 {{/if}}
@@ -160,10 +160,10 @@
 
   {{!-- ============ STEP 5: COMBAT SKILLS ============ --}}
   {{#if (eq step 4)}}
-    <h2>{{localize "ESSENCE.Common.CombatSkills"}}</h2>
+    <h2>{{localize "ESSENCE.Common.CombatStyles"}}</h2>
     <p class="muted">{{localize "ESSENCE.Wizard.Character.SkillsHint" pool=skillPool}} {{localize "ESSENCE.Wizard.PointsRemaining"}}: <strong>{{skillRemaining}}</strong></p>
     <table class="item-table">
-      <thead><tr><th>{{localize "ESSENCE.Common.Skill"}}</th><th></th><th>{{localize "ESSENCE.Common.Rank"}}</th><th></th></tr></thead>
+      <thead><tr><th>{{localize "ESSENCE.Common.Style"}}</th><th></th><th>{{localize "ESSENCE.Common.Rank"}}</th><th></th></tr></thead>
       <tbody>
         {{#each skills as |s|}}
           <tr class="{{#unless s.gateOpen}}gated{{/unless}}">
@@ -221,7 +221,7 @@
               <option value="reaction-card" {{#if (eq cardTypeFilter "reaction-card")}}selected{{/if}}>{{localize "ESSENCE.Common.Reaction"}}</option>
             </select>
           </label>
-          <label>{{localize "ESSENCE.Common.Skill"}}
+          <label>{{localize "ESSENCE.Common.Style"}}
             <select data-wizard-select="cardSkill">
               <option value="all" {{#if (eq cardSkillFilter "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
               {{#each cardSkillOptions as |sk|}}
@@ -241,7 +241,7 @@
             <select data-wizard-select="cardSort">
               <option value="rank" {{#if (eq cardSort "rank")}}selected{{/if}}>{{localize "ESSENCE.Common.Rank"}}</option>
               <option value="name" {{#if (eq cardSort "name")}}selected{{/if}}>{{localize "ESSENCE.Common.Name"}}</option>
-              <option value="skill" {{#if (eq cardSort "skill")}}selected{{/if}}>{{localize "ESSENCE.Common.Skill"}}</option>
+              <option value="skill" {{#if (eq cardSort "skill")}}selected{{/if}}>{{localize "ESSENCE.Common.Style"}}</option>
             </select>
           </label>
         </div>
@@ -284,6 +284,27 @@
       <label>{{localize "ESSENCE.Character.KeyAspect"}} 2 <input type="text" name="system.keyAspects.1" value="{{lookup system.keyAspects 1}}"></label>
       <label>{{localize "ESSENCE.Character.KeyAspect"}} 3 <input type="text" name="system.keyAspects.2" value="{{lookup system.keyAspects 2}}"></label>
     </div>
+    {{!-- V6 Intellect benefit (design/v6-revision-delta.md §3.4): one free Rank-1 Non-Combat Skill
+         per point of permanent Intellect, made BEFORE spending the ordinary 5 points below. Shown
+         first in the step per the book's own ordering. --}}
+    <h3 class="section-head">{{localize "ESSENCE.Wizard.Character.IntellectSkillsHeader" have=intellectEntries.length count=intellectSkillCount}}</h3>
+    {{#each intellectEntries as |s|}}
+      <div class="nc-skill-row">
+        <input type="text" name="system.nonCombatSkills.{{s.i}}.name" value="{{s.name}}" placeholder="{{localize 'ESSENCE.Wizard.Character.SkillNamePlaceholder'}}">
+        <span class="muted">{{localize "ESSENCE.Wizard.Character.IntellectGrant"}}</span>
+        <button type="button" data-action="adjustNonCombatRating" data-index="{{s.i}}" data-delta="-1">-</button>
+        <input type="number" class="wizard-value" name="system.nonCombatSkills.{{s.i}}.rating" value="{{s.rating}}" readonly style="width:3em">
+        <button type="button" data-action="adjustNonCombatRating" data-index="{{s.i}}" data-delta="1">+</button>
+        {{!-- Preserves `source` through submitOnChange's whole-array reconstruction — see the
+             ordinary loop's own comment below for why this hidden input is load-bearing. --}}
+        <input type="hidden" name="system.nonCombatSkills.{{s.i}}.source" value="intellect">
+        <a data-action="deleteNonCombatSkill" data-index="{{s.i}}"><i class="fa-solid fa-trash"></i></a>
+      </div>
+    {{/each}}
+    {{#if intellectRemaining}}
+      <button type="button" data-action="addIntellectSkill"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Wizard.Character.AddIntellectSkill"}}</button>
+    {{/if}}
+
     <h3 class="section-head">{{localize "ESSENCE.Wizard.Character.NonCombatSkillsHeader" spent=nonCombatSpent pool=nonCombatPool remaining=nonCombatRemaining}}</h3>
     {{#each nonCombatEntries as |s|}}
       <div class="nc-skill-row">
@@ -295,6 +316,7 @@
              schema default the next time ANY field in the form changes. --}}
         <input type="number" class="wizard-value" name="system.nonCombatSkills.{{s.i}}.rating" value="{{s.rating}}" readonly style="width:3em">
         <button type="button" data-action="adjustNonCombatRating" data-index="{{s.i}}" data-delta="1">+</button>
+        <input type="hidden" name="system.nonCombatSkills.{{s.i}}.source" value="">
         <a data-action="deleteNonCombatSkill" data-index="{{s.i}}"><i class="fa-solid fa-trash"></i></a>
       </div>
     {{/each}}
@@ -328,9 +350,9 @@
   {{#if (eq step 8)}}
     <h2>{{localize "ESSENCE.Item.EquipmentLabel"}}</h2>
     <p class="muted">{{localize "ESSENCE.Wizard.Character.EquipmentHint"}}</p>
-    <h3 class="section-head">{{localize "ESSENCE.Wizard.SignatureLoadout" used=signatureUsed limit=signatureLimit reach=reach}}</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Wizard.InventoryLoadout" used=inventoryUsed limit=inventoryLimit reach=reach}}</h3>
     <ul class="item-list">
-      {{#each signatureItems as |item|}}
+      {{#each inventoryItems as |item|}}
         <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{localize "ESSENCE.Item.Equipment.Reach"}} {{item.system.cost}}</span>
           {{#if item.overReach}}<span class="muted reach-warning" title="{{localize 'ESSENCE.Wizard.Character.ExceedsReachYours'}}"><i class="fa-solid fa-triangle-exclamation"></i></span>{{/if}}
           <button type="button" data-action="toggleEquipment" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
@@ -378,7 +400,7 @@
     <ul class="item-list wizard-scroll-list">
       {{#each browsableEquipment as |item|}}
         <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{equipmentCategoryLabel item.system.category}} &middot; {{localize "ESSENCE.Item.Equipment.Reach"}} {{item.system.cost}}</span>
-          <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" data-slot="signature" aria-label="{{localize 'ESSENCE.Wizard.AddToSignatureAria' name=item.name}}" title="{{localize 'ESSENCE.Wizard.AddToSignature'}}"><i class="fa-solid fa-star"></i></button>
+          <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" data-slot="inventory" aria-label="{{localize 'ESSENCE.Wizard.AddToInventoryAria' name=item.name}}" title="{{localize 'ESSENCE.Wizard.AddToInventory'}}"><i class="fa-solid fa-star"></i></button>
           <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" data-slot="armory" aria-label="{{localize 'ESSENCE.Wizard.AddToArmoryAria' name=item.name}}" title="{{localize 'ESSENCE.Wizard.AddToArmory'}}"><i class="fa-solid fa-warehouse"></i></button></li>
       {{/each}}
     </ul>

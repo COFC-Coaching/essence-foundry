@@ -19,6 +19,7 @@
     {{#if system.min}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Item.Card.Commitment"}}</span><span>{{localize "ESSENCE.Common.Dice"}} {{system.min}}+{{#if system.cost}} · {{localize "ESSENCE.Common.Cost"}} {{system.cost}} {{domainResource system.domain}}{{/if}}</span></div>{{/if}}
     {{#if system.attr}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Attribute"}}</span><span>{{system.attr}}</span></div>{{/if}}
     {{#if system.defense}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Defense"}}</span><span>{{system.defense}}</span></div>{{/if}}
+    {{#if system.unopposed}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Defense"}}</span><span>{{localize "ESSENCE.Item.Card.Unopposed"}}</span></div>{{/if}}
   </div>
   {{#if system.tags}}<div class="card-view-tags muted">{{system.tags}}</div>{{/if}}
 
@@ -65,7 +66,7 @@
     </select>
   </label>
   <label>{{localize "ESSENCE.Common.Attribute"}} <input name="system.attr" type="text" value="{{system.attr}}"></label>
-  <label>{{localize "ESSENCE.Common.Skill"}}
+  <label>{{localize "ESSENCE.Common.Style"}}
     <select class="skill-select">
       <option value="" {{#unless system.skill}}selected{{/unless}}>{{localize "ESSENCE.Item.Card.BasicUniversal"}}</option>
       {{#each skillOptions as |s|}}
@@ -74,6 +75,9 @@
     </select>
   </label>
   <label>{{localize "ESSENCE.Common.Defense"}} <input name="system.defense" type="text" value="{{system.defense}}"></label>
+  <label style="display:flex;align-items:center;gap:6px;">
+    <input name="system.unopposed" type="checkbox" {{#if system.unopposed}}checked{{/if}}> {{localize "ESSENCE.Item.Card.Unopposed"}}
+  </label>
   <label>{{localize "ESSENCE.Item.Card.MinDice"}} <input name="system.min" type="text" value="{{system.min}}"></label>
   <label>{{localize "ESSENCE.Common.Cost"}} <input name="system.cost" type="text" value="{{system.cost}}"></label>
   <label>{{localize "ESSENCE.Common.Tags"}} <input name="system.tags" type="text" value="{{system.tags}}"></label>

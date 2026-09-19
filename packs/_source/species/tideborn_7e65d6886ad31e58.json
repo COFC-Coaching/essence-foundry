@@ -9,12 +9,12 @@
       "name": "Amphibious Body",
       "text": "Gain Swim 10. You can breathe both air and water and function normally while submerged. Ordinary water pressure, currents, and temperature within habitable depths do not impair you."
     },
-    "adaptationLabel": "Tideborn Adaptation",
-    "adaptationCount": 1,
-    "adaptations": [
+    "traitLabel": "Tideborn Trait",
+    "traitCount": 1,
+    "traits": [
       {
         "name": "Adhesive Limbs",
-        "text": "Gain Climb 10 through suckers, gripping pads, hooked limbs, or a similar adaptation. You may remain secured to a surface without using your hands.",
+        "text": "Gain Climb 10 through suckers, gripping pads, hooked limbs, or a similar trait. You may remain secured to a surface without using your hands.",
         "chosen": false
       },
       {

@@ -14,33 +14,6 @@
  * Essence's full combat system" — Champion/Leader/Solo are differentiated by eliteType and ability
  * access, not by a separate budget tier.
  */
-/**
- * Reduced Engine defaults (Mook/Normal only — see actor-adversary.mjs's class doc comment).
- * Calibration target, straight from the design conversation: at a Tier 1 same-Tier baseline, a
- * Mook/Normal's fixed attack pool should land at roughly the same effectiveness as an ordinary
- * 2d10 PC Action (see the Encounter & Adventure Building Primer's "1 - (0.5 x 0.5) = 75%" 2d10
- * math). computeFixedAttack/computeFixedDefense below use the exact same base+(perTier*tier)
- * shape as computeResilience already does — so, matching how Mook's resilienceBase=1/
- * resiliencePerTier=1 lands on the Primer's own "~2 Core Wounds at Tier 1" (1 + 1*1 = 2),
- * fixedAttackBase is 1 (not 2) so Tier 1 lands on the 2d10 target: 1 + 1*1 = 2. Normal doesn't get
- * a bigger pool than Mook here; it gets MORE of them — the existing actionCards/reactionCards
- * budget below already doubles Normal's action count (2/1) over Mook's (1/0), matching the
- * Primer's Tier 1 Enemy Chassis ("2 Mooks = 4 Core / 2 Actions" ≈ "1 Normal = 4 Core / 2 Actions").
- * fixedDefenseBase is a flat stand-in for the Attribute-derived Fortitude/Composure/Harmony
- * formula a PC uses (2 + two-lowest-of-three-Attributes) — with as few Attribute points as these
- * Grades ever had anyway, a flat 4/5 approximates what that formula would have produced. Every
- * number here is an explicit first draft per the design doc's own warning: unlike the point-buy
- * budget below (no balance risk either way), these numbers set how hard a Mook/Normal hits and
- * how easily it's hit — validate against actual play and the Rank 0-2 Combat Cards before
- * treating them as settled.
- */
-const REDUCED_ENGINE_DEFAULTS = {
-  Mook: { fixedAttackBase: 1, fixedAttackPerTier: 1, fixedDefenseBase: 4, fixedDefensePerTier: 0 },
-  Normal: { fixedAttackBase: 1, fixedAttackPerTier: 1, fixedDefenseBase: 5, fixedDefensePerTier: 0 },
-  // Elite stays on the full engine — these are unused, kept only so every Grade has the same shape.
-  Elite: { fixedAttackBase: 0, fixedAttackPerTier: 0, fixedDefenseBase: 0, fixedDefensePerTier: 0 }
-};
-
 export const GRADE_BUDGETS = {
   Mook: {
     attributePool: 2, attributeMax: 2,
@@ -49,7 +22,10 @@ export const GRADE_BUDGETS = {
     temporaryWoundsAvailable: 0,
     actionCards: 1, reactionCards: 0,
     equipmentCount: 1,
-    ...REDUCED_ENGINE_DEFAULTS.Mook
+    // V6 §2410/§2467 simplified enemy Wound capacity (plan §4.8/§5.1.4) — every enemy grade,
+    // Mook/Normal/Elite (including Champion/Leader/Solo), uses a flat filled/capacity Wound
+    // counter instead of the 5-space Light/Serious/Critical track. See actor-adversary.mjs.
+    woundCapacity: 2
   },
   Normal: {
     attributePool: 7, attributeMax: 3,
@@ -58,7 +34,7 @@ export const GRADE_BUDGETS = {
     temporaryWoundsAvailable: 1,
     actionCards: 2, reactionCards: 1,
     equipmentCount: 2,
-    ...REDUCED_ENGINE_DEFAULTS.Normal
+    woundCapacity: 4
   },
   Elite: {
     attributePool: 13, attributeMax: 5,
@@ -67,7 +43,9 @@ export const GRADE_BUDGETS = {
     temporaryWoundsAvailable: 3,
     actionCards: 4, reactionCards: 3,
     equipmentCount: 4,
-    ...REDUCED_ENGINE_DEFAULTS.Elite
+    // Solo keeps the standard Elite Wound capacity of five (V6 §2467) — eliteType doesn't affect
+    // this budget lookup at all, only `grade` does.
+    woundCapacity: 5
   }
 };
 
@@ -84,17 +62,4 @@ export function getGradeBudget(grade) {
 export function computeResilience(grade, tier) {
   const budget = getGradeBudget(grade);
   return budget.resilienceBase + Math.max(0, tier || 0) * budget.resiliencePerTier;
-}
-
-/** Reduced Engine (Mook/Normal only) — see REDUCED_ENGINE_DEFAULTS above. Applied uniformly
- *  across all three Domains by Auto-Generate; a GM can always hand-tune one Domain higher/lower
- *  afterward for a specialized Mook/Normal (an Artillery Mook with a stronger Mental pool, say). */
-export function computeFixedAttack(grade, tier) {
-  const budget = getGradeBudget(grade);
-  return budget.fixedAttackBase + Math.max(0, tier || 0) * budget.fixedAttackPerTier;
-}
-
-export function computeFixedDefense(grade, tier) {
-  const budget = getGradeBudget(grade);
-  return budget.fixedDefenseBase + Math.max(0, tier || 0) * budget.fixedDefensePerTier;
 }

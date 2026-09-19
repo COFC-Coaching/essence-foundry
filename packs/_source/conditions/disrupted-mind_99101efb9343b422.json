@@ -1,0 +1,50 @@
+{
+  "_id": "99101efb9343b422",
+  "name": "Disrupted Mind",
+  "type": "condition",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "classification": "wound",
+    "sections": [
+      {
+        "label": "WOUND — Mental Light",
+        "html": "Wound Condition: <b>Disrupted Mind</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "-1 Composure."
+      },
+      {
+        "label": "NATURAL RECOVERY",
+        "html": "A safe opportunity to recover from the cause plus one appropriate Recovery opportunity."
+      }
+    ]
+  },
+  "effects": [
+    {
+      "_id": "4106a8553cd8a6f5",
+      "_key": "!items.effects!99101efb9343b422.4106a8553cd8a6f5",
+      "name": "Disrupted Mind: Composure -1",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.composureBonus",
+          "mode": 2,
+          "value": "-1",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!99101efb9343b422"
+}

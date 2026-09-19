@@ -1,0 +1,50 @@
+{
+  "_id": "ff51cbc492c8418c",
+  "name": "Spiritual Trauma",
+  "type": "condition",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "classification": "wound",
+    "sections": [
+      {
+        "label": "WOUND — Spiritual Serious",
+        "html": "Wound Condition: <b>Spiritual Trauma</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "-1 Harmony. The first Spiritual Action on each of your Turns and first Spiritual Reaction between your Turns require 1 additional burned die."
+      },
+      {
+        "label": "NATURAL RECOVERY",
+        "html": "Relevant ritual, relational, spiritual, or supernatural care plus post-Adventure Downtime rest and healing, or qualifying active healing. Mid-Adventure Recovery alone is insufficient."
+      }
+    ]
+  },
+  "effects": [
+    {
+      "_id": "aa1cc0ccfb94dff7",
+      "_key": "!items.effects!ff51cbc492c8418c.aa1cc0ccfb94dff7",
+      "name": "Spiritual Trauma: Harmony -1",
+      "img": "icons/svg/upgrade.svg",
+      "changes": [
+        {
+          "key": "system.harmonyBonus",
+          "mode": 2,
+          "value": "-1",
+          "priority": 20
+        }
+      ],
+      "disabled": false,
+      "transfer": true,
+      "duration": {},
+      "origin": null,
+      "flags": {}
+    }
+  ],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!ff51cbc492c8418c"
+}

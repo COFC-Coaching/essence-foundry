@@ -1,0 +1,26 @@
+{
+  "_id": "4539aa6c4dee2726",
+  "name": "Immobilized",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "classification": "ordinary",
+    "sections": [
+      {
+        "label": "ORDINARY CONDITION",
+        "html": "<b>Immobilized</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "Your voluntary Movement is 0 and you cannot gain voluntary extra Movement. You may still take Actions and Reactions normally, and forced movement can still move you unless the source of Immobilized says otherwise."
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!4539aa6c4dee2726"
+}

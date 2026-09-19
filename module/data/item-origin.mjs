@@ -1,11 +1,11 @@
 const { fields } = foundry.data;
 
 /**
- * Some Species Nature traits and Adaptations bury a SECOND choice inside their own rules text
- * beyond the outer "choose N Adaptations" pick — e.g. Mortal-Kin's Keen ("choose two of the
+ * Some Species Nature traits and Traits bury a SECOND choice inside their own rules text
+ * beyond the outer "choose N Traits" pick — e.g. Mortal-Kin's Keen ("choose two of the
  * following special Senses: low-light vision, keen hearing, or keen scent") or Dragonkin's Nature
  * ("Choose a Draconic Lineage, such as Flame, Frost, Storm, Stone..."). This factory builds that
- * nested sub-choice block, shared identically between `nature` and each `adaptations` entry so the
+ * nested sub-choice block, shared identically between `nature` and each `traits` entry so the
  * Wizard (character-wizard.mjs) can render/handle both with one code path.
  *
  * `type` distinguishes two flavors found in part-ii-character-creation.md § Species:
@@ -35,7 +35,7 @@ function subChoiceField() {
   });
 }
 
-/** A Species (natural lineage): a Nature trait plus a pool of Adaptations the player picks from. */
+/** A Species (natural lineage): a Nature trait plus a pool of Traits the player picks from. */
 export class EssenceSpeciesData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
@@ -45,9 +45,9 @@ export class EssenceSpeciesData extends foundry.abstract.TypeDataModel {
         text: new fields.HTMLField({ initial: "" }),
         subChoice: subChoiceField()
       }),
-      adaptationLabel: new fields.StringField({ initial: "Adaptation" }),
-      adaptationCount: new fields.NumberField({ integer: true, initial: 1, min: 0 }),
-      adaptations: new fields.ArrayField(new fields.SchemaField({
+      traitLabel: new fields.StringField({ initial: "Trait" }),
+      traitCount: new fields.NumberField({ integer: true, initial: 1, min: 0 }),
+      traits: new fields.ArrayField(new fields.SchemaField({
         name: new fields.StringField({ initial: "" }),
         text: new fields.HTMLField({ initial: "" }),
         chosen: new fields.BooleanField({ initial: false }),
@@ -76,7 +76,7 @@ export class EssenceHeritageData extends foundry.abstract.TypeDataModel {
 }
 
 /**
- * A Distinction: the character-creation option that ties to one Combat Skill, and for five of
+ * A Distinction: the character-creation option that ties to one Combat Style, and for five of
  * them (Gifted/Psyker/Arcanist/Invoker/Summoner) is the ONLY way to unlock a gated skill
  * (Gestalt/Psionics/Magecraft/Ritualism/Calling respectively). See SKILL_GATE in the web app's
  * essence-options.ts for the canonical skill -> distinction-name mapping this mirrors.

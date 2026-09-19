@@ -9,6 +9,7 @@
 
 {{#if viewMode}}
 <div class="card-view condition-view">
+  <p class="muted condition-classification-badge">{{localize "ESSENCE.Item.Condition.Classification"}}: {{localize (concat "ESSENCE.Item.Condition.Classification." system.classification)}}</p>
   {{#each system.sections as |sec i|}}
     {{#if sec.html}}
       {{!-- Rules' own printed-card convention: the first section is boxed and shaded. --}}
@@ -21,6 +22,16 @@
   {{#unless system.sections.length}}<p class="muted">{{localize "ESSENCE.Item.Condition.NoSectionsYet"}}</p>{{/unless}}
 </div>
 {{else}}
+<label>{{localize "ESSENCE.Item.Condition.Classification"}}
+  <select name="system.classification">
+    <option value="ordinary" {{#if (eq system.classification "ordinary")}}selected{{/if}}>{{localize "ESSENCE.Item.Condition.Classification.ordinary"}}</option>
+    <option value="specialty" {{#if (eq system.classification "specialty")}}selected{{/if}}>{{localize "ESSENCE.Item.Condition.Classification.specialty"}}</option>
+    <option value="wound" {{#if (eq system.classification "wound")}}selected{{/if}}>{{localize "ESSENCE.Item.Condition.Classification.wound"}}</option>
+    <option value="consequence" {{#if (eq system.classification "consequence")}}selected{{/if}}>{{localize "ESSENCE.Item.Condition.Classification.consequence"}}</option>
+    <option value="cover" {{#if (eq system.classification "cover")}}selected{{/if}}>{{localize "ESSENCE.Item.Condition.Classification.cover"}}</option>
+    <option value="other" {{#if (eq system.classification "other")}}selected{{/if}}>{{localize "ESSENCE.Item.Condition.Classification.other"}}</option>
+  </select>
+</label>
 <h3 class="section-head">{{localize "ESSENCE.Item.Condition.Sections"}}</h3>
 <ol class="sections">
   {{#each system.sections as |sec i|}}

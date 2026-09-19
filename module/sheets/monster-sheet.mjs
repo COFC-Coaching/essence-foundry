@@ -6,7 +6,7 @@ import { MONSTER_TYPES_LOW, MONSTER_TYPES_HIGH } from "../data/monster-types.mjs
  * Wounds, Combat Cards, Equipment, Tactics/Leader/Solo Abilities, the Monster Wizard launcher)
  * reused verbatim by extending it, since none of that logic is Person-specific. Only the template
  * differs: monster-sheet.hbs swaps the Species/Heritage Origin section for a Monster Type badge
- * (kept minimal, just a Distinction pick-list, so gated Combat Skills like Magecraft/Ritualism
+ * (kept minimal, just a Distinction pick-list, so gated Combat Styles like Magecraft/Ritualism
  * stay reachable for a spellcasting creature) and drops the Influence/full-Reach sections a
  * creature essentially never uses — see the "People vs. Monsters" plan for the reasoning. A
  * Monster's `system.monsterType` needs the same Grade-gated low/high band lists as monster-wizard.mjs's
@@ -33,7 +33,7 @@ export default class EssenceMonsterSheet extends EssenceNpcSheet {
     const context = await super._prepareContext(options);
     context.monsterTypesLow = MONSTER_TYPES_LOW;
     context.monsterTypesHigh = MONSTER_TYPES_HIGH;
-    // context.equipment (one flat Equipment-and-Components list, no Signature/Temporary/Armory
+    // context.equipment (one flat Equipment-and-Components list, no Inventory/Temporary/Armory
     // split) is already built by super._prepareContext() — see EssenceNpcSheet's own comment;
     // Monster and People share the identical single-container Equipment model.
     return context;

@@ -1,0 +1,51 @@
+{
+  "_id": "681c1e6662dbae6b",
+  "name": "Defend",
+  "type": "reaction-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "",
+    "subtype": "",
+    "attr": "",
+    "skill": "",
+    "defense": "",
+    "unopposed": true,
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Trigger",
+        "html": "You are targeted by an opposed Action or Reaction."
+      },
+      {
+        "label": "Effect",
+        "html": "Choose the Endurance Attribute of the targeted Defense: Vigor for Fortitude, Resolve for Composure, or Anima for Harmony. Roll at least 2 Reaction dice, up to that Attribute; if the Attribute is 1, your maximum is 2 instead. This Reaction is unopposed. Gain +1 to the targeted Defense against the triggering card."
+      }
+    ],
+    "surges": [
+      {
+        "n": "2",
+        "html": "Increase that Defense by an additional +1 against the triggering card."
+      }
+    ],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    },
+    "nonCombatTask": false,
+    "noSurges": false
+  },
+  "folder": "f57fad37b968baad",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!681c1e6662dbae6b"
+}

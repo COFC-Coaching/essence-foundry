@@ -9,9 +9,9 @@
       "name": "Artificial Nature",
       "text": "You do not need to breathe or eat and do not sleep in the ordinary manner. Ordinary biological diseases and poisons do not affect you, though you must still rest and recover normally."
     },
-    "adaptationLabel": "Construct Module",
-    "adaptationCount": 1,
-    "adaptations": [
+    "traitLabel": "Construct Module",
+    "traitCount": 1,
+    "traits": [
       {
         "name": "Alternate Chassis",
         "text": "Gain Climb 10 or Swim 10 through a body specifically designed for that form of Movement.",
@@ -33,7 +33,7 @@
       },
       {
         "name": "Integrated Tool",
-        "text": "Choose one ordinary Non-Combat toolkit and incorporate it into your body. It does not count against your Signature Equipment Limit, cannot be disarmed, and remains available whenever the relevant parts of your body are functional.",
+        "text": "Choose one ordinary Non-Combat toolkit and incorporate it into your body. It does not count against your Inventory Limit, cannot be disarmed, and remains available whenever the relevant parts of your body are functional.",
         "chosen": false,
         "subChoice": {
           "label": "Toolkit",
@@ -44,7 +44,7 @@
       },
       {
         "name": "Internal Compartment",
-        "text": "Choose one small Other Equipment item with a cost of 1 whose Availability does not exceed your Reach. While installed inside your body, it does not count against your Signature Equipment Limit and is not discovered through casual observation. You may replace it during significant downtime.",
+        "text": "Choose one small Other Equipment item with a cost of 1 whose Availability does not exceed your Reach. While installed inside your body, it does not count against your Inventory Limit and is not discovered through casual observation. You may replace it during significant downtime.",
         "chosen": false,
         "subChoice": {
           "label": "Equipment Item",
@@ -82,7 +82,7 @@
       },
       {
         "name": "Utility Limb",
-        "text": "You possess an additional arm, tool mount, cable, or similar mechanism. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Signature Equipment Limit, and the limb does not grant additional Actions.",
+        "text": "You possess an additional arm, tool mount, cable, or similar mechanism. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Inventory Limit, and the limb does not grant additional Actions.",
         "chosen": false
       }
     ],

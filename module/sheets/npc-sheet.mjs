@@ -5,7 +5,7 @@ import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQu
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, INFLUENCE_RECOVERY_TIME } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
 import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -58,7 +58,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       toggleTempWound: EssenceNpcSheet.#onToggleTempWound,
       toggleCoreWound: EssenceNpcSheet.#onToggleCoreWound,
       toggleDeathTrack: EssenceNpcSheet.#onToggleDeathTrack,
-      toggleDeathTrackFrozen: EssenceNpcSheet.#onToggleDeathTrackFrozen,
+      toggleDeathTrackStabilized: EssenceNpcSheet.#onToggleDeathTrackStabilized,
       toggleTempInfluence: EssenceNpcSheet.#onToggleTempInfluence,
       toggleCoreInfluence: EssenceNpcSheet.#onToggleCoreInfluence,
       applyInfluenceInjury: EssenceNpcSheet.#onApplyInfluenceInjury,
@@ -69,13 +69,13 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       activateReachTrigger: EssenceNpcSheet.#onActivateReachTrigger,
       deactivateReachTrigger: EssenceNpcSheet.#onDeactivateReachTrigger,
       resetAdventureUses: EssenceNpcSheet.#onResetAdventureUses,
+      newEncounter: EssenceNpcSheet.#onNewEncounter,
       addTactic: EssenceNpcSheet.#onAddTactic,
       deleteTactic: EssenceNpcSheet.#onDeleteTactic,
       addLeaderAbility: EssenceNpcSheet.#onAddLeaderAbility,
       deleteLeaderAbility: EssenceNpcSheet.#onDeleteLeaderAbility,
       addSoloAbility: EssenceNpcSheet.#onAddSoloAbility,
       deleteSoloAbility: EssenceNpcSheet.#onDeleteSoloAbility,
-      rollFixedAttack: EssenceNpcSheet.#onRollFixedAttack,
       addAbility: EssenceNpcSheet.#onAddAbility,
       deleteAbility: EssenceNpcSheet.#onDeleteAbility,
       useAbility: EssenceNpcSheet.#onUseAbility,
@@ -84,11 +84,18 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       itemDelete: EssenceNpcSheet.#onItemDelete,
       postEquipmentToChat: EssenceNpcSheet.#onPostEquipmentToChat,
       createEquipment: EssenceNpcSheet.#onCreateEquipment,
+      reconfigureItem: EssenceNpcSheet.#onReconfigureItem,
+      releaseItem: EssenceNpcSheet.#onReleaseItem,
+      toggleItemUsed: EssenceNpcSheet.#onToggleItemUsed,
       selectOrigin: EssenceNpcSheet.#onSelectOrigin,
       clearOrigin: EssenceNpcSheet.#onClearOrigin,
       chooseGrantedItem: EssenceNpcSheet.#onChooseGrantedItem,
       dismissManifestation: EssenceNpcSheet.#onDismissManifestation,
-      applyManifestationDefeat: EssenceNpcSheet.#onApplyManifestationDefeat
+      applyManifestationDefeat: EssenceNpcSheet.#onApplyManifestationDefeat,
+      addResistance: EssenceNpcSheet.#onAddResistance,
+      removeResistance: EssenceNpcSheet.#onRemoveResistance,
+      addVulnerability: EssenceNpcSheet.#onAddVulnerability,
+      removeVulnerability: EssenceNpcSheet.#onRemoveVulnerability
     }
   };
 
@@ -126,7 +133,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     this.#wireCardControls();
   }
 
-  /** Equipment tab Signature/Temporary/Armory drop zones — see the matching, more fully commented
+  /** Equipment tab Inventory/Temporary/Armory drop zones — see the matching, more fully commented
    *  override in actor-sheet.mjs; identical behavior here. */
   async _onDropItem(event, item) {
     const dropSlot = resolveEquipmentDropSlot(event);
@@ -261,13 +268,18 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     context.leaderAbilities = (system.leaderAbilities ?? []).map((a, i) => ({ ...a, i }));
     context.soloAbilities = (system.soloAbilities ?? []).map((a, i) => ({ ...a, i }));
 
-    // Reduced Engine (module/data/actor-adversary.mjs) — Mook/Normal only. isReduced gates the
-    // template between the full dice-pool/Combat Card engine and the Fixed Attack/Abilities one.
-    context.isReduced = system.grade === "Mook" || system.grade === "Normal";
+    // V6: every Grade rolls the same way now (plan §5.1.4/§9.5) — the old Mook/Normal-only
+    // Reduced Engine template split is gone, so this list is just a plain general-purpose ability
+    // reference available on any Grade (see actor-adversary.mjs's class doc comment).
     context.abilities = (system.abilities ?? []).map((a, i) => ({ ...a, i }));
 
     context.temporaryWoundPips = pips(system.playState.currentTemporaryWounds, system.temporaryWoundsAvailable);
-    context.deathTrackPips = pips(system.playState.deathTrackStep, 5);
+    // V6: track length is deathTrackMax (5, or 7 for Deathless — design/v6-revision-delta.md §2.3).
+    context.deathTrackPips = pips(system.playState.deathTrackStep, system.deathTrackMax);
+    // V6: the Death Track block only shows once ALL Core Wound spaces are filled — see
+    // EssenceActorSheet's identical context.deathTrackActive for the full comment. Adversaries stop
+    // using the Death Track entirely once usesSimplifiedWounds lands (0.6.78) — see that flag below.
+    context.deathTrackActive = system.coreWoundsFilled === system.coreWounds.length && !system.usesSimplifiedWounds;
     context.temporaryInfluencePips = pips(system.playState.currentTemporaryInfluence, system.temporaryInfluence);
     context.coreInfluenceLabels = CORE_INFLUENCE_LABELS;
     // See EssenceActorSheet#_prepareContext — same Adventure-Limited Reach Trigger mapping.
@@ -284,11 +296,11 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     context.reactionCards = allReactionCards.filter((i) => i.system.skill).map(cardView);
     context.conditions = this.actor.items.filter((i) => i.type === "condition");
 
-    // An NPC/Monster has one Equipment container, not the PC's Signature/Temporary/Armory
+    // An NPC/Monster has one Equipment container, not the PC's Inventory/Temporary/Armory
     // loadout-preparation split (see part-iii-playing-the-game.md § Preparing Equipment — a
     // Planning-phase concept that doesn't apply to an adversary). Chassis/Fitting/Augment are
     // likewise "just a part of Equipment," not a separate inventory concept, so they're folded
-    // into the same flat list. Everything here still lives in the "signature" slot under the hood
+    // into the same flat list. Everything here still lives in the "inventory" slot under the hood
     // (see #onCreateEquipment/EssenceActorSheet's identical _onDropItem override) purely so
     // equipment-effects.mjs's active-bonus gate treats it as equipped rather than silently inert —
     // the GM never sees or manages that distinction.
@@ -297,15 +309,18 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     // Reach + any active Reach Triggers) rather than raw system.reach.
     const equipmentView = (item) => {
       const { reachCost, exceptionSource, overReach } = computeReachGate(item.system, system.effectiveReach);
-      return { id: item.id, name: item.name, system: item.system, reachCost, exceptionSource, overReach };
+      return { id: item.id, name: item.name, system: item.system, reachCost, exceptionSource, overReach, tracksUsedFlag: true };
     };
     const componentView = (item) => ({
       id: item.id,
       name: item.name,
-      system: { category: capitalize(item.type) },
+      system: { category: capitalize(item.type), usedThisAdventure: item.system.usedThisAdventure ?? false },
       reachCost: null,
       exceptionSource: "",
-      overReach: false
+      overReach: false,
+      // See EssenceActorSheet's componentView for the full rationale — Augments are always 0
+      // capacity and don't carry usedThisAdventure.
+      tracksUsedFlag: item.type !== "augment"
     });
     const equipment = this.actor.items.filter((i) => i.type === "equipment");
     context.equipment = [
@@ -368,11 +383,11 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   }
 
   /** Shared dice-commit prompt — see EssenceActorSheet#promptDiceCount for the full rationale. */
-  static async #promptDiceCount({ title, label, min, max, initial }) {
+  static async #promptDiceCount({ title, label, min, max, initial, note = "", extraCheckbox = null }) {
     return new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
         window: { title },
-        content: `<p>${label}</p><input type="number" name="count" value="${initial}" min="${min}" max="${max}" autofocus>`,
+        content: `<p>${label}</p>${note ? `<p class="muted">${note}</p>` : ""}<input type="number" name="count" value="${initial}" min="${min}" max="${max}" autofocus>${extraCheckbox ? `<label style="display:flex;align-items:center;gap:6px;margin-top:6px;"><input type="checkbox" name="extra"> ${extraCheckbox.label}</label>` : ""}`,
         buttons: [
           {
             action: "commit",
@@ -381,7 +396,8 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
             callback: (event, button) => {
               const raw = Number(button.form.elements.count.value);
               const n = Number.isFinite(raw) ? raw : initial;
-              return Math.min(max, Math.max(min, n));
+              const count = Math.min(max, Math.max(min, n));
+              return extraCheckbox ? { count, extra: button.form.elements.extra.checked } : count;
             }
           },
           { action: "cancel", label: "Cancel", callback: () => "essence-cancelled" }
@@ -389,6 +405,23 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
         submit: (result) => resolve(result === "essence-cancelled" ? null : result)
       }).render(true);
     });
+  }
+
+  /**
+   * See EssenceActorSheet#maxRolledDiceNote — same V6 §5.2.2/design/v6-revision-delta.md §2.5-§2.6
+   * advisory, same reasoning. An enemy profile's Roll Limit (§2.6: "a per-card maximum, not a
+   * separate pool") is exactly this same `rollLimit` field on the card, so no separate handling is
+   * needed for NPCs/Monsters.
+   */
+  static #maxRolledDiceNote(actor, sys) {
+    if (typeof sys?.rollLimit === "number") {
+      return `Advisory: this card's printed roll limit is ${sys.rollLimit} dice. Committing more is allowed but exceeds the printed maximum.`;
+    }
+    if (!sys?.attr || !sys?.skill) return "";
+    const raw = (actor.system[sys.attr] ?? 0) + (actor.system[sys.skill] ?? 0);
+    const isBasicOrRank0 = !sys.style || (Number(sys.rank) || 0) === 0;
+    const maxRolled = isBasicOrRank0 ? Math.max(2, raw) : raw;
+    return `Advisory: this card's normal maximum is ${maxRolled} dice (${capitalize(sys.attr)} + ${capitalize(sys.skill)} Rank${isBasicOrRank0 ? ", floored at 2 for a Basic/Rank 0 card" : ""}). Committing more is allowed but exceeds the printed maximum.`;
   }
 
   static async #resolveTargets(defenseKey) {
@@ -462,18 +495,25 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     });
     if (!attr) return;
     const pool = (this.actor.system[attr] ?? 0) + (this.actor.system[skill] ?? 0);
-    await rollEssencePool({ pool, label: `${capitalize(attr)} + ${capitalize(skill)}`, actor: this.actor });
+    await rollEssencePool({ pool, label: `${capitalize(attr)} + ${capitalize(skill)}`, actor: this.actor, nonCombat: true });
   }
 
   static async #onRollItem(event, target) {
     const item = this.actor.items.get(target.dataset.itemId);
     if (!item) return;
     const sys = item.system;
+    // See EssenceActorSheet#onRollItem — V6 §6.8's cooldown rule applies identically to an Elite's
+    // explicitly-granted learned cards.
+    if (cardOnCooldown(item)) {
+      ui.notifications.warn(`${item.name} is on cooldown (${sys.cooldownFrequency === "perEncounter" ? "once per Encounter" : "once per Round"}) and isn't available yet.`);
+      return;
+    }
     const isReaction = item.type === "reaction-card";
     const poolField = isReaction ? "reactionDice" : "actionDice";
     const poolLabel = isReaction ? "Reaction" : "Action";
     const available = this.actor.system.playState[poolField] ?? 0;
-    const cardMin = Math.max(1, parseInt(sys.min, 10) || 1);
+    // See EssenceActorSheet#onRollItem — V6 §5.2.1's 2-die floor applies here identically.
+    const cardMin = Math.max(2, parseInt(sys.min, 10) || 1);
 
     if (available <= 0) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoPoolDiceRemaining", { label: poolLabel }));
@@ -486,16 +526,22 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
 
     if (isReaction) EssenceNpcSheet.#warnIfLikelySecondReaction(this.actor);
 
-    const committed = await EssenceNpcSheet.#promptDiceCount({
+    // See EssenceActorSheet#onRollItem — V6 §5.2.8's unaware tax applies here identically.
+    const promptResult = await EssenceNpcSheet.#promptDiceCount({
       title: `Use ${item.name}`,
       label: `Commit how many ${poolLabel} Dice? (min ${cardMin}, max ${available})`,
-      min: cardMin, max: available, initial: cardMin
+      min: cardMin, max: available, initial: cardMin,
+      note: EssenceNpcSheet.#maxRolledDiceNote(this.actor, sys),
+      extraCheckbox: isReaction ? { label: "Target is unaware (burn 1 additional Reaction die)" } : null
     });
-    if (committed === null) return;
+    if (promptResult === null) return;
+    const committed = isReaction ? promptResult.count : promptResult;
+    const unawareTax = isReaction && promptResult.extra ? 1 : 0;
 
     const defenseKey = (sys.defense || "").toLowerCase();
     const { defense, targets } = await EssenceNpcSheet.#resolveTargets(defenseKey);
-    const update = { [`system.playState.${poolField}`]: available - committed };
+    const poolSpend = Math.min(available, committed + unawareTax);
+    const update = { [`system.playState.${poolField}`]: available - poolSpend };
 
     // See EssenceActorSheet#onRollItem — a card's printed Cost is paid from its Domain's
     // resource pool on top of the Action/Reaction Dice spent above.
@@ -517,17 +563,32 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     }
 
     await this.actor.update(update);
+    // See EssenceActorSheet#onRollItem — cooldown starts on play, unconditionally.
+    await applyCardCooldown(this.actor, item);
     const bonusSurges = hasMastery(sys, this.actor.system.expertises) ? 1 : 0;
-    await rollEssencePool({ pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges });
+    await rollEssencePool({ pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges, unopposed: !!sys.unopposed, nonCombat: !!sys.noSurges });
   }
 
-  /** See EssenceActorSheet#onRollEquipmentCard — same reasoning, same implementation. */
+  /** See EssenceActorSheet#onRollEquipmentCard — same V6 §9.6 fold-into-Combat-Card-flow, same
+   *  implementation (2-die minimum, Action Dice pool spend, Domain asked separately since Equipment
+   *  Cards carry no domain/defense/min schema of their own). */
   static async #onRollEquipmentCard(event, target) {
     const name = target.dataset.cardName;
     const itemId = target.dataset.itemId || null;
     const cardIndex = target.dataset.cardIndex !== "" ? Number(target.dataset.cardIndex) : null;
 
-    const result = await new Promise((resolve) => {
+    const available = this.actor.system.playState.actionDice ?? 0;
+    const cardMin = 2;
+    if (available <= 0) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoPoolDiceRemaining", { label: "Action" }));
+      return;
+    }
+    if (cardMin > available) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CardRequiresMoreDice", { name, min: cardMin, available, label: "Action" }));
+      return;
+    }
+
+    const domainKey = await new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
         window: { title: `Use ${name}` },
         content: `
@@ -538,21 +599,24 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
               <option value="spiritual">Spiritual</option>
             </select>
           </label>
-          <label>Dice <input type="number" name="dice" value="2" min="1" autofocus></label>
         `,
         buttons: [{
-          action: "roll",
-          label: "Roll",
+          action: "next",
+          label: "Continue",
           default: true,
-          callback: (event, button) => ({
-            domain: button.form.elements.domain.value,
-            dice: Math.max(1, Math.floor(Number(button.form.elements.dice.value)) || 1)
-          })
+          callback: (event, button) => button.form.elements.domain.value
         }],
-        submit: (result) => resolve(result === "roll" ? null : result)
+        submit: (result) => resolve(result === "next" ? null : result)
       }).render(true);
     });
-    if (!result) return;
+    if (!domainKey) return;
+
+    const committed = await EssenceNpcSheet.#promptDiceCount({
+      title: `Use ${name}`,
+      label: `Commit how many Action Dice? (min ${cardMin}, max ${available})`,
+      min: cardMin, max: available, initial: cardMin
+    });
+    if (committed === null) return;
 
     if (itemId) {
       const item = this.actor.items.get(itemId);
@@ -575,12 +639,18 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
           }
           await item.update({ "system.usesRemaining": item.system.usesRemaining - 1 });
         }
+        // See EssenceActorSheet#onRollEquipmentCard's identical hook for the used-vs-unused
+        // preparation commitment (design/v6-revision-delta.md §3.5) — same reasoning here.
+        if (["equipment", "chassis", "fitting"].includes(item.type) && !item.system.usedThisAdventure) {
+          await item.update({ "system.usedThisAdventure": true });
+        }
       }
     }
 
-    const domain = DOMAINS.find((d) => d.key === result.domain);
+    await this.actor.update({ "system.playState.actionDice": available - committed });
+    const domain = DOMAINS.find((d) => d.key === domainKey);
     const { defense, targets } = await EssenceNpcSheet.#resolveTargets(domain.defense);
-    await rollEssencePool({ pool: result.dice, defense, targets, label: name, actor: this.actor });
+    await rollEssencePool({ pool: committed, defense, targets, label: name, actor: this.actor });
   }
 
   /** See EssenceActorSheet#onToggleEquipmentCard — same reasoning, same implementation. */
@@ -666,12 +736,42 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     await this.actor.update({ "system.playState.currentTemporaryWounds": next });
   }
 
+  /**
+   * `EssenceAdversaryData#prepareDerivedData` (actor-adversary.mjs) re-views `system.coreWounds` at
+   * the current Grade's `woundCapacity` (2/4/5) every prepare cycle — a VIEW-only resize for
+   * display, explicitly documented there as becoming permanent data loss only if a handler persists
+   * that shorter view back to the actor. Reading/writing `this.actor.system.coreWounds` directly (as
+   * this sheet's damage/recovery/toggle handlers used to) does exactly that: fill a Wound on an
+   * Elite, downgrade to Mook, and the 3 excess Wound slots are gone forever on the next Apply
+   * Damage/Recover/toggle. This reads the actor's actual STORED array via `Actor#_source` (Foundry's
+   * standard un-derived accessor) instead, padding it (never truncating it) up to the current
+   * capacity so a handler can freely operate within the active window — indices `0` to `capacity-1`,
+   * the only ones the sheet ever renders a pip for — without ever deleting stored slots beyond it.
+   * `EssenceManifestationData#coreWounds` (actor-manifestation.mjs) is the reference for "any
+   * coreWounds length just works" for this same slot-indexed Apply Damage/Recover logic — the only
+   * gap here was resizing the STORED array instead of the DERIVED one.
+   * @param {Actor} actor
+   * @returns {{coreWounds: object[], capacity: number}} `coreWounds` is a fresh deep-cloned working
+   *   copy at least `capacity` long (preserving any stored slots beyond it untouched); `capacity` is
+   *   the current Grade's `woundCapacity` (read off the derived `system.coreWounds.length`, which
+   *   `prepareDerivedData` already clamps correctly).
+   */
+  static #storedCoreWoundsAndCapacity(actor) {
+    const capacity = actor.system.coreWounds.length;
+    const coreWounds = (actor._source.system.coreWounds ?? []).map((w) => ({ ...w }));
+    while (coreWounds.length < capacity) coreWounds.push({ filled: false, domain: "", severity: "", condition: "" });
+    return { coreWounds, capacity };
+  }
+
+  /** Natural recovery is order-free (V6) — this pip toggle lets a GM/owner clear (or set) any
+   *  chosen Core Wound space directly, unlike #onRecoverWound's active-healing lowest-first rule. */
   static async #onToggleCoreWound(event, target) {
     const i = Number(target.dataset.index);
-    const coreWounds = this.actor.system.coreWounds.map((w) => ({ ...w }));
+    const { coreWounds, capacity } = EssenceNpcSheet.#storedCoreWoundsAndCapacity(this.actor);
     coreWounds[i].filled = !coreWounds[i].filled;
     if (!coreWounds[i].filled) { coreWounds[i].domain = ""; coreWounds[i].severity = ""; coreWounds[i].condition = ""; }
-    await this.actor.update({ "system.coreWounds": coreWounds, "system.playState.currentCoreWounds": coreWounds.filter((w) => w.filled).length });
+    const filled = coreWounds.slice(0, capacity).filter((w) => w.filled).length;
+    await this.actor.update({ "system.coreWounds": coreWounds, "system.playState.currentCoreWounds": filled });
   }
 
   static async #onToggleDeathTrack(event, target) {
@@ -680,10 +780,19 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     await this.actor.update({ "system.playState.deathTrackStep": next });
   }
 
-  static async #onToggleDeathTrackFrozen() {
-    await this.actor.update({ "system.playState.deathTrackFrozen": !this.actor.system.playState.deathTrackFrozen });
+  /** Manual GM control over "stabilized" — see EssenceActorSheet's identical method for the doc comment. */
+  static async #onToggleDeathTrackStabilized() {
+    const current = this.actor.system.playState.deathTrackState;
+    const next = current === "stabilized" ? "dying" : "stabilized";
+    await this.actor.update({ "system.playState.deathTrackState": next });
   }
 
+  /**
+   * V6 §2415: adversaries (both People and Monster actor types share this sheet class) use a
+   * simplified Wound model — a flat filled/capacity counter (system.usesSimplifiedWounds, see
+   * EssenceAdversaryData#prepareDerivedData), no Light/Serious/Critical severity, no Wound Cards,
+   * no Death Track. This is a simplified version of EssenceActorSheet's identical-looking method.
+   */
   static async #onApplyDamage() {
     const result = await new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
@@ -697,6 +806,11 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
               <option value="Spiritual">Spiritual</option>
             </select>
           </label>
+          <label>Damage Type <span class="muted">(for Resistance/Vulnerability — V6 §6.2)</span>
+            <select name="damageType">
+              ${DAMAGE_TYPES.map((t) => `<option value="${t}">${t}</option>`).join("")}
+            </select>
+          </label>
           <label style="display:flex;align-items:center;gap:6px;">
             <input type="checkbox" name="breach"> Breach (bypasses Resilience)
           </label>
@@ -708,6 +822,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
           callback: (event, button) => ({
             amount: Math.max(1, Math.floor(Number(button.form.elements.amount.value)) || 1),
             domain: button.form.elements.domain.value,
+            damageType: button.form.elements.damageType.value,
             breach: button.form.elements.breach.checked
           })
         }],
@@ -719,29 +834,42 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     const sys = this.actor.system;
     const resilience = sys.effectiveResilience ?? sys.resilience ?? 0;
     const prevAccumulated = sys.playState.accumulatedDamage ?? 0;
+    // See EssenceActorSheet#onApplyDamage — 0.6.85 fix, plan §5.6: stored, not re-derived from the
+    // current (possibly just-changed) Resilience.
+    const prevWounds = sys.playState.accumulatedDamageWounds ?? 0;
+
+    const log = [];
+    // V6 §6.2 (plan; revised per design/v6-revision-delta.md §2.1): Resistance/Vulnerability apply
+    // BEFORE Resilience or Breach, to both branches, and key off the named Damage Type — NOT the
+    // Domain, which stays a separate field used only for the simplified Wound record below.
+    const { amount: adjustedAmount, log: rvLog } = applyResistanceVulnerability(this.actor, result.damageType, result.amount);
+    log.push(...rvLog);
 
     let wounds;
     let newAccumulated = prevAccumulated;
+    let newWounds = prevWounds;
     if (result.breach) {
-      wounds = result.amount;
+      // Breach bypasses Resilience, not Resistance/Vulnerability (0.6.85 fix).
+      wounds = adjustedAmount;
     } else {
-      newAccumulated = prevAccumulated + result.amount;
-      const prevWounds = Math.max(0, prevAccumulated - resilience);
-      const newWounds = Math.max(0, newAccumulated - resilience);
+      newAccumulated = prevAccumulated + adjustedAmount;
+      // See EssenceActorSheet#onApplyDamage — clamped to never fall below the already-converted
+      // count, so a mid-interval Resilience increase can't cause the same Wounds to be counted twice.
+      newWounds = Math.max(prevWounds, Math.max(0, newAccumulated - resilience));
       wounds = newWounds - prevWounds;
     }
 
-    const update = { "system.playState.accumulatedDamage": newAccumulated };
-    const log = [];
-    let becameCritical = false;
+    const update = {
+      "system.playState.accumulatedDamage": newAccumulated,
+      "system.playState.accumulatedDamageWounds": newWounds
+    };
+    let becameDefeated = false;
 
     if (wounds <= 0) {
       log.push(`Absorbed entirely by Resilience — no Wound.`);
     } else {
       let tempWounds = sys.playState.currentTemporaryWounds ?? 0;
-      const coreWounds = sys.coreWounds.map((w) => ({ ...w }));
-      const SEVERITY_BY_INDEX = ["Light", "Light", "Serious", "Serious", "Critical"];
-      let deathTrackStep = sys.playState.deathTrackStep ?? 0;
+      const { coreWounds, capacity } = EssenceNpcSheet.#storedCoreWoundsAndCapacity(this.actor);
 
       for (let i = 0; i < wounds; i++) {
         if (tempWounds > 0) {
@@ -749,41 +877,41 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
           log.push("1 Wound absorbed by a Temporary Wound.");
           continue;
         }
-        const slot = coreWounds.findIndex((w) => !w.filled);
+        const slot = coreWounds.slice(0, capacity).findIndex((w) => !w.filled);
         if (slot === -1) {
-          deathTrackStep = Math.min(5, deathTrackStep + 1);
-          log.push("Core Wound track already full — Death Track advances instead.");
+          log.push("Wound capacity already full.");
           continue;
         }
-        const severity = SEVERITY_BY_INDEX[slot];
-        const label = `${severity} ${result.domain} Wound`;
-        coreWounds[slot] = { filled: true, domain: result.domain, severity, condition: label };
-        log.push(`Core Wound filled: <strong>${label}</strong>.`);
-        if (slot === 4) becameCritical = true;
+        coreWounds[slot] = { filled: true, domain: result.domain, severity: "", condition: "" };
+        log.push(`Wound capacity filled: ${coreWounds.slice(0, capacity).filter((w) => w.filled).length}/${capacity}.`);
       }
+
+      const filled = coreWounds.slice(0, capacity).filter((w) => w.filled).length;
+      becameDefeated = filled >= capacity;
 
       update["system.playState.currentTemporaryWounds"] = tempWounds;
       update["system.coreWounds"] = coreWounds;
-      update["system.playState.currentCoreWounds"] = coreWounds.filter((w) => w.filled).length;
-      if (deathTrackStep !== (sys.playState.deathTrackStep ?? 0)) update["system.playState.deathTrackStep"] = deathTrackStep;
+      update["system.playState.currentCoreWounds"] = filled;
     }
 
     await this.actor.update(update);
 
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> takes ${result.amount} ${result.domain} Damage${result.breach ? " (Breach)" : ""}.</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+      content: `<p><strong>${this.actor.name}</strong> takes ${result.amount} ${result.domain} (${result.damageType}) Damage${result.breach ? " (Breach)" : ""}.</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
     });
 
-    if (becameCritical) {
-      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CriticallyWounded", { name: this.actor.name }));
+    if (becameDefeated) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.EnemyDefeated", { name: this.actor.name }));
     }
   }
 
+  /** V6 §2415: adversaries recover Wounds order-free too (no severity to sequence by) — this is a
+   *  simplified version of EssenceActorSheet's identical-looking #onRecoverWound. */
   static async #onRecoverWound() {
-    const coreWounds = this.actor.system.coreWounds.map((w) => ({ ...w }));
+    const { coreWounds, capacity } = EssenceNpcSheet.#storedCoreWoundsAndCapacity(this.actor);
     let slot = -1;
-    for (let i = coreWounds.length - 1; i >= 0; i--) {
+    for (let i = 0; i < capacity; i++) {
       if (coreWounds[i].filled) { slot = i; break; }
     }
     if (slot === -1) {
@@ -794,17 +922,66 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     coreWounds[slot] = { filled: false, domain: "", severity: "", condition: "" };
     const update = {
       "system.coreWounds": coreWounds,
-      "system.playState.currentCoreWounds": coreWounds.filter((w) => w.filled).length
+      "system.playState.currentCoreWounds": coreWounds.slice(0, capacity).filter((w) => w.filled).length
     };
-    if (slot === 4) {
-      update["system.playState.deathTrackStep"] = 0;
-      update["system.playState.deathTrackFrozen"] = false;
-    }
     await this.actor.update(update);
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> recovers from their <strong>${recovered.condition}</strong>.</p>`
+      content: `<p><strong>${this.actor.name}</strong> recovers a ${recovered.domain || ""} Wound.</p>`
     });
+  }
+
+  /** See EssenceActorSheet#onAddResistanceOrVulnerability — same reasoning, same implementation. */
+  static async #onAddResistanceOrVulnerability(fieldKey, dialogTitle) {
+    const result = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: dialogTitle },
+        content: `
+          <label>Damage Type
+            <select name="damageType">
+              ${DAMAGE_TYPES.map((t) => `<option value="${t}">${t}</option>`).join("")}
+            </select>
+          </label>
+          <label>Source <input type="text" name="source" placeholder="e.g. Manifestation profile, equipment" autofocus></label>
+        `,
+        buttons: [{
+          action: "add",
+          label: "Add",
+          default: true,
+          callback: (event, button) => ({
+            damageType: button.form.elements.damageType.value,
+            source: button.form.elements.source.value.trim()
+          })
+        }],
+        submit: (result) => resolve(result === "add" ? null : result)
+      }).render(true);
+    });
+    if (!result) return;
+    const list = (this.actor.system[fieldKey] ?? []).map((r) => ({ ...r }));
+    list.push(result);
+    await this.actor.update({ [`system.${fieldKey}`]: list });
+  }
+
+  static async #onAddResistance() {
+    await EssenceNpcSheet.#onAddResistanceOrVulnerability.call(this, "resistances", "Add Resistance");
+  }
+
+  static async #onAddVulnerability() {
+    await EssenceNpcSheet.#onAddResistanceOrVulnerability.call(this, "vulnerabilities", "Add Vulnerability");
+  }
+
+  static async #onRemoveResistance(event, target) {
+    const i = Number(target.dataset.index);
+    const list = this.actor.system.resistances.map((r) => ({ ...r }));
+    list.splice(i, 1);
+    await this.actor.update({ "system.resistances": list });
+  }
+
+  static async #onRemoveVulnerability(event, target) {
+    const i = Number(target.dataset.index);
+    const list = this.actor.system.vulnerabilities.map((r) => ({ ...r }));
+    list.splice(i, 1);
+    await this.actor.update({ "system.vulnerabilities": list });
   }
 
   /** See EssenceActorSheet#onToggleTempInfluence/#onToggleCoreInfluence/#onApplyInfluenceInjury/
@@ -815,12 +992,16 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     await this.actor.update({ "system.playState.currentTemporaryInfluence": next });
   }
 
+  /** See EssenceActorSheet#onToggleCoreInfluence — same rule, same reasoning (severity is always
+   *  derivable from the slot index, so a manual toggle can still attach/remove the right Influence
+   *  Consequence Card). */
   static async #onToggleCoreInfluence(event, target) {
     const i = Number(target.dataset.index);
     const coreInfluence = this.actor.system.coreInfluence.map((c) => ({ ...c }));
     coreInfluence[i].filled = !coreInfluence[i].filled;
+    let severity = "";
     if (coreInfluence[i].filled) {
-      const severity = SEVERITY_BY_INDEX[i];
+      severity = SEVERITY_BY_INDEX[i];
       coreInfluence[i].severity = severity;
       coreInfluence[i].condition = `${severity} Injury`;
     } else {
@@ -828,42 +1009,29 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       coreInfluence[i].condition = "";
     }
     await this.actor.update({ "system.coreInfluence": coreInfluence });
+    if (severity) await attachConsequenceCard(this.actor, severity, i);
+    else await removeConsequenceCard(this.actor, i);
   }
 
-  static async #onApplyInfluenceInjury() {
-    const result = await new Promise((resolve) => {
-      new foundry.applications.api.DialogV2({
-        window: { title: "Apply Influence Injury" },
-        content: `
-          <label>Injuries <input type="number" name="amount" value="1" min="1" autofocus></label>
-          <label style="display:flex;align-items:center;gap:6px;">
-            <input type="checkbox" name="voluntary"> Voluntary (skip Temporary Influence, mark Core Influence directly)
-          </label>
-        `,
-        buttons: [{
-          action: "apply",
-          label: "Apply",
-          default: true,
-          callback: (event, button) => ({
-            amount: Math.max(1, Math.floor(Number(button.form.elements.amount.value)) || 1),
-            voluntary: button.form.elements.voluntary.checked
-          })
-        }],
-        submit: (result) => resolve(result === "apply" ? null : result)
-      }).render(true);
-    });
-    if (!result) return;
-
-    const sys = this.actor.system;
-    let tempInfluence = sys.playState.currentTemporaryInfluence ?? 0;
-    const coreInfluence = sys.coreInfluence.map((c) => ({ ...c }));
+  /** See EssenceActorSheet#computeOrdinaryPressure — identical V6 3-layer ordinary-pressure
+   *  resolution, duplicated per this project's actor-sheet/npc-sheet convention. */
+  static #computeOrdinaryPressure(actor, amount) {
+    let reachPressure = actor.system.reachPressure ?? 0;
+    const effectiveReach = actor.system.effectiveReach ?? 0;
+    let tempInfluence = actor.system.playState.currentTemporaryInfluence ?? 0;
+    const coreInfluence = actor.system.coreInfluence.map((c) => ({ ...c }));
     const log = [];
+    const filledSlots = [];
     let becameCritical = false;
-
-    for (let i = 0; i < result.amount; i++) {
-      if (!result.voluntary && tempInfluence > 0) {
+    for (let i = 0; i < amount; i++) {
+      if (reachPressure < effectiveReach) {
+        reachPressure += 1;
+        log.push("1 pressure absorbed by Reach.");
+        continue;
+      }
+      if (tempInfluence > 0) {
         tempInfluence -= 1;
-        log.push("1 Injury absorbed by a Temporary Influence slot.");
+        log.push("1 pressure absorbed by a Temporary Influence slot.");
         continue;
       }
       const slot = coreInfluence.findIndex((c) => !c.filled);
@@ -874,21 +1042,60 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       const severity = SEVERITY_BY_INDEX[slot];
       const condition = `${severity} Injury`;
       coreInfluence[slot] = { filled: true, severity, condition };
-      log.push(`Core Influence filled: <strong>${condition}</strong> (recovers in ${INFLUENCE_RECOVERY_TIME[severity]}).`);
+      filledSlots.push({ severity, slot });
+      log.push(`Core Influence filled: <strong>${condition}</strong>.`);
       if (slot === 4) becameCritical = true;
     }
+    return { reachPressure, tempInfluence, coreInfluence, log, filledSlots, becameCritical };
+  }
 
-    await this.actor.update({
-      "system.playState.currentTemporaryInfluence": tempInfluence,
-      "system.coreInfluence": coreInfluence
+  /** See EssenceActorSheet#onApplyInfluenceInjury — same V6 3-layer Pressure Type selector
+   *  (Ordinary pressure vs. Influence Breach) replacing V5's "Voluntary" checkbox. */
+  static async #onApplyInfluenceInjury() {
+    const result = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: "Apply Influence Injury" },
+        content: `
+          <label>Injuries <input type="number" name="amount" value="1" min="1" autofocus></label>
+          <label>Pressure Type
+            <select name="pressureType">
+              <option value="ordinary">Ordinary pressure (Reach absorbs first)</option>
+              <option value="breach">Influence Breach (skips Reach)</option>
+            </select>
+          </label>
+        `,
+        buttons: [{
+          action: "apply",
+          label: "Apply",
+          default: true,
+          callback: (event, button) => ({
+            amount: Math.max(1, Math.floor(Number(button.form.elements.amount.value)) || 1),
+            breach: button.form.elements.pressureType.value === "breach"
+          })
+        }],
+        submit: (result) => resolve(result === "apply" ? null : result)
+      }).render(true);
     });
+    if (!result) return;
+
+    const overextension = result.breach
+      ? EssenceNpcSheet.#computeInfluenceOverextension(this.actor, result.amount)
+      : EssenceNpcSheet.#computeOrdinaryPressure(this.actor, result.amount);
+
+    const update = {
+      "system.playState.currentTemporaryInfluence": overextension.tempInfluence,
+      "system.coreInfluence": overextension.coreInfluence
+    };
+    if (overextension.reachPressure !== undefined) update["system.reachPressure"] = overextension.reachPressure;
+    await this.actor.update(update);
+    if (overextension.filledSlots.length) await attachConsequenceCards(this.actor, overextension.filledSlots);
 
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> takes ${result.amount} Influence ${result.amount === 1 ? "Injury" : "Injuries"}${result.voluntary ? " (Voluntary)" : ""}.</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+      content: `<p><strong>${this.actor.name}</strong> takes ${result.amount} Influence ${result.amount === 1 ? "Injury" : "Injuries"}${result.breach ? " (Influence Breach)" : " (Ordinary pressure)"}.</p><ul>${overextension.log.map((l) => `<li>${l}</li>`).join("")}</ul>`
     });
 
-    if (becameCritical) {
+    if (overextension.becameCritical) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CriticalInfluenceInjury", { name: this.actor.name }));
     }
   }
@@ -907,13 +1114,16 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     const recovered = coreInfluence[slot];
     coreInfluence[slot] = { filled: false, severity: "", condition: "" };
     await this.actor.update({ "system.coreInfluence": coreInfluence });
+    await removeConsequenceCard(this.actor, slot);
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content: `<p><strong>${this.actor.name}</strong> recovers from their <strong>${recovered.condition}</strong>.</p>`
     });
   }
 
-  /** See EssenceActorSheet#onContributeToGoal — same rule, same reasoning. */
+  /** See EssenceActorSheet#onContributeToGoal — same rule (V6 deleted § Collaborative Influence
+   *  Pooling; this per-character behaviour already matched what V6 codified), same routing through
+   *  #computeOrdinaryPressure instead of a bespoke Temp→Core loop. */
   static async #onContributeToGoal() {
     const result = await new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
@@ -921,9 +1131,9 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
         content: `
           <label>Shared Goal <input type="text" name="goal" placeholder="e.g. Rebuilding the Guildhall" autofocus></label>
           <label style="display:flex;align-items:center;gap:6px;">
-            <input type="checkbox" name="narrative"> Narrative only (no Temporary Influence spent, no cost)
+            <input type="checkbox" name="narrative"> Narrative only (no Influence spent, no cost)
           </label>
-          <label>Temporary Influence Slots to Spend <input type="number" name="amount" value="1" min="1"></label>
+          <label>Pressure to Spend <input type="number" name="amount" value="1" min="1"></label>
         `,
         buttons: [{
           action: "contribute",
@@ -945,21 +1155,43 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     if (result.narrative) {
       await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        content: `<p><strong>${this.actor.name}</strong> contributes to <strong>${goalLabel}</strong> narratively (labor, connections, or information) — no Temporary Influence spent, no Injury risked.</p>`
+        content: `<p><strong>${this.actor.name}</strong> contributes to <strong>${goalLabel}</strong> narratively (labor, connections, or information) — no Influence spent, no Injury risked.</p>`
       });
       return;
     }
 
-    const sys = this.actor.system;
-    let tempInfluence = sys.playState.currentTemporaryInfluence ?? 0;
-    const coreInfluence = sys.coreInfluence.map((c) => ({ ...c }));
-    const log = [];
-    let becameCritical = false;
+    const overextension = EssenceNpcSheet.#computeOrdinaryPressure(this.actor, result.amount);
 
-    for (let i = 0; i < result.amount; i++) {
+    await this.actor.update({
+      "system.reachPressure": overextension.reachPressure,
+      "system.playState.currentTemporaryInfluence": overextension.tempInfluence,
+      "system.coreInfluence": overextension.coreInfluence
+    });
+    if (overextension.filledSlots.length) await attachConsequenceCards(this.actor, overextension.filledSlots);
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> contributes ${result.amount} ${result.amount === 1 ? "point" : "points"} of pressure to <strong>${goalLabel}</strong>.</p><ul>${overextension.log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+    });
+
+    if (overextension.becameCritical) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CriticalInfluenceInjuryGoal", { name: this.actor.name, goal: goalLabel }));
+    }
+  }
+
+  /** See EssenceActorSheet#computeInfluenceOverextension — the Breach-type (skip-Reach) Temp→Core
+   *  spend shared by Influence Breach proper and a Reach Trigger's Breach cost past its first free
+   *  use, duplicated per this project's actor-sheet/npc-sheet convention. */
+  static #computeInfluenceOverextension(actor, amount) {
+    let tempInfluence = actor.system.playState.currentTemporaryInfluence ?? 0;
+    const coreInfluence = actor.system.coreInfluence.map((c) => ({ ...c }));
+    const log = [];
+    const filledSlots = [];
+    let becameCritical = false;
+    for (let i = 0; i < amount; i++) {
       if (tempInfluence > 0) {
         tempInfluence -= 1;
-        log.push("1 slot absorbed by a Temporary Influence slot.");
+        log.push("1 Breach absorbed by a Temporary Influence slot.");
         continue;
       }
       const slot = coreInfluence.findIndex((c) => !c.filled);
@@ -970,23 +1202,11 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       const severity = SEVERITY_BY_INDEX[slot];
       const condition = `${severity} Injury`;
       coreInfluence[slot] = { filled: true, severity, condition };
-      log.push(`Core Influence filled: <strong>${condition}</strong> (recovers in ${INFLUENCE_RECOVERY_TIME[severity]}).`);
+      filledSlots.push({ severity, slot });
+      log.push(`Core Influence filled: <strong>${condition}</strong>.`);
       if (slot === 4) becameCritical = true;
     }
-
-    await this.actor.update({
-      "system.playState.currentTemporaryInfluence": tempInfluence,
-      "system.coreInfluence": coreInfluence
-    });
-
-    await ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> contributes ${result.amount} Temporary Influence ${result.amount === 1 ? "slot" : "slots"} to <strong>${goalLabel}</strong>.</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
-    });
-
-    if (becameCritical) {
-      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CriticalInfluenceInjuryGoal", { name: this.actor.name, goal: goalLabel }));
-    }
+    return { tempInfluence, coreInfluence, log, filledSlots, becameCritical };
   }
 
   /** See EssenceActorSheet's identically-named private methods for the full Adventure-Limited
@@ -1024,28 +1244,21 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
 
     if (trigger.tempInfluenceGrant) {
       tempInfluence = Math.min(maxTemp, tempInfluence + trigger.tempInfluenceGrant);
-      log.push(`Grants ${trigger.tempInfluenceGrant} Temporary Influence usable only this Scene (capped at normal max).`);
+      log.push(`Grants ${trigger.tempInfluenceGrant} Temporary Influence usable only this Encounter (capped at normal max).`);
     }
 
     let becameCritical = false;
+    let filledSlots = [];
     if (!wasFree) {
-      for (let n = 0; n < 1; n++) {
-        if (tempInfluence > 0) {
-          tempInfluence -= 1;
-          log.push("Additional use this Adventure — 1 Breach absorbed by a Temporary Influence slot.");
-          continue;
-        }
-        const slot = coreInfluence.findIndex((c) => !c.filled);
-        if (slot === -1) {
-          log.push("Additional use this Adventure — Core Influence track already full, GM adjudicates.");
-          continue;
-        }
-        const severity = SEVERITY_BY_INDEX[slot];
-        const condition = `${severity} Injury`;
-        coreInfluence[slot] = { filled: true, severity, condition };
-        log.push(`Additional use this Adventure — Core Influence filled: <strong>${condition}</strong> (recovers in ${INFLUENCE_RECOVERY_TIME[severity]}).`);
-        if (slot === 4) becameCritical = true;
-      }
+      const overextension = EssenceNpcSheet.#computeInfluenceOverextension(
+        { system: { playState: { currentTemporaryInfluence: tempInfluence }, coreInfluence } },
+        1
+      );
+      tempInfluence = overextension.tempInfluence;
+      coreInfluence.splice(0, coreInfluence.length, ...overextension.coreInfluence);
+      becameCritical = overextension.becameCritical;
+      filledSlots = overextension.filledSlots;
+      log.push(...overextension.log.map((l) => `Additional use this Adventure — ${l}`));
     } else {
       log.push("First use this Adventure — free.");
     }
@@ -1055,10 +1268,11 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       "system.playState.currentTemporaryInfluence": tempInfluence,
       "system.coreInfluence": coreInfluence
     });
+    if (filledSlots.length) await attachConsequenceCards(this.actor, filledSlots);
 
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> activates <strong>${trigger.name || "a Reach Trigger"}</strong> (Reach +${trigger.tempBonus} for the current Scene).</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+      content: `<p><strong>${this.actor.name}</strong> activates <strong>${trigger.name || "a Reach Trigger"}</strong> (Reach +${trigger.tempBonus} for the current Encounter).</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
     });
 
     if (becameCritical) {
@@ -1079,7 +1293,16 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     await resetAdventureUses(this.actor);
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> resets Reach Triggers, Augment Uses, and Equipment Card Uses for a new Adventure.</p>`
+      content: `<p><strong>${this.actor.name}</strong> resets Reach pressure, Reach Triggers, Augment Uses, and Equipment Card Uses for a new Adventure.</p>`
+    });
+  }
+
+  /** See EssenceActorSheet#onNewEncounter / resetEncounterCooldowns() in utils.mjs. */
+  static async #onNewEncounter() {
+    await resetEncounterCooldowns(this.actor);
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> begins a new Encounter — once-per-Encounter Combat/Reaction Cards are available again.</p>`
     });
   }
 
@@ -1120,21 +1343,10 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     await this.actor.update({ "system.soloAbilities": abilities });
   }
 
-  /** Reduced Engine (module/data/actor-adversary.mjs) — the whole point of "fixed" is that this
-   *  pool size is printed on the stat block instead of rebuilt from Attribute + Skill, NOT that
-   *  the roll is skipped: this still rolls real dice through the exact same resolver a PC's
-   *  Combat Card roll uses (rollEssencePool), against the target's real Defense. */
-  static async #onRollFixedAttack(event, target) {
-    const domainKey = target.dataset.domain;
-    const domain = DOMAINS.find((d) => d.key === domainKey);
-    const pool = this.actor.system.fixedAttack[domainKey];
-    const { defense, targets } = await EssenceNpcSheet.#resolveTargets(domain.defense);
-    await rollEssencePool({ pool, defense, targets, label: `${capitalize(domainKey)} Attack`, actor: this.actor });
-  }
-
   /** See #onAddLeaderAbility/#onAddSoloAbility — same add/delete-by-index shape, for the
-   *  Reduced Engine's frequency-tagged Ability list (Mook/Normal only, but harmless to expose
-   *  the buttons regardless — an empty list is just an empty list on any other Grade). */
+   *  general-purpose frequency-tagged Ability list, available on every Grade (see
+   *  actor-adversary.mjs's class doc comment — this stopped being a Mook/Normal-only "Reduced
+   *  Engine" concept in V6). An empty list is just an empty list on any Grade that hasn't used it. */
   static async #onAddAbility() {
     const abilities = [...(this.actor.system.abilities ?? []), { name: "", text: "", frequency: "atWill", usesMax: 1, usesRemaining: 1, usedThisRound: false }];
     await this.actor.update({ "system.abilities": abilities });
@@ -1201,7 +1413,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   /** See EssenceActorSheet#onCreateEquipment's identical implementation for the reasoning. */
   static async #onCreateEquipment(event, target) {
     const slot = target.dataset.slot;
-    if (!["signature", "temporary", "armory"].includes(slot)) return;
+    if (!["inventory", "temporary", "armory"].includes(slot)) return;
     const [created] = await this.actor.createEmbeddedDocuments("Item", [{
       name: game.i18n.localize("ESSENCE.Sheet.NewEquipmentName"),
       type: "equipment",
@@ -1209,6 +1421,114 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       system: { slot }
     }]);
     created?.sheet.render(true);
+  }
+
+  /** See EssenceActorSheet#onReconfigureItem's identical implementation for the reasoning — this
+   *  system has no "held in hand" vs "stowed" state to actually transition, so this is a costed
+   *  chat-log action like every other manual action on this sheet. NPCs have no separate
+   *  Temporary/Armory equipment sections (only one flat Equipment list), so there's no other-slot
+   *  swap-item filtering needed beyond excluding the item itself. */
+  static async #onReconfigureItem(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (!item) return;
+    const others = this.actor.items.filter((i) => i.type === "equipment" && i.id !== item.id);
+    const otherActors = game.actors.filter((a) => a.id !== this.actor.id && a.isOwner && ["character", "npc", "monster"].includes(a.type));
+
+    const result = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: `Reconfigure: ${item.name}` },
+        content: `
+          <p class="muted">Burns 3 Action Dice. Choose one — ready it into an empty hand, stow it,
+          recover it from the ground within reach, hand it to an adjacent willing creature, or swap
+          it for another prepared item.</p>
+          <label>Action
+            <select name="mode">
+              <option value="ready">Ready (draw into an empty hand)</option>
+              <option value="stow">Stow</option>
+              <option value="recover">Recover (pick up from the ground within reach)</option>
+              <option value="handover">Hand Over to an adjacent willing creature</option>
+              <option value="swap">Swap for another prepared item</option>
+            </select>
+          </label>
+          <label class="reconfigure-swap-target">Swap For
+            <select name="swapItemId">
+              <option value="">— ${game.i18n.localize("ESSENCE.Common.None")} —</option>
+              ${others.map((i) => `<option value="${i.id}">${i.name}</option>`).join("")}
+            </select>
+          </label>
+          <label class="reconfigure-handover-target">Hand To
+            <select name="targetActorId">
+              <option value="">— ${game.i18n.localize("ESSENCE.Common.None")} —</option>
+              ${otherActors.map((a) => `<option value="${a.id}">${a.name}</option>`).join("")}
+            </select>
+          </label>
+        `,
+        buttons: [{
+          action: "reconfigure",
+          label: "Reconfigure",
+          default: true,
+          callback: (event, button) => ({
+            mode: button.form.elements.mode.value,
+            swapItemId: button.form.elements.swapItemId.value,
+            targetActorId: button.form.elements.targetActorId.value
+          })
+        }],
+        submit: (result) => resolve(result === "reconfigure" ? null : result)
+      }).render(true);
+    });
+    if (!result) return;
+
+    const cost = 3;
+    const available = this.actor.system.playState.actionDice ?? 0;
+    if (available < cost) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.ReconfigureItemCost", { cost, available }));
+      return;
+    }
+
+    let message;
+    if (result.mode === "ready") message = `draws <strong>${item.name}</strong> into an empty hand`;
+    else if (result.mode === "stow") message = `stows <strong>${item.name}</strong>`;
+    else if (result.mode === "recover") message = `recovers <strong>${item.name}</strong> from the ground within reach`;
+    else if (result.mode === "handover") {
+      const targetActor = result.targetActorId ? game.actors.get(result.targetActorId) : null;
+      if (!targetActor) {
+        ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ReconfigureHandOverNoTarget"));
+        return;
+      }
+      message = `hands <strong>${item.name}</strong> to <strong>${targetActor.name}</strong>. It remains attached to ${this.actor.name}'s own Inventory allocation — handing an item over does not change its accounting`;
+    } else if (result.mode === "swap") {
+      const swapItem = result.swapItemId ? this.actor.items.get(result.swapItemId) : null;
+      if (!swapItem) {
+        ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ReconfigureSwapNoTarget"));
+        return;
+      }
+      message = `swaps out <strong>${item.name}</strong> for <strong>${swapItem.name}</strong>`;
+    } else {
+      return;
+    }
+
+    await this.actor.update({ "system.playState.actionDice": available - cost });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> uses Reconfigure (burns ${cost} Action Dice) and ${message}.</p>`
+    });
+  }
+
+  /** See EssenceActorSheet#onReleaseItem's identical implementation for the reasoning. */
+  static async #onReleaseItem(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (!item) return;
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> releases <strong>${item.name}</strong> — it falls where released. No Action required.</p>`
+    });
+  }
+
+  /** See EssenceActorSheet#onToggleItemUsed's identical implementation for the reasoning. */
+  static async #onToggleItemUsed(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (!item || !["equipment", "chassis", "fitting"].includes(item.type)) return;
+    await item.update({ "system.usedThisAdventure": !item.system.usedThisAdventure });
   }
 
   static async #onItemDelete(event, target) {
@@ -1258,7 +1578,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
 
     const chosen = this.actor.items.get(chosenId);
     await chosen.update({
-      "system.slot": "signature",
+      "system.slot": "inventory",
       "system.reachExceptionSource": sourceName,
       "system.reachExceptionMargin": grant.reachMargin,
       "system.slotCost": grant.countsAgainstLimit ? 1 : 0

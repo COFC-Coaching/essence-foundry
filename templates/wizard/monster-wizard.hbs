@@ -31,7 +31,7 @@
           <option value="Defender" {{#if (eq system.battlefieldRole "Defender")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleDefender"}}</option>
           <option value="Striker" {{#if (eq system.battlefieldRole "Striker")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleStriker"}}</option>
           <option value="Controller" {{#if (eq system.battlefieldRole "Controller")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleController"}}</option>
-          <option value="Artillery" {{#if (eq system.battlefieldRole "Artillery")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleArtillery"}}</option>
+          <option value="Blaster" {{#if (eq system.battlefieldRole "Blaster")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleBlaster"}}</option>
           <option value="Skirmisher" {{#if (eq system.battlefieldRole "Skirmisher")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleSkirmisher"}}</option>
           <option value="Support" {{#if (eq system.battlefieldRole "Support")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.BattlefieldRoleSupport"}}</option>
         </select>
@@ -155,11 +155,11 @@
 
   {{!-- ============ STEP 4: COMBAT SKILLS ============ --}}
   {{#if (eq step 3)}}
-    <h2>{{localize "ESSENCE.Common.CombatSkills"}}</h2>
+    <h2>{{localize "ESSENCE.Common.CombatStyles"}}</h2>
     <p class="muted">{{localize "ESSENCE.Wizard.Monster.SkillsHint" pool=skillPool max=budget.skillMax}} {{localize "ESSENCE.Wizard.PointsRemaining"}}: <strong>{{skillRemaining}}</strong></p>
     <button type="button" data-action="rerollSkills"><i class="fa-solid fa-dice"></i> {{localize "ESSENCE.Wizard.Monster.RerollSkills"}}</button>
     <table class="item-table">
-      <thead><tr><th>{{localize "ESSENCE.Common.Skill"}}</th><th></th><th>{{localize "ESSENCE.Common.Rank"}}</th><th></th></tr></thead>
+      <thead><tr><th>{{localize "ESSENCE.Common.Style"}}</th><th></th><th>{{localize "ESSENCE.Common.Rank"}}</th><th></th></tr></thead>
       <tbody>
         {{#each skills as |s|}}
           <tr class="{{#unless s.gateOpen}}gated{{/unless}}">

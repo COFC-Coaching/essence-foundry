@@ -1,0 +1,8 @@
+{{!--
+  Wounds section header — shared by npc-sheet.hbs/monster-sheet.hbs (previously duplicated
+  byte-for-byte between them; see build-history). Branches on `system.usesSimplifiedWounds`
+  (EssenceAdversaryData#prepareDerivedData) to show the enemy flat filled/capacity counter instead
+  of the player-facing Wound State label. Not used by character-sheet.hbs, which never has
+  usesSimplifiedWounds set and keeps its own always-Wound-State header as-is.
+--}}
+<h3 class="section-head">{{localize "ESSENCE.Common.Wounds"}} {{#if system.usesSimplifiedWounds}}<span class="muted">— {{system.coreWoundsFilled}}/{{system.coreWounds.length}}{{#if system.woundState}} — {{system.woundState}}{{/if}}</span>{{else}}<span class="muted">— {{system.woundState}}</span>{{/if}}</h3>

@@ -6,7 +6,7 @@
   "system": {
     "description": "Combatants who have pushed their physical capabilities through discipline, experience, or relentless conditioning — brawlers, duelists, soldiers, martial artists, bodyguards.",
     "keyCombatSkill": "Prowess",
-    "primaryAttr": "Vigor",
+    "primaryAttr": "Might",
     "unlocks": "",
     "benefit": "Gain one additional Prowess Expertise and two additional Prowess Action Cards. If acquired later: instead increase Prowess to a minimum of 2 pips, then gain one additional Prowess Expertise and four additional Prowess Action Cards.",
     "creationExpertiseBonus": 1,
