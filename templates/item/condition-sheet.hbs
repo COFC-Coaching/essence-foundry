@@ -9,7 +9,7 @@
 
 {{#if viewMode}}
 <div class="card-view condition-view">
-  <p class="muted condition-classification-badge">{{localize "ESSENCE.Item.Condition.Classification"}}: {{localize (concat "ESSENCE.Item.Condition.Classification." system.classification)}}</p>
+  <p class="muted condition-classification-badge">{{localize "ESSENCE.Item.Condition.ClassificationLabel"}}: {{localize (concat "ESSENCE.Item.Condition.Classification." system.classification)}}</p>
   {{#each system.sections as |sec i|}}
     {{#if sec.html}}
       {{!-- Rules' own printed-card convention: the first section is boxed and shaded. --}}
@@ -22,7 +22,7 @@
   {{#unless system.sections.length}}<p class="muted">{{localize "ESSENCE.Item.Condition.NoSectionsYet"}}</p>{{/unless}}
 </div>
 {{else}}
-<label>{{localize "ESSENCE.Item.Condition.Classification"}}
+<label>{{localize "ESSENCE.Item.Condition.ClassificationLabel"}}
   <select name="system.classification">
     <option value="ordinary" {{#if (eq system.classification "ordinary")}}selected{{/if}}>{{localize "ESSENCE.Item.Condition.Classification.ordinary"}}</option>
     <option value="specialty" {{#if (eq system.classification "specialty")}}selected{{/if}}>{{localize "ESSENCE.Item.Condition.Classification.specialty"}}</option>

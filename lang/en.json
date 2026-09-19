@@ -357,7 +357,7 @@
   "ESSENCE.Item.Condition.SectionLabelExamplePlaceholder": "Label (e.g. EFFECT)",
   "ESSENCE.Item.Condition.DeleteSectionAria": "Delete section {n}",
   "ESSENCE.Item.Condition.AddSection": "Add Section",
-  "ESSENCE.Item.Condition.Classification": "Classification",
+  "ESSENCE.Item.Condition.ClassificationLabel": "Classification",
   "ESSENCE.Item.Condition.Classification.ordinary": "Ordinary Condition",
   "ESSENCE.Item.Condition.Classification.specialty": "Specialty Condition",
   "ESSENCE.Item.Condition.Classification.wound": "Wound Card",

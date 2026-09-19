@@ -2,6 +2,21 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.7.2
+
+**Fixed a broken sheet: every label on every sheet was rendering as a raw localization key
+instead of its translated text (e.g. "ESSENCE.Common.Tier" instead of "Tier").** Caused by a
+leaf/namespace collision in `lang/en.json` — `"ESSENCE.Item.Condition.Classification"` existed
+both as a plain field-label string and as the parent namespace for its dropdown's six option
+labels (`.ordinary`, `.specialty`, `.wound`, `.consequence`, `.cover`, `.other`), introduced when
+0.6.102 added the Condition classification field. Foundry can't reconcile a key being both a leaf
+value and a namespace, and appears to abort loading the entire language file when it hits one,
+rather than just failing the colliding branch — the same failure mode this project's own
+build-history already documented once before (0.6.46). Renamed the label key to
+`ESSENCE.Item.Condition.ClassificationLabel` and updated its two call sites in
+`condition-sheet.hbs`. Verified zero remaining leaf/namespace collisions across all 652 keys in
+the file.
+
 ## 0.7.1
 
 **The remaining five per-Attribute benefits: Might, Grace, Vigor, Acuity, Resolve.** Completes the

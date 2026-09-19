@@ -2945,3 +2945,40 @@ reading the full `git status` deletion list by hand rather than trusting row-cou
 alone (row counts went up, not down, once the fix landed -- a straightforward "did the count drop"
 check would have caught this immediately, and should be standard practice after any unscoped
 rebuild going forward).
+
+
+### 2026-09-19 -- v0.7.2 hotfix: leaf/namespace localization collision broke every sheet label
+
+The user reported every label on the Character sheet rendering as a raw key ("ESSENCE.Common.Tier")
+instead of translated text, immediately after v0.7.1 released, and asked why this keeps happening --
+this project's own build-history already recorded the same failure mode once before, at 0.6.46.
+
+Root cause, confirmed by writing a small script to scan `lang/en.json` (which stores translations
+as flat dotted-string keys, not nested objects) for any key that is both a leaf value AND a dotted
+prefix of other keys: exactly one collision existed, `"ESSENCE.Item.Condition.Classification"`
+(the field's own label, "Classification") coexisting with `"ESSENCE.Item.Condition.Classification.
+ordinary"` / `.specialty` / `.wound` / `.consequence` / `.cover` / `.other` (the dropdown's six
+option labels) -- introduced in 0.6.102 when the Condition `classification` field was added, and
+never caught by any prior phase's "lang/en.json has zero key collisions" verification claim,
+because none of them appear to have actually run this specific leaf-vs-prefix check; they likely
+only checked for exact-duplicate keys (which JSON parsing prevents structurally) rather than this
+subtler leaf/namespace shape. **This is the actual lesson: "zero key collisions, verified" in every
+phase's report from 0.6.70 onward was checking the wrong thing.** A real collision-detection check
+needs to test whether any key is also a dotted prefix of another key, not just check for duplicate
+exact keys.
+
+A single such collision breaks the ENTIRE language file, not just the colliding branch -- every
+label on every sheet renders raw once Foundry hits it while expanding the flat key list into a
+nested translation tree, which explains why the user's screenshot showed total breakage across
+unrelated namespaces (Common, Character, Sheet, Item) rather than just the Condition sheet.
+
+Fixed: renamed the leaf key to `ESSENCE.Item.Condition.ClassificationLabel`, updated its two uses
+in `condition-sheet.hbs` (the view-mode badge and the edit-mode `<label>`), verified zero remaining
+leaf-vs-prefix collisions across all 652 keys with the same script, confirmed the template's
+`{{#`/`{{/` count stays balanced (17/17), and confirmed `lang/en.json` still parses as valid JSON.
+Shipped as v0.7.2, a hotfix on top of the just-released v0.7.1.
+
+**Actionable for future sessions**: before claiming "lang/en.json has zero key collisions" in any
+report, actually run the leaf-vs-prefix check (for every key k, does any other key start with
+`k + "."`), not just a duplicate-exact-key check -- the latter can never find anything in valid
+JSON and was giving false confidence.
