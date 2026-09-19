@@ -45,13 +45,12 @@
         <h4>{{d.label}}</h4>
         {{#each d.attrs as |a|}}
           <div class="attr-row">
-            <span class="attr-label">{{a.label}}</span>
+            <span class="attr-label" {{#if a.benefit}}title="{{a.benefit}}"{{/if}}>{{a.label}}</span>
             <input class="attr-input" name="system.{{a.key}}" type="number" value="{{a.value}}">
             <span class="pip-track">
               {{#each a.pips as |filled|}}<span class="pip {{#if filled}}filled{{/if}}"></span>{{/each}}
             </span>
           </div>
-          {{#if a.benefit}}<div class="muted attr-benefit-note">{{a.benefit}}</div>{{/if}}
         {{/each}}
         <div class="resource-row">
           <span class="attr-label">{{d.resourceLabel}}</span>

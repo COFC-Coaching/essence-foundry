@@ -2,6 +2,16 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.7.3
+
+**Character sheet no longer buries the Attributes block in explanation text.** The five new
+per-Attribute reference values (Exceptional load, Running jump, Extreme exertion, Extended Senses,
+Sustained attention) were rendering as permanently-visible full sentences under every Attribute
+row, cluttering the Core tab. Moved that text into a hover tooltip on the Attribute's label instead
+(`title="..."` on `.attr-label`), matching the pattern already used everywhere else on this sheet
+(Combo, Lock, Strain, Authority, and Rites labels all work this way). The Attributes, Resources &
+Defenses block is compact again; the full explanation is still one hover away.
+
 ## 0.7.2
 
 **Fixed a broken sheet: every label on every sheet was rendering as a raw localization key
