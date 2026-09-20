@@ -1,3 +1,4 @@
+import { migrateSource } from "./migration.mjs";
 const { fields } = foundry.data;
 
 /**
@@ -49,6 +50,14 @@ export const FLAT_EQUIPMENT_CATEGORIES = ["toolkit", "consumable-kit", "gear"];
 
 /** Shared schema pieces for action-card / reaction-card, mirroring CombatCard in card-builder.ts */
 class EssenceCardData extends foundry.abstract.TypeDataModel {
+  /** See module/data/migration.mjs — repairs any value an older version of this system saved that
+   *  this schema would now reject, BEFORE Foundry can reject it and leave the document invalid
+   *  (and therefore invisible). Inherited by every subtype; `this.schema` resolves to whichever
+   *  concrete model is actually loading, so this one implementation covers all of them. */
+  static migrateData(source) {
+    return migrateSource(this, super.migrateData(source));
+  }
+
   static defineSchema() {
     return {
       domain: new fields.StringField({ initial: "physical", choices: ["physical", "mental", "spiritual"] }),
@@ -127,6 +136,14 @@ export class EssenceReactionCardData extends EssenceCardData {}
 
 /** Mirrors ConditionCard: kind 'condition' with free-text labeled sections. */
 export class EssenceConditionData extends foundry.abstract.TypeDataModel {
+  /** See module/data/migration.mjs — repairs any value an older version of this system saved that
+   *  this schema would now reject, BEFORE Foundry can reject it and leave the document invalid
+   *  (and therefore invisible). Inherited by every subtype; `this.schema` resolves to whichever
+   *  concrete model is actually loading, so this one implementation covers all of them. */
+  static migrateData(source) {
+    return migrateSource(this, super.migrateData(source));
+  }
+
   static defineSchema() {
     return {
       // V6 (plan §6.5, design/v6-revision-delta.md §2.8/§6): "Ordinary Conditions are temporary
@@ -153,6 +170,14 @@ export class EssenceConditionData extends foundry.abstract.TypeDataModel {
 
 /** Mirrors EquipmentItem in equipment-model.ts (subset most relevant to Foundry play). */
 export class EssenceEquipmentData extends foundry.abstract.TypeDataModel {
+  /** See module/data/migration.mjs — repairs any value an older version of this system saved that
+   *  this schema would now reject, BEFORE Foundry can reject it and leave the document invalid
+   *  (and therefore invisible). Inherited by every subtype; `this.schema` resolves to whichever
+   *  concrete model is actually loading, so this one implementation covers all of them. */
+  static migrateData(source) {
+    return migrateSource(this, super.migrateData(source));
+  }
+
   static defineSchema() {
     return {
       // What this item fundamentally IS — one flat choice rather than a separate "category" +

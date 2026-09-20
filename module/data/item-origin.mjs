@@ -1,3 +1,4 @@
+import { migrateSource } from "./migration.mjs";
 const { fields } = foundry.data;
 
 /**
@@ -37,6 +38,14 @@ function subChoiceField() {
 
 /** A Species (natural lineage): a Nature trait plus a pool of Traits the player picks from. */
 export class EssenceSpeciesData extends foundry.abstract.TypeDataModel {
+  /** See module/data/migration.mjs — repairs any value an older version of this system saved that
+   *  this schema would now reject, BEFORE Foundry can reject it and leave the document invalid
+   *  (and therefore invisible). Inherited by every subtype; `this.schema` resolves to whichever
+   *  concrete model is actually loading, so this one implementation covers all of them. */
+  static migrateData(source) {
+    return migrateSource(this, super.migrateData(source));
+  }
+
   static defineSchema() {
     return {
       description: new fields.HTMLField({ initial: "" }),
@@ -60,6 +69,14 @@ export class EssenceSpeciesData extends foundry.abstract.TypeDataModel {
 
 /** A Heritage (upbringing/background): grants a Legacy (mechanical) and a Familiarity (narrative/knowledge). */
 export class EssenceHeritageData extends foundry.abstract.TypeDataModel {
+  /** See module/data/migration.mjs — repairs any value an older version of this system saved that
+   *  this schema would now reject, BEFORE Foundry can reject it and leave the document invalid
+   *  (and therefore invisible). Inherited by every subtype; `this.schema` resolves to whichever
+   *  concrete model is actually loading, so this one implementation covers all of them. */
+  static migrateData(source) {
+    return migrateSource(this, super.migrateData(source));
+  }
+
   static defineSchema() {
     return {
       description: new fields.HTMLField({ initial: "" }),
@@ -82,6 +99,14 @@ export class EssenceHeritageData extends foundry.abstract.TypeDataModel {
  * essence-options.ts for the canonical skill -> distinction-name mapping this mirrors.
  */
 export class EssenceDistinctionData extends foundry.abstract.TypeDataModel {
+  /** See module/data/migration.mjs — repairs any value an older version of this system saved that
+   *  this schema would now reject, BEFORE Foundry can reject it and leave the document invalid
+   *  (and therefore invisible). Inherited by every subtype; `this.schema` resolves to whichever
+   *  concrete model is actually loading, so this one implementation covers all of them. */
+  static migrateData(source) {
+    return migrateSource(this, super.migrateData(source));
+  }
+
   static defineSchema() {
     return {
       description: new fields.HTMLField({ initial: "" }),

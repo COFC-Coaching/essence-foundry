@@ -30,7 +30,7 @@ export default class EssenceCharacterData extends EssenceCombatantData {
         // ordinary player-picked entry paid from that pool. Retraining logic itself isn't built yet
         // — this tag exists so a future retraining pass can recompute Intellect grants without
         // repeatedly harvesting them, per the book's own explicit caution.
-        source: new fields.StringField({ initial: "", choices: ["", "intellect"] })
+        source: new fields.StringField({ initial: "", blank: true, choices: ["", "intellect"] })
       }))
     };
   }

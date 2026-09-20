@@ -23,6 +23,7 @@ import { syncEquipmentEffect } from "./data/equipment-effects.mjs";
 import { GRADE_BUDGETS } from "./data/monster-budgets.mjs";
 import EssenceGradeBudgetsSettings from "./apps/grade-budgets-settings.mjs";
 import { registerWhatsNewSetting, checkWhatsNew, handleWhatsNewChatCommand } from "./apps/whats-new.mjs";
+import { repairWorldData } from "./apps/world-repair.mjs";
 
 /** Foundry combat's own enum values, given a display label a player should actually see. */
 const TURN_LABELS = { notStarted: "Not Started", first: "First Turn", active: "Active", ended: "Ended" };
@@ -156,6 +157,17 @@ Hooks.once("init", () => {
  * content" re-import, unlike the compendium document's own _id) and carries `essenceConditionUuid`
  * so EssenceActor#toggleStatusEffect (module/documents/actor.mjs) knows which real Item to apply.
  */
+/**
+ * FIRST ready hook deliberately — every migration below this one iterates `game.actors`, and a
+ * document that failed schema validation isn't IN `game.actors` to be iterated. See
+ * module/data/migration.mjs for what makes a document fail to load in the first place, and
+ * module/apps/world-repair.mjs for what this does about it (persist the repair, then tell the GM
+ * in plain language — no console, no instructions to follow).
+ */
+Hooks.once("ready", async () => {
+  await repairWorldData();
+});
+
 /** See whats-new.mjs — posts a per-client, once-per-version "what's new" chat card. */
 Hooks.once("ready", () => {
   checkWhatsNew();
@@ -268,13 +280,14 @@ Hooks.once("ready", async () => {
   if (!game.user.isGM) return;
   if (game.settings.get("essence-system", "migratedRoleToGrade")) return;
 
-  const ROLE_TO_GRADE = { Minion: "Mook", Standard: "Normal", Elite: "Elite", Nemesis: "Elite" };
-  for (const actor of game.actors) {
-    if (actor.type !== "npc") continue;
-    const oldRole = actor._source.system.role;
-    if (!oldRole || actor.system.grade) continue;
-    await actor.update({ "system.grade": ROLE_TO_GRADE[oldRole] ?? "" });
-  }
+  // The per-actor half of this migration now happens at source level in module/data/migration.mjs
+  // (LEGACY_FIELD_RENAMES role -> grade, LEGACY_VALUE_ALIASES Minion/Standard/Nemesis -> Mook/
+  // Normal/Elite), which is both earlier and strictly broader: it runs before the document is
+  // constructed rather than after, and it covers Monsters as well as NPCs, which the loop that
+  // used to live here never did. It also covers the case this loop structurally could not — an
+  // actor whose stored data the schema rejects is not in `game.actors` to be iterated at all.
+  // What remains here is the world SETTING migration, which is not document data and so has no
+  // source-level equivalent.
 
   const oldRoleBudgets = game.settings.get("essence-system", "roleBudgets");
   const hasCustomValue = ["Minion", "Standard", "Elite", "Nemesis"].some((role) =>

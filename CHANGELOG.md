@@ -2,6 +2,76 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.7.5
+
+**Fixes 0.7.1 emptying the Actors and Items directories of any world created before it, and makes
+that class of failure structurally unable to happen again.**
+
+Nothing was ever deleted. Foundry validates a document against its schema while constructing it,
+and a value the schema rejects doesn't get quietly dropped — it throws, the document is never
+instantiated, and it lands on `invalidDocumentIds`. An invalid document renders nowhere: not in
+the sidebar, not on a sheet, not in a search. The data sat on disk the whole time, unreachable.
+
+0.7.1's V5→V6 sync renamed two `choices`-validated values with no migration:
+
+- **`slot: "signature"` → `"inventory"`** (equipment, and Chassis/Fitting). The larger of the two.
+  Any gear in a Signature slot was invalidated, emptying the Items directory — and because owned
+  gear is an embedded document, it took its owning character down with it, emptying Actors too.
+- **`battlefieldRole: "Artillery"` → `"Blaster"`** (NPCs and Monsters). Invalidated those directly.
+
+Compendiums were unaffected because packs are rebuilt from `packs/_source` at release time and
+already carried the new values, which is why the loss looked selective.
+
+**The fix is not a list of known renames.** This system's own tag history has gaps — 0.6.70 through
+0.6.108 exist in this file but were never tagged — so there is no reliable way to enumerate every
+value a live world might still hold. `module/data/migration.mjs` instead walks each model's own
+schema and repairs anything that schema would reject, whatever wrote it and whenever:
+
+- a `choices` value that is no longer valid → its alias where one is known, otherwise the field's
+  own initial value
+- a number outside a field's `min`/`max` → clamped; a non-integer in an integer field → rounded
+- a renamed field → carried across to its new key, old key removed
+
+The guarantee is deliberately modest and deliberately absolute: a document may come back with one
+dropdown reset to a default, but it always comes back. A GM can fix a dropdown in seconds; they
+cannot fix a character that will not load. This runs through `static migrateData()`, which Foundry
+calls on raw source *before* cleaning and validation — the only hook early enough to rewrite a
+value before the schema rejects it — and is wired into every registered data model.
+
+**Affected worlds need no action and no instructions.** `module/apps/world-repair.mjs` writes the
+repairs back on the first load after upgrading, then tells the GM in plain language what was
+restored. If anything ever can't be recovered, it says so plainly, states that nothing was deleted,
+and asks them to get in touch — rather than leaving them to discover an empty sidebar on their own.
+No console, nothing to type.
+
+Also in this release:
+
+- **`speciesAdaptations` → `speciesTraits` and `signatureEquipmentLimit` → `inventoryLimit`** are
+  migrated too. Neither is `choices`-validated so neither invalidated anything, but without a
+  migration the old key is silently dropped on the next write, discarding a GM's configured values.
+- **The NPC role→grade migration moved to source level**, which fixes two bugs in passing: the old
+  `ready` hook only covered NPCs and never Monsters, and it iterated `game.actors` — which by
+  definition cannot contain the invalid actors that most needed migrating. Its world-setting half
+  (`roleBudgets` → `gradeBudgets`) stays where it was; that isn't document data.
+- **`npm test`** now runs `scripts/test-migration.mjs`: 25 regression tests against the real
+  schemas, covering both renames, unknown-value fallback, range clamping, and — importantly —
+  that current data passes through untouched. This failure mode is silent by nature. It doesn't
+  break the build, doesn't break a fresh world, and doesn't throw anywhere a developer will see
+  it; it breaks someone's saved campaign weeks later. These tests are what catches the next one.
+
+Renaming a `choices` value or a field is a breaking change to live data. It needs a matching entry
+in `migration.mjs` and a test in the same commit.
+
+**Also fixes the Character Wizard's "+ Add Skill" (Non-Combat Skills) button doing nothing on
+click.** Same root cause, same failure shape, caught by hand this time: `nonCombatSkills[].source`
+was declared `choices: ["", "intellect"]` without `blank: true`, so `StringField` rejected every
+ordinary (non-Intellect) skill row for being blank — independently of `choices` already listing
+`""` as valid. `Document#update()` doesn't throw on that; it silently keeps the field's old value,
+which is exactly why the button looked like it was doing nothing rather than erroring. "Add Skill
+from Intellect" always worked because its rows use `source: "intellect"`, never blank. No stored
+data was ever affected (the rejected write never reached disk), so this needed a one-line schema
+fix, not a migration entry.
+
 ## 0.7.4
 
 **Broader UI/CSS cleanup pass, following up on 0.7.3's Attribute-tooltip fix.** 0.7.3 fixed one

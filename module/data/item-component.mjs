@@ -1,3 +1,4 @@
+import { migrateSource } from "./migration.mjs";
 const { fields } = foundry.data;
 
 /**
@@ -15,6 +16,14 @@ const { fields } = foundry.data;
  * Grip").
  */
 class EssenceComponentData extends foundry.abstract.TypeDataModel {
+  /** See module/data/migration.mjs — repairs any value an older version of this system saved that
+   *  this schema would now reject, BEFORE Foundry can reject it and leave the document invalid
+   *  (and therefore invisible). Inherited by every subtype; `this.schema` resolves to whichever
+   *  concrete model is actually loading, so this one implementation covers all of them. */
+  static migrateData(source) {
+    return migrateSource(this, super.migrateData(source));
+  }
+
   static defineSchema() {
     return {
       category: new fields.StringField({ initial: "weapon", choices: ["weapon", "ranged", "armor", "shield", "implement"] }),
@@ -119,6 +128,14 @@ export class EssenceFittingData extends EssenceComponentData {
  * them at 0 regardless of where they're kept.
  */
 export class EssenceAugmentData extends foundry.abstract.TypeDataModel {
+  /** See module/data/migration.mjs — repairs any value an older version of this system saved that
+   *  this schema would now reject, BEFORE Foundry can reject it and leave the document invalid
+   *  (and therefore invisible). Inherited by every subtype; `this.schema` resolves to whichever
+   *  concrete model is actually loading, so this one implementation covers all of them. */
+  static migrateData(source) {
+    return migrateSource(this, super.migrateData(source));
+  }
+
   static defineSchema() {
     return {
       kind: new fields.StringField({ initial: "function", choices: ["function", "support"] }),

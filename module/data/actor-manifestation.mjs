@@ -1,3 +1,4 @@
+import { migrateSource } from "./migration.mjs";
 const { fields } = foundry.data;
 
 /**
@@ -15,6 +16,14 @@ const { fields } = foundry.data;
  * printed profile table gives these three directly.
  */
 export default class EssenceManifestationData extends foundry.abstract.TypeDataModel {
+  /** See module/data/migration.mjs — repairs any value an older version of this system saved that
+   *  this schema would now reject, BEFORE Foundry can reject it and leave the document invalid
+   *  (and therefore invisible). Inherited by every subtype; `this.schema` resolves to whichever
+   *  concrete model is actually loading, so this one implementation covers all of them. */
+  static migrateData(source) {
+    return migrateSource(this, super.migrateData(source));
+  }
+
   static defineSchema() {
     return {
       // 17 named families across Ranks 0-5 (V6 Appendix H/J) — only the Rank 0-2 families below

@@ -1,3 +1,4 @@
+import { migrateSource } from "./migration.mjs";
 import { SEVERITY_BY_INDEX, DAMAGE_TYPES } from "../utils.mjs";
 import { deriveDeathTrackMax } from "./origin-features.mjs";
 
@@ -42,6 +43,14 @@ export function skillField() {
  * the player-only fluff (Concept, Career, Non-Combat Skills, etc.); EssenceNpcData adds GM notes.
  */
 export default class EssenceCombatantData extends foundry.abstract.TypeDataModel {
+  /** See module/data/migration.mjs — repairs any value an older version of this system saved that
+   *  this schema would now reject, BEFORE Foundry can reject it and leave the document invalid
+   *  (and therefore invisible). Inherited by every subtype; `this.schema` resolves to whichever
+   *  concrete model is actually loading, so this one implementation covers all of them. */
+  static migrateData(source) {
+    return migrateSource(this, super.migrateData(source));
+  }
+
   static defineSchema() {
     return {
       species: new fields.StringField({ initial: "" }),
