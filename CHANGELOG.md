@@ -2,6 +2,99 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.7.6
+
+**Every character can now assemble from the full component catalog.** Opening Modular Assembly on
+an equipment Item a character owns offered only Chassis/Fittings that character had already dragged
+out of the compendium — which for most players is none, so the dropdown was empty with nothing
+explaining why, while a GM editing an unowned compendium template saw the whole list. Assembling
+your own gear is not a GM privilege. Both pickers (and the Mount Augment pickers) now offer the
+whole `essence-system.equipment` catalog to anyone who can open the sheet, still filtered to the
+item's own Category — a Melee Weapon offers Strikers and Grips, a Ranged Weapon offers Launchers
+and Payloads, and so on.
+
+- Picking an entry the character doesn't own yet embeds their own copy first, then assigns that
+  copy. Storing the raw compendium id instead would have displayed fine and silently broken every
+  write-back: the Equipment Card handler resolves its source with `actor.items.get()`, so a
+  compendium id skipped both the Uses decrement and the used-this-Adventure commitment — a card
+  that never ran out.
+- Those entries are marked "Catalog" in the dropdown so it's clear which ones you own already.
+- Assembling costs no capacity: a Chassis/Fitting referenced by an assembled item was already
+  exempt from the ½-slot loose-Component charge.
+- An empty picker now says so, and points at the Equipment compendium's Ownership setting — the
+  one remaining way for a player to legitimately see nothing.
+
+**The Equipment compendium's Chassis, Fitting and Augment folders are split by category.** One flat
+Chassis folder interleaved Strikers, Shells, Focuses, Shields and Launchers alphabetically, so a
+player browsing for a melee weapon had no way to tell which entries were even relevant. Each now
+has Melee Weapon / Ranged Weapon / Armor / Shield / Implement child folders in rules order (Augments
+have no category at all, so they split by Function / Support instead). The Content Wizard files a
+GM-authored Component into the matching child folder as its Category field is set, and its folder
+lookup is now scoped by depth — "Armor", "Shield" and "Implement" each name both a top-level
+equipment folder and a Chassis/Fitting child, which an unscoped name match could have confused.
+
+While in that lookup: a hyphenated category never matched its own folder, so every Consumable Kit
+a GM authored through the Content Wizard came out unfiled ("Consumable-kit" vs "Consumable Kit").
+
+**The Equipment pack now declares player-visible ownership explicitly** rather than relying on
+Foundry's default. A world that has already overridden that setting keeps its own; change it in
+Compendium ▸ right-click ▸ Configure Ownership.
+
+**The Character Wizard drops its Wounds and Influence steps** — ten steps down to eight. Both were
+play state rather than creation choices: a new character starts at 0 Resilience, 0 Temporary
+Wounds, an empty Core Wound track and unmarked Influence, so both pages showed empty tracks and
+asked for nothing. Everything they held is still reachable:
+
+- Resilience, the Temporary Wound track, the Core Wound track and both Influence tracks are all on
+  the character sheet already.
+- Temporary Wounds Available had no input anywhere else — nothing derives it and no Active Effect
+  writes it — so it now sits beside the Temporary Wound track on the sheet, where it belongs.
+- Reach moved to the Wizard's Equipment step, which is what actually consumes it (the loadout
+  header prints it and the over-Reach warnings gate on it). It remains editable on the sheet too.
+
+**The Character Wizard can build modular equipment.** Its Equipment Library listed pre-fab
+`equipment` templates only — and since the catalog migration retired every flat weapon, armor,
+shield and implement in favour of Chassis + Fitting pairs, that left a player creating a character
+with nothing to browse but six Toolkits and four Consumable Kits. There was no way to arm a new
+character without finishing the Wizard first and finding "+ Add Item" on the sheet. The Equipment
+step now has a Build New Equipment control: pick a category, add it to Inventory or Armory, and its
+sheet opens on the spot to assemble from the catalog.
+
+- The Library itself gained a Type filter covering Equipment, Chassis, Fitting and Augment, so
+  loose Components can be stocked during creation too. Equipment stays the default view. The
+  Category filter no longer hides Augments, which have no category to filter on.
+- Chassis, Fittings and Augments a character owns now appear in the Wizard's own Inventory and
+  Armory lists. They were already addable by other routes and simply didn't show up here.
+- Capacity accounting in the Wizard (both the loadout headers and the Finalize checklist) now uses
+  the same `computeSlotUsage` the character sheet does, so a loose Component counts as its real
+  half slot and an assembled one correctly counts as nothing. It previously counted whole
+  `equipment` items only.
+
+
+**Closes the gap 0.7.5's own `nonCombatSkills[].source` fix exposed in the migrator.**
+
+0.7.5 fixed that field by adding `blank: true`, which was correct. But it revealed that the
+migrator added in the same release would not have caught it. Foundry's `StringField` rejects the
+empty string whenever `choices` is set unless the field also declares `blank: true` — so
+`choices: ["", "intellect"]` without it rejects its own `initial: ""`, invalidating every document
+holding the default. The migrator saw `""` sitting in the `choices` list, judged it valid, and
+passed it through for Foundry to reject anyway. Membership in `choices` is not the same as being
+accepted, and the repair now tests acceptance instead:
+
+- A blank the field would reject is repaired to the first value it will actually take.
+- A blank the field explicitly permits is still left alone.
+- The fallback can no longer hand back a value the field would refuse — previously it could
+  return the field's own `initial`, which in this exact shape is the rejected blank.
+
+**A schema guard now catches this at source rather than repairing it after the fact.** `npm test`
+walks every registered model's real schema and fails on any `StringField` whose `choices` include
+`""` without `blank: true`. Repairing one of these costs a GM their configured value, because the
+repair has to reset it to a default; never shipping one costs nothing. Verified by reintroducing
+the 0.7.4 bug and confirming the suite fails, then restoring it. 30 tests, all passing.
+
+No world data is affected by this release. Every field in the system already declares `blank: true`
+where it needs to — 0.7.5 fixed the last one. This is the net that stops the next one.
+
 ## 0.7.5
 
 **Fixes 0.7.1 emptying the Actors and Items directories of any world created before it, and makes

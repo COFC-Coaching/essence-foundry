@@ -11,7 +11,7 @@
     "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p><strong>Gravitic Snare</strong> (EC13)</p><p><em>ACTION &bull; Roll 3+ &bull; USES 2 &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Equipment + Intellect vs Fortitude</p><p><strong>Range / Targeting:</strong> 6 units / Sphere 1; every creature in the area</p><p><strong>Effect:</strong> Each successfully affected creature takes 1 Force Damage. Until the start of your next Turn, it can voluntarily move no more than 2 units in total after this effect is applied, counting normal and granted Movement. This does not limit forced movement or teleportation.</p><p><strong>Surge 1: Pull each successfully affected creature 1 unit toward the center of the area, stopping before an illegal space. Once per use.</strong></p><p><strong>Surge 2: Deal +1 Force Damage to each successfully affected creature. Once per use.</strong></p><p><em>Design note: This is an explicit movement restriction, not an undefined Slowed or Restrained Condition.</em></p>",
     "flavor": "<p>A strong, temporary restriction on ordinary movement.</p>"
   },
-  "folder": "3216b00ec364f4c1",
+  "folder": "a8b774634a5ae5c5",
   "flags": {},
   "ownership": {
     "default": 0

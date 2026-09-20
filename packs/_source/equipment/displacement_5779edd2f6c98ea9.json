@@ -11,7 +11,7 @@
     "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p><strong>Displacement</strong> (EC14)</p><p><em>REACTION &bull; Burn 2 &bull; USES 1 &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Automatic; burn the printed dice</p><p><strong>Range / Targeting:</strong> 3 units / Self or one willing ally</p><p><strong>Trigger:</strong> Another character declares an Action targeting the protected creature; use before that Action is rolled or resolved.</p><p><strong>Effect:</strong> The protected creature cannot be affected by the triggering Action. This explicitly prevents that Action’s effects against that creature; its other targets and independent effects resolve normally. After the Action finishes, the protected creature may teleport to an unoccupied space it can see within 2 units of itself.</p><p><em>Design note: Cancels effects against one creature, not the entire Action. Does not protect against separate nested Actions or Reactions, existing hazards, or later attacks.</em></p>",
     "flavor": "<p>An exceptional one-use answer to a declared attack.</p>"
   },
-  "folder": "3216b00ec364f4c1",
+  "folder": "a8b774634a5ae5c5",
   "flags": {},
   "ownership": {
     "default": 0

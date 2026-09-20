@@ -11,7 +11,7 @@
     "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p><strong>Aegis</strong> (EC08)</p><p><em>REACTION &bull; Burn 2 &bull; USES 2 &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Automatic; burn the printed dice</p><p><strong>Range / Targeting:</strong> 3 units / Self or one willing ally</p><p><strong>Trigger:</strong> The target would take Damage from another character’s Action or Reaction; use after that Damage is determined but before it is accumulated.</p><p><strong>Effect:</strong> Reduce that Damage by 2, to a minimum of 0. When an event contains several Damage types or Breach, choose which points are removed. This does not prevent separately inflicted direct Wounds.</p><p><em>Design note: Prevention, not healing. Still consumes the user’s one Reaction against that Action.</em></p>",
     "flavor": "<p>Preventing a dangerous Damage event across all domains.</p>"
   },
-  "folder": "3216b00ec364f4c1",
+  "folder": "a8b774634a5ae5c5",
   "flags": {},
   "ownership": {
     "default": 0

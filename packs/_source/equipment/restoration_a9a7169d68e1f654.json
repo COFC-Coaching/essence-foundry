@@ -11,7 +11,7 @@
     "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p><strong>Restoration</strong> (EC16)</p><p><em>ACTION &bull; Burn 3 &bull; USES 1 &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Automatic; burn the printed dice</p><p><strong>Range / Targeting:</strong> Touch; self or adjacent / One living willing creature</p><p><strong>Effect:</strong> Restore the target’s most severe currently marked Core Wound and remove its corresponding Wound Condition. Follow the normal reverse-order recovery rule. A creature can benefit from Restoration only once per Adventure, even from different copies. This cannot revive the dead or recreate a missing limb or organ.</p><p><em>Design note: Exceptional healing, not a consumable-kit baseline. If a Wound represents an injury this Function cannot repair, it cannot restore that Wound.</em></p><p>Major treasure; not assumed starting equipment. This is the only Function here that restores a Core Wound.</p>",
     "flavor": "<p>A deliberately exceptional example of genuine healing.</p>"
   },
-  "folder": "3216b00ec364f4c1",
+  "folder": "a8b774634a5ae5c5",
   "flags": {},
   "ownership": {
     "default": 0

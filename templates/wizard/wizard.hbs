@@ -144,22 +144,8 @@
     </div>
   {{/if}}
 
-  {{!-- ============ STEP 4: WOUNDS ============ --}}
+  {{!-- ============ STEP 4: COMBAT SKILLS ============ --}}
   {{#if (eq step 3)}}
-    <h2>{{localize "ESSENCE.Common.Wounds"}}</h2>
-    <p class="muted">{{localize "ESSENCE.Wizard.Character.WoundsHint"}}</p>
-    <div class="wizard-row">
-      <label>{{localize "ESSENCE.Common.Resilience"}} <input type="number" name="system.resilience" value="{{system.resilience}}" style="width:4em"></label>
-      <label>{{localize "ESSENCE.Common.TemporaryWoundsAvailable"}} <input type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" style="width:4em" min="0" max="5"></label>
-    </div>
-    <h3 class="section-head">{{localize "ESSENCE.Wizard.Monster.CoreWoundsStartEmpty"}}</h3>
-    <span class="pip-track">
-      {{#each system.coreWounds as |w|}}<span class="pip {{#if w.filled}}filled{{/if}}"></span>{{/each}}
-    </span>
-  {{/if}}
-
-  {{!-- ============ STEP 5: COMBAT SKILLS ============ --}}
-  {{#if (eq step 4)}}
     <h2>{{localize "ESSENCE.Common.CombatStyles"}}</h2>
     <p class="muted">{{localize "ESSENCE.Wizard.Character.SkillsHint" pool=skillPool}} {{localize "ESSENCE.Wizard.PointsRemaining"}}: <strong>{{skillRemaining}}</strong></p>
     <table class="item-table">
@@ -256,27 +242,8 @@
     </div>
   {{/if}}
 
-  {{!-- ============ STEP 6: INFLUENCE ============ --}}
-  {{#if (eq step 5)}}
-    <h2>{{localize "ESSENCE.Sheet.Influence"}}</h2>
-    <p class="muted">{{localize "ESSENCE.Wizard.Character.InfluenceHint"}}</p>
-    <label>{{localize "ESSENCE.Sheet.Reach"}} <input type="number" name="system.reach" value="{{system.reach}}" style="width:4em"></label>
-    <h3 class="section-head">{{localize "ESSENCE.Sheet.TemporaryInfluence"}}</h3>
-    <span class="pip-track">
-      {{#each temporaryInfluencePips as |filled i|}}
-        <button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempInfluence" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="{{localize 'ESSENCE.Sheet.TemporaryInfluenceAria' n=(addOne i)}}"></button>
-      {{/each}}
-    </span>
-    <h3 class="section-head">{{localize "ESSENCE.Sheet.CoreInfluence"}} <span class="muted">{{localize "ESSENCE.Wizard.Character.CoreInfluenceHint"}}</span></h3>
-    <span class="pip-track">
-      {{#each coreInfluencePips as |c i|}}
-        <button type="button" class="pip toggle {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}" aria-pressed="{{c.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreInfluenceAria' n=(addOne i)}}"></button>
-      {{/each}}
-    </span>
-  {{/if}}
-
-  {{!-- ============ STEP 7: NON-COMBAT ============ --}}
-  {{#if (eq step 6)}}
+  {{!-- ============ STEP 5: NON-COMBAT ============ --}}
+  {{#if (eq step 4)}}
     <h2>{{localize "ESSENCE.Character.TabNonCombat"}}</h2>
     <label>{{localize "ESSENCE.Character.Career"}} <input type="text" name="system.career" value="{{system.career}}"></label>
     <div class="wizard-row">
@@ -323,8 +290,8 @@
     <button type="button" data-action="addNonCombatSkill"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Character.AddSkill"}}</button>
   {{/if}}
 
-  {{!-- ============ STEP 8: PASSIVE FEATURES ============ --}}
-  {{#if (eq step 7)}}
+  {{!-- ============ STEP 6: PASSIVE FEATURES ============ --}}
+  {{#if (eq step 5)}}
     <h2>{{localize "ESSENCE.Wizard.Character.PassiveFeatures"}}</h2>
     <p class="muted">{{localize "ESSENCE.Wizard.Character.PassiveFeaturesHint"}}</p>
     <table class="item-table">
@@ -346,14 +313,17 @@
     <button type="button" data-action="addPassiveFeature"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Character.AddFeature"}}</button>
   {{/if}}
 
-  {{!-- ============ STEP 9: EQUIPMENT ============ --}}
-  {{#if (eq step 8)}}
+  {{!-- ============ STEP 7: EQUIPMENT ============ --}}
+  {{#if (eq step 6)}}
     <h2>{{localize "ESSENCE.Item.EquipmentLabel"}}</h2>
     <p class="muted">{{localize "ESSENCE.Wizard.Character.EquipmentHint"}}</p>
+    {{!-- Reach gates what a character may carry, so its input lives with the loadout it governs
+          now that the Influence step (its old home) is gone. --}}
+    <label>{{localize "ESSENCE.Sheet.Reach"}} <input type="number" name="system.reach" value="{{system.reach}}" style="width:4em"></label>
     <h3 class="section-head">{{localize "ESSENCE.Wizard.InventoryLoadout" used=inventoryUsed limit=inventoryLimit reach=reach}}</h3>
     <ul class="item-list">
       {{#each inventoryItems as |item|}}
-        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{localize "ESSENCE.Item.Equipment.Reach"}} {{item.system.cost}}</span>
+        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{item.meta}}</span>
           {{#if item.overReach}}<span class="muted reach-warning" title="{{localize 'ESSENCE.Wizard.Character.ExceedsReachYours'}}"><i class="fa-solid fa-triangle-exclamation"></i></span>{{/if}}
           <button type="button" data-action="toggleEquipment" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
       {{/each}}
@@ -362,7 +332,7 @@
     <h3 class="section-head">{{localize "ESSENCE.Wizard.ArmoryLoadout" used=armoryUsed limit=armoryLimit}}</h3>
     <ul class="item-list">
       {{#each armoryItems as |item|}}
-        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{localize "ESSENCE.Item.Equipment.Reach"}} {{item.system.cost}}</span>
+        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{item.meta}}</span>
           <button type="button" data-action="toggleEquipment" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
       {{/each}}
     </ul>
@@ -385,9 +355,31 @@
       </ul>
     {{/if}}
 
+    <h3 class="section-head">{{localize "ESSENCE.Wizard.BuildEquipment"}}</h3>
+    <p class="muted">{{localize "ESSENCE.Wizard.BuildEquipmentHint"}}</p>
+    <div class="wizard-row">
+      <label>{{localize "ESSENCE.Common.Category"}}
+        <select data-wizard-select="buildCategory">
+          {{#each buildCategoryOptions as |opt|}}
+            <option value="{{opt.value}}" {{#if (eq ../buildCategory opt.value)}}selected{{/if}}>{{opt.label}}</option>
+          {{/each}}
+        </select>
+      </label>
+      <button type="button" data-action="buildEquipment" data-slot="inventory"><i class="fa-solid fa-star"></i> {{localize "ESSENCE.Wizard.AddToInventory"}}</button>
+      <button type="button" data-action="buildEquipment" data-slot="armory"><i class="fa-solid fa-warehouse"></i> {{localize "ESSENCE.Wizard.AddToArmory"}}</button>
+    </div>
+
     <h3 class="section-head">{{localize "ESSENCE.Wizard.EquipmentLibrary"}}</h3>
     <input type="text" data-wizard-search="equipment" placeholder="{{localize 'ESSENCE.Common.SearchPlaceholder'}}" value="{{equipmentSearch}}">
     <div class="wizard-row wizard-card-filters">
+      <label>{{localize "ESSENCE.Common.Type"}}
+        <select data-wizard-select="equipmentType">
+          <option value="all" {{#if (eq equipmentTypeFilter "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
+          {{#each equipmentTypeOptions as |opt|}}
+            <option value="{{opt.value}}" {{#if (eq ../equipmentTypeFilter opt.value)}}selected{{/if}}>{{opt.label}}</option>
+          {{/each}}
+        </select>
+      </label>
       <label>{{localize "ESSENCE.Wizard.Group"}}
         <select data-wizard-select="equipmentCategory">
           <option value="all" {{#if (eq equipmentCategoryFilter "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
@@ -399,15 +391,15 @@
     </div>
     <ul class="item-list wizard-scroll-list">
       {{#each browsableEquipment as |item|}}
-        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{equipmentCategoryLabel item.system.category}} &middot; {{localize "ESSENCE.Item.Equipment.Reach"}} {{item.system.cost}}</span>
-          <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" data-slot="inventory" aria-label="{{localize 'ESSENCE.Wizard.AddToInventoryAria' name=item.name}}" title="{{localize 'ESSENCE.Wizard.AddToInventory'}}"><i class="fa-solid fa-star"></i></button>
+        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{item.meta}}</span>
+          {{#unless item.isAugment}}<button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" data-slot="inventory" aria-label="{{localize 'ESSENCE.Wizard.AddToInventoryAria' name=item.name}}" title="{{localize 'ESSENCE.Wizard.AddToInventory'}}"><i class="fa-solid fa-star"></i></button>{{/unless}}
           <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" data-slot="armory" aria-label="{{localize 'ESSENCE.Wizard.AddToArmoryAria' name=item.name}}" title="{{localize 'ESSENCE.Wizard.AddToArmory'}}"><i class="fa-solid fa-warehouse"></i></button></li>
       {{/each}}
     </ul>
   {{/if}}
 
-  {{!-- ============ STEP 10: FINALIZE ============ --}}
-  {{#if (eq step 9)}}
+  {{!-- ============ STEP 8: FINALIZE ============ --}}
+  {{#if (eq step 7)}}
     <h2>{{localize "ESSENCE.Wizard.Finalize"}}</h2>
     <p class="muted">{{localize "ESSENCE.Wizard.Character.FinalizeHint"}}</p>
     <div class="wizard-row">

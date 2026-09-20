@@ -11,7 +11,7 @@
     "effect": "<p><strong>Requirement:</strong> The host must grant an ordinary Equipment Reaction that increases the user’s Defense.</p><p>When an ordinary Equipment Reaction through this item increases your Defense against one attack, retain 1 point of that increase after the attack resolves until the start of your next Turn. The retained point is part of the original increase, not an additional bonus.</p><p>Retained bonuses from Afterguard do not stack for the same Defense, even from multiple items. Refreshing a duration creates no new Reaction.</p>",
     "flavor": "<p>Extending a little protection beyond its original timing window.</p>"
   },
-  "folder": "3216b00ec364f4c1",
+  "folder": "7b9618b2952002be",
   "flags": {},
   "ownership": {
     "default": 0

@@ -11,7 +11,7 @@
     "effect": "<p><strong>Requirement:</strong> The host must have an ordinary property or Equipment Card that grants a Temporary Wound.</p><p>When an ordinary property or Equipment Card of this item would grant you a Temporary Wound, you may instead grant it to one adjacent willing ally. Preserve its original duration and restrictions. You do not gain it, and no additional Temporary Wound is created.</p><p>Balanced Shell supplies a working starting combination. Function Augments are not modified; the normal five-Temporary-Wound cap applies.</p>",
     "flavor": "<p>Redirecting a limited protective buffer.</p>"
   },
-  "folder": "3216b00ec364f4c1",
+  "folder": "7b9618b2952002be",
   "flags": {},
   "ownership": {
     "default": 0

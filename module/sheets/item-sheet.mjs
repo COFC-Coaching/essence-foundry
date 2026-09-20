@@ -228,10 +228,22 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
     // (e.g. the category was changed after assembly) so a mismatch is visible and fixable rather
     // than silently vanishing from the dropdown. Augments aren't scoped this way — Source A leaves
     // Augment compatibility as printed free text (`compatibility`), not a hard-coded category enum.
+    // Category is the ONLY scoping here: anyone with a character sheet can assemble from the whole
+    // component catalog, owned copy or not (see #resolveComponentSource).
     const category = context.system.category;
-    context.chassisOptions = items.all.filter((i) => i.type === "chassis" && (i.system.category === category || i.id === this.item.system.chassisItemId));
-    context.fittingOptions = items.all.filter((i) => i.type === "fitting" && (i.system.category === category || i.id === this.item.system.fittingItemId));
-    context.augmentOptions = items.all.filter((i) => i.type === "augment");
+    // `fromCatalog` marks an option the actor doesn't own a copy of yet — selecting it embeds one
+    // (see #materializeComponent). Always false on an unowned template item, where there's no
+    // actor to own anything and the suffix would just be noise on every single row.
+    const toOption = (i) => ({
+      id: i.id,
+      name: i.name,
+      tier: i.system.tier,
+      kind: i.system.kind,
+      fromCatalog: Boolean(this.item.actor) && !this.item.actor.items.has(i.id)
+    });
+    context.chassisOptions = items.all.filter((i) => i.type === "chassis" && (i.system.category === category || i.id === this.item.system.chassisItemId)).map(toOption);
+    context.fittingOptions = items.all.filter((i) => i.type === "fitting" && (i.system.category === category || i.id === this.item.system.fittingItemId)).map(toOption);
+    context.augmentOptions = items.all.filter((i) => i.type === "augment").map(toOption);
     context.stats = deriveEquipmentStats(items, this.item);
     // See EssenceComponentSheet's own comment on CHASSIS_LABELS/FITTING_LABELS — once a Chassis/
     // Fitting is assigned, ITS category is the authority on which in-fiction term to show (a
@@ -257,13 +269,15 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
   /**
    * Resolves the pool of Chassis/Fitting/Augment Items this equipment Item can assemble from, and
    * gives deriveEquipmentStats() a `.get(id)` it can use regardless of where that pool came from.
-   * An OWNED equipment Item still assembles from the actor's own embedded Chassis/Fitting/Augment
-   * copies (unchanged). An UNOWNED one (authored straight in the compendium, e.g. via the Item
-   * Creation Wizard, with no actor to embed real copies into) now assembles directly from the
-   * shared `essence-system.equipment` pack's own Chassis/Fitting/Augment library instead of falling
-   * back to the old free-text `modularNotes` placeholder — every Chassis/Fitting/Augment in this
-   * system lives in that one pack (see COMPONENT_TYPES_FOR_FOLDERS in build-packs.mjs), so this is
-   * simply the system's full component catalog, not actor-scoped.
+   * Owned or unowned, that pool is the system's FULL component catalog — the shared
+   * `essence-system.equipment` pack (every Chassis/Fitting/Augment in this system lives in that one
+   * pack, see COMPONENT_TYPES_FOR_FOLDERS in build-packs.mjs) merged with whatever the actor
+   * already has embedded. An earlier version scoped an owned item's pickers to the actor's own
+   * embedded Components only, which meant a player who hadn't first dragged a Chassis out of the
+   * compendium opened Modular Assembly to an empty dropdown with no explanation while the GM,
+   * editing an unowned template, saw the whole list — assembling your own gear isn't a GM-gated
+   * privilege, so the catalog is offered to everyone and a copy gets embedded on selection
+   * (#materializeComponent) to keep per-copy Uses tracking intact.
    */
   async #resolveComponentSource() {
     const actor = this.item.actor;
@@ -271,15 +285,62 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
       // `.get` also falls back to the compendium (see buildEquipmentResolver's own doc comment) —
       // confirmed live: several owned equipment Items had chassisItemId/fittingItemId already set
       // to a compendium id with no embedded copy on the actor at all, so Combined Effect/Fortitude
-      // etc. resolved to nothing. `.all` (the picker dropdown's OWN option list) deliberately stays
-      // actor-only, not merged — a player should only be offered Components they actually own.
+      // etc. resolved to nothing.
       const resolver = await buildEquipmentResolver(actor);
-      return { get: resolver.get, all: actor.items.contents };
+      const owned = actor.items.contents;
+      // A catalog entry the actor already holds a copy of is dropped so the dropdown doesn't list
+      // the same Chassis twice. `_stats.compendiumSource` is what Foundry stamps on an import (a
+      // hand-dragged copy included); the name/type pair catches copies made some other way.
+      const sources = new Set(owned.map((i) => i._stats?.compendiumSource ?? i.flags?.core?.sourceId).filter(Boolean));
+      const names = new Set(owned.map((i) => `${i.type}:${i.name}`));
+      const catalog = resolver.catalog.filter((d) => !sources.has(d.uuid) && !names.has(`${d.type}:${d.name}`));
+      return { get: resolver.get, all: [...owned, ...catalog] };
     }
     const pack = game.packs.get("essence-system.equipment");
-    const docs = pack ? await pack.getDocuments() : [];
+    let docs = [];
+    try {
+      docs = pack ? await pack.getDocuments() : [];
+    } catch (err) {
+      console.warn("Essence | Could not read the equipment compendium for this user", err);
+    }
     const byId = new Map(docs.map((d) => [d.id, d]));
     return { get: (id) => byId.get(id) ?? null, all: docs };
+  }
+
+  /**
+   * Turns a picked CATALOG component into something this actor actually owns, returning the id to
+   * store on the equipment Item. Storing the raw compendium id instead would look fine on the
+   * sheet (deriveEquipmentStats resolves it through buildEquipmentResolver's fallback) but breaks
+   * everything that writes back: actor-sheet.mjs's Equipment Card handler resolves its source via
+   * `this.actor.items.get(itemId)`, so a compendium id silently skips the Uses decrement AND the
+   * usedThisAdventure commitment — a card that never runs out. An embedded copy also gives the
+   * player independent Augment Uses on THEIR copy, which is the whole reason owned items hold
+   * their own copies. Capacity is unaffected: computeSlotUsage (utils.mjs) already excludes a
+   * Chassis/Fitting referenced by an assembled equipment Item from the ½-slot loose-Component
+   * charge, so assembling from the catalog costs no Inventory/Armory space.
+   */
+  async #materializeComponent(id) {
+    const actor = this.item.actor;
+    if (!id || !actor || actor.items.has(id)) return id;
+    const pack = game.packs.get("essence-system.equipment");
+    let doc = null;
+    try {
+      doc = pack ? await pack.getDocument(id) : null;
+    } catch (err) {
+      console.warn("Essence | Could not read the equipment compendium for this user", err);
+    }
+    if (!doc) return id;
+    // Same toObject()/delete-_id shape every other compendium-to-actor copy in this system uses
+    // (documents/actor.mjs, data/origin-select.mjs, the wizards). `folder` goes too: it points at
+    // a folder inside the compendium, which means nothing on an embedded Item. compendiumSource is
+    // what #resolveComponentSource dedupes on, so it's stamped explicitly rather than relying on
+    // any particular Foundry version doing it.
+    const data = doc.toObject();
+    delete data._id;
+    delete data.folder;
+    foundry.utils.setProperty(data, "_stats.compendiumSource", doc.uuid);
+    const [created] = await actor.createEmbeddedDocuments("Item", [data]);
+    return created?.id ?? id;
   }
 
   /**
@@ -296,18 +357,21 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
   #wireModularSelects() {
     const chassisSelect = this.element.querySelector(".chassis-select");
     chassisSelect?.addEventListener("change", async (event) => {
-      await this.item.update({ "system.chassisItemId": event.currentTarget.value });
+      const id = await this.#materializeComponent(event.currentTarget.value);
+      await this.item.update({ "system.chassisItemId": id });
     });
     const fittingSelect = this.element.querySelector(".fitting-select");
     fittingSelect?.addEventListener("change", async (event) => {
-      await this.item.update({ "system.fittingItemId": event.currentTarget.value });
+      const id = await this.#materializeComponent(event.currentTarget.value);
+      await this.item.update({ "system.fittingItemId": id });
     });
     for (const select of this.element.querySelectorAll(".mount-augment-select")) {
       select.addEventListener("change", async (event) => {
         const i = Number(event.currentTarget.dataset.mountIndex);
+        const id = await this.#materializeComponent(event.currentTarget.value);
         const mounts = this.item.system.mounts.map((m) => ({ ...m }));
         while (mounts.length <= i) mounts.push({ augmentItemId: "", linkOn: true });
-        mounts[i].augmentItemId = event.currentTarget.value;
+        mounts[i].augmentItemId = id;
         await this.item.update({ "system.mounts": mounts });
       });
     }

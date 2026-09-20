@@ -129,7 +129,7 @@
         <select class="chassis-select">
           <option value="">— {{localize "ESSENCE.Common.None"}} —</option>
           {{#each chassisOptions as |c|}}
-            <option value="{{c.id}}" {{#if (eq c.id ../system.chassisItemId)}}selected{{/if}}>{{c.name}} (T{{c.system.tier}})</option>
+            <option value="{{c.id}}" {{#if (eq c.id ../system.chassisItemId)}}selected{{/if}}>{{c.name}} (T{{c.tier}}){{#if c.fromCatalog}} — {{localize "ESSENCE.Item.Equipment.FromCatalog"}}{{/if}}</option>
           {{/each}}
         </select>
       </label>
@@ -137,13 +137,20 @@
         <select class="fitting-select">
           <option value="">— {{localize "ESSENCE.Common.None"}} —</option>
           {{#each fittingOptions as |f|}}
-            <option value="{{f.id}}" {{#if (eq f.id ../system.fittingItemId)}}selected{{/if}}>{{f.name}} (T{{f.system.tier}})</option>
+            <option value="{{f.id}}" {{#if (eq f.id ../system.fittingItemId)}}selected{{/if}}>{{f.name}} (T{{f.tier}}){{#if f.fromCatalog}} — {{localize "ESSENCE.Item.Equipment.FromCatalog"}}{{/if}}</option>
           {{/each}}
         </select>
       </label>
     </div>
+    {{#unless chassisOptions.length}}
+      <p class="muted">{{localize "ESSENCE.Item.Equipment.NoComponentOptions" label=chassisLabel}}</p>
+    {{/unless}}
+    {{#unless fittingOptions.length}}
+      <p class="muted">{{localize "ESSENCE.Item.Equipment.NoComponentOptions" label=fittingLabel}}</p>
+    {{/unless}}
     {{#if item.actor}}
       <p class="muted">{{localize "ESSENCE.Item.Equipment.AssignFreeHint" chassisLabel=chassisLabel fittingLabel=fittingLabel}}</p>
+      <p class="muted">{{localize "ESSENCE.Item.Equipment.CatalogCopyHint"}}</p>
       {{#with (fittingReconfigureCost stats.fitting) as |rc|}}
       <button type="button" data-action="reconfigureFittingCost"><i class="fa-solid fa-dice"></i> {{localize "ESSENCE.Common.Pay"}} {{fittingLabel}} {{localize "ESSENCE.Item.Component.Reconfigure"}} {{localize "ESSENCE.Item.Equipment.CostSuffix"}} ({{rc.cost}} {{#if (eq rc.cost 1)}}{{localize "ESSENCE.Item.Equipment.ActionDie"}}{{else}}{{localize "ESSENCE.Item.Equipment.ActionDice"}}{{/if}}){{#if rc.outOfCombatOnly}} <span class="muted">{{localize "ESSENCE.Item.Component.ReconfigureStructural"}}</span>{{/if}}</button>
       {{/with}}
@@ -173,7 +180,7 @@
               <select class="mount-augment-select" data-mount-index="{{m.index}}">
                 <option value="">— {{localize "ESSENCE.Common.Empty"}} —</option>
                 {{#each ../augmentOptions as |a|}}
-                  <option value="{{a.id}}" {{#if (eq a.id m.augment.id)}}selected{{/if}}>{{a.name}} ({{a.system.kind}})</option>
+                  <option value="{{a.id}}" {{#if (eq a.id m.augment.id)}}selected{{/if}}>{{a.name}} ({{a.kind}}){{#if a.fromCatalog}} — {{localize "ESSENCE.Item.Equipment.FromCatalog"}}{{/if}}</option>
                 {{/each}}
               </select>
             </label>

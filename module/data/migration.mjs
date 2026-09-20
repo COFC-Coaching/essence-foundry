@@ -98,17 +98,32 @@ function choiceList(field) {
   return null;
 }
 
+/**
+ * Whether a StringField would actually accept this value. Listing a value in `choices` is not
+ * sufficient on its own: Foundry's StringField rejects the empty string whenever `choices` is set
+ * unless the field ALSO declares `blank: true` — so `choices: ["", "intellect"]` without it
+ * rejects its own `initial: ""`, and every document holding the default is invalidated. That trap
+ * is documented at item-component.mjs's `handedness` field and it has already been hit once here,
+ * on the Character model's `nonCombatSkills[].source` (fixed in 0.7.5). Checking acceptance rather
+ * than mere membership is what makes this migrator catch the next one automatically.
+ */
+function accepts(field, choices, value) {
+  if (!choices.includes(value)) return false;
+  if (value === "" && !field?.blank) return false;
+  return true;
+}
+
 /** The value to fall back to when a stale value has no known alias: the field's own declared
- *  initial where that is itself valid, then blank where the field permits it, then the first
- *  listed choice — so the result is always something the schema will accept. */
+ *  initial where that is itself acceptable, then the first choice the field would actually take —
+ *  so the result is always something the schema will accept, never merely something it lists. */
 function fallbackChoice(field, choices) {
+  const usable = choices.filter((choice) => accepts(field, choices, choice));
   let initial = field?.initial;
   if (typeof initial === "function") {
     try { initial = initial(); } catch { initial = undefined; }
   }
-  if (choices.includes(initial)) return initial;
-  if (field?.blank && choices.includes("")) return "";
-  return choices[0];
+  if (usable.includes(initial)) return initial;
+  return usable[0]; // undefined if the field accepts nothing at all — caller leaves the value be
 }
 
 /**
@@ -141,10 +156,9 @@ function repairValue(field, container, key, path) {
 
   const choices = choiceList(field);
   if (choices) {
-    if (choices.includes(value)) return;
-    if (value === "" && field.blank) return;
+    if (accepts(field, choices, value)) return;
     const alias = LEGACY_VALUE_ALIASES[key]?.[value];
-    const replacement = choices.includes(alias) ? alias : fallbackChoice(field, choices);
+    const replacement = accepts(field, choices, alias) ? alias : fallbackChoice(field, choices);
     if (replacement === undefined || replacement === value) return;
     container[key] = replacement;
     repairLog.push({ path, from: value, to: replacement, kind: alias !== undefined ? "renamed" : "reset" });

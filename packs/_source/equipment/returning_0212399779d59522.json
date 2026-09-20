@@ -11,7 +11,7 @@
     "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p>At the start of your Turn, this item may return to one free hand if it is within 6 units and a clear path connects it to you. It cannot return while another creature holds it, through a solid barrier, or while fixed in place. Returning is not an attack and moves no other object.</p><p>Does not itself make an item throwable or grant a ranged attack. Two-handed use still requires the other hand.</p>",
     "flavor": "<p>Recovering thrown, dropped, or disarmed equipment without another Action.</p>"
   },
-  "folder": "3216b00ec364f4c1",
+  "folder": "7b9618b2952002be",
   "flags": {},
   "ownership": {
     "default": 0

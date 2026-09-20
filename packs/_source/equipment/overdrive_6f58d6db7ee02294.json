@@ -11,7 +11,7 @@
     "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p><strong>Overdrive</strong> (EC11)</p><p><em>ACTION &bull; Burn 2 &bull; USES 1 &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Automatic; burn the printed dice</p><p><strong>Range / Targeting:</strong> 3 units / Self or one willing ally</p><p><strong>Effect:</strong> At the start of the target’s next Turn, add 3 dice to its Action Pool and increase its base Movement by 3 units for that Turn. Added dice do not increase maximum rolled dice and expire with that Action Pool. The target can benefit from Overdrive only once per Combat, even from different copies.</p><p><em>Design note: Does not grant an extra Turn or let the target act immediately. No extra Reaction dice.</em></p>",
     "flavor": "<p>A deliberately timed burst of next-turn capacity.</p>"
   },
-  "folder": "3216b00ec364f4c1",
+  "folder": "a8b774634a5ae5c5",
   "flags": {},
   "ownership": {
     "default": 0

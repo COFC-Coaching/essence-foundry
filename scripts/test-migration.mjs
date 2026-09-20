@@ -114,6 +114,65 @@ check("blank value allowed where the field permits it",
   migrate(EssenceNpcData, { grade: "" }).grade, "");
 check("condition with no classification stays absent", migrate(EssenceConditionData, {}), {});
 
+console.log("\n--- a listed choice the field would still reject ---");
+// Foundry's StringField rejects "" whenever `choices` is set unless the field also declares
+// `blank: true`, so `choices: ["", "intellect"]` without it rejects its own `initial: ""` and
+// invalidates every document holding the default. This shipped once, on the Character model's
+// nonCombatSkills[].source, and was fixed in 0.7.5 by adding blank: true. These tests cover the
+// migrator's side of it: membership in `choices` is not the same as being accepted, so the next
+// field written with this trap is repaired rather than passed straight through to be rejected.
+const { migrateSource } = await import("../module/data/migration.mjs");
+class BlankTrapModel extends TypeDataModel {
+  static defineSchema() {
+    return {
+      trap: new StringField({ initial: "", choices: ["", "intellect"] }),              // no blank
+      fine: new StringField({ initial: "", blank: true, choices: ["", "intellect"] })  // blank ok
+    };
+  }
+  static migrateData(source) { return migrateSource(this, super.migrateData(source)); }
+}
+check("blank rejected by the field is repaired, not passed through",
+  migrate(BlankTrapModel, { trap: "" }).trap, "intellect");
+check("blank the field explicitly permits is left alone",
+  migrate(BlankTrapModel, { fine: "" }).fine, "");
+check("fallback never returns a value the field would reject",
+  migrate(BlankTrapModel, { trap: "nonsense" }).trap, "intellect");
+check("the real character model accepts its own default now that blank:true is set",
+  migrate(EssenceCharacterData, { nonCombatSkills: [{ source: "" }] }).nonCombatSkills,
+  [{ source: "" }]);
+
+console.log("\n--- no schema may reject its own default (the nonCombatSkills.source trap) ---");
+// The migrator repairs this if it ships, but repairing it means resetting a GM's value to a
+// default. Far better to never ship it. This walks EVERY registered model's real schema and fails
+// the build on any StringField whose `choices` list includes "" without `blank: true` — the exact
+// shape that invalidated every character holding the default in 0.7.1 through 0.7.4.
+const ALL_MODELS = {
+  character: EssenceCharacterData, npc: EssenceNpcData, monster: EssenceMonsterData,
+  manifestation: (await import("../module/data/actor-manifestation.mjs")).default,
+  equipment: EssenceEquipmentData, condition: EssenceConditionData, chassis: EssenceChassisData,
+  ...(await import("../module/data/item-card.mjs")),
+  ...(await import("../module/data/item-component.mjs")),
+  ...(await import("../module/data/item-origin.mjs"))
+};
+
+function findBlankTraps(field, path, found) {
+  if (field?.fields) {
+    for (const [k, sub] of Object.entries(field.fields)) findBlankTraps(sub, `${path}.${k}`, found);
+    return found;
+  }
+  if (field?.element) return findBlankTraps(field.element, `${path}[]`, found);
+  const c = Array.isArray(field?.choices) ? field.choices : null;
+  if (c?.includes("") && !field.blank) found.push(path);
+  return found;
+}
+
+const traps = [];
+for (const [name, Model] of Object.entries(ALL_MODELS)) {
+  if (typeof Model?.defineSchema !== "function") continue;
+  findBlankTraps(Model.schema, name, traps);
+}
+check("every model accepts its own blank default", traps, []);
+
 console.log("\n--- must never throw ---");
 check("null source", migrate(EssenceCharacterData, null), null);
 check("undefined source", migrate(EssenceCharacterData, undefined), undefined);

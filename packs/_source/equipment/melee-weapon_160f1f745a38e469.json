@@ -1,0 +1,11 @@
+{
+  "_id": "160f1f745a38e469",
+  "name": "Melee Weapon",
+  "type": "Item",
+  "folder": "d174e886ce945b8c",
+  "sort": 100000,
+  "sorting": "a",
+  "color": null,
+  "flags": {},
+  "_key": "!folders!160f1f745a38e469"
+}

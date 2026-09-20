@@ -3,7 +3,7 @@ import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import { capitalize, computeReachGate, computeSlotUsage } from "../utils.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
-import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
+import { EQUIPMENT_CATEGORY_LABELS, MODULAR_EQUIPMENT_CATEGORIES } from "../data/item-card.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { DocumentSheetV2 } = foundry.applications.api;
@@ -80,18 +80,18 @@ function creationBonusFor(distinctionItem) {
   };
 }
 
+/** Wounds and Influence are deliberately absent: both are play state, not creation choices. A new
+ *  character starts at 0 Resilience, 0 Temporary Wounds, an empty Core Wound track and unmarked
+ *  Influence, and every one of those fields is already editable on the character sheet once play
+ *  starts — a creation step that only ever showed empty tracks was two clicks of nothing. */
 const STEPS = [
-  "Concept", "Identity", "Attributes", "Wounds", "Combat Styles",
-  "Influence", "Non-Combat", "Passive Features", "Equipment", "Finalize"
+  "Concept", "Identity", "Attributes", "Combat Styles",
+  "Non-Combat", "Passive Features", "Equipment", "Finalize"
 ];
 
-function pips(value, max = 5) {
-  return Array.from({ length: max }, (_, i) => i < value);
-}
-
 /**
- * Walks the same 10 steps as the web app's character-builder.tsx (Concept, Identity, Attributes,
- * Wounds, Combat Styles, Influence, Non-Combat, Passive Features, Equipment, Finalize), writing
+ * Walks the creation steps (Concept, Identity, Attributes, Combat Styles, Non-Combat, Passive
+ * Features, Equipment, Finalize — see STEPS for why Wounds and Influence aren't among them), writing
  * directly to an existing Actor rather than building a separate draft — every choice here is a
  * normal actor.update()/createEmbeddedDocuments() call, so closing and reopening the wizard loses
  * nothing and the main sheet already reflects every choice live.
@@ -117,8 +117,6 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       toggleExpertise: EssenceCharacterWizard.#onToggleExpertise,
       grantBasicCards: EssenceCharacterWizard.#onGrantBasicCards,
       toggleCard: EssenceCharacterWizard.#onToggleCard,
-      toggleTempInfluence: EssenceCharacterWizard.#onToggleTempInfluence,
-      toggleCoreInfluence: EssenceCharacterWizard.#onToggleCoreInfluence,
       addNonCombatSkill: EssenceCharacterWizard.#onAddNonCombatSkill,
       addIntellectSkill: EssenceCharacterWizard.#onAddIntellectSkill,
       deleteNonCombatSkill: EssenceCharacterWizard.#onDeleteNonCombatSkill,
@@ -126,6 +124,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       addPassiveFeature: EssenceCharacterWizard.#onAddPassiveFeature,
       deletePassiveFeature: EssenceCharacterWizard.#onDeletePassiveFeature,
       toggleEquipment: EssenceCharacterWizard.#onToggleEquipment,
+      buildEquipment: EssenceCharacterWizard.#onBuildEquipment,
       previewItem: EssenceCharacterWizard.#onPreviewItem,
       toggleTraitChosen: EssenceCharacterWizard.#onToggleTraitChosen,
       toggleSubChoiceOption: EssenceCharacterWizard.#onToggleSubChoiceOption,
@@ -145,6 +144,8 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
   #cardSort = "rank";
   #equipmentSearch = "";
   #equipmentCategoryFilter = "all";
+  #equipmentTypeFilter = "equipment";
+  #buildCategory = "weapon";
   #refocusSearch = null;
   /** Last known scrollTop of the current step's `.wizard-body` (the whole step's content area)
    *  and its inner `.wizard-scroll-list` (Qualifying Cards / Equipment Library), each keyed by
@@ -168,6 +169,8 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     this.#wireSearch("cards", (v) => { this.#cardSearch = v; });
     this.#wireSearch("equipment", (v) => { this.#equipmentSearch = v; });
     this.#wireSelect("equipmentCategory", (v) => { this.#equipmentCategoryFilter = v; });
+    this.#wireSelect("equipmentType", (v) => { this.#equipmentTypeFilter = v; });
+    this.#wireSelect("buildCategory", (v) => { this.#buildCategory = v; });
     this.#wireSelect("cardType", (v) => { this.#cardTypeFilter = v; });
     // Subtype is nested under Skill (each Skill has its own fixed 7 — see SUBTYPE_DATABASE), so
     // changing Skill resets a no-longer-relevant Subtype selection back to "all" rather than
@@ -271,12 +274,11 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     switch (this.#step) {
       case 1: await this.#prepareIdentity(context, speciesItem, heritageItem, distinctionItem); break;
       case 2: this.#prepareAttributes(context); break;
-      case 4: await this.#prepareCombatSkills(context, distinctionItem); break;
-      case 5: context.temporaryInfluencePips = pips(system.playState.currentTemporaryInfluence, system.temporaryInfluence); context.coreInfluencePips = system.coreInfluence; break;
-      case 6: this.#prepareNonCombat(context); break;
-      case 7: context.originFeatures = deriveOriginFeatures({ speciesItem, heritageItem, distinctionItem }); break;
-      case 8: await this.#prepareEquipment(context); break;
-      case 9: this.#prepareFinalize(context, speciesItem, heritageItem, distinctionItem); break;
+      case 3: await this.#prepareCombatSkills(context, distinctionItem); break;
+      case 4: this.#prepareNonCombat(context); break;
+      case 5: context.originFeatures = deriveOriginFeatures({ speciesItem, heritageItem, distinctionItem }); break;
+      case 6: await this.#prepareEquipment(context); break;
+      case 7: this.#prepareFinalize(context, speciesItem, heritageItem, distinctionItem); break;
     }
     return context;
   }
@@ -448,9 +450,26 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     context.nonCombatEntries = system.nonCombatSkills.map((s, i) => ({ ...s, i })).filter((s) => s.source !== "intellect");
   }
 
+  /** Equipment plus the three Component types — the Wizard's loadout lists and its Library both
+   *  cover all four now, matching how the character sheet's own Inventory/Armory tables already
+   *  fold Chassis/Fitting/Augment into the same three slots (actor-sheet.mjs). */
+  static #EQUIPMENT_STEP_TYPES = ["equipment", "chassis", "fitting", "augment"];
+
+  /** One row's grey subtitle, for both the owned loadout lists and the Library — an assembled
+   *  Equipment item is identified by Category and Reach, a Component by what kind of part it is,
+   *  for what category, at what Tier (it has no Reach cost of its own). */
+  static #rowMeta(doc) {
+    if (doc.type === "equipment") {
+      const label = EQUIPMENT_CATEGORY_LABELS[doc.system.category] ?? capitalize(doc.system.category);
+      return `${label} · ${game.i18n.localize("ESSENCE.Item.Equipment.Reach")} ${doc.system.cost}`;
+    }
+    return [capitalize(doc.type), EQUIPMENT_CATEGORY_LABELS[doc.system.category], doc.system.tier ? `T${doc.system.tier}` : null]
+      .filter(Boolean).join(" · ");
+  }
+
   async #prepareEquipment(context) {
     const system = context.system;
-    const owned = this.document.items.filter((i) => i.type === "equipment");
+    const owned = this.document.items.filter((i) => EssenceCharacterWizard.#EQUIPMENT_STEP_TYPES.includes(i.type));
     // See EssenceActorSheet#_prepareContext for the full Reach-gating reasoning (computeReachGate()
     // in utils.mjs). Soft, non-blocking flag only — the Wizard still lets you add an over-Reach
     // item, same as the character sheet does.
@@ -460,34 +479,69 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       uuid: i.uuid,
       name: i.name,
       system: i.system,
-      overReach: computeReachGate(i.system, context.reach).overReach
+      meta: EssenceCharacterWizard.#rowMeta(i),
+      overReach: i.type === "equipment" && computeReachGate(i.system, context.reach).overReach
     });
-    context.inventoryItems = owned.filter((i) => i.system.slot === "inventory").map(equipmentRow);
-    context.inventoryUsed = context.inventoryItems.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
+    // Augments are never "carried" independently of what they're mounted in — same rule the
+    // character sheet applies (actor-sheet.mjs), so they always list under Armory.
+    const inSlot = (slot) => owned.filter((i) => (i.type === "augment" ? slot === "armory" : i.system.slot === slot));
+    context.inventoryItems = inSlot("inventory").map(equipmentRow);
+    // computeSlotUsage rather than a plain count: a loose Component is ½ a slot, and one already
+    // assembled into an equipment Item is free (utils.mjs).
+    context.inventoryUsed = computeSlotUsage(this.document.items, "inventory");
     context.inventoryLimit = system.inventoryLimit;
     // Armory (§ Armory and Inventory Capacity) — previously the Wizard only ever let a player add
     // to Inventory; there was no way to stock the Armory during character creation at all, so
     // every new character started with an empty one regardless of what they'd bought/found.
-    context.armoryItems = owned.filter((i) => i.system.slot === "armory").map(equipmentRow);
+    context.armoryItems = inSlot("armory").map(equipmentRow);
     context.armoryUsed = computeSlotUsage(this.document.items, "armory");
     context.armoryLimit = system.armoryLimit;
     // Item Grants (Quartermaster's Due, Internal Compartment, ...) — see item-grants.mjs and
     // EssenceActorSheet#_prepareContext for the full reasoning.
-    context.itemGrants = deriveActiveGrants({ speciesItem: context.speciesItem, heritageItem: context.heritageItem }, owned);
+    // Equipment only: a grant is satisfied by a whole item (`reachExceptionSource`), never by a
+    // loose Component, and `owned` now carries Components too.
+    context.itemGrants = deriveActiveGrants({ speciesItem: context.speciesItem, heritageItem: context.heritageItem }, owned.filter((i) => i.type === "equipment"));
 
-    const pack = await (game.packs.get("essence-system.equipment")?.getDocuments() ?? []);
-    const ownedNames = new Set(owned.map((i) => i.name));
+    let pack = [];
+    try {
+      pack = await (game.packs.get("essence-system.equipment")?.getDocuments() ?? []);
+    } catch (err) {
+      console.warn("Essence | Could not read the equipment compendium for this user", err);
+    }
+    const ownedNames = new Set(owned.map((i) => `${i.type}:${i.name}`));
     const search = this.#equipmentSearch.trim().toLowerCase();
     // Chassis/Fitting/Augment share this pack as folders (see build-packs.mjs's
-    // COMPONENT_TYPES_FOR_FOLDERS) — this browser is Equipment-only, so exclude them explicitly
-    // rather than relying on their differently-shaped `system` data to just happen not to match.
+    // COMPONENT_TYPES_FOR_FOLDERS). The Library used to hard-exclude them and show `equipment`
+    // only — which, after the modular catalog migration retired every flat weapon/armor/shield/
+    // implement template, left a character-creating player with nothing to browse but Toolkits and
+    // Consumable Kits. The Type filter below now covers all four, so a player can stock loose
+    // Components too; Equipment stays the default view.
     context.browsableEquipment = pack
-      .filter((d) => d.type === "equipment")
-      .filter((d) => !ownedNames.has(d.name))
+      .filter((d) => this.#equipmentTypeFilter === "all"
+        ? EssenceCharacterWizard.#EQUIPMENT_STEP_TYPES.includes(d.type)
+        : d.type === this.#equipmentTypeFilter)
+      .filter((d) => !ownedNames.has(`${d.type}:${d.name}`))
       .filter((d) => !search || d.name.toLowerCase().includes(search))
-      .filter((d) => this.#equipmentCategoryFilter === "all" || d.system.category === this.#equipmentCategoryFilter)
+      // Augments have no category at all (printed free-text compatibility instead), so a category
+      // filter can't apply to them — they'd otherwise vanish entirely whenever one is set.
+      .filter((d) => this.#equipmentCategoryFilter === "all" || d.type === "augment" || d.system.category === this.#equipmentCategoryFilter)
       .sort((a, b) => a.name.localeCompare(b.name))
-      .map((d) => ({ id: d.id, uuid: d.uuid, name: d.name, system: d.system }));
+      .map((d) => ({
+        id: d.id,
+        uuid: d.uuid,
+        name: d.name,
+        system: d.system,
+        // An Augment has no slot of its own, so it's only ever offered an Armory button.
+        isAugment: d.type === "augment",
+        meta: EssenceCharacterWizard.#rowMeta(d)
+      }));
+    context.equipmentTypeFilter = this.#equipmentTypeFilter;
+    context.equipmentTypeOptions = EssenceCharacterWizard.#EQUIPMENT_STEP_TYPES.map((t) => ({ value: t, label: capitalize(t) }));
+    // The five categories that are always an assembled Chassis + Fitting — what "build a new one"
+    // can actually mean. Toolkits/Consumable Kits/Gear aren't modular, and are added from the
+    // Library as whole pre-fab items instead.
+    context.buildCategoryOptions = MODULAR_EQUIPMENT_CATEGORIES.map((value) => ({ value, label: EQUIPMENT_CATEGORY_LABELS[value] }));
+    context.buildCategory = this.#buildCategory;
     context.equipmentSearch = this.#equipmentSearch;
     // Equipment's "group" is its Category (weapon/armor/shield/implement/toolkit/consumable-kit/
     // gear — see EssenceEquipmentData's schema in item-card.mjs). Offered as a fixed list rather
@@ -507,8 +561,9 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const ncSpent = system.nonCombatSkills.reduce((sum, s) => sum + Math.max(0, (s.rating || 0) - (s.source === "intellect" ? 1 : 0)), 0);
     const intellectGranted = system.nonCombatSkills.filter((s) => s.source === "intellect").length;
     const intellectCount = system.intellect ?? 0;
-    const inventory = this.document.items.filter((i) => i.type === "equipment" && i.system.slot === "inventory");
-    const inventoryUsed = inventory.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
+    // Matches the Equipment step's own accounting — computeSlotUsage counts a loose Component as
+    // ½ a slot and an assembled one as free, which a plain per-item count of `equipment` missed.
+    const inventoryUsed = computeSlotUsage(this.document.items, "inventory");
     const bonus = creationBonusFor(distinctionItem);
     const expertiseCount = EXPERTISE_COUNT + bonus.expertise;
     const cardLimit = CARD_LIMIT + bonus.actionCards;
@@ -571,8 +626,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
    * Inline Trait checkbox, capped at `traitCount` (mirrors #onToggleExpertise's
    * capped-array shape). Writes the whole `traits` array back to the embedded Species Item —
    * same read-modify-write pattern as EssenceItemSheetBase#onAddArrayRow/#onDeleteArrayRow
-   * (item-sheet.mjs) and this file's own #onToggleCoreInfluence, just targeting speciesItem instead
-   * of the Actor.
+   * (item-sheet.mjs), just targeting speciesItem instead of the Actor.
    */
   static async #onToggleTraitChosen(event, target) {
     const speciesItem = this.document.items.find((i) => i.type === "species");
@@ -747,23 +801,6 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     await this.document.createEmbeddedDocuments("Item", [sourceItem.toObject()]);
   }
 
-  static #onTogglePip(current, index) {
-    return current === index + 1 ? index : index + 1;
-  }
-
-  static async #onToggleTempInfluence(event, target) {
-    const i = Number(target.dataset.index);
-    const next = EssenceCharacterWizard.#onTogglePip(this.document.system.playState.currentTemporaryInfluence, i);
-    await this.document.update({ "system.playState.currentTemporaryInfluence": next });
-  }
-
-  static async #onToggleCoreInfluence(event, target) {
-    const i = Number(target.dataset.index);
-    const coreInfluence = this.document.system.coreInfluence.map((c) => ({ filled: c.filled }));
-    coreInfluence[i].filled = !coreInfluence[i].filled;
-    await this.document.update({ "system.coreInfluence": coreInfluence });
-  }
-
   static async #onAddNonCombatSkill() {
     const nonCombatSkills = this.document.system.nonCombatSkills.map((s) => ({ ...s }));
     nonCombatSkills.push({ name: "", rating: 0, source: "" });
@@ -826,9 +863,8 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
 
   /** `data-slot` ("inventory" or "armory") picks which capacity this Library "+" button adds to —
    *  see the two separate buttons per row in wizard.hbs's Equipment Library list. Missing/unknown
-   *  values default to "inventory" for backward compatibility with any other caller. Only Inventory
-   *  has a hard capacity check here (Armory's own over-limit handling is the Temporary-Influence
-   *  spend on the actor sheet, not a Wizard-time block — see computeSlotUsage/armoryLimit). */
+   *  values default to "inventory" for backward compatibility with any other caller. Capacity is
+   *  checked by #fitsInInventory below. */
   static async #onToggleEquipment(event, target) {
     const existing = this.document.items.get(target.dataset.itemId);
     if (existing) {
@@ -839,18 +875,63 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const sourceItem = await pack?.getDocument(target.dataset.id);
     if (!sourceItem) return;
     const slot = target.dataset.slot === "armory" ? "armory" : "inventory";
-    if (slot === "inventory") {
-      const owned = this.document.items.filter((i) => i.type === "equipment" && i.system.slot === "inventory");
-      const used = owned.reduce((sum, i) => sum + (i.system.slotCost || 1), 0);
-      const cost = sourceItem.system.slotCost || 1;
-      if (used + cost > this.document.system.inventoryLimit) {
-        ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ExceedsInventoryLimit"));
-        return;
-      }
-    }
+    if (slot === "inventory" && !this.#fitsInInventory(EssenceCharacterWizard.#slotCostOf(sourceItem))) return;
     const data = sourceItem.toObject();
-    data.system.slot = slot;
+    delete data._id;
+    delete data.folder;
+    foundry.utils.setProperty(data, "_stats.compendiumSource", sourceItem.uuid);
+    // An Augment has no slot of its own (it's never carried independently of what it's mounted
+    // in) — its schema has no `slot` field at all, so writing one would just be dropped.
+    if (data.system && sourceItem.type !== "augment") data.system.slot = slot;
     await this.document.createEmbeddedDocuments("Item", [data]);
+  }
+
+  /** What one more item of this kind costs against Inventory/Armory capacity — the same ½-slot
+   *  Component / 0-slot Augment rule computeSlotUsage (utils.mjs) applies to what's already there. */
+  static #slotCostOf(item) {
+    if (item.type === "augment") return 0;
+    if (item.type === "chassis" || item.type === "fitting") return 0.5;
+    return item.system.slotCost || 1;
+  }
+
+  /** Warns and returns false when adding `cost` more slots would breach the Inventory limit. Only
+   *  Inventory is hard-blocked here — Armory's over-limit handling is the Temporary-Influence
+   *  spend on the actor sheet, not a Wizard-time refusal. */
+  #fitsInInventory(cost) {
+    const used = computeSlotUsage(this.document.items, "inventory");
+    if (used + cost > this.document.system.inventoryLimit) {
+      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ExceedsInventoryLimit"));
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * "Build New" — creates an empty modular equipment Item (Melee Weapon/Ranged Weapon/Armor/
+   * Shield/Implement) in the chosen slot and opens its sheet so the player can assemble it from
+   * the Chassis/Fitting catalog right there. Character creation previously had no way to make one
+   * at all: the modular catalog migration retired every flat pre-fab weapon and armor template, so
+   * the Library a player browses here holds only Toolkits and Consumable Kits, and building your
+   * own gear meant finishing the Wizard first and then finding "+ Add Item" on the sheet.
+   * `essence.mjs` force-sets isModular for these five categories on create, so the new Item lands
+   * ready to assemble.
+   */
+  static async #onBuildEquipment(event, target) {
+    const slot = target.dataset.slot === "armory" ? "armory" : "inventory";
+    // Read from wizard state, not the DOM: #wireSelect re-renders on change, so by the time this
+    // click lands the <select> element the player chose from has already been replaced.
+    const category = this.#buildCategory;
+    if (slot === "inventory" && !this.#fitsInInventory(1)) return;
+    const name = game.i18n.format("ESSENCE.Wizard.NewEquipmentNamed", {
+      label: EQUIPMENT_CATEGORY_LABELS[category] ?? capitalize(category)
+    });
+    const [created] = await this.document.createEmbeddedDocuments("Item", [{
+      name,
+      type: "equipment",
+      img: "icons/svg/item-bag.svg",
+      system: { slot, category }
+    }]);
+    created?.sheet.render(true);
   }
 
   /** See EssenceActorSheet#onChooseGrantedItem for the full reasoning — identical behavior here,

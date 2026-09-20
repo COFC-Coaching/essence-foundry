@@ -406,6 +406,62 @@ const EQUIPMENT_CATEGORIES_FOR_FOLDERS = ["weapon", "ranged", "armor", "shield",
  * EQUIPMENT_CATEGORIES_FOR_FOLDERS's values since mapCategory() never returns them.
  */
 const COMPONENT_TYPES_FOR_FOLDERS = ["chassis", "fitting", "augment"];
+/**
+ * One folder per Chassis/Fitting category NESTED under its type folder, in rules order rather than
+ * alphabetical (hence the explicit sort below): a flat "Chassis" folder listing Strikers, Shells,
+ * Focuses, Shields and Launchers interleaved alphabetically gave a player browsing for a melee
+ * weapon no way to tell which entries were even relevant to them. The keys are the same five
+ * MODULAR_EQUIPMENT_CATEGORIES values a Component's `system.category` stores (item-component.mjs),
+ * so a folder and the equipment sheet's own category filter always agree on what belongs where.
+ * Augments deliberately get no category split — they have no `category` field at all (Source A
+ * leaves Augment compatibility as printed free text), so they're bucketed by `kind` instead.
+ */
+const COMPONENT_CATEGORY_FOLDERS = [
+  ["weapon", "Melee Weapon"],
+  ["ranged", "Ranged Weapon"],
+  ["armor", "Armor"],
+  ["shield", "Shield"],
+  ["implement", "Implement"]
+];
+const AUGMENT_KIND_FOLDERS = [["function", "Function"], ["support", "Support"]];
+
+/**
+ * Writes the three component type folders plus their children, returning a map keyed both by bare
+ * type ("chassis" — the fallback for a Component whose category/kind is blank or unrecognized) and
+ * by "type:bucket" ("chassis:ranged", "augment:support").
+ */
+function writeComponentFolders(packName) {
+  const map = {};
+  for (const type of COMPONENT_TYPES_FOR_FOLDERS) {
+    const parentId = stableId(`folder:${packName}:${type}`);
+    writeSourceDoc(packName, {
+      _id: parentId,
+      name: type[0].toUpperCase() + type.slice(1),
+      type: "Item",
+      folder: null,
+      sorting: "a",
+      color: null,
+      flags: {}
+    }, "folders");
+    map[type] = parentId;
+    const buckets = type === "augment" ? AUGMENT_KIND_FOLDERS : COMPONENT_CATEGORY_FOLDERS;
+    buckets.forEach(([key, label], i) => {
+      const _id = stableId(`folder:${packName}:${type}:${key}`);
+      writeSourceDoc(packName, {
+        _id,
+        name: label,
+        type: "Item",
+        folder: parentId,
+        sort: (i + 1) * 100000,
+        sorting: "a",
+        color: null,
+        flags: {}
+      }, "folders");
+      map[`${type}:${key}`] = _id;
+    });
+  }
+  return map;
+}
 
 /**
  * Same purpose as writeCombatSkillFolders but keyed by Equipment's `category` field (weapon/armor/
@@ -852,7 +908,7 @@ function chassisToItem(c, folderMap) {
       mounts: Array.from({ length: c.mountCount || 1 }, () => ({ linkedWith: null })),
       compatibleFittingCategory: c.compatibleFittingCategory || ""
     },
-    folder: folderMap ? (folderMap["chassis"] ?? null) : null,
+    folder: folderMap ? (folderMap[`chassis:${c.category}`] ?? folderMap["chassis"] ?? null) : null,
     flags: {},
     ownership: { default: 0 }
   };
@@ -882,7 +938,7 @@ function fittingToItem(f, folderMap) {
       reconfigureCategory: f.reconfigureCategory || "simple",
       reconfigureCostOverride: null
     },
-    folder: folderMap ? (folderMap["fitting"] ?? null) : null,
+    folder: folderMap ? (folderMap[`fitting:${f.category}`] ?? folderMap["fitting"] ?? null) : null,
     flags: {},
     ownership: { default: 0 }
   };
@@ -903,7 +959,7 @@ function augmentToItem(a, folderMap) {
       effect: (a.effect || "") + (a.special || ""),
       flavor: a.flavor || ""
     },
-    folder: folderMap ? (folderMap["augment"] ?? null) : null,
+    folder: folderMap ? (folderMap[`augment:${a.kind}`] ?? folderMap["augment"] ?? null) : null,
     flags: {},
     ownership: { default: 0 }
   };
@@ -1252,7 +1308,7 @@ async function main() {
     // Chassis/Fitting/Augment folders (see COMPONENT_TYPES_FOR_FOLDERS) — the playtest catalog
     // below is the first pre-authored content for these types; a GM-authored one (via
     // content-wizard.mjs) lands in these same folders alongside it.
-    const componentFolders = writeCategoryFolders("equipment", COMPONENT_TYPES_FOR_FOLDERS);
+    const componentFolders = writeComponentFolders("equipment");
 
     // The old flat weapon/armor/shield/implement rows are retired: the playtest catalog below
     // (chassisData/fittingData/augmentData) migrates every one of them 1:1 into a Chassis+Fitting

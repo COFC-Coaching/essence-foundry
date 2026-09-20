@@ -24,17 +24,27 @@ import { parseSigned } from "../utils.mjs";
  * Item actually embedded on the actor (no embedded Chassis/Fitting existed for them at all), so
  * deriveEquipmentStats() resolved nothing and every Effect cell rendered blank. An owned item is
  * still meant to hold its own embedded copies going forward (that's what lets a player track that
- * copy's Augment Uses independently, per item-sheet.mjs's own chassisOptions/fittingOptions,
- * which stay actor-scoped) — this fallback only makes already-stored references that skipped
- * embedding still resolve to *something* displayable instead of silently showing nothing.
+ * copy's Augment Uses independently) — the pickers in item-sheet.mjs now offer the whole catalog
+ * and embed a copy on selection, so that stays true without gating what a player can build; this
+ * fallback only makes already-stored references that skipped embedding still resolve to
+ * *something* displayable instead of silently showing nothing.
+ * Also returns the raw `catalog` it loaded so a caller that needs the full component list (the
+ * equipment sheet's Chassis/Fitting/Augment pickers) doesn't have to call `pack.getDocuments()` a
+ * second time on the same render.
  * @param {Actor} actor
- * @returns {Promise<{get: (id: string) => Item|null}>}
+ * @returns {Promise<{get: (id: string) => Item|null, catalog: Item[]}>}
  */
 export async function buildEquipmentResolver(actor) {
   const pack = game.packs.get("essence-system.equipment");
-  const compendiumDocs = pack ? await pack.getDocuments() : [];
+  // A player whose GM has restricted the pack gets an empty catalog rather than a thrown render.
+  let compendiumDocs = [];
+  try {
+    compendiumDocs = pack ? await pack.getDocuments() : [];
+  } catch (err) {
+    console.warn("Essence | Could not read the equipment compendium for this user", err);
+  }
   const byCompendiumId = new Map(compendiumDocs.map((d) => [d.id, d]));
-  return { get: (id) => actor.items.get(id) ?? byCompendiumId.get(id) ?? null };
+  return { get: (id) => actor.items.get(id) ?? byCompendiumId.get(id) ?? null, catalog: compendiumDocs };
 }
 
 /**

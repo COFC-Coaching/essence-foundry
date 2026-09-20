@@ -11,7 +11,7 @@
     "effect": "<p><strong>Requirement:</strong> An active compatible modular item with one empty mount.</p><p><strong>Sever</strong> (EC10)</p><p><em>ACTION &bull; Roll 3+ &bull; USES 2 &bull; RESOURCE 0</em></p><p><strong>Resolution:</strong> Equipment + Anima vs Harmony</p><p><strong>Range / Targeting:</strong> 6 units / Single creature</p><p><strong>Effect:</strong> On a hit, deal 2 Necrotic Damage. You may also end one temporary beneficial Combat effect currently affecting the target. You must be able to identify the effect; this does not reveal hidden effects. It cannot remove an inherent feature, an equipped item’s continuous property, a Specialty Condition, or a Wound Condition.</p><p><strong>Surge 1: Deal +1 Necrotic Damage. Once per use.</strong></p><p><strong>Surge 2: Give 1 point of this Damage Breach. Once per use; no additional Damage.</strong></p><p><em>Design note: Ends one existing application, not the source ability. A continuing external aura may reapply according to its own rules.</em></p>",
     "flavor": "<p>Harming a target while removing one temporary combat advantage.</p>"
   },
-  "folder": "3216b00ec364f4c1",
+  "folder": "a8b774634a5ae5c5",
   "flags": {},
   "ownership": {
     "default": 0

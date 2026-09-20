@@ -81,6 +81,12 @@
           <button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempWound" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="{{localize 'ESSENCE.Sheet.TemporaryWoundAria' n=(addOne i)}}"></button>
         {{/each}}
       </span>
+      {{!-- How many Temporary Wounds gear and features grant. Nothing derives this field and no
+            Active Effect writes it, so it needs a real input somewhere; it used to live on the
+            Character Wizard's Wounds step, which was removed as play state. --}}
+      <label class="muted" title="{{localize 'ESSENCE.Sheet.TemporaryWoundsAvailableHint'}}">{{localize "ESSENCE.Common.Available"}}
+        <input type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" style="width:3em" min="0" max="5">
+      </label>
     </div>
     <div class="wound-block">
       <span class="attr-label">{{localize "ESSENCE.Common.CoreWounds"}}</span>

@@ -38,21 +38,36 @@ const TYPE_CONFIG = {
     // Chassis/Fitting/Augment used to be their own separate (always-empty) compendium packs —
     // folded into "equipment" as folders instead (see build-packs.mjs's COMPONENT_TYPES_FOR_FOLDERS)
     // so a GM authoring reusable Components has one shared library, not four mostly-empty tabs.
-    folder: "Chassis"
+    // Each type folder is now split by category (Melee Weapon/Ranged Weapon/Armor/Shield/
+    // Implement — build-packs.mjs's COMPONENT_CATEGORY_FOLDERS), so these track their Category
+    // field into the right child folder exactly as Equipment tracks its own.
+    folder: "Chassis",
+    folderBy: "system.category",
+    folderLabels: EQUIPMENT_CATEGORY_LABELS
   },
   fitting: {
     label: "Fitting", pack: "essence-system.equipment", img: "icons/svg/item-bag.svg",
     steps: ["Type & Name", "Details", "Description", "Done"],
     arrayDefaults: {},
-    folder: "Fitting"
+    folder: "Fitting",
+    folderBy: "system.category",
+    folderLabels: EQUIPMENT_CATEGORY_LABELS
   },
   augment: {
     label: "Augment", pack: "essence-system.equipment", img: "icons/svg/upgrade.svg",
     steps: ["Type & Name", "Details", "Description", "Done"],
     arrayDefaults: {},
-    folder: "Augment"
+    folder: "Augment",
+    // Augments have no `category` at all — see build-packs.mjs's AUGMENT_KIND_FOLDERS.
+    folderBy: "system.kind",
+    folderLabels: { function: "Function", support: "Support" }
   }
 };
+
+/** A compendium Folder's parent id, whether `folder` resolves to a document or stays a raw id. */
+function parentFolderId(folder) {
+  return typeof folder?.folder === "string" ? folder.folder : (folder?.folder?.id ?? null);
+}
 
 /** Foundry's own assignable "Create Items" permission (World Settings > Configure Permissions) — GMs always pass. */
 export function canCreateContent() {
@@ -163,17 +178,32 @@ export default class EssenceContentWizard extends HandlebarsApplicationMixin(App
   }
 
   /**
-   * Keeps an Equipment draft's Folder in sync with its Category field (see TYPE_CONFIG.equipment's
-   * `folderBy`) — Weapon/Armor/Tool/Gear are the same folders build-packs.mjs's
-   * writeCategoryFolders() seeds ahead of time, so a GM-authored item lands in the same folder
-   * group a pre-loaded one with that Category would.
+   * Keeps a draft's Folder in sync with whichever field its TYPE_CONFIG names in `folderBy` —
+   * Equipment tracks Category into the top-level Weapon/Armor/Toolkit/Gear folders build-packs.mjs
+   * seeds, and a Chassis/Fitting/Augment tracks Category (or Kind) into the matching child folder
+   * under Chassis/Fitting/Augment, so a GM-authored one lands exactly where a pre-loaded one with
+   * that Category would.
+   *
+   * The match is scoped to one level of the tree on purpose: "Armor", "Shield" and "Implement" now
+   * each name BOTH a top-level equipment-category folder and a child of Chassis/Fitting, so an
+   * unscoped `find(f => f.name === ...)` could file a GM's new Chassis into the equipment folder
+   * (or vice versa) depending on pack order alone.
    */
-  async #syncCategoryFolder(category) {
+  async #syncCategoryFolder(value) {
     const cfg = TYPE_CONFIG[this.#type];
     const pack = game.packs.get(cfg.pack);
-    const folderName = category ? category[0].toUpperCase() + category.slice(1) : null;
-    const folder = folderName ? pack.folders.find((f) => f.name === folderName) : null;
-    await this.#doc.update({ folder: folder?.id ?? null });
+    const parent = cfg.folder ? pack.folders.find((f) => f.name === cfg.folder && !parentFolderId(f)) : null;
+    const parentId = parent?.id ?? null;
+    // Capitalize each hyphenated word exactly as writeCategoryFolders() names the folder it
+    // seeded — a bare capitalize left "consumable-kit" hunting for "Consumable-kit" and finding
+    // nothing, so every Consumable Kit a GM authored came out unfiled.
+    const folderName = cfg.folderLabels
+      ? (cfg.folderLabels[value] ?? null)
+      : (value ? value.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ") : null);
+    const folder = folderName ? pack.folders.find((f) => f.name === folderName && parentFolderId(f) === parentId) : null;
+    // Falls back to the type's own parent folder rather than unfiling the draft entirely when the
+    // category has no child folder (a blank Category, or a value predating this split).
+    await this.#doc.update({ folder: folder?.id ?? parentId });
   }
 
   #onArrayFieldChange(event) {
@@ -226,7 +256,7 @@ export default class EssenceContentWizard extends HandlebarsApplicationMixin(App
     // Fixed-folder types (Chassis/Fitting/Augment) get sorted immediately; category-tracking types
     // (Equipment) start unfoldered until the Details step's Category field is set — see
     // #syncCategoryFolder().
-    const folder = cfg.folder ? pack.folders.find((f) => f.name === cfg.folder) : null;
+    const folder = cfg.folder ? pack.folders.find((f) => f.name === cfg.folder && !parentFolderId(f)) : null;
     const [doc] = await Item.createDocuments([{ name, type: this.#type, img: cfg.img, folder: folder?.id ?? null }], { pack: pack.collection });
     this.#doc = doc;
     this.#step = 1;
