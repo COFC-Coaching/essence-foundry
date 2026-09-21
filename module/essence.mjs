@@ -138,6 +138,9 @@ Hooks.once("init", () => {
   game.settings.register("essence-system", "resyncedModularEquipmentBonusEffects", {
     scope: "world", config: false, type: Boolean, default: false
   });
+  game.settings.register("essence-system", "dedupedEquipmentBonusEffects", {
+    scope: "world", config: false, type: Boolean, default: false
+  });
   game.settings.register("essence-system", "migratedRoleToGrade", {
     scope: "world", config: false, type: Boolean, default: false
   });
@@ -239,6 +242,26 @@ Hooks.once("ready", async () => {
     }
   }
   await game.settings.set("essence-system", "resyncedModularEquipmentBonusEffects", true);
+});
+
+/**
+ * One-time repair: an equipment Item could end up carrying TWO "Equipment Bonus" ActiveEffects,
+ * both transferred and both applying, so its Fortitude/Resilience/Movement contribution was
+ * doubled — a +2 Resilience / -2 Movement Half-Plate reading as +4 and -4 on its owner. The race
+ * that produced them is fixed at source (syncEquipmentEffect now queues per Item), but the extra
+ * effect documents are already on disk in any world that hit it, and nothing re-triggers a sync
+ * for an item nobody happens to re-save. One world-wide pass clears them: the sync itself now
+ * deletes every duplicate it finds, so simply re-running it per equipment Item is the repair.
+ */
+Hooks.once("ready", async () => {
+  if (!game.user.isGM) return;
+  if (game.settings.get("essence-system", "dedupedEquipmentBonusEffects")) return;
+  for (const actor of game.actors) {
+    for (const item of actor.items) {
+      if (item.type === "equipment") await syncEquipmentEffect(item);
+    }
+  }
+  await game.settings.set("essence-system", "dedupedEquipmentBonusEffects", true);
 });
 
 /**

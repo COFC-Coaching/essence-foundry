@@ -30,6 +30,24 @@ and both use the same label.
 
 No world data is affected: these are displayed figures, not stored ones.
 
+**Equipment bonuses could be applied twice.** A Half-Plate assembled from a Fortress Shell (+2
+Resilience, -4 Movement) and Scout Rigging (+2 Movement) contributes +2 Resilience and -2 Movement,
+and its own sheet said exactly that — while its owner read Resilience (effective 4) and Movement
+(effective 6). Both doubled, because the item was carrying two "Equipment Bonus" ActiveEffects and
+Foundry stacks every transferred effect.
+
+`syncEquipmentEffect` awaits a compendium read before it looks for the existing effect, and the
+hooks that call it are fire-and-forget, so two triggers landing inside that window both found
+nothing and both created one. The two one-time `ready` migrations are a standing example: separate
+async hook callbacks run concurrently and both cover modular items. Syncs are now queued per Item,
+so the second call always sees what the first wrote.
+
+- The sync now deletes every duplicate it finds rather than updating the first and ignoring the
+  rest, and a one-time world-wide pass runs it over every equipment Item — so existing doubled
+  bonuses clear themselves on load without anyone re-saving gear by hand.
+- Nothing about the stacking rules changed: a Chassis and Fitting still sum into one item's
+  contribution, and separate prepared items still each contribute their own.
+
 ## 0.7.8
 
 **A Chassis or Fitting built into an item no longer gets its own Armory row.** Assembling a weapon

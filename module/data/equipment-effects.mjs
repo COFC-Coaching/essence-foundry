@@ -50,10 +50,31 @@ function changesEqual(a, b) {
   return a.every((c, i) => c.key === b[i].key && c.mode === b[i].mode && c.value === b[i].value);
 }
 
-/** @param {Item} item - an `equipment`-type Item; no-op for any other type or an unowned Item. */
-export async function syncEquipmentEffect(item) {
-  if (item.type !== "equipment" || !item.actor) return;
+/**
+ * Serializes syncs per Item. This function awaits `buildEquipmentResolver` (a compendium read)
+ * before it looks for the existing effect, and the hooks that call it are fire-and-forget — so two
+ * triggers landing inside that window BOTH saw no existing effect and BOTH created one. Two
+ * transferred effects then stacked: a +2 Resilience / -2 Movement Half-Plate applied +4 and -4,
+ * which is exactly how this was found. The two one-time `ready` migrations in essence.mjs are a
+ * standing example of the race — they're separate async hook callbacks, so they run concurrently
+ * and cover the same modular items. Queuing per Item means the second call always sees what the
+ * first one wrote.
+ * @param {Item} item - an `equipment`-type Item; no-op for any other type or an unowned Item.
+ */
+const inFlight = new Map();
+export function syncEquipmentEffect(item) {
+  if (item.type !== "equipment" || !item.actor) return Promise.resolve();
+  const key = item.uuid;
+  // A failed sync must not poison the queue for the next one, hence the swallow between links.
+  const next = (inFlight.get(key) ?? Promise.resolve()).catch(() => {}).then(() => applyEquipmentEffect(item));
+  inFlight.set(key, next);
+  next.catch(() => {}).then(() => {
+    if (inFlight.get(key) === next) inFlight.delete(key);
+  });
+  return next;
+}
 
+async function applyEquipmentEffect(item) {
   const sys = item.system;
   let fortitude, resilience, movement;
   if (sys.isModular) {
@@ -70,7 +91,13 @@ export async function syncEquipmentEffect(item) {
   const reach = Number(sys.reachBonus) || 0;
   const changes = buildChanges(fortitude, resilience, movement, reach);
   const disabled = item.system.slot !== "inventory";
-  const existing = item.effects.find((e) => e.getFlag(FLAG_SCOPE, FLAG_KEY));
+  // ALL of them, not the first: a world that already collected duplicates from the race described
+  // above needs them cleared, and the next sync is the natural moment to do it. Foundry stacks
+  // every transferred effect on the actor, so a stray second copy silently doubles the bonus.
+  const [existing, ...duplicates] = item.effects.filter((e) => e.getFlag(FLAG_SCOPE, FLAG_KEY));
+  if (duplicates.length) {
+    await item.deleteEmbeddedDocuments("ActiveEffect", duplicates.map((e) => e.id));
+  }
 
   if (!changes.length) {
     if (existing) await existing.delete();
