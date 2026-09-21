@@ -2,6 +2,22 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.7.7
+
+**Armory stops counting your Loadout.** The Armory header read "7 / 8" above a list of three
+items, because it was adding the Inventory bucket to the Armory bucket. Inventory, Temporary and
+Armory are three separate containers you move items between — each counts only what is actually in
+it, and an item in your Loadout occupies an Inventory slot and nothing else.
+
+This undoes a 2026-09-08 change that read the rulebook's "It is not eight reserve items plus four
+carried items" as meaning Armory's 8 included Inventory's 4. It doesn't. `computeSlotUsage`
+counting each slot bucket independently was right all along, and the Character Wizard's own Armory
+figure never adopted the combined math — so the sheet and the Wizard disagreed with each other
+until now. The superseded instruction in the implementation plan is struck through and marked
+do-not-re-apply so it isn't rebuilt from the plan later.
+
+No world data is affected: this is a displayed figure, not a stored one.
+
 ## 0.7.6
 
 **Every character can now assemble from the full component catalog.** Opening Modular Assembly on

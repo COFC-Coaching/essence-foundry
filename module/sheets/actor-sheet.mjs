@@ -545,12 +545,15 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // Inventory Capacity) — previously nothing read armoryLimit/inventoryLimit against
     // actual usage at all; see computeSlotUsage's own doc comment for the ½-slot Component rule.
     context.inventoryUsed = computeSlotUsage(this.actor.items, "inventory");
-    // V6 (plan §5.7, confirmed unchanged by design/v6-revision-delta.md §3.5): "It is not eight
-    // reserve items plus four carried items" — Armory's 8 slots are INCLUSIVE of the 4 Inventory
-    // ones, not a separate pool stacked on top. Previously this only summed the "armory" slot
-    // bucket on its own, so a full Inventory + full Armory silently allowed 12 total instead of 8 —
-    // a real gap the plan's own audit expected to already be fixed; it wasn't, so it's fixed here.
-    context.armoryUsed = context.inventoryUsed + computeSlotUsage(this.actor.items, "armory");
+    // Inventory, Temporary and Armory are three SEPARATE containers you move items between, so
+    // each counts only what is actually in it — an item in your Loadout occupies an Inventory slot
+    // and nothing else. A 2026-09-08 pass read plan §5.7's "It is not eight reserve items plus
+    // four carried items" as meaning Armory's 8 was inclusive of Inventory's 4 and added the two
+    // buckets together here; that reading is wrong (confirmed by the system's author), and it made
+    // the Armory header count items the Armory list doesn't even show. The Character Wizard's own
+    // Armory figure (character-wizard.mjs) always counted the one bucket, so this also puts the
+    // two screens back in agreement.
+    context.armoryUsed = computeSlotUsage(this.actor.items, "armory");
     // § Bringing More Than Your Inventory Limit — pays 1 ordinary Influence pressure for each
     // additional slot of capacity prepared beyond the normal limit. V6 (plan §5.3.5): excess
     // capacity rounds UP on the TOTAL (4.5 over supported capacity = 1 pressure, 5.5 = 2) — a
