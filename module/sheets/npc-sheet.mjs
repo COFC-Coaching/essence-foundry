@@ -5,7 +5,7 @@ import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQu
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, assembledComponentIds, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
 import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -323,9 +323,12 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       tracksUsedFlag: item.type !== "augment"
     });
     const equipment = this.actor.items.filter((i) => i.type === "equipment");
+    // See EssenceActorSheet's identical filter — a Component assembled into an item isn't separate
+    // gear and doesn't get its own row; only loose ones do.
+    const assembled = assembledComponentIds(this.actor.items);
     context.equipment = [
       ...equipment.map(equipmentView),
-      ...this.actor.items.filter((i) => ["chassis", "fitting", "augment"].includes(i.type)).map(componentView)
+      ...this.actor.items.filter((i) => ["chassis", "fitting", "augment"].includes(i.type) && !assembled.has(i.id)).map(componentView)
     ];
     context.itemGrants = deriveActiveGrants({ speciesItem, heritageItem }, equipment);
 

@@ -451,13 +451,28 @@ export function fittingReconfigureCost(fittingItem) {
   };
 }
 
-export function computeSlotUsage(items, slotKey) {
+/**
+ * The ids of every Component currently built INTO an assembled equipment Item on this actor — its
+ * Chassis, its Fitting, and any Augment installed in one of its Mounts. Such a Component is a part
+ * of that item, not a separate thing the character is carrying: it costs no capacity (below) and
+ * the sheets don't list it as its own Inventory/Armory row either. Shared between the two so the
+ * count and the list can never disagree about what's loose.
+ */
+export function assembledComponentIds(items) {
   const referenced = new Set();
   for (const item of items) {
     if (item.type !== "equipment") continue;
     if (item.system.chassisItemId) referenced.add(item.system.chassisItemId);
     if (item.system.fittingItemId) referenced.add(item.system.fittingItemId);
+    for (const mount of item.system.mounts ?? []) {
+      if (mount.augmentItemId) referenced.add(mount.augmentItemId);
+    }
   }
+  return referenced;
+}
+
+export function computeSlotUsage(items, slotKey) {
+  const referenced = assembledComponentIds(items);
   let used = 0;
   for (const item of items) {
     if (item.system?.slot !== slotKey) continue;

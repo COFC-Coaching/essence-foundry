@@ -1,7 +1,7 @@
 import { EXPERTISE_DATABASE, SUBTYPE_DATABASE } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
-import { capitalize, computeReachGate, computeSlotUsage } from "../utils.mjs";
+import { assembledComponentIds, capitalize, computeReachGate, computeSlotUsage } from "../utils.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
 import { EQUIPMENT_CATEGORY_LABELS, MODULAR_EQUIPMENT_CATEGORIES } from "../data/item-card.mjs";
 
@@ -483,8 +483,12 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       overReach: i.type === "equipment" && computeReachGate(i.system, context.reach).overReach
     });
     // Augments are never "carried" independently of what they're mounted in — same rule the
-    // character sheet applies (actor-sheet.mjs), so they always list under Armory.
-    const inSlot = (slot) => owned.filter((i) => (i.type === "augment" ? slot === "armory" : i.system.slot === slot));
+    // character sheet applies (actor-sheet.mjs), so they always list under Armory. A Component
+    // already assembled into an equipment Item isn't listed at all: it's part of that item, not
+    // separate gear, and it costs no capacity either (see assembledComponentIds in utils.mjs).
+    const assembled = assembledComponentIds(this.document.items);
+    const carried = owned.filter((i) => !assembled.has(i.id));
+    const inSlot = (slot) => carried.filter((i) => (i.type === "augment" ? slot === "armory" : i.system.slot === slot));
     context.inventoryItems = inSlot("inventory").map(equipmentRow);
     // computeSlotUsage rather than a plain count: a loose Component is ½ a slot, and one already
     // assembled into an equipment Item is free (utils.mjs).

@@ -2,6 +2,26 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.7.8
+
+**A Chassis or Fitting built into an item no longer gets its own Armory row.** Assembling a weapon
+from the catalog (0.7.6) embeds the character's own copy of each part, and those copies were
+listing as standalone Armory entries — so a player who built one weapon saw "Point Striker" and
+"Driving Grip" sitting in the Armory beside their real stored kit, while the Armory count read
+0 / 8. The count was right: an assembled Component has never cost capacity, because it's part of
+the item rather than something separately carried. The list was wrong, and the two describing
+different things is what made it look broken.
+
+Assembled Chassis, Fittings and mounted Augments are now filtered out of the Inventory, Temporary
+and Armory lists on the character sheet, the NPC sheet and the Character Wizard. Loose ones still
+list and still cost their half slot. Clear a Chassis back to "— none —" and its copy reappears as
+loose gear, which is what it then is. The set of assembled Component ids is now derived in one
+place (`assembledComponentIds` in utils.mjs) and shared with the capacity math, so the list and
+the number cannot drift apart again.
+
+This only showed up on items assembled since 0.7.6. Equipment assembled before it stores a
+compendium id with no embedded copy, so there was never a Component on the actor to list.
+
 ## 0.7.7
 
 **Armory stops counting your Loadout.** The Armory header read "7 / 8" above a list of three

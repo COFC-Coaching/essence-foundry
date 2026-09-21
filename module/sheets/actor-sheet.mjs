@@ -5,7 +5,7 @@ import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQu
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, computeSlotUsage, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, assembledComponentIds, computeSlotUsage, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
 import { availableSubtypes, enterManifestation } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -525,8 +525,16 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       effectText: equipmentEffectSummary(equipmentResolver, item)
     });
     const equipment = this.actor.items.filter((i) => i.type === "equipment");
-    const chassisAndFittings = this.actor.items.filter((i) => ["chassis", "fitting"].includes(i.type));
-    const augments = this.actor.items.filter((i) => i.type === "augment").map(componentView);
+    // A Component built into an assembled item is part of that item, not separate gear: the
+    // weapon's own row already carries its combined Effect, and its Modular Assembly section is
+    // where you change the parts. Listing them again as standalone rows put "Point Striker" and
+    // "Driving Grip" in the Armory beside real stored kit, while the Armory count (which has
+    // always exempted assembled Components from the ½-slot charge) said 0 — a list and a number
+    // describing different things. Loose Components still list, and still cost their half slot.
+    const assembled = assembledComponentIds(this.actor.items);
+    const looseComponents = this.actor.items.filter((i) => !assembled.has(i.id));
+    const chassisAndFittings = looseComponents.filter((i) => ["chassis", "fitting"].includes(i.type));
+    const augments = looseComponents.filter((i) => i.type === "augment").map(componentView);
     context.inventoryEquipment = [
       ...equipment.filter((i) => i.system.slot === "inventory").map(equipmentView),
       ...chassisAndFittings.filter((i) => i.system.slot === "inventory").map(componentView)
