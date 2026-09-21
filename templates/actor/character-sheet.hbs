@@ -485,7 +485,7 @@
   </div>
 
   <div class="equipment-drop-zone" data-drop-slot="armory">
-  <h3 class="section-head">{{localize "ESSENCE.Item.Equipment.Armory"}} <span class="muted">({{armoryUsed}} / {{system.armoryLimit}}) <i class="fa-solid fa-flag" title="{{localize 'ESSENCE.Sheet.UsedThisAdventureHint'}}"></i></span></h3>
+  <h3 class="section-head">{{localize "ESSENCE.Item.Equipment.Armory"}} <span class="muted">({{localize "ESSENCE.Sheet.ArmoryCapacity" used=armoryUsed limit=system.armoryLimit stored=armoryStored prepared=inventoryUsed}}) <i class="fa-solid fa-flag" title="{{localize 'ESSENCE.Sheet.UsedThisAdventureHint'}}"></i></span></h3>
   <table class="item-table">
     <thead><tr><th>{{localize "ESSENCE.Common.Item"}}</th><th>{{localize "ESSENCE.Common.Category"}}</th><th>{{localize "ESSENCE.Common.Notes"}}</th><th></th></tr></thead>
     <tbody>

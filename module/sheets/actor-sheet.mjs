@@ -553,15 +553,18 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // Inventory Capacity) — previously nothing read armoryLimit/inventoryLimit against
     // actual usage at all; see computeSlotUsage's own doc comment for the ½-slot Component rule.
     context.inventoryUsed = computeSlotUsage(this.actor.items, "inventory");
-    // Inventory, Temporary and Armory are three SEPARATE containers you move items between, so
-    // each counts only what is actually in it — an item in your Loadout occupies an Inventory slot
-    // and nothing else. A 2026-09-08 pass read plan §5.7's "It is not eight reserve items plus
-    // four carried items" as meaning Armory's 8 was inclusive of Inventory's 4 and added the two
-    // buckets together here; that reading is wrong (confirmed by the system's author), and it made
-    // the Armory header count items the Armory list doesn't even show. The Character Wizard's own
-    // Armory figure (character-wizard.mjs) always counted the one bucket, so this also puts the
-    // two screens back in agreement.
-    context.armoryUsed = computeSlotUsage(this.actor.items, "armory");
+    // Armory is the character's WHOLE maintained collection, and the prepared Inventory is drawn
+    // from it rather than stacked on top: part-iii-core-rules.md § The Armory — "It includes
+    // equipment currently prepared in Inventory; Inventory is not a separate pile added on top of
+    // the Armory" — and the wiki's Part VIII spells out the same thing ("an 8-slot Armory does not
+    // mean 8 slots in reserve plus your normal Inventory Limit on top"). So the figure against
+    // armoryLimit is both buckets. 0.7.7 briefly made this the armory bucket alone, which let a
+    // character maintain 12 items against a printed limit of 8; reverted in 0.7.9 once the rules
+    // text was actually read. What was genuinely wrong was the LABEL: "(7 / 8)" over a three-row
+    // list looked like a miscount, so the header now names both halves of the number instead.
+    // Do not "fix" this to the armory bucket alone again without changing the rulebook first.
+    context.armoryStored = computeSlotUsage(this.actor.items, "armory");
+    context.armoryUsed = context.inventoryUsed + context.armoryStored;
     // § Bringing More Than Your Inventory Limit — pays 1 ordinary Influence pressure for each
     // additional slot of capacity prepared beyond the normal limit. V6 (plan §5.3.5): excess
     // capacity rounds UP on the TOTAL (4.5 over supported capacity = 1 pressure, 5.5 = 2) — a

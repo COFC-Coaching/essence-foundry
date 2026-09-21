@@ -498,7 +498,11 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     // to Inventory; there was no way to stock the Armory during character creation at all, so
     // every new character started with an empty one regardless of what they'd bought/found.
     context.armoryItems = inSlot("armory").map(equipmentRow);
-    context.armoryUsed = computeSlotUsage(this.document.items, "armory");
+    // Inclusive of the prepared Inventory — see EssenceActorSheet#_prepareContext for the rules
+    // text this follows. The Wizard counted the armory bucket alone until 0.7.9, so it and the
+    // character sheet reported different Armory figures for the same character.
+    context.armoryStored = computeSlotUsage(this.document.items, "armory");
+    context.armoryUsed = context.inventoryUsed + context.armoryStored;
     context.armoryLimit = system.armoryLimit;
     // Item Grants (Quartermaster's Due, Internal Compartment, ...) — see item-grants.mjs and
     // EssenceActorSheet#_prepareContext for the full reasoning.

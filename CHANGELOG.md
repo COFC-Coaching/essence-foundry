@@ -2,6 +2,34 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.7.9
+
+**Reverts 0.7.7 — the Armory figure was right and the label was wrong.** 0.7.7 changed the Armory
+header to count only the Armory bucket, on the understanding that Inventory, Temporary and Armory
+are three independent containers. The rulebook says otherwise, in all three of its copies:
+
+> The Armory is the character's entire collection of maintained significant equipment. It includes
+> equipment currently prepared in Inventory; Inventory is not a separate pile added on top of the
+> Armory. — part-iii-core-rules.md § The Armory
+
+The wiki mirror puts it the same way ("an 8-slot Armory does not mean 8 slots in reserve plus your
+normal Inventory Limit on top"), and the source adds the design intent: "The starting limits of
+Armory 8 and Inventory 4 provide two maintained options for every prepared option." Counting the
+buckets separately quietly raised maintained capacity from 8 to 12 and turned that 2:1 ratio into
+3:1 — a balance change, not a display fix. It stood for two releases.
+
+What was actually wrong is what prompted the report: a header reading **(7 / 8)** above a
+three-row list looks like a miscount, because the number and the list were describing different
+things without saying so. Both headers now name both halves:
+
+> ARMORY — 7 / 8 maintained — 3 stored + 4 prepared
+
+The Character Wizard counted the armory bucket alone even before 0.7.7, so it and the character
+sheet had been reporting different Armory figures for the same character. Both are inclusive now,
+and both use the same label.
+
+No world data is affected: these are displayed figures, not stored ones.
+
 ## 0.7.8
 
 **A Chassis or Fitting built into an item no longer gets its own Armory row.** Assembling a weapon
