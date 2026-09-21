@@ -22,6 +22,20 @@ the number cannot drift apart again.
 This only showed up on items assembled since 0.7.6. Equipment assembled before it stores a
 compendium id with no embedded copy, so there was never a Component on the actor to list.
 
+**Update checks now read the release, not the branch.** `manifest` pointed at
+`main/system.json`, while `download` pointed at the latest release — two sources that can
+disagree. Between pushing a version bump to `main` and pushing the tag, `main` advertised the new
+version while `releases/latest` still served the previous zip, so a client checking in that window
+would install the old build believing it was the new one. GitHub also serves raw branch files with
+a five-minute CDN cache, which is why a client could be offered a version *older* than the one it
+already had right after 0.7.7 went out.
+
+`system.json` now ships as its own release asset and `manifest` points at
+`releases/latest/download/system.json`, so the manifest a client reads and the zip it downloads
+are published together by the same tag. Existing installs keep checking the old URL until they
+update once, then switch over on their own.
+
+
 ## 0.7.7
 
 **Armory stops counting your Loadout.** The Armory header read "7 / 8" above a list of three

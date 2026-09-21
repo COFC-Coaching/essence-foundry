@@ -116,7 +116,7 @@
   "primaryTokenAttribute": "resources.stamina",
   "secondaryTokenAttribute": "resources.focus",
   "url": "https://github.com/COFC-Coaching/essence-foundry",
-  "manifest": "https://raw.githubusercontent.com/COFC-Coaching/essence-foundry/main/system.json",
+  "manifest": "https://github.com/COFC-Coaching/essence-foundry/releases/latest/download/system.json",
   "download": "https://github.com/COFC-Coaching/essence-foundry/releases/latest/download/essence-system.zip",
   "license": "LICENSE",
   "readme": "https://github.com/COFC-Coaching/essence-foundry/blob/main/README.md",

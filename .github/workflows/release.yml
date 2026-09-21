@@ -36,7 +36,18 @@ jobs:
             -x "packs/*/LOCK"
 
       - name: Create GitHub Release
+        # system.json ships as its own asset, not just inside the zip: `manifest` points at
+        # releases/latest/download/system.json, so the manifest a client checks and the zip it
+        # then downloads are published in the same instant by the same tag. Pointing `manifest`
+        # at main/system.json instead meant the two could disagree — between pushing the version
+        # bump to main and pushing the tag, main advertised the new version while
+        # releases/latest still served the previous zip, and any client checking in that window
+        # would install the old build believing it was the new one. It was also served with a
+        # five-minute CDN cache, which is why a client could be shown a version older than the
+        # one it already had.
         uses: softprops/action-gh-release@v2
         with:
-          files: essence-system.zip
+          files: |
+            essence-system.zip
+            system.json
           generate_release_notes: true
