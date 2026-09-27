@@ -114,12 +114,12 @@ export async function enterManifestation(actor, subtype) {
   if (!profile) return;
 
   // No fresh Action Pool, Reaction Pool, or Damage-pressure reset on entry (CALLING_PROFILES.md's
-  // shared procedure) — the profile picks up exactly where the caller's turn stood. Tier is synced
+  // shared procedure) — the profile picks up exactly where the caller's turn stood. poolBonus is synced
   // too since EssenceManifestationData has no Attributes of its own to derive baseCombatDice from
   // — see actor-manifestation.mjs.
   const ps = actor.system.playState;
   await profile.update({
-    "system.tier": actor.system.tier,
+    "system.poolBonus": actor.system.poolBonus ?? 0,
     "system.playState.actionDice": ps.actionDice,
     "system.playState.reactionDice": ps.reactionDice,
     "system.playState.accumulatedDamage": ps.accumulatedDamage

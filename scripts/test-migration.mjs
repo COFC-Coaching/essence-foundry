@@ -149,6 +149,7 @@ console.log("\n--- no schema may reject its own default (the nonCombatSkills.sou
 const ALL_MODELS = {
   character: EssenceCharacterData, npc: EssenceNpcData, monster: EssenceMonsterData,
   manifestation: (await import("../module/data/actor-manifestation.mjs")).default,
+  team: (await import("../module/data/actor-team.mjs")).default,
   equipment: EssenceEquipmentData, condition: EssenceConditionData, chassis: EssenceChassisData,
   ...(await import("../module/data/item-card.mjs")),
   ...(await import("../module/data/item-component.mjs")),
@@ -179,6 +180,15 @@ check("undefined source", migrate(EssenceCharacterData, undefined), undefined);
 check("array where an object belongs", migrate(EssenceCharacterData, { specialties: [] }).specialties, []);
 check("string where a number belongs is left for cleanData",
   migrate(EssenceCharacterData, { tier: "three" }).tier, "three");
+
+console.log("\n--- Team actor (0.8.0) ---");
+const { default: EssenceTeamData } = await import("../module/data/actor-team.mjs");
+check("Team Tier above 5 is clamped, not rejected", migrate(EssenceTeamData, { tier: 7 }).tier, 5);
+check("Team Tier below 1 is clamped, not rejected", migrate(EssenceTeamData, { tier: 0 }).tier, 1);
+check("record rows keep their fields",
+  migrate(EssenceTeamData, { things: [{ name: "Van", tags: "Asset, Obligation", notes: "" }] }).things,
+  [{ name: "Van", tags: "Asset, Obligation", notes: "" }]);
+check("a character's legacy personal Tier still loads", migrate(EssenceCharacterData, { tier: 3 }).tier, 3);
 
 console.log(`\n${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);

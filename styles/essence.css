@@ -443,6 +443,21 @@
    editor below. General Notes stays a plain textarea (scratch notes, not formatted prose), so it
    just gets a taller floor instead. */
 .essence .tab.bio textarea { width: 100%; min-height: 6em; }
+/* Team & Advancement block at the top of the Bio tab: the character's Team, Team Tier and
+   Advancement bookkeeping, laid out as small labelled cells. Scoped under .bio-standing so the
+   Bio tab's own `label { display: block }` rule (for the prose fields below) doesn't apply. */
+.essence .tab.bio .bio-standing { margin-bottom: 14px; }
+.essence .tab.bio .bio-standing-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.essence .tab.bio .bio-standing .bio-cell { display: flex; flex-direction: column; gap: 3px; margin: 0; padding: 6px 8px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 4px; min-width: 0; }
+.essence .tab.bio .bio-standing .bio-cell-wide { grid-column: span 2; }
+.essence .tab.bio .bio-standing .bio-cell-label { font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8; }
+.essence .tab.bio .bio-standing .bio-cell-note { font-size: 0.7em; }
+.essence .tab.bio .bio-standing .bio-cell-warn { border-color: #f9a825; }
+.essence .tab.bio .bio-standing .bio-cell-warn .bio-cell-value { color: #f9a825; }
+.essence .tab.bio .bio-standing .bio-standing-note { margin: 6px 0 0; line-height: 1.45; }
+.essence .tab.bio .bio-standing .bio-cell-value { font-size: 1.15em; line-height: 1.6em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.essence .tab.bio .bio-standing .bio-cell input[type="number"] { width: 100%; font-size: 1.05em; }
+
 
 /* NOTE: the roll-card's root element is <div class="essence roll-card"> — both classes on the
    SAME node. A descendant-combinator selector like ".essence .roll-card X" requires .roll-card
@@ -713,3 +728,34 @@
 .essence-whats-new-body p:last-child { margin-bottom: 0; }
 .essence-whats-new-body ul { margin: 0 0 8px; padding-left: 1.2em; }
 .essence-whats-new-body code { background: rgba(255,255,255,0.08); border-radius: 3px; padding: 0 3px; }
+
+/* ---- Team sheet (templates/actor/team-sheet.hbs) ----
+   Header: portrait, name + Identity, and a Team Tier block on the right. Team Tier is a read-only
+   number: the GM changes it with Raise (confirmed) or Correct, never by typing, because a raise
+   is permanent and clears every member's Temporary Influence. */
+.essence.team .team-header { align-items: stretch; }
+.essence.team .team-header .header-main h1 { margin-right: 96px; }
+.essence.team .team-field-label { display: block; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8; }
+.essence.team .team-identity { display: block; margin-top: 2px; }
+.essence.team .team-identity input { width: 100%; }
+.essence.team .team-tier { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 92px; padding: 6px 10px; border: 1px solid rgba(249, 168, 37, 0.45); border-radius: 4px; text-align: center; }
+.essence.team .team-tier .team-field-label { white-space: nowrap; }
+.essence.team .team-tier-value { font-size: 2em; line-height: 1.1; font-weight: bold; color: #f9a825; }
+.essence.team .team-tier-value .muted { font-size: 0.45em; color: inherit; }
+.essence.team .team-tier-actions { display: flex; flex-direction: column; align-items: stretch; gap: 2px; margin-top: 2px; }
+.essence.team .team-tier-actions button { white-space: nowrap; font-size: 0.85em; }
+.essence.team .team-hint { line-height: 1.45; margin: 4px 0 8px; }
+.essence.team .team-empty { font-style: italic; opacity: 0.8; margin: 6px 0; }
+.essence.team .team-member-link { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.essence.team .team-member-link img { border: none; border-radius: 3px; object-fit: cover; }
+.essence.team .team-member-table td:nth-child(2), .essence.team .team-member-table td:nth-child(3),
+.essence.team .team-member-table th:nth-child(2), .essence.team .team-member-table th:nth-child(3) { text-align: center; width: 18%; }
+.essence.team .team-record-table { table-layout: fixed; margin-bottom: 6px; }
+.essence.team .team-record-table th:nth-child(1) { width: 26%; }
+.essence.team .team-record-table th:nth-child(2) { width: 24%; }
+.essence.team .team-record-table th:nth-child(4) { width: 36px; }
+.essence.team .team-record-table input, .essence.team .team-record-table textarea { width: 100%; box-sizing: border-box; }
+.essence.team .team-record-table textarea { resize: vertical; min-height: 2.6em; font: inherit; }
+.essence.team .team-record-table td { vertical-align: top; }
+.essence.team section.tab.charter > label { display: block; margin-bottom: 10px; }
+.essence.team section.tab.charter prose-mirror { min-height: 4.5em; }

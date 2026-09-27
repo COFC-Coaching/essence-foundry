@@ -25,6 +25,9 @@ const WOUND_STATE_BY_RANK = ["Unharmed", "Lightly Wounded", "Seriously Wounded",
 const STRAIN_PENALTY_THRESHOLDS = [{ min: 3, composure: 1 }];
 const STRAIN_EXTRA_BURNED_DIE_AT = 5;
 
+/** v0.6 base Action and Reaction Pool size before explicit grants (Part VII "Action Pool"). */
+export const BASE_COMBAT_POOL = 6;
+
 /** One of the 9 attributes: base 1, 7 points to distribute, max 3 at creation. */
 export function attributeField() {
   return new fields.NumberField({ required: true, integer: true, initial: 1, min: 0 });
@@ -58,8 +61,21 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
       speciesTraits: new fields.ArrayField(new fields.StringField()),
       heritage: new fields.StringField({ initial: "" }),
       distinction: new fields.StringField({ initial: "" }),
+      // Legacy: before v0.6 this was the character's personal Tier, which set base pools (5 + Tier)
+      // and Advancement Points. v0.6 has no personal Tier ("Characters have no personal Tier",
+      // Doc L7598); Team Tier lives on the Team actor (actor-team.mjs). Kept, unused, so stored
+      // actors still load. Its only remaining reader is the one-time GM notice that lists
+      // characters who were above Tier 1 when their pools became a flat 6 (essence.mjs).
       tier: new fields.NumberField({ required: true, integer: true, initial: 1, min: 1 }),
+      // v0.6 Part VIII "Earned Points and Level": Level is optional and equals total Advancement
+      // Points earned — a new character has earned 1 (Level 1), and there is no cap.
       level: new fields.NumberField({ required: true, integer: true, initial: 1, min: 1 }),
+      // AP already spent on Skill Tree nodes (1 AP each). Manually tracked: node rewards are still
+      // in design, so nothing here knows what a node grants.
+      advancementPointsSpent: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
+      // v0.6 Part VII "Action Pool": base Action and Reaction Pools are a flat 6, and only explicit
+      // grants raise them — both together, one shared base. This is the sum of those grants.
+      poolBonus: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
 
       // Attributes — Physical / Mental / Spiritual domains
       might: attributeField(), grace: attributeField(), vigor: attributeField(),
@@ -367,10 +383,17 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
     // {value, max} shape so Foundry's token resource bars (primary/secondaryTokenAttribute in
     // system.json) can resolve these paths — value mirrors the live playState counter, falling
     // back to max until the GM sets one (same null-until-touched convention as playState itself).
+    // Doc L982: "Resource maxima and current values cannot fall below 0", and a lowered maximum
+    // caps the current amount without refunding anything (L4852). Applied to the derived value
+    // only, so stored play state is never rewritten.
+    const resource = (current, max) => {
+      const cap = Math.max(0, max);
+      return { value: Math.min(cap, Math.max(0, current ?? cap)), max: cap };
+    };
     this.resources = {
-      stamina: { value: this.playState.currentStamina ?? staminaMax, max: staminaMax },
-      focus: { value: this.playState.currentFocus ?? focusMax, max: focusMax },
-      mana: { value: this.playState.currentMana ?? manaMax, max: manaMax }
+      stamina: resource(this.playState.currentStamina, staminaMax),
+      focus: resource(this.playState.currentFocus, focusMax),
+      mana: resource(this.playState.currentMana, manaMax)
     };
     // Psionics Strain's penalty (see STRAIN_PENALTY_THRESHOLDS above) reduces the
     // character's own Defenses directly rather than needing a GM to remember and apply it by hand
@@ -385,36 +408,29 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
     // its own derived flag for the sheet/roll-commit dialog to check.
     this.psionicsBurnSurcharge = strain >= STRAIN_EXTRA_BURNED_DIE_AT;
 
+    // Defenses cannot fall below 0 (Doc L982).
     this.defenses = {
-      fortitude: 2 + twoLowest(might, grace, vigor) + this.fortitudeBonus - strainPenalty.fortitude,
-      composure: 2 + twoLowest(intellect, acuity, resolve) + this.composureBonus - strainPenalty.composure,
-      harmony: 2 + twoLowest(presence, adaptability, anima) + this.harmonyBonus - strainPenalty.harmony
+      fortitude: Math.max(0, 2 + twoLowest(might, grace, vigor) + this.fortitudeBonus - strainPenalty.fortitude),
+      composure: Math.max(0, 2 + twoLowest(intellect, acuity, resolve) + this.composureBonus - strainPenalty.composure),
+      harmony: Math.max(0, 2 + twoLowest(presence, adaptability, anima) + this.harmonyBonus - strainPenalty.harmony)
     };
 
-    // Base combat dice pool: Tier + 5 (see play-mode.ts)
-    this.baseCombatDice = 5 + (this.tier || 0);
+    // Base Action/Reaction Pool size (v0.6 Part VII "Action Pool"): a flat 6 plus explicit grants,
+    // shared by both pools. Mirrors BASE_COMBAT_POOL in the web builder's character-model.ts.
+    this.baseCombatDice = BASE_COMBAT_POOL + (this.poolBonus ?? 0);
 
-    // V6 Skill Tree (plan §9.3, confirmed by design/v6-revision-delta.md §4.3): Advancement Points
-    // earned beyond standard Character Creation = (Tier-1)*10 + (Level-1), max 49. "Every
-    // advancement after the character's initial Tier 1, Level 1 position grants one Advancement
-    // Point... only the initial starting position is exempt" — the formula already produces this
-    // with no special-casing: at Tier 1/Level 1 it's naturally 0, and entering a LATER Tier at its
-    // own Level 1 still yields a nonzero value (e.g. Tier 2/Level 1 = (2-1)*10+(1-1) = 10), so a
-    // naive "only Level 1 grants none" reading would wrongly zero that case out — this formula
-    // doesn't have that bug. Ship as a read-only derived value: the Skill Tree node system itself
-    // (what a point actually buys) remains explicitly blocked/deprioritized (plan §6.9/§9.3) — this
-    // is intentionally inert data until that design lands.
-    this.advancementPoints = Math.min(49, Math.max(0, ((this.tier || 1) - 1) * 10 + ((this.level || 1) - 1)));
+    // Level IS total AP earned (v0.6 Part VIII), so unspent AP is just Level minus what's spent.
+    this.advancementPointsUnspent = Math.max(0, (this.level || 1) - (this.advancementPointsSpent ?? 0));
 
     // Each point of Combo increases Movement by 1 unit (part-iv-combat.md § Combo), and equipment's
     // own Movement modifier (movementBonus, see its schema comment above) folds in here too rather
     // than touching the raw, sheet-editable `movement` field directly.
-    this.totalMovement = this.movement + (this.movementBonus ?? 0) + (this.specialties?.combo ?? 0);
+    this.totalMovement = Math.max(0, this.movement + (this.movementBonus ?? 0) + (this.specialties?.combo ?? 0));
 
     // Resilience as actually usable for Apply Damage's math — base plus equipment's own Resilience
     // modifier (resilienceBonus). Apply Damage (actor-sheet.mjs/npc-sheet.mjs) reads this, never
     // the raw `resilience` field directly.
-    this.effectiveResilience = this.resilience + (this.resilienceBonus ?? 0);
+    this.effectiveResilience = Math.max(0, this.resilience + (this.resilienceBonus ?? 0));
 
     // Reach as actually usable right now for equipment-gating purposes: base Reach plus equipment's
     // own Reach modifier (reachBonus) plus any currently-active Adventure-Limited Reach Triggers

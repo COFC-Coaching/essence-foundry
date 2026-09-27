@@ -1,0 +1,118 @@
+<div class="essence-sheet-root team-sheet">
+<header class="sheet-header team-header">
+  <div class="portrait-wrap">
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="editImage" alt="" title="{{localize 'ESSENCE.Sheet.PortraitTooltip'}}">
+  </div>
+  <div class="header-main">
+    <div class="header-actions">
+      {{#if isEditable}}
+        <button type="button" class="edit-lock-btn" data-action="toggleEditLock" aria-pressed="{{editUnlocked}}" title="{{#if editUnlocked}}{{localize 'ESSENCE.Sheet.UnlockedTooltip'}}{{else}}{{localize 'ESSENCE.Sheet.LockedTooltip'}}{{/if}}">
+          <i class="fa-solid {{#if editUnlocked}}fa-lock-open{{else}}fa-lock{{/if}}"></i> {{#if editUnlocked}}{{localize "ESSENCE.Common.Unlocked"}}{{else}}{{localize "ESSENCE.Common.Locked"}}{{/if}}
+        </button>
+      {{/if}}
+    </div>
+    <h1><input name="name" type="text" value="{{actor.name}}" aria-label="{{localize 'ESSENCE.Common.Name'}}"></h1>
+    <label class="team-identity">
+      <span class="team-field-label">{{localize "ESSENCE.Team.Identity"}}</span>
+      <input name="system.identity" type="text" value="{{system.identity}}" placeholder="{{localize 'ESSENCE.Team.IdentityPlaceholder'}}">
+    </label>
+  </div>
+  <div class="team-tier" title="{{localize 'ESSENCE.Team.TierHint'}}">
+    <span class="team-field-label">{{localize "ESSENCE.Team.Tier"}}</span>
+    <span class="team-tier-value">{{system.tier}}<span class="muted"> / {{tierMax}}</span></span>
+    {{#if isGM}}
+      <div class="team-tier-actions">
+        <button type="button" data-action="raiseTier" {{#unless canRaiseTier}}disabled{{/unless}} title="{{localize 'ESSENCE.Team.RaiseTooltip'}}"><i class="fa-solid fa-arrow-up"></i> {{localize "ESSENCE.Team.Raise"}}</button>
+        <button type="button" class="link-button" data-action="correctTier" title="{{localize 'ESSENCE.Team.CorrectTooltip'}}">{{localize "ESSENCE.Team.Correct"}}</button>
+      </div>
+    {{/if}}
+  </div>
+</header>
+
+<nav class="sheet-tabs" role="tablist" aria-label="{{localize 'TYPES.Actor.team'}}">
+  <a data-action="changeTab" data-tab="team" role="tab" tabindex="0">{{localize "ESSENCE.Team.TabTeam"}}</a>
+  <a data-action="changeTab" data-tab="record" role="tab" tabindex="0">{{localize "ESSENCE.Team.TabRecord"}}</a>
+  <a data-action="changeTab" data-tab="charter" role="tab" tabindex="0">{{localize "ESSENCE.Team.TabCharter"}}</a>
+</nav>
+
+{{!-- ============ TEAM: members ============ --}}
+<section class="tab team" data-tab="team">
+  <p class="muted team-hint">{{localize "ESSENCE.Team.TierNote"}}</p>
+  <h3 class="section-head">{{localize "ESSENCE.Team.Members"}} <span class="muted">({{members.length}})</span></h3>
+  {{#if members.length}}
+    <table class="item-table team-member-table">
+      <thead><tr><th>{{localize "ESSENCE.Common.Name"}}</th><th>{{localize "ESSENCE.Common.Level"}}</th><th>{{localize "ESSENCE.Sheet.TemporaryInfluence"}}</th><th></th></tr></thead>
+      <tbody>
+        {{#each members as |m|}}
+          <tr>
+            <td><a class="team-member-link" data-action="openMember" data-actor-id="{{m.id}}"><img src="{{m.img}}" alt="" width="26" height="26"> {{m.name}}</a></td>
+            <td>{{m.level}}</td>
+            <td>{{m.temporaryInfluence}}</td>
+            <td><button type="button" data-action="removeMember" data-actor-id="{{m.id}}" title="{{localize 'ESSENCE.Team.RemoveMemberAria' name=m.name}}" aria-label="{{localize 'ESSENCE.Team.RemoveMemberAria' name=m.name}}"><i class="fa-solid fa-user-minus"></i></button></td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{else}}
+    <p class="team-empty">{{localize "ESSENCE.Team.NoMembersYet"}}</p>
+  {{/if}}
+  {{#if missingMembers}}
+    <p class="muted team-hint">{{localize "ESSENCE.Team.MissingMembers" n=missingMembers}} <button type="button" class="link-button" data-action="removeMissingMembers">{{localize "ESSENCE.Team.RemoveMissingMembers"}}</button></p>
+  {{/if}}
+  <p class="muted team-hint">{{localize "ESSENCE.Team.DropHint"}}</p>
+</section>
+
+{{!-- ============ RECORD: things and organizations ============ --}}
+<section class="tab record" data-tab="record">
+  <h3 class="section-head">{{localize "ESSENCE.Team.Things"}}</h3>
+  <p class="muted team-hint">{{localize "ESSENCE.Team.ThingsHint"}}</p>
+  <datalist id="essence-team-tags-{{actor.id}}">{{#each recordTags}}<option value="{{this}}"></option>{{/each}}</datalist>
+  {{#if things.length}}
+    <table class="item-table team-record-table">
+      <thead><tr><th>{{localize "ESSENCE.Common.Name"}}</th><th>{{localize "ESSENCE.Team.Tags"}}</th><th>{{localize "ESSENCE.Team.Notes"}}</th><th></th></tr></thead>
+      <tbody>
+        {{#each things as |t|}}
+          <tr>
+            <td><input type="text" value="{{t.name}}" data-array="things" data-index="{{t.i}}" data-record-field="name" aria-label="{{localize 'ESSENCE.Common.Name'}}"></td>
+            <td><input type="text" value="{{t.tags}}" data-array="things" data-index="{{t.i}}" data-record-field="tags" list="essence-team-tags-{{../actor.id}}" placeholder="{{localize 'ESSENCE.Team.TagsPlaceholder'}}" aria-label="{{localize 'ESSENCE.Team.Tags'}}: {{t.name}}"></td>
+            <td><textarea rows="2" data-array="things" data-index="{{t.i}}" data-record-field="notes" placeholder="{{localize 'ESSENCE.Team.ThingsNotesPlaceholder'}}" aria-label="{{localize 'ESSENCE.Team.Notes'}}: {{t.name}}">{{t.notes}}</textarea></td>
+            <td><button type="button" data-action="deleteRecordRow" data-array="things" data-index="{{t.i}}" title="{{localize 'ESSENCE.Common.DeleteAria' name=t.name}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=t.name}}"><i class="fa-solid fa-trash"></i></button></td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{/if}}
+  <button type="button" data-action="addRecordRow" data-array="things"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Team.AddThing"}}</button>
+
+  <h3 class="section-head">{{localize "ESSENCE.Team.Organizations"}}</h3>
+  <p class="muted team-hint">{{localize "ESSENCE.Team.OrganizationsHint"}}</p>
+  <datalist id="essence-team-relationships-{{actor.id}}">{{#each relationships}}<option value="{{this}}"></option>{{/each}}</datalist>
+  {{#if organizations.length}}
+    <table class="item-table team-record-table">
+      <thead><tr><th>{{localize "ESSENCE.Common.Name"}}</th><th>{{localize "ESSENCE.Team.Relationship"}}</th><th>{{localize "ESSENCE.Team.Notes"}}</th><th></th></tr></thead>
+      <tbody>
+        {{#each organizations as |o|}}
+          <tr>
+            <td><input type="text" value="{{o.name}}" data-array="organizations" data-index="{{o.i}}" data-record-field="name" aria-label="{{localize 'ESSENCE.Common.Name'}}"></td>
+            <td><input type="text" value="{{o.relationship}}" data-array="organizations" data-index="{{o.i}}" data-record-field="relationship" list="essence-team-relationships-{{../actor.id}}" placeholder="{{localize 'ESSENCE.Team.RelationshipPlaceholder'}}" aria-label="{{localize 'ESSENCE.Team.Relationship'}}: {{o.name}}"></td>
+            <td><textarea rows="2" data-array="organizations" data-index="{{o.i}}" data-record-field="notes" placeholder="{{localize 'ESSENCE.Team.OrganizationsNotesPlaceholder'}}" aria-label="{{localize 'ESSENCE.Team.Notes'}}: {{o.name}}">{{o.notes}}</textarea></td>
+            <td><button type="button" data-action="deleteRecordRow" data-array="organizations" data-index="{{o.i}}" title="{{localize 'ESSENCE.Common.DeleteAria' name=o.name}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=o.name}}"><i class="fa-solid fa-trash"></i></button></td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{/if}}
+  <button type="button" data-action="addRecordRow" data-array="organizations"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Team.AddOrganization"}}</button>
+</section>
+
+{{!-- ============ CHARTER: the six agreements from Creating the Team ============ --}}
+<section class="tab charter" data-tab="charter">
+  <p class="muted team-hint">{{localize "ESSENCE.Team.CharterHint"}}</p>
+  <label>{{localize "ESSENCE.Team.ReasonToCooperate"}}{{essenceEditor system.reasonToCooperate target="system.reasonToCooperate" button=true}}</label>
+  <label>{{localize "ESSENCE.Team.MajorGoal"}}{{essenceEditor system.majorGoal target="system.majorGoal" button=true}}</label>
+  <label>{{localize "ESSENCE.Team.Methods"}}{{essenceEditor system.methods target="system.methods" button=true}}</label>
+  <label>{{localize "ESSENCE.Team.Principles"}}{{essenceEditor system.principles target="system.principles" button=true}}</label>
+  <label>{{localize "ESSENCE.Team.Decisions"}}{{essenceEditor system.decisions target="system.decisions" button=true}}</label>
+  <label>{{localize "ESSENCE.Team.Roles"}}{{essenceEditor system.roles target="system.roles" button=true}}</label>
+</section>
+</div>

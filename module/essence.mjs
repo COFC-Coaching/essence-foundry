@@ -2,6 +2,7 @@ import EssenceCharacterData from "./data/actor-character.mjs";
 import EssenceNpcData from "./data/actor-npc.mjs";
 import EssenceMonsterData from "./data/actor-monster.mjs";
 import EssenceManifestationData from "./data/actor-manifestation.mjs";
+import EssenceTeamData from "./data/actor-team.mjs";
 import { EssenceActionCardData, EssenceReactionCardData, EssenceConditionData, EssenceEquipmentData, EQUIPMENT_CATEGORY_LABELS, MODULAR_EQUIPMENT_CATEGORIES } from "./data/item-card.mjs";
 import { EssenceSpeciesData, EssenceHeritageData, EssenceDistinctionData } from "./data/item-origin.mjs";
 import { EssenceChassisData, EssenceFittingData, EssenceAugmentData } from "./data/item-component.mjs";
@@ -9,6 +10,7 @@ import EssenceActorSheet from "./sheets/actor-sheet.mjs";
 import EssenceNpcSheet from "./sheets/npc-sheet.mjs";
 import EssenceMonsterSheet from "./sheets/monster-sheet.mjs";
 import EssenceManifestationSheet from "./sheets/manifestation-sheet.mjs";
+import EssenceTeamSheet from "./sheets/team-sheet.mjs";
 import {
   EssenceCardSheet, EssenceConditionSheet, EssenceEquipmentSheet,
   EssenceSpeciesSheet, EssenceHeritageSheet, EssenceDistinctionSheet,
@@ -66,6 +68,7 @@ Hooks.once("init", () => {
   CONFIG.Actor.dataModels.npc = EssenceNpcData;
   CONFIG.Actor.dataModels.monster = EssenceMonsterData;
   CONFIG.Actor.dataModels.manifestation = EssenceManifestationData;
+  CONFIG.Actor.dataModels.team = EssenceTeamData;
   CONFIG.Item.dataModels["action-card"] = EssenceActionCardData;
   CONFIG.Item.dataModels["reaction-card"] = EssenceReactionCardData;
   CONFIG.Item.dataModels.condition = EssenceConditionData;
@@ -84,6 +87,7 @@ Hooks.once("init", () => {
   Actors.registerSheet("essence-system", EssenceNpcSheet, { types: ["npc"], makeDefault: true });
   Actors.registerSheet("essence-system", EssenceMonsterSheet, { types: ["monster"], makeDefault: true });
   Actors.registerSheet("essence-system", EssenceManifestationSheet, { types: ["manifestation"], makeDefault: true });
+  Actors.registerSheet("essence-system", EssenceTeamSheet, { types: ["team"], makeDefault: true });
 
   Items.registerSheet("essence-system", EssenceCardSheet, { types: ["action-card", "reaction-card"], makeDefault: true });
   Items.registerSheet("essence-system", EssenceConditionSheet, { types: ["condition"], makeDefault: true });
@@ -139,6 +143,9 @@ Hooks.once("init", () => {
     scope: "world", config: false, type: Boolean, default: false
   });
   game.settings.register("essence-system", "dedupedEquipmentBonusEffects", {
+    scope: "world", config: false, type: Boolean, default: false
+  });
+  game.settings.register("essence-system", "notifiedPersonalTierRemoved", {
     scope: "world", config: false, type: Boolean, default: false
   });
   game.settings.register("essence-system", "rekeyedResilienceEffects", {
@@ -265,6 +272,31 @@ Hooks.once("ready", async () => {
     }
   }
   await game.settings.set("essence-system", "dedupedEquipmentBonusEffects", true);
+});
+
+/**
+ * One-time notice (0.8.0): v0.6 removes personal Tier. Base Action and Reaction Pools become a flat
+ * 6 (they were 5 + Tier), Level now means total Advancement Points earned (it used to count within
+ * a Tier), and Team Tier lives on a Team actor. Per the decision recorded in
+ * design/v0.6-doc-implementation-plan.md, nothing is converted automatically: this whispers the GM
+ * which characters had a personal Tier above 1, so their pools and Level can be adjusted by hand.
+ * It reads the legacy `system.tier` straight from the stored data.
+ */
+Hooks.once("ready", async () => {
+  if (!game.user.isGM) return;
+  if (game.settings.get("essence-system", "notifiedPersonalTierRemoved")) return;
+  const affected = game.actors
+    .filter((a) => a.type === "character" && (a._source.system?.tier ?? 1) > 1)
+    .map((a) => game.i18n.format("ESSENCE.Notify.PersonalTierEntry", { name: a.name, tier: a._source.system.tier, level: a._source.system.level ?? 1 }));
+  await ChatMessage.create({
+    whisper: ChatMessage.getWhisperRecipients("GM"),
+    content: game.i18n.format("ESSENCE.Notify.PersonalTierRemoved", {
+      list: affected.length
+        ? `${game.i18n.localize("ESSENCE.Notify.PersonalTierAffectedIntro")}<ul>${affected.map((l) => `<li>${l}</li>`).join("")}</ul>`
+        : game.i18n.localize("ESSENCE.Notify.PersonalTierNoneAffected")
+    })
+  });
+  await game.settings.set("essence-system", "notifiedPersonalTierRemoved", true);
 });
 
 /**

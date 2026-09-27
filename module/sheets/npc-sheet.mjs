@@ -1,11 +1,11 @@
 import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
-import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
+import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, tierQualifiesForGrant } from "../data/item-grants.mjs";
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, ordinaryDamageWounds, assembledComponentIds, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, ordinaryDamageWounds, teamTierFor, componentTiers, assembledComponentIds, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
 import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -304,20 +304,13 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     // (see #onCreateEquipment/EssenceActorSheet's identical _onDropItem override) purely so
     // equipment-effects.mjs's active-bonus gate treats it as equipped rather than silently inert —
     // the GM never sees or manages that distinction.
-    // See EssenceActorSheet#_prepareContext for the full Reach-gating reasoning (computeReachGate()
-    // in utils.mjs) — same soft, non-blocking over-Reach flag here, reading effectiveReach (base
-    // Reach + any active Reach Triggers) rather than raw system.reach.
-    const equipmentView = (item) => {
-      const { reachCost, exceptionSource, overReach } = computeReachGate(item.system, system.effectiveReach);
-      return { id: item.id, name: item.name, system: item.system, reachCost, exceptionSource, overReach, tracksUsedFlag: true };
-    };
+    // No Team Tier access check here: enemies aren't on a Team, and "Team Tier is not an enemy
+    // rating" (Doc L6961). Characters get the check (computeTierGate in utils.mjs).
+    const equipmentView = (item) => ({ id: item.id, name: item.name, system: item.system, tracksUsedFlag: true });
     const componentView = (item) => ({
       id: item.id,
       name: item.name,
       system: { category: capitalize(item.type), usedThisAdventure: item.system.usedThisAdventure ?? false },
-      reachCost: null,
-      exceptionSource: "",
-      overReach: false,
       // See EssenceActorSheet's componentView for the full rationale — Augments are always 0
       // capacity and don't carry usedThisAdventure.
       tracksUsedFlag: item.type !== "augment"
@@ -1228,34 +1221,38 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     trigger.usedThisAdventure = true;
     trigger.active = true;
 
-    const maxTemp = this.actor.system.temporaryInfluence ?? 5;
+    // See EssenceActorSheet#onActivateReachTrigger: an additional use is 1 ordinary Influence
+    // pressure (Reach first), and the grant is uncapped (Temporary Influence has no maximum).
     let tempInfluence = this.actor.system.playState.currentTemporaryInfluence ?? 0;
     const coreInfluence = this.actor.system.coreInfluence.map((c) => ({ ...c }));
+    let reachPressure = this.actor.system.reachPressure ?? 0;
     const log = [];
 
     if (trigger.tempInfluenceGrant) {
-      tempInfluence = Math.min(maxTemp, tempInfluence + trigger.tempInfluenceGrant);
-      log.push(`Grants ${trigger.tempInfluenceGrant} Temporary Influence usable only this Encounter (capped at normal max).`);
+      tempInfluence += trigger.tempInfluenceGrant;
+      log.push(`Grants ${trigger.tempInfluenceGrant} Temporary Influence usable only this Encounter.`);
     }
 
     let becameCritical = false;
     let filledSlots = [];
     if (!wasFree) {
-      const overextension = EssenceNpcSheet.#computeInfluenceOverextension(
-        { system: { playState: { currentTemporaryInfluence: tempInfluence }, coreInfluence } },
+      const pressure = EssenceNpcSheet.#computeOrdinaryPressure(
+        { system: { reachPressure, effectiveReach: this.actor.system.effectiveReach, playState: { currentTemporaryInfluence: tempInfluence }, coreInfluence } },
         1
       );
-      tempInfluence = overextension.tempInfluence;
-      coreInfluence.splice(0, coreInfluence.length, ...overextension.coreInfluence);
-      becameCritical = overextension.becameCritical;
-      filledSlots = overextension.filledSlots;
-      log.push(...overextension.log.map((l) => `Additional use this Adventure — ${l}`));
+      reachPressure = pressure.reachPressure;
+      tempInfluence = pressure.tempInfluence;
+      coreInfluence.splice(0, coreInfluence.length, ...pressure.coreInfluence);
+      becameCritical = pressure.becameCritical;
+      filledSlots = pressure.filledSlots;
+      log.push(...pressure.log.map((l) => `Additional use this Adventure — ${l}`));
     } else {
       log.push("First use this Adventure — free.");
     }
 
     await this.actor.update({
       "system.reachTriggers": triggers,
+      "system.reachPressure": reachPressure,
       "system.playState.currentTemporaryInfluence": tempInfluence,
       "system.coreInfluence": coreInfluence
     });
@@ -1539,9 +1536,9 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     const grant = ITEM_GRANT_REGISTRY[sourceName];
     if (!grant) return;
 
-    const reach = this.actor.system.effectiveReach;
+    const teamTier = teamTierFor(this.actor);
     const owned = this.actor.items.filter((i) => i.type === "equipment" && i.system.reachExceptionSource !== sourceName);
-    const eligible = owned.filter((i) => equipmentMatchesGrant(i.system, grant) && reachQualifiesForGrant(i.system, grant, reach));
+    const eligible = owned.filter((i) => equipmentMatchesGrant(i.system, grant) && tierQualifiesForGrant(i, grant, teamTier, this.actor.items));
     if (!eligible.length) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoQualifyingItemNpc", { source: sourceName }));
       return;
@@ -1551,7 +1548,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       new foundry.applications.api.DialogV2({
         window: { title: `Choose Item — ${sourceName}` },
         content: `<label>Item
-          <select name="itemId">${eligible.map((i) => `<option value="${i.id}">${i.name} (Reach ${i.system.cost || 0})</option>`).join("")}</select>
+          <select name="itemId">${eligible.map((i) => `<option value="${i.id}">${i.name}${(() => { const t = componentTiers(i, this.actor.items); return t.length ? ` (Tier ${Math.max(...t)})` : ""; })()}</option>`).join("")}</select>
         </label>`,
         buttons: [{
           action: "choose",
@@ -1571,7 +1568,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     await chosen.update({
       "system.slot": "inventory",
       "system.reachExceptionSource": sourceName,
-      "system.reachExceptionMargin": grant.reachMargin,
+      "system.reachExceptionMargin": grant.tierMargin ?? 0,
       "system.slotCost": grant.countsAgainstLimit ? 1 : 0
     });
   }

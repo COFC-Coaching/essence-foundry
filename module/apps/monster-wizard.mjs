@@ -1,5 +1,5 @@
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
-import { getGradeBudget } from "../data/monster-budgets.mjs";
+import { getGradeBudget, computeResilience } from "../data/monster-budgets.mjs";
 import { MONSTER_TYPES_LOW, MONSTER_TYPES_HIGH } from "../data/monster-types.mjs";
 import { capitalize, buildEnemyHeaderLabel } from "../utils.mjs";
 
@@ -503,12 +503,11 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     const document = this.document;
     const grade = document.system.grade;
     const budget = getGradeBudget(grade);
-    const tier = document.system.tier;
 
     await this.#rollAttributes();
     await this.#rollSkills();
     await document.update({
-      "system.resilience": budget.resilienceBase + Math.max(0, tier || 0) * budget.resiliencePerTier,
+      "system.resilience": computeResilience(grade),
       "system.temporaryWoundsAvailable": budget.temporaryWoundsAvailable,
       "system.inventoryLimit": budget.equipmentCount
     });
