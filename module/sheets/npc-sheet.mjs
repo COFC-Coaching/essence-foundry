@@ -1,4 +1,4 @@
-import { playBurnOnlyCard } from "./card-play.mjs";
+import { playBurnOnlyCard, promptDamageComponents } from "./card-play.mjs";
 import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
@@ -6,7 +6,7 @@ import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, tierQua
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, ordinaryDamageWounds, teamTierFor, componentTiers, assembledComponentIds, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns , resetEncounterSpecialties , equipmentCardCommitment } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, ordinaryDamageWounds, teamTierFor, componentTiers, assembledComponentIds, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns , resetEncounterSpecialties , equipmentCardCommitment , resolveDamageComponents } from "../utils.mjs";
 import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -806,104 +806,44 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
    * EssenceAdversaryData#prepareDerivedData), no Light/Serious/Critical severity, no Wound Cards,
    * no Death Track. This is a simplified version of EssenceActorSheet's identical-looking method.
    */
+  /**
+   * Apply Damage for a simplified enemy (0.10.1, Doc L3896-L3918 with V6 §2415's flat capacity):
+   * printed components in order through Resistance/Vulnerability, Resilience or Breach, Temporary
+   * Wounds and the capacity. A full capacity is Defeated and unconscious (L4062); a nonlethal
+   * component filling it leaves the enemy Defeated but stable (L4117). No Death Track.
+   */
   static async #onApplyDamage() {
-    const result = await new Promise((resolve) => {
-      new foundry.applications.api.DialogV2({
-        window: { title: "Apply Damage" },
-        content: `
-          <label>Amount <input type="number" name="amount" value="1" min="1" autofocus></label>
-          <label>Domain
-            <select name="domain">
-              <option value="Physical">Physical</option>
-              <option value="Mental">Mental</option>
-              <option value="Spiritual">Spiritual</option>
-            </select>
-          </label>
-          <label>Damage Type <span class="muted">(for Resistance/Vulnerability — V6 §6.2)</span>
-            <select name="damageType">
-              ${DAMAGE_TYPES.map((t) => `<option value="${t}">${t}</option>`).join("")}
-            </select>
-          </label>
-          <label style="display:flex;align-items:center;gap:6px;">
-            <input type="checkbox" name="breach"> Breach (bypasses Resilience)
-          </label>
-        `,
-        buttons: [{
-          action: "apply",
-          label: "Apply",
-          default: true,
-          callback: (event, button) => ({
-            amount: Math.max(1, Math.floor(Number(button.form.elements.amount.value)) || 1),
-            domain: button.form.elements.domain.value,
-            damageType: button.form.elements.damageType.value,
-            breach: button.form.elements.breach.checked
-          })
-        }],
-        submit: (result) => resolve(result === "apply" ? null : result)
-      }).render(true);
-    });
-    if (!result) return;
+    const picked = await promptDamageComponents({ types: DAMAGE_TYPES });
+    if (!picked) return;
 
     const sys = this.actor.system;
-    const resilience = sys.effectiveResilience ?? sys.resilience ?? 0;
-    const prevAccumulated = sys.playState.accumulatedDamage ?? 0;
-    const log = [];
-    // V6 §6.2 (plan; revised per design/v6-revision-delta.md §2.1): Resistance/Vulnerability apply
-    // BEFORE Resilience or Breach, to both branches, and key off the named Damage Type — NOT the
-    // Domain, which stays a separate field used only for the simplified Wound record below.
-    const { amount: adjustedAmount, log: rvLog } = applyResistanceVulnerability(this.actor, result.damageType, result.amount);
-    log.push(...rvLog);
+    const { coreWounds, capacity } = EssenceNpcSheet.#storedCoreWoundsAndCapacity(this.actor);
+    const wasDefeated = coreWounds.slice(0, capacity).every((w) => w.filled);
+    const result = resolveDamageComponents({
+      resilience: sys.effectiveResilience ?? sys.resilience ?? 0,
+      accumulated: sys.playState.accumulatedDamage ?? 0,
+      tempWounds: sys.playState.currentTemporaryWounds ?? 0,
+      coreWounds, capacity,
+      overflow: "none",
+      resistances: sys.resistances,
+      vulnerabilities: sys.vulnerabilities
+    }, picked.components, picked.reduction);
 
-    let wounds;
-    let newAccumulated = prevAccumulated;
-    if (result.breach) {
-      // Breach bypasses Resilience, not Resistance/Vulnerability (0.6.85 fix).
-      wounds = adjustedAmount;
-    } else {
-      // See ordinaryDamageWounds (utils.mjs) — per-event remaining protection.
-      wounds = ordinaryDamageWounds(resilience, prevAccumulated, adjustedAmount);
-      newAccumulated = prevAccumulated + adjustedAmount;
-    }
-
+    const filled = result.coreWounds.slice(0, capacity).filter((w) => w.filled).length;
     const update = {
-      "system.playState.accumulatedDamage": newAccumulated
+      "system.playState.accumulatedDamage": result.accumulated,
+      "system.playState.currentTemporaryWounds": result.tempWounds,
+      "system.coreWounds": result.coreWounds,
+      "system.playState.currentCoreWounds": filled
     };
-    let becameDefeated = false;
-
-    if (wounds <= 0) {
-      log.push(`Absorbed entirely by Resilience — no Wound.`);
-    } else {
-      let tempWounds = sys.playState.currentTemporaryWounds ?? 0;
-      const { coreWounds, capacity } = EssenceNpcSheet.#storedCoreWoundsAndCapacity(this.actor);
-
-      for (let i = 0; i < wounds; i++) {
-        if (tempWounds > 0) {
-          tempWounds -= 1;
-          log.push("1 Wound absorbed by a Temporary Wound.");
-          continue;
-        }
-        const slot = coreWounds.slice(0, capacity).findIndex((w) => !w.filled);
-        if (slot === -1) {
-          log.push("Wound capacity already full.");
-          continue;
-        }
-        coreWounds[slot] = { filled: true, domain: result.domain, severity: "", condition: "" };
-        log.push(`Wound capacity filled: ${coreWounds.slice(0, capacity).filter((w) => w.filled).length}/${capacity}.`);
-      }
-
-      const filled = coreWounds.slice(0, capacity).filter((w) => w.filled).length;
-      becameDefeated = filled >= capacity;
-
-      update["system.playState.currentTemporaryWounds"] = tempWounds;
-      update["system.coreWounds"] = coreWounds;
-      update["system.playState.currentCoreWounds"] = filled;
-    }
-
+    const becameDefeated = !wasDefeated && filled >= capacity;
+    if (becameDefeated && result.nonlethalStable) update["system.playState.deathTrackState"] = "stabilized";
     await this.actor.update(update);
 
+    const summary = picked.components.map((c) => `${c.amount} ${c.type}${c.breach ? " (Breach)" : ""}${c.nonlethal ? " (nonlethal)" : ""}`).join(" + ");
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> takes ${result.amount} ${result.domain} (${result.damageType}) Damage${result.breach ? " (Breach)" : ""}.</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+      content: `<p><strong>${this.actor.name}</strong> takes ${summary}${picked.reduction ? `, reduced by ${picked.reduction}` : ""}.</p><ul>${result.log.map((l) => `<li>${l}</li>`).join("")}</ul>`
     });
 
     if (becameDefeated) {

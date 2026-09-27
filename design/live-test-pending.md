@@ -1,7 +1,7 @@
-# Live test: 0.8.1, 0.9.0 and 0.10.0
+# Live test: 0.8.1 through 0.10.1
 
-Branch `claude/elastic-lamarr-32f578-lza4a9`, commits `cac234e` (0.8.1), `0b5e315` (0.9.0) and
-`6243178` (0.10.0). None was live-tested when built (cloud session, no Foundry). Run this in a world on Foundry
+Branch `claude/elastic-lamarr-32f578-lza4a9`, commits `cac234e` (0.8.1), `0b5e315` (0.9.0),
+`6243178` (0.10.0) and the 0.10.1 release commit after it. None was live-tested when built (cloud session, no Foundry). Run this in a world on Foundry
 v14 with the branch checked out into `Data/systems/essence-system`. Record results in
 build-history under a new dated heading; delete this file once everything below has passed.
 
@@ -127,3 +127,27 @@ build-history under a new dated heading; delete this file once everything below 
 43. Open Dazed, Prone, Weakened, Exposed and Concentration from the Conditions compendium: the
     text matches the rulebook (Dazed is the start-of-Turn burn, Exposed is −1 all Defenses).
 44. Play an Equipment Card whose text says "Burn 2" (Aegis): no commit prompt, 2 dice burned.
+
+## 0.10.1: Damage components, Recovery, Concentration
+
+45. Character with Resilience 2, no accumulated Damage, empty track. Apply Damage: row 1 = 3 Fire,
+    row 2 = 2 Psychic. Chat lists one Physical Wound then two Mental Wounds, accumulated 5 (Doc
+    L3914). Core spaces 1 to 3 are filled and the Wound Cards attached read Physical, Mental,
+    Mental.
+46. Same setup plus Fire Resistance; Apply 3 Fire + 2 Psychic with flat reduction 1: chat shows
+    2 Fire + 2 Psychic after the reduction, Fire to 0 by Resistance, two Mental Wounds (L3918).
+47. Tick "Attacker is Weakened" with 1 Slashing: nothing gets through (reduced to 0).
+48. Fill four spaces, then apply 3 Bludgeoning with Breach and Nonlethal ticked: fifth space fills,
+    the state reads Stabilized (not Dying), the token gets unconscious, the Death Track step stays 0.
+49. On a Dying character, apply 1 Breach Wound with Nonlethal: state stays Dying (nonlethal doesn't
+    stabilize someone already Dying).
+50. NPC with capacity 3: apply 5 Fire in one component: capacity fills, Defeated, unconscious
+    status. Same with Nonlethal ticked: header reads "Defeated (stable)".
+51. Put the Concentration Condition on a character with Action dice 2, Reaction dice 0. Apply a
+    Breach Wound: a prompt offers "Burn 1 Action die (2 left)" or "End Concentration". Burn: Action
+    dice read 1, Concentration stays. Repeat with both pools at 0: Concentration is removed and chat
+    says why.
+52. Fill spaces 1, 2 and 3. Grant Recovery: the dialog lists three Wounds with checkboxes. Tick
+    only space 2: it clears, spaces 1 and 3 stay, the state and step are unchanged.
+53. Full Manifestation profile: Apply Damage with a full track adds to overflow Wounds by the
+    surplus, as before.

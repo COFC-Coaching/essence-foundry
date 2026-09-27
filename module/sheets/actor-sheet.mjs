@@ -2,13 +2,13 @@ import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { EXPERTISE_DATABASE, THREAD_EFFECTS } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { addSecondDistinction } from "../data/origin-select.mjs";
-import { playBurnOnlyCard } from "./card-play.mjs";
+import { playBurnOnlyCard, promptDamageComponents, promptConcentrationOnWound } from "./card-play.mjs";
 import { dismissManifestation } from "../apps/manifestation.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, tierQualifiesForGrant } from "../data/item-grants.mjs";
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, isDistinctionStyle, distinctionUnlocks, teamForActor, teamTierFor, componentTiers, assembledComponentIds, computeSlotUsage, computeTierGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, ordinaryDamageWounds, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns, resetEncounterSpecialties, equipmentCardCommitment, recoveryBaseAmount } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, isDistinctionStyle, distinctionUnlocks, teamForActor, teamTierFor, componentTiers, assembledComponentIds, computeSlotUsage, computeTierGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, ordinaryDamageWounds, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns, resetEncounterSpecialties, equipmentCardCommitment, recoveryBaseAmount, resolveDamageComponents } from "../utils.mjs";
 import { availableSubtypes, enterManifestation } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -1357,7 +1357,10 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     await this.actor.update(update);
     // A manual toggle-fill has no Damage domain to attach a Wound Card from; a manual toggle-clear
     // still removes one if this space had one (e.g. the space was filled by #onApplyDamage earlier).
-    if (wasCleared) await removeWoundCard(this.actor, i);
+    if (wasCleared) {
+      await removeWoundCard(this.actor, i);
+      await this.actor.setUnconscious(false);
+    }
   }
 
   static async #onToggleDeathTrack(event, target) {
@@ -1504,169 +1507,59 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    * the whole application, since per-domain Damage Types would be a second axis of complexity the
    * task explicitly says not to build here.
    */
+  /**
+   * Apply Damage (0.10.1, Doc L3896-L3918): printed components resolved in order after the flat
+   * reduction, each through Resistance/Vulnerability, Resilience or Breach, Temporary Wounds and
+   * Core Wounds. The math is resolveDamageComponents (utils.mjs, tested against the Doc's worked
+   * examples); this method gathers the state, applies the result and posts the log. Nonlethal
+   * (L4117) leaves the character Stabilized and unconscious; the Death Track threshold is death
+   * (L4059); a Core Wound while concentrating asks for the burn-or-end choice (L4632).
+   */
   static async #onApplyDamage() {
-    const result = await new Promise((resolve) => {
-      new foundry.applications.api.DialogV2({
-        window: { title: "Apply Damage" },
-        content: `
-          <p class="muted">Mixed-Domain Damage: enter an amount for each domain involved. Resulting Wounds are assigned Spiritual -> Mental -> Physical -> repeat, skipping domains with 0.</p>
-          <label>Spiritual Amount <input type="number" name="spiritual" value="0" min="0"></label>
-          <label>Mental Amount <input type="number" name="mental" value="0" min="0"></label>
-          <label>Physical Amount <input type="number" name="physical" value="1" min="0" autofocus></label>
-          <label>Damage Type <span class="muted">(for Resistance/Vulnerability — V6 §6.2)</span>
-            <select name="damageType">
-              ${DAMAGE_TYPES.map((t) => `<option value="${t}">${t}</option>`).join("")}
-            </select>
-          </label>
-          <label style="display:flex;align-items:center;gap:6px;">
-            <input type="checkbox" name="breach"> Breach (bypasses Resilience)
-          </label>
-        `,
-        buttons: [{
-          action: "apply",
-          label: "Apply",
-          default: true,
-          callback: (event, button) => {
-            const domainAmounts = {
-              Spiritual: Math.max(0, Math.floor(Number(button.form.elements.spiritual.value)) || 0),
-              Mental: Math.max(0, Math.floor(Number(button.form.elements.mental.value)) || 0),
-              Physical: Math.max(0, Math.floor(Number(button.form.elements.physical.value)) || 0)
-            };
-            return {
-              domainAmounts,
-              amount: domainAmounts.Spiritual + domainAmounts.Mental + domainAmounts.Physical,
-              damageType: button.form.elements.damageType.value,
-              breach: button.form.elements.breach.checked
-            };
-          }
-        }],
-        submit: (result) => resolve(result === "apply" ? null : result)
-      }).render(true);
-    });
-    if (!result || result.amount <= 0) return;
-
-    // Spiritual -> Mental -> Physical -> repeat, skipping absent domains — one queue entry per
-    // point of Damage submitted, popped in order below to label each resulting filled Wound.
-    const domainQueue = [];
-    {
-      const remaining = { ...result.domainAmounts };
-      const cycle = ["Spiritual", "Mental", "Physical"];
-      while (remaining.Spiritual > 0 || remaining.Mental > 0 || remaining.Physical > 0) {
-        for (const d of cycle) {
-          if (remaining[d] > 0) { domainQueue.push(d); remaining[d] -= 1; }
-        }
-      }
+    if (this.actor.system.playState.deathTrackState === "dead") {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.DeadActor", { name: this.actor.name }));
+      return;
     }
+    const picked = await promptDamageComponents({ types: DAMAGE_TYPES });
+    if (!picked) return;
 
     const sys = this.actor.system;
-    const resilience = sys.effectiveResilience ?? sys.resilience ?? 0;
-    const prevAccumulated = sys.playState.accumulatedDamage ?? 0;
-    const log = [];
-    // V6 §6.2 (plan; revised per design/v6-revision-delta.md §2.1): Resistance/Vulnerability apply
-    // BEFORE Resilience or Breach, to both branches, and key off the named Damage Type — NOT the
-    // Domain, which is a separate field used only for Wound Card labeling/coreWounds.domain below.
-    const { amount: adjustedAmount, log: rvLog } = applyResistanceVulnerability(this.actor, result.damageType, result.amount);
-    log.push(...rvLog);
-
-    let wounds;
-    let newAccumulated = prevAccumulated;
-    if (result.breach) {
-      // Breach bypasses Resilience, not Resistance/Vulnerability (0.6.85 fix, plan §5.6) — the
-      // pre-0.6.85 code used `result.amount` directly here, skipping the adjustment above entirely.
-      // Breach Damage also does not add to accumulated ordinary Damage (already correct — untouched).
-      wounds = adjustedAmount;
-    } else {
-      // See ordinaryDamageWounds (utils.mjs): remaining protection is computed per event from the
-      // current Resilience, so a mid-interval Resilience change never rewrites earlier Wounds.
-      wounds = ordinaryDamageWounds(resilience, prevAccumulated, adjustedAmount);
-      newAccumulated = prevAccumulated + adjustedAmount;
-    }
+    const result = resolveDamageComponents({
+      resilience: sys.effectiveResilience ?? sys.resilience ?? 0,
+      accumulated: sys.playState.accumulatedDamage ?? 0,
+      tempWounds: sys.playState.currentTemporaryWounds ?? 0,
+      coreWounds: sys.coreWounds,
+      deathTrackState: sys.playState.deathTrackState ?? "none",
+      deathTrackStep: sys.playState.deathTrackStep ?? 0,
+      deathTrackMax: sys.deathTrackMax ?? 5,
+      overflow: "deathTrack",
+      resistances: sys.resistances,
+      vulnerabilities: sys.vulnerabilities
+    }, picked.components, picked.reduction);
 
     const update = {
-      "system.playState.accumulatedDamage": newAccumulated
+      "system.playState.accumulatedDamage": result.accumulated,
+      "system.playState.currentTemporaryWounds": result.tempWounds,
+      "system.coreWounds": result.coreWounds,
+      "system.playState.currentCoreWounds": result.coreWounds.filter((w) => w.filled).length
     };
-    let becameCritical = false;
-    const filledSlots = []; // V6 Wound Cards (see utils.mjs#attachWoundCard) — attached after the actor update below.
-
-    if (wounds <= 0) {
-      log.push(`Absorbed entirely by Resilience — no Wound.`);
-    } else {
-      let tempWounds = sys.playState.currentTemporaryWounds ?? 0;
-      const coreWounds = sys.coreWounds.map((w) => ({ ...w }));
-      const SEVERITY_BY_INDEX = ["Light", "Light", "Serious", "Serious", "Critical"];
-      let deathTrackStep = sys.playState.deathTrackStep ?? 0;
-      let deathTrackState = sys.playState.deathTrackState ?? "none";
-      const wasFull = coreWounds.length > 0 && coreWounds.every((w) => w.filled);
-
-      for (let i = 0; i < wounds; i++) {
-        // Mixed-Domain Damage: consume the queue in submission order — the first N submitted
-        // points of Damage are treated as the ones that became Wounds this call, N = this call's
-        // delta. Simplification, not a per-domain Resilience split (see #onApplyDamage's own doc
-        // comment): the domain-agnostic Resilience/accumulated-Damage math above is unchanged.
-        const domain = domainQueue.shift() ?? "Physical";
-        if (tempWounds > 0) {
-          tempWounds -= 1;
-          log.push(`1 ${domain} Wound absorbed by a Temporary Wound.`);
-          continue;
-        }
-        const slot = coreWounds.findIndex((w) => !w.filled);
-        if (slot === -1) {
-          // V6: an extra Wound landing on an already-full track advances the Death Track — and, if
-          // the character was Stabilized, breaks Stabilization back to Dying (see
-          // actor-combatant.mjs's deathTrackState schema comment). Shares deathTrackAfterWoundFilled
-          // with #onToggleCoreWound and applyManifestationDefeat rather than reimplementing this.
-          // Ceiling is deathTrackMax (5, or 7 for Deathless — design/v6-revision-delta.md §2.3).
-          deathTrackStep = Math.min(sys.deathTrackMax ?? 5, deathTrackStep + 1);
-          const overflowChange = deathTrackAfterWoundFilled(deathTrackState, true, true);
-          if (overflowChange) deathTrackState = overflowChange.deathTrackState;
-          log.push("Core Wound track already full — Death Track advances instead.");
-          continue;
-        }
-        const severity = SEVERITY_BY_INDEX[slot];
-        const label = `${severity} ${domain} Wound`;
-        coreWounds[slot] = { filled: true, domain, severity, condition: label };
-        filledSlots.push({ slot, domain, severity });
-        log.push(`Core Wound filled: <strong>${label}</strong>.`);
-        if (slot === 4) becameCritical = true;
-      }
-
-      // V6: the Death Track activates the instant the 5th Core Wound space fills — at step 0,
-      // without advancing it. The first automatic advance happens at the start of the character's
-      // NEXT Turn (EssenceCombat#_onStartTurn), not immediately here.
-      const nowFull = coreWounds.length > 0 && coreWounds.every((w) => w.filled);
-      const fillChange = deathTrackAfterWoundFilled(deathTrackState, wasFull, nowFull);
-      if (fillChange) {
-        deathTrackState = fillChange.deathTrackState;
-        if (fillChange.deathTrackStep !== undefined) deathTrackStep = fillChange.deathTrackStep;
-      }
-
-      update["system.playState.currentTemporaryWounds"] = tempWounds;
-      update["system.coreWounds"] = coreWounds;
-      update["system.playState.currentCoreWounds"] = coreWounds.filter((w) => w.filled).length;
-      if (deathTrackStep !== (sys.playState.deathTrackStep ?? 0)) update["system.playState.deathTrackStep"] = deathTrackStep;
-      if (deathTrackState !== (sys.playState.deathTrackState ?? "none")) update["system.playState.deathTrackState"] = deathTrackState;
-    }
-
+    if (result.deathTrackStep !== (sys.playState.deathTrackStep ?? 0)) update["system.playState.deathTrackStep"] = result.deathTrackStep;
+    if (result.deathTrackState !== (sys.playState.deathTrackState ?? "none")) update["system.playState.deathTrackState"] = result.deathTrackState;
     await this.actor.update(update);
+    if (result.filledSlots.length) await attachWoundCards(this.actor, result.filledSlots);
 
-    // V6 Wound Cards: attach the matching Condition Item for each newly filled Core Wound space —
-    // batched into one createEmbeddedDocuments call rather than one call per Wound (Finding 7).
-    if (filledSlots.length) await attachWoundCards(this.actor, filledSlots);
-    // Overflow Wounds advanced the track (Doc L4059): reaching the threshold is death.
-    if (update["system.playState.deathTrackState"] === "dying" || sys.playState.deathTrackState === "dying") {
-      const step = update["system.playState.deathTrackStep"] ?? sys.playState.deathTrackStep ?? 0;
-      if (step >= (sys.deathTrackMax ?? 5)) await this.actor.markDead();
-    }
-
-    const domainSummary = Object.entries(result.domainAmounts).filter(([, n]) => n > 0).map(([d, n]) => `${n} ${d}`).join(" + ");
+    const summary = picked.components.map((c) => `${c.amount} ${c.type}${c.breach ? " (Breach)" : ""}${c.nonlethal ? " (nonlethal)" : ""}`).join(" + ");
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> takes ${result.amount} Damage (${domainSummary}, ${result.damageType})${result.breach ? " (Breach)" : ""}.</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+      content: `<p><strong>${this.actor.name}</strong> takes ${summary}${picked.reduction ? `, reduced by ${picked.reduction}` : ""}.</p><ul>${result.log.map((l) => `<li>${l}</li>`).join("")}</ul>`
     });
 
-    if (becameCritical) {
+    if (result.nonlethalStable) await this.actor.setUnconscious(true);
+    if (result.filledSlots.some((f) => f.slot === 4)) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CriticallyWounded", { name: this.actor.name }));
     }
+    if (result.died) await this.actor.markDead();
+    else if (result.filledSlots.length) await promptConcentrationOnWound(this.actor);
   }
 
   /**
@@ -1725,6 +1618,10 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    */
   static async #onGrantRecovery() {
     const anima = this.actor.system.anima ?? 0;
+    // Natural recovery (Doc L2719-L2721): the GM clears whichever Wounds met their cards'
+    // requirements, in any order; gaps are allowed. Only active healing (Recover Wound) is
+    // lowest-first.
+    const filledWounds = this.actor.system.coreWounds.map((w, i) => ({ ...w, i })).filter((w) => w.filled);
     // Fatigued (Doc L2701, L4139): halve each base amount and round up again, before Anima.
     const fatiguedItem = this.actor.items.find((i) => i.type === "condition" && (i.name || "").toUpperCase() === "FATIGUED") ?? null;
     const result = await new Promise((resolve) => {
@@ -1743,10 +1640,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
           <label>Stamina <input type="number" name="animaStamina" value="0" min="0" max="${anima}"></label>
           <label>Focus <input type="number" name="animaFocus" value="0" min="0" max="${anima}"></label>
           <label>Mana <input type="number" name="animaMana" value="0" min="0" max="${anima}"></label>
-          <label style="display:flex;align-items:center;gap:6px;">
-            <input type="checkbox" name="healWounds"> Recover Core Wounds
-          </label>
-          <label>Core Wounds to Recover <input type="number" name="woundCount" value="1" min="1" max="5"></label>
+          ${filledWounds.length ? `<p class="muted">${game.i18n.localize("ESSENCE.Sheet.RecoverWhichWounds")}</p>${filledWounds.map((w) => `<label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" name="wound${w.i}"> ${w.condition || `${SEVERITY_BY_INDEX[w.i]} Wound`} (space ${w.i + 1})</label>`).join("")}` : ""}
         `,
         buttons: [{
           action: "grant",
@@ -1767,8 +1661,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
               animaStamina: clamp(rawStamina),
               animaFocus: clamp(rawFocus),
               animaMana: clamp(rawMana),
-              healWounds: button.form.elements.healWounds.checked,
-              woundCount: Math.max(1, Math.floor(Number(button.form.elements.woundCount.value)) || 1)
+              woundSlots: filledWounds.filter((w) => button.form.elements[`wound${w.i}`]?.checked).map((w) => w.i)
             };
           }
         }],
@@ -1805,16 +1698,12 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
     const woundsRecovered = [];
     const woundSlotsRecovered = []; // V6 Wound Cards — removed after the actor update below.
-    if (result.healWounds) {
+    if (result.woundSlots.length) {
       const coreWounds = sys.coreWounds.map((w) => ({ ...w }));
       let deathTrackState = sys.playState.deathTrackState;
       let deathTrackStep = sys.playState.deathTrackStep;
-      for (let n = 0; n < result.woundCount; n++) {
-        let slot = -1;
-        for (let i = 0; i < coreWounds.length; i++) {
-          if (coreWounds[i].filled) { slot = i; break; }
-        }
-        if (slot === -1) break;
+      for (const slot of result.woundSlots) {
+        if (!coreWounds[slot]?.filled) continue;
         woundsRecovered.push(coreWounds[slot].condition);
         woundSlotsRecovered.push(slot);
         coreWounds[slot] = { filled: false, domain: "", severity: "", condition: "" };
@@ -1853,7 +1742,11 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     await this.actor.update(update);
     // Batched into one deleteEmbeddedDocuments call (and one linear scan of actor.items) rather
     // than one scan-and-delete per recovered Wound (Finding 7).
-    if (woundSlotsRecovered.length) await removeWoundCards(this.actor, woundSlotsRecovered);
+    if (woundSlotsRecovered.length) {
+      await removeWoundCards(this.actor, woundSlotsRecovered);
+      // Doc L4117: injury unconsciousness ends when a Wound space opens.
+      await this.actor.setUnconscious(false);
+    }
 
     // Reduce the Death Track by 1 (non-Dying only, including a full-track Stabilized character) —
     // EssenceActor#reduceDeathTrack is the "ready extension point" the Phase 3 review-fix pass left

@@ -2,6 +2,27 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.10.1
+
+**Phase 3, part two: Damage components, Recovery, Concentration.**
+
+**Apply Damage follows the book.** The dialog takes up to three printed components, each with an
+amount, a Damage type (which sets its domain), Breach and Nonlethal. A flat reduction applies once
+to the total from the largest component, with a one-click "Attacker is Weakened (−1)". Components
+then resolve in order: Resistance or Vulnerability, Resilience or Breach, Temporary Wounds, Core
+Wounds, each finishing before the next. The old Spiritual/Mental/Physical cycling is gone. The
+same engine runs on the Character, NPC/Monster and Full Manifestation sheets.
+
+**Nonlethal.** When a nonlethal component fills the last Wound space, a character is Stabilized and
+unconscious instead of Dying, and an enemy is Defeated but stable. Its surplus Wounds do nothing.
+
+**Recovery.** Grant Recovery now lists each filled Core Wound with a checkbox, so the GM clears the
+ones whose Wound Cards' requirements were met, in any order. Recover Wound stays lowest-first for
+active healing. Opening a space clears injury unconsciousness.
+
+**Concentration.** A Core Wound on a concentrating character asks: burn 1 available Action or
+Reaction die, or end Concentration. No die available ends it.
+
 ## 0.10.0
 
 **Phase 3, part one: dice, Turns, Prepare Action, Stabilize, death, Conditions.**

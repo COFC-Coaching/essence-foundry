@@ -3272,3 +3272,25 @@ rework (3.6 to 3.8), Recovery's Wound picker (3.13) and Concentration (3.15).
   (burns 2, no prompt); Prepare Action then Fire from the Combat tab; Stabilize with a targeted
   Dying character; a Death Track reaching 5 marks the token defeated; Dazed on a token then
   advancing the tracker to that combatant.
+
+### 2026-09-27 -- 0.10.1: Phase 3 part two (Damage components, Recovery picker, Concentration)
+
+- **Engine** (`utils.mjs`): `DAMAGE_TYPE_DOMAIN`, `adjustForResistance` (pure twin of
+  `applyResistanceVulnerability`), `applyFlatReduction` (Doc L3900: largest component first,
+  ties to the earlier one with a log note that the target may choose) and
+  `resolveDamageComponents` (L3898-L3904). Test cases reproduce the Doc's two worked examples
+  (L3912-L3914, L3918), nonlethal (L4117-L4119), the Stabilized-overflow break, death at the
+  threshold, a capacity-3 enemy and Manifestation overflow counting.
+- **Dialog** (`card-play.mjs` `promptDamageComponents`): three rows (amount, type, Breach,
+  Nonlethal), flat reduction, Weakened checkbox. Shared by all three sheets; the old per-domain
+  amounts and Spiritual-Mental-Physical queue are gone.
+- **Sheets**: `#onApplyDamage` rewritten on `actor-sheet.mjs` (overflow "deathTrack", Wound
+  Cards, unconscious on nonlethal, `markDead` at the threshold, Concentration prompt),
+  `npc-sheet.mjs` (capacity, overflow "none", Defeated -> unconscious, nonlethal -> "stabilized")
+  and `manifestation-sheet.mjs` (overflow "count"). Grant Recovery lists filled Wounds as
+  checkboxes (L2719-L2721) instead of a count; clearing a space via Recovery or the pip toggle
+  calls `setUnconscious(false)`.
+- **Concentration** (`promptConcentrationOnWound`): burn 1 from whichever Pool has dice, or end;
+  auto-ends with none (L4632). Triggered only by real Core Wound fills, not Temporary absorption.
+- **Verification:** `npm test` (rules 86, migration 45); templates balanced; lang keys resolve.
+  Not live-tested; checks 45-53 in `design/live-test-pending.md`.

@@ -7,7 +7,7 @@
  * here; module/utils.mjs has no imports and loads under plain Node.
  */
 
-import { ordinaryDamageWounds, isDistinctionStyle, distinctionUnlocks, componentTiers, computeTierGate, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, burnOnlyProfile, equipmentCardCommitment, recoveryBaseAmount, initiativeTieBreak } from "../module/utils.mjs";
+import { ordinaryDamageWounds, isDistinctionStyle, distinctionUnlocks, componentTiers, computeTierGate, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, burnOnlyProfile, equipmentCardCommitment, recoveryBaseAmount, initiativeTieBreak, applyFlatReduction, resolveDamageComponents } from "../module/utils.mjs";
 import { resolveNonCombatRoll } from "../module/dice/essence-roll.mjs";
 import { laterAcquisitionText } from "../module/data/origin-features.mjs";
 import { ITEM_GRANT_REGISTRY, tierQualifiesForGrant } from "../module/data/item-grants.mjs";
@@ -103,6 +103,37 @@ console.log("\n--- Initiative ties (Doc L3402) ---");
 check("a PC goes before a tied enemy", initiativeTieBreak("character", "npc") < 0, true);
 check("an enemy goes after a tied PC", initiativeTieBreak("monster", "character") > 0, true);
 check("two PCs: no rule here", initiativeTieBreak("character", "character"), 0);
+
+console.log("\n--- Damage components (Part VII, Doc L3896-L3918, L4117-L4119, L4188) ---");
+const track = () => Array.from({ length: 5 }, () => ({ filled: false }));
+check("L3900 −1 comes off the largest component", JSON.stringify(applyFlatReduction([3, 2], 1)), "[2,2]");
+check("L3900 a further −1 on a tie reduces the earlier one", JSON.stringify(applyFlatReduction([2, 2], 1)), "[1,2]");
+check("reduction stops at 0", JSON.stringify(applyFlatReduction([1], 3)), "[0]");
+// L3912-L3914: Resilience 2, nothing accumulated: 3 Fire + 2 Psychic = 1 Physical Wound then 2 Mental Wounds, accumulated 5.
+const ex1 = resolveDamageComponents({ resilience: 2, accumulated: 0, tempWounds: 0, coreWounds: track() }, [{ amount: 3, type: "Fire" }, { amount: 2, type: "Psychic" }]);
+check("L3914 three Wounds in all", ex1.filledSlots.length, 3);
+check("L3914 first Wound is Physical", ex1.filledSlots[0].domain, "Physical");
+check("L3914 the Psychic Wounds are Mental", ex1.filledSlots[1].domain + "/" + ex1.filledSlots[2].domain, "Mental/Mental");
+check("L3914 accumulated Damage is 5", ex1.accumulated, 5);
+// L3918: 3 Fire + 2 Psychic reduced by 1 -> 2 Fire + 2 Psychic; Fire Resistance takes the Fire to 0; 2 Psychic resolve normally.
+const ex2 = resolveDamageComponents({ resilience: 0, accumulated: 0, tempWounds: 0, coreWounds: track(), resistances: [{ damageType: "Fire" }] }, [{ amount: 3, type: "Fire" }, { amount: 2, type: "Psychic" }], 1);
+check("L3918 reduction is not reassigned after Resistance", ex2.filledSlots.length, 2);
+check("L3918 both Wounds are Mental", ex2.filledSlots.every((f) => f.domain === "Mental"), true);
+check("Temporary Wounds absorb first", resolveDamageComponents({ resilience: 0, accumulated: 0, tempWounds: 1, coreWounds: track() }, [{ amount: 2, type: "Slashing", breach: true }]).filledSlots.length, 1);
+check("L4057 filling the fifth space starts Dying", resolveDamageComponents({ resilience: 0, accumulated: 0, tempWounds: 0, coreWounds: track() }, [{ amount: 5, type: "Slashing", breach: true }]).deathTrackState, "dying");
+const ex3 = resolveDamageComponents({ resilience: 0, accumulated: 0, tempWounds: 0, coreWounds: track() }, [{ amount: 7, type: "Bludgeoning", breach: true, nonlethal: true }]);
+check("L4117 nonlethal last space: stabilized", ex3.deathTrackState, "stabilized");
+check("L4117 nonlethal: unconscious flag", ex3.nonlethalStable, true);
+check("L4119 nonlethal surplus does not advance the track", ex3.deathTrackStep, 0);
+const full = track().map(() => ({ filled: true }));
+const ex4 = resolveDamageComponents({ resilience: 0, accumulated: 0, tempWounds: 0, coreWounds: full, deathTrackState: "stabilized", deathTrackStep: 2 }, [{ amount: 1, type: "Slashing", breach: true }]);
+check("an extra Wound while Stabilized breaks it and advances", ex4.deathTrackState + ex4.deathTrackStep, "dying3");
+const ex5 = resolveDamageComponents({ resilience: 0, accumulated: 0, tempWounds: 0, coreWounds: full, deathTrackState: "dying", deathTrackStep: 4 }, [{ amount: 1, type: "Slashing", breach: true }]);
+check("L4059 reaching the threshold is death", ex5.died, true);
+check("L4119 a nonlethal component does not stabilize someone already Dying", resolveDamageComponents({ resilience: 0, accumulated: 0, tempWounds: 0, coreWounds: full, deathTrackState: "dying", deathTrackStep: 1 }, [{ amount: 1, type: "Slashing", breach: true, nonlethal: true }]).deathTrackState, "dying");
+const ex6 = resolveDamageComponents({ resilience: 1, accumulated: 0, tempWounds: 0, coreWounds: track().slice(0, 3), capacity: 3, overflow: "none" }, [{ amount: 5, type: "Fire" }]);
+check("simplified enemy: capacity 3 caps the fills", ex6.filledSlots.length, 3);
+check("Manifestation overflow is counted", resolveDamageComponents({ resilience: 0, accumulated: 0, tempWounds: 0, coreWounds: full, overflow: "count" }, [{ amount: 2, type: "Force", breach: true }]).overflowCount, 2);
 
 console.log("\n--- Team Tier access (Part III, Team Tier and Acquisition, Doc L1793) ---");
 const part = (id, type, tier) => ({ id, type, system: { tier } });

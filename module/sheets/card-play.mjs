@@ -112,3 +112,84 @@ async function preparePlay(actor, item, available, burn) {
   });
   return true;
 }
+
+/**
+ * Apply Damage prompt (0.10.1, Doc L3896-L3918): up to three printed components, each with an
+ * amount, Damage type, Breach and (when the source grants it) nonlethal; plus the generic flat
+ * reduction applied once to the total, with Weakened (Doc L4188) as a one-click −1 source.
+ * @returns {Promise<{components: Array, reduction: number}|null>}
+ */
+export async function promptDamageComponents({ title = "Apply Damage", types, rows = 3 } = {}) {
+  const typeOptions = types.map((t) => `<option value="${t}">${t}</option>`).join("");
+  const row = (i) => `
+    <div class="damage-component" style="display:grid;grid-template-columns:4em 1fr auto auto;gap:6px;align-items:center;margin-bottom:4px;">
+      <input type="number" name="amount${i}" value="${i === 0 ? 1 : 0}" min="0" aria-label="Component ${i + 1} amount"${i === 0 ? " autofocus" : ""}>
+      <select name="type${i}" aria-label="Component ${i + 1} Damage type">${typeOptions}</select>
+      <label title="${game.i18n.localize("ESSENCE.Sheet.BreachHint")}"><input type="checkbox" name="breach${i}"> ${game.i18n.localize("ESSENCE.Sheet.Breach")}</label>
+      <label title="${game.i18n.localize("ESSENCE.Sheet.NonlethalHint")}"><input type="checkbox" name="nonlethal${i}"> ${game.i18n.localize("ESSENCE.Sheet.Nonlethal")}</label>
+    </div>`;
+  const result = await new Promise((resolve) => {
+    new foundry.applications.api.DialogV2({
+      window: { title },
+      content: `
+        <p class="muted">${game.i18n.localize("ESSENCE.Sheet.DamageComponentsHint")}</p>
+        ${Array.from({ length: rows }, (_, i) => row(i)).join("")}
+        <div style="display:flex;gap:12px;align-items:center;margin-top:6px;">
+          <label>${game.i18n.localize("ESSENCE.Sheet.FlatReduction")} <input type="number" name="reduction" value="0" min="0" style="width:4em"></label>
+          <label title="${game.i18n.localize("ESSENCE.Sheet.WeakenedHint")}"><input type="checkbox" name="weakened"> ${game.i18n.localize("ESSENCE.Sheet.AttackerWeakened")}</label>
+        </div>`,
+      buttons: [{
+        action: "apply", label: "Apply", default: true,
+        callback: (event, button) => {
+          const f = button.form.elements;
+          const components = [];
+          for (let i = 0; i < rows; i++) {
+            const amount = Math.max(0, Math.floor(Number(f[`amount${i}`].value)) || 0);
+            if (amount > 0) components.push({ amount, type: f[`type${i}`].value, breach: f[`breach${i}`].checked, nonlethal: f[`nonlethal${i}`].checked });
+          }
+          const reduction = Math.max(0, Math.floor(Number(f.reduction.value)) || 0) + (f.weakened.checked ? 1 : 0);
+          return { components, reduction };
+        }
+      }],
+      submit: (result) => resolve(result === "apply" ? null : result)
+    }).render(true);
+  });
+  if (!result || !result.components.length) return null;
+  return result;
+}
+
+/**
+ * Concentration on a Core Wound (Doc L4632): "burn 1 die from their currently available Action or
+ * Reaction Pool or end Concentration. If no appropriate die is available, Concentration ends." Not
+ * a Reaction. A Temporary Wound absorbing the harm does not trigger it, so callers pass only real
+ * Core Wound fills.
+ */
+export async function promptConcentrationOnWound(actor) {
+  const item = actor.items.find((i) => i.type === "condition" && (i.name || "").toUpperCase() === "CONCENTRATION");
+  if (!item) return;
+  const ps = actor.system.playState;
+  const pools = [["actionDice", "Action", ps.actionDice ?? 0], ["reactionDice", "Reaction", ps.reactionDice ?? 0]].filter(([, , n]) => n > 0);
+  if (!pools.length) {
+    await item.delete();
+    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p><strong>${actor.name}</strong> suffers a Core Wound with no Pool die available: Concentration ends.</p>` });
+    return;
+  }
+  const choice = await new Promise((resolve) => {
+    new foundry.applications.api.DialogV2({
+      window: { title: "Concentration" },
+      content: `<p>${game.i18n.format("ESSENCE.Sheet.ConcentrationWound", { name: actor.name })}</p>`,
+      buttons: [
+        ...pools.map(([field, label, n]) => ({ action: field, label: `Burn 1 ${label} die (${n} left)`, callback: () => field })),
+        { action: "end", label: "End Concentration", callback: () => "end" }
+      ],
+      submit: (result) => resolve(result ?? "end")
+    }).render(true);
+  });
+  if (choice === "end" || !choice) {
+    await item.delete();
+    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p><strong>${actor.name}</strong> ends Concentration after a Core Wound.</p>` });
+    return;
+  }
+  await actor.update({ [`system.playState.${choice}`]: (ps[choice] ?? 0) - 1 });
+  await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p><strong>${actor.name}</strong> burns 1 ${choice === "actionDice" ? "Action" : "Reaction"} die to keep Concentration through a Core Wound.</p>` });
+}

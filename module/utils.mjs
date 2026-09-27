@@ -130,6 +130,152 @@ export const DAMAGE_TYPES = [
   "Acid", "Force", "Psychic", "Arcane", "Radiant", "Necrotic"
 ];
 
+/** Each printed Damage type's domain (Doc L3898: "its specific Damage type, which determines its
+ *  domain"). Physical: the eight bodily and elemental types; Mental: Psychic, Arcane; Spiritual:
+ *  Radiant, Necrotic. */
+export const DAMAGE_TYPE_DOMAIN = {
+  Bludgeoning: "Physical", Piercing: "Physical", Slashing: "Physical", Fire: "Physical",
+  Cold: "Physical", Lightning: "Physical", Acid: "Physical", Force: "Physical",
+  Psychic: "Mental", Arcane: "Mental", Radiant: "Spiritual", Necrotic: "Spiritual"
+};
+
+/** Pure form of applyResistanceVulnerability for the component engine below. */
+export function adjustForResistance(resistances, vulnerabilities, damageType, amount) {
+  const hasResistance = (resistances ?? []).some((r) => r.damageType === damageType);
+  const hasVulnerability = (vulnerabilities ?? []).some((v) => v.damageType === damageType);
+  if (hasResistance && hasVulnerability) return { amount, note: `Resistance and Vulnerability (${damageType}) cancel.` };
+  if (hasResistance) return { amount: Math.max(0, amount - 2), note: `Resistance (${damageType}) −2.` };
+  if (hasVulnerability) return { amount: amount + 2, note: `Vulnerability (${damageType}) +2.` };
+  return { amount, note: "" };
+}
+
+/**
+ * Generic flat Damage reduction (Doc L3900, and Weakened at L4188): applied once to the card's
+ * total, each point taken from the currently largest component, stopping at 0. On a tie the
+ * creature taking the Damage chooses; here the earlier-listed tied component is reduced and the
+ * log says so. Returns new amounts in the same order.
+ */
+export function applyFlatReduction(amounts, reduction) {
+  const out = amounts.map((n) => Math.max(0, n | 0));
+  let left = Math.max(0, reduction | 0);
+  while (left > 0 && out.some((n) => n > 0)) {
+    let idx = 0;
+    for (let i = 1; i < out.length; i++) if (out[i] > out[idx]) idx = i;
+    out[idx] -= 1;
+    left -= 1;
+  }
+  return out;
+}
+
+/**
+ * Multiple Damage Components (Doc L3896-L3918), one card use against one target, resolved in
+ * printed order after the flat reduction: Resistance or Vulnerability, then Resilience (or
+ * Breach), Temporary Wounds, then Core Wounds, finishing each component before the next so later
+ * components see the updated state. Pure: takes a snapshot, returns the new one plus a log.
+ *
+ * @param {object} state
+ * @param {number} state.resilience - effective Resilience
+ * @param {number} state.accumulated - ordinary Damage accumulated this interval
+ * @param {number} state.tempWounds - Temporary Wounds available
+ * @param {Array<{filled: boolean}>} state.coreWounds - the track (any length; capacity below)
+ * @param {number} [state.capacity] - usable spaces (simplified enemies); default all
+ * @param {string} [state.deathTrackState] - "none" | "dying" | "stabilized" | "dead"
+ * @param {number} [state.deathTrackStep]
+ * @param {number} [state.deathTrackMax] - 5, or 7 for Deathless
+ * @param {"deathTrack"|"count"|"none"} [state.overflow] - what an extra Wound on a full track does:
+ *   advance the Death Track (characters), count it (Manifestations), or nothing (simplified enemies)
+ * @param {Array} [state.resistances]
+ * @param {Array} [state.vulnerabilities]
+ * @param {Array<{amount: number, type: string, breach?: boolean, nonlethal?: boolean}>} components
+ * @param {number} [reduction] - generic flat reduction incl. Weakened's 1
+ */
+export function resolveDamageComponents(state, components, reduction = 0) {
+  const capacity = state.capacity ?? state.coreWounds.length;
+  const track = state.coreWounds.map((w) => ({ ...w }));
+  let accumulated = state.accumulated ?? 0;
+  let tempWounds = state.tempWounds ?? 0;
+  let deathTrackState = state.deathTrackState ?? "none";
+  let deathTrackStep = state.deathTrackStep ?? 0;
+  const deathTrackMax = state.deathTrackMax ?? 5;
+  const overflowMode = state.overflow ?? "deathTrack";
+  const log = [];
+  const filledSlots = [];
+  let overflowCount = 0;
+  let nonlethalStable = false;
+  let died = false;
+
+  const live = components.filter((c) => (c.amount | 0) > 0);
+  const reduced = applyFlatReduction(live.map((c) => c.amount), reduction);
+  if (reduction > 0) {
+    const ties = live.length > 1;
+    log.push(`Flat reduction −${reduction} applied once to the total, from the largest component${ties ? " (ties: the target may choose; the earlier one was reduced here)" : ""}: ${reduced.map((n, i) => `${n} ${live[i].type}`).join(" + ")}.`);
+  }
+
+  const isFull = () => track.slice(0, capacity).every((w) => w.filled);
+
+  live.forEach((c, i) => {
+    const domain = DAMAGE_TYPE_DOMAIN[c.type] ?? "Physical";
+    const rv = adjustForResistance(state.resistances, state.vulnerabilities, c.type, reduced[i]);
+    if (rv.note) log.push(rv.note);
+    const amount = rv.amount;
+    let wounds;
+    if (c.breach) {
+      wounds = amount;
+      log.push(`${amount} ${c.type} (Breach): skips Resilience.`);
+    } else {
+      wounds = ordinaryDamageWounds(state.resilience ?? 0, accumulated, amount);
+      accumulated += amount;
+      log.push(`${amount} ${c.type}: accumulated ${accumulated} against Resilience ${state.resilience ?? 0}, ${wounds} Wound${wounds === 1 ? "" : "s"}.`);
+    }
+    const wasFullBefore = isFull();
+    const wasDying = deathTrackState === "dying";
+    for (let n = 0; n < wounds; n++) {
+      if (tempWounds > 0) { tempWounds -= 1; log.push(`1 ${domain} Wound absorbed by a Temporary Wound.`); continue; }
+      const slot = track.slice(0, capacity).findIndex((w) => !w.filled);
+      if (slot === -1) {
+        // Surplus Wounds from a nonlethal component cannot kill or advance the track (Doc L4119).
+        if (c.nonlethal) { log.push("Surplus Wound from a nonlethal component: no effect."); continue; }
+        if (overflowMode === "deathTrack" && deathTrackState !== "dead") {
+          deathTrackStep = Math.min(deathTrackMax, deathTrackStep + 1);
+          const change = deathTrackAfterWoundFilled(deathTrackState, true, true);
+          if (change) deathTrackState = change.deathTrackState;
+          log.push(`Core Wound track full: Death Track advances to ${deathTrackStep}.`);
+          if (deathTrackStep >= deathTrackMax) died = true;
+        } else if (overflowMode === "count") {
+          overflowCount += 1;
+          log.push("Wound Track full: this Wound overflows.");
+        } else {
+          log.push("Wound capacity already full.");
+        }
+        continue;
+      }
+      const severity = SEVERITY_BY_INDEX[slot] ?? "";
+      track[slot] = { filled: true, domain, severity, condition: severity ? `${severity} ${domain} Wound` : "" };
+      filledSlots.push({ slot, domain, severity });
+      log.push(`Core Wound filled: ${severity ? `${severity} ${domain} Wound` : `${domain} Wound`}.`);
+    }
+    const nowFull = isFull();
+    if (!wasFullBefore && nowFull) {
+      if (c.nonlethal && !wasDying) {
+        // Nonlethal defeat (Doc L4117): unconscious and stable instead of beginning to die.
+        deathTrackState = overflowMode === "deathTrack" ? "stabilized" : deathTrackState;
+        nonlethalStable = true;
+        log.push("Last space filled by a nonlethal component: unconscious and stable, not Dying.");
+      } else if (overflowMode === "deathTrack") {
+        const change = deathTrackAfterWoundFilled(deathTrackState, false, true);
+        if (change) deathTrackState = change.deathTrackState;
+        log.push("Every Core Wound space is filled: Dying, Death Track active.");
+      }
+    }
+  });
+
+  return {
+    coreWounds: track, accumulated, tempWounds, deathTrackState, deathTrackStep,
+    filledSlots, overflowCount, nonlethalStable, died, log,
+    total: reduced.reduce((a, b) => a + b, 0)
+  };
+}
+
 /** Strips tags for a plain-text preview; card body/rider fields are stored as HTMLFields. */
 export function stripHtml(html) {
   return (html || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();

@@ -1,5 +1,6 @@
 import { rollEssencePool } from "../dice/essence-roll.mjs";
-import { SEVERITY_BY_INDEX, cardSummary, ordinaryDamageWounds } from "../utils.mjs";
+import { SEVERITY_BY_INDEX, cardSummary, ordinaryDamageWounds , resolveDamageComponents, DAMAGE_TYPES } from "../utils.mjs";
+import { promptDamageComponents } from "./card-play.mjs";
 import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -252,83 +253,37 @@ export default class EssenceManifestationSheet extends HandlebarsApplicationMixi
    * (see EssenceManifestationData) — for applyManifestationDefeat() to read once the GM/player
    * resolves the defeat from this sheet's header menu.
    */
+  /**
+   * Apply Damage for a Full Manifestation profile (0.10.1, Doc L3896-L3918): components in order;
+   * a full Wound Track counts overflow Wounds, which pass to the caller on defeat (see
+   * applyManifestationDefeat in apps/manifestation.mjs).
+   */
   static async #onApplyDamage() {
-    const result = await new Promise((resolve) => {
-      new foundry.applications.api.DialogV2({
-        window: { title: "Apply Damage" },
-        content: `
-          <label>Amount <input type="number" name="amount" value="1" min="1" autofocus></label>
-          <label style="display:flex;align-items:center;gap:6px;">
-            <input type="checkbox" name="breach"> Breach (bypasses Resilience)
-          </label>
-        `,
-        buttons: [{
-          action: "apply",
-          label: "Apply",
-          default: true,
-          callback: (event, button) => ({
-            amount: Math.max(1, Math.floor(Number(button.form.elements.amount.value)) || 1),
-            breach: button.form.elements.breach.checked
-          })
-        }],
-        submit: (result) => resolve(result)
-      }).render(true);
-    });
-    if (!result) return;
+    const picked = await promptDamageComponents({ types: DAMAGE_TYPES });
+    if (!picked) return;
 
     const sys = this.actor.system;
-    const resilience = sys.resilience ?? 0;
-    const prevAccumulated = sys.playState.accumulatedDamage ?? 0;
+    const result = resolveDamageComponents({
+      resilience: sys.resilience ?? 0,
+      accumulated: sys.playState.accumulatedDamage ?? 0,
+      tempWounds: sys.playState.currentTemporaryWounds ?? 0,
+      coreWounds: sys.coreWounds,
+      overflow: "count",
+      resistances: sys.resistances,
+      vulnerabilities: sys.vulnerabilities
+    }, picked.components, picked.reduction);
 
-    let wounds;
-    let newAccumulated = prevAccumulated;
-    if (result.breach) {
-      wounds = result.amount;
-    } else {
-      // Per-event remaining protection (ordinaryDamageWounds, utils.mjs). This used to re-derive
-      // earlier Wounds from the current Resilience, so any mid-interval change rewrote them.
-      wounds = ordinaryDamageWounds(resilience, prevAccumulated, result.amount);
-      newAccumulated = prevAccumulated + result.amount;
-    }
+    await this.actor.update({
+      "system.playState.accumulatedDamage": result.accumulated,
+      "system.playState.currentTemporaryWounds": result.tempWounds,
+      "system.coreWounds": result.coreWounds,
+      "system.playState.overflowWounds": (sys.playState.overflowWounds ?? 0) + result.overflowCount
+    });
 
-    const update = { "system.playState.accumulatedDamage": newAccumulated };
-    const log = [];
-
-    if (wounds <= 0) {
-      log.push("Absorbed entirely by Resilience — no Wound.");
-    } else {
-      let tempWounds = sys.playState.currentTemporaryWounds ?? 0;
-      const coreWounds = sys.coreWounds.map((w) => ({ ...w }));
-      let overflowWounds = sys.playState.overflowWounds ?? 0;
-
-      for (let i = 0; i < wounds; i++) {
-        if (tempWounds > 0) {
-          tempWounds -= 1;
-          log.push("1 Wound absorbed by a Temporary Wound.");
-          continue;
-        }
-        const slot = coreWounds.findIndex((w) => !w.filled);
-        if (slot === -1) {
-          overflowWounds += 1;
-          log.push("Wound Track already full — this Wound will overflow to the caller on defeat.");
-          continue;
-        }
-        const severity = SEVERITY_BY_INDEX[slot];
-        const label = `${severity} Wound`;
-        coreWounds[slot] = { filled: true, domain: "", severity, condition: label };
-        log.push(`Wound filled: <strong>${label}</strong>.`);
-      }
-
-      update["system.playState.currentTemporaryWounds"] = tempWounds;
-      update["system.coreWounds"] = coreWounds;
-      update["system.playState.overflowWounds"] = overflowWounds;
-    }
-
-    await this.actor.update(update);
-
+    const summary = picked.components.map((c) => `${c.amount} ${c.type}${c.breach ? " (Breach)" : ""}`).join(" + ");
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> takes ${result.amount} Damage${result.breach ? " (Breach)" : ""}.</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+      content: `<p><strong>${this.actor.name}</strong> takes ${summary}${picked.reduction ? `, reduced by ${picked.reduction}` : ""}.</p><ul>${result.log.map((l) => `<li>${l}</li>`).join("")}</ul>`
     });
 
     if (this.actor.system.defeated) {
