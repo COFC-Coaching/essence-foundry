@@ -20,6 +20,7 @@
     <div class="header-fields">
       <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}</label>
       <label title="{{localize 'ESSENCE.Common.PoolBonusHint'}}">{{localize "ESSENCE.Common.PoolBonus"}} <input name="system.poolBonus" type="number" min="0" value="{{system.poolBonus}}" style="width:3em"></label>
+      <label title="{{localize 'ESSENCE.Manifestation.RollLimitHint'}}">{{localize "ESSENCE.Item.Monster.RollLimit"}} <input name="system.rollLimit" type="number" min="0" value="{{system.rollLimit}}" style="width:3em" placeholder="—"></label>
       {{#if (eq system.subtype "Elemental")}}
         <label>Aspect
           <select name="system.aspect">
@@ -56,7 +57,8 @@
   </div>
 </div>
 
-<h3 class="section-head">{{localize "ESSENCE.Common.Wounds"}} {{#if system.defeated}}<span class="muted">&mdash; {{localize "ESSENCE.Manifestation.Defeated"}}</span>{{/if}}</h3>
+<h3 class="section-head">{{localize "ESSENCE.Manifestation.SharedTrack"}} {{#if system.defeated}}<span class="muted">&mdash; {{localize "ESSENCE.Manifestation.Defeated"}}</span>{{/if}}</h3>
+<p class="muted">{{localize "ESSENCE.Manifestation.SharedTrackHint"}}</p>
 <div class="wounds-row">
   <div class="wound-block">
     <span class="attr-label">{{localize "ESSENCE.Common.Resilience"}}</span>
@@ -73,10 +75,6 @@
     <button type="button" data-action="recoverWound">{{localize "ESSENCE.Sheet.RecoverWound"}}</button>
   </div>
 </div>
-{{#if system.playState.overflowWounds}}
-  <p class="muted">{{localize "ESSENCE.Manifestation.OverflowNote" n=system.playState.overflowWounds}}</p>
-{{/if}}
-
 <div class="combat-header">
   <div class="combat-header-left">
     <div class="action-pool">
@@ -94,6 +92,7 @@
   <div class="combat-header-right">
     <div class="combat-controls">
       <button type="button" data-action="endTurn">{{localize "ESSENCE.Sheet.EndTurn"}}</button>
+      <button type="button" data-action="dismissManifestation" title="{{localize 'ESSENCE.Manifestation.ReturnHint'}}">{{localize "ESSENCE.Manifestation.Return"}}</button>
     </div>
   </div>
 </div>

@@ -359,6 +359,159 @@ export function distinctionUnlocks(distinctionItems, skill) {
   return (distinctionItems ?? []).some((item) => item?.system?.unlocks === skill);
 }
 
+/**
+ * Whether the character holds `name` as their creation Distinction. Origin Benefits (Orator's
+ * Commanding Authority, Marksman's Split Focus, ...) come only from that one (Doc L4915: a later
+ * Distinction "does not grant its Origin Benefit"), so `acquiredLater` items never count.
+ */
+export function hasOriginDistinction(distinctionItems, name) {
+  const wanted = (name ?? "").trim().toLowerCase();
+  return (distinctionItems ?? []).some((i) => !i?.system?.acquiredLater && (i?.name ?? "").trim().toLowerCase() === wanted);
+}
+
+// ---- Combat Style Specialties (Part X, Appendix E; 0.12.0) -------------------------------------
+
+/** Magecraft: "You may maintain up to 3 Threads" (Doc L6033). Duplicates allowed. */
+export const THREAD_CAPACITY = 3;
+
+/** Adds a Thread, or reports that one must be discarded first. */
+export function addThread(threads, thread) {
+  const list = [...(threads ?? [])];
+  if (list.length >= THREAD_CAPACITY) return { threads: list, error: "capacity" };
+  list.push(thread);
+  return { threads: list };
+}
+
+/** Leadership: occupied-card capacity is half Leadership Rank rounded up, minimum 1 (Doc L6164). */
+export function authorityCapacity(rank) {
+  return Math.max(1, Math.ceil((rank ?? 0) / 2));
+}
+
+/** Results one card may hold: 1, or 2 with the Orator's Commanding Authority (Doc L6189). */
+export function authorityResultsPerCard(orator) {
+  return orator ? 2 : 1;
+}
+
+/**
+ * Stores newly rolled results on a Leadership card (Doc L6162-L6164, L6189). `cards` is
+ * [{card, results[]}]. A new card needs a free capacity slot; an occupied card keeps or replaces
+ * (`discard` lists the indexes of existing results to drop first). The total on a card never
+ * exceeds `perCard`; the newest results win, so a full card with nothing discarded replaces its
+ * oldest result. Never transfers between cards.
+ */
+export function storeAuthority(cards, cardName, results, { capacity, perCard, discard = [] }) {
+  const list = (cards ?? []).map((c) => ({ card: c.card, results: [...(c.results ?? [])] }));
+  const vals = (results ?? []).filter((n) => Number.isInteger(n) && n >= 1 && n <= 10).slice(0, perCard);
+  if (!vals.length) return { cards: list, error: "noResults" };
+  const idx = list.findIndex((c) => c.card === cardName);
+  if (idx === -1) {
+    if (list.length >= capacity) return { cards: list, error: "capacity" };
+    list.push({ card: cardName, results: vals });
+    return { cards: list, replaced: 0 };
+  }
+  const kept = list[idx].results.filter((_, i) => !discard.includes(i));
+  const merged = [...kept, ...vals].slice(-perCard);
+  const replaced = list[idx].results.length + vals.length - merged.length;
+  list[idx].results = merged;
+  return { cards: list, replaced };
+}
+
+/** Spends (removes) one stored result; an emptied card releases its capacity slot (Doc L6187). */
+export function spendAuthority(cards, cardIndex, resultIndex) {
+  const list = (cards ?? []).map((c) => ({ card: c.card, results: [...(c.results ?? [])] }));
+  const card = list[cardIndex];
+  if (!card) return list;
+  card.results.splice(resultIndex, 1);
+  if (!card.results.length) list.splice(cardIndex, 1);
+  return list;
+}
+
+/** Ballistics: one Lock, two with the Marksman's Split Focus (Doc L5889). */
+export function lockCapacity(marksman) {
+  return marksman ? 2 : 1;
+}
+
+/** Cunning: establish one Contingency per Round, two with the Strategist's Branching Plans; only
+ *  one may trigger per Round either way (Doc L5985, L5993). */
+export function contingencyCapacity(strategist) {
+  return strategist ? 2 : 1;
+}
+
+/** Ritualism: maintain 3 Rites, 4 with the Invoker's Final Echo (Doc L6241-L6243). */
+export function riteCapacity(invoker) {
+  return invoker ? 4 : 3;
+}
+
+/**
+ * Places a Rite (Doc L6241, L6281). A Possessed Rite (one with a `subject`) whose name already sits
+ * on that subject replaces the earlier application in place ("a new same-named effect replaces the
+ * old application"); otherwise it needs a free slot.
+ */
+export function placeRite(rites, rite, capacity) {
+  const list = (rites ?? []).map((r) => ({ ...r }));
+  const name = (rite.name ?? "").trim().toLowerCase();
+  const subject = (rite.subject ?? "").trim().toLowerCase();
+  if (name && subject) {
+    const idx = list.findIndex((r) => (r.name ?? "").trim().toLowerCase() === name && (r.subject ?? "").trim().toLowerCase() === subject);
+    if (idx !== -1) { list[idx] = { ...rite }; return { rites: list, replacedIndex: idx }; }
+  }
+  if (list.length >= capacity) return { rites: list, error: "capacity" };
+  list.push({ ...rite });
+  return { rites: list };
+}
+
+/**
+ * Gestalt upkeep actually due at end of Turn (Doc L5941, L5977): the printed Stamina upkeep, less 1
+ * (minimum 0) with the Gifted's Efficient Transformation, plus 1 while Unstable, which that
+ * reduction cannot remove.
+ */
+export function adaptationUpkeep(printed, { efficient = false, unstable = false } = {}) {
+  const base = Math.max(0, (printed ?? 0) - (efficient ? 1 : 0));
+  return base + (unstable ? 1 : 0);
+}
+
+/** Psionics Strain is capped at 6 (Doc L6120). */
+export const STRAIN_MAX = 6;
+
+/** Forced Strain past 6 stays at 6 and deals 1 Psychic Breach Damage per excess point (Doc L6120). */
+export function forcedStrain(current, amount) {
+  const target = Math.max(0, current ?? 0) + Math.max(0, amount ?? 0);
+  return { strain: Math.min(STRAIN_MAX, target), excess: Math.max(0, target - STRAIN_MAX) };
+}
+
+/** Extra burned die a Psionics card costs at the given Strain (Doc L6118: 5-6). */
+export function psionicsBurnSurchargeAt(strain) {
+  return (strain ?? 0) >= 5 ? 1 : 0;
+}
+
+/**
+ * Full Manifestation entry costs by Rank (Doc L6295-L6303) and the form's native card minimums
+ * (L6323-L6331). The Summoner's Greater Manifestation reduces only the burned-die surcharge, by 1
+ * to a minimum of 0 (L6305); the underlying card keeps its own commitment.
+ */
+export const MANIFESTATION_ENTRY_COSTS = [
+  { burn: 3, mana: 0, actionMin: 2, reactionMin: 2 },
+  { burn: 3, mana: 1, actionMin: 2, reactionMin: 2 },
+  { burn: 3, mana: 2, actionMin: 3, reactionMin: 2 },
+  { burn: 4, mana: 3, actionMin: 4, reactionMin: 2 },
+  { burn: 4, mana: 4, actionMin: 5, reactionMin: 3 },
+  { burn: 5, mana: 5, actionMin: 6, reactionMin: 3 }
+];
+
+export function manifestationEntryCost(rank, { summoner = false } = {}) {
+  const row = MANIFESTATION_ENTRY_COSTS[Math.min(5, Math.max(0, rank | 0))];
+  return { burn: Math.max(0, row.burn - (summoner ? 1 : 0)), mana: row.mana, actionMin: row.actionMin, reactionMin: row.reactionMin };
+}
+
+/** All of a character's forms share one five-space Manifestation Wound track (Doc L6365). */
+export const MANIFESTATION_TRACK = 5;
+
+/** A five-space track with the first `filled` spaces marked, for the active form's sheet. */
+export function manifestationTrack(filled) {
+  const n = Math.min(MANIFESTATION_TRACK, Math.max(0, filled | 0));
+  return Array.from({ length: MANIFESTATION_TRACK }, (_, i) => ({ filled: i < n, domain: "", severity: "", condition: i < n ? "Manifestation Wound" : "" }));
+}
+
 export function hasMastery(cardSystem, actorExpertises) {
   const listed = (cardSystem?.expertises || "")
     .split(",")
@@ -884,9 +1037,20 @@ export async function resetEncounterSpecialties(actor) {
   const update = {};
   const cleared = [];
   if (sp.combo) { update["system.specialties.combo"] = 0; cleared.push("Combo"); }
+  if (sp.comboDealtDamage) update["system.specialties.comboDealtDamage"] = false;
   if (sp.lock) { update["system.specialties.lock"] = ""; cleared.push("Lock"); }
+  if (sp.locks?.length) { update["system.specialties.locks"] = []; cleared.push("Lock"); }
   if (sp.threads?.length) { update["system.specialties.threads"] = []; cleared.push("Threads"); }
   if (sp.authority?.length) { update["system.specialties.authority"] = []; cleared.push("Authority"); }
+  if (sp.authorityCards?.length) { update["system.specialties.authorityCards"] = []; cleared.push("Authority"); }
+  // Contingencies expire at the start of the next Turn anyway; Encounter end clears them too.
+  if (sp.contingency) update["system.specialties.contingency"] = "";
+  if (sp.contingencies?.length) { update["system.specialties.contingencies"] = []; cleared.push("Contingencies"); }
+  if (sp.contingencyTriggered) update["system.specialties.contingencyTriggered"] = false;
+  if (sp.finalEchoUsed) update["system.specialties.finalEchoUsed"] = false;
+  if (sp.strainVented) update["system.specialties.strainVented"] = false;
+  // Doc L6359: Full Manifestation normally ends when the Encounter ends; the caller's sheet handles
+  // the actual return (see #onNewEncounter). Adaptations follow their cards; Unstable ends below.
   if (Object.keys(update).length) await actor.update(update);
   const ending = actor.items.filter((i) => i.type === "condition" && ["STANCE", "UNSTABLE"].includes((i.name || "").toUpperCase()));
   if (ending.length) {

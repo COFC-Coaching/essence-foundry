@@ -1154,10 +1154,10 @@ function manifestationManeuverToItem(m, profileName, rank, actorId) {
  * and that world copy becomes the character's own persistent record for the rest of the Adventure
  * (see CALLING_PROFILES.md's "one persistent Wound record per subtype").
  *
- * `coreWounds` is sized to the profile's own Wound capacity (3-5, not the usual fixed 5) by
- * slicing the same ["Light","Light","Serious","Serious","Critical"] pattern Apply Damage already
- * assigns by slot index (see utils.mjs's SEVERITY_BY_INDEX) — Apply Damage indexes by position,
- * not by array length, so a shorter track "just works" with the existing Wound-filling code.
+ * `coreWounds` has five spaces for every profile (v0.6 Doc L6365, 0.12.0): all of a caller's forms
+ * share one five-space Manifestation Wound track, and the form's own array is only the working view
+ * that enterManifestation fills from the caller's count. The per-profile `woundCapacity` in
+ * calling-profiles-data.json is legacy and no longer read.
  */
 function manifestationProfileToActor(profile) {
   const _id = stableId(`manifestation:${profile.name}`).slice(0, 16);
@@ -1180,7 +1180,7 @@ function manifestationProfileToActor(profile) {
       harmony: profile.harmony,
       resilience: profile.resilience,
       movement: profile.movement,
-      coreWounds: Array.from({ length: profile.woundCapacity }, () => ({ filled: false, domain: "", severity: "", condition: "" }))
+      coreWounds: Array.from({ length: 5 }, () => ({ filled: false, domain: "", severity: "", condition: "" }))
     },
     items: profile.maneuvers.map((m) => manifestationManeuverToItem(m, profile.name, profile.rank, _id)),
     folder: null,

@@ -54,10 +54,14 @@ export default class EssenceManifestationData extends foundry.abstract.TypeDataM
       harmony: new fields.NumberField({ integer: true, initial: 0 }),
       resilience: new fields.NumberField({ integer: true, initial: 0 }),
       movement: new fields.NumberField({ integer: true, initial: 0 }),
+      // Doc L6321: a printed Roll Limit replaces Attribute + Style Rank for the form's native
+      // abilities. Null shows no advisory.
+      rollLimit: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 }),
 
-      // Sized to the profile's own Wound capacity (3-5) at creation, not the usual fixed 5 — see
-      // build-packs.mjs's manifestationProfileToActor(). Apply Damage indexes by slot position
-      // (utils.mjs's SEVERITY_BY_INDEX), so any length here "just works" unmodified.
+      // The active form's view of the caller's shared five-space Manifestation Wound track (Doc
+      // L6365; `specialties.manifestationWounds` on the character is the record). enterManifestation
+      // fills it from the caller's count; return and collapse write the count back. Apply Damage
+      // indexes by slot position (utils.mjs's SEVERITY_BY_INDEX), so any length "just works".
       coreWounds: new fields.ArrayField(new fields.SchemaField({
         filled: new fields.BooleanField({ initial: false }),
         domain: new fields.StringField({ initial: "" }),

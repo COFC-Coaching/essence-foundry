@@ -174,6 +174,13 @@ export default class EssenceCombat extends Combat {
         // Doc L6878: "Refresh the printed allowance at the start of each Round."
         await actor.update({ "system.enemyTurn.reactionsUsed": 0 });
       }
+      // Per-Round Specialty limits (Part X): one Contingency trigger per Round (Doc L5985) and the
+      // Invoker's once-per-Round Final Echo (L6243) reset at the start of every Round.
+      const sp = actor.system.specialties;
+      const roundReset = {};
+      if (sp?.contingencyTriggered) roundReset["system.specialties.contingencyTriggered"] = false;
+      if (sp?.finalEchoUsed) roundReset["system.specialties.finalEchoUsed"] = false;
+      if (Object.keys(roundReset).length) await actor.update(roundReset);
     }
   }
 
@@ -263,11 +270,14 @@ export default class EssenceCombat extends Combat {
       update["system.playState.preparedAction"] = { cardId: "", cardName: "", trigger: "", reserved: 0 };
     }
 
-    // A Cunning Contingency not used by its Trigger expires at the start of the character's
-    // next Turn (see part-iv-combat.md § Contingency).
-    if (actor.system.specialties?.contingency) {
-      update["system.specialties.contingency"] = "";
-    }
+    // Cunning (Doc L5987): an unused Contingency expires at the start of the character's next
+    // Turn. Psionics (L6122): the "no Psionics Actions this Turn" lock from venting Strain ends.
+    // Prowess: the "dealt Damage" tick was settled at End Turn; make sure it starts clear.
+    const sp = actor.system.specialties;
+    if (sp?.contingency) update["system.specialties.contingency"] = "";
+    if (sp?.contingencies?.length) update["system.specialties.contingencies"] = [];
+    if (sp?.strainVented) update["system.specialties.strainVented"] = false;
+    if (sp?.comboDealtDamage) update["system.specialties.comboDealtDamage"] = false;
 
     // Reduced Engine "1 per Round" Abilities (module/data/actor-adversary.mjs) re-enable at the
     // start of every one of this actor's own Turns, same cadence as Action Dice above.

@@ -41,6 +41,12 @@
         "domain": "",
         "severity": "",
         "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
       }
     ]
   },

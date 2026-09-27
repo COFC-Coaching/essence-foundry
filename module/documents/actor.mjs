@@ -1,3 +1,5 @@
+import { adaptationUpkeep, hasOriginDistinction } from "../utils.mjs";
+
 /**
  * Character actors should always use a linked token — every combat/sheet mechanic (Action
  * Dice, wounds, combat state) updates the world Actor via `this.actor`, and an unlinked token
@@ -86,12 +88,64 @@ export default class EssenceActor extends Actor {
       await this.update({ "system.playState.combatTurn": "ended" });
       return true;
     }
+    // End-of-Turn Specialty steps (Part X, 0.12.0) run before the Pool converts, so an Adaptation's
+    // Stamina upkeep and Combo loss are settled on this Turn.
+    await this.#endOfTurnSpecialties();
     await this.update({
       "system.playState.combatTurn": "ended",
       "system.playState.reactionDice": (this.system.baseCombatDice ?? 0) + (ps.actionDice ?? 0),
       "system.playState.actionDice": null
     });
     return true;
+  }
+
+  /**
+   * End-of-Turn Specialty bookkeeping (Part X; 0.12.0), run once per Turn from
+   * formEndOfTurnReactionPool. Kept automatic rather than prompted because the combat tracker's
+   * end-of-turn hook runs on the GM's client, where a modal would block the tracker.
+   * - Gestalt (Doc L5937-L5941, L5977): pay the Adaptation's Stamina upkeep (less 1 with Efficient
+   *   Transformation, plus 1 while Unstable) or the Adaptation ends. An Adaptation assumed outside
+   *   the Turn (`deferUpkeep`) is first charged at the end of the NEXT Turn. To stop maintaining a
+   *   zero-upkeep Adaptation, the player clicks End before ending the Turn.
+   * - Prowess (Doc L8100): lose 1 Combo if no Prowess card dealt Damage this Turn (the sheet's
+   *   "dealt Damage" tick), then clear the tick.
+   */
+  async #endOfTurnSpecialties() {
+    const sp = this.system.specialties;
+    if (!sp) return;
+    const update = {};
+    const notes = [];
+    const adaptation = sp.adaptation;
+    if (adaptation?.name) {
+      if (adaptation.deferUpkeep) {
+        update["system.specialties.adaptation.deferUpkeep"] = false;
+        notes.push(`${adaptation.name} was assumed outside the Turn; its first upkeep is due at the end of the next Turn.`);
+      } else {
+        const distinctions = this.items.filter((i) => i.type === "distinction");
+        const unstable = this.items.some((i) => i.type === "condition" && (i.name || "").toUpperCase() === "UNSTABLE");
+        const due = adaptationUpkeep(adaptation.upkeep, { efficient: hasOriginDistinction(distinctions, "Gifted"), unstable });
+        const stamina = this.system.resources?.stamina?.value ?? 0;
+        if (due === 0) {
+          notes.push(`${adaptation.name} is maintained (no upkeep).`);
+        } else if (stamina >= due) {
+          update["system.playState.currentStamina"] = stamina - due;
+          notes.push(`${adaptation.name} upkeep paid: ${due} Stamina${unstable ? " (includes +1 for Unstable)" : ""}.`);
+        } else {
+          update["system.specialties.adaptation"] = { name: "", upkeep: 0, deferUpkeep: false };
+          notes.push(`${adaptation.name} ends: its upkeep of ${due} Stamina could not be paid (${stamina} available).`);
+        }
+      }
+    }
+    if ((sp.combo ?? 0) > 0 && !sp.comboDealtDamage) {
+      update["system.specialties.combo"] = sp.combo - 1;
+      notes.push(`No Prowess Damage this Turn: Combo falls to ${sp.combo - 1}.`);
+    }
+    if (sp.comboDealtDamage) update["system.specialties.comboDealtDamage"] = false;
+    if (!Object.keys(update).length) return;
+    await this.update(update);
+    if (notes.length) {
+      await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content: `<p><strong>${this.name}</strong>, end of Turn:</p><ul>${notes.map((n) => `<li>${n}</li>`).join("")}</ul>` });
+    }
   }
 
   async reduceDeathTrack() {

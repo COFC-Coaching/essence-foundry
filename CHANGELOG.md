@@ -2,6 +2,54 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.12.0
+
+**Phase 5: Combat Styles follow Part X and Appendix E.**
+
+**Magecraft.** Clicking a subtype chip creates that Thread; duplicates are allowed and a count shows
+on the chip. Consume a stored Thread from the list beside it, which now carries the Doc's full
+effect text. Three is still the cap.
+
+**Leadership.** Authority is stored per generating card. Store Authority asks which card and which
+rolled result; capacity counts occupied cards (half Rank rounded up, minimum 1). An Orator holds
+two results per card and spending one keeps the other. An emptied card frees its slot.
+
+**Ritualism.** Rites record the card name and, for Possessed, the subject. Three Rites, four with an
+Invoker. Adding a Rite at capacity asks which one to remove, and an Invoker can resolve that Rite's
+Echo once as it goes (Final Echo, once per Round). A same-named Rite on the same subject replaces
+the old one. An Echo button resolves the Trigger, reduces the remaining Echoes and removes the Rite
+after the last.
+
+**Ballistics.** Establish Lock burns 1 Action die and records the target. One Lock, two with a
+Marksman; a new one replaces the oldest. Click a Lock to end it.
+
+**Cunning.** Contingencies are a list: one per Round, two with a Strategist. Trigger fires one (a
+second in the same Round warns), Declining keeps it, and unused ones expire at the start of your
+next Turn.
+
+**Gestalt.** End Turn pays the Adaptation's Stamina upkeep or ends it. Efficient Transformation
+takes 1 off (minimum 0); Unstable adds 1 that the reduction cannot remove. A tick marks an
+Adaptation assumed outside your Turn so its first upkeep waits for the next Turn.
+
+**Prowess.** A "dealt Damage this Turn" tick; End Turn drops 1 Combo when it is clear. A Wound that
+reaches the Core track also costs 1 Combo.
+
+**Psionics.** The dice prompt for a Psionics card offers 1 Strain for 1 free Surge and burns the
+extra die at Strain 5 or 6, judged after the gain. Vent burns 2 Action dice for 2 Strain and blocks
+Psionics Actions for the rest of the Turn. Forced Strain past 6 deals 1 Psychic Breach Damage per
+excess point through Apply Damage.
+
+**Calling.** Entering a form pays the Rider's surcharge from the Rank table (3/3/3/4/4/5 extra
+burned dice, Mana equal to Rank; a Summoner pays 1 die fewer). Every form shares one five-space
+Manifestation Wound track shown on the character sheet. Filling it collapses the form at once:
+surplus Wounds from that component are discarded, the caller returns and suffers 1 direct Spiritual
+Core Wound, and is Broken until a Recovery removes a Manifestation Wound. Return costs 1 Action die
+during your Turn; the form's Conditions and Temporary Wounds end on return. Native card minimums by
+Rank apply on the form's sheet, with an optional printed Roll Limit. The manifestation profiles in
+the compendium now carry five spaces.
+
+**Data.** Old single Lock, Contingency and Authority values move into the new lists on load.
+
 ## 0.11.0
 
 **Phase 4: enemies follow Part XIV.**

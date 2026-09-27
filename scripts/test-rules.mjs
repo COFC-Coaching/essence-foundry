@@ -7,7 +7,7 @@
  * here; module/utils.mjs has no imports and loads under plain Node.
  */
 
-import { ordinaryDamageWounds, isDistinctionStyle, distinctionUnlocks, componentTiers, computeTierGate, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, burnOnlyProfile, equipmentCardCommitment, recoveryBaseAmount, initiativeTieBreak, applyFlatReduction, resolveDamageComponents } from "../module/utils.mjs";
+import { ordinaryDamageWounds, isDistinctionStyle, distinctionUnlocks, componentTiers, computeTierGate, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, burnOnlyProfile, equipmentCardCommitment, recoveryBaseAmount, initiativeTieBreak, applyFlatReduction, resolveDamageComponents, hasOriginDistinction, addThread, authorityCapacity, authorityResultsPerCard, storeAuthority, spendAuthority, lockCapacity, contingencyCapacity, riteCapacity, placeRite, adaptationUpkeep, forcedStrain, psionicsBurnSurchargeAt, manifestationEntryCost, manifestationTrack } from "../module/utils.mjs";
 import { resolveNonCombatRoll } from "../module/dice/essence-roll.mjs";
 import { laterAcquisitionText } from "../module/data/origin-features.mjs";
 import { ITEM_GRANT_REGISTRY, tierQualifiesForGrant } from "../module/data/item-grants.mjs";
@@ -164,6 +164,46 @@ check("QD: capped at Tier 5", tierQualifiesForGrant(assembled("c5", "f5"), quart
 check("Inherited Tools has no Tier limit", tierQualifiesForGrant({ type: "equipment", system: { tier: 4 } }, ITEM_GRANT_REGISTRY["Inherited Tools"], 1, []), true);
 check("Internal Compartment is within ordinary access only",
   tierQualifiesForGrant({ type: "equipment", system: { tier: 2 } }, ITEM_GRANT_REGISTRY["Internal Compartment"], 1, []), false);
+
+console.log("\n--- Combat Style Specialties (Part X, 0.12.0) ---");
+const deep = (name, actual, expected) => check(name, JSON.stringify(actual), JSON.stringify(expected));
+const orator = { name: "Orator", system: { acquiredLater: false } };
+const laterOrator = { name: "Orator", system: { acquiredLater: true } };
+check("Origin Benefit from the creation Distinction", hasOriginDistinction([orator], "orator"), true);
+check("a later-acquired Distinction grants no Origin Benefit", hasOriginDistinction([laterOrator], "Orator"), false);
+deep("Threads: duplicates allowed", addThread(["Fire", "Fire"], "Fire").threads, ["Fire", "Fire", "Fire"]);
+check("Threads: a fourth needs a discard", addThread(["Fire", "Air", "Earth"], "Fire").error, "capacity");
+deep("Authority capacity Rank 0-2 -> 1", [authorityCapacity(0), authorityCapacity(2)], [1, 1]);
+deep("Authority capacity Rank 3-4 -> 2, Rank 5 -> 3", [authorityCapacity(3), authorityCapacity(4), authorityCapacity(5)], [2, 2, 3]);
+deep("Orator holds 2 results per card", [authorityResultsPerCard(false), authorityResultsPerCard(true)], [1, 2]);
+const s1 = storeAuthority([], "Rally", [8], { capacity: 1, perCard: 1 });
+deep("Doc L6168: store the 8 on the generating card", s1.cards, [{ card: "Rally", results: [8] }]);
+check("a second card at capacity is refused", storeAuthority(s1.cards, "Hold", [5], { capacity: 1, perCard: 1 }).error, "capacity");
+deep("the same card keeps or replaces (newest wins)", storeAuthority(s1.cards, "Rally", [9], { capacity: 1, perCard: 1 }).cards, [{ card: "Rally", results: [9] }]);
+const o1 = storeAuthority([], "Rally", [8, 6], { capacity: 1, perCard: 2 });
+deep("Doc L6199: an Orator stores an 8 and a 6 on one card", o1.cards, [{ card: "Rally", results: [8, 6] }]);
+const o2 = spendAuthority(o1.cards, 0, 0);
+deep("spending the 8 leaves the 6", o2, [{ card: "Rally", results: [6] }]);
+deep("the card later stores a 9 alongside the 6", storeAuthority(o2, "Rally", [9], { capacity: 1, perCard: 2 }).cards, [{ card: "Rally", results: [6, 9] }]);
+deep("an emptied card releases its slot", spendAuthority(o2, 0, 0), []);
+deep("Lock capacity: 1, Marksman 2", [lockCapacity(false), lockCapacity(true)], [1, 2]);
+deep("Contingency capacity: 1, Strategist 2", [contingencyCapacity(false), contingencyCapacity(true)], [1, 2]);
+deep("Rite capacity: 3, Invoker 4", [riteCapacity(false), riteCapacity(true)], [3, 4]);
+const ward = { name: "Ward of Ash", trigger: "t", echo: "e", echoLimit: 2, subject: "Kel" };
+const p1 = placeRite([ward], { ...ward, echoLimit: 1 }, 3);
+deep("Possessed: a same-named Rite on the same subject replaces it", [p1.replacedIndex, p1.rites.length, p1.rites[0].echoLimit], [0, 1, 1]);
+check("a fourth Rite needs a removal", placeRite([{}, {}, {}], { name: "x" }, 3).error, "capacity");
+check("Invoker's fourth Rite fits", placeRite([{}, {}, {}], { name: "x" }, 4).rites.length, 4);
+deep("Gestalt upkeep: Efficient Transformation −1, minimum 0", [adaptationUpkeep(2, { efficient: true }), adaptationUpkeep(0, { efficient: true })], [1, 0]);
+check("Unstable adds 1 that the reduction cannot remove", adaptationUpkeep(0, { efficient: true, unstable: true }), 1);
+deep("Doc L6120: forced Strain past 6 stays at 6, excess becomes Breach Damage", forcedStrain(5, 3), { strain: 6, excess: 2 });
+deep("Doc L6126: Strain 5 adds a burned die (2 rolled + 1 burned = 3)", [psionicsBurnSurchargeAt(4), psionicsBurnSurchargeAt(5)], [0, 1]);
+deep("Doc L6309: Rank 1 form adds 3 burned dice and 1 Mana", manifestationEntryCost(1), { burn: 3, mana: 1, actionMin: 2, reactionMin: 2 });
+check("Doc L6313: the Summoner pays 2 burned dice, Mana unchanged", manifestationEntryCost(1, { summoner: true }).burn, 2);
+check("Rank 0 with the Summoner pays 2 burned dice (3 − 1)", manifestationEntryCost(0, { summoner: true }).burn, 2);
+deep("Rank 5: 5 dice, 5 Mana, native minimums 6 / 3", manifestationEntryCost(5), { burn: 5, mana: 5, actionMin: 6, reactionMin: 3 });
+check("Rank 2 native Reaction minimum stays 2", manifestationEntryCost(2).reactionMin, 2);
+deep("the shared track view fills the first N of five", manifestationTrack(3).map((w) => w.filled), [true, true, true, false, false]);
 
 console.log(`\n${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);

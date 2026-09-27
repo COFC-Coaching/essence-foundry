@@ -1,7 +1,8 @@
-# Live test: 0.8.1 through 0.11.0
+# Live test: 0.8.1 through 0.12.0
 
 Branch `claude/elastic-lamarr-32f578-lza4a9`, commits `cac234e` (0.8.1), `0b5e315` (0.9.0),
-`6243178` (0.10.0), `cfc5147` (0.10.1) and the 0.11.0 release commit after it. None was
+`6243178` (0.10.0), `cfc5147` (0.10.1), `52dcba9` (0.11.0) and the 0.12.0 release commit after
+it. None was
 live-tested when built (cloud session, no Foundry). Run this in a world on Foundry
 v14 with the branch checked out into `Data/systems/essence-system`. Record results in
 build-history under a new dated heading; delete this file once everything below has passed.
@@ -204,3 +205,69 @@ build-history under a new dated heading; delete this file once everything below 
     Mook, 1 for a Normal, 2 for an Elite; Temporary Wounds default to 0.
 69. Monster (not NPC) sheet: repeat checks 54, 57 and 60 on a `monster` actor set to Mook: same
     compact record, same allowance line, no console error.
+
+## 0.12.0: Combat Styles (Part X)
+
+70. Open a pre-0.12.0 character who had a Lock name, a Contingency and two Authority results
+    saved: the Lock shows as a chip, the Contingency as a list row, and Authority as two
+    "(card not recorded)" rows with one result each. No console error, no invalid document.
+71. Magecraft 1+: click Fire twice, then Air: chips read "Fire ×2" and "Air", the list below shows
+    three entries with the Doc's full effect text. Click Water: warning "Already holding 3
+    Threads". Click the "Fire ✕" chip: one Fire is consumed, chat posts its effect, "Fire ×2"
+    becomes "Fire".
+72. Leadership 3 (capacity 2): Store Authority with card "Rally" and result 8; then card "Hold"
+    and 5; then card "Charge" and 9: the third is refused ("Every Authority slot is occupied").
+    Store again on "Rally" with 9 and "Discard existing" unticked: Rally shows 9 (newest wins,
+    one result per card). Click the 5: the Hold row disappears (slot freed).
+73. Give the character the Orator Distinction (creation, not later): the Store dialog offers a
+    second result. Store 8 and 6 on Rally; click the 8: the 6 remains. Store 9 on Rally: 6 and 9.
+    Make the Orator the later-acquired Distinction instead: no second result field.
+74. Ritualism, three Rites present: Add Rite asks which to remove; pick one: it is replaced by a
+    blank row. With the Invoker Distinction: a fourth blank row is added directly; a fifth asks
+    which to remove with a ticked "Final Echo" option; confirming posts the removed Rite's Echo to
+    chat and the Invoker note reads "(Final Echo used this Round)". Next Round, the note clears.
+75. Rite with Echo Limit 2: click Echo: chat posts the Echo, limit reads 1. Click again: the Rite
+    is removed and chat says it was the final Echo.
+76. Ballistics: Establish Lock with Action dice 4: prompt for the name, then Action dice read 3
+    and a chip shows the name. Establish another: the first chip is replaced (chat says the old
+    Lock ends). With the Marksman Distinction: two chips coexist, the third replaces the oldest.
+77. Cunning: Establish Contingency, then a second: refused ("Already holding 1"). Click Trigger:
+    the row is removed, chat posts it, and the note "A Contingency has triggered this Round"
+    appears. Establish another and Trigger it in the same Round: a warning, but it still fires.
+    Advance to the character's next Turn: any unused Contingency is gone. Next Round: the
+    triggered note clears. With the Strategist Distinction two can be established.
+78. Gestalt: Adaptation "Hide" with upkeep 2, Stamina 5. End Turn: Stamina 3, chat "upkeep paid:
+    2 Stamina". Set Stamina 1 and End Turn again: the Adaptation ends, chat says why. With the
+    Gifted Distinction the label reads "(due at End Turn: 1 Stamina)"; add the Unstable
+    Condition: 2. Tick "assumed outside my Turn" and End Turn: nothing is charged, the tick
+    clears, chat says the first upkeep is due next Turn.
+79. Prowess: Combo 3, "dealt Damage" unticked, End Turn: Combo 2 and a chat line. Tick it and End
+    Turn: Combo stays, tick clears. Apply 1 Breach Wound: Combo drops by 1.
+80. Psionics, Strain 4, Action dice 6: play a Psionics Action card (min 2). The dice prompt shows
+    "Gain 1 Strain (to 5) for 1 free Surge". Tick it, commit 2: Strain reads 5, Action dice read 3
+    (2 rolled + 1 burned surcharge), chat notes both, and the roll reports one extra Surge. At
+    Strain 6 the checkbox is absent.
+81. Click Vent with Action dice 3: dice 1, Strain 3, note "Strain vented: no Psionics Actions
+    this Turn". Play a Psionics Action: refused with a warning; a Psionics Reaction still opens the
+    prompt. Next Turn the note clears. Forced Strain 3 at Strain 5: Strain 6 and Apply Damage runs
+    2 Psychic Breach through the normal engine (two Mental Wounds on an empty track).
+82. Calling 1, Action dice 6, Mana 3, token on the scene: header menu → Full Manifestation. Options
+    read "Beast (Rank 1: +3 burned dice, +1 Mana)". Enter: Action dice on the Beast sheet read 3,
+    the caller's Mana reads 2, chat states the cost. With the Summoner Distinction: "+2 burned
+    dice". With Action dice 2: refused ("burns 3 additional Action dice; has 2").
+83. The Beast sheet's Wounds section is titled "Manifestation Wounds (shared track)" with five
+    pips. Return (burn 1): Action dice 2 on the caller, token swaps back, chat posts the return.
+    Return with 0 Action dice: refused.
+84. Set the caller's Manifestation Wound track to 4 (pips on the character sheet), enter Beast:
+    four pips are filled on the form. Apply Damage 3 Fire + 2 Psychic to the form (Resilience 0):
+    one Fire Wound fills the fifth space, chat says 2 surplus Wounds are discarded, the form
+    collapses, the caller's token returns, the caller's first open Core space fills with a
+    Spiritual Wound Card ("Unmoored Essence" on an empty track), the character sheet shows five
+    Manifestation pips, "Broken", and chat lists "2 Psychic" as still to resolve by hand.
+85. Broken caller: Full Manifestation is refused with the Broken warning. Grant Recovery: chat
+    says "1 Manifestation Wound removed", pips read 4, Broken clears, entering works again.
+86. New Encounter with an active form: the caller returns with no die burned (chat says "as the
+    Encounter ends"); Combo, Locks, Threads, Authority and Contingencies clear.
+87. Import Familiar from the compendium: five Wound pips (was three). Play a native Action card
+    with min 2 on a Rank 2 form: the prompt's minimum reads 3 (native minimum); a Reaction's
+    reads 2. Type Roll Limit 5 in the header: the advisory line names it.

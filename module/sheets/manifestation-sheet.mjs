@@ -1,7 +1,7 @@
 import { rollEssencePool } from "../dice/essence-roll.mjs";
-import { SEVERITY_BY_INDEX, cardSummary, ordinaryDamageWounds , resolveDamageComponents, DAMAGE_TYPES } from "../utils.mjs";
+import { cardSummary, resolveDamageComponents, applyFlatReduction, DAMAGE_TYPES, MANIFESTATION_ENTRY_COSTS, MANIFESTATION_TRACK } from "../utils.mjs";
 import { promptDamageComponents } from "./card-play.mjs";
-import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
+import { returnFromManifestation, collapseManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -137,11 +137,11 @@ export default class EssenceManifestationSheet extends HandlebarsApplicationMixi
     }
   }
 
-  static async #promptDiceCount({ title, label, min, max, initial }) {
+  static async #promptDiceCount({ title, label, min, max, initial, note = "" }) {
     return new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
         window: { title },
-        content: `<p>${label}</p><input type="number" name="count" value="${initial}" min="${min}" max="${max}" autofocus>`,
+        content: `<p>${label}</p>${note ? `<p class="muted">${note}</p>` : ""}<input type="number" name="count" value="${initial}" min="${min}" max="${max}" autofocus>`,
         buttons: [{
           action: "commit",
           label: "Roll",
@@ -209,7 +209,11 @@ export default class EssenceManifestationSheet extends HandlebarsApplicationMixi
     const poolField = isReaction ? "reactionDice" : "actionDice";
     const poolLabel = isReaction ? "Reaction" : "Action";
     const available = this.actor.system.playState[poolField] ?? 0;
-    const cardMin = Math.max(1, parseInt(sys.min, 10) || 1);
+    // Doc L6323-L6331: the form's native Action and Reaction minimums by Rank (Rank 2 Reactions
+    // stay at 2); a card's own printed minimum can only raise them.
+    const row = MANIFESTATION_ENTRY_COSTS[Math.min(5, Math.max(0, this.actor.system.rank ?? 0))];
+    const nativeMin = isReaction ? row.reactionMin : row.actionMin;
+    const cardMin = Math.max(nativeMin, parseInt(sys.min, 10) || 1);
 
     if (available <= 0) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoPoolDiceRemaining", { label: poolLabel }));
@@ -220,10 +224,13 @@ export default class EssenceManifestationSheet extends HandlebarsApplicationMixi
       return;
     }
 
+    // Doc L6321: a printed Roll Limit replaces Attribute + Style Rank; free dice may exceed it.
+    const rollLimit = this.actor.system.rollLimit;
+    const note = typeof rollLimit === "number" ? `Advisory: this form's Roll Limit is ${rollLimit} dice (native minimum ${nativeMin}). Committing more is allowed but exceeds the printed maximum.` : `Native minimum for a Rank ${this.actor.system.rank ?? 0} form: ${nativeMin} dice.`;
     const committed = await EssenceManifestationSheet.#promptDiceCount({
       title: `Use ${item.name}`,
       label: `Commit how many ${poolLabel} Dice? (min ${cardMin}, max ${available})`,
-      min: cardMin, max: available, initial: cardMin
+      min: cardMin, max: available, initial: cardMin, note
     });
     if (committed === null) return;
 
@@ -247,47 +254,62 @@ export default class EssenceManifestationSheet extends HandlebarsApplicationMixi
   }
 
   /**
-   * Same accumulation math as every other Apply Damage (see actor-sheet.mjs's identical, more
-   * fully-commented version) with one difference: once coreWounds is completely full, further
-   * Wounds increment `overflowWounds` instead of advancing a Death Track — a manifestation has none
-   * (see EssenceManifestationData) — for applyManifestationDefeat() to read once the GM/player
-   * resolves the defeat from this sheet's header menu.
-   */
-  /**
-   * Apply Damage for a Full Manifestation profile (0.10.1, Doc L3896-L3918): components in order;
-   * a full Wound Track counts overflow Wounds, which pass to the caller on defeat (see
-   * applyManifestationDefeat in apps/manifestation.mjs).
+   * Apply Damage for a Full Manifestation (Doc L3896-L3918, L6381-L6385). The flat reduction is
+   * applied once across the whole hit, then components resolve one at a time against the shared
+   * Manifestation Wound track. The component that fills the track collapses the form at once: its
+   * surplus Wounds are discarded, the caller returns and takes the direct Spiritual Core Wound, and
+   * any later components are posted for the GM to recheck against the returned caller by hand.
+   * Ordinary accumulated Damage is not reset by the collapse.
    */
   static async #onApplyDamage() {
     const picked = await promptDamageComponents({ types: DAMAGE_TYPES });
     if (!picked) return;
 
     const sys = this.actor.system;
-    const result = resolveDamageComponents({
+    const live = picked.components.filter((c) => (c.amount | 0) > 0);
+    // Reduction first, across the whole hit (Doc L3900), so each component below carries its
+    // reduced amount into its own resolution.
+    const reducedAmounts = applyFlatReduction(live.map((c) => c.amount), picked.reduction);
+    let state = {
       resilience: sys.resilience ?? 0,
       accumulated: sys.playState.accumulatedDamage ?? 0,
       tempWounds: sys.playState.currentTemporaryWounds ?? 0,
       coreWounds: sys.coreWounds,
-      overflow: "count",
+      capacity: MANIFESTATION_TRACK,
+      overflow: "none",
       resistances: sys.resistances,
       vulnerabilities: sys.vulnerabilities
-    }, picked.components, picked.reduction);
+    };
+    const log = [];
+    if (picked.reduction > 0) log.push(`Flat reduction −${picked.reduction} applied once to the total: ${reducedAmounts.map((n, i) => `${n} ${live[i].type}`).join(" + ")}.`);
+    let collapsedAt = -1;
+    for (let i = 0; i < live.length; i++) {
+      const result = resolveDamageComponents(state, [{ ...live[i], amount: reducedAmounts[i] }], 0);
+      log.push(...result.log);
+      state = { ...state, accumulated: result.accumulated, tempWounds: result.tempWounds, coreWounds: result.coreWounds };
+      const filled = result.coreWounds.filter((w) => w.filled).length;
+      if (filled >= MANIFESTATION_TRACK) {
+        collapsedAt = i;
+        if (result.overflowCount > 0) log.push(`${result.overflowCount} surplus Wound(s) from this component are discarded (Doc: collapse).`);
+        break;
+      }
+    }
 
     await this.actor.update({
-      "system.playState.accumulatedDamage": result.accumulated,
-      "system.playState.currentTemporaryWounds": result.tempWounds,
-      "system.coreWounds": result.coreWounds,
-      "system.playState.overflowWounds": (sys.playState.overflowWounds ?? 0) + result.overflowCount
+      "system.playState.accumulatedDamage": state.accumulated,
+      "system.playState.currentTemporaryWounds": state.tempWounds,
+      "system.coreWounds": state.coreWounds
     });
 
-    const summary = picked.components.map((c) => `${c.amount} ${c.type}${c.breach ? " (Breach)" : ""}`).join(" + ");
+    const summary = live.map((c) => `${c.amount} ${c.type}${c.breach ? " (Breach)" : ""}${c.nonlethal ? " (nonlethal)" : ""}`).join(" + ");
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> takes ${summary}${picked.reduction ? `, reduced by ${picked.reduction}` : ""}.</p><ul>${result.log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+      content: `<p><strong>${this.actor.name}</strong> takes ${summary}${picked.reduction ? `, reduced by ${picked.reduction}` : ""}.</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`
     });
 
-    if (this.actor.system.defeated) {
-      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.ManifestationDefeated", { name: this.actor.name }));
+    if (collapsedAt >= 0) {
+      const remaining = live.slice(collapsedAt + 1).map((c, j) => ({ ...c, amount: reducedAmounts[collapsedAt + 1 + j] }));
+      await collapseManifestation(this.actor, { remaining });
     }
   }
 
@@ -325,8 +347,9 @@ export default class EssenceManifestationSheet extends HandlebarsApplicationMixi
     await this.actor.items.get(target.dataset.itemId)?.delete();
   }
 
+  /** Doc L6361: a voluntary return during the Turn burns 1 Action die. */
   static async #onDismissManifestation() {
-    await dismissManifestation(this.actor);
+    await returnFromManifestation(this.actor, { reason: "voluntary" });
   }
 
   static async #onApplyManifestationDefeat() {

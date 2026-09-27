@@ -190,6 +190,20 @@ check("record rows keep their fields",
   [{ name: "Van", tags: "Asset, Obligation", notes: "" }]);
 check("a character's legacy personal Tier still loads", migrate(EssenceCharacterData, { tier: 3 }).tier, 3);
 
+console.log("\n--- 0.12.0 (Phase 5) Specialty shape changes ---");
+const oldSp = migrate(EssenceCharacterData, { specialties: { lock: "Ogre", contingency: "door opens -> move 2", authority: [8, 5] } }).specialties;
+check("lock string becomes the locks list", [oldSp.locks, oldSp.lock], [["Ogre"], ""]);
+check("contingency string becomes the contingencies list", [oldSp.contingencies, oldSp.contingency], [["door opens -> move 2"], ""]);
+check("flat authority results become one unnamed card each", oldSp.authorityCards, [{ card: "", results: [8] }, { card: "", results: [5] }]);
+check("old authority list is emptied", oldSp.authority, []);
+const newSp = migrate(EssenceCharacterData, { specialties: { lock: "", locks: ["Kel"], authority: [], authorityCards: [{ card: "Rally", results: [9] }] } }).specialties;
+check("already-migrated data is left alone", [newSp.locks, newSp.authorityCards], [["Kel"], [{ card: "Rally", results: [9] }]]);
+check("manifestationWounds above 5 is clamped", migrate(EssenceCharacterData, { specialties: { manifestationWounds: 9 } }).specialties.manifestationWounds, 5);
+check("a Rite row with the new fields loads",
+  migrate(EssenceCharacterData, { specialties: { rites: [{ name: "Ward", trigger: "t", echo: "e", echoLimit: 2, subject: "Kel" }] } }).specialties.rites,
+  [{ name: "Ward", trigger: "t", echo: "e", echoLimit: 2, subject: "Kel" }]);
+check("an npc with old specialties migrates too (subclass inherits)", migrate(EssenceNpcData, { specialties: { lock: "Ysolde" } }).specialties.locks, ["Ysolde"]);
+
 console.log("\n--- 0.9.0 (Phase 2) fields ---");
 const { EssenceDistinctionData } = await import("../module/data/item-origin.mjs");
 check("Size above 5 is clamped", migrate(EssenceCharacterData, { size: 9 }).size, 5);

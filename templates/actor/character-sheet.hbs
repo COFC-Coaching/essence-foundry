@@ -213,95 +213,128 @@
           <span class="pip-track">
             {{#each comboPips as |filled i|}}<button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleCombo" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="{{localize 'ESSENCE.Character.ComboAria' n=(addOne i)}}"></button>{{/each}}
           </span>
+          <label class="muted" title="{{localize 'ESSENCE.Character.ComboDealtDamageHint'}}"><input type="checkbox" name="system.specialties.comboDealtDamage" {{#if system.specialties.comboDealtDamage}}checked{{/if}}> {{localize "ESSENCE.Character.ComboDealtDamage"}}</label>
         </div>
       {{/if}}
       {{#if (gt system.ballistics 0)}}
-        <div class="specialty-row">
-          <span class="attr-label" title="{{localize 'ESSENCE.Character.LockTooltip'}}">{{localize "ESSENCE.Character.LockLabel"}}</span>
-          <input type="text" name="system.specialties.lock" value="{{system.specialties.lock}}" placeholder="{{localize 'ESSENCE.Character.LockedCreaturePlaceholder'}}">
-          <button type="button" data-action="clearLock">{{localize "ESSENCE.Common.Clear"}}</button>
+        <div class="specialty-row specialty-row-wrap">
+          <span class="attr-label" title="{{localize 'ESSENCE.Character.LockTooltip'}}">{{localize "ESSENCE.Character.LockLabel" max=lockCap}}</span>
+          <div class="thread-chips">
+            {{#each lockEntries as |l|}}
+              <button type="button" class="thread-chip active" data-action="removeLock" data-index="{{l.i}}" title="{{localize 'ESSENCE.Character.LockEndHint'}}">{{l.name}}</button>
+            {{/each}}
+          </div>
+          <button type="button" data-action="addLock">{{localize "ESSENCE.Character.EstablishLock"}}</button>
         </div>
       {{/if}}
       {{#if (gt system.gestalt 0)}}
         <div class="specialty-row">
           <span class="attr-label" title="{{localize 'ESSENCE.Character.AdaptationTooltip'}}">{{localize "ESSENCE.Character.AdaptationLabel"}}</span>
           <input type="text" name="system.specialties.adaptation.name" value="{{system.specialties.adaptation.name}}" placeholder="{{localize 'ESSENCE.Character.AdaptationNamePlaceholder'}}">
-          <label class="muted">{{localize "ESSENCE.Character.Upkeep"}} <input type="number" name="system.specialties.adaptation.upkeep" value="{{system.specialties.adaptation.upkeep}}" style="width:3em"></label>
+          <label class="muted">{{localize "ESSENCE.Character.Upkeep"}} <input type="number" name="system.specialties.adaptation.upkeep" value="{{system.specialties.adaptation.upkeep}}" style="width:3em" min="0"></label>
+          {{#if system.specialties.adaptation.name}}<span class="muted" title="{{localize 'ESSENCE.Character.UpkeepDueHint'}}">{{localize "ESSENCE.Character.UpkeepDue" n=adaptationDue}}</span>{{/if}}
+          <label class="muted" title="{{localize 'ESSENCE.Character.DeferUpkeepHint'}}"><input type="checkbox" name="system.specialties.adaptation.deferUpkeep" {{#if system.specialties.adaptation.deferUpkeep}}checked{{/if}}> {{localize "ESSENCE.Character.DeferUpkeep"}}</label>
           <button type="button" data-action="endAdaptation">{{localize "ESSENCE.Common.End"}}</button>
         </div>
       {{/if}}
       {{#if (gt system.cunning 0)}}
-        <div class="specialty-row">
-          <span class="attr-label" title="{{localize 'ESSENCE.Character.ContingencyTooltip'}}">{{localize "ESSENCE.Character.ContingencyLabel"}}</span>
-          <input type="text" name="system.specialties.contingency" value="{{system.specialties.contingency}}" placeholder="{{localize 'ESSENCE.Character.ContingencyPlaceholder'}}">
-          <button type="button" data-action="clearContingency">{{localize "ESSENCE.Common.Clear"}}</button>
+        <div class="specialty-row specialty-row-wrap">
+          <span class="attr-label" title="{{localize 'ESSENCE.Character.ContingencyTooltip'}}">{{localize "ESSENCE.Character.ContingencyLabel" max=contingencyCap}}</span>
+          <div class="array-rows">
+            {{#each contingencyEntries as |c|}}
+              <div class="array-row">
+                <input type="text" name="system.specialties.contingencies.{{c.i}}" value="{{c.text}}" placeholder="{{localize 'ESSENCE.Character.ContingencyPlaceholder'}}">
+                <button type="button" data-action="triggerContingency" data-index="{{c.i}}" title="{{localize 'ESSENCE.Character.TriggerContingencyHint'}}">{{localize "ESSENCE.Character.TriggerContingency"}}</button>
+                <a data-action="removeContingency" data-index="{{c.i}}" title="{{localize 'ESSENCE.Common.Clear'}}"><i class="fa-solid fa-trash"></i></a>
+              </div>
+            {{/each}}
+          </div>
+          <button type="button" data-action="addContingency">{{localize "ESSENCE.Character.EstablishContingency"}}</button>
+          {{#if system.specialties.contingencyTriggered}}<span class="muted">{{localize "ESSENCE.Character.ContingencyTriggeredThisRound"}}</span>{{/if}}
         </div>
       {{/if}}
       {{#if (gt system.magecraft 0)}}
         <div class="specialty-row specialty-row-wrap">
-          <span class="attr-label" title="{{localize 'ESSENCE.Character.ThreadsTooltip'}}">{{localize "ESSENCE.Character.ThreadsLabel"}}</span>
+          <span class="attr-label" title="{{localize 'ESSENCE.Character.ThreadsTooltip'}}">{{localize "ESSENCE.Character.ThreadsLabel" n=system.specialties.threads.length}}</span>
           <div class="thread-chips">
             {{#each threadFamilies as |family|}}
               {{#each family.threads as |t|}}
-                <button type="button" class="thread-chip {{#if t.active}}active{{/if}}" data-action="toggleThread" data-thread="{{t.name}}" title="{{t.title}}">{{t.name}}</button>
+                <button type="button" class="thread-chip {{#if t.active}}active{{/if}}" data-action="addThread" data-thread="{{t.name}}" title="{{t.title}}">{{t.name}}{{#if (gt t.count 1)}} ×{{t.count}}{{/if}}</button>
               {{/each}}
             {{/each}}
           </div>
           {{#if activeThreads.length}}
             <ul class="active-thread-effects muted">
               {{#each activeThreads as |t|}}
-                <li><strong>{{t.name}}:</strong> {{t.effect}}</li>
+                <li><button type="button" class="thread-chip active" data-action="consumeThread" data-index="{{t.i}}" title="{{localize 'ESSENCE.Character.ConsumeThreadHint'}}">{{t.name}} ✕</button> {{t.effect}}</li>
               {{/each}}
             </ul>
           {{/if}}
         </div>
       {{/if}}
       {{#if (gt system.psionics 0)}}
-        <div class="specialty-row">
+        <div class="specialty-row specialty-row-wrap">
           <span class="attr-label" title="{{localize 'ESSENCE.Character.StrainTooltip'}}">{{localize "ESSENCE.Character.StrainLabel"}}</span>
           <input type="number" name="system.specialties.strain" value="{{system.specialties.strain}}" style="width:3em" min="0" max="6">
+          <button type="button" data-action="ventStrain" title="{{localize 'ESSENCE.Character.VentStrainHint'}}">{{localize "ESSENCE.Character.VentStrain"}}</button>
+          <button type="button" data-action="forceStrain" title="{{localize 'ESSENCE.Character.ForceStrainHint'}}">{{localize "ESSENCE.Character.ForceStrain"}}</button>
           {{#if system.psionicsBurnSurcharge}}
             <span class="muted strain-burn-surcharge" title="{{localize 'ESSENCE.Character.StrainBurnSurcharge'}}">{{localize "ESSENCE.Character.StrainBurnSurcharge"}}</span>
           {{/if}}
+          {{#if system.specialties.strainVented}}<span class="muted">{{localize "ESSENCE.Character.StrainVentedNote"}}</span>{{/if}}
         </div>
       {{/if}}
       {{#if (gt system.leadership 0)}}
         <div class="specialty-row specialty-row-wrap">
           <span class="attr-label" title="{{localize 'ESSENCE.Character.AuthorityTooltip'}}">{{localize "ESSENCE.Character.AuthorityLabel" max=authorityCap}}</span>
-          <div class="thread-chips">
+          <div class="array-rows">
             {{#each authorityEntries as |a|}}
-              <button type="button" class="thread-chip active" data-action="removeAuthority" data-index="{{a.i}}" title="{{localize 'ESSENCE.Character.ClickToSpendDiscard'}}">{{a.value}}</button>
+              <div class="array-row">
+                <span class="muted">{{#if a.card}}{{a.card}}{{else}}{{localize "ESSENCE.Character.AuthorityUnnamedCard"}}{{/if}}:</span>
+                <div class="thread-chips">
+                  {{#each a.results as |r|}}
+                    <button type="button" class="thread-chip active" data-action="spendAuthority" data-card="{{a.i}}" data-index="{{r.i}}" title="{{localize 'ESSENCE.Character.ClickToSpendDiscard'}}">{{r.value}}</button>
+                  {{/each}}
+                </div>
+              </div>
             {{/each}}
           </div>
           <button type="button" data-action="addAuthority">{{localize "ESSENCE.Character.StoreAuthority"}}</button>
+          {{#if orator}}<span class="muted">{{localize "ESSENCE.Character.OratorNote"}}</span>{{/if}}
         </div>
       {{/if}}
       {{#if (gt system.ritualism 0)}}
         <div class="specialty-row specialty-row-wrap">
-          <span class="attr-label" title="{{localize 'ESSENCE.Character.RitesTooltip'}}">{{localize "ESSENCE.Character.RitesLabel"}}</span>
+          <span class="attr-label" title="{{localize 'ESSENCE.Character.RitesTooltip'}}">{{localize "ESSENCE.Character.RitesLabel" max=riteCap}}</span>
           <div class="array-rows">
             {{#each riteEntries as |r|}}
               <div class="array-row">
+                <input type="text" name="system.specialties.rites.{{r.i}}.name" value="{{r.name}}" placeholder="{{localize 'ESSENCE.Character.RiteName'}}" style="max-width:9em">
                 <input type="text" name="system.specialties.rites.{{r.i}}.trigger" value="{{r.trigger}}" placeholder="{{localize 'ESSENCE.Character.Trigger'}}">
                 <input type="text" name="system.specialties.rites.{{r.i}}.echo" value="{{r.echo}}" placeholder="{{localize 'ESSENCE.Character.Echo'}}">
                 <input type="number" name="system.specialties.rites.{{r.i}}.echoLimit" value="{{r.echoLimit}}" style="width:3em" min="1" title="{{localize 'ESSENCE.Character.EchoLimit'}}">
-                <a data-action="deleteRite" data-index="{{r.i}}"><i class="fa-solid fa-trash"></i></a>
+                <input type="text" name="system.specialties.rites.{{r.i}}.subject" value="{{r.subject}}" placeholder="{{localize 'ESSENCE.Character.PossessedSubject'}}" style="max-width:9em" title="{{localize 'ESSENCE.Character.PossessedHint'}}">
+                <button type="button" data-action="echoRite" data-index="{{r.i}}" title="{{localize 'ESSENCE.Character.EchoRiteHint'}}">{{localize "ESSENCE.Character.EchoRite"}}</button>
+                <a data-action="deleteRite" data-index="{{r.i}}" title="{{localize 'ESSENCE.Character.RemoveRiteHint'}}"><i class="fa-solid fa-trash"></i></a>
               </div>
             {{/each}}
           </div>
           <button type="button" data-action="addRite">{{localize "ESSENCE.Character.AddRite"}}</button>
+          {{#if invoker}}<span class="muted">{{localize "ESSENCE.Character.InvokerNote"}}{{#if system.specialties.finalEchoUsed}} {{localize "ESSENCE.Character.FinalEchoUsed"}}{{/if}}</span>{{/if}}
         </div>
       {{/if}}
       {{#if (gt system.calling 0)}}
-        <div class="specialty-row">
+        <div class="specialty-row specialty-row-wrap">
           <span class="attr-label" title="{{localize 'ESSENCE.Character.ManifestationTooltip'}}">{{localize "ESSENCE.Character.ManifestationLabel"}}</span>
+          <span class="pip-track" title="{{localize 'ESSENCE.Character.ManifestationTrackHint'}}">
+            {{#each manifestationPips as |filled i|}}<button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleManifestationWound" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="{{localize 'ESSENCE.Character.ManifestationWoundAria' n=(addOne i)}}"></button>{{/each}}
+          </span>
           {{#if system.specialties.activeManifestation}}
             <span>{{localize "ESSENCE.Character.FullyManifested"}}: <strong>{{system.specialties.activeManifestation}}</strong></span>
+          {{else if callerBroken}}
+            <span class="muted"><strong>{{localize "ESSENCE.Character.Broken"}}</strong>: {{localize "ESSENCE.Character.BrokenHint"}}</span>
           {{else}}
             <span class="muted">{{localize "ESSENCE.Character.NotManifested"}}</span>
-          {{/if}}
-          {{#if brokenManifestations.length}}
-            <span class="muted">{{localize "ESSENCE.Character.Broken"}}: {{#each brokenManifestations}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</span>
           {{/if}}
         </div>
       {{/if}}

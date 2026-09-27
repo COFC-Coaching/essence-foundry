@@ -3,12 +3,12 @@ import { EXPERTISE_DATABASE, THREAD_EFFECTS } from "../data/expertise-database.m
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { addSecondDistinction } from "../data/origin-select.mjs";
 import { playBurnOnlyCard, promptDamageComponents, promptConcentrationOnWound } from "./card-play.mjs";
-import { dismissManifestation } from "../apps/manifestation.mjs";
+import { returnFromManifestation, isBroken, entryCostFor } from "../apps/manifestation.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, tierQualifiesForGrant } from "../data/item-grants.mjs";
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, isDistinctionStyle, distinctionUnlocks, teamForActor, teamTierFor, componentTiers, assembledComponentIds, computeSlotUsage, computeTierGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, ordinaryDamageWounds, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns, resetEncounterSpecialties, equipmentCardCommitment, recoveryBaseAmount, resolveDamageComponents } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, isDistinctionStyle, distinctionUnlocks, teamForActor, teamTierFor, componentTiers, assembledComponentIds, computeSlotUsage, computeTierGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, ordinaryDamageWounds, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns, resetEncounterSpecialties, equipmentCardCommitment, recoveryBaseAmount, resolveDamageComponents, hasOriginDistinction, THREAD_CAPACITY, addThread, authorityCapacity, authorityResultsPerCard, storeAuthority, spendAuthority, lockCapacity, contingencyCapacity, riteCapacity, placeRite, adaptationUpkeep, STRAIN_MAX, forcedStrain, psionicsBurnSurchargeAt, MANIFESTATION_TRACK } from "../utils.mjs";
 import { availableSubtypes, enterManifestation } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -119,14 +119,22 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       rollKeyAspect: EssenceActorSheet.#onRollKeyAspect,
       addExpertise: EssenceActorSheet.#onAddExpertise,
       toggleCombo: EssenceActorSheet.#onToggleCombo,
-      clearLock: EssenceActorSheet.#onClearLock,
+      addLock: EssenceActorSheet.#onAddLock,
+      removeLock: EssenceActorSheet.#onRemoveLock,
       endAdaptation: EssenceActorSheet.#onEndAdaptation,
-      clearContingency: EssenceActorSheet.#onClearContingency,
-      toggleThread: EssenceActorSheet.#onToggleThread,
+      addContingency: EssenceActorSheet.#onAddContingency,
+      triggerContingency: EssenceActorSheet.#onTriggerContingency,
+      removeContingency: EssenceActorSheet.#onRemoveContingency,
+      addThread: EssenceActorSheet.#onAddThread,
+      consumeThread: EssenceActorSheet.#onConsumeThread,
+      ventStrain: EssenceActorSheet.#onVentStrain,
+      forceStrain: EssenceActorSheet.#onForceStrain,
       addAuthority: EssenceActorSheet.#onAddAuthority,
-      removeAuthority: EssenceActorSheet.#onRemoveAuthority,
+      spendAuthority: EssenceActorSheet.#onSpendAuthority,
       addRite: EssenceActorSheet.#onAddRite,
+      echoRite: EssenceActorSheet.#onEchoRite,
       deleteRite: EssenceActorSheet.#onDeleteRite,
+      toggleManifestationWound: EssenceActorSheet.#onToggleManifestationWound,
       activateReachTrigger: EssenceActorSheet.#onActivateReachTrigger,
       deactivateReachTrigger: EssenceActorSheet.#onDeactivateReachTrigger,
       resetAdventureUses: EssenceActorSheet.#onResetAdventureUses,
@@ -475,29 +483,42 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // tempBonus; exposed again here bare so the template doesn't need to reach through `system.`.
     context.reachTriggers = system.reachTriggers.map((t, i) => ({ ...t, i }));
 
-    context.comboPips = pips(system.specialties.combo, 5);
+    // Combat Style Specialties (Part X, Appendix E; 0.12.0). Origin Benefits come from the
+    // creation Distinction only (hasOriginDistinction).
+    const sp = system.specialties;
+    context.comboPips = pips(sp.combo, 5);
+    context.lockCap = lockCapacity(hasOriginDistinction(distinctionItems, "Marksman"));
+    context.lockEntries = (sp.locks ?? []).map((name, i) => ({ name, i }));
+    const unstable = this.actor.items.some((i) => i.type === "condition" && (i.name || "").toUpperCase() === "UNSTABLE");
+    context.adaptationDue = adaptationUpkeep(sp.adaptation?.upkeep, { efficient: hasOriginDistinction(distinctionItems, "Gifted"), unstable });
+    context.contingencyCap = contingencyCapacity(hasOriginDistinction(distinctionItems, "Strategist"));
+    context.contingencyEntries = (sp.contingencies ?? []).map((text, i) => ({ text, i }));
+    const threadCounts = {};
+    for (const t of sp.threads) threadCounts[t] = (threadCounts[t] ?? 0) + 1;
     context.threadFamilies = MAGECRAFT_THREAD_FAMILIES.map((f) => ({
       label: f.label,
       threads: f.threads.map((t) => ({
         name: t,
-        active: system.specialties.threads.includes(t),
+        active: (threadCounts[t] ?? 0) > 0,
+        count: threadCounts[t] ?? 0,
         effect: THREAD_EFFECTS[t] ?? "",
         title: `${f.label} — ${THREAD_EFFECTS[t] ?? ""}`
       }))
     }));
-    // V6 Appendix G (plan §6.12): the effect text beside each currently-STORED Thread (as opposed
-    // to the toggle chips above, which show every available Thread). A Thread may be stored more
-    // than once (duplicates allowed, effects stack), so this lists every entry in the array, not a
-    // deduped set.
-    context.activeThreads = system.specialties.threads.map((t) => ({ name: t, effect: THREAD_EFFECTS[t] ?? "" }));
-    // max(1, half Rank rounded up) — the plain half-rank formula gives 0 slots at Leadership Rank
-    // 0, an unusable result PLAYTEST_RULES.md §13 explicitly patches with this floor.
-    context.authorityCap = Math.max(1, Math.ceil((system.leadership ?? 0) / 2));
-    context.authorityEntries = system.specialties.authority.map((value, i) => ({ value, i }));
-    context.riteEntries = system.specialties.rites.map((r, i) => ({ ...r, i }));
-    // Read-only status for the Calling specialty row — entering/dismissing a Full Manifestation
-    // happens through this sheet's own header dropdown (see manifestation.mjs), not here.
-    context.brokenManifestations = system.specialties.manifestationRecords.filter((r) => r.broken).map((r) => r.subtype);
+    // The effect text beside each currently-STORED Thread (Doc L6033: duplicates allowed, effects
+    // stack), so this lists every entry in the array, not a deduped set.
+    context.activeThreads = sp.threads.map((t, i) => ({ name: t, i, effect: THREAD_EFFECTS[t] ?? "" }));
+    context.threadCap = THREAD_CAPACITY;
+    context.authorityCap = authorityCapacity(system.leadership);
+    context.orator = hasOriginDistinction(distinctionItems, "Orator");
+    context.authorityEntries = (sp.authorityCards ?? []).map((c, i) => ({ card: c.card, i, results: (c.results ?? []).map((value, j) => ({ value, i: j })) }));
+    context.invoker = hasOriginDistinction(distinctionItems, "Invoker");
+    context.riteCap = riteCapacity(context.invoker);
+    context.riteEntries = sp.rites.map((r, i) => ({ ...r, i }));
+    // Calling (Doc L6365): the shared five-space Manifestation Wound track lives here; entering a
+    // form happens through this sheet's header dropdown (see manifestation.mjs).
+    context.manifestationPips = pips(sp.manifestationWounds ?? 0, MANIFESTATION_TRACK);
+    context.callerBroken = isBroken(this.actor);
 
     // Universal actions everyone can use (Hide, Strike, Brace, ...) are just Action/Reaction Cards
     // with no Combat Style set — split those into their own "Basic" row of quick-access buttons
@@ -648,11 +669,14 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    * amount deducted from the pool (see condition text like "commit 4 or more dice to a single
    * Action"). Returns null if the dialog is dismissed without committing.
    */
-  static async #promptDiceCount({ title, label, min, max, initial, note = "", extraCheckbox = null }) {
+  /** `extraCheckbox` yields `{count, extra}`; `checkboxes` ([{name,label}]) adds more, read back as
+   *  `result[name]`. */
+  static async #promptDiceCount({ title, label, min, max, initial, note = "", extraCheckbox = null, checkboxes = [] }) {
+    const box = (name, text) => `<label style="display:flex;align-items:center;gap:6px;margin-top:6px;"><input type="checkbox" name="${name}"> ${text}</label>`;
     return new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
         window: { title },
-        content: `<p>${label}</p>${note ? `<p class="muted">${note}</p>` : ""}<input type="number" name="count" value="${initial}" min="${min}" max="${max}" autofocus>${extraCheckbox ? `<label style="display:flex;align-items:center;gap:6px;margin-top:6px;"><input type="checkbox" name="extra"> ${extraCheckbox.label}</label>` : ""}`,
+        content: `<p>${label}</p>${note ? `<p class="muted">${note}</p>` : ""}<input type="number" name="count" value="${initial}" min="${min}" max="${max}" autofocus>${extraCheckbox ? box("extra", extraCheckbox.label) : ""}${checkboxes.map((c) => box(c.name, c.label)).join("")}`,
         buttons: [
           {
             action: "commit",
@@ -662,7 +686,10 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
               const raw = Number(button.form.elements.count.value);
               const n = Number.isFinite(raw) ? raw : initial;
               const count = Math.min(max, Math.max(min, n));
-              return extraCheckbox ? { count, extra: button.form.elements.extra.checked } : count;
+              if (!extraCheckbox && !checkboxes.length) return count;
+              const out = { count, extra: extraCheckbox ? button.form.elements.extra.checked : false };
+              for (const c of checkboxes) out[c.name] = !!button.form.elements[c.name]?.checked;
+              return out;
             }
           },
           { action: "cancel", label: "Cancel", callback: () => "essence-cancelled" }
@@ -983,6 +1010,18 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
     if (isReaction) EssenceActorSheet.#warnIfLikelySecondReaction(this.actor);
 
+    // Psionics (Doc L6111-L6122): venting Strain this Turn forbids Psionics Actions; a card may buy
+    // 1 free Surge for 1 Strain (not at 6); Strain 5-6 costs 1 additional burned die, judged at the
+    // value AFTER the gain.
+    const isPsionics = (sys.skill || "").toLowerCase() === "psionics";
+    const strain = this.actor.system.specialties?.strain ?? 0;
+    if (isPsionics && !isReaction && this.actor.system.specialties?.strainVented) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.StrainVentedThisTurn", { name: this.actor.name }));
+      return;
+    }
+    const checkboxes = [];
+    if (isPsionics && strain < STRAIN_MAX) checkboxes.push({ name: "strainSurge", label: game.i18n.format("ESSENCE.Sheet.StrainForSurge", { next: strain + 1 }) });
+
     // Reactions: the unaware tax (Doc L4460) burns 1 extra Reaction die on top of the roll; it is
     // a cost, never rolled, and can't be skipped by committing every die (checked below).
     // Actions: a helpless target (Doc L4530) makes the card unopposed; declared when playing it.
@@ -990,21 +1029,27 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       title: `Use ${item.name}`,
       label: `Commit how many ${poolLabel} Dice? (min ${cardMin}, max ${available})`,
       min: cardMin, max: available, initial: cardMin,
-      note: EssenceActorSheet.#maxRolledDiceNote(this.actor, sys),
+      note: [EssenceActorSheet.#maxRolledDiceNote(this.actor, sys), isPsionics && psionicsBurnSurchargeAt(strain) ? game.i18n.localize("ESSENCE.Character.StrainBurnSurcharge") : ""].filter(Boolean).join(" "),
       extraCheckbox: isReaction
         ? { label: "Target is unaware (burn 1 additional Reaction die)" }
-        : { label: game.i18n.localize("ESSENCE.Sheet.HelplessTarget") }
+        : { label: game.i18n.localize("ESSENCE.Sheet.HelplessTarget") },
+      checkboxes
     });
     if (promptResult === null) return;
     const committed = promptResult.count;
     const unawareTax = isReaction && promptResult.extra ? 1 : 0;
     const helpless = !isReaction && promptResult.extra;
-    if (committed + unawareTax > available) {
-      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.UnawareTaxUnaffordable", { name: this.actor.name, needed: committed + unawareTax, min: committed, available }));
+    const strainGain = isPsionics && promptResult.strainSurge ? 1 : 0;
+    const strainAfter = strain + strainGain;
+    const strainBurn = isPsionics ? psionicsBurnSurchargeAt(strainAfter) : 0;
+    const extraBurn = unawareTax + strainBurn;
+    if (committed + extraBurn > available) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.UnawareTaxUnaffordable", { name: this.actor.name, needed: committed + extraBurn, min: committed, available }));
       return;
     }
+    if (strainGain) await this.actor.update({ "system.specialties.strain": strainAfter });
 
-    await EssenceActorSheet.#finishCardPlay(this.actor, item, { committed, unawareTax, poolField, available, unopposed: !!sys.unopposed || helpless });
+    await EssenceActorSheet.#finishCardPlay(this.actor, item, { committed, unawareTax: extraBurn, poolField, available, unopposed: !!sys.unopposed || helpless, extraSurges: strainGain, costNotes: [strainGain ? `+1 Strain (now ${strainAfter}) for 1 free Surge` : "", strainBurn ? "1 additional die burned for Strain 5-6" : ""].filter(Boolean) });
   }
 
   /**
@@ -1012,8 +1057,11 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    * the ordinary play above and a prepared Action fired from its reserved dice (Doc L4324: "Pay its
    * current dice requirements from the reserved dice, never from Reaction dice").
    */
-  static async #finishCardPlay(actor, item, { committed, unawareTax = 0, poolField, available, unopposed, fromReserved = false }) {
+  static async #finishCardPlay(actor, item, { committed, unawareTax = 0, poolField, available, unopposed, fromReserved = false, extraSurges = 0, costNotes = [] }) {
     const sys = item.system;
+    if (costNotes.length) {
+      await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p><strong>${actor.name}</strong> plays <strong>${item.name}</strong>: ${costNotes.join("; ")}.</p>` });
+    }
     const isReaction = item.type === "reaction-card";
     const defenseKey = (sys.defense || "").toLowerCase();
     const { defense, targets } = await EssenceActorSheet.#resolveTargets(defenseKey);
@@ -1052,7 +1100,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // spent), even if the roll below fails or is interrupted, so this fires unconditionally before
     // rollEssencePool resolves.
     await applyCardCooldown(actor, item);
-    const bonusSurges = hasMastery(sys, actor.system.expertises) ? 1 : 0;
+    const bonusSurges = (hasMastery(sys, actor.system.expertises) ? 1 : 0) + (extraSurges | 0);
     await rollEssencePool({ pool: committed, defense, targets, label: fromReserved ? `${item.name} (prepared)` : item.name, actor, surgeOptions: sys.surges, bonusSurges, unopposed, nonCombat: !!sys.noSurges });
     // V6 "Acting While Dying" (design/v6-revision-delta.md §2.4): this Combat/Reaction Card is an
     // Action or Reaction, so it's eligible — see #applyDyingExertion for the once-per-Round gate.
@@ -1522,8 +1570,13 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     }
     const picked = await promptDamageComponents({ types: DAMAGE_TYPES });
     if (!picked) return;
+    await EssenceActorSheet.#applyDamageComponents(this.actor, picked.components, picked.reduction);
+  }
 
-    const sys = this.actor.system;
+  /** The Apply Damage engine (Doc L3896-L3918), shared with forced Strain's Psychic Breach Damage. */
+  static async #applyDamageComponents(actor, components, reduction) {
+    const picked = { components, reduction };
+    const sys = actor.system;
     const result = resolveDamageComponents({
       resilience: sys.effectiveResilience ?? sys.resilience ?? 0,
       accumulated: sys.playState.accumulatedDamage ?? 0,
@@ -1545,21 +1598,25 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     };
     if (result.deathTrackStep !== (sys.playState.deathTrackStep ?? 0)) update["system.playState.deathTrackStep"] = result.deathTrackStep;
     if (result.deathTrackState !== (sys.playState.deathTrackState ?? "none")) update["system.playState.deathTrackState"] = result.deathTrackState;
-    await this.actor.update(update);
-    if (result.filledSlots.length) await attachWoundCards(this.actor, result.filledSlots);
+    await actor.update(update);
+    if (result.filledSlots.length) await attachWoundCards(actor, result.filledSlots);
 
     const summary = picked.components.map((c) => `${c.amount} ${c.type}${c.breach ? " (Breach)" : ""}${c.nonlethal ? " (nonlethal)" : ""}`).join(" + ");
     await ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> takes ${summary}${picked.reduction ? `, reduced by ${picked.reduction}` : ""}.</p><ul>${result.log.map((l) => `<li>${l}</li>`).join("")}</ul>`
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: `<p><strong>${actor.name}</strong> takes ${summary}${picked.reduction ? `, reduced by ${picked.reduction}` : ""}.</p><ul>${result.log.map((l) => `<li>${l}</li>`).join("")}</ul>`
     });
 
-    if (result.nonlethalStable) await this.actor.setUnconscious(true);
+    if (result.nonlethalStable) await actor.setUnconscious(true);
     if (result.filledSlots.some((f) => f.slot === 4)) {
-      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CriticallyWounded", { name: this.actor.name }));
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CriticallyWounded", { name: actor.name }));
     }
-    if (result.died) await this.actor.markDead();
-    else if (result.filledSlots.length) await promptConcentrationOnWound(this.actor);
+    // Doc L8100: a Wound not absorbed by a Temporary Wound costs 1 Combo.
+    if (result.filledSlots.length && (actor.system.specialties?.combo ?? 0) > 0) {
+      await actor.update({ "system.specialties.combo": actor.system.specialties.combo - 1 });
+    }
+    if (result.died) await actor.markDead();
+    else if (result.filledSlots.length) await promptConcentrationOnWound(actor);
   }
 
   /**
@@ -1786,28 +1843,28 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   }
 
   /**
-   * Minimal single-slot decrement for V6's "Recovery removes 1 Manifestation Wound" (plan §5.4).
-   * Manifestation Wounds live on the character's own persistent per-subtype profile Actor (see
-   * module/apps/manifestation.mjs), not on the character itself, so this only touches the currently
-   * ACTIVE manifestation's coreWounds (the same "any length just works" array Apply Damage already
-   * indexes by slot position) — clearing the first filled slot it finds, same convention as this
-   * method's own Core Wound loop above. Deliberately does not attempt to pick a "most severe" slot,
-   * walk every recorded manifestation regardless of active state, or build any new Manifestation
-   * bookkeeping — Calling/Summoner content is explicitly deprioritized (plan §9.4/§6.10), and this
-   * is scoped to the smallest change that satisfies the V6 rule text.
+   * Doc L6389: "Each Recovery removes 1 Manifestation Wound as a specific Calling exception.
+   * Removing at least one Wound from the full track ends Broken." The shared track is the
+   * character's own `specialties.manifestationWounds` (0.12.0); an active form's working copy is
+   * kept in step.
    */
   static async #reduceOneManifestationWound(actor) {
+    const count = actor.system.specialties?.manifestationWounds ?? 0;
+    if (count <= 0) return false;
+    const update = { "system.specialties.manifestationWounds": count - 1 };
+    if (count - 1 < MANIFESTATION_TRACK) update["system.specialties.broken"] = false;
+    await actor.update(update);
     const subtype = actor.system.specialties?.activeManifestation;
-    if (!subtype) return false;
-    const record = actor.system.specialties.manifestationRecords.find((r) => r.subtype === subtype);
-    if (!record?.actorId) return false;
-    const manifestation = game.actors.get(record.actorId);
-    if (!manifestation) return false;
-    const coreWounds = manifestation.system.coreWounds.map((w) => ({ ...w }));
-    const slot = coreWounds.findIndex((w) => w.filled);
-    if (slot === -1) return false;
-    coreWounds[slot] = { filled: false, domain: "", severity: "", condition: "" };
-    await manifestation.update({ "system.coreWounds": coreWounds });
+    const record = subtype ? actor.system.specialties.manifestationRecords.find((r) => r.subtype === subtype) : null;
+    const form = record?.actorId ? game.actors.get(record.actorId) : null;
+    if (form) {
+      const coreWounds = form.system.coreWounds.map((w) => ({ ...w }));
+      const slot = coreWounds.map((w) => w.filled).lastIndexOf(true);
+      if (slot !== -1) {
+        coreWounds[slot] = { filled: false, domain: "", severity: "", condition: "" };
+        await form.update({ "system.coreWounds": coreWounds });
+      }
+    }
     return true;
   }
 
@@ -2249,7 +2306,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     if (subtype) {
       const record = this.actor.system.specialties.manifestationRecords?.find((r) => r.subtype === subtype);
       const profile = record?.actorId ? game.actors.get(record.actorId) : null;
-      if (profile) { await dismissManifestation(profile); cleared.push("Full Manifestation"); }
+      // Doc L6361: "Full Manifestation normally ends when the Encounter ends" (no die burned).
+      if (profile) { await returnFromManifestation(profile, { reason: "encounter" }); cleared.push("Full Manifestation"); }
     }
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
@@ -2314,80 +2372,266 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     await this.actor.update({ "system.specialties.combo": next });
   }
 
-  /** Ballistics — Lock is free text (the Locked creature's name); establishing is just typing a new one. */
-  static async #onClearLock() {
-    await this.actor.update({ "system.specialties.lock": "" });
+  #distinctions() {
+    return this.actor.items.filter((i) => i.type === "distinction");
+  }
+
+  /** One short text prompt shared by the Specialty "establish" buttons below. */
+  static async #promptText(title, label, { placeholder = "", initial = "" } = {}) {
+    return new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title },
+        content: `<label>${label} <input type="text" name="value" value="${foundry.utils.escapeHTML(initial)}" placeholder="${foundry.utils.escapeHTML(placeholder)}" autofocus></label>`,
+        buttons: [
+          { action: "ok", label: "OK", default: true, callback: (event, button) => button.form.elements.value.value.trim() || "essence-blank" },
+          { action: "cancel", label: "Cancel", callback: () => "essence-cancelled" }
+        ],
+        submit: (result) => resolve(["essence-cancelled", "essence-blank", "ok"].includes(result) ? null : result)
+      }).render(true);
+    });
+  }
+
+  /**
+   * Ballistics — Lock (Doc L5887-L5889, L5927-L5931). Establishing Lock costs 1 burned Action die
+   * on top of the Ballistics Action; that die is burned here. One Lock, two with the Marksman;
+   * at capacity the new Lock replaces the oldest. Ending (replaced, consumed, detection lost by end
+   * of Turn) is the chip click.
+   */
+  static async #onAddLock() {
+    const cap = lockCapacity(hasOriginDistinction(this.#distinctions(), "Marksman"));
+    const name = await EssenceActorSheet.#promptText(game.i18n.localize("ESSENCE.Character.EstablishLock"), game.i18n.localize("ESSENCE.Character.LockTargetLabel"), { placeholder: game.i18n.localize("ESSENCE.Character.LockedCreaturePlaceholder") });
+    if (!name) return;
+    const locks = [...(this.actor.system.specialties.locks ?? [])];
+    let replaced = "";
+    if (locks.length >= cap) replaced = locks.shift();
+    locks.push(name);
+    const update = { "system.specialties.locks": locks };
+    const dice = this.actor.system.playState.actionDice;
+    let burned = false;
+    if (typeof dice === "number" && dice > 0) { update["system.playState.actionDice"] = dice - 1; burned = true; }
+    await this.actor.update(update);
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> establishes Lock on <strong>${foundry.utils.escapeHTML(name)}</strong>${burned ? " (1 Action die burned)" : " (no Action die available to burn; pay it by hand)"}${replaced ? `; Lock on ${foundry.utils.escapeHTML(replaced)} ends` : ""}.</p>`
+    });
+  }
+
+  static async #onRemoveLock(event, target) {
+    const i = Number(target.dataset.index);
+    const locks = [...(this.actor.system.specialties.locks ?? [])];
+    locks.splice(i, 1);
+    await this.actor.update({ "system.specialties.locks": locks });
   }
 
   /** Gestalt — Adaptation name/upkeep are bound directly via form inputs; this just ends it. */
   static async #onEndAdaptation() {
-    await this.actor.update({ "system.specialties.adaptation": { name: "", upkeep: 0 } });
+    await this.actor.update({ "system.specialties.adaptation": { name: "", upkeep: 0, deferUpkeep: false } });
   }
 
-  /** Cunning — Contingency is free text (trigger + effect); this clears it (used or expired). */
-  static async #onClearContingency() {
-    await this.actor.update({ "system.specialties.contingency": "" });
-  }
-
-  /** Magecraft — Threads: up to 3 of the 10 fixed family names (part-iv-combat.md § Thread Families). */
-  static async #onToggleThread(event, target) {
-    const thread = target.dataset.thread;
-    const threads = [...this.actor.system.specialties.threads];
-    const i = threads.indexOf(thread);
-    if (i !== -1) {
-      threads.splice(i, 1);
-    } else {
-      if (threads.length >= 3) {
-        ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.AlreadyMaintaining3Threads"));
-        return;
-      }
-      threads.push(thread);
-    }
-    await this.actor.update({ "system.specialties.threads": threads });
-  }
-
-  /** Leadership — Authority: stored die results, capped at max(1, half Leadership Rank rounded up). */
-  static async #onAddAuthority() {
-    const rank = this.actor.system.leadership ?? 0;
-    const cap = Math.max(1, Math.ceil(rank / 2));
-    const authority = this.actor.system.specialties.authority;
-    if (authority.length >= cap) {
-      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.MaxAuthorityStored", { cap }));
+  /** Cunning — establish a Contingency (Doc L5983-L5987): one per Round, two with the Strategist. */
+  static async #onAddContingency() {
+    const cap = contingencyCapacity(hasOriginDistinction(this.#distinctions(), "Strategist"));
+    const list = [...(this.actor.system.specialties.contingencies ?? [])];
+    if (list.length >= cap) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.ContingencyCapacity", { cap }));
       return;
     }
-    const value = await new Promise((resolve) => {
+    const text = await EssenceActorSheet.#promptText(game.i18n.localize("ESSENCE.Character.EstablishContingency"), game.i18n.localize("ESSENCE.Character.ContingencyLabelShort"), { placeholder: game.i18n.localize("ESSENCE.Character.ContingencyPlaceholder") });
+    if (!text) return;
+    list.push(text);
+    await this.actor.update({ "system.specialties.contingencies": list });
+  }
+
+  /**
+   * Fires a Contingency at its Trigger (Doc L5985-L5987): optional, one trigger per Round (a second
+   * warns rather than blocks, since another rule may raise the limit), resolves once and ends.
+   */
+  static async #onTriggerContingency(event, target) {
+    const i = Number(target.dataset.index);
+    const list = [...(this.actor.system.specialties.contingencies ?? [])];
+    const text = list[i];
+    if (text === undefined) return;
+    if (this.actor.system.specialties.contingencyTriggered) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.ContingencyAlreadyTriggered", { name: this.actor.name }));
+    }
+    list.splice(i, 1);
+    await this.actor.update({ "system.specialties.contingencies": list, "system.specialties.contingencyTriggered": true });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong>'s Contingency triggers: ${foundry.utils.escapeHTML(text)}. It resolves once and ends; no Reaction is played and the chain response is not used.</p>`
+    });
+  }
+
+  static async #onRemoveContingency(event, target) {
+    const i = Number(target.dataset.index);
+    const list = [...(this.actor.system.specialties.contingencies ?? [])];
+    list.splice(i, 1);
+    await this.actor.update({ "system.specialties.contingencies": list });
+  }
+
+  /** Magecraft — create a Thread (Doc L6031-L6033): hold up to 3, duplicates allowed; at capacity
+   *  one must be consumed or discarded first. */
+  static async #onAddThread(event, target) {
+    const result = addThread(this.actor.system.specialties.threads, target.dataset.thread);
+    if (result.error === "capacity") {
+      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.AlreadyMaintaining3Threads"));
+      return;
+    }
+    await this.actor.update({ "system.specialties.threads": result.threads });
+  }
+
+  /** Consumes (or discards) one stored Thread; consumed Threads stay spent even if the card fails. */
+  static async #onConsumeThread(event, target) {
+    const i = Number(target.dataset.index);
+    const threads = [...this.actor.system.specialties.threads];
+    const [thread] = threads.splice(i, 1);
+    if (thread === undefined) return;
+    await this.actor.update({ "system.specialties.threads": threads });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> consumes a <strong>${thread}</strong> Thread: ${THREAD_EFFECTS[thread] ?? ""}</p>`
+    });
+  }
+
+  /** Psionics — burn 2 Action dice to remove 2 Strain (Doc L6122); no Psionics Actions this Turn. */
+  static async #onVentStrain() {
+    const sp = this.actor.system.specialties;
+    const dice = this.actor.system.playState.actionDice ?? 0;
+    if ((sp.strain ?? 0) <= 0) { ui.notifications.info(game.i18n.format("ESSENCE.Notify.NoStrain", { name: this.actor.name })); return; }
+    if (dice < 2) { ui.notifications.warn(game.i18n.format("ESSENCE.Notify.VentNeedsDice", { name: this.actor.name, available: dice })); return; }
+    const next = Math.max(0, sp.strain - 2);
+    await this.actor.update({ "system.playState.actionDice": dice - 2, "system.specialties.strain": next, "system.specialties.strainVented": true });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> burns 2 Action dice to vent Strain: ${sp.strain} → ${next}. No Psionics Actions for the rest of this Turn; Reactions remain available.</p>`
+    });
+  }
+
+  /** Psionics — a hostile effect forces Strain (Doc L6120): past 6 it deals 1 Psychic Breach Damage
+   *  per excess point, resolved through Apply Damage's own engine. */
+  static async #onForceStrain() {
+    const raw = await EssenceActorSheet.#promptText(game.i18n.localize("ESSENCE.Character.ForceStrain"), game.i18n.localize("ESSENCE.Character.ForceStrainAmount"), { initial: "1" });
+    const amount = parseInt(raw ?? "", 10);
+    if (!Number.isFinite(amount) || amount <= 0) return;
+    const { strain, excess } = forcedStrain(this.actor.system.specialties.strain, amount);
+    await this.actor.update({ "system.specialties.strain": strain });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> is forced to gain ${amount} Strain: now ${strain} / ${STRAIN_MAX}${excess ? `; ${excess} excess point(s) become ${excess} Psychic Breach Damage` : ""}.</p>`
+    });
+    if (excess > 0) await EssenceActorSheet.#applyDamageComponents(this.actor, [{ amount: excess, type: "Psychic", breach: true }], 0);
+  }
+
+  /**
+   * Leadership — store Authority after a Leadership Action (Doc L6162-L6164, L6189): pick the
+   * generating card, enter the rolled result (two with the Orator), keep or replace what the card
+   * already holds. Capacity counts occupied cards, not results.
+   */
+  static async #onAddAuthority() {
+    const orator = hasOriginDistinction(this.#distinctions(), "Orator");
+    const capacity = authorityCapacity(this.actor.system.leadership);
+    const perCard = authorityResultsPerCard(orator);
+    const cards = this.actor.system.specialties.authorityCards ?? [];
+    const leadershipCards = this.actor.items.filter((i) => (i.type === "action-card") && (i.system.skill || "").toLowerCase() === "leadership").map((i) => i.name);
+    const names = [...new Set([...cards.map((c) => c.card).filter(Boolean), ...leadershipCards])].sort((a, b) => a.localeCompare(b));
+    const options = names.map((n) => `<option value="${foundry.utils.escapeHTML(n)}">${foundry.utils.escapeHTML(n)}</option>`).join("");
+    const picked = await new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
-        window: { title: "Store Authority" },
-        content: `<label>Rolled result to store <input type="number" name="value" value="1" min="1" max="10" autofocus></label>`,
-        buttons: [{
-          action: "store",
-          label: "Store",
-          default: true,
-          callback: (event, button) => Number(button.form.elements.value.value)
-        }],
-        submit: (result) => resolve(result === "store" ? null : result)
+        window: { title: game.i18n.localize("ESSENCE.Character.StoreAuthority") },
+        content: `<p class="muted">${game.i18n.format("ESSENCE.Character.StoreAuthorityHint", { capacity, perCard })}</p>
+          <label>${game.i18n.localize("ESSENCE.Character.GeneratingCard")} <select name="card"><option value="">${game.i18n.localize("ESSENCE.Character.AuthorityUnnamedCard")}</option>${options}</select></label>
+          <label>${game.i18n.localize("ESSENCE.Character.OrCardName")} <input type="text" name="cardName"></label>
+          <label>${game.i18n.localize("ESSENCE.Character.RolledResult")} <input type="number" name="r1" value="" min="1" max="10" autofocus></label>
+          ${perCard > 1 ? `<label>${game.i18n.localize("ESSENCE.Character.SecondResult")} <input type="number" name="r2" value="" min="1" max="10"></label>` : ""}
+          <label style="display:flex;align-items:center;gap:6px;margin-top:6px;"><input type="checkbox" name="replace"> ${game.i18n.localize("ESSENCE.Character.ReplaceExisting")}</label>`,
+        buttons: [
+          { action: "store", label: "Store", default: true, callback: (event, button) => {
+            const f = button.form.elements;
+            const results = [parseInt(f.r1.value, 10), f.r2 ? parseInt(f.r2.value, 10) : NaN].filter((n) => Number.isFinite(n));
+            return { card: f.cardName.value.trim() || f.card.value, results, replace: f.replace.checked };
+          } },
+          { action: "cancel", label: "Cancel", callback: () => null }
+        ],
+        submit: (result) => resolve(result && typeof result === "object" ? result : null)
       }).render(true);
     });
-    if (value === null || !Number.isFinite(value)) return;
-    await this.actor.update({ "system.specialties.authority": [...authority, value] });
+    if (!picked) return;
+    const existing = cards.find((c) => c.card === picked.card);
+    const discard = picked.replace && existing ? existing.results.map((_, i) => i) : [];
+    const result = storeAuthority(cards, picked.card, picked.results, { capacity, perCard, discard });
+    if (result.error === "capacity") { ui.notifications.warn(game.i18n.format("ESSENCE.Notify.MaxAuthorityStored", { cap: capacity })); return; }
+    if (result.error === "noResults") { ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.AuthorityNeedsResult")); return; }
+    await this.actor.update({ "system.specialties.authorityCards": result.cards });
   }
 
-  static async #onRemoveAuthority(event, target) {
-    const i = Number(target.dataset.index);
-    const authority = [...this.actor.system.specialties.authority];
-    authority.splice(i, 1);
-    await this.actor.update({ "system.specialties.authority": authority });
+  /** Spends one stored result (Doc L6177-L6187): the general substitution, or the card's own
+   *  Authority effect. An emptied card releases its capacity slot. */
+  static async #onSpendAuthority(event, target) {
+    const cards = spendAuthority(this.actor.system.specialties.authorityCards, Number(target.dataset.card), Number(target.dataset.index));
+    await this.actor.update({ "system.specialties.authorityCards": cards });
   }
 
-  /** Ritualism — Rites: up to 3 (trigger, Echo, Echo Limit). */
+  /**
+   * Ritualism — establish a Rite (Doc L6237-L6243, L6277-L6283): 3, or 4 with the Invoker. A
+   * Possessed Rite (a subject named) with the same card name on the same subject replaces the old
+   * application. At capacity the player picks which Rite to remove; the Invoker may resolve that
+   * Rite's Echo once as it goes (Final Echo, once per Round).
+   */
   static async #onAddRite() {
+    const invoker = hasOriginDistinction(this.#distinctions(), "Invoker");
+    const capacity = riteCapacity(invoker);
     const rites = this.actor.system.specialties.rites.map((r) => ({ ...r }));
-    if (rites.length >= 3) {
-      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.AlreadyMaintaining3Rites"));
+    const blank = { name: "", trigger: "", echo: "", echoLimit: 1, subject: "" };
+    if (rites.length < capacity) {
+      await this.actor.update({ "system.specialties.rites": [...rites, blank] });
       return;
     }
-    rites.push({ trigger: "", echo: "", echoLimit: 1 });
+    const options = rites.map((r, i) => `<option value="${i}">${foundry.utils.escapeHTML(r.name || r.trigger || `Rite ${i + 1}`)}${r.subject ? ` (on ${foundry.utils.escapeHTML(r.subject)})` : ""}</option>`).join("");
+    const finalEchoAvailable = invoker && !this.actor.system.specialties.finalEchoUsed;
+    const picked = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: game.i18n.localize("ESSENCE.Character.AddRite") },
+        content: `<p>${game.i18n.format("ESSENCE.Notify.RiteCapacity", { cap: capacity })}</p><label>${game.i18n.localize("ESSENCE.Character.RemoveWhichRite")} <select name="idx">${options}</select></label>
+          ${finalEchoAvailable ? `<label style="display:flex;align-items:center;gap:6px;margin-top:6px;"><input type="checkbox" name="finalEcho" checked> ${game.i18n.localize("ESSENCE.Character.FinalEchoOption")}</label>` : ""}`,
+        buttons: [
+          { action: "ok", label: "Replace", default: true, callback: (event, button) => ({ idx: Number(button.form.elements.idx.value), finalEcho: !!button.form.elements.finalEcho?.checked }) },
+          { action: "cancel", label: "Cancel", callback: () => null }
+        ],
+        submit: (result) => resolve(result && typeof result === "object" ? result : null)
+      }).render(true);
+    });
+    if (!picked) return;
+    const removed = rites[picked.idx];
+    if (!removed) return;
+    rites.splice(picked.idx, 1);
+    rites.push(blank);
+    const update = { "system.specialties.rites": rites };
+    if (picked.finalEcho && finalEchoAvailable) {
+      update["system.specialties.finalEchoUsed"] = true;
+      await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        content: `<p><strong>${this.actor.name}</strong> replaces the Rite <strong>${foundry.utils.escapeHTML(removed.name || removed.trigger || "Rite")}</strong> and, with Final Echo, resolves its Echo once first (any legal target or area): ${foundry.utils.escapeHTML(removed.echo || "")}</p>`
+      });
+    }
+    await this.actor.update(update);
+  }
+
+  /** A Rite's Trigger occurred (Doc L6239): resolve the Echo, reduce remaining Echoes by 1, remove
+   *  the Rite after the last. */
+  static async #onEchoRite(event, target) {
+    const i = Number(target.dataset.index);
+    const rites = this.actor.system.specialties.rites.map((r) => ({ ...r }));
+    const rite = rites[i];
+    if (!rite) return;
+    const left = (rite.echoLimit ?? 1) - 1;
+    const label = foundry.utils.escapeHTML(rite.name || rite.trigger || `Rite ${i + 1}`);
+    if (left <= 0) rites.splice(i, 1);
+    else rites[i] = { ...rite, echoLimit: left };
     await this.actor.update({ "system.specialties.rites": rites });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong>'s Rite <strong>${label}</strong>${rite.subject ? ` (Possessed: ${foundry.utils.escapeHTML(rite.subject)})` : ""} echoes: ${foundry.utils.escapeHTML(rite.echo || "")}${left <= 0 ? " That was its final Echo; the Rite is removed." : ` ${left} Echo(es) remain.`}</p>`
+    });
   }
 
   static async #onDeleteRite(event, target) {
@@ -2397,10 +2641,16 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     await this.actor.update({ "system.specialties.rites": rites });
   }
 
+  /** Calling — the shared Manifestation Wound track, hand-adjustable like every other pip track. */
+  static async #onToggleManifestationWound(event, target) {
+    const i = Number(target.dataset.index);
+    const next = EssenceActorSheet.#onTogglePip(this.actor.system.specialties.manifestationWounds ?? 0, i);
+    await this.actor.update({ "system.specialties.manifestationWounds": next, "system.specialties.broken": next >= MANIFESTATION_TRACK });
+  }
+
   /**
    * Calling — Full Manifestation entry point (see manifestation.mjs). Already-manifested is
-   * handled by pointing the player at the profile's own sheet instead of offering a second Enter
-   * here — Dismiss/Apply Defeat live on that NPC sheet's matching header control, not this one.
+   * handled by pointing the player at the form's own sheet, where Return lives.
    */
   static async #onOpenManifestation() {
     const actor = this.actor;
@@ -2409,15 +2659,18 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       ui.notifications.info(game.i18n.format("ESSENCE.Notify.AlreadyManifested", { name: actor.name, subtype: active }));
       return;
     }
+    if (isBroken(actor)) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CallerBroken", { name: actor.name }));
+      return;
+    }
     const subtypes = availableSubtypes(actor);
     if (!subtypes.length) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoManifestationRank", { name: actor.name }));
       return;
     }
     const options = subtypes.map((s) => {
-      const record = actor.system.specialties.manifestationRecords.find((r) => r.subtype === s.name);
-      const broken = record?.broken;
-      return `<option value="${s.name}" ${broken ? "disabled" : ""}>${s.name} (Rank ${s.rank})${broken ? " — Broken until Downtime" : ""}</option>`;
+      const cost = entryCostFor(actor, s.rank);
+      return `<option value="${s.name}">${s.name} (Rank ${s.rank}: +${cost.burn} burned dice, +${cost.mana} Mana)</option>`;
     }).join("");
     const subtype = await new Promise((resolve) => {
       new foundry.applications.api.DialogV2({

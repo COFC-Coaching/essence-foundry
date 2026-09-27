@@ -28,6 +28,37 @@ const STRAIN_EXTRA_BURNED_DIE_AT = 5;
 /** v0.6 base Action and Reaction Pool size before explicit grants (Part VII "Action Pool"). */
 export const BASE_COMBAT_POOL = 6;
 
+/**
+ * 0.12.0 (Phase 5): three Specialties grew from a single value into a list. The old fields stay in
+ * the schema so any stored value still validates; this carries each one across the first time the
+ * document loads with the new field empty, then blanks the old one. Shape changes are outside what
+ * the schema-driven migrateSource repairs (it fixes values, not field types), hence a hand step.
+ * Defensive like migration.mjs: never throws, leaves the source alone on anything unexpected.
+ */
+export function migrateSpecialties(source) {
+  try {
+    const sp = source?.specialties;
+    if (!sp || typeof sp !== "object" || Array.isArray(sp)) return source;
+    if (typeof sp.lock === "string" && sp.lock.trim() && !(Array.isArray(sp.locks) && sp.locks.length)) {
+      sp.locks = [sp.lock.trim()];
+      sp.lock = "";
+    }
+    if (typeof sp.contingency === "string" && sp.contingency.trim() && !(Array.isArray(sp.contingencies) && sp.contingencies.length)) {
+      sp.contingencies = [sp.contingency.trim()];
+      sp.contingency = "";
+    }
+    if (Array.isArray(sp.authority) && sp.authority.length && !(Array.isArray(sp.authorityCards) && sp.authorityCards.length)) {
+      // The old list did not record which card generated each result; each becomes its own
+      // occupied card with no name, which the player can spend or discard as before.
+      sp.authorityCards = sp.authority.filter((n) => Number.isFinite(n)).map((n) => ({ card: "", results: [Math.min(10, Math.max(1, Math.round(n)))] }));
+      sp.authority = [];
+    }
+  } catch (err) {
+    console.error("Essence System | Specialties migration failed, leaving data untouched", err);
+  }
+  return source;
+}
+
 /** One of the 9 attributes: base 1, 7 points to distribute, max 3 at creation. */
 export function attributeField() {
   return new fields.NumberField({ required: true, integer: true, initial: 1, min: 0 });
@@ -51,6 +82,7 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
    *  (and therefore invisible). Inherited by every subtype; `this.schema` resolves to whichever
    *  concrete model is actually loading, so this one implementation covers all of them. */
   static migrateData(source) {
+    migrateSpecialties(source);
     return migrateSource(this, super.migrateData(source));
   }
 
@@ -230,22 +262,52 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
       // (Apply Damage, Burn Dice, etc. are all manual too) rather than auto-triggered off rolls.
       specialties: new fields.SchemaField({
         combo: new fields.NumberField({ integer: true, initial: 0, min: 0, max: 5 }), // Prowess
-        lock: new fields.StringField({ initial: "" }), // Ballistics — name of the Locked creature
+        // Prowess (Doc L8100): ticked when a Prowess card dealt Damage this Turn; End Turn drops 1
+        // Combo when it is not, then clears it.
+        comboDealtDamage: new fields.BooleanField({ initial: false }),
+        // Ballistics. `lock` is the pre-0.12.0 single field; migrateData moves it into `locks`
+        // (one Lock, two with the Marksman's Split Focus, Doc L5889).
+        lock: new fields.StringField({ initial: "" }),
+        locks: new fields.ArrayField(new fields.StringField()),
         adaptation: new fields.SchemaField({ // Gestalt
           name: new fields.StringField({ initial: "" }),
-          upkeep: new fields.NumberField({ integer: true, initial: 0, min: 0 })
+          upkeep: new fields.NumberField({ integer: true, initial: 0, min: 0 }),
+          // Doc L5937: assumed outside your Turn, the first upkeep is due at the end of your NEXT
+          // Turn. Ticked by the player when assuming off-turn; End Turn clears it instead of charging.
+          deferUpkeep: new fields.BooleanField({ initial: false })
         }),
-        contingency: new fields.StringField({ initial: "" }), // Cunning — trigger + effect, free text
-        threads: new fields.ArrayField(new fields.StringField()), // Magecraft — up to 3, fixed family names
+        // Cunning. `contingency` is the pre-0.12.0 single field; migrateData moves it into
+        // `contingencies` (one per Round, two with the Strategist's Branching Plans). Only one may
+        // trigger per Round (`contingencyTriggered`, reset by EssenceCombat at the start of a Round).
+        contingency: new fields.StringField({ initial: "" }),
+        contingencies: new fields.ArrayField(new fields.StringField()),
+        contingencyTriggered: new fields.BooleanField({ initial: false }),
+        threads: new fields.ArrayField(new fields.StringField()), // Magecraft — up to 3, duplicates allowed
         // Psionics — capped at 6 per V6 Appendix D "Strain" (see STRAIN_PENALTY_THRESHOLDS and
         // STRAIN_EXTRA_BURNED_DIE_AT below for the Composure penalty and burned-die surcharge).
         strain: new fields.NumberField({ integer: true, initial: 0, min: 0, max: 6 }), // Psionics
-        authority: new fields.ArrayField(new fields.NumberField({ integer: true })), // Leadership — stored die results
-        rites: new fields.ArrayField(new fields.SchemaField({ // Ritualism — up to 3
+        // Doc L6122: after burning 2 Action dice to vent Strain, no Psionics Actions this Turn.
+        strainVented: new fields.BooleanField({ initial: false }),
+        // Leadership. `authority` is the pre-0.12.0 flat list of results; migrateData moves it into
+        // `authorityCards`, one entry per occupied generating card (Doc L6162-L6164), each holding
+        // one result (two with the Orator's Commanding Authority).
+        authority: new fields.ArrayField(new fields.NumberField({ integer: true })),
+        authorityCards: new fields.ArrayField(new fields.SchemaField({
+          card: new fields.StringField({ initial: "" }),
+          results: new fields.ArrayField(new fields.NumberField({ integer: true, min: 1, max: 10 }))
+        })),
+        rites: new fields.ArrayField(new fields.SchemaField({ // Ritualism — 3, or 4 with the Invoker
+          name: new fields.StringField({ initial: "" }), // the card, for Possessed's same-name replacement
           trigger: new fields.StringField({ initial: "" }),
           echo: new fields.StringField({ initial: "" }),
-          echoLimit: new fields.NumberField({ integer: true, initial: 1, min: 1 })
+          echoLimit: new fields.NumberField({ integer: true, initial: 1, min: 1 }),
+          subject: new fields.StringField({ initial: "" }) // Possessed: the creature it is attached to
         })),
+        // Invoker's Final Echo (Doc L6243): once per Round, resolving a replaced Rite's Echo.
+        finalEchoUsed: new fields.BooleanField({ initial: false }),
+        // Calling (Doc L6365): one shared five-space Manifestation Wound track for every form. Full
+        // (5) means Broken (L6387); each Recovery removes 1 (L6389). Character-wide, not per subtype.
+        manifestationWounds: new fields.NumberField({ integer: true, initial: 0, min: 0, max: 5 }),
         // Calling — Full Manifestation. `manifested`/`broken` are the original flat flags kept for
         // back-compat with any world data already using them; `activeManifestation` (the current
         // subtype name, "" when not manifested) and `manifestationRecords` (see manifestation.mjs)

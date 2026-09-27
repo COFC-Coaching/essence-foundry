@@ -37,17 +37,18 @@ export const EXPERTISE_DATABASE = {
 // convention for tables that are reminder text rather than live mechanics. A Thread cannot
 // strengthen the Action that created it; duplicates are allowed; effects stack; a consumed Thread
 // is spent even if the card fails — all reminder-only, not modeled in code.
+/** Thread effects when consumed (Doc L6044-L6053, brought to full wording in 0.12.0). */
 export const THREAD_EFFECTS = {
-  Fire: "+1 Damage.",
-  Water: "Move the target (or yourself) 2 units.",
-  Earth: "+1 Fortitude.",
-  Air: "+2 Range.",
-  Time: "Extend one effect by one Turn.",
-  Space: "+1 unit to a radius or length.",
-  Light: "+1 to the Success Die (can exceed 10).",
-  Shadow: "-1 to an enemy's next Success Die.",
-  Aether: "-1 Focus cost (min 0).",
-  Chaos: "Reroll one rolled die."
+  Fire: "Intensify: add 1 Damage to one chosen creature successfully affected by a damaging effect of the card; that effect keeps its Damage type.",
+  Water: "Flow: after resolution, move yourself or one willing creature successfully affected by the card up to 2 units.",
+  Earth: "Ground: after resolution, gain +1 Fortitude until the start of your next Turn. Repeated Earth Threads stack.",
+  Air: "Carry: increase the card's numeric Range by 2 units. A Self effect stays Self.",
+  Time: "Sustain: extend one eligible effect that would end at the start or end of your next Turn by one additional Turn of yours. Upkeep and Concentration still apply.",
+  Space: "Expand: increase a Sphere's hex radius by 1 (one outer ring), or a Line or Cone's length by 1 unit.",
+  Light: "Clarify: add 1 to the Success Die of an opposed Magecraft roll; the final value can exceed 10.",
+  Shadow: "Obscure: one successfully affected enemy suffers −1 to the Success Die of its next hostile Action before the start of your next Turn. Repeated Shadow Threads stack.",
+  Aether: "Economize: reduce the card's Focus cost by 1, to a minimum of 0.",
+  Chaos: "Recast: reroll one die actually rolled for this card before calculating Surges; you must use the new result. A fixed Authority result cannot be rerolled. Each Chaos Thread permits another reroll."
 };
 
 export const SUBTYPE_DATABASE = {
