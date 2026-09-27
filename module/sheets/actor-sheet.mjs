@@ -1791,7 +1791,12 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const adaptabilityRestored = sys.playState.adaptabilityRerollAvailable === false;
     if (adaptabilityRestored) update["system.playState.adaptabilityRerollAvailable"] = true;
 
-    if (!resourceLog.length && !woundsRecovered.length && !strainLog.length && !adaptabilityRestored) {
+    // The Death Track step and the shared Manifestation Wound track are reduced below through
+    // their own helpers; count them here too, or a Broken caller with full Resources is told there
+    // is nothing to recover and stays Broken (live-test check 85).
+    const deathTrackReducible = (sys.playState.deathTrackStep ?? 0) > 0 && !["dying", "dead"].includes(sys.playState.deathTrackState);
+    const manifestationWoundReducible = (sys.specialties?.manifestationWounds ?? 0) > 0;
+    if (!resourceLog.length && !woundsRecovered.length && !strainLog.length && !adaptabilityRestored && !deathTrackReducible && !manifestationWoundReducible) {
       ui.notifications.info(game.i18n.format("ESSENCE.Notify.NothingToRecover", { name: this.actor.name }));
       return;
     }
