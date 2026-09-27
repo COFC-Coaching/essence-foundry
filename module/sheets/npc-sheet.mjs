@@ -139,6 +139,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
 
   _onRender(context, options) {
     super._onRender(context, options);
+    this.#wireOriginSelects();
     this.#applyEditable();
     this.#wireCardControls();
   }
@@ -177,7 +178,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     // client-side view controls with no `name` attribute (as is the full-stats toggle), so the lock has nothing to
     // protect by disabling them.
     for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) {
-      if (el.matches("[data-card-filter], [data-card-sort], [data-action=\"toggleFullStats\"]")) continue;
+      if (el.matches("[data-card-filter], [data-card-sort], [data-action=\"toggleFullStats\"], [data-origin-select]")) continue;
       el.disabled = true;
     }
       for (const el of body.querySelectorAll("button[data-action], a[data-action]")) {
@@ -191,7 +192,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     // client-side view controls with no `name` attribute (as is the full-stats toggle), so the lock has nothing to
     // protect by disabling them.
     for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) {
-      if (el.matches("[data-card-filter], [data-card-sort], [data-action=\"toggleFullStats\"]")) continue;
+      if (el.matches("[data-card-filter], [data-card-sort], [data-action=\"toggleFullStats\"], [data-origin-select]")) continue;
       el.disabled = true;
     }
   }
@@ -382,6 +383,21 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       current,
       callback: (path) => this.actor.update({ "prototypeToken.texture.src": path })
     }).render(true);
+  }
+
+  /** Origin dropdowns (Shane, 2026-09-27): one <select> per origin type on the enemy sheets. A pick
+   *  goes through setOriginItem exactly as the old buttons did; the blank option clears it. The
+   *  selects carry no name= so the form submit ignores them; the lock leaves them enabled. */
+  #wireOriginSelects() {
+    for (const sel of this.element.querySelectorAll("select[data-origin-select]")) {
+      sel.addEventListener("change", async (event) => {
+        event.stopPropagation();
+        const id = sel.value;
+        if (!id) return clearOriginItem(this.actor, sel.dataset.originSelect);
+        const sourceItem = await game.packs.get(sel.dataset.pack)?.getDocument(id);
+        if (sourceItem) await setOriginItem(this.actor, sourceItem);
+      });
+    }
   }
 
   static async #onSelectOrigin(event, target) {

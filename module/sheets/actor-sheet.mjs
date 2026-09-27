@@ -1408,6 +1408,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     coreWounds[i].filled = !coreWounds[i].filled;
     const wasCleared = !coreWounds[i].filled;
     if (wasCleared) { coreWounds[i].domain = ""; coreWounds[i].severity = ""; coreWounds[i].condition = ""; }
+    // A hand-filled space carries its slot severity (SEVERITY_BY_INDEX, as Apply Damage does) so the
+    // Wound state label reads Lightly/Seriously/Critically Wounded; the domain stays unknown.
+    else if (!coreWounds[i].severity) { coreWounds[i].severity = SEVERITY_BY_INDEX[i] ?? ""; coreWounds[i].condition = coreWounds[i].severity ? `${coreWounds[i].severity} Wound` : ""; }
     const nowFull = coreWounds.every((w) => w.filled);
 
     const update = {

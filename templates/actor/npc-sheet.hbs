@@ -113,17 +113,20 @@
 {{/if}}
 
 <h3 class="section-head">{{localize "ESSENCE.Sheet.Origin"}}</h3>
-<div class="wizard-pick-list">
-  {{#each speciesOptions as |opt|}}
-    <button type="button" class="{{#if (eq opt.name ../speciesItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.species" data-id="{{opt.id}}">{{opt.name}}</button>
-  {{/each}}
+{{!-- Origin is a dropdown on enemy sheets (Shane, 2026-09-27): a blank pick clears the Species, any
+     other pick goes through the same setOriginItem path the buttons used. --}}
+<div class="origin-row">
+  <label>{{localize "ESSENCE.Item.SpeciesLabel"}} <select data-origin-select="species" data-pack="essence-system.species">
+    <option value="">—</option>
+    {{#each speciesOptions as |opt|}}<option value="{{opt.id}}" {{#if (eq opt.name ../speciesItem.name)}}selected{{/if}}>{{opt.name}}</option>{{/each}}
+  </select></label>
   {{#if speciesItem}}<button type="button" class="link-button" data-action="itemEdit" data-item-id="{{speciesItem.id}}">({{localize "ESSENCE.Sheet.OpenSpeciesHint"}})</button> <button type="button" class="link-button" data-action="clearOrigin" data-type="species">({{localize "ESSENCE.Sheet.ClearSpecies"}})</button>{{/if}}
 </div>
-<div class="wizard-pick-list">
-  {{#each distinctionOptions as |opt|}}
-    <button type="button" class="{{#if (eq opt.name ../distinctionItem.name)}}chosen{{/if}}" data-action="selectOrigin" data-pack="essence-system.distinctions" data-id="{{opt.id}}">{{opt.name}}</button>
-  {{/each}}
-  {{#if distinctionItem}}<button type="button" class="link-button" data-action="clearOrigin" data-type="distinction">({{localize "ESSENCE.Sheet.ClearDistinction"}})</button>{{/if}}
+<div class="origin-row">
+  <label>{{localize "ESSENCE.Item.DistinctionLabel"}} <select data-origin-select="distinction" data-pack="essence-system.distinctions">
+    <option value="">—</option>
+    {{#each distinctionOptions as |opt|}}<option value="{{opt.id}}" {{#if (eq opt.name ../distinctionItem.name)}}selected{{/if}}>{{opt.name}}</option>{{/each}}
+  </select></label>
 </div>
 
 {{#if isReduced}}

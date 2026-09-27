@@ -109,6 +109,16 @@
   background: var(--essence-veil);
   pointer-events: none;
 }
+/* Foundry's own themes color headings, inputs and selects (dark text in the light theme, its own
+   navy fields in the dark one). The sheet is self-themed, so pin every heading and field to the
+   tokens; a theme switch must not change what is readable (live-test check 97). Locked fields keep
+   most of their contrast: the sheet opens locked, so its values must still read. */
+.application.essence :is(h1, h2, h3, h4, h5, h6) { color: var(--essence-ink); }
+.application.essence .section-head, .application.essence .side-label { color: var(--essence-accent); }
+.application.essence :is(input, select, textarea) { color: var(--essence-ink); background: var(--essence-well); border: 1px solid var(--essence-line-strong); }
+.application.essence :is(input, select, textarea):focus { border-color: var(--essence-accent); outline: none; }
+.application.essence :is(input, select, textarea)::placeholder { color: var(--essence-muted); }
+.application.essence option { background: var(--essence-well); color: var(--essence-ink); }
 .essence .essence-sheet-root > .sheet-header, .essence .essence-sheet-root > .sheet-tabs { flex: 0 0 auto; }
 .essence .sheet-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; padding-right: 4px; scrollbar-width: thin; }
 /* Character sheet: header and tab strip span the full width; below them the tab body and the
@@ -119,8 +129,11 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-rows: auto auto minmax(0, 1fr);
-  container-type: inline-size;
 }
+/* The container queries below must sit on an ancestor of the root: an element cannot match a
+   query on its own size, so with container-type on the root only its children ever matched (the
+   sidebar moved to row 4 while the root kept two columns; live-test checks 102 and 110). */
+.application.essence.character .window-content { container-type: inline-size; }
 .essence.character .essence-sheet-root:has(> .sheet-side:not(:empty)) { column-gap: 10px; }
 .essence.character .essence-sheet-root > .sheet-header, .essence.character .essence-sheet-root > .sheet-tabs { grid-column: 1 / -1; }
 .essence.character .essence-sheet-root > .sheet-scroll { grid-column: 1; grid-row: 3; min-height: 0; }
@@ -179,7 +192,7 @@
   .essence.character .essence-sheet-root > .sheet-side { width: 240px; }
 }
 @container (max-width: 860px) {
-  .essence.character .essence-sheet-root { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr) auto; }
+  .essence.character .essence-sheet-root { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 3fr) minmax(0, 2fr); }
   .essence.character .essence-sheet-root > .sheet-scroll { grid-column: 1; grid-row: 3; }
   .essence.character .essence-sheet-root > .sheet-side { grid-column: 1; grid-row: 4; width: auto; max-height: 40%; }
 }
@@ -196,7 +209,7 @@
    left unwrapped as a direct child of the flex root. */
 .essence .essence-sheet-root > button { align-self: flex-start; }
 .essence .button-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-.essence input:disabled, .essence select:disabled, .essence textarea:disabled { opacity: 0.65; cursor: not-allowed; }
+.essence input:disabled, .essence select:disabled, .essence textarea:disabled { opacity: 0.85; cursor: not-allowed; }
 
 /* Give rich-text (<prose-mirror>) fields the same visible box our text inputs already have —
    core's own ProseMirror styling is transparent by default (meant to blend into document-style
@@ -983,3 +996,8 @@
 .essence.team .team-record-table td { vertical-align: top; }
 .essence.team section.tab.charter > label { display: block; margin-bottom: 10px; }
 .essence.team section.tab.charter prose-mirror { min-height: 4.5em; }
+
+/* Enemy sheet Origin dropdowns (0.17.x): one row per origin type. */
+.essence .origin-row { display: flex; align-items: center; gap: 10px; margin: 2px 0 6px; }
+.essence .origin-row label { display: inline-flex; align-items: center; gap: 6px; }
+.essence .origin-row select { min-width: 12em; }

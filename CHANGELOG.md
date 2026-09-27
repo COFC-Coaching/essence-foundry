@@ -2,6 +2,15 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.17.2
+
+**Live-test fixes for the sheet redesign (checks 97, 102, 105, 110) and the enemy Origin dropdown.**
+
+- Headings, inputs, selects and text areas on every Essence sheet now take their colors from the design tokens. Before, they inherited Foundry's theme colors, so in the light theme every heading and field went dark on the dark sheet (check 97). Locked fields keep more contrast, since a sheet opens locked.
+- The narrow-sheet layout works: below 860px the vitals sidebar drops under the tab body at up to two fifths of the height with its own scrollbar (checks 102 and 110). The container query was declared on the sheet root, and an element cannot match a query on its own size, so only the sidebar had moved while the tab body collapsed to nothing.
+- Filling a Core Wound space by hand records that space's severity, so the Wound state reads Lightly, Seriously or Critically Wounded instead of staying Unharmed (check 105).
+- Enemy sheets: Origin is a Species dropdown and a Distinction dropdown instead of a button for every entry (Shane, 2026-09-27). A blank pick clears the origin.
+
 ## 0.17.1
 
 **Ryan's rulings, second batch (2026-09-27).**
