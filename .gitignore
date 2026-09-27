@@ -2,3 +2,4 @@ node_modules/
 scripts/.cache/
 *.log
 packs/*/LOCK
+.impeccable/
