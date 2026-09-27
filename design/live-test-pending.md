@@ -1,7 +1,7 @@
-# Live test: 0.8.1 and 0.9.0
+# Live test: 0.8.1, 0.9.0 and 0.10.0
 
-Branch `claude/elastic-lamarr-32f578-lza4a9`, commits `cac234e` (0.8.1) and `0b5e315` (0.9.0).
-Neither was live-tested when built (cloud session, no Foundry). Run this in a world on Foundry
+Branch `claude/elastic-lamarr-32f578-lza4a9`, commits `cac234e` (0.8.1), `0b5e315` (0.9.0) and
+`6243178` (0.10.0). None was live-tested when built (cloud session, no Foundry). Run this in a world on Foundry
 v14 with the branch checked out into `Data/systems/essence-system`. Record results in
 build-history under a new dated heading; delete this file once everything below has passed.
 
@@ -81,3 +81,49 @@ build-history under a new dated heading; delete this file once everything below 
 
 28. Open every pre-existing actor in the world. All load; the console shows no schema errors. A
     character that had Presence-grant values shows nothing about them.
+
+## 0.10.0: dice and Turns
+
+29. Roll Initiative. The prompt's minimum is 1; there is no pass. Two combatants tied on
+    Initiative, one a character and one an NPC: the character is listed first in the tracker.
+30. With Combat running and it being the character's Turn, click Dash on the Combat tab. No
+    commit prompt: 2 Action dice are burned and the card text posts to chat. Reconfigure burns 3.
+31. Prepare Action: burn 2, choose an Action (say Basic Melee Attack), type a trigger, reserve 2.
+    The Action Pool drops by 4. The Combat tab shows the preparation with Fire and Cancel. End the
+    Turn: the Reaction Pool is base + unused unreserved dice (the 2 reserved are not in it).
+32. Before the character's next Turn, click Fire: the commit prompt offers only the reserved dice;
+    the roll posts as "(prepared)"; the preparation clears. Prepare again, then advance the tracker
+    to the character's Turn: chat says the preparation expired and the reserved dice are gone.
+33. Put Dazed on the character's token (Token HUD), then advance the tracker to their Turn: chat
+    reports the burn of 3, the Action Pool is base minus 3, Dazed is gone from the sheet.
+34. Play a Reaction with "Target is unaware" ticked while holding exactly the card's minimum in
+    Reaction dice: refused with the "needs N dice" notice. With one more die it plays and the extra
+    die is spent.
+35. Play an Action with "Target is helpless" ticked: the chat card reserves no Success Die and
+    every 6+ counts as a Surge.
+
+## 0.10.0: Wounds, death, Stabilize
+
+36. Fill all five Core Wound spaces on a character. State reads Dying, step 0. Advance the tracker
+    through their Turn five times: step 5, the token gets Foundry's defeated overlay, chat says the
+    character has died, the Death Track line reads "Dead". Recover Wound and the pip toggles no
+    longer change the state. Cards refuse to play with the "is dead" notice.
+37. On another character at Dying, target their token and play Stabilize from a third character
+    (burn 3, confirm treatment): the target's state reads Stabilized. Untargeted, Stabilize on a
+    Dying character stabilizes them.
+38. Fill an NPC's Wound capacity: the token gets Foundry's unconscious status and the header reads
+    Defeated. Target it and play Stabilize: header reads "Defeated (stable)". Recover one Wound:
+    the status clears and the header reads normally.
+39. Toggle off the Critical (fifth) space on a character whose step was 3 and whose state was
+    "none" after an earlier recovery: the step resets to 0.
+
+## 0.10.0: Encounter, Recovery, Conditions
+
+40. Give the character Combo 3, a Lock, a Thread and a Stance Condition; click New Encounter: all
+    four clear and chat lists them. End the Combat instead (delete it): Threads stay.
+41. Put Fatigued on the character (it is in the Conditions compendium) with Stamina max 9 at 5/9.
+    Grant Recovery at 25%: Stamina gains 2, not 3; the dialog then asks whether to remove Fatigued.
+42. Fill three Core Influence spaces, click Recover Influence: a prompt asks which space clears.
+43. Open Dazed, Prone, Weakened, Exposed and Concentration from the Conditions compendium: the
+    text matches the rulebook (Dazed is the start-of-Turn burn, Exposed is −1 all Defenses).
+44. Play an Equipment Card whose text says "Burn 2" (Aegis): no commit prompt, 2 dice burned.
