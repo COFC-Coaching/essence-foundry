@@ -2,6 +2,15 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.13.6
+
+**Ryan's rulings on the gap questions (2026-09-27), first batch.**
+
+- Mooks do not generate Surges (question 5). A Mook's printed-dice roll still pits its highest die against the Defense, but the chat card reports no Surges and offers none to spend. Normals and Elites are unchanged.
+- Weakened reduces each Damage instance by 1 (question 17). The Apply Damage dialog's "Attacker is Weakened" box now takes 1 off every component row before the flat reduction, which still comes off the total once. The chat summary says so.
+- Emergency Cover is a Reaction (question 13). The Mook Support's ability is filed as a Reaction, counts against its Reaction allowance, and its text no longer says it is not one.
+- Attributes cannot be 0 (question 22). Attribute inputs on every actor sheet carry a minimum of 1, and an update that tries to store 0 is raised to 1. Existing data is not rewritten.
+
 ## 0.13.5
 
 **Live-test fix (check 85).** Grant Recovery told a Broken caller with full Resources that there was nothing to recover and stopped before removing a Manifestation Wound, so the caller stayed Broken. The same early exit skipped the Death Track step. Both now count as something to recover.

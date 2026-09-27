@@ -879,7 +879,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     if (becameDefeated && result.nonlethalStable) update["system.playState.deathTrackState"] = "stabilized";
     await this.actor.update(update);
 
-    const summary = picked.components.map((c) => `${c.amount} ${c.type}${c.breach ? " (Breach)" : ""}${c.nonlethal ? " (nonlethal)" : ""}`).join(" + ");
+    const summary = picked.components.map((c) => `${c.amount} ${c.type}${c.breach ? " (Breach)" : ""}${c.nonlethal ? " (nonlethal)" : ""}`).join(" + ") + (picked.weakened ? " (attacker Weakened: −1 per component)" : "");
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content: `<p><strong>${this.actor.name}</strong> takes ${summary}${picked.reduction ? `, reduced by ${picked.reduction}` : ""}.</p><ul>${result.log.map((l) => `<li>${l}</li>`).join("")}</ul>`
@@ -1424,7 +1424,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         content: `<div class="essence content-type-action-card"><p><strong>${this.actor.name}</strong> uses <strong>${name}</strong>${reduced ? ` (printed ${pool}d10)` : ""}.</p>${text}</div>`
       });
-      await rollEssencePool({ pool, defense, targets, label: name, actor: this.actor, unopposed: !!ability.unopposed });
+      await rollEssencePool({ pool, defense, targets, label: name, actor: this.actor, unopposed: !!ability.unopposed, noSurges: reduced && this.actor.system.grade === "Mook" });
     } else {
       await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),

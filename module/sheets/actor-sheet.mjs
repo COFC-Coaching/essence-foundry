@@ -1570,12 +1570,12 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     }
     const picked = await promptDamageComponents({ types: DAMAGE_TYPES });
     if (!picked) return;
-    await EssenceActorSheet.#applyDamageComponents(this.actor, picked.components, picked.reduction);
+    await EssenceActorSheet.#applyDamageComponents(this.actor, picked.components, picked.reduction, picked.weakened);
   }
 
   /** The Apply Damage engine (Doc L3896-L3918), shared with forced Strain's Psychic Breach Damage. */
-  static async #applyDamageComponents(actor, components, reduction) {
-    const picked = { components, reduction };
+  static async #applyDamageComponents(actor, components, reduction, weakened = false) {
+    const picked = { components, reduction, weakened };
     const sys = actor.system;
     const result = resolveDamageComponents({
       resilience: sys.effectiveResilience ?? sys.resilience ?? 0,
@@ -1601,7 +1601,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     await actor.update(update);
     if (result.filledSlots.length) await attachWoundCards(actor, result.filledSlots);
 
-    const summary = picked.components.map((c) => `${c.amount} ${c.type}${c.breach ? " (Breach)" : ""}${c.nonlethal ? " (nonlethal)" : ""}`).join(" + ");
+    const summary = picked.components.map((c) => `${c.amount} ${c.type}${c.breach ? " (Breach)" : ""}${c.nonlethal ? " (nonlethal)" : ""}`).join(" + ") + (picked.weakened ? " (attacker Weakened: −1 per component)" : "");
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),
       content: `<p><strong>${actor.name}</strong> takes ${summary}${picked.reduction ? `, reduced by ${picked.reduction}` : ""}.</p><ul>${result.log.map((l) => `<li>${l}</li>`).join("")}</ul>`

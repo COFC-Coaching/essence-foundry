@@ -301,7 +301,7 @@ export default class EssenceManifestationSheet extends HandlebarsApplicationMixi
       "system.coreWounds": state.coreWounds
     });
 
-    const summary = live.map((c) => `${c.amount} ${c.type}${c.breach ? " (Breach)" : ""}${c.nonlethal ? " (nonlethal)" : ""}`).join(" + ");
+    const summary = live.map((c) => `${c.amount} ${c.type}${c.breach ? " (Breach)" : ""}${c.nonlethal ? " (nonlethal)" : ""}`).join(" + ") + (picked.weakened ? " (attacker Weakened: −1 per component)" : "");
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content: `<p><strong>${this.actor.name}</strong> takes ${summary}${picked.reduction ? `, reduced by ${picked.reduction}` : ""}.</p><ul>${log.map((l) => `<li>${l}</li>`).join("")}</ul>`

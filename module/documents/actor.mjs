@@ -1,5 +1,7 @@
 import { adaptationUpkeep, hasOriginDistinction } from "../utils.mjs";
 
+const ATTRIBUTES = ["might", "grace", "vigor", "intellect", "acuity", "resolve", "presence", "adaptability", "anima"];
+
 /**
  * Character actors should always use a linked token — every combat/sheet mechanic (Action
  * Dice, wounds, combat state) updates the world Actor via `this.actor`, and an unlinked token
@@ -8,6 +10,14 @@ import { adaptationUpkeep, hasOriginDistinction } from "../utils.mjs";
  * standard `_preCreate` lifecycle hook (the same mechanism most systems use for this).
  */
 export default class EssenceActor extends Actor {
+  /** Attributes cannot be 0 (Ryan, 2026-09-27, gap question 22): a 0 means the character is
+   *  functionally dead in that Attribute. The sheet inputs carry min=1; this catches a typed 0 or
+   *  a scripted update. Existing data is not rewritten, only new values. */
+  async _preUpdate(changes, options, user) {
+    const sys = changes.system;
+    if (sys) for (const k of ATTRIBUTES) if (typeof sys[k] === "number" && sys[k] < 1) sys[k] = 1;
+    return super._preUpdate(changes, options, user);
+  }
   async _preCreate(data, options, user) {
     const allowed = await super._preCreate(data, options, user);
     if (allowed === false) return false;

@@ -144,7 +144,7 @@
     <div class="domain domain-{{d.key}}">
       <h4>{{d.label}}</h4>
       {{#each d.attrs as |a|}}
-        <div class="attr-row"><span class="attr-label">{{a.label}}</span><input class="attr-input" type="number" name="system.{{a.key}}" value="{{a.value}}"></div>
+        <div class="attr-row"><span class="attr-label">{{a.label}}</span><input class="attr-input" type="number" min="1" name="system.{{a.key}}" value="{{a.value}}"></div>
       {{/each}}
       <div class="resource-row">
         <span class="attr-label">{{d.resourceLabel}}</span>

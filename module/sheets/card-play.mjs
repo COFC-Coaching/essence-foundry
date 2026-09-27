@@ -137,7 +137,7 @@ async function preparePlay(actor, item, available, burn) {
  * Apply Damage prompt (0.10.1, Doc L3896-L3918): up to three printed components, each with an
  * amount, Damage type, Breach and (when the source grants it) nonlethal; plus the generic flat
  * reduction applied once to the total, with Weakened (Doc L4188) as a one-click −1 source.
- * @returns {Promise<{components: Array, reduction: number}|null>}
+ * @returns {Promise<{components: Array, reduction: number, weakened: boolean}|null>}
  */
 export async function promptDamageComponents({ title = "Apply Damage", types, rows = 3 } = {}) {
   const typeOptions = types.map((t) => `<option value="${t}">${t}</option>`).join("");
@@ -167,8 +167,12 @@ export async function promptDamageComponents({ title = "Apply Damage", types, ro
             const amount = Math.max(0, Math.floor(Number(f[`amount${i}`].value)) || 0);
             if (amount > 0) components.push({ amount, type: f[`type${i}`].value, breach: f[`breach${i}`].checked, nonlethal: f[`nonlethal${i}`].checked });
           }
-          const reduction = Math.max(0, Math.floor(Number(f.reduction.value)) || 0) + (f.weakened.checked ? 1 : 0);
-          return { components, reduction };
+          const reduction = Math.max(0, Math.floor(Number(f.reduction.value)) || 0);
+          // Weakened (Ryan, 2026-09-27, gap question 17): each Damage instance is reduced by 1 on its
+          // own, before the flat reduction, which still comes off the total once.
+          const weakened = f.weakened.checked;
+          if (weakened) for (const c of components) c.amount = Math.max(0, c.amount - 1);
+          return { components, reduction, weakened };
         }
       }],
       submit: (result) => resolve(result === "apply" ? null : result)

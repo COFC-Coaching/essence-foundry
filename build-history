@@ -3469,3 +3469,30 @@ Wound track from earlier hand edits, so it goes Dying at two Wounds.
 **Console.** No error whose stack names `systems/essence-system` at any point after 0.13.1. The
 only warnings were Foundry's own screen-size notices and the duplicate-GM artifact above.
 `design/live-test-pending.md` and `design/live-test-runbook.md` stay until 89 is decided.
+
+### 2026-09-27 -- 0.13.6: first batch of Ryan's gap-question rulings (5, 17, 13, 22)
+
+Source: the shared spreadsheet of answers (column D) and the Q&A session notes. Built and
+live-verified on the local Foundry the same way as the live test above.
+
+- **Q5, Mooks have no Surges.** `rollEssencePool` gained a `noSurges` flag; the reduced-engine
+  ability roll passes it when `grade === "Mook"`. The Success Die still meets the Defense; the
+  card prints "Surges: none — Mooks do not generate Surges." and stores no spendable Surges.
+  Normals and Elites are untouched (a Normal Defender roll still showed Surges: 1).
+- **Q17, Weakened per instance.** `promptDamageComponents` now takes 1 off every component row
+  when the box is ticked and returns `weakened` separately from the flat reduction, so all three
+  Apply Damage paths (character, enemy, manifestation) get it without engine changes. 3 Fire + 3
+  Piercing became 2 + 2; three 1-point components became 0. The session notes' "5 total" example
+  does not match the stated rule; flagged to Shane.
+- **Q13, Emergency Cover is a Reaction.** `kind` changed in the Mook Support `_source` and its
+  text no longer says "not a Reaction"; `compile-packs.mjs --only=enemies` rebuilt the pack.
+  Verified from the rebuilt compendium after a Foundry relaunch (pack locks).
+- **Q22, Attributes cannot be 0.** `min="1"` on the Attribute inputs of the character, NPC and
+  Monster sheets, and `EssenceActor#_preUpdate` raises a stored value below 1 to 1. No schema
+  minimum was added, so existing actors stay valid. The creation wizard already floored at 1.
+- A first cut imported `ATTRIBUTES` from utils.mjs, which does not export it; the system failed
+  to load until the list was defined locally like the other modules do.
+- Not built yet: Q3 (Defeated enemies die after 6 Rounds) and Q23 (burn the difference) wait for
+  Ryan's written rule; Q21 (Dash as a 1-unit-per-die reminder card) waits for the Doc wording.
+  The Guide and wiki text for enemy Surges should follow once the Doc carries the ruling.
+- Verification: `npm test` (rules 116, migration 59), `node --check` on every changed module.

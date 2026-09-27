@@ -44,7 +44,7 @@
           <div class="attr-row">
             <span class="attr-label" {{#if a.benefit}}title="{{a.benefit}}"{{/if}}>{{a.label}}</span>
             <button type="button" class="attr-roll" data-action="rollAttribute" data-attr="{{a.key}}" aria-label="{{localize 'ESSENCE.Sheet.RollAttributeAria' name=a.label}}" title="{{localize 'ESSENCE.Sheet.RollAttributeAria' name=a.label}}"><i class="fa-solid fa-dice-d10"></i></button>
-            <input class="attr-input" name="system.{{a.key}}" type="number" value="{{a.value}}">
+            <input class="attr-input" name="system.{{a.key}}" type="number" min="1" value="{{a.value}}">
             <span class="pip-track">
               {{#each a.pips as |filled|}}<span class="pip {{#if filled}}filled{{/if}}"></span>{{/each}}
             </span>

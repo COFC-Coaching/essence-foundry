@@ -499,6 +499,7 @@
   "ESSENCE.Chat.Available": "available",
   "ESSENCE.Chat.OpenRollNoteSingular": "{surges} candidate die at 6+ (excluding the Success Die) — Defense wasn't declared, so the GM decides how many actually count.",
   "ESSENCE.Chat.OpenRollNotePlural": "{surges} candidate dice at 6+ (excluding the Success Die) — Defense wasn't declared, so the GM decides how many actually count.",
+  "ESSENCE.Chat.NoSurgesMook": "none — Mooks do not generate Surges.",
   "ESSENCE.Chat.NoSurgesNonCombat": "No Surges — non-combat roll.",
 
   "ESSENCE.Item.SpeciesLabel": "Species",

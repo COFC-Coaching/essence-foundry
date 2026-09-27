@@ -47,7 +47,9 @@
     {{#if bonusSurges}}
       <p class="muted mastery-note"><strong>{{localize "ESSENCE.Chat.Mastery"}}:</strong> {{localize "ESSENCE.Chat.FreeSurge" n=bonusSurges}}</p>
     {{/if}}
-    {{#if openRoll}}
+    {{#if noSurges}}
+      <p class="muted no-surges-note"><strong>{{localize "ESSENCE.Chat.Surges"}}:</strong> {{localize "ESSENCE.Chat.NoSurgesMook"}}</p>
+    {{else if openRoll}}
       <p class="muted open-roll-note">
         <strong>{{localize "ESSENCE.Chat.Surges"}}:</strong>
         {{#if (eq surges 1)}}{{localize "ESSENCE.Chat.OpenRollNoteSingular" surges=surges}}{{else}}{{localize "ESSENCE.Chat.OpenRollNotePlural" surges=surges}}{{/if}}

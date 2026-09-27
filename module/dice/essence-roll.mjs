@@ -97,7 +97,7 @@ export function resolveCombatRoll(faces, defense = null, unopposed = false) {
  * @param {number|null} [options.difficulty] - Non-Combat only (Doc L1265): the GM's Difficulty.
  *   The highest die meeting or beating it succeeds. null means the GM decides from the card.
  */
-export async function rollEssencePool({ pool, defense = null, targets = null, label = "Essence Roll", actor = null, surgeOptions = [], bonusSurges = 0, freeDice = 0, unopposed = false, nonCombat = false, difficulty = null } = {}) {
+export async function rollEssencePool({ pool, defense = null, targets = null, label = "Essence Roll", actor = null, surgeOptions = [], bonusSurges = 0, freeDice = 0, unopposed = false, nonCombat = false, difficulty = null, noSurges = false } = {}) {
   const n = Math.max(1, Math.floor(pool));
   const nFree = Math.max(0, Math.floor(freeDice) || 0);
   const roll = new Roll(`${n + nFree}d10`);
@@ -112,7 +112,9 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
   // though it also has no Defense value.
   const openRoll = !unopposed && !multi && defense == null;
   const combat = resolveCombatRoll(faces, multi ? null : defense, unopposed);
-  combat.surges += bonusSurges;
+  // Mooks roll their printed dice against the Defense but never generate Surges (Ryan, 2026-09-27,
+  // gap question 5); Normals and Elites do.
+  if (noSurges) combat.surges = 0; else combat.surges += bonusSurges;
   const task = nonCombat ? resolveNonCombatRoll(faces, difficulty) : null;
 
   const targetResults = multi
@@ -135,13 +137,14 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
       successDie: combat.successDie,
       succeeded: combat.succeeded,
       surges: combat.surges,
-      openRoll: nonCombat ? false : openRoll,
+      openRoll: nonCombat || noSurges ? false : openRoll,
+      noSurges,
       nonCombat,
       difficulty: nonCombat ? difficulty : null,
       taskSucceeded: task?.succeeded ?? null,
       targets: targetResults,
       surgeOptions: nonCombat ? [] : surgeOptions.map((opt, i) => ({ i, n: opt.n, html: opt.html })),
-      bonusSurges,
+      bonusSurges: noSurges ? 0 : bonusSurges,
       suppressSurges: nonCombat
     }
   );
@@ -153,8 +156,8 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
     sound: CONFIG.sounds.dice,
     flags: {
       "essence-system": {
-        surgesAvailable: nonCombat ? 0 : combat.surges,
-        surgeOptions: nonCombat ? [] : surgeOptions.map((opt) => ({ n: opt.n, html: opt.html })),
+        surgesAvailable: nonCombat || noSurges ? 0 : combat.surges,
+        surgeOptions: nonCombat || noSurges ? [] : surgeOptions.map((opt) => ({ n: opt.n, html: opt.html })),
         spentIndices: []
       }
     }

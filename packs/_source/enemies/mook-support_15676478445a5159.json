@@ -33,8 +33,8 @@
       },
       {
         "name": "Emergency Cover",
-        "text": "When an ally within 3 units would suffer a Wound, grant that ally 1 Temporary Wound before the Wound is resolved. This is not a Reaction and cannot be used if the Support is unable to detect the ally.",
-        "kind": "triggered",
+        "text": "When an ally within 3 units would suffer a Wound, grant that ally 1 Temporary Wound before the Wound is resolved. This Reaction cannot be used if the Support is unable to detect the ally.",
+        "kind": "reaction",
         "dice": null,
         "defense": "",
         "unopposed": false,
