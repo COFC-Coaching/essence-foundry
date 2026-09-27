@@ -17,8 +17,10 @@ Combat card grid, `SearchFilter` and severity squares in 0.16.0 (see the CHANGEL
 the sheet is a self-themed dark surface, not a consumer of Foundry's `--color-*` theme variables.
 Foundry's light theme puts dark text on parchment; over cover art and translucent panels that is
 unreadable, and the concept was drawn dark. So the tokens hold our own palette in both themes and
-read only Foundry's fonts (`--font-h1`, `--font-body`). Next: steps 6 to 8, and the step 5 items
-that wait on a decision (listed under step 5).
+read only Foundry's fonts (`--font-h1`, `--font-body`). Shane (2026-09-27): the enemy sheets (NPC,
+Monster) stay basic: no art, no veil, opaque panels, plain card rows. Everything in this plan about
+art, translucency and the card grid is Character sheet only (0.16.1). Next: steps 6 to 8, and the
+step 5 items that wait on a decision (listed under step 5).
 
 ## Where the stylesheet stood before 0.14.0
 

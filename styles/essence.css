@@ -67,6 +67,13 @@
   --essence-radius: 8px;
   --essence-radius-sm: 6px;
 }
+/* Every sheet that is not the Character sheet is a basic surface: same palette, opaque panels, no
+   cover art (the art variable is only ever set on the Character template's root anyway). */
+.application.essence:not(.character) {
+  --essence-panel: #201d19;
+  --essence-panel-raised: #25211c;
+  --essence-sheet-art: none;
+}
 
 /* Sheet frame (0.8.1, reworked 0.14.0). The window is resizable (DEFAULT_OPTIONS.window.resizable
    on every actor sheet); the header and tab strip stay put and only the .sheet-scroll regions
@@ -79,17 +86,22 @@
    translucent --essence-panel / --essence-panel-raised so the art shows through everywhere. With no
    artwork set the veil simply darkens the ground color by a hair, which is invisible. */
 .essence .essence-sheet-root {
-  position: relative;
-  isolation: isolate;
   display: flex;
   flex-direction: column;
   height: 100%;
   padding: 4px 8px;
   overflow: hidden;
   color: var(--essence-ink);
+  background: var(--essence-ground);
+}
+/* Cover art is a Character sheet feature only (Shane, 2026-09-27: enemy sheets stay basic). The
+   NPC, Monster, Full Manifestation and Team sheets keep the plain ground above and opaque panels. */
+.essence.character .essence-sheet-root {
+  position: relative;
+  isolation: isolate;
   background: var(--essence-ground) var(--essence-sheet-art) center / cover no-repeat;
 }
-.essence .essence-sheet-root::before {
+.essence.character .essence-sheet-root::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -503,26 +515,28 @@
    metadata + search here, for the hand you're actually playing from. */
 .essence .card-filter-input { width: 100%; box-sizing: border-box; margin: 4px 0 6px; }
 /* Card grid (0.16.0, the concept's Combat artboard): each card is a translucent panel with a rail
-   on its left in the card-type color (the --essence-card-* tokens, keyed off data-card-list so the
-   NPC and Monster sheets, which share this markup, get the same treatment). The Style chip reads the
+   on its left in the card-type color (the --essence-card-* tokens, keyed off data-card-list). Scoped to
+   .character: the NPC and Monster sheets keep the plain list rows below (Shane: enemy sheets stay basic). The Style chip reads the
    domain ink color from the row's domain-* class; the actions sit in their own row under the
    summary. [hidden] rows (the SearchFilter) drop out of the grid as before. */
-.essence .card-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px; margin: 4px 0 10px; }
-.essence .card-list li {
+.essence.character .card-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px; margin: 4px 0 10px; }
+.essence.character .card-list li {
   flex-direction: column; align-items: stretch; gap: 4px; padding: 8px 10px;
   background: var(--essence-panel-raised); border: 1px solid var(--essence-line); border-left: 3px solid var(--essence-card-basic);
   border-radius: var(--essence-radius-sm);
 }
-.essence .card-list[data-card-list="action"] li { border-left-color: var(--essence-card-action); }
-.essence .card-list[data-card-list="reaction"] li { border-left-color: var(--essence-card-reaction); }
-.essence .card-list[data-card-list="equipment"] li { border-left-color: var(--essence-card-equipment); }
-.essence .card-list li.muted { grid-column: 1 / -1; background: none; border: none; padding: 2px 0; }
+.essence.character .card-list[data-card-list="action"] li { border-left-color: var(--essence-card-action); }
+.essence.character .card-list[data-card-list="reaction"] li { border-left-color: var(--essence-card-reaction); }
+.essence.character .card-list[data-card-list="equipment"] li { border-left-color: var(--essence-card-equipment); }
+.essence.character .card-list li.muted { grid-column: 1 / -1; background: none; border: none; padding: 2px 0; }
+.essence .card-list li { flex-direction: column; align-items: stretch; gap: 2px; }
 .essence .card-list .card-row-top { display: flex; align-items: center; gap: 6px; }
-.essence .card-list .card-name { flex: 1 1 auto; text-align: left; font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-.essence .card-list .card-meta { flex: 0 0 auto; font-size: 0.8em; white-space: nowrap; }
-.essence .card-list .card-row-actions { display: flex; justify-content: flex-end; gap: 4px; }
-.essence .card-list .card-row-actions button { padding: 2px 6px; font-size: 0.85em; }
-.essence .card-list .card-play { background: var(--essence-accent); color: var(--essence-accent-ink); border-color: var(--essence-accent); font-weight: 600; }
+.essence .card-list .card-meta { flex: 1; font-size: 0.8em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.essence.character .card-list .card-name { flex: 1 1 auto; text-align: left; font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.essence.character .card-list .card-meta { flex: 0 0 auto; font-size: 0.8em; white-space: nowrap; }
+.essence.character .card-list .card-row-actions { display: flex; justify-content: flex-end; gap: 4px; }
+.essence.character .card-list .card-row-actions button { padding: 2px 6px; font-size: 0.85em; }
+.essence.character .card-list .card-play { background: var(--essence-accent); color: var(--essence-accent-ink); border-color: var(--essence-accent); font-weight: 600; }
 .essence .card-list .card-tags { opacity: 0.8; }
 .essence .style-chip {
   display: inline-flex; align-items: center; font-size: 0.75em; padding: 1px 8px; border-radius: 10px;

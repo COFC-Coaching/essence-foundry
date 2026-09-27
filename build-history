@@ -3595,3 +3595,13 @@ The rest of step 5 that needs no decision. Not live-tested; checks 112-116.
   tracks share the five-box severity ladder.
 - Verification: `npm test` (rules 116, migration 59), `node --check`, template balance and lang
   keys, CSS braces.
+
+### 2026-09-27 -- 0.16.1: enemy sheets stay basic
+
+Shane, mid-redesign: "The CSS for the enemy sheets shouldn't have the background image and should
+be basic." The art variable was only ever set on the Character template, but the root rule, the
+veil and the 0.16.0 card grid were shared. Now: the art background and ::before veil live on
+`.essence.character .essence-sheet-root`; `.application.essence:not(.character)` overrides the
+panel tokens to opaque values and pins the art variable to none; the card grid, rails, chip and
+action-row rules are scoped to `.essence.character`, with the pre-0.16.0 plain row rules restored
+for every other sheet. Palette and fonts stay shared. Not live-tested; check 114 rewritten.

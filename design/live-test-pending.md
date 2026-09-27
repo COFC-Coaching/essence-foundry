@@ -384,8 +384,9 @@ at the end of this file.
     Effect text: it stays. Now edit any field on the sheet (re-render): the search text is still
     in the box and the list is still filtered. Clear the box: all cards return. Sort by Skill and
     by Cost still reorders the list.
-114. NPC and Monster sheets: their card lists use the same grid and rails (no Style chip). Nothing
-    overlaps and the buttons work.
+114. NPC and Monster sheets (0.16.1): plain as before. No cover art even with the Character sheet
+    artwork setting filled, opaque panels, card lists as single rows without rails or a Play
+    button. The Full Manifestation and Team sheets likewise.
 115. Core Wounds in the sidebar show five squares lettered L L S S C (not round dots); filled ones
     are gold. Core Influence on the Non-Combat tab shows the same squares. Clicking still toggles.
 116. Console: no error whose stack names `systems/essence-system` (in particular nothing about
