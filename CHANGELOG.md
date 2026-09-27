@@ -2,6 +2,10 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.13.3
+
+**Live-test fix (check 18).** A later-acquired Distinction's General Features row printed the whole benefit instead of its later-acquisition clause: 0.13.0 reworded every Distinction to the Doc's "If this Distinction is acquired later, ..." and the parser still looked for "If acquired later:". Both wordings are accepted now.
+
 ## 0.13.2
 
 **Live-test fixes (checks 35 and 38).** An Unopposed play (helpless target, or a card that is unopposed by nature) now says so on the chat card instead of printing a Success Die and a Defense it did not use; the dice and Surge count were already right. The NPC and Monster sheet prints the Wound state (Defeated, Defeated (stable)) beside the Wound Capacity pips, and filling or clearing the last pip by hand applies or removes Foundry's unconscious status the same way Apply Damage and Recover Wound already did.

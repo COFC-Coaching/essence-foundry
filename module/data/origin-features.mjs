@@ -20,7 +20,9 @@ function withSubChoiceSuffix(text, subChoice) {
  *  entry prints one (every shipped Distinction does), else the whole benefit. */
 export function laterAcquisitionText(benefitHtml) {
   const text = benefitHtml || "";
-  const m = /if acquired later:?\s*/i.exec(text);
+  // 0.13.0 rewrote every benefit to the Doc's "If this Distinction is acquired later, ..."; the
+  // older "If acquired later:" form is still accepted for world data imported before that.
+  const m = /if (?:this distinction is )?acquired later[,:]?\s*/i.exec(text);
   return m ? text.slice(m.index + m[0].length) : text;
 }
 
