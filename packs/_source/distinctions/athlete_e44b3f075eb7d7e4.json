@@ -18,13 +18,13 @@
   },
   "effects": [
     {
-      "_id": "baaefb464ba48b93",
-      "_key": "!items.effects!e44b3f075eb7d7e4.baaefb464ba48b93",
+      "_id": "784b730d00fc0973",
+      "_key": "!items.effects!e44b3f075eb7d7e4.784b730d00fc0973",
       "name": "Peak Performance: Resilience +1",
       "img": "icons/svg/upgrade.svg",
       "changes": [
         {
-          "key": "system.resilience",
+          "key": "system.resilienceBonus",
           "mode": 2,
           "value": "1",
           "priority": 20

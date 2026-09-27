@@ -1,7 +1,7 @@
 import { EXPERTISE_DATABASE, SUBTYPE_DATABASE } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
-import { assembledComponentIds, capitalize, computeReachGate, computeSlotUsage } from "../utils.mjs";
+import { assembledComponentIds, capitalize, computeReachGate, computeSlotUsage, isDistinctionStyle } from "../utils.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
 import { EQUIPMENT_CATEGORY_LABELS, MODULAR_EQUIPMENT_CATEGORIES } from "../data/item-card.mjs";
 
@@ -62,7 +62,7 @@ const SPECIES_CARD_TRAIT_NAMES = ["Shaper", "True Breath", "Ink Cloud", "Spore C
  */
 function expertiseLimitForSkill(system, skill, distinctionItem) {
   const rank = system[skill] ?? 0;
-  const bonus = distinctionItem?.system.keyCombatSkill === skill ? 1 : 0;
+  const bonus = isDistinctionStyle(distinctionItem, skill) ? 1 : 0;
   return rank + bonus;
 }
 
@@ -373,8 +373,11 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       if (!skill) return true;
       const gateDistinction = SKILL_GATE[skill];
       if (gateDistinction && distinctionItem?.system.unlocks !== skill) return false;
+      // A card's Rank can't exceed the character's Rank in its Style: "Increasing a Style Rank...
+      // unlocks higher-Rank Combat Cards" (Doc L4860). This used to check only Style Rank >= 1,
+      // so a Rank 2 card was offered at Style Rank 1. Rank 0 cards need only Style access (above).
       const rank = system[skill] ?? 0;
-      if ((Number(cardSystem.rank) || 0) > 0 && rank < 1) return false;
+      if ((Number(cardSystem.rank) || 0) > rank) return false;
       const required = (cardSystem.expertises || "").split(",").map((s) => s.trim()).filter(Boolean);
       if (!required.length) return true;
       const have = system.expertises.filter((e) => e.skill === skill).map((e) => e.name);
@@ -771,7 +774,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       const styleLimit = expertiseLimitForSkill(this.document.system, skill, distinctionItem);
       const styleChosen = expertises.filter((e) => e.skill === skill).length;
       if (styleChosen >= styleLimit) {
-        ui.notifications.warn(`${capitalize(skill)}'s Expertise limit is ${styleLimit} (its Rank${distinctionItem?.system.keyCombatSkill === skill ? ", +1 for your Distinction" : ""}).`);
+        ui.notifications.warn(`${capitalize(skill)}'s Expertise limit is ${styleLimit} (its Rank${isDistinctionStyle(distinctionItem, skill) ? ", +1 for your Distinction" : ""}).`);
         return;
       }
       expertises.push({ name, skill });
@@ -799,7 +802,9 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const pack = game.packs.get(target.dataset.pack);
     const sourceItem = await pack?.getDocument(target.dataset.id);
     if (!sourceItem) return;
-    const nonBasicCount = this.document.items.filter((i) => (i.type === "action-card" || i.type === "reaction-card") && !isBasicCard(i.system)).length;
+    // Species cards don't use a learned-card selection (Doc L858), matching how the display and
+    // Finalize already count; this check used to count them against the limit.
+    const nonBasicCount = this.document.items.filter((i) => (i.type === "action-card" || i.type === "reaction-card") && !isBasicCard(i.system) && !isSpeciesCard(i.system)).length;
     const distinctionItem = this.document.items.find((it) => it.type === "distinction");
     const cardLimit = CARD_LIMIT + creationBonusFor(distinctionItem).actionCards;
     if (nonBasicCount >= cardLimit) {

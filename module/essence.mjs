@@ -141,6 +141,9 @@ Hooks.once("init", () => {
   game.settings.register("essence-system", "dedupedEquipmentBonusEffects", {
     scope: "world", config: false, type: Boolean, default: false
   });
+  game.settings.register("essence-system", "rekeyedResilienceEffects", {
+    scope: "world", config: false, type: Boolean, default: false
+  });
   game.settings.register("essence-system", "migratedRoleToGrade", {
     scope: "world", config: false, type: Boolean, default: false
   });
@@ -262,6 +265,46 @@ Hooks.once("ready", async () => {
     }
   }
   await game.settings.set("essence-system", "dedupedEquipmentBonusEffects", true);
+});
+
+/**
+ * One-time repair (0.7.10): Athlete's "Peak Performance: Resilience +1" Active Effect targeted
+ * `system.resilience` directly — the plain sheet input — so every unrelated form save wrote the
+ * already-boosted value back as the new base and the effect then added 1 again (the compounding
+ * the schema comment on `resilienceBonus` in actor-combatant.mjs describes). The compendium now
+ * targets `resilienceBonus`, but each character's embedded Distinction keeps its own copy of the
+ * old effect, so re-point those here. A character's base Resilience may already have crept up and
+ * there's no record of the true value, so the GM gets a whispered list to check by hand rather
+ * than a guessed correction.
+ */
+Hooks.once("ready", async () => {
+  if (!game.user.isGM) return;
+  if (game.settings.get("essence-system", "rekeyedResilienceEffects")) return;
+  const affected = [];
+  const rekey = async (item) => {
+    for (const effect of item.effects) {
+      if (!effect.changes.some((c) => c.key === "system.resilience")) continue;
+      const changes = effect.changes.map((c) => (c.key === "system.resilience" ? { ...c, key: "system.resilienceBonus" } : c));
+      await effect.update({ changes });
+      return true;
+    }
+    return false;
+  };
+  for (const actor of game.actors) {
+    for (const item of actor.items) {
+      if (item.type === "distinction" && (await rekey(item))) affected.push(actor.name);
+    }
+  }
+  for (const item of game.items) {
+    if (item.type === "distinction") await rekey(item);
+  }
+  if (affected.length) {
+    await ChatMessage.create({
+      whisper: ChatMessage.getWhisperRecipients("GM"),
+      content: game.i18n.format("ESSENCE.Notify.ResilienceEffectRekeyed", { names: affected.join(", ") })
+    });
+  }
+  await game.settings.set("essence-system", "rekeyedResilienceEffects", true);
 });
 
 /**

@@ -146,6 +146,40 @@ export function stripHtml(html) {
  * @param {Array<{name: string}>} actorExpertises - the rolling actor's `system.expertises`
  * @returns {boolean} whether Mastery applies to this use of the card
  */
+/**
+ * Whether `skill` (a lowercase Combat Style key such as "prowess") is the Style associated with a
+ * Distinction. `keyCombatSkill` is stored as display text ("Prowess"), and the Distinction sheet
+ * edits it as free text, so compare case-insensitively rather than with ===. The +1 Expertise limit
+ * this gates never applied while the comparison was a strict === against the lowercase key.
+ * @param {Item|null|undefined} distinctionItem
+ * @param {string} skill
+ */
+/**
+ * Wounds caused by one event of ordinary (non-Breach) Damage, v0.6 Part VII "Resilience and
+ * Accumulated Damage" (Doc L3877): "Remaining protection = current Resilience - accumulated
+ * ordinary Damage, minimum 0... Every point of the new Damage beyond the remaining protection causes
+ * 1 Wound. Then add the entire ordinary Damage event to accumulated Damage."
+ *
+ * Computed per event from the CURRENT Resilience and what has already accumulated, never by
+ * re-deriving a running Wound total. That is what makes "a change to Resilience never creates or
+ * removes Wounds retroactively" hold in both directions. The pre-0.7.10 code kept a stored running
+ * Wound count, which over-counted when Resilience fell mid-interval (Doc example: Resilience 3,
+ * 2 accumulated, Resilience falls to 1, then 1 Damage causes 1 Wound, not 2).
+ * @param {number} resilience - current effective Resilience
+ * @param {number} accumulated - ordinary Damage already accumulated this interval
+ * @param {number} amount - this event's Damage after Resistance/Vulnerability
+ * @returns {number} Wounds caused by this event
+ */
+export function ordinaryDamageWounds(resilience, accumulated, amount) {
+  const remaining = Math.max(0, (resilience ?? 0) - (accumulated ?? 0));
+  return Math.max(0, (amount ?? 0) - remaining);
+}
+
+export function isDistinctionStyle(distinctionItem, skill) {
+  const key = (distinctionItem?.system.keyCombatSkill ?? "").trim().toLowerCase();
+  return !!key && key === (skill ?? "").toLowerCase();
+}
+
 export function hasMastery(cardSystem, actorExpertises) {
   const listed = (cardSystem?.expertises || "")
     .split(",")

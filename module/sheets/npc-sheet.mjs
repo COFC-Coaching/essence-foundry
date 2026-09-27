@@ -5,7 +5,7 @@ import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQu
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, assembledComponentIds, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, ordinaryDamageWounds, assembledComponentIds, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
 import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -708,13 +708,9 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   }
 
   static async #onEndTurn() {
-    const ps = this.actor.system.playState;
-    const base = this.actor.system.baseCombatDice;
-    await this.actor.update({
-      "system.playState.combatTurn": "ended",
-      "system.playState.reactionDice": base + (ps.actionDice ?? 0),
-      "system.playState.actionDice": null
-    });
+    // See EssenceActor#formEndOfTurnReactionPool — shared with EssenceCombat#_onEndTurn, which
+    // fires again when the tracker advances below and then does nothing (the Turn is already over).
+    await this.actor.formEndOfTurnReactionPool();
     if (game.combat?.combatant?.actor?.id === this.actor.id) {
       await game.combat.nextTurn();
     }
@@ -837,10 +833,6 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     const sys = this.actor.system;
     const resilience = sys.effectiveResilience ?? sys.resilience ?? 0;
     const prevAccumulated = sys.playState.accumulatedDamage ?? 0;
-    // See EssenceActorSheet#onApplyDamage — 0.6.85 fix, plan §5.6: stored, not re-derived from the
-    // current (possibly just-changed) Resilience.
-    const prevWounds = sys.playState.accumulatedDamageWounds ?? 0;
-
     const log = [];
     // V6 §6.2 (plan; revised per design/v6-revision-delta.md §2.1): Resistance/Vulnerability apply
     // BEFORE Resilience or Breach, to both branches, and key off the named Damage Type — NOT the
@@ -850,21 +842,17 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
 
     let wounds;
     let newAccumulated = prevAccumulated;
-    let newWounds = prevWounds;
     if (result.breach) {
       // Breach bypasses Resilience, not Resistance/Vulnerability (0.6.85 fix).
       wounds = adjustedAmount;
     } else {
+      // See ordinaryDamageWounds (utils.mjs) — per-event remaining protection.
+      wounds = ordinaryDamageWounds(resilience, prevAccumulated, adjustedAmount);
       newAccumulated = prevAccumulated + adjustedAmount;
-      // See EssenceActorSheet#onApplyDamage — clamped to never fall below the already-converted
-      // count, so a mid-interval Resilience increase can't cause the same Wounds to be counted twice.
-      newWounds = Math.max(prevWounds, Math.max(0, newAccumulated - resilience));
-      wounds = newWounds - prevWounds;
     }
 
     const update = {
-      "system.playState.accumulatedDamage": newAccumulated,
-      "system.playState.accumulatedDamageWounds": newWounds
+      "system.playState.accumulatedDamage": newAccumulated
     };
     let becameDefeated = false;
 

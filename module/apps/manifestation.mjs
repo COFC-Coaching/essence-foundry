@@ -34,10 +34,12 @@ export const MANIFESTATION_SUBTYPES = [
   { name: "Fey", rank: 2 }
 ];
 
-/** Every subtype this character's current Calling Rank can enter, in profile order. */
+/** Every subtype this character's current Calling Rank can enter, in profile order. The authored
+ *  profiles stop at Rank 2, but a higher-Rank caller can still enter every one of them; before
+ *  0.7.10 a `rank <= 2` condition here left Calling Rank 3+ with no options at all. */
 export function availableSubtypes(actor) {
   const rank = actor.system.calling ?? 0;
-  return MANIFESTATION_SUBTYPES.filter((s) => rank <= 2 && rank >= s.rank);
+  return MANIFESTATION_SUBTYPES.filter((s) => rank >= s.rank);
 }
 
 function getRecord(actor, subtype) {

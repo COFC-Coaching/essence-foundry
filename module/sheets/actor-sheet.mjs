@@ -5,7 +5,7 @@ import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQu
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, assembledComponentIds, computeSlotUsage, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, isDistinctionStyle, assembledComponentIds, computeSlotUsage, computeReachGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, ordinaryDamageWounds, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
 import { availableSubtypes, enterManifestation } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -1160,13 +1160,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    * actor's turn — Start Combat/End Combat/Start Turn all now live in the native Combat Tracker.
    */
   static async #onEndTurn() {
-    const ps = this.actor.system.playState;
-    const base = this.actor.system.baseCombatDice;
-    await this.actor.update({
-      "system.playState.combatTurn": "ended",
-      "system.playState.reactionDice": base + (ps.actionDice ?? 0),
-      "system.playState.actionDice": null
-    });
+    // See EssenceActor#formEndOfTurnReactionPool — shared with EssenceCombat#_onEndTurn, which
+    // fires again when the tracker advances below and then does nothing (the Turn is already over).
+    await this.actor.formEndOfTurnReactionPool();
     if (game.combat?.combatant?.actor?.id === this.actor.id) {
       await game.combat.nextTurn();
     }
@@ -1422,14 +1418,6 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const sys = this.actor.system;
     const resilience = sys.effectiveResilience ?? sys.resilience ?? 0;
     const prevAccumulated = sys.playState.accumulatedDamage ?? 0;
-    // Stored, not re-derived (0.6.85 fix, plan §5.6): the count of Wounds already extracted from
-    // accumulatedDamage as of the LAST Apply Damage this Turn-interval. The pre-0.6.85 code instead
-    // recomputed `prevWounds = prevAccumulated - resilience` using the CURRENT (possibly
-    // just-changed) Resilience every time, so a mid-interval Resilience change silently rewrote how
-    // much of the ALREADY-accumulated Damage counted as Wounds, retroactively creating or removing
-    // Wounds that had already been resolved — V6 makes explicit that this must never happen.
-    const prevWounds = sys.playState.accumulatedDamageWounds ?? 0;
-
     const log = [];
     // V6 §6.2 (plan; revised per design/v6-revision-delta.md §2.1): Resistance/Vulnerability apply
     // BEFORE Resilience or Breach, to both branches, and key off the named Damage Type — NOT the
@@ -1439,27 +1427,20 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
     let wounds;
     let newAccumulated = prevAccumulated;
-    let newWounds = prevWounds;
     if (result.breach) {
       // Breach bypasses Resilience, not Resistance/Vulnerability (0.6.85 fix, plan §5.6) — the
       // pre-0.6.85 code used `result.amount` directly here, skipping the adjustment above entirely.
       // Breach Damage also does not add to accumulated ordinary Damage (already correct — untouched).
       wounds = adjustedAmount;
     } else {
+      // See ordinaryDamageWounds (utils.mjs): remaining protection is computed per event from the
+      // current Resilience, so a mid-interval Resilience change never rewrites earlier Wounds.
+      wounds = ordinaryDamageWounds(resilience, prevAccumulated, adjustedAmount);
       newAccumulated = prevAccumulated + adjustedAmount;
-      // Clamped to never fall BELOW what's already been converted: a mid-interval Resilience
-      // *increase* can make (newAccumulated - resilience) smaller than prevWounds, and storing that
-      // smaller figure would quietly "un-convert" Wounds that were already applied to the track —
-      // they'd then be counted a second time by the next Apply Damage in the same interval. The
-      // max() keeps the stored count monotonic within an interval, which is what makes "a Resilience
-      // change never retroactively creates or removes Wounds" true in BOTH directions.
-      newWounds = Math.max(prevWounds, Math.max(0, newAccumulated - resilience));
-      wounds = newWounds - prevWounds;
     }
 
     const update = {
-      "system.playState.accumulatedDamage": newAccumulated,
-      "system.playState.accumulatedDamageWounds": newWounds
+      "system.playState.accumulatedDamage": newAccumulated
     };
     let becameCritical = false;
     const filledSlots = []; // V6 Wound Cards (see utils.mjs#attachWoundCard) — attached after the actor update below.
@@ -2262,7 +2243,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const expertises = this.actor.system.expertises.map((e) => ({ name: e.name, skill: e.skill }));
     const distinctionItem = this.actor.items.find((i) => i.type === "distinction");
     const rank = this.actor.system[skill] ?? 0;
-    const bonus = distinctionItem?.system.keyCombatSkill === skill ? 1 : 0;
+    const bonus = isDistinctionStyle(distinctionItem, skill) ? 1 : 0;
     const styleLimit = rank + bonus;
     const styleChosen = expertises.filter((e) => e.skill === skill).length;
     if (styleChosen >= styleLimit) {

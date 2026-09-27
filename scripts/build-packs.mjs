@@ -779,9 +779,32 @@ const PLAYTEST_CARD_FILES = [
   ["spiritual-actions.csv", "action"], ["spiritual-reactions.csv", "reaction"]
 ];
 
+/**
+ * Neon condition rows whose TEXT is wrong under the v0.6 rulebook, replaced by name here while the
+ * row itself (and so its compendium `_id`) is kept. Keeping the id matters: copies already on
+ * actors and any links to the compendium entry keep pointing at the same document. This is the
+ * same fix-at-the-pipeline approach as ORDINARY_CONDITIONS (so a Neon re-sync can't bring the old
+ * text back), minus the id change a full hand-authored replacement would cause.
+ *
+ * STRAIN: Neon's text (burn at 3-4, Psychic Damage at 5+) contradicted both the v0.6 Doc and the
+ * system's own Strain math (actor-combatant.mjs STRAIN_PENALTY_THRESHOLDS). Text is the Doc's
+ * Part X "Psionics" and Appendix E "Strain" wording (Doc L6111-6122, L8140-8152).
+ */
+const CONDITION_TEXT_OVERRIDES = {
+  STRAIN: [
+    { label: "SPECIALTY CONDITION", html: "Psionics · Self. Whenever you play a Psionics Action or Reaction, you may voluntarily gain 1 Strain to gain 1 free Surge for that card. Use the Strain value after gaining the point to determine the costs and penalties affecting the current card." },
+    { label: "0–2 STRAIN", html: "No penalty." },
+    { label: "3–4 STRAIN", html: "−1 Composure." },
+    { label: "5–6 STRAIN", html: "−1 Composure, and Psionics Actions and Reactions require 1 additional burned die." },
+    { label: "AT 6 STRAIN", html: "You cannot voluntarily gain more Strain. You can still use Psionics normally, but cannot buy another Surge through Strain. If a hostile effect would force Strain beyond 6, remain at 6 and suffer 1 Psychic Breach Damage for each excess point." },
+    { label: "REMOVAL", html: "During your Turn, before using a Psionics Action, you may burn 2 Action dice to remove 2 Strain. This prevents Psionics Actions for the rest of that Turn; other legal Actions and eligible Psionics Reactions remain available. Recovery clears Strain. Ordinary Condition removal does not." }
+  ]
+};
+
 function conditionToItem(row) {
   const d = row.data;
   const _id = row.id.replace(/-/g, "").slice(0, 16);
+  const override = CONDITION_TEXT_OVERRIDES[(row.name || "").toUpperCase()];
   return {
     _id,
     name: row.name,
@@ -789,7 +812,7 @@ function conditionToItem(row) {
     img: "icons/svg/skull.svg",
     system: {
       classification: classifyCondition(row.name),
-      sections: (d.sections || []).map((s) => ({ label: s.label || "", html: s.html || "" }))
+      sections: override ?? (d.sections || []).map((s) => ({ label: s.label || "", html: s.html || "" }))
     },
     effects: activeEffects(_id, CONDITION_EFFECTS[row.name] || []),
     folder: null,

@@ -61,6 +61,29 @@ export default class EssenceActor extends Actor {
    * here. A "dying" character is excluded on purpose: the whole point of an actively-advancing Death
    * Track is that it doesn't get quietly walked back by an unrelated Recovery grant.
    */
+  /**
+   * End of Turn (v0.6 Part VII "End of Turn and Reaction Pool", Doc L3461-3463): "Reaction Pool =
+   * base pool size + unused, unreserved Action Dice." Unused Action dice become Reaction dice; they
+   * do not remain Action dice.
+   *
+   * One implementation for both paths that end a Turn: EssenceCombat#_onEndTurn (Foundry's own
+   * lifecycle hook, which fires however the tracker advances) and the sheets' End Turn buttons.
+   * Before 0.7.10 only the sheet button did this, so advancing the Combat Tracker directly left the
+   * combatant with no Reaction Pool at all. Idempotent: it acts only while the Turn is still live
+   * ("first"/"active"), so the button followed by the tracker's own _onEndTurn applies it once.
+   * @returns {Promise<boolean>} whether the pool was formed
+   */
+  async formEndOfTurnReactionPool() {
+    const ps = this.system.playState;
+    if (!ps || !["first", "active"].includes(ps.combatTurn)) return false;
+    await this.update({
+      "system.playState.combatTurn": "ended",
+      "system.playState.reactionDice": (this.system.baseCombatDice ?? 0) + (ps.actionDice ?? 0),
+      "system.playState.actionDice": null
+    });
+    return true;
+  }
+
   async reduceDeathTrack() {
     const ps = this.system.playState;
     if (!ps || ps.deathTrackState === "dying") return false;

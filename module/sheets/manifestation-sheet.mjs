@@ -1,5 +1,5 @@
 import { rollEssencePool } from "../dice/essence-roll.mjs";
-import { SEVERITY_BY_INDEX, cardSummary } from "../utils.mjs";
+import { SEVERITY_BY_INDEX, cardSummary, ordinaryDamageWounds } from "../utils.mjs";
 import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -127,13 +127,9 @@ export default class EssenceManifestationSheet extends HandlebarsApplicationMixi
    *  carries over unchanged (see manifestation.mjs's enterManifestation); re-rolling would only
    *  confuse turn order. End Turn still applies normally. */
   static async #onEndTurn() {
-    const ps = this.actor.system.playState;
-    const base = this.actor.system.baseCombatDice;
-    await this.actor.update({
-      "system.playState.combatTurn": "ended",
-      "system.playState.reactionDice": base + (ps.actionDice ?? 0),
-      "system.playState.actionDice": null
-    });
+    // See EssenceActor#formEndOfTurnReactionPool — shared with EssenceCombat#_onEndTurn, which
+    // fires again when the tracker advances below and then does nothing (the Turn is already over).
+    await this.actor.formEndOfTurnReactionPool();
     if (game.combat?.combatant?.actor?.id === this.actor.id) {
       await game.combat.nextTurn();
     }
@@ -288,10 +284,10 @@ export default class EssenceManifestationSheet extends HandlebarsApplicationMixi
     if (result.breach) {
       wounds = result.amount;
     } else {
+      // Per-event remaining protection (ordinaryDamageWounds, utils.mjs). This used to re-derive
+      // earlier Wounds from the current Resilience, so any mid-interval change rewrote them.
+      wounds = ordinaryDamageWounds(resilience, prevAccumulated, result.amount);
       newAccumulated = prevAccumulated + result.amount;
-      const prevWounds = Math.max(0, prevAccumulated - resilience);
-      const newWounds = Math.max(0, newAccumulated - resilience);
-      wounds = newWounds - prevWounds;
     }
 
     const update = { "system.playState.accumulatedDamage": newAccumulated };

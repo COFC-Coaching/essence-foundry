@@ -675,6 +675,7 @@
   "ESSENCE.Notify.AbilityNoUsesRemaining": "{name} has no uses remaining this Combat.",
   "ESSENCE.Notify.NoUsesRemaining": "{name} has no Uses remaining.",
 
+  "ESSENCE.Notify.ResilienceEffectRekeyed": "<p><strong>Essence System update:</strong> the Athlete Distinction's Resilience +1 was being saved into these characters' base Resilience, adding 1 more each time their sheet saved. It now applies as a bonus instead. Please check each character's base Resilience and correct it by hand if it grew: {names}.</p>",
   "ESSENCE.Notify.EndOfDeathTrack": "{name} has reached the end of the Death Track.",
 
   "ESSENCE.Notify.NotOwnedNoActionDicePool": "This item isn't owned by an Actor — no Action Dice pool to burn from.",

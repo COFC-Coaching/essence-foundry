@@ -2,6 +2,53 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.7.10
+
+Fixes for bugs affecting tables now. Each one is wrong under both the old rules and the new
+v0.6 rulebook, so none of them waits for the v0.6 update. No saved data changes shape.
+
+**A Distinction's extra Expertise never applied.** The rules give each Distinction's Style an
+Expertise limit one higher than its Rank. For example, an Athlete with Prowess 2 can hold three
+Prowess Expertises. The check compared the Distinction's Style as stored ("Prowess") with the
+sheet's lowercase key ("prowess"), so it never matched. Every character was held to their plain
+Rank, both in the Character Wizard and on the sheet.
+
+**A drop in Resilience could over-count Wounds.** The rulebook's worked example is Resilience 3
+with 2 Damage already taken this round, Resilience falling to 1, then 1 more Damage. That should
+cause 1 Wound; the sheet gave 2. Damage now uses the rulebook's formula every time: remaining
+protection = current Resilience − Damage already taken, minimum 0, and each point past that is a
+Wound. A mid-round Resilience change never adds or removes Wounds after the fact, whichever way
+it goes. The same fix covers NPC, Monster, and Full Manifestation sheets.
+
+**Advancing the Combat Tracker skipped the end of the Turn.** Unused Action dice become Reaction
+dice at the end of a Turn, but only the sheet's End Turn button did it. A GM who pressed Next Turn
+in the Combat Tracker left that combatant with no Reaction Pool. The end of every Turn now forms
+the pool, however the tracker advances, and it can't happen twice.
+
+**Combatants added mid-fight started with no Reaction Pool.** Only combatants present when Combat
+began got one. Anyone added later now gets their starting Reaction Pool on joining, and their
+Initiative dice still come out of their first Action Pool.
+
+**Calling Rank 3 and higher had no Full Manifestation options.** A leftover condition hid every
+profile once Calling passed Rank 2, instead of keeping all eight available.
+
+**Athlete's Resilience +1 grew every time the sheet saved.** The bonus was written into base
+Resilience, so each save stored the boosted value and then added 1 on top again. It now applies
+as a separate bonus. Athletes already in play are corrected automatically. Their saved base
+Resilience may already have crept up, and there's no record of the true value, so the GM gets a
+one-time whisper naming each Athlete to check by hand.
+
+**The Strain Condition's text disagreed with its own rules.** The card said 3–4 Strain burns an
+extra die and 5+ deals Psychic Damage. The sheet already applied the rulebook's numbers: −1
+Composure at 3–4, plus an extra burned die at 5–6. The card now matches, including the cap at 6
+and removing Strain by burning 2 Action dice.
+
+**Character Wizard card choices.**
+- Species cards (Shaper, True Breath, Ink Cloud, Spore Cloud) were counted against the 10
+  learned-card picks. They're a Species Trait grant and don't use a pick.
+- The card browser offered cards above the character's Rank in that Style, such as a Rank 2 card
+  at Prowess 1.
+
 ## 0.7.9
 
 **Reverts 0.7.7 — the Armory figure was right and the label was wrong.** 0.7.7 changed the Armory

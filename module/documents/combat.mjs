@@ -106,6 +106,23 @@ export default class EssenceCombat extends Combat {
     return this;
   }
 
+  /**
+   * The play state every combatant starts Combat with (Doc L3411, "Starting Reaction Pools"):
+   * before anyone's first Turn, each combatant has its base Reaction Pool, not 0, so a combatant who
+   * acts late can still respond before its own first Turn. That pool clears normally when the
+   * combatant's own first Turn begins (_onStartTurn always resets reactionDice to 0), and the
+   * "notStarted" turn state is what makes _onStartTurn subtract its Initiative dice from that first
+   * Action Pool.
+   */
+  static startingCombatState(actor) {
+    return {
+      "system.playState.combatStarted": true,
+      "system.playState.combatTurn": "notStarted",
+      "system.playState.actionDice": null,
+      "system.playState.reactionDice": actor.system.baseCombatDice
+    };
+  }
+
   /** Fires once per round, awaited before _onStartTurn. Round 1 is combat's actual start. */
   async _onStartRound(context) {
     await super._onStartRound(context);
@@ -113,17 +130,7 @@ export default class EssenceCombat extends Combat {
     for (const combatant of this.combatants) {
       const actor = combatant.actor;
       if (!COMBATANT_TYPES.includes(actor?.type)) continue;
-      // Before anyone's first Turn, every combatant starts with a Reaction Pool of 5 + Tier —
-      // not 0 — so combatants who act later in the round can still defend themselves before
-      // their own first Turn arrives (see part-iv-combat.md § Starting Reaction Pools). This
-      // starting pool clears normally once the combatant's own first Turn begins (_onStartTurn
-      // below always resets reactionDice to 0 there).
-      const update = {
-        "system.playState.combatStarted": true,
-        "system.playState.combatTurn": "notStarted",
-        "system.playState.actionDice": null,
-        "system.playState.reactionDice": actor.system.baseCombatDice
-      };
+      const update = EssenceCombat.startingCombatState(actor);
       // Reduced Engine "X per Combat" Abilities (module/data/actor-adversary.mjs) refill once,
       // here, at the true start of combat — never mid-combat, unlike "per Round" below.
       if (actor.system.abilities?.length) {
@@ -131,6 +138,36 @@ export default class EssenceCombat extends Combat {
       }
       await actor.update(update);
     }
+  }
+
+  /**
+   * Joining an ongoing Combat (Doc L3421-3423): "The newcomer receives its base Reaction Pool and
+   * pays their Initiative dice against their first Action Pool... Existing participants do not
+   * reroll Initiative and do not reset any Pool." _onStartRound only sets up the combatants present
+   * at Round 1, so before 0.7.10 a combatant added mid-fight began with no Reaction Pool. Foundry's
+   * own descendant-creation hook runs on every client; only the active GM writes, matching how core
+   * runs the turn events above.
+   */
+  _onCreateDescendantDocuments(parent, collection, documents, data, options, userId) {
+    super._onCreateDescendantDocuments(parent, collection, documents, data, options, userId);
+    if (collection !== "combatants" || !game.user.isActiveGM || !this.started || this.round < 1) return;
+    for (const combatant of documents) {
+      const actor = combatant.actor;
+      if (!COMBATANT_TYPES.includes(actor?.type)) continue;
+      actor.update(EssenceCombat.startingCombatState(actor));
+    }
+  }
+
+  /**
+   * End of Turn — Foundry's own lifecycle hook, run by the active GM whenever a turn ends, however
+   * the tracker was advanced. See EssenceActor#formEndOfTurnReactionPool, which the sheets' End
+   * Turn buttons also call (it only acts once per Turn).
+   */
+  async _onEndTurn(combatant, context) {
+    await super._onEndTurn(combatant, context);
+    const actor = combatant.actor;
+    if (!COMBATANT_TYPES.includes(actor?.type)) return;
+    await actor.formEndOfTurnReactionPool();
   }
 
   /** Fires once per combatant whose turn is starting, after _onStartRound has resolved. */
@@ -147,9 +184,8 @@ export default class EssenceCombat extends Combat {
       "system.playState.actionDice": base - (isFirst ? (ps.initiativeDice || 0) : 0),
       "system.playState.reactionDice": 0,
       // Accumulated Damage resets at the start of each of the character's own Turns
-      // (see part-iv-combat.md § Resilience) — accumulatedDamageWounds (0.6.85, plan §5.6) resets
-      // alongside it, since it's just the already-extracted-Wounds count derived from the same
-      // interval's accumulated Damage.
+      // (Doc L3445). accumulatedDamageWounds is no longer read (see ordinaryDamageWounds in
+      // utils.mjs) but is still zeroed so stored data stays tidy.
       "system.playState.accumulatedDamage": 0,
       "system.playState.accumulatedDamageWounds": 0
     };

@@ -8,23 +8,27 @@
     "sections": [
       {
         "label": "SPECIALTY CONDITION",
-        "html": "Psionics · Self · Stackable. Strain is cumulative and remains until removed. When you use a Psionics Action or Reaction, you may gain 1 Strain to gain 1 additional Surge."
+        "html": "Psionics · Self. Whenever you play a Psionics Action or Reaction, you may voluntarily gain 1 Strain to gain 1 free Surge for that card. Use the Strain value after gaining the point to determine the costs and penalties affecting the current card."
       },
       {
-        "label": "1–2 STRAIN",
-        "html": "No additional penalty."
+        "label": "0–2 STRAIN",
+        "html": "No penalty."
       },
       {
         "label": "3–4 STRAIN",
-        "html": "Each Psionics Action or Reaction burns 1 additional die."
+        "html": "−1 Composure."
       },
       {
-        "label": "5+ STRAIN",
-        "html": "After resolving a Psionics Action or Reaction, suffer 1 Psychic damage."
+        "label": "5–6 STRAIN",
+        "html": "−1 Composure, and Psionics Actions and Reactions require 1 additional burned die."
+      },
+      {
+        "label": "AT 6 STRAIN",
+        "html": "You cannot voluntarily gain more Strain. You can still use Psionics normally, but cannot buy another Surge through Strain. If a hostile effect would force Strain beyond 6, remain at 6 and suffer 1 Psychic Breach Damage for each excess point."
       },
       {
         "label": "REMOVAL",
-        "html": "Strain is removed only by effects that specifically remove Strain or by the appropriate Recovery."
+        "html": "During your Turn, before using a Psionics Action, you may burn 2 Action dice to remove 2 Strain. This prevents Psionics Actions for the rest of that Turn; other legal Actions and eligible Psionics Reactions remain available. Recovery clears Strain. Ordinary Condition removal does not."
       }
     ]
   },
