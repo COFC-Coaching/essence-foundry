@@ -2,6 +2,10 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.3
+
+**Dialogs no longer stretch to the window.** Foundry v14 sizes a dialog to its content, and any prompt with a stretchy column (Apply Damage's type selects, long hints) grew to the full width. Every dialog is capped at 560px.
+
 ## 0.18.2
 
 **Dash at 1 unit per die, chat-card Apply buttons, Grip, tab arrow keys, pack normalisation.**

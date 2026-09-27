@@ -197,6 +197,11 @@
   .essence.character .essence-sheet-root > .sheet-side { grid-column: 1; grid-row: 4; width: auto; max-height: 40%; }
 }
 .application.essence.actor { min-width: 560px; min-height: 420px; }
+/* DialogV2 width defaults to auto in v14, so a prompt with a stretchy column (a select in a 1fr
+   grid, a long hint) grows to the whole window. Cap every dialog at a readable width; the
+   condition picker sets its own. */
+.application.dialog { max-width: min(560px, 95vw); }
+.application.dialog .damage-component select { min-width: 0; }
 /* .essence-sheet-root is a column flexbox, so any element placed directly inside it — rather than
    inside a section/div wrapper, as everything else on every sheet is — inherits the column's
    default cross-axis stretch and silently becomes full sheet-width. Invisible on a div or table
