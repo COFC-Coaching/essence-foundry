@@ -2,6 +2,12 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.6
+
+**Fix: the Core tab's Attribute boxes.** Two things from Shane's screenshot. The tooltip cue from 0.18.5 was a bottom border on the label, and on the Core tab that label is a fixed-width column, so Might, Grace and the rest trailed a dotted line to the dice button; it is a text underline now, under the word only. And the three Attribute boxes were each given a third of the tab body whatever its width, about 250px at the default window, while a row (label, roll button, value, six pips) needs about 270px, so the pips ran past the border and everything sat cramped. The boxes now keep their width: three across on a wide window, two across (then one) on a narrower one. Rows and boxes also get a little more room.
+
+**Fix: item sheets clipped below the fold.** An Item sheet (Equipment, Card, Condition, Species, Heritage, Distinction, Chassis, Fitting, Augment) opened at a fixed 600px and hid everything past that height with no scrollbar, so Half-Plate's Combined Effect ended at "Fortress Shell —" (Shane). Item sheets now scroll, keep their scroll position across edits, and can be resized. A Chassis or Fitting effect also continues on the source's own line instead of dropping under it.
+
 ## 0.18.5
 
 **Sheet polish pass (Impeccable audit): keyboard reach, icons, dialogs, tokens.** No layout change; Shane's live look is still owed.

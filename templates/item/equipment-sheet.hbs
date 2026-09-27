@@ -41,7 +41,7 @@
   {{#if stats.combinedEffect.length}}
     <div class="card-view-line">
       <div class="card-view-label">{{localize "ESSENCE.Item.Equipment.CombinedEffect"}}</div>
-      <ul>
+      <ul class="combined-effect">
         {{#each stats.combinedEffect as |ce|}}
           <li><strong>{{ce.source}}</strong> — {{{ce.html}}}</li>
         {{/each}}
@@ -162,7 +162,7 @@
 
       {{#if stats.combinedEffect.length}}
         <h4>{{localize "ESSENCE.Item.Equipment.CombinedEffect"}}</h4>
-        <ul>
+        <ul class="combined-effect">
           {{#each stats.combinedEffect as |ce|}}
             <li><strong>{{ce.source}}</strong> — {{{ce.html}}}</li>
           {{/each}}

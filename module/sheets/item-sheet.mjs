@@ -33,6 +33,7 @@ const ARRAY_ROW_DEFAULTS = {
 class EssenceItemSheetBase extends HandlebarsApplicationMixin(ItemSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["essence", "item"],
+    window: { resizable: true },
     position: { width: 480, height: 600 },
     form: { submitOnChange: true },
     actions: {
@@ -134,7 +135,7 @@ class EssenceItemSheetBase extends HandlebarsApplicationMixin(ItemSheetV2) {
  */
 export class EssenceCardSheet extends EssenceItemSheetBase {
   static PARTS = {
-    body: { template: "systems/essence-system/templates/item/card-sheet.hbs" }
+    body: { template: "systems/essence-system/templates/item/card-sheet.hbs", scrollable: [""] }
   };
 
   async _prepareContext(options) {
@@ -202,7 +203,7 @@ export class EssenceCardSheet extends EssenceItemSheetBase {
  */
 export class EssenceConditionSheet extends EssenceItemSheetBase {
   static PARTS = {
-    body: { template: "systems/essence-system/templates/item/condition-sheet.hbs" }
+    body: { template: "systems/essence-system/templates/item/condition-sheet.hbs", scrollable: [""] }
   };
 }
 
@@ -226,7 +227,7 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
   };
 
   static PARTS = {
-    body: { template: "systems/essence-system/templates/item/equipment-sheet.hbs" }
+    body: { template: "systems/essence-system/templates/item/equipment-sheet.hbs", scrollable: [""] }
   };
 
   _onRender(context, options) {
@@ -528,7 +529,7 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
  */
 export class EssenceSpeciesSheet extends EssenceItemSheetBase {
   static PARTS = {
-    body: { template: "systems/essence-system/templates/item/species-sheet.hbs" }
+    body: { template: "systems/essence-system/templates/item/species-sheet.hbs", scrollable: [""] }
   };
 
   /** No "join" Handlebars helper exists in this project (core Foundry doesn't register one) —
@@ -598,13 +599,13 @@ export class EssenceSpeciesSheet extends EssenceItemSheetBase {
 
 export class EssenceHeritageSheet extends EssenceItemSheetBase {
   static PARTS = {
-    body: { template: "systems/essence-system/templates/item/heritage-sheet.hbs" }
+    body: { template: "systems/essence-system/templates/item/heritage-sheet.hbs", scrollable: [""] }
   };
 }
 
 export class EssenceDistinctionSheet extends EssenceItemSheetBase {
   static PARTS = {
-    body: { template: "systems/essence-system/templates/item/distinction-sheet.hbs" }
+    body: { template: "systems/essence-system/templates/item/distinction-sheet.hbs", scrollable: [""] }
   };
 }
 
@@ -624,7 +625,7 @@ export class EssenceComponentSheet extends EssenceItemSheetBase {
   };
 
   static PARTS = {
-    body: { template: "systems/essence-system/templates/item/component-sheet.hbs" }
+    body: { template: "systems/essence-system/templates/item/component-sheet.hbs", scrollable: [""] }
   };
 
   /**
@@ -700,6 +701,6 @@ export class EssenceComponentSheet extends EssenceItemSheetBase {
 
 export class EssenceAugmentSheet extends EssenceItemSheetBase {
   static PARTS = {
-    body: { template: "systems/essence-system/templates/item/augment-sheet.hbs" }
+    body: { template: "systems/essence-system/templates/item/augment-sheet.hbs", scrollable: [""] }
   };
 }

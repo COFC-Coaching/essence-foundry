@@ -302,6 +302,14 @@
 .essence .header-fields { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2px; font-size: 0.85em; }
 .essence .header-fields label { display: flex; align-items: center; gap: 4px; }
 
+/* Item sheets have no .sheet-scroll region: the root is the whole window, so it scrolls itself.
+   Before 0.18.6 the root's overflow: hidden and the fixed 600px window clipped everything below
+   the fold with no way to reach it (Shane: Half-Plate's Combined Effect ended at "Fortress Shell —").
+   Each item PART lists scrollable: [""] so the position survives submitOnChange re-renders. */
+.essence.item .essence-sheet-root { overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; }
+/* A Chassis or Fitting effect is rich text (<p>…</p>). Inside the "Source — effect" list item the
+   first paragraph continues the line instead of dropping under the source name. */
+.essence .combined-effect li > p:first-of-type { display: inline; margin: 0; }
 /* Item sheets (card/condition/equipment/species/heritage/distinction) put the name <h1>
    directly in .sheet-header rather than inside .header-main — same sizing fix applies. */
 /* min-width: 0 overrides a flex item's default min-width: auto (= its content's intrinsic
@@ -338,9 +346,14 @@
 .essence .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .essence .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; }
 
-.essence .domain { background: var(--essence-panel); border: 1px solid var(--essence-line); border-radius: 4px; padding: 6px 8px; }
-.essence .domain h4 { margin: 0 0 4px; text-align: center; }
-.essence .attr-row, .essence .resource-row, .essence .defense-row { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+.essence .domain { background: var(--essence-panel); border: 1px solid var(--essence-line); border-radius: 4px; padding: 8px 10px; }
+.essence .domain h4 { margin: 0 0 6px; text-align: center; }
+/* Core tab: an attribute row (label, roll button, value, six pips) needs about 270px. Three
+   fixed columns gave each box a third of the tab body, about 250px at the default window, so the
+   pips ran past the border. The grid now fits as many 270px boxes as the body allows: three on a
+   wide window, two (then one) on a narrower one, never a squeezed box (Shane, screenshot). */
+.essence .tab.core .domains { grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); }
+.essence .attr-row, .essence .resource-row, .essence .defense-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
 .essence .attr-label { flex: 0 0 80px; text-transform: capitalize; }
 .essence .attr-input, .essence .current-input { width: 3em; }
 /* Attribute-only Non-Combat roll (0.9.0, Doc L1237): same footprint as the Style roll die button. */
@@ -425,7 +438,9 @@
 /* One affordance for "hover for the rule": every static label that carries a tooltip gets the
    help cursor, and attribute-style labels get the dotted underline the Specialties row had. */
 .essence :is(span, label, h3, h4, p, tr, div)[data-tooltip-text] { cursor: help; }
-.essence span.attr-label[data-tooltip-text] { border-bottom: 1px dotted var(--essence-line-bright); }
+/* A text underline, not a border: the Core tab's labels are a fixed 80px column, and a border ran
+   the whole column as a dotted line trailing off to the dice button (Shane, screenshot). */
+.essence span.attr-label[data-tooltip-text] { text-decoration: underline dotted var(--essence-line-bright); text-underline-offset: 3px; }
 .essence .specialty-row input[type="text"] { flex: 1; min-width: 120px; }
 .essence .specialty-row-wrap { align-items: flex-start; }
 .essence .thread-chips { display: flex; gap: 4px; flex-wrap: wrap; }

@@ -3779,3 +3779,19 @@ stylesheet against the templates in parallel. Findings and what was done:
 text field and confirm the amber ring; open Delete Item and Dash dialogs (560px cap, localized
 titles); hover an Attribute label with a benefit (dotted underline, help cursor); the Content
 Wizard type picker frames; Monster sheet header at 560px wide.
+
+### 2026-09-27 -- 0.18.6: Attribute label underline
+
+Shane (screenshot of the Core tab): the dotted tooltip cue from 0.18.5 ran the full 80px
+`.attr-label` column as a border. Now `text-decoration: underline dotted` with a 3px offset, so
+only the word is underlined; the Specialties row labels get the same. Static-checked only.
+Also (Shane: "the boxes are too narrow and don't cover all of the pips", "everything is very
+squished"): `.tab.core .domains` is `repeat(auto-fit, minmax(270px, 1fr))` instead of three fixed
+columns; `.domain` padding 8px 10px, attribute rows gap 8px / margin 4px. At the 1080 default
+window (sidebar 240px, body ~800px) that is two columns and one below; three from ~1130px wide.
+Also (Shane: "Can't see the Combined Effects on the cards", Half-Plate screenshot): item sheets
+had no scroll region; `.essence-sheet-root` is `height: 100%; overflow: hidden` and the window is
+a fixed 480 × 600, so anything below the fold was unreachable. `.essence.item .essence-sheet-root`
+now scrolls, every item PART has `scrollable: [""]`, and the base item sheet is
+`window.resizable`. The effect HTML is `<p>` so it dropped under "Fortress Shell —";
+`.combined-effect li > p:first-of-type` is inline.
