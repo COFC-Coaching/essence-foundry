@@ -751,6 +751,12 @@
 .essence.roll-card .surge-option.spent { background: rgba(var(--essence-success-rgb), 0.22); border-color: var(--essence-success); }
 .essence.roll-card .surge-option.spent .cost { background: var(--essence-success); border-color: var(--essence-success); color: var(--essence-ink-bright); }
 .essence.roll-card .surge-option:disabled { opacity: 0.45; cursor: not-allowed; }
+.essence.roll-card .rc-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 10px 8px; }
+.essence.roll-card .rc-actions button { width: auto; flex: 0 0 auto; height: 28px !important; min-height: 0 !important; line-height: 1 !important; padding: 0 10px; border-radius: 6px; font-size: 12px; font-weight: 600; background: var(--essence-well); border: 1px solid var(--essence-line-strong); color: var(--essence-ink); cursor: pointer; }
+.essence.roll-card .rc-actions .rc-card { margin-left: auto; }
+.essence.roll-card.kind-action .rc-apply { background: var(--essence-card-action); border-color: var(--essence-card-action); color: var(--essence-ink-bright); }
+.essence.roll-card.kind-reaction .rc-apply { background: var(--essence-card-reaction); border-color: var(--essence-card-reaction); color: var(--essence-ink-bright); }
+.essence.roll-card.kind-equipment .rc-apply, .essence.roll-card.kind-basic .rc-apply { background: var(--essence-accent); border-color: var(--essence-accent); color: var(--essence-accent-ink); }
 .essence.roll-card .rc-text { display: flex; flex-direction: column; gap: 6px; padding: 8px 10px 10px; border-top: 1px solid var(--essence-line); }
 .essence.roll-card .rc-sec { display: flex; gap: 8px; line-height: 1.4; font-size: 0.9em; }
 .essence.roll-card .rc-sec > b { flex: 0 0 60px; padding-top: 2px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--essence-muted); }

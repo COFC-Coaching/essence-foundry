@@ -2,6 +2,16 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.2
+
+**Dash at 1 unit per die, chat-card Apply buttons, Grip, tab arrow keys, pack normalisation.**
+
+- **Dash** asks how many Action dice to burn (at least 2) and grants that many units of Movement; the card text says so. Re-import Dash on existing characters.
+- **Chat card buttons.** A played card's chat card carries "Apply Damage to <target>" for each targeted token, which opens that actor's own Apply Damage dialog, and a "Card" button that opens the card.
+- **Grip.** Melee and Guard Fittings are labelled Grip again (Shane: "Handles should be referred to as Grips"); the twelve Chassis keep their stored Grip.
+- **Tab strips** answer Left, Right, Home and End when focused (Foundry binds no keys for its tab strips).
+- **Packs.** Every card's Combat Style and Attribute value is stored capitalized ("Prowess", "Might"); the two lowercase entries were normalised. The sheet lookups accept either.
+
 ## 0.18.1
 
 **Mooks and Normals take Dazed and the unaware surcharge like characters (Shane, 2026-09-27, gap question 4).** The old blanket waivers are gone. A Dazed Mook or Normal loses its Action allowance for the Turn instead of burning 3 Pool dice it does not have, and Dazed then ends. A Mook or Normal Reaction against an unaware target costs one additional Reaction from the Round's allowance; the sheet asks when the Reaction is used. Elites already followed the character rules.

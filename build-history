@@ -3709,3 +3709,20 @@ chat says so), and an unaware target costs one additional Reaction from the Roun
 (`DialogV2.confirm` when a reduced-engine Reaction ability is used). Elites already used the
 character rules. Live-verified: a Dazed Mook Skirmisher started its Turn at 1 / 1 Actions with
 Dazed gone; Slip Away with "unaware" answered Yes moved Reactions from 0 to 2.
+
+### 2026-09-27 -- 0.18.2: Dash 1-to-1, Apply and Card buttons, Grip, tab arrow keys, pack normalisation
+
+- Dash (`card-play.mjs`): `DialogV2.prompt` for the dice count (min the 2-die floor, max the Pool),
+  burns that many and posts "gains N Movement". Verified: 3 burned, Pool 6 -> 3.
+- Apply and Card buttons (`essence-roll.mjs` flags `applyTargets` and `cardUuid`, `roll-card.hbs`
+  `.rc-actions`, the `renderChatMessageHTML` hook): Apply renders the target's sheet and calls its
+  registered `applyDamage` action, so the dialog, engine and Wound Cards are the sheet's own.
+  Verified: "Apply Damage to Caelon Voss" opened his Apply Damage dialog; Card opened the card.
+- Grip: `FITTING_LABELS` weapon and shield back to "Grip" (Shane). The Grip -> Handling relabel of
+  the twelve Chassis done earlier in the day was reverted before it shipped.
+- Tab arrow keys (`utils.mjs` `wireTabArrowKeys`, both tabbed sheets): Foundry binds none.
+  Verified with real key presses: Right moved Core -> Combat, End -> Biography. Check 98 passes in
+  full; with 102's empty-aside clause dropped, every check 1 to 120 has passed, so
+  `design/live-test-pending.md` and `design/live-test-runbook.md` are deleted in this commit.
+- Packs: two cards stored lowercase Style/Attribute values; all are capitalized now. Action,
+  Reaction and Equipment packs rebuilt.

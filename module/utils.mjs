@@ -1105,3 +1105,24 @@ export function splitCommitment(committed, cardMin, maxRolled) {
   const rolled = Math.max(1, Math.min(committed, maxRolled));
   return { rolled, burned: committed - rolled };
 }
+
+/**
+ * Arrow-key movement on an ApplicationV2 tab strip (live-test check 98). Foundry renders the strip
+ * and switches tabs on click; it binds no keys, so Left/Right/Home/End here focus and activate the
+ * neighbouring tab through the same click the mouse would send.
+ */
+export function wireTabArrowKeys(root) {
+  for (const nav of root.querySelectorAll("nav.tabs[role=tablist]")) {
+    nav.addEventListener("keydown", (event) => {
+      const tabs = [...nav.querySelectorAll("[data-action=tab]")];
+      const i = tabs.indexOf(document.activeElement);
+      if (i === -1) return;
+      const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[event.key];
+      if (next === undefined) return;
+      event.preventDefault();
+      const target = tabs[(next + tabs.length) % tabs.length];
+      target.focus();
+      target.click();
+    });
+  }
+}

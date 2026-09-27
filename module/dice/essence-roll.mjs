@@ -177,6 +177,10 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
       taskSucceeded: task?.succeeded ?? null,
       targets: targetResults,
       surgeOptions: nonCombat ? [] : surgeOptions.map((opt, i) => ({ i, n: opt.n, html: opt.html })),
+      // Apply buttons (Shane, 2026-09-27): one per targeted token, opening that actor's own Apply
+      // Damage dialog; and a Card button that opens the played card. Only for card plays.
+      applyTargets: card && !nonCombat ? Array.from(game.user.targets).filter((t) => t.actor).map((t) => ({ name: t.actor.name, uuid: t.actor.uuid })) : [],
+      cardUuid: card?.uuid ?? null,
       card: cardChatContext(card),
       play: playChatContext(play),
       bonusSurges: noSurges ? 0 : bonusSurges,
@@ -193,7 +197,9 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
       "essence-system": {
         surgesAvailable: nonCombat || noSurges ? 0 : combat.surges,
         surgeOptions: nonCombat || noSurges ? [] : surgeOptions.map((opt) => ({ n: opt.n, html: opt.html })),
-        spentIndices: []
+        spentIndices: [],
+        applyTargets: card && !nonCombat ? Array.from(game.user.targets).filter((t) => t.actor).map((t) => ({ name: t.actor.name, uuid: t.actor.uuid })) : [],
+        cardUuid: card?.uuid ?? null
       }
     }
   });

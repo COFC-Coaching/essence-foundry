@@ -57,6 +57,23 @@ export async function playBurnOnlyCard(actor, item) {
   }
 
   if (item.name === "Prepare Action") return preparePlay(actor, item, available, burn);
+  // Dash (Shane, 2026-09-27): a reminder card for the general movement rule, 1 unit per burned
+  // die. Ask how many dice (never below the 2-die minimum), burn them, grant that many units.
+  if (item.name === "Dash") {
+    const n = await foundry.applications.api.DialogV2.prompt({
+      window: { title: item.name },
+      content: `<p>${game.i18n.format("ESSENCE.Sheet.DashPrompt", { min: burn, max: available })}</p><input type="number" name="count" value="${burn}" min="${burn}" max="${available}" autofocus>`,
+      ok: { label: "Burn", callback: (event, button) => Math.min(available, Math.max(burn, parseInt(button.form.elements.count.value, 10) || burn)) },
+      rejectClose: false
+    });
+    if (!n) return true;
+    await actor.update({ [`system.playState.${poolField}`]: available - n });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: `<div class="essence content-type-action-card"><p><strong>${actor.name}</strong> uses <strong>Dash</strong>: burns ${n} ${poolLabel} dice and gains ${n} Movement this Turn.</p>${cardText(item)}</div>`
+    });
+    return true;
+  }
 
   await actor.update({ [`system.playState.${poolField}`]: available - burn });
   let extra = "";

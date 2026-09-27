@@ -568,6 +568,21 @@ Hooks.on("preUpdateItem", (item, changes) => {
  */
 Hooks.on("renderChatMessageHTML", (message, html) => {
   const data = message.flags?.["essence-system"];
+  // Apply and Card buttons on a card play (Shane, 2026-09-27): Apply opens the target's own Apply
+  // Damage dialog through the sheet's registered action, so the engine, Wound Cards and status
+  // handling are exactly what the sheet button gives; Card opens the played card's sheet.
+  for (const btn of html.querySelectorAll(".rc-actions [data-action]")) {
+    btn.onclick = async () => {
+      const doc = await fromUuid(btn.dataset.uuid);
+      if (!doc) return ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ChatTargetGone"));
+      const sheet = doc.sheet;
+      await sheet.render(true);
+      if (btn.dataset.action === "applyDamage") {
+        const handler = sheet.options.actions?.applyDamage;
+        if (typeof handler === "function") await handler.call(sheet, new Event("click"), sheet.element);
+      }
+    };
+  }
   if (!data?.surgeOptions?.length) return;
 
   const spent = new Set(data.spentIndices ?? []);

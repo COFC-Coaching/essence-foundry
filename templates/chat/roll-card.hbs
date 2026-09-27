@@ -87,6 +87,12 @@
     {{/if}}
   </div>
 
+  {{#if card}}
+    <div class="rc-actions">
+      {{#each applyTargets as |t|}}<button type="button" class="rc-apply" data-action="applyDamage" data-uuid="{{t.uuid}}">{{localize "ESSENCE.Chat.ApplyDamageTo" name=t.name}}</button>{{/each}}
+      {{#if cardUuid}}<button type="button" class="rc-card" data-action="openCard" data-uuid="{{cardUuid}}">{{localize "ESSENCE.Chat.OpenCard"}}</button>{{/if}}
+    </div>
+  {{/if}}
   {{#if card.body.length}}
     <div class="rc-text">
       {{#each card.body as |line|}}

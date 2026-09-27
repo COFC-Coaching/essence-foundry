@@ -1,5 +1,5 @@
 import { TEAM_TIER_MIN, TEAM_TIER_MAX, TEAM_RECORD_TAGS, TEAM_RELATIONSHIPS } from "../data/actor-team.mjs";
-import { teamForActor } from "../utils.mjs";
+import { teamForActor, wireTabArrowKeys } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -99,6 +99,7 @@ export default class EssenceTeamSheet extends HandlebarsApplicationMixin(ActorSh
 
   _onRender(context, options) {
     super._onRender(context, options);
+    wireTabArrowKeys(this.element);
     for (const el of this.element.querySelectorAll("[data-record-field]")) {
       el.addEventListener("change", (event) => this.#onRecordFieldChange(event));
     }

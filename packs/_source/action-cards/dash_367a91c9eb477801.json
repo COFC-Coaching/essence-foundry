@@ -21,7 +21,7 @@
     "body": [
       {
         "label": "Effect",
-        "html": "Burn 2 Action dice to gain 2 Movement this Turn. A reminder of the general movement rule: any Action die may be burned for 1 additional unit of movement. This movement is voluntary and follows ordinary terrain and movement restrictions. It is in addition to normal Movement for the Turn."
+        "html": "Burn any number of Action dice, at least 2, to gain that many units of Movement this Turn: 1 unit per burned die, the general movement rule restated. This movement is voluntary and follows ordinary terrain and movement restrictions. It is in addition to normal Movement for the Turn."
       }
     ],
     "surges": [],
