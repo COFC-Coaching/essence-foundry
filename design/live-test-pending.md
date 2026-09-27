@@ -7,7 +7,7 @@ Run this in a world on Foundry v14 with the branch checked out into `Data/system
 Record results in build-history under a new dated heading; delete this file once everything below
 has passed.
 
-**Where this stands (2026-09-27, evening).** Checks 96 to 120 and 89 were run on the local machine against 0.17.1 (build-history, "Live test of 0.14.0 through 0.18.0"). All passed after the 0.17.2 fixes except two clauses left for Shane: 98's arrow-key tab navigation (Foundry core has no such handler; the tab strip is native and keyboard focus works, but arrows do nothing) and 102's "empty aside is display: none" (0.15.0 filled the sidebar, so it is never empty). 103's chat card passes with 0.18.0. Earlier status:
+**Where this stands (2026-09-27, evening).** Checks 96 to 120 and 89 were run on the local machine against 0.17.1 (build-history, "Live test of 0.14.0 through 0.18.0"). All passed after the 0.17.2 fixes except one clause left for Shane: 98's arrow-key tab navigation (Foundry core has no such handler; the tab strip is native and keyboard focus works, but arrows do nothing). 103's chat card passes with 0.18.0. Earlier status:
 
 **Where this stood (2026-09-27, morning).** Checks 1 to 95 were run on the local machine against 0.13.5
 (build-history, "Live test of 0.8.1 through 0.13.5"): all passed after the 0.13.1 to 0.13.5 fixes
@@ -335,9 +335,8 @@ at the end of this file.
     skill boxes, cards and tables, never competing with text. Clear the field and save: the plain
     background returns.
 102. Resize the Character sheet to under about 860px wide: the layout stays one column with no
-    horizontal scrollbar and no clipped content. Widen it past 1100px: still one column (the
-    sidebar has no content until 0.15.0). Inspect the root in the element picker: an empty
-    `aside.sheet-side.sheet-scroll` sits after `div.sheet-scroll` and is `display: none`.
+    horizontal scrollbar and no clipped content; the vitals sidebar drops under the tab body (check
+    110 covers its size). Widen it past 1100px: the sidebar returns beside the tab body.
 103. NPC, Monster and Full Manifestation sheets and every Item sheet: open one of each. Colors match
     the Character sheet's palette; nothing is unstyled, invisible or clipped. Play a card: the chat
     card uses the same gold accent.
