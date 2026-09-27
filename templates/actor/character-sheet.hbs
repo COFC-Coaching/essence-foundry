@@ -757,7 +757,7 @@
   </div>
 
   <div class="side-panel">
-    <span class="side-label">{{localize "ESSENCE.Sheet.Conditions"}}</span>
+    <span class="side-label">{{localize "ESSENCE.Sheet.Conditions"}} <button type="button" class="side-add" data-action="addCondition" title="{{localize 'ESSENCE.Sheet.AddCondition'}}"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.Add"}}</button></span>
     {{#if conditions.length}}
       <ul class="item-list condition-list">
         {{#each conditions as |item|}}

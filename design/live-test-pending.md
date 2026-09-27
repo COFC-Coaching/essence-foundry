@@ -391,3 +391,19 @@ at the end of this file.
     are gold. Core Influence on the Non-Combat tab shows the same squares. Clicking still toggles.
 116. Console: no error whose stack names `systems/essence-system` (in particular nothing about
     SearchFilter) while doing 112 to 115.
+
+## 0.17.0: Add Condition dialog
+
+117. Character sheet sidebar, Conditions panel: an "+ Add" button sits in the panel heading. Click
+    it: a dialog "Add Condition" opens with a search box, an "Ordinary" group and a "Specialty"
+    group (nine Specialty rows: Stance, Lock, Unstable, Exposed, Concentration, Strain, Rallied,
+    Possessed, Broken). No Wound Card, Consequence Card or Cover Condition is listed.
+118. Type "pro" in the search: only Prone (and any other match) stays; the Specialty group hides
+    when it has no match. Clear the box: everything returns.
+119. Click Prone: the row disables and shows "On sheet"; the sheet's Conditions panel lists Prone
+    behind the dialog; the token's HUD shows the Prone icon lit. Click Dazed too without closing.
+    Close: both are on the sheet. Reopen: both rows read "On sheet" and are disabled. Remove Prone
+    with the trash on the sheet, reopen: Prone is pickable again.
+120. Custom Condition: a "New Condition" appears in the Conditions panel and its editor opens with
+    one EFFECT section. Console: no error whose stack names `systems/essence-system` during 117
+    to 120.

@@ -8,6 +8,7 @@ import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, tierQua
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
+import { pickConditions } from "../apps/condition-picker.mjs";
 import { capitalize, cardSummary, domainResource, hasMastery, isDistinctionStyle, distinctionUnlocks, teamForActor, teamTierFor, componentTiers, assembledComponentIds, computeSlotUsage, computeTierGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, ordinaryDamageWounds, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns, resetEncounterSpecialties, equipmentCardCommitment, recoveryBaseAmount, resolveDamageComponents, hasOriginDistinction, THREAD_CAPACITY, addThread, authorityCapacity, authorityResultsPerCard, storeAuthority, spendAuthority, lockCapacity, contingencyCapacity, riteCapacity, placeRite, adaptationUpkeep, STRAIN_MAX, forcedStrain, psionicsBurnSurchargeAt, MANIFESTATION_TRACK } from "../utils.mjs";
 import { availableSubtypes, enterManifestation } from "../apps/manifestation.mjs";
 
@@ -147,7 +148,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       removeResistance: EssenceActorSheet.#onRemoveResistance,
       addVulnerability: EssenceActorSheet.#onAddVulnerability,
       removeVulnerability: EssenceActorSheet.#onRemoveVulnerability,
-      toggleAdaptabilityReroll: EssenceActorSheet.#onToggleAdaptabilityReroll
+      toggleAdaptabilityReroll: EssenceActorSheet.#onToggleAdaptabilityReroll,
+      addCondition: EssenceActorSheet.#onAddCondition
     }
   };
 
@@ -2920,6 +2922,11 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const item = this.actor.items.get(target.dataset.itemId);
     if (!item || !["equipment", "chassis", "fitting"].includes(item.type)) return;
     await item.update({ "system.usedThisAdventure": !item.system.usedThisAdventure });
+  }
+
+  /** Add Condition dialog (0.17.0): lists the Conditions compendium; adds through toggleStatusEffect. */
+  static async #onAddCondition() {
+    await pickConditions(this.actor);
   }
 
   static async #onItemDelete(event, target) {

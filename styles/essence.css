@@ -157,6 +157,22 @@
 .essence .sheet-side .equipment-bonus-sources { font-size: 0.8em; margin-bottom: 6px; }
 .essence .sheet-side .condition-list { gap: 4px; }
 .essence .sheet-side .condition-entry { padding: 3px 6px; }
+.essence .side-add { font-size: 0.85em; padding: 1px 8px; text-transform: none; letter-spacing: 0; }
+/* Add Condition dialog (0.17.0). The dialog window carries .essence so the tokens apply; rows are
+   whole-row buttons so a click anywhere on the name adds the Condition. */
+.essence-condition-picker .condition-pick-search { width: 100%; box-sizing: border-box; margin-bottom: 8px; }
+.essence-condition-picker .condition-pick-body { max-height: 60vh; overflow-y: auto; scrollbar-width: thin; padding-right: 4px; }
+.essence-condition-picker .condition-pick-list { list-style: none; padding: 0; margin: 0 0 8px; }
+.essence-condition-picker .condition-pick-list li { padding: 0; }
+.essence-condition-picker .condition-pick-add {
+  display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; padding: 4px 8px;
+  background: var(--essence-panel-raised); border: 1px solid var(--essence-line); border-radius: var(--essence-radius-sm);
+}
+.essence-condition-picker .condition-pick-add:hover:not(:disabled) { border-color: var(--essence-accent); }
+.essence-condition-picker .condition-pick-add:disabled { opacity: 0.6; cursor: default; }
+.essence-condition-picker .condition-pick-add img { border: none; flex: 0 0 auto; }
+.essence-condition-picker .condition-pick-name { flex: 1 1 auto; }
+.essence-condition-picker .condition-pick-owned { font-size: 0.75em; }
 .essence .side-readout { display: flex; flex-direction: column; gap: 4px; font-size: 0.9em; }
 .essence .side-readout > div { display: flex; justify-content: space-between; gap: 8px; }
 @container (max-width: 1100px) {

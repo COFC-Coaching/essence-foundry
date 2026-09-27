@@ -2,6 +2,18 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.17.0
+
+**Add Condition dialog.** The sidebar's Conditions panel has an Add button. It opens a dialog
+listing the Conditions compendium in two groups, Ordinary (named by the rules, removed by ordinary
+effects) and Specialty (set up by a Style's cards, not removed by ordinary effects), with a search
+box across both. Click a Condition to put it on the sheet; it is added the same way the Token HUD
+adds it, so the HUD icon lights up too. Conditions already on the sheet are marked "On sheet". The
+dialog stays open for several picks. Custom Condition creates a blank Condition on the sheet and
+opens its editor. Wound, Consequence and Cover Conditions are not listed; Apply Damage, the
+Influence Injury flow and the Cover rules attach those themselves. Step 7 of
+`design/css-migration-plan.md`.
+
 ## 0.16.1
 
 **Enemy sheets stay basic.** The cover art, the veil, the translucent panels and the card grid

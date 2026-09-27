@@ -3605,3 +3605,24 @@ veil and the 0.16.0 card grid were shared. Now: the art background and ::before 
 panel tokens to opaque values and pins the art variable to none; the card grid, rails, chip and
 action-row rules are scoped to `.essence.character`, with the pre-0.16.0 plain row rules restored
 for every other sheet. Palette and fonts stay shared. Not live-tested; check 114 rewritten.
+
+### 2026-09-27 -- 0.17.0: Add Condition dialog (plan step 7)
+
+`module/apps/condition-picker.mjs`, opened by the `addCondition` action from the sidebar's
+Conditions panel. Not live-tested; checks 117-120.
+
+- **Adds through the Token HUD path.** Rows call `actor.toggleStatusEffect(id, { active: true })`
+  with the same `essence-<slug>` id essence.mjs registers on "ready", so the owned Item carries the
+  statusId flag and the HUD icon lights. A row's "On sheet" state checks that flag OR a name match,
+  because Conditions dragged from the compendium have no flag.
+- **Grouping is by `system.classification`**: ordinary + other are "Ordinary", specialty is
+  "Specialty"; wound, consequence and cover are excluded because their subsystems attach them.
+  `getIndex({ fields: ["img", "system.classification"] })` is enough; no documents are loaded until
+  a row is clicked.
+- **Search is Foundry's SearchFilter bound inside DialogV2's render callback** (`dialog.element`),
+  with a group hidden when none of its rows match. Same class the sheet's card search uses.
+- **Custom Condition** creates a blank owned Condition Item and opens its sheet; it does not go
+  through the content wizard (that builds compendium content, not a one-off on this actor).
+- The 0.16.1 quoting lesson repeated: `node -e` with an apostrophe in a template literal fails on
+  the shell before it runs. Scripts go in scratchpad files or heredocs.
+- Verification: `node --check` on both modules, `npm test`, template balance, lang keys, CSS braces.
