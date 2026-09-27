@@ -371,3 +371,22 @@ at the end of this file.
 110. Narrow the window to about 800px: the sidebar drops under the tab body, capped at 40% of the
     height with its own scrollbar; nothing overlaps. Widen past 860px: it returns to the right.
 111. Console: no error whose stack names `systems/essence-system` while doing 104 to 110.
+
+## 0.16.0: card grid, SearchFilter, severity squares
+
+112. Combat tab: Action Cards render as a grid of small panels (two or more columns at 1080px
+    wide), each with a colored rail on the left (green for Action Cards, red for Reaction Cards,
+    gold for Equipment Cards), the name, a Combat Style chip colored by domain (Prowess red-orange,
+    Cunning blue, Leadership purple), and "R{rank} · Min {n} · Cost {n}" on the right. The Effect
+    summary sits under the name with the tags after it. A row of View, Edit, Delete and a gold
+    Play button is at the bottom. Play and clicking the name both open the card play dialog.
+113. Card search: type part of a card name: other cards disappear. Type a word from a card's
+    Effect text: it stays. Now edit any field on the sheet (re-render): the search text is still
+    in the box and the list is still filtered. Clear the box: all cards return. Sort by Skill and
+    by Cost still reorders the list.
+114. NPC and Monster sheets: their card lists use the same grid and rails (no Style chip). Nothing
+    overlaps and the buttons work.
+115. Core Wounds in the sidebar show five squares lettered L L S S C (not round dots); filled ones
+    are gold. Core Influence on the Non-Combat tab shows the same squares. Clicking still toggles.
+116. Console: no error whose stack names `systems/essence-system` (in particular nothing about
+    SearchFilter) while doing 112 to 115.

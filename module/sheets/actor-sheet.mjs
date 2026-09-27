@@ -227,22 +227,29 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    * building a hand; this is the same affordance for the hand you already picked, reachable
    * mid-combat.
    */
+  /** Foundry's own SearchFilter (0.16.0) owns the card search box: one instance per sheet, re-bound
+   *  on every render, so the query and the hidden rows survive the re-render that submitOnChange
+   *  triggers on every edit (bind() restores the input's value and re-applies the filter). */
+  #cardSearch = new foundry.applications.ux.SearchFilter({
+    inputSelector: "[data-card-filter]",
+    contentSelector: ".tab.combat",
+    callback: (event, query, rgx, html) => {
+      if (!html) return;
+      for (const li of html.querySelectorAll(".card-list li[data-card-name]")) {
+        const haystack = foundry.applications.ux.SearchFilter.cleanQuery(`${li.dataset.cardName} ${li.dataset.cardSummary ?? ""}`);
+        li.hidden = !!query && !rgx.test(haystack);
+      }
+    }
+  });
+
   #wireCardControls() {
     const input = this.element.querySelector("[data-card-filter]");
-    input?.addEventListener("input", (e) => {
-      // Stops this reaching the form-level submitOnChange listener (see the ApplicationV2 `form`
-      // option in DEFAULT_OPTIONS) — without this, typing/selecting here triggered a full form
-      // submit-and-re-render on every keystroke/selection, which rebuilds the card list from
-      // scratch and silently undoes the filter/sort that change was supposed to apply, along with
-      // resetting scroll position. Neither control has a `name` attribute (nothing here is actual
-      // actor data to save), so nothing is lost by keeping the event local to this listener.
-      e.stopPropagation();
-      const q = e.currentTarget.value.trim().toLowerCase();
-      for (const li of this.element.querySelectorAll(".card-list li[data-card-name]")) {
-        const haystack = `${li.dataset.cardName} ${li.dataset.cardSummary ?? ""}`.toLowerCase();
-        li.hidden = !!q && !haystack.includes(q);
-      }
-    });
+    if (input) {
+      this.#cardSearch.bind(this.element);
+      // The search box has no `name`, so the change event it fires on blur would only reach the
+      // form-level submitOnChange listener and cause a pointless re-render.
+      input.addEventListener("change", (e) => e.stopPropagation());
+    }
 
     for (const select of this.element.querySelectorAll("[data-card-sort]")) {
       select.addEventListener("change", (e) => {
@@ -481,6 +488,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     context.apBalanceLabel = apBalance < 0 ? `−${Math.abs(apBalance)}` : String(apBalance);
     context.temporaryInfluencePips = pips(system.playState.currentTemporaryInfluence, system.temporaryInfluence);
     context.coreInfluenceLabels = CORE_INFLUENCE_LABELS;
+    // Core Wounds use the same five-box severity ladder (actor-combatant.mjs schema comment), so
+    // the sidebar's squares carry the same L L S S C letters (0.16.0).
+    context.coreWoundLabels = CORE_INFLUENCE_LABELS;
     // Adventure-Limited Reach Triggers (Letters of Standing et al. — see reachTriggers' schema
     // comment in actor-combatant.mjs). effectiveReach already folds in every `active` trigger's
     // tempBonus; exposed again here bare so the template doesn't need to reach through `system.`.
@@ -526,7 +536,13 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // Universal actions everyone can use (Hide, Strike, Brace, ...) are just Action/Reaction Cards
     // with no Combat Style set — split those into their own "Basic" row of quick-access buttons
     // above the skill-gated hand instead of burying them in the same list.
-    const cardView = (item) => ({ id: item.id, name: item.name, system: item.system, summary: cardSummary(item.system) });
+    // `domain` colors the card row's Style chip (0.16.0): the domain whose skill list carries the
+    // card's Combat Style, or "" for a Style the sheet does not know.
+    const domainOfSkill = Object.fromEntries(DOMAINS.flatMap((d) => d.skills.map((s) => [s, d.key])));
+    const cardView = (item) => ({
+      id: item.id, name: item.name, system: item.system, summary: cardSummary(item.system),
+      domain: domainOfSkill[(item.system.skill ?? "").toLowerCase()] ?? ""
+    });
     const allActionCards = this.actor.items.filter((i) => i.type === "action-card");
     const allReactionCards = this.actor.items.filter((i) => i.type === "reaction-card");
     const byName = (a, b) => a.name.localeCompare(b.name);

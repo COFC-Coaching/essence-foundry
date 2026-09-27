@@ -318,17 +318,23 @@
       <option value="rank">{{localize "ESSENCE.Sheet.SortRank"}}</option>
     </select>
   </div>
+  {{!-- Card rows (0.16.0): a grid of cards with the type rail, the Style chip in its domain color
+       and Rank / minimum / Cost inline. The buttons and data-* attributes are unchanged. --}}
   <ul class="item-list card-list" data-card-list="action">
     {{#each actionCards as |item|}}
-      <li data-card-name="{{item.name}}" data-card-skill="{{item.system.skill}}" data-card-cost="{{item.system.cost}}" data-card-rank="{{item.system.rank}}" data-card-summary="{{item.summary}}">
+      <li class="{{#if item.domain}}domain-{{item.domain}}{{/if}}" data-card-name="{{item.name}}" data-card-skill="{{item.system.skill}}" data-card-cost="{{item.system.cost}}" data-card-rank="{{item.system.rank}}" data-card-summary="{{item.summary}}">
         <div class="card-row-top">
-          <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
-          <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.skill}} · {{capitalize item.system.skill}}{{/if}}{{#if item.system.cost}} · {{localize "ESSENCE.Common.Cost"}} {{item.system.cost}}{{/if}}{{#if item.system.tags}} · {{item.system.tags}}{{/if}}</span>
+          <button type="button" class="card-name" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
+          {{#if item.system.skill}}<span class="style-chip">{{capitalize item.system.skill}}</span>{{/if}}
+          <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.min}} · {{localize "ESSENCE.Sheet.CardMin" min=item.system.min}}{{/if}}{{#if item.system.cost}} · {{localize "ESSENCE.Common.Cost"}} {{item.system.cost}}{{/if}}</span>
+        </div>
+        {{#if item.summary}}<p class="card-summary muted">{{item.summary}}{{#if item.system.tags}} <span class="card-tags">{{item.system.tags}}</span>{{/if}}</p>{{/if}}
+        <div class="card-row-actions">
           <button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.ViewAria' name=item.name}}"><i class="fa-solid fa-eye"></i></button>
           <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
           <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button>
+          <button type="button" class="card-play" data-action="rollItem" data-item-id="{{item.id}}">{{localize "ESSENCE.Sheet.Play"}}</button>
         </div>
-        {{#if item.summary}}<p class="card-summary muted">{{item.summary}}</p>{{/if}}
       </li>
     {{else}}
       <li class="muted">{{localize "ESSENCE.Sheet.NoActionCards"}}</li>
@@ -355,15 +361,19 @@
   </div>
   <ul class="item-list card-list" data-card-list="reaction">
     {{#each reactionCards as |item|}}
-      <li data-card-name="{{item.name}}" data-card-skill="{{item.system.skill}}" data-card-cost="{{item.system.cost}}" data-card-rank="{{item.system.rank}}" data-card-summary="{{item.summary}}">
+      <li class="{{#if item.domain}}domain-{{item.domain}}{{/if}}" data-card-name="{{item.name}}" data-card-skill="{{item.system.skill}}" data-card-cost="{{item.system.cost}}" data-card-rank="{{item.system.rank}}" data-card-summary="{{item.summary}}">
         <div class="card-row-top">
-          <button type="button" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
-          <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.skill}} · {{capitalize item.system.skill}}{{/if}}{{#if item.system.cost}} · {{localize "ESSENCE.Common.Cost"}} {{item.system.cost}}{{/if}}{{#if item.system.tags}} · {{item.system.tags}}{{/if}}</span>
+          <button type="button" class="card-name" data-action="rollItem" data-item-id="{{item.id}}">{{item.name}}</button>
+          {{#if item.system.skill}}<span class="style-chip">{{capitalize item.system.skill}}</span>{{/if}}
+          <span class="card-meta muted">R{{item.system.rank}}{{#if item.system.min}} · {{localize "ESSENCE.Sheet.CardMin" min=item.system.min}}{{/if}}{{#if item.system.cost}} · {{localize "ESSENCE.Common.Cost"}} {{item.system.cost}}{{/if}}</span>
+        </div>
+        {{#if item.summary}}<p class="card-summary muted">{{item.summary}}{{#if item.system.tags}} <span class="card-tags">{{item.system.tags}}</span>{{/if}}</p>{{/if}}
+        <div class="card-row-actions">
           <button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.ViewAria' name=item.name}}"><i class="fa-solid fa-eye"></i></button>
           <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
           <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button>
+          <button type="button" class="card-play" data-action="rollItem" data-item-id="{{item.id}}">{{localize "ESSENCE.Sheet.Play"}}</button>
         </div>
-        {{#if item.summary}}<p class="card-summary muted">{{item.summary}}</p>{{/if}}
       </li>
     {{else}}
       <li class="muted">{{localize "ESSENCE.Sheet.NoReactionCards"}}</li>
@@ -372,7 +382,7 @@
 
   {{#if equipmentCards.length}}
     <h3 class="section-head">{{localize "ESSENCE.Sheet.EquipmentCards"}} <span class="muted">{{localize "ESSENCE.Sheet.EquipmentCardsHint"}}</span></h3>
-    <ul class="item-list card-list">
+    <ul class="item-list card-list" data-card-list="equipment">
       {{#each equipmentCards as |c|}}
         <li>
           <div class="card-row-top">
@@ -550,7 +560,7 @@
       <span class="attr-label" title="{{localize 'ESSENCE.Sheet.InfluenceRecoveryNote'}}">{{localize "ESSENCE.Sheet.CoreInfluence"}}</span>
       <span class="pip-track">
         {{#each system.coreInfluence as |c i|}}
-          <button type="button" class="pip toggle labeled {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}" title="{{c.condition}}" aria-pressed="{{c.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreInfluenceAria' n=(addOne i)}}{{#if c.condition}}: {{c.condition}}{{/if}}">{{lookup ../coreInfluenceLabels i}}</button>
+          <button type="button" class="pip toggle labeled sq {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}" title="{{c.condition}}" aria-pressed="{{c.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreInfluenceAria' n=(addOne i)}}{{#if c.condition}}: {{c.condition}}{{/if}}">{{lookup ../coreInfluenceLabels i}}</button>
         {{/each}}
       </span>
     </div>
@@ -720,7 +730,7 @@
         <span class="attr-label">{{localize "ESSENCE.Common.CoreWounds"}}</span>
         <span class="pip-track">
           {{#each system.coreWounds as |w i|}}
-            <button type="button" class="pip toggle {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" title="{{w.condition}}" aria-pressed="{{w.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreWoundAria' n=(addOne i)}}{{#if w.condition}}: {{w.condition}}{{/if}}"></button>
+            <button type="button" class="pip toggle labeled sq {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" title="{{w.condition}}" aria-pressed="{{w.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreWoundAria' n=(addOne i)}}{{#if w.condition}}: {{w.condition}}{{/if}}">{{lookup ../coreWoundLabels i}}</button>
           {{/each}}
         </span>
       </div>

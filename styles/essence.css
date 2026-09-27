@@ -502,9 +502,38 @@
    card to check its cost/skill. The Wizard already surfaces this when building a hand; same
    metadata + search here, for the hand you're actually playing from. */
 .essence .card-filter-input { width: 100%; box-sizing: border-box; margin: 4px 0 6px; }
-.essence .card-list li { flex-direction: column; align-items: stretch; gap: 2px; }
+/* Card grid (0.16.0, the concept's Combat artboard): each card is a translucent panel with a rail
+   on its left in the card-type color (the --essence-card-* tokens, keyed off data-card-list so the
+   NPC and Monster sheets, which share this markup, get the same treatment). The Style chip reads the
+   domain ink color from the row's domain-* class; the actions sit in their own row under the
+   summary. [hidden] rows (the SearchFilter) drop out of the grid as before. */
+.essence .card-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px; margin: 4px 0 10px; }
+.essence .card-list li {
+  flex-direction: column; align-items: stretch; gap: 4px; padding: 8px 10px;
+  background: var(--essence-panel-raised); border: 1px solid var(--essence-line); border-left: 3px solid var(--essence-card-basic);
+  border-radius: var(--essence-radius-sm);
+}
+.essence .card-list[data-card-list="action"] li { border-left-color: var(--essence-card-action); }
+.essence .card-list[data-card-list="reaction"] li { border-left-color: var(--essence-card-reaction); }
+.essence .card-list[data-card-list="equipment"] li { border-left-color: var(--essence-card-equipment); }
+.essence .card-list li.muted { grid-column: 1 / -1; background: none; border: none; padding: 2px 0; }
 .essence .card-list .card-row-top { display: flex; align-items: center; gap: 6px; }
-.essence .card-list .card-meta { flex: 1; font-size: 0.8em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.essence .card-list .card-name { flex: 1 1 auto; text-align: left; font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.essence .card-list .card-meta { flex: 0 0 auto; font-size: 0.8em; white-space: nowrap; }
+.essence .card-list .card-row-actions { display: flex; justify-content: flex-end; gap: 4px; }
+.essence .card-list .card-row-actions button { padding: 2px 6px; font-size: 0.85em; }
+.essence .card-list .card-play { background: var(--essence-accent); color: var(--essence-accent-ink); border-color: var(--essence-accent); font-weight: 600; }
+.essence .card-list .card-tags { opacity: 0.8; }
+.essence .style-chip {
+  display: inline-flex; align-items: center; font-size: 0.75em; padding: 1px 8px; border-radius: 10px;
+  border: 1px solid var(--essence-line-bright); text-transform: capitalize; white-space: nowrap;
+}
+.essence .domain-physical .style-chip { color: var(--essence-domain-physical-ink); border-color: var(--essence-domain-physical-ink); }
+.essence .domain-mental .style-chip { color: var(--essence-domain-mental-ink); border-color: var(--essence-domain-mental-ink); }
+.essence .domain-spiritual .style-chip { color: var(--essence-domain-spiritual-ink); border-color: var(--essence-domain-spiritual-ink); }
+/* L L S S C squares (the concept) for the Core Wound and Core Influence tracks: same buttons and
+   actions as the round pips, square corners. */
+.essence .pip.sq { border-radius: 4px; }
 /* There's a full sheet-width of empty space next to a card's name/meta — put the card's own
    Effect text there instead of making a GM/player reopen it mid-turn just to check what it does. */
 .essence .card-list .card-summary { margin: 0 0 4px; font-size: 0.8em; font-style: italic; }

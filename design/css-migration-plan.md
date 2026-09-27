@@ -12,12 +12,13 @@ parallel versions.
 
 ## Status (2026-09-27)
 
-Steps 0 to 3 shipped in 0.14.0, step 4 and the Core / Non-Combat part of step 5 in 0.15.0 (see
-the CHANGELOG entries). One decision made while doing step 1:
+Steps 0 to 3 shipped in 0.14.0, step 4 and the Core / Non-Combat part of step 5 in 0.15.0, the
+Combat card grid, `SearchFilter` and severity squares in 0.16.0 (see the CHANGELOG entries). One decision made while doing step 1:
 the sheet is a self-themed dark surface, not a consumer of Foundry's `--color-*` theme variables.
 Foundry's light theme puts dark text on parchment; over cover art and translucent panels that is
 unreadable, and the concept was drawn dark. So the tokens hold our own palette in both themes and
-read only Foundry's fonts (`--font-h1`, `--font-body`). The rest of step 5, then 6 to 8, are next.
+read only Foundry's fonts (`--font-h1`, `--font-body`). Next: steps 6 to 8, and the step 5 items
+that wait on a decision (listed under step 5).
 
 ## Where the stylesheet stood before 0.14.0
 
@@ -134,9 +135,13 @@ Depends on Ryan: which vitals belong in the sidebar. Size: medium.
 ### 5. Per-tab reorders and the card row
 
 Core and Non-Combat done in 0.15.0: Core is Attributes, Resistances and Vulnerabilities, General
-Features & Benefits, Languages; Non-Combat lost the last two. Still open: L L S S C squares, the
-Combat card rail and inline Commit / Cost, the Equipment `ContextMenu`, Temporary Influence as a
-stepper, the Biography order, `SearchFilter`. Core in Ryan's 02 to 03 order (Attributes, combat traits) followed by Passive Features and
+Features & Benefits, Languages; Non-Combat lost the last two. Done in 0.16.0: the Combat card grid
+with the type rail, the Style chip and inline Rank / Min / Cost; `SearchFilter` for the card
+search; L L S S C squares on Core Wounds and Core Influence. Still open, each waiting on a
+decision: the Equipment `ContextMenu` and Prepared column (Shane: checkbox or move buttons),
+Temporary Influence as a stepper with no maximum (Ryan: the data model caps it today), the
+Biography order (Team and Advancement are already first; nothing else to move). Core in Ryan's 02
+to 03 order (Attributes, combat traits) followed by Passive Features and
 Languages moved in from Non-Combat, since Wounds now live only in the sidebar; L L S S C squares
 (`.sq`, same buttons and actions as the pips) for Core Wounds in the sidebar and Core Influence;
 Combat's card rows gain the type rail (`--essence-card-*`) and inline Commit and Cost; Equipment's

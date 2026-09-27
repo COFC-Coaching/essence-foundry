@@ -867,6 +867,8 @@
   "ESSENCE.Notify.AlreadyManifested": "{name} is already manifested as their {subtype} — open that Actor's own sheet to Return.",
   "ESSENCE.Notify.ManifestationDefeated": "{name}'s Manifestation Wound track is full — the form collapses.",
   "ESSENCE.Sheet.StrainForSurge": "Gain 1 Strain (to {next}) for 1 free Surge",
+  "ESSENCE.Sheet.CardMin": "Min {min}",
+  "ESSENCE.Sheet.Play": "Play",
   "ESSENCE.Sheet.Resources": "Resources",
   "ESSENCE.Sheet.Defenses": "Defenses",
   "ESSENCE.Sheet.BasePoolsNote": "Base pools {base} · Pool bonus {bonus}",

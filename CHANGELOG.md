@@ -2,6 +2,24 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.16.0
+
+**Sheet redesign, part three: the Combat tab's card grid.**
+The rest of step 5 in `design/css-migration-plan.md` that does not wait on a decision.
+
+**Card grid.** Action and Reaction Cards are a grid of small cards instead of a list of lines.
+Each card has a rail on its left in the card-type color (green Action, red Reaction, gold
+Equipment), the card's name, a Combat Style chip in its domain color, and Rank, minimum and Cost
+inline. The Effect summary sits under that with the tags after it; View, Edit, Delete and a gold
+Play button are in their own row. The NPC and Monster sheets share the grid and rails; the Style
+chip is on the Character sheet.
+
+**Card search.** The search box is Foundry's own SearchFilter. The query survives every edit
+and re-render; typing filters as before, on the card name and its summary.
+
+**Severity squares.** Core Wounds (sidebar) and Core Influence (Non-Combat tab) show L L S S C
+squares instead of round pips. Same buttons, same clicks.
+
 ## 0.15.0
 
 **Sheet redesign, part two: the vitals sidebar, and the Core tab reordered.**

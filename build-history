@@ -3569,3 +3569,29 @@ checks 104-111 in `design/live-test-pending.md`.
 - Verification: `npm test` (rules 116, migration 59), `node --check` on the two changed modules,
   Handlebars block balance and HTML tag pair counts on the character template, all 269 localize
   keys in the template resolve, CSS braces balanced.
+
+### 2026-09-27 -- 0.16.0: sheet redesign part three (card grid, SearchFilter, severity squares)
+
+The rest of step 5 that needs no decision. Not live-tested; checks 112-116.
+
+- **SearchFilter replaces the hand-wired input listener.** `foundry.applications.ux.SearchFilter`
+  is a class field on the sheet (one instance per open sheet), bound in `#wireCardControls` on
+  every render. `bind()` writes the stored query back into the input and re-runs the filter, which
+  is exactly the "keep my filter across the submitOnChange re-render" behaviour the old code tried
+  to get with stopPropagation. The old `input` stopPropagation is gone (input events never reached
+  submitOnChange anyway; only `change` does), and a `change` stopPropagation stays so blurring the
+  search box does not re-render. The callback gets the content element (`.tab.combat`) or null when
+  the selector misses, hence the null guard. The sort selects remain hand-wired: Foundry has no
+  sort helper.
+- **Card grid is shared CSS.** `.card-list` became a grid with rails keyed off `data-card-list`, so
+  the NPC and Monster sheets (same markup) get it for free. Only the character template adds the
+  Style chip (it needs `item.domain` from `cardView`, computed from `DOMAINS`) and the action row
+  with the Play button; the other sheets keep their inline icon buttons, which the grid still lays
+  out. The equipment list gained `data-card-list="equipment"`; no code reads that value (the sort
+  code looks lists up by the select's value, and equipment has no select).
+- **Squares are a class, not new markup.** `.pip.sq` squares the corners; the buttons, actions and
+  aria remain those of the pips. Core Wounds now print the same L L S S C letters as Core Influence
+  (`context.coreWoundLabels`, the same constant), justified by the schema comment that the two
+  tracks share the five-box severity ladder.
+- Verification: `npm test` (rules 116, migration 59), `node --check`, template balance and lang
+  keys, CSS braces.
