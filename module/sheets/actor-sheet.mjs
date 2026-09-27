@@ -397,9 +397,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     context.isEditable = this.isEditable;
     context.editUnlocked = this.#editUnlocked;
     context.combatRound = game.combat?.round ?? null;
+    const system = this.actor.system;
     context.preparedAction = system.playState.preparedAction?.cardName ? system.playState.preparedAction : null;
     context.isDead = system.playState.deathTrackState === "dead";
-    const system = this.actor.system;
     context.system = system;
     context.attributeOptions = ATTRIBUTES;
     context.skillOptions = SKILLS;

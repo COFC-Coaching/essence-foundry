@@ -2,6 +2,10 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.13.1
+
+**Live-test fix (check 28).** Character sheets threw "Cannot access 'system' before initialization" on open: the Prepare Action context lines added in 0.10.0 read `system` two lines before it was declared. Every Character sheet failed to render since 0.10.0; NPC, Monster, Team and Manifestation sheets were unaffected.
+
 ## 0.13.0
 
 **Phase 6: content, guide and docs follow the v0.6 Doc.**
