@@ -26,7 +26,7 @@
     </div>
     {{#if type}}
       <label>{{localize "ESSENCE.Common.Name"}} <input type="text" data-field="name" placeholder="{{localize 'ESSENCE.Wizard.Content.NamePlaceholder'}}" {{#unless canCreate}}disabled{{/unless}}></label>
-      <button type="button" data-action="createDraft" {{#unless canCreate}}disabled{{/unless}}>{{localize "ESSENCE.Wizard.Content.CreateAndContinue"}} →</button>
+      <button type="button" data-action="createDraft" {{#unless canCreate}}disabled{{/unless}}>{{localize "ESSENCE.Wizard.Content.CreateAndContinue"}} <i class="fa-solid fa-arrow-right"></i></button>
     {{/if}}
   {{/unless}}
 
@@ -47,18 +47,18 @@
               <option value="spiritual" {{#if (eq system.domain "spiritual")}}selected{{/if}}>spiritual</option>
             </select>
           </label>
-          <label>{{localize "ESSENCE.Common.Rank"}} <input type="number" data-field="system.rank" value="{{system.rank}}" style="width:4em" min="0" max="5"></label>
+          <label>{{localize "ESSENCE.Common.Rank"}} <input class="w-4" type="number" data-field="system.rank" value="{{system.rank}}" min="0" max="5"></label>
           <label>{{localize "ESSENCE.Item.Card.CombatStyle"}} <input type="text" data-field="system.style" value="{{system.style}}" placeholder="{{localize 'ESSENCE.Item.Card.CombatStylePlaceholder'}}"></label>
           <label>{{localize "ESSENCE.Common.Subtype"}} <input type="text" data-field="system.subtype" value="{{system.subtype}}"></label>
         </div>
         <div class="wizard-row">
           <label>{{localize "ESSENCE.Common.Attribute"}} <input type="text" data-field="system.attr" value="{{system.attr}}"></label>
           <label>{{localize "ESSENCE.Common.Style"}} <input type="text" data-field="system.skill" value="{{system.skill}}"></label>
-          <label>{{localize "ESSENCE.Common.Defense"}} <input type="text" data-field="system.defense" value="{{system.defense}}" placeholder="Fortitude/Composure/Harmony"></label>
+          <label>{{localize "ESSENCE.Common.Defense"}} <input type="text" data-field="system.defense" value="{{system.defense}}" placeholder="{{localize 'ESSENCE.Wizard.Content.DefensePlaceholder'}}"></label>
         </div>
         <div class="wizard-row">
-          <label>{{localize "ESSENCE.Item.Card.MinDice"}} <input type="text" data-field="system.min" value="{{system.min}}" style="width:5em"></label>
-          <label>{{localize "ESSENCE.Common.Cost"}} <input type="text" data-field="system.cost" value="{{system.cost}}" style="width:5em"></label>
+          <label>{{localize "ESSENCE.Item.Card.MinDice"}} <input class="w-5" type="text" data-field="system.min" value="{{system.min}}"></label>
+          <label>{{localize "ESSENCE.Common.Cost"}} <input class="w-5" type="text" data-field="system.cost" value="{{system.cost}}"></label>
           <label>{{localize "ESSENCE.Common.Tags"}} <input type="text" data-field="system.tags" value="{{system.tags}}"></label>
         </div>
         <div class="wizard-row">
@@ -92,7 +92,7 @@
         <h3 class="section-head">{{localize "ESSENCE.Common.Surges"}}</h3>
         {{#each system.surges as |s i|}}
           <div class="array-row wizard-array-block">
-            <input type="text" data-array="surges" data-index="{{i}}" data-field="n" value="{{s.n}}" style="width:3em" data-tooltip-text="{{localize 'ESSENCE.Wizard.Content.SurgeCostTooltip'}}">
+            <input class="w-3" type="text" data-array="surges" data-index="{{i}}" data-field="n" value="{{s.n}}" data-tooltip-text="{{localize 'ESSENCE.Wizard.Content.SurgeCostTooltip'}}">
             <button type="button" data-action="deleteArrayRow" data-array="surges" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Item.Card.DeleteSurgeAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button>
             <textarea data-array="surges" data-index="{{i}}" data-field="html" rows="2" placeholder="{{localize 'ESSENCE.Common.HtmlAllowed'}}">{{s.html}}</textarea>
           </div>
@@ -122,11 +122,11 @@
               {{/each}}
             </select>
           </label>
-          <label>{{localize "ESSENCE.Common.Tier"}} <input type="number" data-field="system.tier" value="{{system.tier}}" style="width:4em" min="1" max="5"></label>
+          <label>{{localize "ESSENCE.Common.Tier"}} <input class="w-4" type="number" data-field="system.tier" value="{{system.tier}}" min="1" max="5"></label>
         </div>
         {{#if isGear}}
           <div class="wizard-row">
-            <label>{{localize "ESSENCE.Common.Uses"}} <input type="number" data-field="system.uses" value="{{system.uses}}" style="width:4em" placeholder="{{localize 'ESSENCE.Common.Unlimited'}}"></label>
+            <label>{{localize "ESSENCE.Common.Uses"}} <input class="w-4" type="number" data-field="system.uses" value="{{system.uses}}" placeholder="{{localize 'ESSENCE.Common.Unlimited'}}"></label>
           </div>
         {{/if}}
         <div class="wizard-row">
@@ -137,7 +137,7 @@
           {{#each system.equipmentCards as |c i|}}
             <div class="array-row wizard-array-block">
               <input type="text" data-array="equipmentCards" data-index="{{i}}" data-field="name" value="{{c.name}}" placeholder="{{localize 'ESSENCE.Wizard.Content.CardNamePlaceholder'}}">
-              <input type="number" data-array="equipmentCards" data-index="{{i}}" data-field="uses" value="{{c.uses}}" style="width:4em" placeholder="{{localize 'ESSENCE.Common.Uses'}}">
+              <input class="w-4" type="number" data-array="equipmentCards" data-index="{{i}}" data-field="uses" value="{{c.uses}}" placeholder="{{localize 'ESSENCE.Common.Uses'}}">
               <button type="button" data-action="deleteArrayRow" data-array="equipmentCards" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Wizard.Content.DeleteCardAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button>
               <textarea data-array="equipmentCards" data-index="{{i}}" data-field="effect" rows="2" placeholder="{{localize 'ESSENCE.Common.HtmlAllowed'}}">{{c.effect}}</textarea>
             </div>
@@ -201,12 +201,12 @@
               <option value="armory" {{#if (eq system.slot "armory")}}selected{{/if}}>armory</option>
             </select>
           </label>
-          <label>{{localize "ESSENCE.Common.Tier"}} <input type="number" data-field="system.tier" value="{{system.tier}}" style="width:4em" min="1" max="5"></label>
+          <label>{{localize "ESSENCE.Common.Tier"}} <input class="w-4" type="number" data-field="system.tier" value="{{system.tier}}" min="1" max="5"></label>
         </div>
         <div class="wizard-row">
-          <label>{{localize "ESSENCE.Common.Fortitude"}} <input type="text" data-field="system.fortitude" value="{{system.fortitude}}" style="width:5em" placeholder="e.g. +2"></label>
-          <label>{{localize "ESSENCE.Common.Resilience"}} <input type="text" data-field="system.resilience" value="{{system.resilience}}" style="width:5em" placeholder="e.g. +1"></label>
-          <label>{{localize "ESSENCE.Common.Movement"}} <input type="text" data-field="system.movement" value="{{system.movement}}" style="width:5em" placeholder="e.g. -1"></label>
+          <label>{{localize "ESSENCE.Common.Fortitude"}} <input class="w-5" type="text" data-field="system.fortitude" value="{{system.fortitude}}" placeholder="e.g. +2"></label>
+          <label>{{localize "ESSENCE.Common.Resilience"}} <input class="w-5" type="text" data-field="system.resilience" value="{{system.resilience}}" placeholder="e.g. +1"></label>
+          <label>{{localize "ESSENCE.Common.Movement"}} <input class="w-5" type="text" data-field="system.movement" value="{{system.movement}}" placeholder="e.g. -1"></label>
           <label>{{localize "ESSENCE.Item.Component.CompatibleFittingCategory"}} <input type="text" data-field="system.compatibleFittingCategory" value="{{system.compatibleFittingCategory}}" placeholder="e.g. Grip, Payload, Rigging, Interface"></label>
         </div>
       {{/if}}
@@ -218,7 +218,7 @@
         {{#each system.mounts as |m i|}}
           <div class="array-row wizard-array-block">
             <span class="mount-index">{{localize "ESSENCE.Item.Component.Mount" n=(addOne i)}}</span>
-            <input type="number" data-array="mounts" data-index="{{i}}" data-field="linkedWith" value="{{m.linkedWith}}" style="width:6em" min="0" placeholder="{{localize 'ESSENCE.Wizard.Content.LinkedMountPlaceholder'}}">
+            <input class="w-6" type="number" data-array="mounts" data-index="{{i}}" data-field="linkedWith" value="{{m.linkedWith}}" min="0" placeholder="{{localize 'ESSENCE.Wizard.Content.LinkedMountPlaceholder'}}">
             <button type="button" data-action="deleteArrayRow" data-array="mounts" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Item.Component.DeleteMountAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button>
           </div>
         {{/each}}
@@ -262,12 +262,12 @@
               <option value="armory" {{#if (eq system.slot "armory")}}selected{{/if}}>armory</option>
             </select>
           </label>
-          <label>{{localize "ESSENCE.Common.Tier"}} <input type="number" data-field="system.tier" value="{{system.tier}}" style="width:4em" min="1" max="5"></label>
+          <label>{{localize "ESSENCE.Common.Tier"}} <input class="w-4" type="number" data-field="system.tier" value="{{system.tier}}" min="1" max="5"></label>
         </div>
         <div class="wizard-row">
-          <label>{{localize "ESSENCE.Common.Fortitude"}} <input type="text" data-field="system.fortitude" value="{{system.fortitude}}" style="width:5em" placeholder="e.g. +2"></label>
-          <label>{{localize "ESSENCE.Common.Resilience"}} <input type="text" data-field="system.resilience" value="{{system.resilience}}" style="width:5em" placeholder="e.g. +1"></label>
-          <label>{{localize "ESSENCE.Common.Movement"}} <input type="text" data-field="system.movement" value="{{system.movement}}" style="width:5em" placeholder="e.g. -1"></label>
+          <label>{{localize "ESSENCE.Common.Fortitude"}} <input class="w-5" type="text" data-field="system.fortitude" value="{{system.fortitude}}" placeholder="e.g. +2"></label>
+          <label>{{localize "ESSENCE.Common.Resilience"}} <input class="w-5" type="text" data-field="system.resilience" value="{{system.resilience}}" placeholder="e.g. +1"></label>
+          <label>{{localize "ESSENCE.Common.Movement"}} <input class="w-5" type="text" data-field="system.movement" value="{{system.movement}}" placeholder="e.g. -1"></label>
         </div>
         <div class="wizard-row">
           <label>{{localize "ESSENCE.Item.Component.Handedness"}}
@@ -284,7 +284,7 @@
               <option value="structural" {{#if (eq system.reconfigureCategory "structural")}}selected{{/if}}>{{localize "ESSENCE.Item.Component.ReconfigureStructural"}}</option>
             </select>
           </label>
-          <label>{{localize "ESSENCE.Item.Component.ReconfigureCostOverride"}} <input type="number" data-field="system.reconfigureCostOverride" value="{{system.reconfigureCostOverride}}" style="width:5em" min="0" placeholder="{{localize 'ESSENCE.Item.Component.ReconfigureCostOverridePlaceholder'}}"></label>
+          <label>{{localize "ESSENCE.Item.Component.ReconfigureCostOverride"}} <input class="w-5" type="number" data-field="system.reconfigureCostOverride" value="{{system.reconfigureCostOverride}}" min="0" placeholder="{{localize 'ESSENCE.Item.Component.ReconfigureCostOverridePlaceholder'}}"></label>
         </div>
       {{/if}}
     {{/if}}
@@ -319,8 +319,8 @@
         </div>
         {{#if (eq system.kind "function")}}
           <div class="wizard-row">
-            <label>{{localize "ESSENCE.Common.Uses"}} <input type="number" data-field="system.uses" value="{{system.uses}}" style="width:4em" min="0"></label>
-            <label>{{localize "ESSENCE.Item.Augment.UsesRemaining"}} <input type="number" data-field="system.usesRemaining" value="{{system.usesRemaining}}" style="width:4em" min="0"></label>
+            <label>{{localize "ESSENCE.Common.Uses"}} <input class="w-4" type="number" data-field="system.uses" value="{{system.uses}}" min="0"></label>
+            <label>{{localize "ESSENCE.Item.Augment.UsesRemaining"}} <input class="w-4" type="number" data-field="system.usesRemaining" value="{{system.usesRemaining}}" min="0"></label>
           </div>
         {{/if}}
       {{/if}}
@@ -351,7 +351,7 @@
     <footer class="wizard-footer">
       <button type="button" data-action="wizardBack" {{#if (eq step 1)}}disabled{{/if}}>← {{localize "ESSENCE.Common.Back"}}</button>
       <span class="muted">{{localize "ESSENCE.Wizard.StepOf" step=(addOne step) total=typeConfig.steps.length name=stepName}}</span>
-      <button type="button" data-action="wizardNext" {{#if isLast}}disabled{{/if}}>{{localize "ESSENCE.Common.Next"}} →</button>
+      <button type="button" data-action="wizardNext" {{#if isLast}}disabled{{/if}}>{{localize "ESSENCE.Common.Next"}} <i class="fa-solid fa-arrow-right"></i></button>
     </footer>
   {{/if}}
 </div>

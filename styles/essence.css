@@ -8,6 +8,7 @@
    themes, and inherits only Foundry's fonts and scrollbar styling. */
 .application.essence, .essence.roll-card, .essence-whats-new {
   --essence-ground: #141210;
+  --essence-ground-rgb: 20, 18, 16;
   --essence-veil: rgba(20, 18, 16, 0.84);
   --essence-sheet-art: none;
   --essence-panel: rgba(32, 29, 25, 0.84);
@@ -22,6 +23,7 @@
   --essence-line-dashed: #4a443b;
   --essence-line-bright: #6f665a;
   --essence-ink: #ece6da;
+  --essence-ink-rgb: 236, 230, 218;
   --essence-ink-bright: #f3eee4;
   --essence-muted: #a89f90;
   --essence-muted-soft: #8f8677;
@@ -72,7 +74,6 @@
 .application.essence:not(.character) {
   --essence-panel: #201d19;
   --essence-panel-raised: #25211c;
-  --essence-sheet-art: none;
 }
 
 /* Sheet frame (0.8.1, reworked 0.14.0). The window is resizable (DEFAULT_OPTIONS.window.resizable
@@ -116,7 +117,7 @@
 .application.essence :is(h1, h2, h3, h4, h5, h6) { color: var(--essence-ink); }
 .application.essence .section-head, .application.essence .side-label { color: var(--essence-accent); }
 .application.essence :is(input, select, textarea) { color: var(--essence-ink); background: var(--essence-well); border: 1px solid var(--essence-line-strong); }
-.application.essence :is(input, select, textarea):focus { border-color: var(--essence-accent); outline: none; }
+.application.essence :is(input, select, textarea):focus { border-color: var(--essence-accent); }
 .application.essence :is(input, select, textarea)::placeholder { color: var(--essence-muted); }
 .application.essence option { background: var(--essence-well); color: var(--essence-ink); }
 .essence .essence-sheet-root > .sheet-header, .essence .essence-sheet-root > .sheet-tabs { flex: 0 0 auto; }
@@ -136,7 +137,7 @@
 .application.essence.character .window-content { container-type: inline-size; }
 .essence.character .essence-sheet-root:has(> .sheet-side:not(:empty)) { column-gap: 10px; }
 .essence.character .essence-sheet-root > .sheet-header, .essence.character .essence-sheet-root > .sheet-tabs { grid-column: 1 / -1; }
-.essence.character .essence-sheet-root > .sheet-scroll { grid-column: 1; grid-row: 3; min-height: 0; }
+.essence.character .essence-sheet-root > .sheet-scroll { grid-column: 1; grid-row: 3; }
 .essence.character .essence-sheet-root > .sheet-side { grid-column: 2; grid-row: 3; width: 300px; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; }
 .essence.character .essence-sheet-root > .sheet-side:empty { display: none; }
 /* Vitals sidebar contents (0.15.0): the Core and Combat tab blocks moved here whole, so their own
@@ -144,7 +145,7 @@
    stack them into panels and turn the wide flex rows into a column. */
 .essence .sheet-side { display: flex; flex-direction: column; gap: 10px; padding-right: 4px; }
 .essence .side-panel { background: var(--essence-panel); border: 1px solid var(--essence-line); border-radius: var(--essence-radius-sm); padding: 10px 12px; }
-.essence .side-label { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; text-transform: uppercase; font-size: 0.8em; letter-spacing: 0.05em; color: var(--essence-muted); }
+.essence .side-label { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; text-transform: uppercase; font-size: 0.8em; letter-spacing: 0.05em; }
 .essence .side-state { color: var(--essence-accent); text-transform: none; letter-spacing: 0; font-weight: 600; }
 .essence .side-pools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .essence .side-pool { display: flex; flex-direction: column; align-items: center; gap: 4px; }
@@ -165,7 +166,7 @@
 .essence .sheet-side .wounds-row { flex-direction: column; align-items: stretch; gap: 6px; margin-bottom: 6px; }
 .essence .sheet-side .wound-block { justify-content: space-between; flex-wrap: wrap; }
 .essence .sheet-side .wound-block .attr-label { flex: 1 1 auto; }
-.essence .sheet-side .side-buttons { justify-content: stretch; gap: 4px; }
+.essence .sheet-side .side-buttons { gap: 4px; }
 .essence .sheet-side .side-buttons button { flex: 1 1 auto; font-size: 0.85em; padding: 2px 4px; }
 .essence .sheet-side .equipment-bonus-sources { font-size: 0.8em; margin-bottom: 6px; }
 .essence .sheet-side .condition-list { gap: 4px; }
@@ -198,10 +199,11 @@
 }
 .application.essence.actor { min-width: 560px; min-height: 420px; }
 /* DialogV2 width defaults to auto in v14, so a prompt with a stretchy column (a select in a 1fr
-   grid, a long hint) grows to the whole window. Cap every dialog at a readable width; the
-   condition picker sets its own. */
-.application.dialog { max-width: min(560px, 95vw); }
-.application.dialog .damage-component select { min-width: 0; }
+   grid, a long hint) grows to the whole window. Cap this system's own dialogs (every DialogV2
+   call passes classes: ["essence-dialog"]) at a readable width; the condition picker sets its
+   own, and core's and other modules' dialogs are left alone. */
+.application.dialog.essence-dialog { max-width: min(560px, 95vw); }
+.application.dialog.essence-dialog .damage-component select { min-width: 0; }
 /* .essence-sheet-root is a column flexbox, so any element placed directly inside it — rather than
    inside a section/div wrapper, as everything else on every sheet is — inherits the column's
    default cross-axis stretch and silently becomes full sheet-width. Invisible on a div or table
@@ -280,14 +282,14 @@
    the portrait — the lock used to sit on the portrait's corner, which read as part of the image
    rather than a sheet-wide control. */
 .essence .header-actions { position: absolute; top: 0; right: 0; display: flex; flex-direction: column; align-items: stretch; gap: 4px; }
-.essence .header-actions .wizard-launch, .essence .header-actions .edit-lock-btn { position: static; white-space: nowrap; }
+.essence .header-actions .wizard-launch, .essence .header-actions .edit-lock-btn { white-space: nowrap; }
 .essence .edit-lock-btn { color: var(--essence-danger); }
 .essence .edit-lock-btn[aria-pressed="true"] { color: var(--essence-success-ink); }
 .essence .edit-lock-btn:hover { border-color: var(--essence-accent); color: var(--essence-accent); }
 .essence .header-main h1 { margin: 0 100px 4px 0; line-height: 1; }
-/* "Monster Creator" is wider than the Character sheet's "Wizard" button — the shared reserve
-   (sized for "Wizard") let it overlap the name input's right edge. */
-.essence.npc .header-main h1 { margin-right: 170px; }
+/* "NPC Creator" and "Monster Creator" are wider than the Character sheet's "Wizard" button — the
+   shared reserve (sized for "Wizard") let them overlap the name input's right edge. */
+.essence.npc .header-main h1, .essence.monster .header-main h1 { margin-right: 170px; }
 .essence .header-main h1 input {
   width: auto;
   max-width: 320px;
@@ -318,12 +320,10 @@
 
 /* Tabs are Foundry's own (ApplicationV2.TABS, 0.14.0): core toggles .active on the strip's
    [data-tab] links and on each section.tab; these rules only style that state. Core hides an
-   inactive .tab itself; the explicit rule stays as a belt for any theme that does not. */
+   inactive .tab itself. */
 .essence .sheet-tabs { display: flex; gap: 12px; margin: 8px 0; border-bottom: 1px solid var(--essence-line-strong); flex: 0 0 auto; }
 .essence .sheet-tabs a { padding: 4px 8px; cursor: pointer; opacity: 0.7; color: inherit; text-decoration: none; }
 .essence .sheet-tabs a.active { opacity: 1; border-bottom: 2px solid var(--essence-accent); font-weight: bold; }
-.essence section.tab:not(.active) { display: none; }
-.essence section.tab.active { display: block; }
 
 .essence .section-head { margin: 10px 0 4px; padding-bottom: 2px; border-bottom: 1px solid var(--essence-line); text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.05em; }
 /* One step down from .section-head, for a sub-list header nested under a tab's own section (e.g.
@@ -333,8 +333,10 @@
 .essence .section-subhead { margin: 8px 0 4px; padding-bottom: 2px; border-bottom: 1px solid var(--essence-line-soft); text-transform: uppercase; font-size: 0.8em; letter-spacing: 0.05em; opacity: 0.85; font-weight: normal; }
 .essence .muted { opacity: 0.7; font-weight: normal; text-transform: none; }
 
-.essence .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.essence .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 16px; }
+/* minmax(0, 1fr): a bare 1fr column cannot shrink below its content, so one long card name or
+   Effect line would push the grid past the sheet's edge. */
+.essence .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.essence .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; }
 
 .essence .domain { background: var(--essence-panel); border: 1px solid var(--essence-line); border-radius: 4px; padding: 6px 8px; }
 .essence .domain h4 { margin: 0 0 4px; text-align: center; }
@@ -352,7 +354,7 @@
    EssenceActorSheet#onAdjustResource. */
 .essence .resource-step {
   width: 1.4em; height: 1.4em; padding: 0; line-height: 1; border-radius: 3px;
-  background: rgba(255,255,255,0.06); border: 1px solid var(--essence-line-strong);
+  background: rgba(var(--essence-ink-rgb), 0.06); border: 1px solid var(--essence-line-strong);
 }
 .essence .resource-step:hover { border-color: var(--essence-accent); color: var(--essence-accent); }
 
@@ -419,7 +421,11 @@
 
 .essence .specialties { margin-bottom: 8px; }
 .essence .specialty-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
-.essence .specialty-row .attr-label { flex: 0 0 auto; cursor: help; border-bottom: 1px dotted var(--essence-line-bright); }
+.essence .specialty-row .attr-label { flex: 0 0 auto; }
+/* One affordance for "hover for the rule": every static label that carries a tooltip gets the
+   help cursor, and attribute-style labels get the dotted underline the Specialties row had. */
+.essence :is(span, label, h3, h4, p, tr, div)[data-tooltip-text] { cursor: help; }
+.essence span.attr-label[data-tooltip-text] { border-bottom: 1px dotted var(--essence-line-bright); }
 .essence .specialty-row input[type="text"] { flex: 1; min-width: 120px; }
 .essence .specialty-row-wrap { align-items: flex-start; }
 .essence .thread-chips { display: flex; gap: 4px; flex-wrap: wrap; }
@@ -462,7 +468,11 @@
 .essence button[data-action="toggleEquipment"],
 .essence button[data-action="deleteTactic"],
 .essence button[data-action="deleteLeaderAbility"],
-.essence button[data-action="deleteBossAbility"],
+.essence button[data-action="deleteNonCombatSkill"],
+.essence button[data-action="deleteConnection"],
+.essence button[data-action="deletePassiveFeature"],
+.essence button[data-action="removeContingency"],
+.essence button[data-action="deleteRite"],
 .essence button[data-action="reconfigureItem"],
 .essence button[data-action="releaseItem"],
 .essence button.used-toggle {
@@ -495,11 +505,19 @@
 .essence button[data-action="itemDelete"],
 .essence button[data-action="deleteTactic"],
 .essence button[data-action="deleteLeaderAbility"],
-.essence button[data-action="deleteBossAbility"] { color: var(--essence-danger); }
+.essence button[data-action="deleteNonCombatSkill"],
+.essence button[data-action="deleteConnection"],
+.essence button[data-action="deletePassiveFeature"],
+.essence button[data-action="removeContingency"],
+.essence button[data-action="deleteRite"] { color: var(--essence-danger); }
 .essence button[data-action="itemDelete"]:hover,
 .essence button[data-action="deleteTactic"]:hover,
 .essence button[data-action="deleteLeaderAbility"]:hover,
-.essence button[data-action="deleteBossAbility"]:hover { background: rgba(var(--essence-danger-rgb), 0.15); color: var(--essence-danger); }
+.essence button[data-action="deleteNonCombatSkill"]:hover,
+.essence button[data-action="deleteConnection"]:hover,
+.essence button[data-action="deletePassiveFeature"]:hover,
+.essence button[data-action="removeContingency"]:hover,
+.essence button[data-action="deleteRite"]:hover { background: rgba(var(--essence-danger-rgb), 0.15); color: var(--essence-danger); }
 /* Adjacent action icons in a table cell otherwise touch edge-to-edge once boxed — .item-list li
    already has its own gap (see the base .item-list li rule) so doesn't need this too. */
 .essence .item-table td button + button { margin-left: 2px; }
@@ -549,7 +567,9 @@
    metadata + search here, for the hand you're actually playing from. */
 .essence .card-filter-input { width: 100%; box-sizing: border-box; margin: 4px 0 6px; }
 /* Card grid (0.16.0, the concept's Combat artboard): each card is a translucent panel with a rail
-   on its left in the card-type color (the --essence-card-* tokens, keyed off data-card-list). Scoped to
+   on its left in the card-type color (the --essence-card-* tokens, keyed off data-card-list). The
+   rail is the concept's own device (the printed cards carry the same type edge), so it stays even
+   though a design linter flags a colored side border; it is the one intentional exception. Scoped to
    .character: the NPC and Monster sheets keep the plain list rows below (Shane: enemy sheets stay basic). The Style chip reads the
    domain ink color from the row's domain-* class; the actions sit in their own row under the
    summary. [hidden] rows (the SearchFilter) drop out of the grid as before. */
@@ -598,7 +618,7 @@
 .essence .basic-action-grid { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 10px; }
 .essence .basic-action-btn { padding: 4px 10px; }
 .essence .card-section-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.essence .card-section-head .section-head { flex: 1; margin: 10px 0 4px; }
+.essence .card-section-head .section-head { flex: 1; }
 .essence [data-card-sort] { font-size: 0.8em; }
 
 .essence .condition-list { display: flex; flex-direction: column; gap: 6px; }
@@ -621,12 +641,12 @@
   padding-top: 0; padding-bottom: 4px; border-bottom: 1px solid var(--essence-line);
   font-size: 0.78em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.65; font-weight: normal;
 }
-.essence .item-table tbody tr { border-bottom: 1px solid rgba(255,255,255,0.08); }
+.essence .item-table tbody tr { border-bottom: 1px solid rgba(var(--essence-ink-rgb), 0.08); }
 .essence .item-table tbody tr:last-child { border-bottom: none; }
 /* Rows in the Equipment tables are draggable and individually actionable (View/Edit/Move/Delete),
    so unlike a plain data table they benefit from the same "this row responds" cue a card-list row
    gets nowhere else in this system currently — a quiet highlight, not a shift in layout. */
-.essence .item-table tbody tr:hover { background: rgba(255,255,255,0.03); }
+.essence .item-table tbody tr:hover { background: rgba(var(--essence-ink-rgb), 0.03); }
 .essence .item-table td p:first-child { margin-top: 0; }
 .essence .item-table td p:last-child { margin-bottom: 0; }
 .essence .item-table td p { margin: 0 0 4px; }
@@ -666,7 +686,7 @@
 .essence .career-row { margin-bottom: 8px; }
 .essence .career-row label { display: flex; flex-direction: column; gap: 2px; }
 .essence .career-row input { width: 100%; }
-.essence .key-aspects-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
+.essence .key-aspects-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 8px; }
 .essence .key-aspects-row label { display: flex; flex-direction: column; gap: 2px; }
 .essence .key-aspects-row input { width: 100%; }
 .essence .key-aspect-row { display: flex; align-items: flex-end; gap: 4px; }
@@ -676,7 +696,6 @@
 .essence .array-rows { margin-bottom: 8px; }
 .essence .array-row { display: flex; gap: 6px; align-items: center; margin-bottom: 2px; }
 .essence .array-row input[type="text"] { flex: 1; }
-.essence .array-row select { flex: 1; }
 .essence [data-action="addArrayRow"] { margin: 4px 0 10px; }
 
 .essence .tab.bio label { display: block; margin-bottom: 8px; }
@@ -690,7 +709,7 @@
    Bio tab's own `label { display: block }` rule (for the prose fields below) doesn't apply. */
 .essence .tab.bio .bio-standing { margin-bottom: 14px; }
 .essence .tab.bio .bio-standing-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
-.essence .tab.bio .bio-standing .bio-cell { display: flex; flex-direction: column; gap: 3px; margin: 0; padding: 6px 8px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 4px; min-width: 0; }
+.essence .tab.bio .bio-standing .bio-cell { display: flex; flex-direction: column; gap: 3px; margin: 0; padding: 6px 8px; border: 1px solid rgba(var(--essence-ink-rgb), 0.12); border-radius: 4px; min-width: 0; }
 .essence .tab.bio .bio-standing .bio-cell-wide { grid-column: span 2; }
 .essence .tab.bio .bio-standing .bio-cell-label { font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8; }
 .essence .tab.bio .bio-standing .bio-cell-note { font-size: 0.7em; }
@@ -708,7 +727,7 @@
    Kind colors are the card-type tokens; the gold accent is the Success Die. Foundry's chat
    message keeps its own background: the card draws its own panel so it reads the same on the
    parchment (light) and dark chat logs. */
-.essence.roll-card { padding: 0; margin: 2px 0; border: 1px solid var(--essence-line); border-radius: 8px; overflow: hidden; background: var(--essence-panel-raised); color: var(--essence-ink); font-family: var(--essence-font-body); }
+.essence.roll-card { padding: 0; margin: 2px 0; border: 1px solid var(--essence-line); border-radius: var(--essence-radius); overflow: hidden; background: var(--essence-panel-raised); color: var(--essence-ink); font-family: var(--essence-font-body); }
 .essence.roll-card .rc-band { display: flex; justify-content: space-between; gap: 8px; padding: 4px 10px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--essence-accent-ink); background: var(--essence-muted-soft); }
 .essence.roll-card.kind-action .rc-band { background: var(--essence-card-action); }
 .essence.roll-card.kind-reaction .rc-band { background: var(--essence-card-reaction); }
@@ -743,7 +762,7 @@
 .essence.roll-card .surges-remaining { display: flex; justify-content: space-between; align-items: baseline; margin: 0 0 2px; }
 .essence.roll-card .surge-option {
   display: flex; gap: 8px; align-items: center; width: 100%; text-align: left;
-  background: var(--essence-panel); border: 1px solid var(--essence-line-strong); border-radius: 6px;
+  background: var(--essence-panel); border: 1px solid var(--essence-line-strong); border-radius: var(--essence-radius-sm);
   padding: 5px 8px; margin: 0; cursor: pointer; color: var(--essence-ink); font-size: 0.85em;
   /* Foundry v14 loads system CSS in layer(system); core's own button height wins unless forced. */
   height: auto !important; min-height: 0 !important; line-height: 1.3 !important; white-space: normal !important;
@@ -757,7 +776,7 @@
 .essence.roll-card .surge-option.spent .cost { background: var(--essence-success); border-color: var(--essence-success); color: var(--essence-ink-bright); }
 .essence.roll-card .surge-option:disabled { opacity: 0.45; cursor: not-allowed; }
 .essence.roll-card .rc-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 10px 8px; }
-.essence.roll-card .rc-actions button { width: auto; flex: 0 0 auto; height: 28px !important; min-height: 0 !important; line-height: 1 !important; padding: 0 10px; border-radius: 6px; font-size: 12px; font-weight: 600; background: var(--essence-well); border: 1px solid var(--essence-line-strong); color: var(--essence-ink); cursor: pointer; }
+.essence.roll-card .rc-actions button { width: auto; flex: 0 0 auto; height: 28px !important; min-height: 0 !important; line-height: 1 !important; padding: 0 10px; border-radius: var(--essence-radius-sm); font-size: 12px; font-weight: 600; background: var(--essence-well); border: 1px solid var(--essence-line-strong); color: var(--essence-ink); cursor: pointer; }
 .essence.roll-card .rc-actions .rc-card { margin-left: auto; }
 .essence.roll-card.kind-action .rc-apply { background: var(--essence-card-action); border-color: var(--essence-card-action); color: var(--essence-ink-bright); }
 .essence.roll-card.kind-reaction .rc-apply { background: var(--essence-card-reaction); border-color: var(--essence-card-reaction); color: var(--essence-ink-bright); }
@@ -796,7 +815,7 @@
 .essence .cv-sec > b { flex: 0 0 62px; padding-top: 2px; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--essence-muted); }
 .essence .cv-sec > span > p { margin: 0; }
 .essence .cv-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
-.essence .cv-stat { display: flex; flex-direction: column; gap: 1px; padding: 6px 8px; border-radius: 6px; background: var(--essence-well); border: 1px solid var(--essence-line); min-width: 0; }
+.essence .cv-stat { display: flex; flex-direction: column; gap: 1px; padding: 6px 8px; border-radius: var(--essence-radius-sm); background: var(--essence-well); border: 1px solid var(--essence-line); min-width: 0; }
 .essence .cv-lbl { font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--essence-muted); }
 .essence .cv-lbl-note { text-transform: none; letter-spacing: 0; font-weight: 400; }
 .essence .cv-v { font-weight: 700; font-size: 1em; line-height: 1.2; }
@@ -838,7 +857,7 @@
    muted text. Small pill treatment, reusing this system's established tag/chip shape. */
 .essence .condition-classification-badge {
   display: inline-block; font-size: 0.8em; padding: 2px 8px; border-radius: 10px;
-  border: 1px solid var(--essence-line-strong); background: rgba(255,255,255,0.04);
+  border: 1px solid var(--essence-line-strong); background: rgba(var(--essence-ink-rgb), 0.04);
 }
 
 /* Equipment (including Toolkits/Consumable Kits) — var(--essence-equipment), steel blue. */
@@ -889,11 +908,9 @@
 .essence .wizard-pick-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
 .essence .wizard-pick-list button { padding: 3px 8px; }
 .essence .wizard-pick-list button.chosen { background: var(--essence-accent); color: var(--essence-accent-ink); font-weight: bold; }
-/* Card/equipment names in the item-list previews (Wizard) and elsewhere — clicking opens the
-   real Item sheet, so they need to actually read as links rather than plain static text. */
-.essence a[data-action="previewItem"] { color: var(--essence-accent); cursor: pointer; }
-.essence a[data-action="previewItem"]:hover { text-decoration: underline; }
-.essence .wizard-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+/* Card/equipment names in the item-list previews (Wizard) and elsewhere open the real Item sheet;
+   they are button.link-button (keyboard-reachable), styled by the .link-button rule above. */
+.essence .wizard-two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .essence .wizard-scroll-list { max-height: 220px; overflow-y: auto; border: 1px solid var(--essence-line); border-radius: 4px; padding: 4px 6px; }
 .essence .wizard-checklist { list-style: none; padding: 0; }
 .essence .wizard-checklist li { padding: 2px 0; }
@@ -931,21 +948,23 @@
 .essence .content-type-card {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
   height: auto; min-height: 72px;
-  padding: 12px 8px; border: 1px solid var(--essence-line); border-radius: 6px; background: rgba(255,255,255,0.03);
+  padding: 12px 8px; border: 1px solid var(--essence-line); border-radius: var(--essence-radius-sm); background: rgba(var(--essence-ink-rgb), 0.03);
 }
 .essence .content-type-card img { width: 32px; height: 32px; object-fit: contain; flex: 0 0 auto; }
 .essence .content-type-card span { font-size: 0.85em; text-align: center; line-height: 1.2; }
-.essence .content-type-card:hover:not(:disabled) { background: rgba(255,255,255,0.08); }
+.essence .content-type-card:hover:not(:disabled) { background: rgba(var(--essence-ink-rgb), 0.08); }
 .essence .content-type-card.chosen { background: rgba(var(--essence-accent-rgb), 0.15); border-color: var(--essence-accent); font-weight: bold; }
-.essence .content-type-action-card, .essence .content-type-reaction-card { border-left: 3px solid var(--essence-accent); }
-.essence .content-type-equipment { border-left: 3px solid var(--essence-equipment); }
-.essence .content-type-condition { border-left: 3px solid var(--essence-condition); }
-.essence .content-type-chassis { border-left: 3px solid var(--essence-chassis-ink); }
-.essence .content-type-fitting { border-left: 3px solid var(--essence-fitting-ink); }
-.essence .content-type-augment { border-left: 3px solid var(--essence-augment); }
+/* Each type's frame takes its own color, the same way the item read views frame themselves
+   (.equipment-view, .condition-view, ...), instead of a colored stripe on one edge. */
+.essence .content-type-action-card, .essence .content-type-reaction-card { border-color: var(--essence-accent); }
+.essence .content-type-equipment { border-color: var(--essence-equipment); }
+.essence .content-type-condition { border-color: var(--essence-condition); }
+.essence .content-type-chassis { border-color: var(--essence-chassis-ink); }
+.essence .content-type-fitting { border-color: var(--essence-fitting-ink); }
+.essence .content-type-augment { border-color: var(--essence-augment); }
 .essence .csv-upload {
-  display: block; margin: 10px 0; padding: 12px; border: 1px dashed var(--essence-line-dashed); border-radius: 6px;
-  text-align: center; background: rgba(255,255,255,0.03);
+  display: block; margin: 10px 0; padding: 12px; border: 1px dashed var(--essence-line-dashed); border-radius: var(--essence-radius-sm);
+  text-align: center; background: rgba(var(--essence-ink-rgb), 0.03);
 }
 .essence .csv-upload input[type="file"] { display: block; margin: 6px auto 0; }
 
@@ -960,8 +979,8 @@
 /* whats-new.mjs's chat card — not scoped under .essence since it renders inside Foundry's chat
    log, not a sheet. */
 .essence-whats-new {
-  border: 1px solid var(--essence-accent); border-radius: 8px; overflow: hidden;
-  background: linear-gradient(180deg, rgba(var(--essence-accent-rgb), 0.10), rgba(0, 0, 0, 0.25));
+  border: 1px solid var(--essence-accent); border-radius: var(--essence-radius); overflow: hidden;
+  background: linear-gradient(180deg, rgba(var(--essence-accent-rgb), 0.10), rgba(var(--essence-ground-rgb), 0.25));
   margin: 2px 0;
 }
 .essence-whats-new-header {
@@ -979,7 +998,7 @@
 .essence-whats-new-body p { margin: 0 0 8px; }
 .essence-whats-new-body p:last-child { margin-bottom: 0; }
 .essence-whats-new-body ul { margin: 0 0 8px; padding-left: 1.2em; }
-.essence-whats-new-body code { background: rgba(255,255,255,0.08); border-radius: 3px; padding: 0 3px; }
+.essence-whats-new-body code { background: rgba(var(--essence-ink-rgb), 0.08); border-radius: 3px; padding: 0 3px; }
 
 /* ---- Team sheet (templates/actor/team-sheet.hbs) ----
    Header: portrait, name + Identity, and a Team Tier block on the right. Team Tier is a read-only
@@ -1016,3 +1035,16 @@
 .essence .origin-row { display: flex; align-items: center; gap: 10px; margin: 2px 0 6px; }
 .essence .origin-row label { display: inline-flex; align-items: center; gap: 6px; }
 .essence .origin-row select { min-width: 12em; }
+
+/* Utility classes (0.18.5) that replaced the templates' inline style="" attributes, so every
+   width and layout value lives here. .w-N: a short numeric input; .check-row: a checkbox and its
+   caption on one line; .flex-break: forces the header-fields row to wrap; .danger-text: an
+   error line in the wizards. */
+.essence .w-3 { width: 3em; }
+.essence .w-4 { width: 4em; }
+.essence .w-5 { width: 5em; }
+.essence .w-6 { width: 6em; }
+.essence .w-max-9 { max-width: 9em; }
+.essence .check-row { display: inline-flex; align-items: center; gap: 6px; }
+.essence .flex-break { flex-basis: 100%; }
+.essence .danger-text { color: var(--essence-danger); opacity: 1; }

@@ -61,9 +61,9 @@ export async function playBurnOnlyCard(actor, item) {
   // die. Ask how many dice (never below the 2-die minimum), burn them, grant that many units.
   if (item.name === "Dash") {
     const n = await foundry.applications.api.DialogV2.prompt({
-      window: { title: item.name },
+      window: { title: item.name }, classes: ["essence-dialog"],
       content: `<p>${game.i18n.format("ESSENCE.Sheet.DashPrompt", { min: burn, max: available })}</p><input type="number" name="count" value="${burn}" min="${burn}" max="${available}" autofocus>`,
-      ok: { label: "Burn", callback: (event, button) => Math.min(available, Math.max(burn, parseInt(button.form.elements.count.value, 10) || burn)) },
+      ok: { label: game.i18n.localize("ESSENCE.Sheet.BurnConfirm"), callback: (event, button) => Math.min(available, Math.max(burn, parseInt(button.form.elements.count.value, 10) || burn)) },
       rejectClose: false
     });
     if (!n) return true;
@@ -94,7 +94,7 @@ async function stabilizePlay(actor) {
   const targeted = Array.from(game.user.targets).map((t) => t.actor).filter(Boolean);
   const target = targeted[0] ?? actor;
   const confirmed = await foundry.applications.api.DialogV2.confirm({
-    window: { title: `Stabilize ${target.name}` },
+    window: { title: game.i18n.format("ESSENCE.Sheet.StabilizeTitle", { name: target.name }) }, classes: ["essence-dialog"],
     content: `<p>${game.i18n.format("ESSENCE.Sheet.StabilizeConfirm", { name: target.name })}</p>`,
     rejectClose: false
   });

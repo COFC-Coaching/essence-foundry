@@ -45,22 +45,22 @@
           </select>
         </label>
       {{/if}}
-      <label data-tooltip-text="{{localize 'ESSENCE.Common.PoolBonusHint'}}">{{localize "ESSENCE.Common.PoolBonus"}} <input name="system.poolBonus" type="number" min="0" value="{{system.poolBonus}}" style="width:3em"> <span class="muted">{{localize "ESSENCE.Common.BasePoolsNote" n=system.baseCombatDice}}</span></label>
-      <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}{{#if (ne system.totalMovement system.movement)}} <span class="muted">{{localize "ESSENCE.Character.EffectiveMovementNote" n=system.totalMovement}}</span>{{/if}}</label>
+      <label data-tooltip-text="{{localize 'ESSENCE.Common.PoolBonusHint'}}">{{localize "ESSENCE.Common.PoolBonus"}} <input class="w-3" name="system.poolBonus" type="number" min="0" value="{{system.poolBonus}}"> <span class="muted">{{localize "ESSENCE.Common.BasePoolsNote" n=system.baseCombatDice}}</span></label>
+      <label>{{localize "ESSENCE.Common.Movement"}} <input class="w-4" name="system.movement" type="number" value="{{system.movement}}"> {{localize "ESSENCE.Common.Units"}}{{#if (ne system.totalMovement system.movement)}} <span class="muted">{{localize "ESSENCE.Character.EffectiveMovementNote" n=system.totalMovement}}</span>{{/if}}</label>
       {{#if isReduced}}
-        <label data-tooltip-text="{{localize 'ESSENCE.Item.Monster.EngineReduced'}}">{{localize "ESSENCE.Item.Monster.InitiativeDice"}} <input name="system.initiativeDice" type="number" min="1" value="{{system.initiativeDice}}" placeholder="{{system.effectiveInitiativeDice}}" style="width:3em">d10</label>
-        <label>{{localize "ESSENCE.Item.Monster.ActionsPerTurn"}} <input name="system.actionsPerTurn" type="number" min="0" value="{{system.actionsPerTurn}}" placeholder="{{system.effectiveActionsPerTurn}}" style="width:3em"></label>
-        <label>{{localize "ESSENCE.Item.Monster.ReactionsPerRound"}} <input name="system.reactionsPerRound" type="number" min="0" value="{{system.reactionsPerRound}}" placeholder="{{system.effectiveReactionsPerRound}}" style="width:3em"></label>
-        <label>{{localize "ESSENCE.Item.Monster.TaskDice"}} <input name="system.taskDice" type="number" min="0" value="{{system.taskDice}}" placeholder="{{system.effectiveTaskDice}}" style="width:3em"> <button type="button" class="link-button" data-action="rollTaskDice" data-tooltip-text="{{localize 'ESSENCE.Item.Monster.RollTask'}}" aria-label="{{localize 'ESSENCE.Item.Monster.RollTask'}}"><i class="fa-solid fa-dice-d10"></i></button></label>
+        <label data-tooltip-text="{{localize 'ESSENCE.Item.Monster.EngineReduced'}}">{{localize "ESSENCE.Item.Monster.InitiativeDice"}} <input class="w-3" name="system.initiativeDice" type="number" min="1" value="{{system.initiativeDice}}" placeholder="{{system.effectiveInitiativeDice}}">d10</label>
+        <label>{{localize "ESSENCE.Item.Monster.ActionsPerTurn"}} <input class="w-3" name="system.actionsPerTurn" type="number" min="0" value="{{system.actionsPerTurn}}" placeholder="{{system.effectiveActionsPerTurn}}"></label>
+        <label>{{localize "ESSENCE.Item.Monster.ReactionsPerRound"}} <input class="w-3" name="system.reactionsPerRound" type="number" min="0" value="{{system.reactionsPerRound}}" placeholder="{{system.effectiveReactionsPerRound}}"></label>
+        <label>{{localize "ESSENCE.Item.Monster.TaskDice"}} <input class="w-3" name="system.taskDice" type="number" min="0" value="{{system.taskDice}}" placeholder="{{system.effectiveTaskDice}}"> <button type="button" class="link-button" data-action="rollTaskDice" data-tooltip-text="{{localize 'ESSENCE.Item.Monster.RollTask'}}" aria-label="{{localize 'ESSENCE.Item.Monster.RollTask'}}"><i class="fa-solid fa-dice-d10"></i></button></label>
       {{else}}
-        <label data-tooltip-text="{{localize 'ESSENCE.Item.Monster.EngineFull'}}">{{localize "ESSENCE.Item.Monster.RollLimit"}} <input name="system.rollLimit" type="number" min="0" value="{{system.rollLimit}}" style="width:3em"></label>
-        <label>{{localize "ESSENCE.Item.Monster.TaskDice"}} <input name="system.taskDice" type="number" min="0" value="{{system.taskDice}}" placeholder="{{system.effectiveTaskDice}}" style="width:3em"> <button type="button" class="link-button" data-action="rollTaskDice" data-tooltip-text="{{localize 'ESSENCE.Item.Monster.RollTask'}}" aria-label="{{localize 'ESSENCE.Item.Monster.RollTask'}}"><i class="fa-solid fa-dice-d10"></i></button></label>
+        <label data-tooltip-text="{{localize 'ESSENCE.Item.Monster.EngineFull'}}">{{localize "ESSENCE.Item.Monster.RollLimit"}} <input class="w-3" name="system.rollLimit" type="number" min="0" value="{{system.rollLimit}}"></label>
+        <label>{{localize "ESSENCE.Item.Monster.TaskDice"}} <input class="w-3" name="system.taskDice" type="number" min="0" value="{{system.taskDice}}" placeholder="{{system.effectiveTaskDice}}"> <button type="button" class="link-button" data-action="rollTaskDice" data-tooltip-text="{{localize 'ESSENCE.Item.Monster.RollTask'}}" aria-label="{{localize 'ESSENCE.Item.Monster.RollTask'}}"><i class="fa-solid fa-dice-d10"></i></button></label>
       {{/if}}
-      <span class="header-fields-break" style="flex-basis:100%"></span>
+      <span class="header-fields-break flex-break"></span>
       <label data-tooltip-text="{{localize 'ESSENCE.Item.Monster.PrintedDefensesHint'}}">{{localize "ESSENCE.Item.Monster.PrintedDefenses"}}
-        {{localize "ESSENCE.Common.Fortitude"}} <input name="system.printedDefenses.fortitude" type="number" min="0" value="{{system.printedDefenses.fortitude}}" placeholder="{{system.defenses.fortitude}}" style="width:3em">
-        {{localize "ESSENCE.Common.Composure"}} <input name="system.printedDefenses.composure" type="number" min="0" value="{{system.printedDefenses.composure}}" placeholder="{{system.defenses.composure}}" style="width:3em">
-        {{localize "ESSENCE.Common.Harmony"}} <input name="system.printedDefenses.harmony" type="number" min="0" value="{{system.printedDefenses.harmony}}" placeholder="{{system.defenses.harmony}}" style="width:3em">
+        {{localize "ESSENCE.Common.Fortitude"}} <input class="w-3" name="system.printedDefenses.fortitude" type="number" min="0" value="{{system.printedDefenses.fortitude}}" placeholder="{{system.defenses.fortitude}}">
+        {{localize "ESSENCE.Common.Composure"}} <input class="w-3" name="system.printedDefenses.composure" type="number" min="0" value="{{system.printedDefenses.composure}}" placeholder="{{system.defenses.composure}}">
+        {{localize "ESSENCE.Common.Harmony"}} <input class="w-3" name="system.printedDefenses.harmony" type="number" min="0" value="{{system.printedDefenses.harmony}}" placeholder="{{system.defenses.harmony}}">
       </label>
     </div>
   </div>
@@ -135,7 +135,7 @@
 </div>
 
 {{#if isReduced}}
-  <p class="muted"><label style="display:inline-flex;align-items:center;gap:6px;"><input type="checkbox" data-action="toggleFullStats" {{#if showFullStats}}checked{{/if}}> {{localize "ESSENCE.Item.Monster.ShowFullStats"}}</label></p>
+  <p class="muted"><label class="check-row"><input type="checkbox" data-action="toggleFullStats" {{#if showFullStats}}checked{{/if}}> {{localize "ESSENCE.Item.Monster.ShowFullStats"}}</label></p>
 {{/if}}
 {{#if showFullStats}}
 <h3 class="section-head">{{localize "ESSENCE.Sheet.AttributesResourcesDefenses"}}</h3>
@@ -214,7 +214,7 @@
     <span class="attr-label">{{localize "ESSENCE.Common.Resistances"}}</span>
     {{#each system.resistances as |r i|}}
       <span class="tag">{{r.damageType}}{{#if r.source}} ({{r.source}}){{/if}}
-        <button type="button" data-action="removeResistance" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Sheet.RemoveResistance'}}">&times;</button>
+        <button type="button" data-action="removeResistance" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Sheet.RemoveResistance'}}"><i class="fa-solid fa-xmark"></i></button>
       </span>
     {{/each}}
     <button type="button" data-action="addResistance">{{localize "ESSENCE.Sheet.AddResistance"}}</button>
@@ -223,7 +223,7 @@
     <span class="attr-label">{{localize "ESSENCE.Common.Vulnerabilities"}}</span>
     {{#each system.vulnerabilities as |r i|}}
       <span class="tag">{{r.damageType}}{{#if r.source}} ({{r.source}}){{/if}}
-        <button type="button" data-action="removeVulnerability" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Sheet.RemoveVulnerability'}}">&times;</button>
+        <button type="button" data-action="removeVulnerability" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Sheet.RemoveVulnerability'}}"><i class="fa-solid fa-xmark"></i></button>
       </span>
     {{/each}}
     <button type="button" data-action="addVulnerability">{{localize "ESSENCE.Sheet.AddVulnerability"}}</button>
@@ -249,7 +249,7 @@
               <option value="perRound" {{#if (eq a.frequency "perRound")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.FrequencyPerRound"}}</option>
               <option value="betweenRecoveries" {{#if (eq a.frequency "betweenRecoveries")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.FrequencyBetweenRecoveries"}}</option>
             </select>
-            <label data-tooltip-text="{{localize 'ESSENCE.Item.Monster.AbilityDiceHint'}}">{{localize "ESSENCE.Item.Monster.AbilityDice"}} <input type="number" name="system.abilities.{{a.i}}.dice" value="{{a.dice}}" min="0" style="width:3em"></label>
+            <label data-tooltip-text="{{localize 'ESSENCE.Item.Monster.AbilityDiceHint'}}">{{localize "ESSENCE.Item.Monster.AbilityDice"}} <input class="w-3" type="number" name="system.abilities.{{a.i}}.dice" value="{{a.dice}}" min="0"></label>
             <label>{{localize "ESSENCE.Item.Monster.AbilityDefense"}}
               <select name="system.abilities.{{a.i}}.defense">
                 <option value="" {{#if (eq a.defense "")}}selected{{/if}}>—</option>
@@ -260,7 +260,7 @@
             </label>
             <label><input type="checkbox" name="system.abilities.{{a.i}}.unopposed" {{#if a.unopposed}}checked{{/if}}> {{localize "ESSENCE.Item.Monster.Unopposed"}}</label>
             {{#if (eq a.frequency "betweenRecoveries")}}
-              <label>{{localize "ESSENCE.Item.Monster.UsesMax"}} <input type="number" name="system.abilities.{{a.i}}.usesMax" value="{{a.usesMax}}" style="width:3em"></label>
+              <label>{{localize "ESSENCE.Item.Monster.UsesMax"}} <input class="w-3" type="number" name="system.abilities.{{a.i}}.usesMax" value="{{a.usesMax}}"></label>
               <span class="muted">{{localize "ESSENCE.Common.UsesFraction" remaining=a.usesRemaining total=a.usesMax}}</span>
             {{/if}}
             {{#if (eq a.frequency "perRound")}}<span class="muted">{{#if a.usedThisRound}}({{localize "ESSENCE.Common.Used"}}){{/if}}</span>{{/if}}
@@ -435,7 +435,7 @@
 
 <h3 class="section-head">{{localize "ESSENCE.Sheet.Reach"}}</h3>
 <div class="wizard-row">
-  <label>{{localize "ESSENCE.Sheet.Reach"}} <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>
+  <label>{{localize "ESSENCE.Sheet.Reach"}} <input class="w-3" name="system.reach" type="number" value="{{system.reach}}"></label>
   {{#if (gt system.effectiveReach system.reach)}}<span class="muted">{{localize "ESSENCE.Sheet.EffectiveReachNote" n=system.effectiveReach}}</span>{{/if}}
   <button type="button" data-action="resetAdventureUses" data-tooltip-text="{{localize 'ESSENCE.Sheet.ResetAdventureUsesTooltip'}}">{{localize "ESSENCE.Sheet.ResetAdventureUses"}}</button>
   <button type="button" data-action="newEncounter" data-tooltip-text="{{localize 'ESSENCE.Sheet.NewEncounterTooltip'}}">{{localize "ESSENCE.Sheet.NewEncounter"}}</button>

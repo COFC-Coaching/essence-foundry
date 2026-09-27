@@ -1869,8 +1869,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       parts.push("Fatigued halved the base Resource amounts");
       // Doc L2703: after the reduced gains, remove Fatigued if the Recovery remedies every cause.
       const remedied = await foundry.applications.api.DialogV2.confirm({
-        window: { title: "Fatigued" },
-        content: "<p>Did this Recovery remedy every recorded cause of Fatigued (rest, care, resupply)? If so it is removed now, after the reduced gains.</p>",
+        window: { title: game.i18n.localize("ESSENCE.Sheet.FatiguedTitle") }, classes: ["essence-dialog"],
+        content: `<p>${game.i18n.localize("ESSENCE.Sheet.FatiguedRemedyBody")}</p>`,
         rejectClose: false
       });
       if (remedied) { await fatiguedItem.delete(); parts.push("Fatigued removed"); }
@@ -2947,8 +2947,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const item = this.actor.items.get(target.dataset.itemId);
     if (!item) return;
     const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: "Delete Item" },
-      content: `<p>Delete <strong>${item.name}</strong>? This cannot be undone.</p>`
+      window: { title: game.i18n.localize("ESSENCE.Sheet.DeleteItemTitle") }, classes: ["essence-dialog"],
+      content: `<p>${game.i18n.format("ESSENCE.Sheet.DeleteItemBody", { name: foundry.utils.escapeHTML(item.name) })}</p>`
     });
     if (confirmed) await item.delete();
   }

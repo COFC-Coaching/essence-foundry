@@ -2,6 +2,19 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.5
+
+**Sheet polish pass (Impeccable audit): keyboard reach, icons, dialogs, tokens.** No layout change; Shane's live look is still owed.
+
+- **Every row action is a real button.** Twenty delete, preview and open links on the Character, NPC and Wizard sheets were plain `<a>` tags with no href, so the keyboard could not reach them. They are buttons now, with the same ghost-icon or link look, and the two Wizard delete links that had no accessible name have one.
+- **Keyboard focus on fields.** Inputs, selects and text areas no longer suppress the focus outline, so a focused field shows the same amber ring every other control does, not only a border tint.
+- **Icons are icons.** The x on Resistance and Vulnerability tags, the x on an active Thread and the arrow on the wizards' Next button were typed glyphs; they are Font Awesome icons like the rest of the sheet.
+- **Tooltip cue.** Every static label that carries a tooltip shows the help cursor, and attribute-style labels get the dotted underline the Specialties row already had, so "hover for the rule" reads the same everywhere.
+- **Dialogs.** The 560px cap from 0.18.3 applied to every dialog in Foundry, including core's and other modules'; it now applies only to this system's own dialogs. The Delete Item, Fatigued, Stabilize and Dash dialogs take their titles and text from the language file instead of hard-coded English, as do the Key Aspect roll hint, the Reach Trigger example and the Content Wizard's Defense placeholder.
+- **Content Wizard type picker** frames each type in its own color, the way the item read views do, instead of a colored stripe on the left edge.
+- **Card sort and search** have accessible names.
+- **Stylesheet.** Eighty-four inline `style=""` widths and layouts in the templates are classes. Ten white and black literals are the new `--essence-ink-rgb` and `--essence-ground-rgb` tokens, hard-coded 6px and 8px radii read the radius tokens, three-column grids can shrink (`minmax(0, 1fr)`) so a long name no longer pushes past the sheet edge, and the Monster sheet's name field reserves room for its wider Creator button as the NPC sheet already did. Dead rules removed: an unused `deleteBossAbility` selector, an `.array-row select` rule with no select, a `.side-label` color that a more specific rule always beat, an invalid `justify-content: stretch`, tab show/hide rules core already provides, and three duplicated declarations.
+
 ## 0.18.4
 
 **Sheet redesign, part five: cleanup (plan step 8).** Every tooltip on the actor sheets, item sheets, wizards and the play-card dialogs is now Foundry's own tooltip (`data-tooltip-text`) instead of the browser's `title` bubble, so tooltips match the rest of Foundry and show without the browser delay. The ten icon-only buttons that had relied on the browser tooltip for their name now carry an explicit label for screen readers. The stylesheet had no dead rules to remove (every class the templates stopped naming was already gone; the rest are built from data), and the design token list is recorded in `design/sheet-redesign-groundwork.md` as the sheet's style reference. No visual change.

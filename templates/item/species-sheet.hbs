@@ -20,7 +20,7 @@
       <option value="free" {{#if (eq system.nature.subChoice.type "free")}}selected{{/if}}>{{localize "ESSENCE.Common.FreeText"}}</option>
     </select>
   </label>
-  <label>{{localize "ESSENCE.Common.Count"}} <input name="system.nature.subChoice.count" type="number" value="{{system.nature.subChoice.count}}" style="width:3em" min="1"></label>
+  <label>{{localize "ESSENCE.Common.Count"}} <input class="w-3" name="system.nature.subChoice.count" type="number" value="{{system.nature.subChoice.count}}" min="1"></label>
   <label>{{localize "ESSENCE.Item.Species.FixedOptionsLabel"}}
     <input class="subchoice-options-field" data-path="nature" type="text" value="{{natureOptionsText}}" placeholder="{{localize 'ESSENCE.Item.Species.NatureOptionsPlaceholder'}}">
   </label>
@@ -28,7 +28,7 @@
 
 <h3 class="section-head">{{system.traitLabel}}s <span class="muted">{{localize "ESSENCE.Item.Species.ChooseCountSuffix" n=system.traitCount}}</span></h3>
 <label>{{localize "ESSENCE.Item.Species.TraitLabel"}} <input name="system.traitLabel" type="text" value="{{system.traitLabel}}"></label>
-<label>{{localize "ESSENCE.Item.Species.ChooseCount"}} <input name="system.traitCount" type="number" value="{{system.traitCount}}" style="width:3em"></label>
+<label>{{localize "ESSENCE.Item.Species.ChooseCount"}} <input class="w-3" name="system.traitCount" type="number" value="{{system.traitCount}}"></label>
 <ol class="traits">
   {{#each system.traits as |a i|}}
     <li>
@@ -45,7 +45,7 @@
             <option value="free" {{#if (eq a.subChoice.type "free")}}selected{{/if}}>{{localize "ESSENCE.Common.FreeText"}}</option>
           </select>
         </label>
-        <label>{{localize "ESSENCE.Common.Count"}} <input class="trait-field" data-index="{{i}}" data-field="subChoice.count" type="number" value="{{a.subChoice.count}}" style="width:3em" min="1"></label>
+        <label>{{localize "ESSENCE.Common.Count"}} <input class="trait-field w-3" data-index="{{i}}" data-field="subChoice.count" type="number" value="{{a.subChoice.count}}" min="1"></label>
         <label>{{localize "ESSENCE.Item.Species.FixedOptionsLabel"}}
           <input class="subchoice-options-field" data-path="traits.{{i}}" type="text" value="{{lookup ../traitOptionsText i}}" placeholder="{{localize 'ESSENCE.Item.Species.TraitOptionsPlaceholder'}}">
         </label>

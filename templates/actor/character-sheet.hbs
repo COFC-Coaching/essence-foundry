@@ -18,8 +18,8 @@
       <label>{{localize "ESSENCE.Item.SpeciesLabel"}} <input name="system.species" type="text" value="{{system.species}}"></label>
       <label>{{localize "ESSENCE.Item.HeritageLabel"}} <input name="system.heritage" type="text" value="{{system.heritage}}"></label>
       <label>{{localize "ESSENCE.Item.DistinctionLabel"}} <input name="system.distinction" type="text" value="{{system.distinction}}">{{#if secondDistinction}} <span class="muted" data-tooltip-text="{{localize 'ESSENCE.Character.SecondDistinctionHint'}}">+ {{secondDistinction.name}}</span>{{/if}}</label>
-      <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}{{#if (ne system.totalMovement system.movement)}} <span class="muted">{{localize "ESSENCE.Character.EffectiveMovementNote" n=system.totalMovement}}</span>{{/if}}</label>
-      <label data-tooltip-text="{{localize 'ESSENCE.Common.SizeHint'}}">{{localize "ESSENCE.Common.Size"}} <input name="system.size" type="number" min="0" max="5" value="{{system.size}}" style="width:3em"></label>
+      <label>{{localize "ESSENCE.Common.Movement"}} <input class="w-4" name="system.movement" type="number" value="{{system.movement}}"> {{localize "ESSENCE.Common.Units"}}{{#if (ne system.totalMovement system.movement)}} <span class="muted">{{localize "ESSENCE.Character.EffectiveMovementNote" n=system.totalMovement}}</span>{{/if}}</label>
+      <label data-tooltip-text="{{localize 'ESSENCE.Common.SizeHint'}}">{{localize "ESSENCE.Common.Size"}} <input class="w-3" name="system.size" type="number" min="0" max="5" value="{{system.size}}"></label>
     </div>
   </div>
 </header>
@@ -58,7 +58,7 @@
       <span class="attr-label">{{localize "ESSENCE.Common.Resistances"}}</span>
       {{#each system.resistances as |r i|}}
         <span class="tag">{{r.damageType}}{{#if r.source}} ({{r.source}}){{/if}}
-          <button type="button" data-action="removeResistance" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Sheet.RemoveResistance'}}">&times;</button>
+          <button type="button" data-action="removeResistance" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Sheet.RemoveResistance'}}"><i class="fa-solid fa-xmark"></i></button>
         </span>
       {{/each}}
       <button type="button" data-action="addResistance">{{localize "ESSENCE.Sheet.AddResistance"}}</button>
@@ -67,7 +67,7 @@
       <span class="attr-label">{{localize "ESSENCE.Common.Vulnerabilities"}}</span>
       {{#each system.vulnerabilities as |r i|}}
         <span class="tag">{{r.damageType}}{{#if r.source}} ({{r.source}}){{/if}}
-          <button type="button" data-action="removeVulnerability" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Sheet.RemoveVulnerability'}}">&times;</button>
+          <button type="button" data-action="removeVulnerability" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Sheet.RemoveVulnerability'}}"><i class="fa-solid fa-xmark"></i></button>
         </span>
       {{/each}}
       <button type="button" data-action="addVulnerability">{{localize "ESSENCE.Sheet.AddVulnerability"}}</button>
@@ -188,7 +188,7 @@
         <div class="specialty-row">
           <span class="attr-label" data-tooltip-text="{{localize 'ESSENCE.Character.AdaptationTooltip'}}">{{localize "ESSENCE.Character.AdaptationLabel"}}</span>
           <input type="text" name="system.specialties.adaptation.name" value="{{system.specialties.adaptation.name}}" placeholder="{{localize 'ESSENCE.Character.AdaptationNamePlaceholder'}}">
-          <label class="muted">{{localize "ESSENCE.Character.Upkeep"}} <input type="number" name="system.specialties.adaptation.upkeep" value="{{system.specialties.adaptation.upkeep}}" style="width:3em" min="0"></label>
+          <label class="muted">{{localize "ESSENCE.Character.Upkeep"}} <input class="w-3" type="number" name="system.specialties.adaptation.upkeep" value="{{system.specialties.adaptation.upkeep}}" min="0"></label>
           {{#if system.specialties.adaptation.name}}<span class="muted" data-tooltip-text="{{localize 'ESSENCE.Character.UpkeepDueHint'}}">{{localize "ESSENCE.Character.UpkeepDue" n=adaptationDue}}</span>{{/if}}
           <label class="muted" data-tooltip-text="{{localize 'ESSENCE.Character.DeferUpkeepHint'}}"><input type="checkbox" name="system.specialties.adaptation.deferUpkeep" {{#if system.specialties.adaptation.deferUpkeep}}checked{{/if}}> {{localize "ESSENCE.Character.DeferUpkeep"}}</label>
           <button type="button" data-action="endAdaptation">{{localize "ESSENCE.Common.End"}}</button>
@@ -202,7 +202,7 @@
               <div class="array-row">
                 <input type="text" name="system.specialties.contingencies.{{c.i}}" value="{{c.text}}" placeholder="{{localize 'ESSENCE.Character.ContingencyPlaceholder'}}">
                 <button type="button" data-action="triggerContingency" data-index="{{c.i}}" data-tooltip-text="{{localize 'ESSENCE.Character.TriggerContingencyHint'}}">{{localize "ESSENCE.Character.TriggerContingency"}}</button>
-                <a data-action="removeContingency" data-index="{{c.i}}" data-tooltip-text="{{localize 'ESSENCE.Common.Clear'}}" aria-label="{{localize 'ESSENCE.Common.Clear'}}"><i class="fa-solid fa-trash"></i></a>
+                <button type="button" data-action="removeContingency" data-index="{{c.i}}" data-tooltip-text="{{localize 'ESSENCE.Common.Clear'}}" aria-label="{{localize 'ESSENCE.Common.Clear'}}"><i class="fa-solid fa-trash"></i></button>
               </div>
             {{/each}}
           </div>
@@ -223,7 +223,7 @@
           {{#if activeThreads.length}}
             <ul class="active-thread-effects muted">
               {{#each activeThreads as |t|}}
-                <li><button type="button" class="thread-chip active" data-action="consumeThread" data-index="{{t.i}}" data-tooltip-text="{{localize 'ESSENCE.Character.ConsumeThreadHint'}}">{{t.name}} ✕</button> {{t.effect}}</li>
+                <li><button type="button" class="thread-chip active" data-action="consumeThread" data-index="{{t.i}}" data-tooltip-text="{{localize 'ESSENCE.Character.ConsumeThreadHint'}}">{{t.name}} <i class="fa-solid fa-xmark"></i></button> {{t.effect}}</li>
               {{/each}}
             </ul>
           {{/if}}
@@ -232,7 +232,7 @@
       {{#if (gt system.psionics 0)}}
         <div class="specialty-row specialty-row-wrap">
           <span class="attr-label" data-tooltip-text="{{localize 'ESSENCE.Character.StrainTooltip'}}">{{localize "ESSENCE.Character.StrainLabel"}}</span>
-          <input type="number" name="system.specialties.strain" value="{{system.specialties.strain}}" style="width:3em" min="0" max="6">
+          <input class="w-3" type="number" name="system.specialties.strain" value="{{system.specialties.strain}}" min="0" max="6">
           <button type="button" data-action="ventStrain" data-tooltip-text="{{localize 'ESSENCE.Character.VentStrainHint'}}">{{localize "ESSENCE.Character.VentStrain"}}</button>
           <button type="button" data-action="forceStrain" data-tooltip-text="{{localize 'ESSENCE.Character.ForceStrainHint'}}">{{localize "ESSENCE.Character.ForceStrain"}}</button>
           {{#if system.psionicsBurnSurcharge}}
@@ -266,13 +266,13 @@
           <div class="array-rows">
             {{#each riteEntries as |r|}}
               <div class="array-row">
-                <input type="text" name="system.specialties.rites.{{r.i}}.name" value="{{r.name}}" placeholder="{{localize 'ESSENCE.Character.RiteName'}}" style="max-width:9em">
+                <input type="text" name="system.specialties.rites.{{r.i}}.name" value="{{r.name}}" placeholder="{{localize 'ESSENCE.Character.RiteName'}}" class="w-max-9">
                 <input type="text" name="system.specialties.rites.{{r.i}}.trigger" value="{{r.trigger}}" placeholder="{{localize 'ESSENCE.Character.Trigger'}}">
                 <input type="text" name="system.specialties.rites.{{r.i}}.echo" value="{{r.echo}}" placeholder="{{localize 'ESSENCE.Character.Echo'}}">
-                <input type="number" name="system.specialties.rites.{{r.i}}.echoLimit" value="{{r.echoLimit}}" style="width:3em" min="1" data-tooltip-text="{{localize 'ESSENCE.Character.EchoLimit'}}">
-                <input type="text" name="system.specialties.rites.{{r.i}}.subject" value="{{r.subject}}" placeholder="{{localize 'ESSENCE.Character.PossessedSubject'}}" style="max-width:9em" data-tooltip-text="{{localize 'ESSENCE.Character.PossessedHint'}}">
+                <input class="w-3" type="number" name="system.specialties.rites.{{r.i}}.echoLimit" value="{{r.echoLimit}}" min="1" data-tooltip-text="{{localize 'ESSENCE.Character.EchoLimit'}}">
+                <input type="text" name="system.specialties.rites.{{r.i}}.subject" value="{{r.subject}}" placeholder="{{localize 'ESSENCE.Character.PossessedSubject'}}" class="w-max-9" data-tooltip-text="{{localize 'ESSENCE.Character.PossessedHint'}}">
                 <button type="button" data-action="echoRite" data-index="{{r.i}}" data-tooltip-text="{{localize 'ESSENCE.Character.EchoRiteHint'}}">{{localize "ESSENCE.Character.EchoRite"}}</button>
-                <a data-action="deleteRite" data-index="{{r.i}}" data-tooltip-text="{{localize 'ESSENCE.Character.RemoveRiteHint'}}" aria-label="{{localize 'ESSENCE.Character.RemoveRiteHint'}}"><i class="fa-solid fa-trash"></i></a>
+                <button type="button" data-action="deleteRite" data-index="{{r.i}}" data-tooltip-text="{{localize 'ESSENCE.Character.RemoveRiteHint'}}" aria-label="{{localize 'ESSENCE.Character.RemoveRiteHint'}}"><i class="fa-solid fa-trash"></i></button>
               </div>
             {{/each}}
           </div>
@@ -298,7 +298,7 @@
     </div>
   {{/if}}
 
-  <input type="text" data-card-filter placeholder="{{localize 'ESSENCE.Sheet.SearchCardsPlaceholder'}}" class="card-filter-input">
+  <input type="text" data-card-filter aria-label="{{localize 'ESSENCE.Sheet.SearchCardsPlaceholder'}}" placeholder="{{localize 'ESSENCE.Sheet.SearchCardsPlaceholder'}}" class="card-filter-input">
 
   <h3 class="section-head">{{localize "ESSENCE.Sheet.BasicActions"}}</h3>
   <div class="basic-action-grid">
@@ -311,7 +311,7 @@
 
   <div class="card-section-head">
     <h3 class="section-head">{{localize "ESSENCE.Item.ActionCard"}}</h3>
-    <select data-card-sort="action">
+    <select data-card-sort="action" aria-label="{{localize 'ESSENCE.Sheet.SortCardsAria'}}">
       <option value="name">{{localize "ESSENCE.Sheet.SortName"}}</option>
       <option value="skill">{{localize "ESSENCE.Sheet.SortSkill"}}</option>
       <option value="cost">{{localize "ESSENCE.Sheet.SortCost"}}</option>
@@ -352,7 +352,7 @@
 
   <div class="card-section-head">
     <h3 class="section-head">{{localize "ESSENCE.Item.ReactionCard"}}</h3>
-    <select data-card-sort="reaction">
+    <select data-card-sort="reaction" aria-label="{{localize 'ESSENCE.Sheet.SortCardsAria'}}">
       <option value="name">{{localize "ESSENCE.Sheet.SortName"}}</option>
       <option value="skill">{{localize "ESSENCE.Sheet.SortSkill"}}</option>
       <option value="cost">{{localize "ESSENCE.Sheet.SortCost"}}</option>
@@ -442,7 +442,7 @@
         <li>
           <strong>{{grant.sourceName}}</strong>
           {{#if grant.grantedItem}}
-            — <a data-action="itemView" data-item-id="{{grant.grantedItem.id}}">{{grant.grantedItem.name}}</a>
+            — <button type="button" class="link-button" data-action="itemView" data-item-id="{{grant.grantedItem.id}}">{{grant.grantedItem.name}}</button>
             <button type="button" data-action="chooseGrantedItem" data-grant-source="{{grant.sourceName}}">{{localize "ESSENCE.Common.Replace"}}</button>
           {{else}}
             <span class="muted">{{localize "ESSENCE.Sheet.NotYetChosen"}}</span>
@@ -510,7 +510,7 @@
     {{#each keyAspects as |aspect|}}
       <div class="key-aspect-row">
         <label>{{localize "ESSENCE.Character.KeyAspect"}} {{aspect.n}}<input name="system.keyAspects.{{aspect.i}}" type="text" value="{{aspect.value}}"></label>
-        <button type="button" data-action="rollKeyAspect" data-index="{{aspect.i}}" aria-label="Roll Key Aspect {{aspect.n}}" data-tooltip-text="Roll Attribute + 5 (replaces a Skill Rank)"><i class="fa-solid fa-dice-d10"></i></button>
+        <button type="button" data-action="rollKeyAspect" data-index="{{aspect.i}}" aria-label="{{localize 'ESSENCE.Character.RollKeyAspectAria' n=aspect.n}}" data-tooltip-text="{{localize 'ESSENCE.Character.RollKeyAspectHint'}}"><i class="fa-solid fa-dice-d10"></i></button>
       </div>
     {{/each}}
   </div>
@@ -520,7 +520,7 @@
     {{#each system.nonCombatSkills as |s i|}}
       <div class="nc-skill-row">
         <input name="system.nonCombatSkills.{{i}}.name" type="text" value="{{s.name}}" placeholder="{{localize 'ESSENCE.Common.Skill'}}">
-        <input name="system.nonCombatSkills.{{i}}.rating" type="number" value="{{s.rating}}" style="width:3em">
+        <input class="w-3" name="system.nonCombatSkills.{{i}}.rating" type="number" value="{{s.rating}}">
         <button type="button" data-action="rollNonCombatSkill" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Character.RollSkillAria' name=s.name}}" data-tooltip-text="{{localize 'ESSENCE.Character.RollSkillAria' name=s.name}}"><i class="fa-solid fa-dice-d10"></i></button>
         <button type="button" data-action="deleteArrayRow" data-array="nonCombatSkills" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Character.DeleteSkillAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button>
       </div>
@@ -573,7 +573,7 @@
   <h3 class="section-head">{{localize "ESSENCE.Sheet.Reach"}}</h3>
   <div class="influence-row">
     <div class="wound-block">
-      <label data-tooltip-text="{{localize 'ESSENCE.Character.ReachHint'}}">{{localize "ESSENCE.Sheet.Reach"}} <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>
+      <label data-tooltip-text="{{localize 'ESSENCE.Character.ReachHint'}}">{{localize "ESSENCE.Sheet.Reach"}} <input class="w-3" name="system.reach" type="number" value="{{system.reach}}"></label>
       {{#if (gt system.effectiveReach system.reach)}}
         <span class="muted">{{localize "ESSENCE.Sheet.EffectiveReachNote" n=system.effectiveReach}}</span>
       {{/if}}
@@ -588,9 +588,9 @@
       <tbody>
         {{#each reachTriggers as |t|}}
           <tr>
-            <td><input name="system.reachTriggers.{{t.i}}.name" type="text" value="{{t.name}}" placeholder="e.g. Letters of Standing"></td>
-            <td><input name="system.reachTriggers.{{t.i}}.tempBonus" type="number" value="{{t.tempBonus}}" style="width:3em"></td>
-            <td><input name="system.reachTriggers.{{t.i}}.tempInfluenceGrant" type="number" value="{{t.tempInfluenceGrant}}" style="width:3em"></td>
+            <td><input name="system.reachTriggers.{{t.i}}.name" type="text" value="{{t.name}}" placeholder="{{localize 'ESSENCE.Character.ReachTriggerNamePlaceholder'}}"></td>
+            <td><input class="w-3" name="system.reachTriggers.{{t.i}}.tempBonus" type="number" value="{{t.tempBonus}}"></td>
+            <td><input class="w-3" name="system.reachTriggers.{{t.i}}.tempInfluenceGrant" type="number" value="{{t.tempInfluenceGrant}}"></td>
             <td>{{#if t.usedThisAdventure}}{{localize "ESSENCE.Common.Yes"}}{{else}}{{localize "ESSENCE.Common.No"}}{{/if}}</td>
             <td>{{#if t.active}}{{localize "ESSENCE.Common.Active"}}{{else}}—{{/if}}</td>
             <td>
@@ -616,7 +616,7 @@
     <div class="bio-standing-grid">
       <div class="bio-cell bio-cell-wide" data-tooltip-text="{{localize 'ESSENCE.Character.TeamCellHint'}}">
         <span class="bio-cell-label">{{localize "ESSENCE.Character.Team"}}</span>
-        <span class="bio-cell-value">{{#if team}}<a data-action="openTeam">{{team.name}}</a>{{else}}<span class="muted">{{localize "ESSENCE.Character.NoTeamShort"}}</span>{{/if}}</span>
+        <span class="bio-cell-value">{{#if team}}<button type="button" class="link-button" data-action="openTeam">{{team.name}}</button>{{else}}<span class="muted">{{localize "ESSENCE.Character.NoTeamShort"}}</span>{{/if}}</span>
       </div>
       <div class="bio-cell" data-tooltip-text="{{localize 'ESSENCE.Character.TeamTierHint'}}">
         <span class="bio-cell-label">{{localize "ESSENCE.Team.Tier"}}</span>
@@ -723,7 +723,7 @@
               Active Effect writes it, so it needs a real input somewhere; it used to live on the
               Character Wizard's Wounds step, which was removed as play state. --}}
         <label class="muted" data-tooltip-text="{{localize 'ESSENCE.Sheet.TemporaryWoundsAvailableHint'}}">{{localize "ESSENCE.Common.Available"}}
-          <input type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" style="width:3em" min="0" max="5">
+          <input class="w-3" type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" min="0" max="5">
         </label>
       </div>
       <div class="wound-block">
@@ -740,7 +740,7 @@
         <button type="button" data-action="grantRecovery">{{localize "ESSENCE.Sheet.GrantRecovery"}}</button>
       </div>
       <div class="wound-block">
-        <label style="display:flex;align-items:center;gap:4px;" data-tooltip-text="{{localize 'ESSENCE.Sheet.AdaptabilityRerollHint'}}">
+        <label class="check-row" data-tooltip-text="{{localize 'ESSENCE.Sheet.AdaptabilityRerollHint'}}">
           <input type="checkbox" data-action="toggleAdaptabilityReroll" {{#if system.playState.adaptabilityRerollAvailable}}checked{{/if}}> {{localize "ESSENCE.Sheet.AdaptabilityReroll"}}
         </label>
       </div>

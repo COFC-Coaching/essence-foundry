@@ -3748,3 +3748,34 @@ No Foundry in the cloud session (Shane), so this release is static-checked only:
 **Left for Shane.** Hover one converted tooltip on each sheet type (Character, NPC, Monster, Team,
 Manifestation, an Item sheet, the Wizard, the play-card dialog's Breach / Non-lethal boxes) to
 confirm Foundry's tooltip appears and reads the localized text, not a key.
+
+### 2026-09-27 -- 0.18.5: Impeccable pass over the sheets (static only; no Foundry in the cloud)
+
+Shane: "have impeccable run through the CSS and clean up the sheets and user experience." The
+plugin is not installed here, so its source was cloned to the scratchpad and its audit, polish,
+clarify, layout, harden and craft-floor references followed by hand; its deterministic detector
+ran through `npx impeccable detect templates styles`. A read-only sub-agent reviewed the
+stylesheet against the templates in parallel. Findings and what was done:
+- Detector: 7 side-stripe findings (3px colored border-left). The six on the Content Wizard type
+  picker became full-frame type colors (the item read views' own device). The card grid's rail is
+  the concept's printed-card edge and stays as the one intentional exception; the CSS says so.
+- A11y: 20 `<a data-action>` links (no href, not focusable) are buttons; `outline: none` on
+  focused fields removed; sort selects and card search named; `&times;`, `✕` and `→` glyphs are
+  Font Awesome icons; help cursor and dotted underline on tooltip-carrying labels.
+- Integrity: `.application.dialog` cap was global to every Foundry dialog; scoped to
+  `.essence-dialog`, passed by all 8 DialogV2 calls. 84 inline `style=""` attributes moved to
+  `.w-3/.w-4/.w-5/.w-6/.w-max-9/.check-row/.flex-break/.danger-text`. 10 rgba(255/0) literals
+  now read `--essence-ink-rgb` / `--essence-ground-rgb`; 7 hard-coded radii read the tokens.
+- i18n: 13 hard-coded English strings (dialog titles and bodies, Key Aspect hint, placeholders)
+  moved to lang keys.
+- Sub-agent review: dead/duplicate rules removed (`deleteBossAbility`, `.array-row select`,
+  `.side-label` color, `justify-content: stretch`, `position: static`, duplicate
+  `--essence-sheet-art`, `min-height`, `margin`), tab display rules dropped (core hides inactive
+  tabs), Monster sheet gets the NPC sheet's 170px name reserve.
+- Verified: `npm test` 120 + 59 pass, `node --check` on the four edited modules, Handlebars block
+  and tag balance on every changed template, all new lang keys present, detector re-run: 1 finding
+  (the rail).
+**Left for Shane (live).** Tab to a Wizard preview link and a row delete and press Enter; focus a
+text field and confirm the amber ring; open Delete Item and Dash dialogs (560px cap, localized
+titles); hover an Attribute label with a benefit (dotted underline, help cursor); the Content
+Wizard type picker frames; Monster sheet header at 560px wide.

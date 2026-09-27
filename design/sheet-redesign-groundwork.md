@@ -45,9 +45,9 @@ the two font tokens read Foundry's own variables. Change a value here, not in a 
 
 | Role | Tokens |
 |---|---|
-| Surfaces | `--essence-ground`, `--essence-veil` (the overlay on the cover art), `--essence-sheet-art` (`none` unless the cover-art setting supplies a URL), `--essence-panel`, `--essence-panel-raised` (both rgba so the art reads through on the Character sheet; the other sheets override them opaque), `--essence-well` (inputs, wells), `--essence-editor-bg`, `--essence-editor-menu`, `--essence-editor-content` |
+| Surfaces | `--essence-ground` (and `--essence-ground-rgb` for shaded gradients), `--essence-veil` (the overlay on the cover art), `--essence-sheet-art` (`none` unless the cover-art setting supplies a URL), `--essence-panel`, `--essence-panel-raised` (both rgba so the art reads through on the Character sheet; the other sheets override them opaque), `--essence-well` (inputs, wells), `--essence-editor-bg`, `--essence-editor-menu`, `--essence-editor-content` |
 | Lines | `--essence-line-soft`, `--essence-line`, `--essence-line-strong`, `--essence-line-dashed`, `--essence-line-bright` |
-| Ink | `--essence-ink`, `--essence-ink-bright`, `--essence-muted`, `--essence-muted-soft` |
+| Ink | `--essence-ink`, `--essence-ink-rgb` (every translucent wash, hairline and hover tint reads this, never a white literal), `--essence-ink-bright`, `--essence-muted`, `--essence-muted-soft` |
 | Accent (amber) | `--essence-accent`, `--essence-accent-rgb`, `--essence-accent-bright`, `--essence-accent-ink` (text on an accent fill) |
 | States | `--essence-warn`, `--essence-danger`, `--essence-danger-rgb`, `--essence-success`, `--essence-success-rgb`, `--essence-success-ink` |
 | Item types (read views, content wizard, chips) | Condition: `--essence-condition`, `-rgb`, `-ink`, `-border`, `-soft-rgb`. Equipment: `--essence-equipment`, `-rgb`, `-ink`. Chassis: `--essence-chassis`, `-rgb`, `-ink`, `-soft`. Fitting: `--essence-fitting`, `-ink`. Augment: `--essence-augment`, `-rgb`, `-ink` |

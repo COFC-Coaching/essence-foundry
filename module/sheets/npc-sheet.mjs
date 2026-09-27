@@ -1419,7 +1419,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
         if ((turn.reactionsUsed ?? 0) >= (sys.effectiveReactionsPerRound ?? 0)) ui.notifications.warn(game.i18n.format("ESSENCE.Notify.EnemyReactionsUsed", { name: this.actor.name, n: sys.effectiveReactionsPerRound }));
         // Unaware target (Shane, 2026-09-27, gap question 4): the surcharge applies as for a
         // character; with no Pool it costs one additional Reaction from this Round's allowance.
-        const unaware = await foundry.applications.api.DialogV2.confirm({ window: { title: name }, content: `<p>${game.i18n.localize("ESSENCE.Notify.EnemyUnawarePrompt")}</p>`, rejectClose: false, defaultNo: true });
+        const unaware = await foundry.applications.api.DialogV2.confirm({ window: { title: name }, classes: ["essence-dialog"], content: `<p>${game.i18n.localize("ESSENCE.Notify.EnemyUnawarePrompt")}</p>`, rejectClose: false, defaultNo: true });
         update["system.enemyTurn.reactionsUsed"] = (turn.reactionsUsed ?? 0) + 1 + (unaware ? 1 : 0);
       }
       pool = dice;
@@ -1638,8 +1638,8 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     const item = this.actor.items.get(target.dataset.itemId);
     if (!item) return;
     const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: "Delete Item" },
-      content: `<p>Delete <strong>${item.name}</strong>? This cannot be undone.</p>`
+      window: { title: game.i18n.localize("ESSENCE.Sheet.DeleteItemTitle") }, classes: ["essence-dialog"],
+      content: `<p>${game.i18n.format("ESSENCE.Sheet.DeleteItemBody", { name: foundry.utils.escapeHTML(item.name) })}</p>`
     });
     if (confirmed) await item.delete();
   }

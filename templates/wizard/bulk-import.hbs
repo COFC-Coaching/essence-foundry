@@ -35,7 +35,7 @@
     {{#if parsed}}
       <h3 class="section-head">{{localize "ESSENCE.Wizard.BulkImport.Preview"}} — {{fileName}}</h3>
       {{#if parsed.missingColumns.length}}
-        <p class="muted" style="color:#c62828">{{localize "ESSENCE.Wizard.BulkImport.MissingColumns"}}: {{#each parsed.missingColumns}}{{this}}{{#unless @last}}, {{/unless}}{{/each}} {{localize "ESSENCE.Wizard.BulkImport.MissingColumnsSuffix"}}</p>
+        <p class="muted danger-text">{{localize "ESSENCE.Wizard.BulkImport.MissingColumns"}}: {{#each parsed.missingColumns}}{{this}}{{#unless @last}}, {{/unless}}{{/each}} {{localize "ESSENCE.Wizard.BulkImport.MissingColumnsSuffix"}}</p>
       {{/if}}
       <p>{{localize "ESSENCE.Wizard.BulkImport.RowsFound" n=parsed.records.length}}</p>
       <ul class="item-list wizard-scroll-list">

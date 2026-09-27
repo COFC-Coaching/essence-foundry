@@ -168,7 +168,7 @@ export default class EssenceTeamSheet extends HandlebarsApplicationMixin(ActorSh
       ? `<ul>${holders.map((m) => `<li>${foundry.utils.escapeHTML(m.name)}: ${m.ti}</li>`).join("")}</ul>`
       : `<p>${game.i18n.localize("ESSENCE.Team.RaiseNoInfluence")}</p>`;
     const confirmed = await DialogV2.confirm({
-      window: { title: game.i18n.format("ESSENCE.Team.RaiseTitle", { tier: next }) },
+      window: { title: game.i18n.format("ESSENCE.Team.RaiseTitle", { tier: next }) }, classes: ["essence-dialog"],
       content: `<p>${game.i18n.format("ESSENCE.Team.RaiseBody", { team: foundry.utils.escapeHTML(this.actor.name), from: system.tier, to: next })}</p>${list}`,
       yes: { label: game.i18n.format("ESSENCE.Team.RaiseConfirm", { tier: next }), default: false },
       no: { label: game.i18n.localize("ESSENCE.Common.Cancel"), default: true }
@@ -182,7 +182,7 @@ export default class EssenceTeamSheet extends HandlebarsApplicationMixin(ActorSh
     if (!game.user.isGM) return;
     const current = this.actor.system.tier;
     const value = await DialogV2.prompt({
-      window: { title: game.i18n.localize("ESSENCE.Team.CorrectTitle") },
+      window: { title: game.i18n.localize("ESSENCE.Team.CorrectTitle") }, classes: ["essence-dialog"],
       content: `<p>${game.i18n.localize("ESSENCE.Team.CorrectBody")}</p>
         <label>${game.i18n.localize("ESSENCE.Team.Tier")}
           <input type="number" name="tier" min="${TEAM_TIER_MIN}" max="${TEAM_TIER_MAX}" value="${current}" autofocus>

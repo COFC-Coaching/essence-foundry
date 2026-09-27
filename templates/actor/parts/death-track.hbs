@@ -18,7 +18,7 @@
       {{#if (eq system.playState.deathTrackState "dead")}}
         <span class="reach-warning">{{localize "ESSENCE.Sheet.DeadNote"}}</span>
       {{else}}
-        <label style="display:flex;align-items:center;gap:4px;">
+        <label class="check-row">
           <input type="checkbox" data-action="toggleDeathTrackStabilized" {{#if (eq system.playState.deathTrackState "stabilized")}}checked{{/if}}> {{localize "ESSENCE.Sheet.Stabilized"}}
         </label>
       {{/if}}

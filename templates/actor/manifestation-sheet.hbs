@@ -18,9 +18,9 @@
       {{#if caller}}<span class="muted"> &mdash; {{localize "ESSENCE.Character.ReturnToCallerControl" name=caller.name}}</span>{{/if}}
     </div>
     <div class="header-fields">
-      <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}</label>
-      <label data-tooltip-text="{{localize 'ESSENCE.Common.PoolBonusHint'}}">{{localize "ESSENCE.Common.PoolBonus"}} <input name="system.poolBonus" type="number" min="0" value="{{system.poolBonus}}" style="width:3em"></label>
-      <label data-tooltip-text="{{localize 'ESSENCE.Manifestation.RollLimitHint'}}">{{localize "ESSENCE.Item.Monster.RollLimit"}} <input name="system.rollLimit" type="number" min="0" value="{{system.rollLimit}}" style="width:3em" placeholder="—"></label>
+      <label>{{localize "ESSENCE.Common.Movement"}} <input class="w-4" name="system.movement" type="number" value="{{system.movement}}"> {{localize "ESSENCE.Common.Units"}}</label>
+      <label data-tooltip-text="{{localize 'ESSENCE.Common.PoolBonusHint'}}">{{localize "ESSENCE.Common.PoolBonus"}} <input class="w-3" name="system.poolBonus" type="number" min="0" value="{{system.poolBonus}}"></label>
+      <label data-tooltip-text="{{localize 'ESSENCE.Manifestation.RollLimitHint'}}">{{localize "ESSENCE.Item.Monster.RollLimit"}} <input class="w-3" name="system.rollLimit" type="number" min="0" value="{{system.rollLimit}}" placeholder="—"></label>
       {{#if (eq system.subtype "Elemental")}}
         <label>Aspect
           <select name="system.aspect">

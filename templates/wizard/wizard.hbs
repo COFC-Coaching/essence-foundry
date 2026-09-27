@@ -18,7 +18,7 @@
     </div>
     <div class="wizard-row">
       <span data-tooltip-text="{{localize 'ESSENCE.Character.TeamTierHint'}}">{{#if team}}{{localize "ESSENCE.Character.TeamLabel"}} <strong>{{team.name}}</strong> &middot; {{localize "ESSENCE.Team.Tier"}} {{teamTier}}{{else}}<span class="muted">{{localize "ESSENCE.Character.NoTeam"}}</span>{{/if}}</span>
-      <label data-tooltip-text="{{localize 'ESSENCE.Character.LevelHint'}}">{{localize "ESSENCE.Common.Level"}} <input type="number" name="system.level" min="1" value="{{system.level}}" style="width:4em"></label>
+      <label data-tooltip-text="{{localize 'ESSENCE.Character.LevelHint'}}">{{localize "ESSENCE.Common.Level"}} <input class="w-4" type="number" name="system.level" min="1" value="{{system.level}}"></label>
     </div>
     <div class="wizard-row">
       <label>{{localize "ESSENCE.Wizard.Character.Pronouns"}} <input type="text" name="system.pronouns" value="{{system.pronouns}}"></label>
@@ -159,7 +159,7 @@
          grants. One point buys one Rank in a new or existing Skill. No Skill can exceed Rank 2." One
          pool; the pre-0.9.0 "one free Rank-1 Skill per Intellect" sub-step is gone. --}}
     <h3 class="section-head">{{localize "ESSENCE.Wizard.Character.NonCombatSkillsHeader" spent=nonCombatSpent pool=nonCombatPool remaining=nonCombatRemaining}} <span class="muted">{{localize "ESSENCE.Wizard.Character.SkillPointFormula" intellect=system.intellect bonus=system.skillPointBonus}}</span></h3>
-    <label class="muted">{{localize "ESSENCE.Wizard.Character.SkillPointBonus"}} <input type="number" name="system.skillPointBonus" value="{{system.skillPointBonus}}" min="0" style="width:3em"></label>
+    <label class="muted">{{localize "ESSENCE.Wizard.Character.SkillPointBonus"}} <input class="w-3" type="number" name="system.skillPointBonus" value="{{system.skillPointBonus}}" min="0"></label>
     {{#each nonCombatEntries as |s|}}
       <div class="nc-skill-row">
         <input type="text" name="system.nonCombatSkills.{{s.i}}.name" value="{{s.name}}" placeholder="{{localize 'ESSENCE.Wizard.Character.SkillNamePlaceholder'}}">
@@ -168,10 +168,10 @@
              system.nonCombatSkills.*.* input present and reconstructs the whole array from just
              those, so any sub-field only ever rendered as a span gets silently reset to its
              schema default the next time ANY field in the form changes. --}}
-        <input type="number" class="wizard-value" name="system.nonCombatSkills.{{s.i}}.rating" value="{{s.rating}}" readonly style="width:3em">
+        <input type="number" class="wizard-value w-3" name="system.nonCombatSkills.{{s.i}}.rating" value="{{s.rating}}" readonly>
         <button type="button" data-action="adjustNonCombatRating" data-index="{{s.i}}" data-delta="1">+</button>
         <input type="hidden" name="system.nonCombatSkills.{{s.i}}.source" value="">
-        <a data-action="deleteNonCombatSkill" data-index="{{s.i}}"><i class="fa-solid fa-trash"></i></a>
+        <button type="button" data-action="deleteNonCombatSkill" data-index="{{s.i}}" aria-label="{{localize 'ESSENCE.Character.DeleteSkillAria' n=(addOne s.i)}}"><i class="fa-solid fa-trash"></i></button>
       </div>
     {{/each}}
     <button type="button" data-action="addNonCombatSkill"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Character.AddSkill"}}</button>
@@ -184,7 +184,7 @@
         <input type="text" name="system.connections.{{i}}.area" value="{{c.area}}" placeholder="{{localize 'ESSENCE.Character.ConnectionArea'}}">
         <input type="text" name="system.connections.{{i}}.relationship" value="{{c.relationship}}" placeholder="{{localize 'ESSENCE.Character.ConnectionRelationship'}}">
         <input type="text" name="system.connections.{{i}}.scope" value="{{c.scope}}" placeholder="{{localize 'ESSENCE.Character.ConnectionScopePlaceholder'}}">
-        <a data-action="deleteConnection" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Character.DeleteConnectionAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></a>
+        <button type="button" data-action="deleteConnection" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Character.DeleteConnectionAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button>
       </div>
     {{/each}}
     <button type="button" data-action="addConnection"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Character.AddConnection"}}</button>
@@ -235,10 +235,10 @@
         <h4>{{localize "ESSENCE.Common.Selected"}}</h4>
         <ul class="item-list">
           {{#each ownedActionCards as |item|}}
-            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}}</span> <button type="button" data-action="toggleCard" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
+            <li><button type="button" class="link-button" data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</button> <span class="muted">R{{item.system.rank}}</span> <button type="button" data-action="toggleCard" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
           {{/each}}
           {{#each ownedReactionCards as |item|}}
-            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}} · {{localize "ESSENCE.Common.Reaction"}}</span> <button type="button" data-action="toggleCard" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
+            <li><button type="button" class="link-button" data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</button> <span class="muted">R{{item.system.rank}} · {{localize "ESSENCE.Common.Reaction"}}</span> <button type="button" data-action="toggleCard" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
           {{/each}}
         </ul>
       </div>
@@ -279,7 +279,7 @@
         </div>
         <ul class="item-list wizard-scroll-list">
           {{#each browsableCards as |item|}}
-            <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">R{{item.system.rank}} · {{item.system.skill}}{{#if item.system.subtype}} · {{item.system.subtype}}{{/if}}{{#if (eq item.type "reaction-card")}} · {{localize "ESSENCE.Common.Reaction"}}{{/if}}</span> <button type="button" data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.AddAria' name=item.name}}"><i class="fa-solid fa-plus"></i></button></li>
+            <li><button type="button" class="link-button" data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</button> <span class="muted">R{{item.system.rank}} · {{item.system.skill}}{{#if item.system.subtype}} · {{item.system.subtype}}{{/if}}{{#if (eq item.type "reaction-card")}} · {{localize "ESSENCE.Common.Reaction"}}{{/if}}</span> <button type="button" data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.AddAria' name=item.name}}"><i class="fa-solid fa-plus"></i></button></li>
           {{else}}
             <li class="muted">{{localize "ESSENCE.Wizard.Character.NoCardsMatchFilters"}}</li>
           {{/each}}
@@ -303,7 +303,7 @@
             <td><input name="system.passiveFeatures.{{i}}.name" type="text" value="{{f.name}}"></td>
             <td><input name="system.passiveFeatures.{{i}}.source" type="text" value="{{f.source}}"></td>
             <td>{{essenceEditor f.text target=(concat "system.passiveFeatures." i ".text") button=true}}</td>
-            <td><a data-action="deletePassiveFeature" data-index="{{i}}"><i class="fa-solid fa-trash"></i></a></td>
+            <td><button type="button" data-action="deletePassiveFeature" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Character.DeleteFeatureAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button></td>
           </tr>
         {{/each}}
       </tbody>
@@ -317,11 +317,11 @@
     <p class="muted">{{localize "ESSENCE.Wizard.Character.EquipmentHint"}}</p>
     {{!-- Reach gates what a character may carry, so its input lives with the loadout it governs
           now that the Influence step (its old home) is gone. --}}
-    <label>{{localize "ESSENCE.Sheet.Reach"}} <input type="number" name="system.reach" value="{{system.reach}}" style="width:4em"></label>
+    <label>{{localize "ESSENCE.Sheet.Reach"}} <input class="w-4" type="number" name="system.reach" value="{{system.reach}}"></label>
     <h3 class="section-head">{{localize "ESSENCE.Wizard.InventoryLoadout" used=inventoryUsed limit=inventoryLimit tier=teamTier}}</h3>
     <ul class="item-list">
       {{#each inventoryItems as |item|}}
-        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{item.meta}}</span>
+        <li><button type="button" class="link-button" data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</button> <span class="muted">{{item.meta}}</span>
           {{#if item.overTier}}<span class="muted reach-warning" data-tooltip-text="{{localize 'ESSENCE.Sheet.AboveTeamTier' tier=../teamTier}}"><i class="fa-solid fa-triangle-exclamation"></i></span>{{/if}}
           <button type="button" data-action="toggleEquipment" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
       {{/each}}
@@ -330,7 +330,7 @@
     <h3 class="section-head">{{localize "ESSENCE.Wizard.ArmoryLoadout" used=armoryUsed limit=armoryLimit stored=armoryStored prepared=inventoryUsed}}</h3>
     <ul class="item-list">
       {{#each armoryItems as |item|}}
-        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{item.meta}}</span>
+        <li><button type="button" class="link-button" data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</button> <span class="muted">{{item.meta}}</span>
           <button type="button" data-action="toggleEquipment" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
       {{/each}}
     </ul>
@@ -342,7 +342,7 @@
           <li>
             <strong>{{grant.sourceName}}</strong>
             {{#if grant.grantedItem}}
-              — <a data-action="previewItem" data-uuid="{{grant.grantedItem.uuid}}">{{grant.grantedItem.name}}</a>
+              — <button type="button" class="link-button" data-action="previewItem" data-uuid="{{grant.grantedItem.uuid}}">{{grant.grantedItem.name}}</button>
               <button type="button" data-action="chooseGrantedItem" data-grant-source="{{grant.sourceName}}">{{localize "ESSENCE.Common.Replace"}}</button>
             {{else}}
               <span class="muted">{{localize "ESSENCE.Sheet.NotYetChosen"}}</span>
@@ -389,7 +389,7 @@
     </div>
     <ul class="item-list wizard-scroll-list">
       {{#each browsableEquipment as |item|}}
-        <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{item.meta}}</span>
+        <li><button type="button" class="link-button" data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</button> <span class="muted">{{item.meta}}</span>
           {{#unless item.isAugment}}<button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" data-slot="inventory" aria-label="{{localize 'ESSENCE.Wizard.AddToInventoryAria' name=item.name}}" data-tooltip-text="{{localize 'ESSENCE.Wizard.AddToInventory'}}"><i class="fa-solid fa-star"></i></button>{{/unless}}
           <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" data-slot="armory" aria-label="{{localize 'ESSENCE.Wizard.AddToArmoryAria' name=item.name}}" data-tooltip-text="{{localize 'ESSENCE.Wizard.AddToArmory'}}"><i class="fa-solid fa-warehouse"></i></button></li>
       {{/each}}
@@ -412,8 +412,8 @@
     <h3 class="section-head">{{localize "ESSENCE.Wizard.Character.StartingAP"}}</h3>
     <p class="muted">{{localize "ESSENCE.Wizard.Character.StartingAPHint"}}</p>
     <div class="wizard-row">
-      <label>{{localize "ESSENCE.Common.Level"}} <input type="number" name="system.level" min="1" value="{{system.level}}" style="width:4em"></label>
-      <label>{{localize "ESSENCE.Character.AdvancementPointsSpent"}} <input type="number" name="system.advancementPointsSpent" min="0" value="{{system.advancementPointsSpent}}" style="width:4em"></label>
+      <label>{{localize "ESSENCE.Common.Level"}} <input class="w-4" type="number" name="system.level" min="1" value="{{system.level}}"></label>
+      <label>{{localize "ESSENCE.Character.AdvancementPointsSpent"}} <input class="w-4" type="number" name="system.advancementPointsSpent" min="0" value="{{system.advancementPointsSpent}}"></label>
       <span>{{localize "ESSENCE.Character.AdvancementPointsAvailable"}}: <strong>{{system.advancementPointsUnspent}}</strong></span>
     </div>
     <h3 class="section-head">{{localize "ESSENCE.Wizard.Character.Checklist"}}</h3>
@@ -433,7 +433,7 @@
     {{#if isLast}}
       <button type="button" data-action="wizardAccept">{{localize "ESSENCE.Common.Accept"}}</button>
     {{else}}
-      <button type="button" data-action="wizardNext">{{localize "ESSENCE.Common.Next"}} →</button>
+      <button type="button" data-action="wizardNext">{{localize "ESSENCE.Common.Next"}} <i class="fa-solid fa-arrow-right"></i></button>
     {{/if}}
   </footer>
 </div>
