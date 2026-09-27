@@ -7,7 +7,7 @@
  * here; module/utils.mjs has no imports and loads under plain Node.
  */
 
-import { ordinaryDamageWounds, isDistinctionStyle, distinctionUnlocks, componentTiers, computeTierGate, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, burnOnlyProfile, equipmentCardCommitment, recoveryBaseAmount, initiativeTieBreak, applyFlatReduction, resolveDamageComponents, hasOriginDistinction, addThread, authorityCapacity, authorityResultsPerCard, storeAuthority, spendAuthority, lockCapacity, contingencyCapacity, riteCapacity, placeRite, adaptationUpkeep, forcedStrain, psionicsBurnSurchargeAt, manifestationEntryCost, manifestationTrack } from "../module/utils.mjs";
+import { ordinaryDamageWounds, isDistinctionStyle, distinctionUnlocks, componentTiers, computeTierGate, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, burnOnlyProfile, equipmentCardCommitment, recoveryBaseAmount, initiativeTieBreak, applyFlatReduction, resolveDamageComponents, hasOriginDistinction, addThread, authorityCapacity, authorityResultsPerCard, storeAuthority, spendAuthority, lockCapacity, contingencyCapacity, riteCapacity, placeRite, adaptationUpkeep, forcedStrain, psionicsBurnSurchargeAt, manifestationEntryCost, manifestationTrack, splitCommitment } from "../module/utils.mjs";
 import { resolveNonCombatRoll } from "../module/dice/essence-roll.mjs";
 import { laterAcquisitionText } from "../module/data/origin-features.mjs";
 import { ITEM_GRANT_REGISTRY, tierQualifiesForGrant } from "../module/data/item-grants.mjs";
@@ -204,6 +204,12 @@ check("Rank 0 with the Summoner pays 2 burned dice (3 − 1)", manifestationEntr
 deep("Rank 5: 5 dice, 5 Mana, native minimums 6 / 3", manifestationEntryCost(5), { burn: 5, mana: 5, actionMin: 6, reactionMin: 3 });
 check("Rank 2 native Reaction minimum stays 2", manifestationEntryCost(2).reactionMin, 2);
 deep("the shared track view fills the first N of five", manifestationTrack(3).map((w) => w.filled), [true, true, true, false, false]);
+
+console.log("\n--- Burn the difference (Ryan 2026-09-27) ---");
+deep("minimum 2, maximum 1: pay 2, roll 1, burn 1", splitCommitment(2, 2, 1), { rolled: 1, burned: 1 });
+deep("minimum 3, maximum 2: pay 3, roll 2, burn 1", splitCommitment(3, 3, 2), { rolled: 2, burned: 1 });
+deep("maximum at or above the minimum rolls everything", splitCommitment(4, 2, 3), { rolled: 4, burned: 0 });
+deep("no known maximum rolls everything", splitCommitment(2, 2, null), { rolled: 2, burned: 0 });
 
 console.log(`\n${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);

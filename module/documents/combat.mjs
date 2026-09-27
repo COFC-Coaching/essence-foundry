@@ -236,7 +236,11 @@ export default class EssenceCombat extends Combat {
       if (actor.system.abilities?.some((a) => a.usedThisRound)) {
         update["system.abilities"] = actor.system.abilities.map((a) => ({ ...a, usedThisRound: false }));
       }
+      const timer = EssenceCombat.enemyDeathTimer(actor);
+      Object.assign(update, timer.update);
       await actor.update(update);
+      if (timer.step) await EssenceCombat.postEnemyDeathTimer(actor, timer);
+      if (timer.died) await actor.markDead();
       return;
     }
     // Start of Turn order (Doc L3443-L3446): 1. clear the Reaction Pool and expire any prepared
@@ -298,6 +302,8 @@ export default class EssenceCombat extends Combat {
     // NOT while "stabilized" (see actor-combatant.mjs's deathTrackState schema comment for the full
     // state model). Adversaries never use the Death Track at all (V6 §2415) — see actor-adversary.mjs.
     const usesDeathTrack = !actor.system.usesSimplifiedWounds;
+    const enemyTimer = actor.system.usesSimplifiedWounds ? EssenceCombat.enemyDeathTimer(actor) : { update: {}, step: 0, died: false };
+    Object.assign(update, enemyTimer.update);
     const trackIsFull = actor.system.coreWoundsFilled === actor.system.coreWounds.length;
     let died = false;
     if (usesDeathTrack && trackIsFull && ps.deathTrackState === "dying") {
@@ -321,6 +327,27 @@ export default class EssenceCombat extends Combat {
       await dazed.delete();
       await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p><strong>${actor.name}</strong> is Dazed: burns ${dazedBurn} Action dice after forming the Pool, then Dazed ends.</p>` });
     }
-    if (died) await actor.markDead();
+    if (enemyTimer.step) await EssenceCombat.postEnemyDeathTimer(actor, enemyTimer);
+    if (died || enemyTimer.died) await actor.markDead();
+  }
+
+  /** Simplified enemy Wounds (Ryan, 2026-09-27): a Defeated enemy that is dying, not stabilized,
+   *  dies six full Rounds after its defeat, counted on its own Turns so its place in Initiative is
+   *  kept. Stabilize stops it; opening a Wound space ends it. All three Grades, Elites included.
+   *  Time keeps running after fighting stops, which the GM tracks by hand. */
+  static ENEMY_DEATH_ROUNDS = 6;
+
+  static enemyDeathTimer(actor) {
+    const ps = actor.system.playState;
+    const defeated = (actor.system.woundState || "").startsWith("Defeated");
+    if (!defeated || ps.deathTrackState !== "dying") return { update: {}, step: 0, died: false };
+    const step = Math.min(EssenceCombat.ENEMY_DEATH_ROUNDS, (ps.deathTrackStep ?? 0) + 1);
+    return { update: { "system.playState.deathTrackStep": step }, step, died: step >= EssenceCombat.ENEMY_DEATH_ROUNDS };
+  }
+
+  static async postEnemyDeathTimer(actor, timer) {
+    const n = EssenceCombat.ENEMY_DEATH_ROUNDS;
+    const text = timer.died ? `has been dying for ${n} Rounds since its defeat and dies.` : `is Defeated and dying: Round ${timer.step} of ${n} since its defeat (Stabilize stops it; opening a Wound space ends it).`;
+    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p><strong>${actor.name}</strong> ${text}</p>` });
   }
 }

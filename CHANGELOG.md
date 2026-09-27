@@ -2,6 +2,16 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.17.1
+
+**Ryan's rulings, second batch (2026-09-27).**
+
+- **Enemies die six Rounds after defeat.** A Defeated enemy that is not stabilized is dying; on each of its own Turns the count advances, and on the sixth it dies (Foundry's dead status, as for characters). Stabilize stops the count; opening a Wound space ends it. Applies to Mooks, Normals and Elites. The Wound state reads "Defeated (dying, Round N of 6)". Time keeps running after fighting stops, which the GM tracks by hand.
+- **Burn the difference.** A card's minimum commitment is always paid, but only its normal maximum (Attribute + Style Rank) is rolled; the rest is burned. Minimum 2, maximum 1: pay 2, roll 1, burn 1. Minimum 3, maximum 2: pay 3, roll 2, burn 1. Free dice are added to the roll afterwards. The old "Basic and Rank 0 cards roll at least 2" floor is gone. Applies to Action and Reaction Cards on characters and Elites; Full Manifestation forms keep their native minimums.
+- **Dash** reads: burn 2 Action dice to gain 2 Movement this Turn, restating the general 1 unit per burned die rule. Re-import the card to pick up the text.
+- **Enemy Resilience is no longer set by Grade.** Auto-Generate leaves Resilience for the GM to type from the individual profile; the ten example enemies keep their printed values.
+- **Species sub-choices feed the sheet.** Aegis of Origin's Damage type becomes a Resistance row (source "Species: Aegis of Origin") and Keen or Sensor Suite picks become Senses entries. Changing the pick replaces what the previous pick wrote; hand-entered rows are left alone.
+
 ## 0.17.0
 
 **Add Condition dialog.** The sidebar's Conditions panel has an Add button. It opens a dialog

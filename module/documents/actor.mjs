@@ -18,6 +18,56 @@ export default class EssenceActor extends Actor {
     if (sys) for (const k of ATTRIBUTES) if (typeof sys[k] === "number" && sys[k] < 1) sys[k] = 1;
     return super._preUpdate(changes, options, user);
   }
+  /**
+   * Species Trait sub-choices with a mechanical home (Ryan, 2026-09-27, gap question 10): a
+   * "Resistance" choice becomes a Resistance row and a "Senses" choice becomes Senses entries.
+   * Runs on the client that changed the Species Item, through Foundry's own descendant hooks.
+   * Rows this sync wrote carry the source "Species: <Trait>"; the senses it wrote are remembered in
+   * a flag so a changed pick replaces them without touching hand-entered ones.
+   */
+  async syncSpeciesSubChoices() {
+    const species = this.items.find((i) => i.type === "species");
+    const traits = species ? [species.system.nature, ...(species.system.traits ?? [])].filter(Boolean) : [];
+    const wantRes = []; const wantSenses = [];
+    for (const t of traits) {
+      if (t.chosen === false && t !== species?.system.nature) continue;
+      const label = t.subChoice?.label ?? ""; const picks = t.subChoice?.selected ?? [];
+      if (/^resistance/i.test(label)) for (const p of picks) wantRes.push({ damageType: p, source: `Species: ${t.name}` });
+      if (/^senses/i.test(label)) for (const p of picks) wantSenses.push(p);
+    }
+    const update = {};
+    const res = this.system.resistances ?? [];
+    const kept = res.filter((r) => !/^Species: /.test(r.source ?? ""));
+    const nextRes = [...kept, ...wantRes];
+    if (JSON.stringify(nextRes) !== JSON.stringify(res)) update["system.resistances"] = nextRes;
+    const prevSenses = this.getFlag("essence-system", "speciesSenses") ?? [];
+    const senses = this.system.senses ?? [];
+    const keptSenses = senses.filter((x) => !prevSenses.includes(x));
+    const nextSenses = [...keptSenses, ...wantSenses.filter((x) => !keptSenses.includes(x))];
+    if (JSON.stringify(nextSenses) !== JSON.stringify(senses)) update["system.senses"] = nextSenses;
+    if (JSON.stringify(wantSenses) !== JSON.stringify(prevSenses)) update["flags.essence-system.speciesSenses"] = wantSenses;
+    if (Object.keys(update).length) await this.update(update);
+  }
+
+  #speciesChanged(collection, documents) {
+    return collection === "items" && documents.some((d) => d.type === "species");
+  }
+
+  _onCreateDescendantDocuments(parent, collection, documents, data, options, userId) {
+    super._onCreateDescendantDocuments(parent, collection, documents, data, options, userId);
+    if (userId === game.user.id && this.#speciesChanged(collection, documents)) this.syncSpeciesSubChoices();
+  }
+
+  _onUpdateDescendantDocuments(parent, collection, documents, changes, options, userId) {
+    super._onUpdateDescendantDocuments(parent, collection, documents, changes, options, userId);
+    if (userId === game.user.id && this.#speciesChanged(collection, documents)) this.syncSpeciesSubChoices();
+  }
+
+  _onDeleteDescendantDocuments(parent, collection, documents, ids, options, userId) {
+    super._onDeleteDescendantDocuments(parent, collection, documents, ids, options, userId);
+    if (userId === game.user.id && this.#speciesChanged(collection, documents)) this.syncSpeciesSubChoices();
+  }
+
   async _preCreate(data, options, user) {
     const allowed = await super._preCreate(data, options, user);
     if (allowed === false) return false;

@@ -1091,3 +1091,17 @@ export function cardSummary(system, max = 140) {
 export function resolveEquipmentDropSlot(event) {
   return event.target?.closest?.("[data-drop-slot]")?.dataset.dropSlot ?? null;
 }
+
+/**
+ * Burn the difference (Ryan, 2026-09-27): a card's minimum commitment is always paid from the
+ * Pool, but only up to the card's normal maximum (Attribute + Style Rank) is rolled; the rest is
+ * burned. Minimum 2, maximum 1: pay 2, roll 1, burn 1. Minimum 3, maximum 2: pay 3, roll 2,
+ * burn 1. Free dice are added to the roll afterwards and never pay the minimum. Replaces the old
+ * "Basic and Rank 0 cards roll at least 2" floor. `maxRolled` null means no maximum is known.
+ * @returns {{rolled: number, burned: number}}
+ */
+export function splitCommitment(committed, cardMin, maxRolled) {
+  if (typeof maxRolled !== "number" || !Number.isFinite(maxRolled) || maxRolled >= cardMin) return { rolled: committed, burned: 0 };
+  const rolled = Math.max(1, Math.min(committed, maxRolled));
+  return { rolled, burned: committed - rolled };
+}

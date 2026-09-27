@@ -9,7 +9,7 @@ import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } 
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
 import { pickConditions } from "../apps/condition-picker.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, isDistinctionStyle, distinctionUnlocks, teamForActor, teamTierFor, componentTiers, assembledComponentIds, computeSlotUsage, computeTierGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, ordinaryDamageWounds, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns, resetEncounterSpecialties, equipmentCardCommitment, recoveryBaseAmount, resolveDamageComponents, hasOriginDistinction, THREAD_CAPACITY, addThread, authorityCapacity, authorityResultsPerCard, storeAuthority, spendAuthority, lockCapacity, contingencyCapacity, riteCapacity, placeRite, adaptationUpkeep, STRAIN_MAX, forcedStrain, psionicsBurnSurchargeAt, MANIFESTATION_TRACK } from "../utils.mjs";
+import { splitCommitment, capitalize, cardSummary, domainResource, hasMastery, isDistinctionStyle, distinctionUnlocks, teamForActor, teamTierFor, componentTiers, assembledComponentIds, computeSlotUsage, computeTierGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, ordinaryDamageWounds, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns, resetEncounterSpecialties, equipmentCardCommitment, recoveryBaseAmount, resolveDamageComponents, hasOriginDistinction, THREAD_CAPACITY, addThread, authorityCapacity, authorityResultsPerCard, storeAuthority, spendAuthority, lockCapacity, contingencyCapacity, riteCapacity, placeRite, adaptationUpkeep, STRAIN_MAX, forcedStrain, psionicsBurnSurchargeAt, MANIFESTATION_TRACK } from "../utils.mjs";
 import { availableSubtypes, enterManifestation } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -738,9 +738,10 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     }
     if (!sys?.attr || !sys?.skill) return "";
     const raw = (actor.system[sys.attr] ?? 0) + (actor.system[sys.skill] ?? 0);
-    const isBasicOrRank0 = !sys.style || (Number(sys.rank) || 0) === 0;
-    const maxRolled = isBasicOrRank0 ? Math.max(2, raw) : raw;
-    return `Advisory: this card's normal maximum is ${maxRolled} dice (${capitalize(sys.attr)} + ${capitalize(sys.skill)} Rank${isBasicOrRank0 ? ", floored at 2 for a Basic/Rank 0 card" : ""}). Committing more is allowed but exceeds the printed maximum.`;
+    // Burn the difference (Ryan, 2026-09-27): no floor; below the minimum, the difference is paid
+    // from the Pool but not rolled (see utils.mjs splitCommitment).
+    if (raw < 2) return `Advisory: this card's normal maximum is ${raw} dice (${capitalize(sys.attr)} + ${capitalize(sys.skill)} Rank). The minimum is still paid; the difference is burned, not rolled.`;
+    return `Advisory: this card's normal maximum is ${raw} dice (${capitalize(sys.attr)} + ${capitalize(sys.skill)} Rank). Committing more is allowed but exceeds the printed maximum.`;
   }
 
   /**
@@ -1070,7 +1071,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     }
     if (strainGain) await this.actor.update({ "system.specialties.strain": strainAfter });
 
-    await EssenceActorSheet.#finishCardPlay(this.actor, item, { committed, unawareTax: extraBurn, poolField, available, unopposed: !!sys.unopposed || helpless, extraSurges: strainGain, costNotes: [strainGain ? `+1 Strain (now ${strainAfter}) for 1 free Surge` : "", strainBurn ? "1 additional die burned for Strain 5-6" : ""].filter(Boolean) });
+    await EssenceActorSheet.#finishCardPlay(this.actor, item, { committed, cardMin, unawareTax: extraBurn, poolField, available, unopposed: !!sys.unopposed || helpless, extraSurges: strainGain, costNotes: [strainGain ? `+1 Strain (now ${strainAfter}) for 1 free Surge` : "", strainBurn ? "1 additional die burned for Strain 5-6" : ""].filter(Boolean) });
   }
 
   /**
@@ -1078,8 +1079,16 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    * the ordinary play above and a prepared Action fired from its reserved dice (Doc L4324: "Pay its
    * current dice requirements from the reserved dice, never from Reaction dice").
    */
-  static async #finishCardPlay(actor, item, { committed, unawareTax = 0, poolField, available, unopposed, fromReserved = false, extraSurges = 0, costNotes = [] }) {
+  /** A card's normal maximum (Attribute + Style Rank), or null when the card names neither. */
+  static #cardMaxRolled(actor, sys) {
+    if (typeof sys?.rollLimit === "number" || !sys?.attr || !sys?.skill) return null;
+    return (actor.system[sys.attr] ?? 0) + (actor.system[sys.skill] ?? 0);
+  }
+
+  static async #finishCardPlay(actor, item, { committed, unawareTax = 0, poolField, available, unopposed, fromReserved = false, extraSurges = 0, costNotes = [], cardMin = 2 }) {
     const sys = item.system;
+    const { rolled, burned } = splitCommitment(committed, cardMin, EssenceActorSheet.#cardMaxRolled(actor, sys));
+    if (burned > 0) costNotes = [...costNotes, `pays ${committed} ${poolField === "reactionDice" ? "Reaction" : "Action"} dice, rolls ${rolled}, burns ${burned} (maximum below the minimum)`];
     if (costNotes.length) {
       await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p><strong>${actor.name}</strong> plays <strong>${item.name}</strong>: ${costNotes.join("; ")}.</p>` });
     }
@@ -1122,7 +1131,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // rollEssencePool resolves.
     await applyCardCooldown(actor, item);
     const bonusSurges = (hasMastery(sys, actor.system.expertises) ? 1 : 0) + (extraSurges | 0);
-    await rollEssencePool({ pool: committed, defense, targets, label: fromReserved ? `${item.name} (prepared)` : item.name, actor, surgeOptions: sys.surges, bonusSurges, unopposed, nonCombat: !!sys.noSurges });
+    await rollEssencePool({ pool: rolled, defense, targets, label: fromReserved ? `${item.name} (prepared)` : item.name, actor, surgeOptions: sys.surges, bonusSurges, unopposed, nonCombat: !!sys.noSurges });
     // V6 "Acting While Dying" (design/v6-revision-delta.md §2.4): this Combat/Reaction Card is an
     // Action or Reaction, so it's eligible — see #applyDyingExertion for the once-per-Round gate.
     // Fires even if the roll above failed or was interrupted (the book: "a failed or interrupted
@@ -1158,7 +1167,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       extraCheckbox: { label: game.i18n.localize("ESSENCE.Sheet.HelplessTarget") }
     });
     if (promptResult === null) return;
-    await EssenceActorSheet.#finishCardPlay(this.actor, item, { committed: promptResult.count, poolField: "actionDice", available: reserved, unopposed: !!sys.unopposed || promptResult.extra, fromReserved: true });
+    await EssenceActorSheet.#finishCardPlay(this.actor, item, { committed: promptResult.count, cardMin, poolField: "actionDice", available: reserved, unopposed: !!sys.unopposed || promptResult.extra, fromReserved: true });
   }
 
   static async #onCancelPreparedAction() {

@@ -3626,3 +3626,31 @@ Conditions panel. Not live-tested; checks 117-120.
 - The 0.16.1 quoting lesson repeated: `node -e` with an apostrophe in a template literal fails on
   the shell before it runs. Scripts go in scratchpad files or heredocs.
 - Verification: `node --check` on both modules, `npm test`, template balance, lang keys, CSS braces.
+### 2026-09-27 -- 0.17.1: Ryan's rulings, second batch (death timer, burn the difference, Dash, defaults, sub-choices)
+
+Source: Ryan's answers to the ten follow-up questions (screenshot in chat). Live-verified on the
+local Foundry after a relaunch (two packs rebuilt).
+
+- **Enemy death timer** (`combat.mjs` `enemyDeathTimer`/`postEnemyDeathTimer`): a Defeated
+  simplified enemy whose `deathTrackState` is "dying" advances `deathTrackStep` on each of its own
+  Turns and dies at 6 through the existing `markDead`. Apply Damage, the pip toggle and Recover
+  Wound set and clear the state; Stabilize already sets "stabilized". `actor-adversary.mjs`
+  prints "Defeated (dying, Round N of 6)" and "Dead". Verified on the Mook Skirmisher: Rounds 1
+  to 6 in the header, then the dead status. A first cut forgot `markDead` on the reduced-engine
+  branch; the Elite (full-engine) branch was not exercised live.
+- **Burn the difference** (`utils.mjs` `splitCommitment`, four unit checks): pays the card's
+  minimum, rolls `min(committed, Attribute + Rank)`, posts "pays 2, rolls 1, burns 1". Wired into
+  the character sheet's play and Fire paths and the Elite path on the enemy sheet; the advisory
+  no longer floors Basic/Rank 0 at 2. Manifestation forms keep their native minimums. Verified:
+  Might 1 + Prowess 0 committed 2, rolled 1d10, Pool 6 -> 4.
+- **Dash** `_source` text: burn 2, gain 2 Movement, plus the 1-per-die reminder; pack rebuilt.
+- **Resilience by Grade** removed from the enemy wizard's Auto-Generate (`monster-budgets.mjs`
+  keeps the numbers for the tests and examples).
+- **Species sub-choices** (`EssenceActor#syncSpeciesSubChoices` on the descendant hooks, acting
+  client only): Resistance-labelled picks become rows with source "Species: <Trait>", Senses picks
+  become Senses entries tracked in `flags.essence-system.speciesSenses`. Verified: Keen wrote two
+  Senses, deleting the Species removed them, Planarborn with Aegis of Origin wrote a Fire row.
+- Still open with Shane: the Mook/Normal penalty waivers (Q4). Slip Away stays as printed (Q5).
+  Temporary Influence grants (Q7) are the next release. Guide and wiki text for the death timer,
+  burn the difference and enemy Surges should follow once the Doc carries the rulings.
+- Verification: `npm test` (rules 120, migration 59), `node --check` on every changed module.

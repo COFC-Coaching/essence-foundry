@@ -1,5 +1,6 @@
 import { playBurnOnlyCard, promptDamageComponents } from "./card-play.mjs";
 import { rollEssencePool } from "../dice/essence-roll.mjs";
+import { splitCommitment } from "../utils.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, tierQualifiesForGrant } from "../data/item-grants.mjs";
@@ -430,9 +431,8 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     }
     if (!sys?.attr || !sys?.skill) return "";
     const raw = (actor.system[sys.attr] ?? 0) + (actor.system[sys.skill] ?? 0);
-    const isBasicOrRank0 = !sys.style || (Number(sys.rank) || 0) === 0;
-    const maxRolled = isBasicOrRank0 ? Math.max(2, raw) : raw;
-    return `Advisory: this card's normal maximum is ${maxRolled} dice (${capitalize(sys.attr)} + ${capitalize(sys.skill)} Rank${isBasicOrRank0 ? ", floored at 2 for a Basic/Rank 0 card" : ""}). Committing more is allowed but exceeds the printed maximum.`;
+    if (raw < 2) return `Advisory: this card's normal maximum is ${raw} dice (${capitalize(sys.attr)} + ${capitalize(sys.skill)} Rank). The minimum is still paid; the difference is burned, not rolled.`;
+    return `Advisory: this card's normal maximum is ${raw} dice (${capitalize(sys.attr)} + ${capitalize(sys.skill)} Rank). Committing more is allowed but exceeds the printed maximum.`;
   }
 
   static async #resolveTargets(defenseKey) {
@@ -604,7 +604,11 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     // See EssenceActorSheet#onRollItem — cooldown starts on play, unconditionally.
     await applyCardCooldown(this.actor, item);
     const bonusSurges = hasMastery(sys, this.actor.system.expertises) ? 1 : 0;
-    await rollEssencePool({ pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges, unopposed: !!sys.unopposed, nonCombat: !!sys.noSurges });
+    // Burn the difference (Ryan, 2026-09-27): pay the minimum, roll only the card's normal maximum.
+    const maxRolled = typeof sys.rollLimit === "number" || !sys.attr || !sys.skill ? null : (this.actor.system[sys.attr] ?? 0) + (this.actor.system[sys.skill] ?? 0);
+    const { rolled, burned } = splitCommitment(committed, cardMin, maxRolled);
+    if (burned > 0) await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: `<p><strong>${this.actor.name}</strong> plays <strong>${item.name}</strong>: pays ${committed} ${poolLabel} dice, rolls ${rolled}, burns ${burned} (maximum below the minimum).</p>` });
+    await rollEssencePool({ pool: rolled, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges, unopposed: !!sys.unopposed, nonCombat: !!sys.noSurges });
   }
 
   /** See EssenceActorSheet#onRollEquipmentCard — same V6 §9.6 fold-into-Combat-Card-flow, same
@@ -821,7 +825,8 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     const update = { "system.coreWounds": coreWounds, "system.playState.currentCoreWounds": filled };
     // Same status handling as #onApplyDamage and #onRecoverWound (Doc L4062, L4117): a Defeated
     // simplified enemy is unconscious; opening a space clears that and any stabilized state.
-    if (wasDefeated && !nowDefeated && this.actor.system.playState.deathTrackState === "stabilized") update["system.playState.deathTrackState"] = "none";
+    if (wasDefeated && !nowDefeated && ["stabilized", "dying"].includes(this.actor.system.playState.deathTrackState)) { update["system.playState.deathTrackState"] = "none"; update["system.playState.deathTrackStep"] = 0; }
+    if (!wasDefeated && nowDefeated && this.actor.system.usesSimplifiedWounds) { update["system.playState.deathTrackState"] = "dying"; update["system.playState.deathTrackStep"] = 0; }
     await this.actor.update(update);
     if (this.actor.system.usesSimplifiedWounds && wasDefeated !== nowDefeated) await this.actor.setUnconscious(nowDefeated);
   }
@@ -877,6 +882,8 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     };
     const becameDefeated = !wasDefeated && filled >= capacity;
     if (becameDefeated && result.nonlethalStable) update["system.playState.deathTrackState"] = "stabilized";
+    // Ryan, 2026-09-27: a Defeated enemy is dying and dies six Rounds after its defeat (EssenceCombat.enemyDeathTimer).
+    if (becameDefeated && !result.nonlethalStable) { update["system.playState.deathTrackState"] = "dying"; update["system.playState.deathTrackStep"] = 0; }
     await this.actor.update(update);
 
     const summary = picked.components.map((c) => `${c.amount} ${c.type}${c.breach ? " (Breach)" : ""}${c.nonlethal ? " (nonlethal)" : ""}`).join(" + ") + (picked.weakened ? " (attacker Weakened: −1 per component)" : "");
@@ -911,7 +918,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       "system.playState.currentCoreWounds": coreWounds.slice(0, capacity).filter((w) => w.filled).length
     };
     // A space opened: no longer Defeated, so no longer unconscious or stabilized (Doc L4117).
-    if (this.actor.system.playState.deathTrackState === "stabilized") update["system.playState.deathTrackState"] = "none";
+    if (["stabilized", "dying"].includes(this.actor.system.playState.deathTrackState)) { update["system.playState.deathTrackState"] = "none"; update["system.playState.deathTrackStep"] = 0; }
     await this.actor.update(update);
     await this.actor.setUnconscious(false);
     await ChatMessage.create({
