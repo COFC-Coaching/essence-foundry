@@ -1,22 +1,55 @@
 /* ---------------------------------------------------------------------------------------------
-   Design tokens (0.8.1). The values come from the sheet redesign concept
-   (design/sheet-redesign-groundwork.md). Nothing below reads them yet on purpose: the current sheet
-   keeps its look until Ryan approves the new one, at which point rules switch to var(--essence-*)
-   instead of literal colors. Card-type colors reuse this system's existing success/fail green/red
-   and equipment amber, so they are already consistent with the roll card and content-type rails. */
-.application.essence, .essence.roll-card {
+   Design tokens. Every color rule below reads one of these (0.14.0); the values here are the
+   sheet's look. Tokens are grouped by role: surfaces, lines, ink, the amber accent, states, and
+   the per-Item-type accents the read views and content wizard share. "-rgb" twins exist for the
+   rules that need an alpha (rgba(var(--essence-accent-rgb), .15)). Whats-new renders in the chat
+   log, outside .application, so it is listed here too. The sheet is a self-themed dark surface
+   (the concept in design/sheet-redesign-groundwork.md): it keeps its own palette in both Foundry
+   themes, and inherits only Foundry's fonts and scrollbar styling. */
+.application.essence, .essence.roll-card, .essence-whats-new {
   --essence-ground: #141210;
   --essence-panel: #201d19;
-  --essence-panel-raised: #25211c;
-  --essence-well: #17150f;
-  --essence-line: #33302a;
-  --essence-line-strong: #4a443b;
-  --essence-ink: #ece6da;
+  --essence-panel-raised: #2b2b2b;
+  --essence-well: #1b1b1b;
+  --essence-editor-bg: rgb(30, 25, 27);
+  --essence-editor-menu: rgb(58, 48, 59);
+  --essence-editor-content: rgb(48, 40, 49);
+  --essence-line-soft: #444;
+  --essence-line: #555;
+  --essence-line-strong: #666;
+  --essence-line-dashed: #777;
+  --essence-line-bright: #888;
+  --essence-ink: #eee;
   --essence-ink-bright: #f3eee4;
-  --essence-muted: #a89f90;
-  --essence-accent: #d4b06a;
-  --essence-accent-ink: #1b1813;
-  --essence-danger: #c85a4a;
+  --essence-muted: #ccc;
+  --essence-muted-soft: #aaa;
+  --essence-accent: #f9a825;
+  --essence-accent-rgb: 249, 168, 37;
+  --essence-accent-bright: #ffca28;
+  --essence-accent-ink: #000;
+  --essence-warn: #e0a020;
+  --essence-danger: #ef5350;
+  --essence-danger-rgb: 239, 83, 80;
+  --essence-success: #2e7d32;
+  --essence-success-rgb: 46, 125, 50;
+  --essence-success-ink: #66bb6a;
+  --essence-condition: #c62828;
+  --essence-condition-rgb: 198, 40, 40;
+  --essence-condition-ink: #ef9a9a;
+  --essence-condition-border: #a33;
+  --essence-condition-soft-rgb: 170, 51, 51;
+  --essence-equipment: #42a5f5;
+  --essence-equipment-rgb: 66, 165, 245;
+  --essence-equipment-ink: #90caf9;
+  --essence-chassis: #8d6e63;
+  --essence-chassis-rgb: 141, 110, 99;
+  --essence-chassis-ink: #a1887f;
+  --essence-chassis-soft: #bcaaa4;
+  --essence-fitting: #26a69a;
+  --essence-fitting-ink: #4db6ac;
+  --essence-augment: #ab47bc;
+  --essence-augment-rgb: 171, 71, 188;
+  --essence-augment-ink: #ce93d8;
   --essence-domain-physical: #c8553d;
   --essence-domain-mental: #3d85c6;
   --essence-domain-spiritual: #9b59b6;
@@ -27,8 +60,8 @@
   --essence-card-reaction: #e05252;
   --essence-card-equipment: #f9a825;
   --essence-card-basic: #8f8677;
-  --essence-font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
-  --essence-font-body: "Source Sans 3", system-ui, sans-serif;
+  --essence-font-display: var(--font-h1, "Modesto Condensed", Georgia, serif);
+  --essence-font-body: var(--font-body, var(--font-primary, "Signika", system-ui, sans-serif));
   --essence-radius: 8px;
   --essence-radius-sm: 6px;
 }
@@ -68,23 +101,23 @@
    content each get their own explicit background/text-color below instead of inheriting one
    shared color. */
 .essence prose-mirror.editor {
-  background: rgb(30, 25, 27);
-  border: 1px solid #555;
+  background: var(--essence-editor-bg);
+  border: 1px solid var(--essence-line);
   border-radius: 4px;
   padding: 4px 6px;
   box-sizing: border-box;
 }
 .essence prose-mirror.editor menu {
-  background: rgb(58, 48, 59);
-  border: 1px solid #666;
+  background: var(--essence-editor-menu);
+  border: 1px solid var(--essence-line-strong);
 }
 .essence prose-mirror.editor .editor-content.ProseMirror {
-  background: rgb(48, 40, 49);
-  color: #eee;
+  background: var(--essence-editor-content);
+  color: var(--essence-ink);
   padding: 4px 6px;
   border-radius: 3px;
 }
-.essence prose-mirror.editor .editor-content.ProseMirror p { color: #eee; }
+.essence prose-mirror.editor .editor-content.ProseMirror p { color: var(--essence-ink); }
 /* Core sets a blanket --min-height: 150px on every <prose-mirror> (the CSS var its own
    `.prosemirror, prose-mirror { min-height: var(--min-height) }` rule reads) — fine for a full
    Biography/Concept field, but for per-row card fields (Body lines, Surges) that's 150px of empty
@@ -112,9 +145,9 @@
    to find Foundry's own Prototype Token config from the Actors sidebar. */
 .essence .token-image-btn {
   position: absolute; bottom: -4px; right: -4px; width: 22px; height: 22px; padding: 0;
-  border-radius: 50%; font-size: 0.7em; line-height: 1; background: #1b1b1b; border: 1px solid #888;
+  border-radius: 50%; font-size: 0.7em; line-height: 1; background: var(--essence-well); border: 1px solid var(--essence-line-bright);
 }
-.essence .token-image-btn:hover { border-color: #f9a825; color: #f9a825; }
+.essence .token-image-btn:hover { border-color: var(--essence-accent); color: var(--essence-accent); }
 .essence .header-main { flex: 1; position: relative; }
 /* Wizard/Monster Creator and the Owner/GM-only safety-lock toggle (see
    EssenceActorSheet#applyEditable) stack in the header's top-right corner instead of overlapping
@@ -122,9 +155,9 @@
    rather than a sheet-wide control. */
 .essence .header-actions { position: absolute; top: 0; right: 0; display: flex; flex-direction: column; align-items: stretch; gap: 4px; }
 .essence .header-actions .wizard-launch, .essence .header-actions .edit-lock-btn { position: static; white-space: nowrap; }
-.essence .edit-lock-btn { color: #ef5350; }
-.essence .edit-lock-btn[aria-pressed="true"] { color: #66bb6a; }
-.essence .edit-lock-btn:hover { border-color: #f9a825; color: #f9a825; }
+.essence .edit-lock-btn { color: var(--essence-danger); }
+.essence .edit-lock-btn[aria-pressed="true"] { color: var(--essence-success-ink); }
+.essence .edit-lock-btn:hover { border-color: var(--essence-accent); color: var(--essence-accent); }
 .essence .header-main h1 { margin: 0 100px 4px 0; line-height: 1; }
 /* "Monster Creator" is wider than the Character sheet's "Wizard" button — the shared reserve
    (sized for "Wizard") let it overlap the name input's right edge. */
@@ -157,24 +190,24 @@
   text-overflow: ellipsis;
 }
 
-.essence .sheet-tabs { display: flex; gap: 12px; margin: 8px 0; border-bottom: 1px solid #666; flex: 0 0 auto; }
+.essence .sheet-tabs { display: flex; gap: 12px; margin: 8px 0; border-bottom: 1px solid var(--essence-line-strong); flex: 0 0 auto; }
 .essence .sheet-tabs a { padding: 4px 8px; cursor: pointer; opacity: 0.7; }
-.essence .sheet-tabs a.active { opacity: 1; border-bottom: 2px solid #f9a825; font-weight: bold; }
+.essence .sheet-tabs a.active { opacity: 1; border-bottom: 2px solid var(--essence-accent); font-weight: bold; }
 .essence section.tab { display: none; }
 .essence section.tab.active { display: block; }
 
-.essence .section-head { margin: 10px 0 4px; padding-bottom: 2px; border-bottom: 1px solid #555; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.05em; }
+.essence .section-head { margin: 10px 0 4px; padding-bottom: 2px; border-bottom: 1px solid var(--essence-line); text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.05em; }
 /* One step down from .section-head, for a sub-list header nested under a tab's own section (e.g.
    the Non-Combat tab's "Adventure-Limited Reach Triggers" table, character-sheet.hbs) — was a bare
    <h4> with no rule of its own, so it fell back to the browser's bold/oversized default instead of
    this system's small-caps section-header voice. */
-.essence .section-subhead { margin: 8px 0 4px; padding-bottom: 2px; border-bottom: 1px solid #444; text-transform: uppercase; font-size: 0.8em; letter-spacing: 0.05em; opacity: 0.85; font-weight: normal; }
+.essence .section-subhead { margin: 8px 0 4px; padding-bottom: 2px; border-bottom: 1px solid var(--essence-line-soft); text-transform: uppercase; font-size: 0.8em; letter-spacing: 0.05em; opacity: 0.85; font-weight: normal; }
 .essence .muted { opacity: 0.7; font-weight: normal; text-transform: none; }
 
 .essence .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .essence .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 16px; }
 
-.essence .domain { border: 1px solid #555; border-radius: 4px; padding: 6px 8px; }
+.essence .domain { border: 1px solid var(--essence-line); border-radius: 4px; padding: 6px 8px; }
 .essence .domain h4 { margin: 0 0 4px; text-align: center; }
 .essence .attr-row, .essence .resource-row, .essence .defense-row { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
 .essence .attr-label { flex: 0 0 80px; text-transform: capitalize; }
@@ -182,7 +215,7 @@
 /* Attribute-only Non-Combat roll (0.9.0, Doc L1237): same footprint as the Style roll die button. */
 .essence .attr-row .attr-roll { flex: 0 0 auto; width: 26px; height: 22px; padding: 0; line-height: 1; }
 /* Prepare Action (0.10.0): the held preparation sits with the combat state, amber like the other live-state notes. */
-.essence .combat-state.prepared-action { border: 1px solid #f9a825; border-radius: 4px; padding: 2px 6px; margin-bottom: 4px; }
+.essence .combat-state.prepared-action { border: 1px solid var(--essence-accent); border-radius: 4px; padding: 2px 6px; margin-bottom: 4px; }
 .essence .combat-state.prepared-action button { height: 22px; padding: 0 6px; font-size: 0.85em; }
 .essence .max-value { font-weight: bold; }
 /* Quick +/- for a resource's current value — a plain action button, so it (unlike the number
@@ -190,9 +223,9 @@
    EssenceActorSheet#onAdjustResource. */
 .essence .resource-step {
   width: 1.4em; height: 1.4em; padding: 0; line-height: 1; border-radius: 3px;
-  background: rgba(255,255,255,0.06); border: 1px solid #666;
+  background: rgba(255,255,255,0.06); border: 1px solid var(--essence-line-strong);
 }
-.essence .resource-step:hover { border-color: #f9a825; color: #f9a825; }
+.essence .resource-step:hover { border-color: var(--essence-accent); color: var(--essence-accent); }
 
 .essence .pip-track { display: inline-flex; gap: 3px; }
 /* Wound/Death Track/Combo/Influence pips were unlabeled <span>s — mouse-only, no state exposed
@@ -200,15 +233,15 @@
    aria-label set in the templates); this resets the browser's own button chrome (padding,
    border, font, background) back to the pip's own circular look. */
 .essence button.pip { padding: 0; margin: 0; font: inherit; -webkit-appearance: none; appearance: none; }
-.essence .pip { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #888; display: inline-block; background: transparent; }
-.essence .pip.filled { background: #f9a825; border-color: #f9a825; }
+.essence .pip { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--essence-line-bright); display: inline-block; background: transparent; }
+.essence .pip.filled { background: var(--essence-accent); border-color: var(--essence-accent); }
 .essence .pip.toggle { cursor: pointer; width: 18px; height: 18px; }
-.essence .pip.labeled { width: 18px; height: 18px; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; color: #ccc; }
-.essence .pip.labeled.filled { color: #000; }
+.essence .pip.labeled { width: 18px; height: 18px; font-size: 10px; display: inline-flex; align-items: center; justify-content: center; color: var(--essence-muted); }
+.essence .pip.labeled.filled { color: var(--essence-accent-ink); }
 /* No :focus-visible rule existed anywhere in the system — every custom-painted control (pips,
    tabs, skill-roll buttons, thread chips) was keyboard-invisible even once focusable. One rule,
    applied everywhere. */
-.essence :focus-visible { outline: 2px solid #f9a825; outline-offset: 2px; }
+.essence :focus-visible { outline: 2px solid var(--essence-accent); outline-offset: 2px; }
 
 .essence .wounds-row, .essence .influence-row { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 8px; }
 .essence .wound-block { display: flex; align-items: center; gap: 8px; }
@@ -223,29 +256,29 @@
    — reusing .thread-chip's own pill shape/sizing here rather than inventing a second one. */
 .essence .tag {
   display: inline-flex; align-items: center; gap: 4px; font-size: 0.8em; padding: 2px 8px;
-  border-radius: 10px; border: 1px solid #888; background: transparent;
+  border-radius: 10px; border: 1px solid var(--essence-line-bright); background: transparent;
 }
 .essence .tag button {
   background: none; border: none; padding: 0; margin: 0; font: inherit; color: inherit;
   cursor: pointer; line-height: 1;
 }
-.essence .tag button:hover { color: #ef5350; }
+.essence .tag button:hover { color: var(--essence-danger); }
 
 .essence .combat-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 6px; }
 .essence .combat-header-left { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; flex: 1 1 auto; min-width: 0; }
 .essence .action-pool { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.essence .skill-box { border: 1px solid #555; border-radius: 4px; padding: 4px 6px; margin-bottom: 6px; }
+.essence .skill-box { border: 1px solid var(--essence-line); border-radius: 4px; padding: 4px 6px; margin-bottom: 6px; }
 .essence .skill-box.gated { opacity: 0.6; border-style: dashed; }
-.essence .gate-note { font-size: 0.75em; color: #e0a020; padding-left: 4px; }
+.essence .gate-note { font-size: 0.75em; color: var(--essence-warn); padding-left: 4px; }
 /* An equipment row's over-Reach warning icon carries .muted (opacity 0.7) alongside it for spacing,
    which washed out the exclamation-triangle to the same low-emphasis gray as ordinary secondary
    text — the opposite of what a warning icon should read as. Restores full opacity and this
    system's own amber warning color (same one .gate-note already uses for "this is locked/blocked"
    text) so it actually reads as a warning again. */
-.essence .reach-warning { opacity: 1; color: #e0a020; }
+.essence .reach-warning { opacity: 1; color: var(--essence-warn); }
 .essence .skill-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
 .essence .skill-name { flex: 1; text-align: left; text-transform: capitalize; }
-.essence .skill-expertises { margin-top: 4px; padding-left: 4px; border-left: 2px solid #555; }
+.essence .skill-expertises { margin-top: 4px; padding-left: 4px; border-left: 2px solid var(--essence-line); }
 .essence .expertise-row { display: flex; gap: 6px; align-items: center; margin-bottom: 2px; }
 .essence .expertise-row select { flex: 1; font-size: 0.85em; }
 .essence .add-expertise { font-size: 0.8em; padding: 2px 6px; margin-top: 2px; }
@@ -257,15 +290,15 @@
 
 .essence .specialties { margin-bottom: 8px; }
 .essence .specialty-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
-.essence .specialty-row .attr-label { flex: 0 0 auto; cursor: help; border-bottom: 1px dotted #888; }
+.essence .specialty-row .attr-label { flex: 0 0 auto; cursor: help; border-bottom: 1px dotted var(--essence-line-bright); }
 .essence .specialty-row input[type="text"] { flex: 1; min-width: 120px; }
 .essence .specialty-row-wrap { align-items: flex-start; }
 .essence .thread-chips { display: flex; gap: 4px; flex-wrap: wrap; }
 .essence .thread-chip {
-  font-size: 0.8em; padding: 2px 8px; border-radius: 10px; border: 1px solid #888;
+  font-size: 0.8em; padding: 2px 8px; border-radius: 10px; border: 1px solid var(--essence-line-bright);
   background: transparent; color: inherit; cursor: pointer;
 }
-.essence .thread-chip.active { background: #f9a825; border-color: #f9a825; color: #000; font-weight: bold; }
+.essence .thread-chip.active { background: var(--essence-accent); border-color: var(--essence-accent); color: var(--essence-accent-ink); font-weight: bold; }
 /* The active-Thread-effects list under the Threads chips had no list-style reset, so it showed the
    browser's default bullet+indent — every other small list in this system (.item-list,
    .npc-tactics-list, .wizard-checklist) is already bulletless, so this one was the odd one out. */
@@ -306,7 +339,7 @@
 .essence button.used-toggle {
   display: inline-flex; align-items: center; justify-content: center;
   width: 1.7em; height: 1.7em; min-height: 0; padding: 0; margin: 0; flex: 0 0 auto;
-  font: inherit; font-size: 0.95em; color: #aaa; background: none; border: none; border-radius: 4px;
+  font: inherit; font-size: 0.95em; color: var(--essence-muted-soft); background: none; border: none; border-radius: 4px;
   cursor: pointer; -webkit-appearance: none; appearance: none; line-height: 1;
   transition: background-color 0.1s ease, color 0.1s ease;
 }
@@ -320,12 +353,12 @@
 .essence button[data-action="reconfigureItem"]:hover,
 .essence button[data-action="releaseItem"]:hover,
 .essence button.used-toggle:hover {
-  background: rgba(249, 168, 37, 0.15); color: #f9a825;
+  background: rgba(var(--essence-accent-rgb), 0.15); color: var(--essence-accent);
 }
 /* used-toggle (Phase 6, 0.6.101) marks an Inventory/Temporary/Armory row's committed-allocation flag —
    same ghost-icon sizing as its row neighbors above, but an amber fill when toggled on so "this item's
    allocation is locked for the Adventure" reads as a real state, not just another idle icon. */
-.essence button.used-toggle.used { color: #f9a825; background: rgba(249, 168, 37, 0.12); }
+.essence button.used-toggle.used { color: var(--essence-accent); background: rgba(var(--essence-accent-rgb), 0.12); }
 /* Delete is irreversible (no document undo in Foundry) and otherwise sits one icon-width from
    the roll button every card row uses every turn — give it its own color so it doesn't read as
    "just another icon" next to Edit/Move. The confirmation dialog in #onItemDelete is the actual
@@ -333,11 +366,11 @@
 .essence button[data-action="itemDelete"],
 .essence button[data-action="deleteTactic"],
 .essence button[data-action="deleteLeaderAbility"],
-.essence button[data-action="deleteBossAbility"] { color: #ef5350; }
+.essence button[data-action="deleteBossAbility"] { color: var(--essence-danger); }
 .essence button[data-action="itemDelete"]:hover,
 .essence button[data-action="deleteTactic"]:hover,
 .essence button[data-action="deleteLeaderAbility"]:hover,
-.essence button[data-action="deleteBossAbility"]:hover { background: rgba(239, 83, 80, 0.15); color: #ef5350; }
+.essence button[data-action="deleteBossAbility"]:hover { background: rgba(var(--essence-danger-rgb), 0.15); color: var(--essence-danger); }
 /* Adjacent action icons in a table cell otherwise touch edge-to-edge once boxed — .item-list li
    already has its own gap (see the base .item-list li rule) so doesn't need this too. */
 .essence .item-table td button + button { margin-left: 2px; }
@@ -353,17 +386,17 @@
 .essence button[data-action="rollNonCombatSkill"] {
   display: inline-flex; align-items: center; justify-content: center;
   width: 1.8em; height: 1.8em; min-height: 0; padding: 0; margin: 0; flex: 0 0 auto;
-  font: inherit; font-size: 1em; color: #f9a825; background: rgba(249, 168, 37, 0.08);
-  border: 1px solid rgba(249, 168, 37, 0.4); border-radius: 4px;
+  font: inherit; font-size: 1em; color: var(--essence-accent); background: rgba(var(--essence-accent-rgb), 0.08);
+  border: 1px solid rgba(var(--essence-accent-rgb), 0.4); border-radius: 4px;
   cursor: pointer; -webkit-appearance: none; appearance: none; line-height: 1;
   transition: background-color 0.1s ease, border-color 0.1s ease;
 }
 .essence button[data-action="rollSkill"]:hover,
 .essence button[data-action="rollNonCombatSkill"]:hover {
-  background: rgba(249, 168, 37, 0.25); border-color: #f9a825;
+  background: rgba(var(--essence-accent-rgb), 0.25); border-color: var(--essence-accent);
 }
 .essence button.link-button {
-  background: none; border: none; padding: 0; margin: 0; font: inherit; color: #f9a825;
+  background: none; border: none; padding: 0; margin: 0; font: inherit; color: var(--essence-accent);
   cursor: pointer; -webkit-appearance: none; appearance: none; text-decoration: none;
 }
 .essence button.link-button:hover { text-decoration: underline; }
@@ -379,9 +412,9 @@
    order and restores this one instance to plain auto-sized link-button text. */
 .essence button.link-button[data-action="itemEdit"] {
   width: auto; height: auto; min-height: 0; padding: 0; display: inline;
-  font: inherit; font-size: inherit; color: #f9a825; background: none;
+  font: inherit; font-size: inherit; color: var(--essence-accent); background: none;
 }
-.essence button.link-button[data-action="itemEdit"]:hover { background: none; color: #f9a825; text-decoration: underline; }
+.essence button.link-button[data-action="itemEdit"]:hover { background: none; color: var(--essence-accent); text-decoration: underline; }
 /* Card list rows previously showed name only — choosing an action mid-turn meant opening the
    card to check its cost/skill. The Wizard already surfaces this when building a hand; same
    metadata + search here, for the hand you're actually playing from. */
@@ -410,8 +443,8 @@
 
 .essence .condition-list { display: flex; flex-direction: column; gap: 6px; }
 .essence .condition-entry {
-  display: block; border: 1px solid #a33; border-radius: 4px; padding: 4px 8px;
-  background: rgba(170, 51, 51, 0.08);
+  display: block; border: 1px solid var(--essence-condition-border); border-radius: 4px; padding: 4px 8px;
+  background: rgba(var(--essence-condition-soft-rgb), 0.08);
 }
 .essence .condition-head { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
 .essence .condition-section { font-size: 0.85em; margin: 2px 0; }
@@ -425,7 +458,7 @@
 .essence .item-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 0.9em; }
 .essence .item-table th, .essence .item-table td { padding: 6px 8px; text-align: left; vertical-align: top; }
 .essence .item-table th {
-  padding-top: 0; padding-bottom: 4px; border-bottom: 1px solid #555;
+  padding-top: 0; padding-bottom: 4px; border-bottom: 1px solid var(--essence-line);
   font-size: 0.78em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.65; font-weight: normal;
 }
 .essence .item-table tbody tr { border-bottom: 1px solid rgba(255,255,255,0.08); }
@@ -446,7 +479,7 @@
   -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 1.2em), transparent 100%);
   mask-image: linear-gradient(to bottom, black calc(100% - 1.2em), transparent 100%);
 }
-.essence .item-table .origin-feature-row { background: rgba(249, 168, 37, 0.06); }
+.essence .item-table .origin-feature-row { background: rgba(var(--essence-accent-rgb), 0.06); }
 .essence .item-table .origin-feature-row td:first-child { font-weight: bold; }
 /* Equipment tab's Inventory/Temporary/Armory drop zones (see resolveEquipmentDropSlot in
    utils.mjs) — draggable-row is both the drag source (existing owned items, to move between zones)
@@ -464,10 +497,10 @@
    are icon-only quick-adds inside an already-compact row, not a labeled block-level row-adder,
    and keep the smaller ghost-icon treatment from the rule above instead. */
 .essence button:has(> i.fa-plus:first-child):not([data-action="toggleCard"]):not([data-action="toggleEquipment"]) {
-  margin-top: 2px; background: rgba(249, 168, 37, 0.08); border: 1px solid #f9a825; color: #f9a825;
+  margin-top: 2px; background: rgba(var(--essence-accent-rgb), 0.08); border: 1px solid var(--essence-accent); color: var(--essence-accent);
 }
 .essence button:has(> i.fa-plus:first-child):not([data-action="toggleCard"]):not([data-action="toggleEquipment"]):hover {
-  background: rgba(249, 168, 37, 0.2);
+  background: rgba(var(--essence-accent-rgb), 0.2);
 }
 
 .essence .career-row { margin-bottom: 8px; }
@@ -501,8 +534,8 @@
 .essence .tab.bio .bio-standing .bio-cell-wide { grid-column: span 2; }
 .essence .tab.bio .bio-standing .bio-cell-label { font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8; }
 .essence .tab.bio .bio-standing .bio-cell-note { font-size: 0.7em; }
-.essence .tab.bio .bio-standing .bio-cell-warn { border-color: #f9a825; }
-.essence .tab.bio .bio-standing .bio-cell-warn .bio-cell-value { color: #f9a825; }
+.essence .tab.bio .bio-standing .bio-cell-warn { border-color: var(--essence-accent); }
+.essence .tab.bio .bio-standing .bio-cell-warn .bio-cell-value { color: var(--essence-accent); }
 .essence .tab.bio .bio-standing .bio-standing-note { margin: 6px 0 0; line-height: 1.45; }
 .essence .tab.bio .bio-standing .bio-cell-value { font-size: 1.15em; line-height: 1.6em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .essence .tab.bio .bio-standing .bio-cell input[type="number"] { width: 100%; font-size: 1.05em; }
@@ -519,32 +552,32 @@
 .essence.roll-card .die {
   display: inline-flex; align-items: flex-start; justify-content: center;
   width: 36px; height: 36px; padding-top: 9px; box-sizing: border-box;
-  font-size: 15px; font-weight: bold; background: #2b2b2b; border: 1px solid #888; color: #eee;
+  font-size: 15px; font-weight: bold; background: var(--essence-panel-raised); border: 1px solid var(--essence-line-bright); color: var(--essence-ink);
   /* Kite/rhombus outline, matching a d10's face shape rather than a generic square die. */
   clip-path: polygon(50% 0%, 100% 35%, 82% 100%, 18% 100%, 0% 35%);
   filter: drop-shadow(0 2px 2px rgba(0,0,0,0.6));
 }
-.essence.roll-card .die.success-die { background: #2e7d32; color: #fff; filter: drop-shadow(0 2px 3px rgba(46,125,50,0.7)); }
-.essence.roll-card .die.surge-die { background: #f9a825; border-color: #ffca28; color: #000; }
+.essence.roll-card .die.success-die { background: var(--essence-success); color: #fff; filter: drop-shadow(0 2px 3px rgba(var(--essence-success-rgb),0.7)); }
+.essence.roll-card .die.surge-die { background: var(--essence-accent); border-color: var(--essence-accent-bright); color: var(--essence-accent-ink); }
 /* No .success-die.surge-die combined rule: since the 2026-09-09 rule change, Surges are counted
    AFTER the Defense check and the Success Die is excluded from that count (see resolveCombatRoll),
    so a die is never both classes at once — success-die and surge-die are mutually exclusive now. */
-/* #2e7d32/#c62828 (this system's "success"/"fail" green/red everywhere else, e.g. the success-die
+/* var(--essence-success)/var(--essence-condition) (this system's "success"/"fail" green/red everywhere else, e.g. the success-die
    background) measure ~2.8:1 and ~1.7:1 as TEXT on this sheet's rgb(48,40,49) background — both
    well under WCAG AA's 4.5:1 floor, and pass/fail here is color-only, no icon or shape backup.
    Lifted just for text-on-dark use; the darker tones stay correct wherever they're a background
    under white text (success-die, spent Surge cost badge), which already passes. */
-.essence.roll-card .pass { color: #66bb6a; font-weight: bold; }
-.essence.roll-card .fail { color: #ef5350; font-weight: bold; }
+.essence.roll-card .pass { color: var(--essence-success-ink); font-weight: bold; }
+.essence.roll-card .fail { color: var(--essence-danger); font-weight: bold; }
 .essence.roll-card .muted { opacity: 0.7; font-size: 0.9em; }
 .essence.roll-card .target-results { width: 100%; border-collapse: collapse; margin: 4px 0; font-size: 0.9em; }
-.essence.roll-card .target-results th, .essence.roll-card .target-results td { border: 1px solid #555; padding: 2px 6px; text-align: left; }
+.essence.roll-card .target-results th, .essence.roll-card .target-results td { border: 1px solid var(--essence-line); padding: 2px 6px; text-align: left; }
 .essence.roll-card .target-results th { background: rgba(255,255,255,0.05); }
 .essence.roll-card .surge-options { margin: 6px 0; }
 .essence.roll-card .surges-remaining { margin-bottom: 4px; }
 .essence.roll-card .surge-option {
   display: flex; gap: 6px; align-items: flex-start; width: 100%; text-align: left;
-  background: rgba(249, 168, 37, 0.12); border: 1px solid #f9a825; border-radius: 4px;
+  background: rgba(var(--essence-accent-rgb), 0.12); border: 1px solid var(--essence-accent); border-radius: 4px;
   padding: 4px 6px; margin-bottom: 3px; cursor: pointer; color: inherit; font-size: 0.85em;
   /* Foundry v14 loads system CSS via @import ... layer(system), which loses to ANY unlayered
      core rule of matching selector regardless of specificity (only !important reliably wins
@@ -555,11 +588,11 @@
 }
 .essence.roll-card .surge-option .cost {
   flex: 0 0 auto; min-width: 1.4em; text-align: center; font-weight: bold;
-  background: #f9a825; color: #000; border-radius: 3px; padding: 1px 3px; align-self: flex-start;
+  background: var(--essence-accent); color: var(--essence-accent-ink); border-radius: 3px; padding: 1px 3px; align-self: flex-start;
 }
 .essence.roll-card .surge-option .surge-text { flex: 1; }
-.essence.roll-card .surge-option.spent { background: rgba(46, 125, 50, 0.25); border-color: #2e7d32; opacity: 0.85; }
-.essence.roll-card .surge-option.spent .cost { background: #2e7d32; color: #fff; }
+.essence.roll-card .surge-option.spent { background: rgba(var(--essence-success-rgb), 0.25); border-color: var(--essence-success); opacity: 0.85; }
+.essence.roll-card .surge-option.spent .cost { background: var(--essence-success); color: #fff; }
 .essence.roll-card .surge-option:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* ============ Card sheet: read view ============
@@ -568,20 +601,20 @@
    language so the card in your hand, on the sheet, and in chat all read as the same object. */
 .essence .card-view-toggle {
   flex: 0 0 auto; align-self: center; width: auto; white-space: nowrap;
-  background: rgba(249, 168, 37, 0.12); border: 1px solid #f9a825; color: #f9a825;
+  background: rgba(var(--essence-accent-rgb), 0.12); border: 1px solid var(--essence-accent); color: var(--essence-accent);
 }
-.essence .card-view-toggle:hover { background: rgba(249, 168, 37, 0.22); }
+.essence .card-view-toggle:hover { background: rgba(var(--essence-accent-rgb), 0.22); }
 /* Framed like a physical card — a bordered box separate from the rest of the sheet chrome,
    closer to how the rules' own card-anatomy reference presents one. */
 .essence .card-view {
-  border: 1px solid #666; border-radius: 8px; padding: 10px 12px; background: rgba(0,0,0,0.15);
+  border: 1px solid var(--essence-line-strong); border-radius: 8px; padding: 10px 12px; background: rgba(0,0,0,0.15);
 }
 .essence .card-view-style-row { font-weight: bold; text-transform: uppercase; letter-spacing: 0.03em; font-size: 1.05em; }
 .essence .card-view-subtype { font-weight: normal; opacity: 0.8; text-transform: none; }
 .essence .card-view-expertises { font-size: 0.85em; opacity: 0.8; margin-bottom: 6px; }
 .essence .card-view-infogrid {
   display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; margin: 8px 0;
-  border: 1px solid #555; border-radius: 4px; padding: 6px 10px; background: rgba(255,255,255,0.03);
+  border: 1px solid var(--essence-line); border-radius: 4px; padding: 6px 10px; background: rgba(255,255,255,0.03);
 }
 .essence .card-view-infogrid > div { display: flex; flex-direction: column; }
 .essence .card-view-statlabel {
@@ -591,22 +624,22 @@
 .essence .card-view-line { margin-bottom: 10px; }
 .essence .card-view-label {
   font-weight: bold; text-transform: uppercase; font-size: 0.75em; letter-spacing: 0.05em;
-  color: #f9a825; margin-bottom: 2px;
+  color: var(--essence-accent); margin-bottom: 2px;
 }
 .essence .card-view-text { line-height: 1.4; }
 .essence .card-view-text p { margin: 0 0 4px; }
 .essence .card-view-surges { margin: 10px 0; }
 .essence .card-view-surges .surge-option {
-  display: flex; gap: 6px; align-items: flex-start; background: rgba(249, 168, 37, 0.12);
-  border: 1px solid #f9a825; border-radius: 4px; padding: 4px 6px; margin-bottom: 3px; font-size: 0.85em;
+  display: flex; gap: 6px; align-items: flex-start; background: rgba(var(--essence-accent-rgb), 0.12);
+  border: 1px solid var(--essence-accent); border-radius: 4px; padding: 4px 6px; margin-bottom: 3px; font-size: 0.85em;
 }
 .essence .card-view-surges .cost {
   flex: 0 0 auto; min-width: 1.4em; text-align: center; font-weight: bold;
-  background: #f9a825; color: #000; border-radius: 3px; padding: 1px 3px;
+  background: var(--essence-accent); color: var(--essence-accent-ink); border-radius: 3px; padding: 1px 3px;
 }
 .essence .card-view-surges .surge-text { flex: 1; }
 .essence .card-view-rider {
-  border: 1px solid #555; border-left: 3px solid #f9a825; border-radius: 4px;
+  border: 1px solid var(--essence-line); border-left: 3px solid var(--essence-accent); border-radius: 4px;
   padding: 6px 8px; margin: 10px 0; background: rgba(255,255,255,0.03);
 }
 .essence .card-view-rider-title { font-weight: bold; text-transform: uppercase; font-size: 0.8em; letter-spacing: 0.05em; margin-bottom: 3px; }
@@ -619,59 +652,59 @@
    the border/frame and section-label colors are overridden per type — everything else (layout,
    infogrid, surge-badge-adjacent styling) reuses the shared .card-view* rules above as-is. */
 
-/* Condition — #c62828, reusing this system's existing danger/fail red intentionally. */
+/* Condition — var(--essence-condition), reusing this system's existing danger/fail red intentionally. */
 .essence .card-view-toggle.condition-view-toggle {
-  background: rgba(198, 40, 40, 0.12); border-color: #c62828; color: #ef9a9a;
+  background: rgba(var(--essence-condition-rgb), 0.12); border-color: var(--essence-condition); color: var(--essence-condition-ink);
 }
-.essence .card-view-toggle.condition-view-toggle:hover { background: rgba(198, 40, 40, 0.22); }
-.essence .condition-view { border-color: #c62828; }
-.essence .condition-view .card-view-label { color: #ef5350; }
+.essence .card-view-toggle.condition-view-toggle:hover { background: rgba(var(--essence-condition-rgb), 0.22); }
+.essence .condition-view { border-color: var(--essence-condition); }
+.essence .condition-view .card-view-label { color: var(--essence-danger); }
 /* Rules' own printed-card convention: "the first section is boxed and shaded." */
 .essence .condition-view-section-primary {
-  border: 1px solid #c62828; border-radius: 4px; padding: 6px 8px; background: rgba(198, 40, 40, 0.12);
+  border: 1px solid var(--essence-condition); border-radius: 4px; padding: 6px 8px; background: rgba(var(--essence-condition-rgb), 0.12);
 }
 /* The Condition edit-form's own classification badge (Ordinary/Specialty/Wound/Consequence/Cover/
    Other, added 0.6.102) had "badge" in its class name but no badge styling — it rendered as plain
    muted text. Small pill treatment, reusing this system's established tag/chip shape. */
 .essence .condition-classification-badge {
   display: inline-block; font-size: 0.8em; padding: 2px 8px; border-radius: 10px;
-  border: 1px solid #666; background: rgba(255,255,255,0.04);
+  border: 1px solid var(--essence-line-strong); background: rgba(255,255,255,0.04);
 }
 
-/* Equipment (including Toolkits/Consumable Kits) — #42a5f5, steel blue. */
+/* Equipment (including Toolkits/Consumable Kits) — var(--essence-equipment), steel blue. */
 .essence .card-view-toggle.equipment-view-toggle {
-  background: rgba(66, 165, 245, 0.12); border-color: #42a5f5; color: #90caf9;
+  background: rgba(var(--essence-equipment-rgb), 0.12); border-color: var(--essence-equipment); color: var(--essence-equipment-ink);
 }
-.essence .card-view-toggle.equipment-view-toggle:hover { background: rgba(66, 165, 245, 0.22); }
-.essence .equipment-view { border-color: #42a5f5; }
-.essence .equipment-view .card-view-label { color: #42a5f5; }
+.essence .card-view-toggle.equipment-view-toggle:hover { background: rgba(var(--essence-equipment-rgb), 0.22); }
+.essence .equipment-view { border-color: var(--essence-equipment); }
+.essence .equipment-view .card-view-label { color: var(--essence-equipment); }
 
-/* Chassis — #8d6e63 (bronze/structural) and Fitting — #26a69a (teal), sharing one sheet/template
+/* Chassis — var(--essence-chassis) (bronze/structural) and Fitting — var(--essence-fitting) (teal), sharing one sheet/template
    but branching on item.type via the .component-view-chassis/.component-view-fitting modifier. */
-.essence .card-view-toggle.component-view-toggle { background: rgba(141, 110, 99, 0.12); border-color: #8d6e63; color: #bcaaa4; }
-.essence .card-view-toggle.component-view-toggle:hover { background: rgba(141, 110, 99, 0.22); }
-.essence .component-view-chassis { border-color: #8d6e63; }
-.essence .component-view-chassis .card-view-label { color: #a1887f; }
-.essence .component-view-fitting { border-color: #26a69a; }
-.essence .component-view-fitting .card-view-label { color: #4db6ac; }
+.essence .card-view-toggle.component-view-toggle { background: rgba(var(--essence-chassis-rgb), 0.12); border-color: var(--essence-chassis); color: var(--essence-chassis-soft); }
+.essence .card-view-toggle.component-view-toggle:hover { background: rgba(var(--essence-chassis-rgb), 0.22); }
+.essence .component-view-chassis { border-color: var(--essence-chassis); }
+.essence .component-view-chassis .card-view-label { color: var(--essence-chassis-ink); }
+.essence .component-view-fitting { border-color: var(--essence-fitting); }
+.essence .component-view-fitting .card-view-label { color: var(--essence-fitting-ink); }
 
-/* Augment — #ab47bc (violet), "should feel like treasure." */
+/* Augment — var(--essence-augment) (violet), "should feel like treasure." */
 .essence .card-view-toggle.augment-view-toggle {
-  background: rgba(171, 71, 188, 0.12); border-color: #ab47bc; color: #ce93d8;
+  background: rgba(var(--essence-augment-rgb), 0.12); border-color: var(--essence-augment); color: var(--essence-augment-ink);
 }
-.essence .card-view-toggle.augment-view-toggle:hover { background: rgba(171, 71, 188, 0.22); }
-.essence .augment-view { border-color: #ab47bc; }
-.essence .augment-view .card-view-label { color: #ce93d8; }
+.essence .card-view-toggle.augment-view-toggle:hover { background: rgba(var(--essence-augment-rgb), 0.22); }
+.essence .augment-view { border-color: var(--essence-augment); }
+.essence .augment-view .card-view-label { color: var(--essence-augment-ink); }
 
 /* ============ Character Creation Wizard ============ */
 .essence-wizard-root { display: flex; flex-direction: column; height: 100%; }
-.essence .wizard-steps { display: flex; flex-wrap: wrap; gap: 2px; padding: 4px 8px; border-bottom: 1px solid #555; flex: 0 0 auto; }
+.essence .wizard-steps { display: flex; flex-wrap: wrap; gap: 2px; padding: 4px 8px; border-bottom: 1px solid var(--essence-line); flex: 0 0 auto; }
 .essence .wizard-step-tab { font-size: 0.78em; padding: 3px 6px; border-radius: 3px; opacity: 0.65; cursor: pointer; white-space: nowrap; }
-.essence .wizard-step-tab.active { opacity: 1; background: rgba(249, 168, 37, 0.15); font-weight: bold; }
+.essence .wizard-step-tab.active { opacity: 1; background: rgba(var(--essence-accent-rgb), 0.15); font-weight: bold; }
 .essence .wizard-body { flex: 1 1 auto; overflow-y: auto; padding: 8px 12px; }
 .essence .wizard-footer {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  padding: 6px 12px; border-top: 1px solid #555; flex: 0 0 auto;
+  padding: 6px 12px; border-top: 1px solid var(--essence-line); flex: 0 0 auto;
 }
 .essence .wizard-row { display: flex; gap: 16px; flex-wrap: wrap; margin: 6px 0; }
 .essence .wizard-row label { display: flex; align-items: center; gap: 4px; }
@@ -681,38 +714,38 @@
    Exception, normally set automatically by the Item Grants system) — a plain <details>/<summary>
    rather than a always-expanded section with paragraph exposition in front of every item. */
 .essence .advanced-section { margin-top: 8px; }
-.essence .advanced-section summary { cursor: pointer; color: #ccc; font-size: 0.9em; padding: 2px 0; }
+.essence .advanced-section summary { cursor: pointer; color: var(--essence-muted); font-size: 0.9em; padding: 2px 0; }
 .essence .advanced-section[open] summary { margin-bottom: 4px; }
 .essence .wizard-pick-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
 .essence .wizard-pick-list button { padding: 3px 8px; }
-.essence .wizard-pick-list button.chosen { background: #f9a825; color: #000; font-weight: bold; }
+.essence .wizard-pick-list button.chosen { background: var(--essence-accent); color: var(--essence-accent-ink); font-weight: bold; }
 /* Card/equipment names in the item-list previews (Wizard) and elsewhere — clicking opens the
    real Item sheet, so they need to actually read as links rather than plain static text. */
-.essence a[data-action="previewItem"] { color: #f9a825; cursor: pointer; }
+.essence a[data-action="previewItem"] { color: var(--essence-accent); cursor: pointer; }
 .essence a[data-action="previewItem"]:hover { text-decoration: underline; }
 .essence .wizard-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.essence .wizard-scroll-list { max-height: 220px; overflow-y: auto; border: 1px solid #555; border-radius: 4px; padding: 4px 6px; }
+.essence .wizard-scroll-list { max-height: 220px; overflow-y: auto; border: 1px solid var(--essence-line); border-radius: 4px; padding: 4px 6px; }
 .essence .wizard-checklist { list-style: none; padding: 0; }
 .essence .wizard-checklist li { padding: 2px 0; }
-.essence .wizard-checklist li.ok { color: #66bb6a; }
-.essence .wizard-checklist li.fail { color: #ef5350; }
+.essence .wizard-checklist li.ok { color: var(--essence-success-ink); }
+.essence .wizard-checklist li.fail { color: var(--essence-danger); }
 /* Domain Emphasis buttons (Monster Creator) reuse the same "chosen" look as Origin picks,
    just outside .wizard-pick-list since they sit in a plain .wizard-row. */
-.essence .wizard-row button.chosen { background: #f9a825; color: #000; font-weight: bold; }
+.essence .wizard-row button.chosen { background: var(--essence-accent); color: var(--essence-accent-ink); font-weight: bold; }
 .essence .wizard-generate {
   display: block; width: 100%; margin: 8px 0; padding: 8px; font-size: 1em; font-weight: bold;
-  background: rgba(249, 168, 37, 0.15); border-color: #f9a825; color: #f9a825;
+  background: rgba(var(--essence-accent-rgb), 0.15); border-color: var(--essence-accent); color: var(--essence-accent);
 }
-.essence .wizard-generate:hover { background: rgba(249, 168, 37, 0.3); }
+.essence .wizard-generate:hover { background: rgba(var(--essence-accent-rgb), 0.3); }
 /* Wizard's inline Species Nature/Trait picker (character-wizard.mjs, Identity step) — replaces
    the old "(open — choose Traits here)" link out to the Species Item's own authoring sheet. */
-.essence .wizard-origin-picker { border: 1px solid #555; border-radius: 4px; padding: 6px 10px; margin: 6px 0 12px; }
-.essence .wizard-origin-text { font-size: 0.9em; color: #ccc; margin: 2px 0 4px; }
+.essence .wizard-origin-picker { border: 1px solid var(--essence-line); border-radius: 4px; padding: 6px 10px; margin: 6px 0 12px; }
+.essence .wizard-origin-text { font-size: 0.9em; color: var(--essence-muted); margin: 2px 0 4px; }
 .essence .wizard-trait-list { list-style: none; padding: 0; margin: 0; }
-.essence .wizard-trait-row { border-top: 1px solid #444; padding: 6px 0; }
+.essence .wizard-trait-row { border-top: 1px solid var(--essence-line-soft); padding: 6px 0; }
 .essence .wizard-trait-row:first-child { border-top: none; }
 .essence .wizard-trait-row .chosen-toggle { display: flex; align-items: center; gap: 6px; }
-.essence .wizard-subchoice { margin: 4px 0 2px 1.4em; padding: 4px 8px; background: rgba(249, 168, 37, 0.08); border-radius: 4px; }
+.essence .wizard-subchoice { margin: 4px 0 2px 1.4em; padding: 4px 8px; background: rgba(var(--essence-accent-rgb), 0.08); border-radius: 4px; }
 .essence .wizard-subchoice .subchoice-option { display: inline-flex; align-items: center; gap: 4px; margin-right: 12px; }
 
 /* Content Wizard's type picker and Bulk Import's template picker — a grid of icon+label cards
@@ -728,27 +761,27 @@
 .essence .content-type-card {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
   height: auto; min-height: 72px;
-  padding: 12px 8px; border: 1px solid #555; border-radius: 6px; background: rgba(255,255,255,0.03);
+  padding: 12px 8px; border: 1px solid var(--essence-line); border-radius: 6px; background: rgba(255,255,255,0.03);
 }
 .essence .content-type-card img { width: 32px; height: 32px; object-fit: contain; flex: 0 0 auto; }
 .essence .content-type-card span { font-size: 0.85em; text-align: center; line-height: 1.2; }
 .essence .content-type-card:hover:not(:disabled) { background: rgba(255,255,255,0.08); }
-.essence .content-type-card.chosen { background: rgba(249, 168, 37, 0.15); border-color: #f9a825; font-weight: bold; }
-.essence .content-type-action-card, .essence .content-type-reaction-card { border-left: 3px solid #f9a825; }
-.essence .content-type-equipment { border-left: 3px solid #42a5f5; }
-.essence .content-type-condition { border-left: 3px solid #c62828; }
-.essence .content-type-chassis { border-left: 3px solid #a1887f; }
-.essence .content-type-fitting { border-left: 3px solid #4db6ac; }
-.essence .content-type-augment { border-left: 3px solid #ab47bc; }
+.essence .content-type-card.chosen { background: rgba(var(--essence-accent-rgb), 0.15); border-color: var(--essence-accent); font-weight: bold; }
+.essence .content-type-action-card, .essence .content-type-reaction-card { border-left: 3px solid var(--essence-accent); }
+.essence .content-type-equipment { border-left: 3px solid var(--essence-equipment); }
+.essence .content-type-condition { border-left: 3px solid var(--essence-condition); }
+.essence .content-type-chassis { border-left: 3px solid var(--essence-chassis-ink); }
+.essence .content-type-fitting { border-left: 3px solid var(--essence-fitting-ink); }
+.essence .content-type-augment { border-left: 3px solid var(--essence-augment); }
 .essence .csv-upload {
-  display: block; margin: 10px 0; padding: 12px; border: 1px dashed #777; border-radius: 6px;
+  display: block; margin: 10px 0; padding: 12px; border: 1px dashed var(--essence-line-dashed); border-radius: 6px;
   text-align: center; background: rgba(255,255,255,0.03);
 }
 .essence .csv-upload input[type="file"] { display: block; margin: 6px auto 0; }
 
 .essence .wizard-array-block {
   display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px;
-  border: 1px solid #555; border-radius: 4px; padding: 6px; margin-bottom: 6px;
+  border: 1px solid var(--essence-line); border-radius: 4px; padding: 6px; margin-bottom: 6px;
 }
 .essence .wizard-array-block input[type="text"] { flex: 0 0 auto; min-width: 140px; }
 .essence .wizard-array-block textarea { flex: 1 1 100%; resize: vertical; }
@@ -757,20 +790,20 @@
 /* whats-new.mjs's chat card — not scoped under .essence since it renders inside Foundry's chat
    log, not a sheet. */
 .essence-whats-new {
-  border: 1px solid #f9a825; border-radius: 8px; overflow: hidden;
-  background: linear-gradient(180deg, rgba(249, 168, 37, 0.10), rgba(0, 0, 0, 0.25));
+  border: 1px solid var(--essence-accent); border-radius: 8px; overflow: hidden;
+  background: linear-gradient(180deg, rgba(var(--essence-accent-rgb), 0.10), rgba(0, 0, 0, 0.25));
   margin: 2px 0;
 }
 .essence-whats-new-header {
   display: flex; align-items: center; gap: 10px; padding: 8px 12px;
-  background: linear-gradient(90deg, rgba(249, 168, 37, 0.35), rgba(249, 168, 37, 0.05));
-  border-bottom: 1px solid rgba(249, 168, 37, 0.5);
+  background: linear-gradient(90deg, rgba(var(--essence-accent-rgb), 0.35), rgba(var(--essence-accent-rgb), 0.05));
+  border-bottom: 1px solid rgba(var(--essence-accent-rgb), 0.5);
 }
-.essence-whats-new-header i { font-size: 1.6em; color: #f9a825; }
+.essence-whats-new-header i { font-size: 1.6em; color: var(--essence-accent); }
 .essence-whats-new-title { font-weight: bold; font-size: 1.05em; letter-spacing: 0.02em; }
 .essence-whats-new-version {
   display: inline-block; margin-top: 2px; font-size: 0.8em; padding: 1px 7px; border-radius: 10px;
-  background: #f9a825; color: #000; font-weight: bold;
+  background: var(--essence-accent); color: var(--essence-accent-ink); font-weight: bold;
 }
 .essence-whats-new-body { padding: 8px 12px; font-size: 0.92em; line-height: 1.4; }
 .essence-whats-new-body p { margin: 0 0 8px; }
@@ -787,9 +820,9 @@
 .essence.team .team-field-label { display: block; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8; }
 .essence.team .team-identity { display: block; margin-top: 2px; }
 .essence.team .team-identity input { width: 100%; }
-.essence.team .team-tier { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 92px; padding: 6px 10px; border: 1px solid rgba(249, 168, 37, 0.45); border-radius: 4px; text-align: center; }
+.essence.team .team-tier { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 92px; padding: 6px 10px; border: 1px solid rgba(var(--essence-accent-rgb), 0.45); border-radius: 4px; text-align: center; }
 .essence.team .team-tier .team-field-label { white-space: nowrap; }
-.essence.team .team-tier-value { font-size: 2em; line-height: 1.1; font-weight: bold; color: #f9a825; }
+.essence.team .team-tier-value { font-size: 2em; line-height: 1.1; font-weight: bold; color: var(--essence-accent); }
 .essence.team .team-tier-value .muted { font-size: 0.45em; color: inherit; }
 .essence.team .team-tier-actions { display: flex; flex-direction: column; align-items: stretch; gap: 2px; margin-top: 2px; }
 .essence.team .team-tier-actions button { white-space: nowrap; font-size: 0.85em; }
