@@ -12,6 +12,17 @@ build-history under a new dated heading; delete this file once everything below 
 - The world must reload the system after the file copy. `game.shutDown()` from the console, then
   relaunch the world (see build-history 2026-09-27, 0.8.0, for why: pack locks).
 - Console open. Any error whose stack names `systems/essence-system` fails the run.
+- Push the wiki patch from your machine (the cloud session cannot reach the wiki repo). From the
+  folder next to your `essence-foundry` checkout:
+
+  ```
+  git clone https://github.com/COFC-Coaching/essence-foundry.wiki.git
+  cd essence-foundry.wiki
+  git am ../essence-foundry/design/wiki/0001-v0.6-update-notes.patch
+  git push
+  ```
+
+  Then delete `design/wiki/` from the repo. Check 95 below confirms the result.
 
 ## 0.8.1: resize and scroll
 
@@ -298,6 +309,8 @@ build-history under a new dated heading; delete this file once everything below 
     "Adventures & Downtime", "Enemy Construction" and "Team Tier & Economic Scale" exist; "Grade
     Budgets" replaces "Role Budget System"; the Full Manifestation Guide's cost table shows six
     Ranks and the profile table has no Wound Capacity column. Every table renders (no raw HTML).
-95. Wiki: https://github.com/COFC-Coaching/essence-foundry/wiki/V0.6-Update-Notes opens and is
-    linked from Home and the sidebar (if the push from the build session was refused, push the
-    prepared commit from a machine with wiki write access; see build-history).
+95. Wiki (after the push in "Before starting"):
+    https://github.com/COFC-Coaching/essence-foundry/wiki/V0.6-Update-Notes opens; Home carries
+    the V5 notice with a link to it; the sidebar lists it first under "Essence System Rules"; the
+    page's five sections render (Team Tier, Attribute benefits, Recovery, Adventure end, enemy
+    construction). `design/wiki/` has been deleted from the repo afterwards.
