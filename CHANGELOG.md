@@ -2,6 +2,35 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.14.0
+
+**Sheet redesign, part one: Foundry 13 minimum, design tokens, native tabs, the new frame.**
+Steps 0 to 3 of `design/css-migration-plan.md`. Nothing moves on the sheet yet; this release lays
+the groundwork the vitals sidebar and per-tab reorders (0.15.0) build on.
+
+**Foundry 13 minimum.** `compatibility.minimum` is now 13 (verified 14). The native tab manager,
+theme variables and container queries this release relies on arrived in v13.
+
+**Design tokens.** Every color in the stylesheet reads a `--essence-*` custom property; no hex
+literal is left in a rule. The palette is retuned to the concept: warm near-black ground, a muted
+gold accent in place of the bright amber, softer lines and parchment ink. The sheet is a
+self-themed dark surface in both Foundry themes and inherits only Foundry's fonts (`--font-h1`,
+`--font-body`).
+
+**Cover art.** New world setting, Character sheet artwork (Settings, Essence System). Pick an
+image and it shows behind every character sheet through translucent panels: the root paints the
+art, a veil layer darkens it, and every panel, card, domain and skill box is about 84% opaque so
+the art just peeks through. Blank keeps the plain background. Changing the setting re-renders
+open Actor sheets.
+
+**Native tabs.** The Character and Team sheets use ApplicationV2's own tab manager (`static
+TABS`, the built-in `tab` action). Foundry now remembers the active tab per open sheet, toggles
+the sections and handles keyboard focus; the hand-wired tab code is gone. Behaviour is unchanged.
+
+**Frame.** The character sheet root is a grid: header and tab strip span the width, the tab body
+and a vitals sidebar sit below and scroll independently. The sidebar is a second `scrollable`
+region so Foundry keeps its scroll position across re-renders. It is empty until 0.15.0 and
+collapses while empty, so the layout reads exactly as before. Below 1100px the sidebar narrows;
 ## 0.13.6
 
 **Ryan's rulings on the gap questions (2026-09-27), first batch.**

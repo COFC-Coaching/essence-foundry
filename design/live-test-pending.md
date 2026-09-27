@@ -1,28 +1,24 @@
-# Live test: 0.8.1 through 0.12.0
+# Live test: 0.8.1 through 0.14.0
 
 Branch `claude/elastic-lamarr-32f578-lza4a9`, commits `cac234e` (0.8.1), `0b5e315` (0.9.0),
-`6243178` (0.10.0), `cfc5147` (0.10.1), `52dcba9` (0.11.0) and the 0.12.0 release commit after
-it. None was
-live-tested when built (cloud session, no Foundry). Run this in a world on Foundry
-v14 with the branch checked out into `Data/systems/essence-system`. Record results in
-build-history under a new dated heading; delete this file once everything below has passed.
+`6243178` (0.10.0), `cfc5147` (0.10.1), `52dcba9` (0.11.0), `9d7fe32` (0.12.0), `3082ceb`
+(0.13.0) and the 0.14.0 release commit after it. Each was built in a cloud session without Foundry.
+Run this in a world on Foundry v14 with the branch checked out into `Data/systems/essence-system`.
+Record results in build-history under a new dated heading; delete this file once everything below
+has passed.
+
+**Where this stands (2026-09-27).** Checks 1 to 95 were run on the local machine against 0.13.5
+(build-history, "Live test of 0.8.1 through 0.13.5"): all passed after the 0.13.1 to 0.13.5 fixes
+except 89 (Species Trait sub-choices do not feed Resistances; waiting on a decision), 17's second
+half (no legacy Dilettante in the test world) and 53 (superseded by 84). The wiki patch was pushed
+and `design/wiki/` removed. What is left to run: 89 once decided, and the 0.14.0 checks 96 to 103
+at the end of this file.
 
 ## Before starting
 
 - The world must reload the system after the file copy. `game.shutDown()` from the console, then
   relaunch the world (see build-history 2026-09-27, 0.8.0, for why: pack locks).
 - Console open. Any error whose stack names `systems/essence-system` fails the run.
-- Push the wiki patch from your machine (the cloud session cannot reach the wiki repo). From the
-  folder next to your `essence-foundry` checkout:
-
-  ```
-  git clone https://github.com/COFC-Coaching/essence-foundry.wiki.git
-  cd essence-foundry.wiki
-  git am ../essence-foundry/design/wiki/0001-v0.6-update-notes.patch
-  git push
-  ```
-
-  Then delete `design/wiki/` from the repo. Check 95 below confirms the result.
 
 ## 0.8.1: resize and scroll
 
@@ -314,3 +310,32 @@ build-history under a new dated heading; delete this file once everything below 
     the V5 notice with a link to it; the sidebar lists it first under "Essence System Rules"; the
     page's five sections render (Team Tier, Attribute benefits, Recovery, Adventure end, enemy
     construction). `design/wiki/` has been deleted from the repo afterwards.
+
+## 0.14.0: Foundry 13 minimum, tokens, native tabs, frame
+
+96. Setup, Systems tab: The Essence System shows compatibility minimum 13, verified 14, and the
+    world launches with no compatibility warning on v14.
+97. Open a Character sheet. The palette is the concept's: warm near-black ground, muted gold
+    accent on the active tab underline and buttons (not bright amber), parchment-colored text,
+    soft dark lines. Every tab reads clearly. Switch Foundry to the light theme (Settings,
+    Configure Settings, Core, Theme): the sheet keeps the same dark look and stays readable.
+    Switch back.
+98. Tabs: click each of the five tabs on the Character sheet. Only that section shows and the
+    tab gets the gold underline. Edit any field (submitOnChange re-renders): the same tab stays
+    active and the scroll position holds. Tab onto the strip and use the arrow keys: focus and
+    the active tab move. Open a second Character sheet: its tab is independent of the first.
+    Lock the sheet (padlock): tabs still switch while inputs are disabled.
+99. Team sheet: the same three checks for Team, Record and Charter.
+100. Console: no error mentions `changeTab`, `tabGroups` or `_prepareTabs`.
+101. Settings, Configure Settings, Essence System: "Character sheet artwork" shows a file picker.
+    Pick any image, save. Every open Character sheet re-renders with the image showing faintly
+    through the whole sheet: visible between panels, just peeking through the attribute domains,
+    skill boxes, cards and tables, never competing with text. Clear the field and save: the plain
+    background returns.
+102. Resize the Character sheet to under about 860px wide: the layout stays one column with no
+    horizontal scrollbar and no clipped content. Widen it past 1100px: still one column (the
+    sidebar has no content until 0.15.0). Inspect the root in the element picker: an empty
+    `aside.sheet-side.sheet-scroll` sits after `div.sheet-scroll` and is `display: none`.
+103. NPC, Monster and Full Manifestation sheets and every Item sheet: open one of each. Colors match
+    the Character sheet's palette; nothing is unstyled, invisible or clipped. Play a card: the chat
+    card uses the same gold accent.

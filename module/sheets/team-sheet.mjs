@@ -37,7 +37,6 @@ export default class EssenceTeamSheet extends HandlebarsApplicationMixin(ActorSh
     form: { submitOnChange: true },
     window: { resizable: true },
     actions: {
-      changeTab: EssenceTeamSheet.#onChangeTab,
       toggleEditLock: EssenceTeamSheet.#onToggleEditLock,
       raiseTier: EssenceTeamSheet.#onRaiseTier,
       correctTier: EssenceTeamSheet.#onCorrectTier,
@@ -53,7 +52,20 @@ export default class EssenceTeamSheet extends HandlebarsApplicationMixin(ActorSh
     body: { template: "systems/essence-system/templates/actor/team-sheet.hbs", scrollable: [".sheet-scroll"] }
   };
 
-  #activeTab = "team";
+  /** Foundry's own tab manager (ApplicationV2.TABS, 0.14.0) replaces the hand-rolled active-tab
+   *  field this sheet used to keep: the strip renders from context.tabs, the built-in "tab" action
+   *  switches sections, and tabGroups remembers the choice per open sheet. */
+  static TABS = {
+    primary: {
+      initial: "team",
+      tabs: [
+        { id: "team", label: "ESSENCE.Team.TabTeam" },
+        { id: "record", label: "ESSENCE.Team.TabRecord" },
+        { id: "charter", label: "ESSENCE.Team.TabCharter" }
+      ]
+    }
+  };
+
   #editUnlocked = false;
   /** Set by "Add" so the next render focuses the new row's Name field. */
   #focusNewRow = null;
@@ -61,6 +73,7 @@ export default class EssenceTeamSheet extends HandlebarsApplicationMixin(ActorSh
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     const system = this.actor.system;
+    context.tabs = this._prepareTabs("primary");
     context.actor = this.actor;
     context.system = system;
     context.isGM = game.user.isGM;
@@ -89,23 +102,11 @@ export default class EssenceTeamSheet extends HandlebarsApplicationMixin(ActorSh
     for (const el of this.element.querySelectorAll("[data-record-field]")) {
       el.addEventListener("change", (event) => this.#onRecordFieldChange(event));
     }
-    this.#applyActiveTab();
     this.#applyEditable();
     if (this.#focusNewRow) {
       const { key, index } = this.#focusNewRow;
       this.#focusNewRow = null;
       this.element.querySelector(`[data-array="${key}"][data-index="${index}"][data-record-field="name"]`)?.focus();
-    }
-  }
-
-  #applyActiveTab() {
-    for (const link of this.element.querySelectorAll('.sheet-tabs [data-action="changeTab"]')) {
-      const active = link.dataset.tab === this.#activeTab;
-      link.classList.toggle("active", active);
-      link.setAttribute("aria-selected", String(active));
-    }
-    for (const section of this.element.querySelectorAll("section.tab")) {
-      section.classList.toggle("active", section.dataset.tab === this.#activeTab);
     }
   }
 
@@ -147,11 +148,6 @@ export default class EssenceTeamSheet extends HandlebarsApplicationMixin(ActorSh
   /** A Team holds no Items. */
   async _onDropItem(event, item) {
     return null;
-  }
-
-  static #onChangeTab(event, target) {
-    this.#activeTab = target.dataset.tab;
-    this.#applyActiveTab();
   }
 
   static #onToggleEditLock() {

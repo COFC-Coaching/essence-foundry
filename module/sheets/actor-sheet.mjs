@@ -102,7 +102,6 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       itemView: EssenceActorSheet.#onItemView,
       itemEdit: EssenceActorSheet.#onItemEdit,
       itemDelete: EssenceActorSheet.#onItemDelete,
-      changeTab: EssenceActorSheet.#onChangeTab,
       toggleTempWound: EssenceActorSheet.#onToggleTempWound,
       toggleCoreWound: EssenceActorSheet.#onToggleCoreWound,
       toggleDeathTrack: EssenceActorSheet.#onToggleDeathTrack,
@@ -168,17 +167,31 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   }
 
   static PARTS = {
-    body: { template: "systems/essence-system/templates/actor/character-sheet.hbs", scrollable: [".sheet-scroll"] }
+    body: { template: "systems/essence-system/templates/actor/character-sheet.hbs", scrollable: [".sheet-scroll", ".sheet-side"] }
   };
 
-  #activeTab = "core";
+  /** Foundry's own tab manager (ApplicationV2.TABS, 0.14.0) replaces the hand-rolled active-tab
+   *  field this sheet used to keep: the strip renders from context.tabs, the built-in "tab" action
+   *  switches sections, and tabGroups remembers the choice per open sheet. */
+  static TABS = {
+    primary: {
+      initial: "core",
+      tabs: [
+        { id: "core", label: "ESSENCE.Character.TabCore" },
+        { id: "combat", label: "ESSENCE.Character.TabCombat" },
+        { id: "equipment", label: "ESSENCE.Item.EquipmentLabel" },
+        { id: "noncombat", label: "ESSENCE.Character.TabNonCombat" },
+        { id: "bio", label: "ESSENCE.Character.TabBiography" }
+      ]
+    }
+  };
+
   /** Sheet-wide safety lock — see #applyEditable. Resets to locked every time the sheet is
    *  reopened; not persisted, since it's a "let me fix this right now" switch, not a setting. */
   #editUnlocked = false;
 
   _onRender(context, options) {
     super._onRender(context, options);
-    this.#applyActiveTab();
     this.#applyEditable();
     this.#wireCardControls();
     this.#wireExpertiseSelects();
@@ -278,7 +291,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       if (el.matches("[data-card-filter], [data-card-sort]")) continue;
       el.disabled = true;
     }
-      for (const el of body.querySelectorAll('button[data-action]:not([data-action="changeTab"]), a[data-action]:not([data-action="changeTab"])')) {
+      for (const el of body.querySelectorAll('button[data-action]:not([data-action="tab"]), a[data-action]:not([data-action="tab"])')) {
         el.classList.add("locked");
         el.style.pointerEvents = "none";
       }
@@ -299,17 +312,6 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   static #onToggleEditLock() {
     this.#editUnlocked = !this.#editUnlocked;
     this.render();
-  }
-
-  #applyActiveTab() {
-    for (const link of this.element.querySelectorAll(".sheet-tabs a")) {
-      const active = link.dataset.tab === this.#activeTab;
-      link.classList.toggle("active", active);
-      link.setAttribute("aria-selected", active);
-    }
-    for (const section of this.element.querySelectorAll("section.tab")) {
-      section.classList.toggle("active", section.dataset.tab === this.#activeTab);
-    }
   }
 
   /**
@@ -368,11 +370,6 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     event.dataTransfer.setData("text/plain", JSON.stringify(item.toDragData()));
   }
 
-  static #onChangeTab(event, target) {
-    this.#activeTab = target.dataset.tab;
-    this.#applyActiveTab();
-  }
-
   static #onOpenWizard() {
     new EssenceCharacterWizard(this.actor).render(true);
   }
@@ -393,6 +390,10 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
+    context.tabs = this._prepareTabs("primary");
+    // Cover art behind the whole sheet (concept, 2026-09-27): a world setting, read here and
+    // handed to the template as a CSS variable so the stylesheet owns how it is shown.
+    context.sheetArt = game.settings.get("essence-system", "sheetArtwork") || "";
     context.actor = this.actor;
     context.isEditable = this.isEditable;
     context.editUnlocked = this.#editUnlocked;

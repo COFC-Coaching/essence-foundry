@@ -10,7 +10,15 @@ layout classes, custom form elements, dice-roll chat markup and header controls.
 replaces something this system currently hand-rolls. The redesign adopts them; it does not build
 parallel versions.
 
-## Where the stylesheet stands
+## Status (2026-09-27)
+
+Steps 0 to 3 shipped in 0.14.0 (see the CHANGELOG entry). One decision made while doing step 1:
+the sheet is a self-themed dark surface, not a consumer of Foundry's `--color-*` theme variables.
+Foundry's light theme puts dark text on parchment; over cover art and translucent panels that is
+unreadable, and the concept was drawn dark. So the tokens hold our own palette in both themes and
+read only Foundry's fonts (`--font-h1`, `--font-body`). Steps 4 to 8 are next, in order.
+
+## Where the stylesheet stood before 0.14.0
 
 - `styles/essence.css`, 810 lines. 161 hard-coded hex colors (51 distinct) across 133 rules. The
   amber `#f9a825` alone appears 45 times.
@@ -57,13 +65,14 @@ go out now. Steps 4 to 8 wait for his review of the concept.
 
 ### 0. Prerequisite: Foundry 13 minimum
 
-`system.json` `compatibility.minimum` is 12. Native tabs, theme variables and the tooltip
+Done in 0.14.0. `system.json` `compatibility.minimum` is 12. Native tabs, theme variables and the tooltip
 manager's current form arrived in v13, and every release since 0.7.10 has only been run against
 v14. Raise the minimum to 13. One line, plus a CHANGELOG note. Size: small.
 
 ### 1. Tokens over hex
 
-Point the existing tokens at Foundry's theme variables where a match exists, keep hard values only
+Done in 0.14.0, in two commits as described (mechanical pass at today's values, then the retune),
+with the self-themed exception noted under Status. Point the existing tokens at Foundry's theme variables where a match exists, keep hard values only
 for what is ours (the three domain colors, the four card-type colors, the gold accent), then
 replace every hex literal in `essence.css` with the matching `var(--essence-*)`.
 
@@ -88,7 +97,9 @@ Size: medium. Mostly mechanical; a scripted replacement from a hex-to-token map,
 
 ### 2. Native tabs
 
-Replace the custom tab code with `static TABS` on the character and NPC sheets. Foundry renders
+Done in 0.14.0 for the Character and Team sheets (the NPC sheet has a single column and no tab
+strip, so nothing to convert). Replace the custom tab code with `static TABS` on the character and
+NPC sheets. Foundry renders
 the strip from `context.tabs`, toggles `.active`, remembers the group per sheet instance, and
 handles keyboard focus. Delete `#activeTab`, `#onChangeTab`, `#applyActiveTab`, the `changeTab`
 action and the `.sheet-tabs` / `section.tab` rules; style Foundry's `.tabs` with tokens instead.
@@ -98,7 +109,10 @@ Size: small to medium. Behaviour is identical for the user.
 
 ### 3. Frame: sidebar grid and second scroll region
 
-`.essence-sheet-root` becomes a two-column grid (`300px 1fr`, rows `auto 1fr`) with the tab strip
+Done in 0.14.0. As built: the header and tab strip span both columns (not sticky inside the scroll
+region), the sidebar is the right-hand column at 300px, and `.sheet-side:empty` hides it so the
+grid reads as one column until step 4. The root also carries the cover-art background and the
+`::before` veil from the translucency note above. `.essence-sheet-root` becomes a two-column grid (`300px 1fr`, rows `auto 1fr`) with the tab strip
 `position: sticky` inside the main scroll region and a second `.sheet-side.sheet-scroll` column
 listed in `PARTS.body.scrollable`. Container queries at 1100px and 860px collapse the sidebar
 above the tabs, matching the concept's compact artboard. The sidebar is empty at this step, so the

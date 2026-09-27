@@ -8,28 +8,30 @@
    themes, and inherits only Foundry's fonts and scrollbar styling. */
 .application.essence, .essence.roll-card, .essence-whats-new {
   --essence-ground: #141210;
-  --essence-panel: #201d19;
-  --essence-panel-raised: #2b2b2b;
-  --essence-well: #1b1b1b;
-  --essence-editor-bg: rgb(30, 25, 27);
-  --essence-editor-menu: rgb(58, 48, 59);
-  --essence-editor-content: rgb(48, 40, 49);
-  --essence-line-soft: #444;
-  --essence-line: #555;
-  --essence-line-strong: #666;
-  --essence-line-dashed: #777;
-  --essence-line-bright: #888;
-  --essence-ink: #eee;
+  --essence-veil: rgba(20, 18, 16, 0.84);
+  --essence-sheet-art: none;
+  --essence-panel: rgba(32, 29, 25, 0.84);
+  --essence-panel-raised: rgba(37, 33, 28, 0.84);
+  --essence-well: #17150f;
+  --essence-editor-bg: #17150f;
+  --essence-editor-menu: #25211c;
+  --essence-editor-content: #201d19;
+  --essence-line-soft: #2a2722;
+  --essence-line: #33302a;
+  --essence-line-strong: #4a443b;
+  --essence-line-dashed: #4a443b;
+  --essence-line-bright: #6f665a;
+  --essence-ink: #ece6da;
   --essence-ink-bright: #f3eee4;
-  --essence-muted: #ccc;
-  --essence-muted-soft: #aaa;
-  --essence-accent: #f9a825;
-  --essence-accent-rgb: 249, 168, 37;
-  --essence-accent-bright: #ffca28;
-  --essence-accent-ink: #000;
+  --essence-muted: #a89f90;
+  --essence-muted-soft: #8f8677;
+  --essence-accent: #d4b06a;
+  --essence-accent-rgb: 212, 176, 106;
+  --essence-accent-bright: #e8c98a;
+  --essence-accent-ink: #1b1813;
   --essence-warn: #e0a020;
-  --essence-danger: #ef5350;
-  --essence-danger-rgb: 239, 83, 80;
+  --essence-danger: #e07a5f;
+  --essence-danger-rgb: 200, 90, 74;
   --essence-success: #2e7d32;
   --essence-success-rgb: 46, 125, 50;
   --essence-success-ink: #66bb6a;
@@ -58,7 +60,7 @@
   --essence-domain-spiritual-ink: #b48ad9;
   --essence-card-action: #43a047;
   --essence-card-reaction: #e05252;
-  --essence-card-equipment: #f9a825;
+  --essence-card-equipment: #d4b06a;
   --essence-card-basic: #8f8677;
   --essence-font-display: var(--font-h1, "Modesto Condensed", Georgia, serif);
   --essence-font-body: var(--font-body, var(--font-primary, "Signika", system-ui, sans-serif));
@@ -66,15 +68,60 @@
   --essence-radius-sm: 6px;
 }
 
-/* Sheet frame (0.8.1). The window is resizable (DEFAULT_OPTIONS.window.resizable on every actor
-   sheet); the header and tab strip stay put and only .sheet-scroll scrolls. Each sheet's PARTS lists
-   .sheet-scroll as `scrollable`, so Foundry restores its scroll position across the re-render that
-   submitOnChange triggers on every edit. The redesign adds a second scroll region (the vitals
-   sidebar) beside this one; the frame is already a column flexbox so that is a grid change here,
-   not a template rewrite. */
-.essence .essence-sheet-root { display: flex; flex-direction: column; height: 100%; padding: 4px 8px; overflow: hidden; }
+/* Sheet frame (0.8.1, reworked 0.14.0). The window is resizable (DEFAULT_OPTIONS.window.resizable
+   on every actor sheet); the header and tab strip stay put and only the .sheet-scroll regions
+   scroll. Each sheet's PARTS lists them as `scrollable`, so Foundry restores scroll position across
+   the re-render that submitOnChange triggers on every edit.
+   Cover art: the root paints the ground color plus the optional world artwork (the sheetArtwork
+   setting, passed in as the --essence-sheet-art custom property on the root element). A ::before
+   pseudo-element lays the veil over the art and under the content; isolation: isolate keeps that
+   z-index: -1 layer inside the root instead of dropping behind the window. Panels then use the
+   translucent --essence-panel / --essence-panel-raised so the art shows through everywhere. With no
+   artwork set the veil simply darkens the ground color by a hair, which is invisible. */
+.essence .essence-sheet-root {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 4px 8px;
+  overflow: hidden;
+  color: var(--essence-ink);
+  background: var(--essence-ground) var(--essence-sheet-art) center / cover no-repeat;
+}
+.essence .essence-sheet-root::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--essence-veil);
+  pointer-events: none;
+}
 .essence .essence-sheet-root > .sheet-header, .essence .essence-sheet-root > .sheet-tabs { flex: 0 0 auto; }
 .essence .sheet-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; padding-right: 4px; scrollbar-width: thin; }
+/* Character sheet: header and tab strip span the full width; below them the tab body and the
+   vitals sidebar (.sheet-side, filled in 0.15.0) sit side by side and scroll independently. An
+   empty sidebar collapses so the layout is unchanged until it has content. Container queries
+   (the window is the container) drop to a single column on narrow sheets. */
+.essence.character .essence-sheet-root {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  container-type: inline-size;
+}
+.essence.character .essence-sheet-root:has(> .sheet-side:not(:empty)) { column-gap: 10px; }
+.essence.character .essence-sheet-root > .sheet-header, .essence.character .essence-sheet-root > .sheet-tabs { grid-column: 1 / -1; }
+.essence.character .essence-sheet-root > .sheet-scroll { grid-column: 1; grid-row: 3; min-height: 0; }
+.essence.character .essence-sheet-root > .sheet-side { grid-column: 2; grid-row: 3; width: 300px; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; }
+.essence.character .essence-sheet-root > .sheet-side:empty { display: none; }
+@container (max-width: 1100px) {
+  .essence.character .essence-sheet-root > .sheet-side { width: 240px; }
+}
+@container (max-width: 860px) {
+  .essence.character .essence-sheet-root { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr) auto; }
+  .essence.character .essence-sheet-root > .sheet-scroll { grid-column: 1; grid-row: 3; }
+  .essence.character .essence-sheet-root > .sheet-side { grid-column: 1; grid-row: 4; width: auto; max-height: 40%; }
+}
 .application.essence.actor { min-width: 560px; min-height: 420px; }
 /* .essence-sheet-root is a column flexbox, so any element placed directly inside it — rather than
    inside a section/div wrapper, as everything else on every sheet is — inherits the column's
@@ -190,10 +237,13 @@
   text-overflow: ellipsis;
 }
 
+/* Tabs are Foundry's own (ApplicationV2.TABS, 0.14.0): core toggles .active on the strip's
+   [data-tab] links and on each section.tab; these rules only style that state. Core hides an
+   inactive .tab itself; the explicit rule stays as a belt for any theme that does not. */
 .essence .sheet-tabs { display: flex; gap: 12px; margin: 8px 0; border-bottom: 1px solid var(--essence-line-strong); flex: 0 0 auto; }
-.essence .sheet-tabs a { padding: 4px 8px; cursor: pointer; opacity: 0.7; }
+.essence .sheet-tabs a { padding: 4px 8px; cursor: pointer; opacity: 0.7; color: inherit; text-decoration: none; }
 .essence .sheet-tabs a.active { opacity: 1; border-bottom: 2px solid var(--essence-accent); font-weight: bold; }
-.essence section.tab { display: none; }
+.essence section.tab:not(.active) { display: none; }
 .essence section.tab.active { display: block; }
 
 .essence .section-head { margin: 10px 0 4px; padding-bottom: 2px; border-bottom: 1px solid var(--essence-line); text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.05em; }
@@ -207,7 +257,7 @@
 .essence .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .essence .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 16px; }
 
-.essence .domain { border: 1px solid var(--essence-line); border-radius: 4px; padding: 6px 8px; }
+.essence .domain { background: var(--essence-panel); border: 1px solid var(--essence-line); border-radius: 4px; padding: 6px 8px; }
 .essence .domain h4 { margin: 0 0 4px; text-align: center; }
 .essence .attr-row, .essence .resource-row, .essence .defense-row { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
 .essence .attr-label { flex: 0 0 80px; text-transform: capitalize; }
@@ -267,7 +317,7 @@
 .essence .combat-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 6px; }
 .essence .combat-header-left { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; flex: 1 1 auto; min-width: 0; }
 .essence .action-pool { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.essence .skill-box { border: 1px solid var(--essence-line); border-radius: 4px; padding: 4px 6px; margin-bottom: 6px; }
+.essence .skill-box { background: var(--essence-panel); border: 1px solid var(--essence-line); border-radius: 4px; padding: 4px 6px; margin-bottom: 6px; }
 .essence .skill-box.gated { opacity: 0.6; border-style: dashed; }
 .essence .gate-note { font-size: 0.75em; color: var(--essence-warn); padding-left: 4px; }
 /* An equipment row's over-Reach warning icon carries .muted (opacity 0.7) alongside it for spacing,

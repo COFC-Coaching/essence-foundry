@@ -3496,3 +3496,46 @@ live-verified on the local Foundry the same way as the live test above.
   Ryan's written rule; Q21 (Dash as a 1-unit-per-die reminder card) waits for the Doc wording.
   The Guide and wiki text for enemy Surges should follow once the Doc carries the ruling.
 - Verification: `npm test` (rules 116, migration 59), `node --check` on every changed module.
+
+### 2026-09-27 -- 0.14.0: sheet redesign part one (Foundry 13 minimum, tokens, native tabs, frame)
+
+Steps 0 to 3 of `design/css-migration-plan.md`, built in the cloud session while the local session
+ran the live test above; rebased onto 0.13.6 before pushing (conflicts only in CHANGELOG.md and the
+version line). Not live-tested; checks 96-103 in `design/live-test-pending.md`.
+
+- **Two commits for the stylesheet on purpose.** The first replaced all 161 hex literals with
+  `var(--essence-*)` at today's values (a scripted map, then a read), so it renders identically and
+  can be diffed as pure mechanics. The second retuned the token values to the concept palette and
+  changed the frame. A future "why does this look different" question lands on the second commit
+  only.
+- **Self-themed, not theme-following.** The plan's step 1 said to point tokens at Foundry's
+  `--color-*` theme variables. Done that way, the light theme puts near-black text on parchment
+  under a dark veil and translucent panels, which is unreadable, and the concept was drawn dark.
+  Decision: the sheet keeps its own palette in both Foundry themes and reads only Foundry's fonts
+  (`--font-h1`, `--font-body`). Recorded in the plan's Status section. Revisit only if a light
+  variant of the concept is drawn.
+- **Cover art through the whole sheet.** World setting `sheetArtwork` (a `FilePathField`, so the
+  settings UI gets Foundry's file picker for free). `_prepareContext` hands the path to the template
+  as `--essence-sheet-art` on the root element; the root paints ground + art, `::before` lays
+  `--essence-veil` (rgba .84) over it under the content, and `--essence-panel` /
+  `--essence-panel-raised` are rgba .84 so the art peeks through every box. `isolation: isolate` on
+  the root is what keeps the `z-index: -1` veil inside the sheet instead of behind the window; a
+  rule that drops it would make the veil vanish. `.domain` and `.skill-box` had no background
+  before and gained the panel token so they sit at the same depth as everything else.
+- **Native tabs.** `static TABS` on the Character and Team sheets, `context.tabs =
+  this._prepareTabs("primary")`, the strip rendered from `context.tabs` with `data-action="tab"`,
+  sections carrying `data-group` and `tab.cssClass`. Deleted `#activeTab`, `#applyActiveTab`,
+  `#onChangeTab` and the `changeTab` action on both sheets. The edit lock's selector that used to
+  exempt `changeTab` now exempts `tab`; forgetting that would have frozen the tab strip on a locked
+  sheet. The NPC sheet has no tab strip, so nothing to convert there.
+- **Frame ready for the sidebar.** The character root is a grid (`minmax(0,1fr) auto`, rows `auto
+  auto minmax(0,1fr)`); the header and tab strip span both columns, `.sheet-scroll` and the new
+  empty `<aside class="sheet-side sheet-scroll">` share row 3. `.sheet-side:empty { display: none }`
+  and a `:has()` gate on the column gap keep the layout identical until 0.15.0 fills it. The aside
+  is listed in `PARTS.body.scrollable` now so scroll position is kept from the first release that
+  has content. Container queries (the window is the container) at 1100px and 860px.
+- **Why the grid rule wins.** `.essence.character .essence-sheet-root` (three classes) overrides
+  the shared `.essence .essence-sheet-root { display: flex }` (two). Other actor sheets stay a
+  column flexbox; only the character sheet is a grid.
+- Verification: `npm test` (rules 116, migration 59), `node --check` on every module, template
+  block balance on the five touched templates, both new lang keys resolve, CSS braces balanced.

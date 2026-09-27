@@ -130,6 +130,18 @@ Hooks.once("init", () => {
 
   registerWhatsNewSetting();
 
+  // Cover art behind every actor sheet (sheet concept, 2026-09-27). A world-scoped image path
+  // through Foundry's own FilePathField, so the settings UI shows its file picker; blank = plain
+  // ground. The sheet class passes it to the template as a CSS variable (see actor-sheet.mjs).
+  game.settings.register("essence-system", "sheetArtwork", {
+    name: "ESSENCE.Settings.SheetArtwork.Name",
+    hint: "ESSENCE.Settings.SheetArtwork.Hint",
+    scope: "world", config: true,
+    type: new foundry.data.fields.FilePathField({ categories: ["IMAGE"], required: false, blank: true, initial: "" }),
+    default: "",
+    onChange: () => { for (const app of foundry.applications.instances.values()) if (app.document?.documentName === "Actor") app.render(); }
+  });
+
   game.settings.register("essence-system", "grantedItemCreatePermission", {
     scope: "world", config: false, type: Boolean, default: false
   });

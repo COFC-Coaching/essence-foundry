@@ -867,6 +867,8 @@
   "ESSENCE.Notify.AlreadyManifested": "{name} is already manifested as their {subtype} — open that Actor's own sheet to Return.",
   "ESSENCE.Notify.ManifestationDefeated": "{name}'s Manifestation Wound track is full — the form collapses.",
   "ESSENCE.Sheet.StrainForSurge": "Gain 1 Strain (to {next}) for 1 free Surge",
+  "ESSENCE.Settings.SheetArtwork.Name": "Character sheet artwork",
+  "ESSENCE.Settings.SheetArtwork.Hint": "An image shown faintly behind every character sheet, under the translucent panels. Leave blank for a plain background.",
   "ESSENCE.Notify.NoManifestationRank": "{name} has no Calling Rank to manifest with.",
   "ESSENCE.Notify.NoQualifyingItemActor": "No item in your Inventory currently qualifies for {source}.",
   "ESSENCE.Notify.NoQualifyingItemNpc": "No item in this NPC's Inventory currently qualifies for {source}.",

@@ -1,4 +1,4 @@
-<div class="essence-sheet-root">
+<div class="essence-sheet-root"{{#if sheetArt}} style="--essence-sheet-art: url('{{sheetArt}}')"{{/if}}>
 <header class="sheet-header">
   <div class="portrait-wrap">
     <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="editImage" title="{{localize 'ESSENCE.Sheet.PortraitTooltip'}}">
@@ -24,17 +24,15 @@
   </div>
 </header>
 
-<nav class="sheet-tabs" role="tablist">
-  <a data-action="changeTab" data-tab="core" role="tab" tabindex="0">{{localize "ESSENCE.Character.TabCore"}}</a>
-  <a data-action="changeTab" data-tab="combat" role="tab" tabindex="0">{{localize "ESSENCE.Character.TabCombat"}}</a>
-  <a data-action="changeTab" data-tab="equipment" role="tab" tabindex="0">{{localize "ESSENCE.Item.EquipmentLabel"}}</a>
-  <a data-action="changeTab" data-tab="noncombat" role="tab" tabindex="0">{{localize "ESSENCE.Character.TabNonCombat"}}</a>
-  <a data-action="changeTab" data-tab="bio" role="tab" tabindex="0">{{localize "ESSENCE.Character.TabBiography"}}</a>
+{{!-- Foundry's own tab manager (ApplicationV2.TABS, 0.14.0): the strip is built from context.tabs
+     and the built-in "tab" action switches the active section; nothing here is hand-wired. --}}
+<nav class="sheet-tabs tabs" role="tablist" data-group="primary">
+  {{#each tabs as |t|}}<a class="{{t.cssClass}}" data-action="tab" data-group="{{t.group}}" data-tab="{{t.id}}" role="tab" tabindex="0">{{localize t.label}}</a>{{/each}}
 </nav>
 <div class="sheet-scroll">
 
 {{!-- ============ CORE: attributes, resources, defenses, wounds ============ --}}
-<section class="tab core" data-tab="core">
+<section class="tab core {{tabs.core.cssClass}}" data-group="primary" data-tab="core">
   <h3 class="section-head">{{localize "ESSENCE.Sheet.AttributesResourcesDefenses"}}</h3>
   <div class="domains grid-3">
     {{#each domains as |d|}}
@@ -137,7 +135,7 @@
 </section>
 
 {{!-- ============ COMBAT: skills, cards, dice lifecycle ============ --}}
-<section class="tab combat" data-tab="combat">
+<section class="tab combat {{tabs.combat.cssClass}}" data-group="primary" data-tab="combat">
   <div class="combat-header">
     <div class="combat-header-left">
       <div class="action-pool">
@@ -448,7 +446,7 @@
 </section>
 
 {{!-- ============ EQUIPMENT: inventory / temporary / armory ============ --}}
-<section class="tab equipment" data-tab="equipment">
+<section class="tab equipment {{tabs.equipment.cssClass}}" data-group="primary" data-tab="equipment">
   <div class="equipment-drop-zone" data-drop-slot="inventory">
   <h3 class="section-head">{{localize "ESSENCE.Sheet.InventoryEquipment"}} <span class="muted">({{inventoryUsed}} / {{system.inventoryLimit}}) &middot; {{localize "ESSENCE.Team.Tier"}} {{teamTier}}</span></h3>
   {{#if (gt inventoryOverLimit 0)}}
@@ -548,7 +546,7 @@
 </section>
 
 {{!-- ============ NON-COMBAT: career, skills, influence, features ============ --}}
-<section class="tab noncombat" data-tab="noncombat">
+<section class="tab noncombat {{tabs.noncombat.cssClass}}" data-group="primary" data-tab="noncombat">
   <h3 class="section-head">{{localize "ESSENCE.Character.CareerKeyAspects"}}</h3>
   <div class="career-row">
     <label>{{localize "ESSENCE.Character.Career"}} <input name="system.career" type="text" value="{{system.career}}"></label>
@@ -684,7 +682,7 @@
 </section>
 
 {{!-- ============ BIOGRAPHY ============ --}}
-<section class="tab bio" data-tab="bio">
+<section class="tab bio {{tabs.bio.cssClass}}" data-group="primary" data-tab="bio">
   <div class="bio-standing">
     <h3 class="section-head">{{localize "ESSENCE.Character.TeamAndAdvancement"}}</h3>
     <div class="bio-standing-grid">
@@ -727,4 +725,7 @@
   <label>{{localize "ESSENCE.Character.GeneralNotes"}}<textarea name="system.playState.sessionNotes">{{system.playState.sessionNotes}}</textarea></label>
 </section>
 </div>
+{{!-- Vitals sidebar (frame in 0.14.0, contents in 0.15.0). It is a second scroll region beside the
+     tab body; while it is empty the stylesheet hides it and the grid collapses to one column. --}}
+<aside class="sheet-side sheet-scroll"></aside>
 </div>

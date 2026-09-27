@@ -29,15 +29,13 @@
   </div>
 </header>
 
-<nav class="sheet-tabs" role="tablist" aria-label="{{localize 'TYPES.Actor.team'}}">
-  <a data-action="changeTab" data-tab="team" role="tab" tabindex="0">{{localize "ESSENCE.Team.TabTeam"}}</a>
-  <a data-action="changeTab" data-tab="record" role="tab" tabindex="0">{{localize "ESSENCE.Team.TabRecord"}}</a>
-  <a data-action="changeTab" data-tab="charter" role="tab" tabindex="0">{{localize "ESSENCE.Team.TabCharter"}}</a>
+<nav class="sheet-tabs tabs" role="tablist" data-group="primary" aria-label="{{localize 'TYPES.Actor.team'}}">
+  {{#each tabs as |t|}}<a class="{{t.cssClass}}" data-action="tab" data-group="{{t.group}}" data-tab="{{t.id}}" role="tab" tabindex="0">{{localize t.label}}</a>{{/each}}
 </nav>
 <div class="sheet-scroll">
 
 {{!-- ============ TEAM: members ============ --}}
-<section class="tab team" data-tab="team">
+<section class="tab team {{tabs.team.cssClass}}" data-group="primary" data-tab="team">
   <p class="muted team-hint">{{localize "ESSENCE.Team.TierNote"}}</p>
   <h3 class="section-head">{{localize "ESSENCE.Team.Members"}} <span class="muted">({{members.length}})</span></h3>
   {{#if members.length}}
@@ -64,7 +62,7 @@
 </section>
 
 {{!-- ============ RECORD: things and organizations ============ --}}
-<section class="tab record" data-tab="record">
+<section class="tab record {{tabs.record.cssClass}}" data-group="primary" data-tab="record">
   <h3 class="section-head">{{localize "ESSENCE.Team.Things"}}</h3>
   <p class="muted team-hint">{{localize "ESSENCE.Team.ThingsHint"}}</p>
   <datalist id="essence-team-tags-{{actor.id}}">{{#each recordTags}}<option value="{{this}}"></option>{{/each}}</datalist>
@@ -107,7 +105,7 @@
 </section>
 
 {{!-- ============ CHARTER: the six agreements from Creating the Team ============ --}}
-<section class="tab charter" data-tab="charter">
+<section class="tab charter {{tabs.charter.cssClass}}" data-group="primary" data-tab="charter">
   <p class="muted team-hint">{{localize "ESSENCE.Team.CharterHint"}}</p>
   <label>{{localize "ESSENCE.Team.ReasonToCooperate"}}{{essenceEditor system.reasonToCooperate target="system.reasonToCooperate" button=true}}</label>
   <label>{{localize "ESSENCE.Team.MajorGoal"}}{{essenceEditor system.majorGoal target="system.majorGoal" button=true}}</label>
