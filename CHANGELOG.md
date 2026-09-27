@@ -2,6 +2,30 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.15.0
+
+**Sheet redesign, part two: the vitals sidebar, and the Core tab reordered.**
+Step 4 and the Core and Non-Combat halves of step 5 in `design/css-migration-plan.md`.
+
+**Vitals sidebar.** The Character sheet has a right-hand column that stays in view on every tab
+and scrolls on its own. From top to bottom: the Action and Reaction dice pools with their steppers;
+Resources (Stamina, Focus, Mana) with steppers and maximums; the three Defenses; Wounds, with
+Resilience, Temporary and Core Wound pips, Apply Damage, Recover Wound, Grant Recovery, the
+Adaptability reroll tick, the equipment bonus note and the Death Track when it is active;
+Conditions; and a readout of effective Reach with Pressure, Temporary and Core Influence, and
+Standing. Every control is the same one it was, moved, so nothing behaves differently. The sheet
+opens at 1080px wide to fit the column; below 860px it drops under the tab body.
+
+**Core tab.** Attributes only in the three domain boxes (Resources and Defenses are in the
+sidebar), then Resistances and Vulnerabilities, then General Features & Benefits and Languages,
+which move here from the Non-Combat tab. Wounds and the Death Track are sidebar-only.
+
+**Combat tab.** The header keeps Roll Initiative, End Turn, the prepared Action and the Turn state;
+the dice pools and the Conditions list are in the sidebar.
+
+**Non-Combat tab.** Career and Key Aspects, Non-Combat Skills, Connections, Influence and Reach.
+Languages and General Features & Benefits left for the Core tab.
+
 ## 0.14.0
 
 **Sheet redesign, part one: Foundry 13 minimum, design tokens, native tabs, the new frame.**

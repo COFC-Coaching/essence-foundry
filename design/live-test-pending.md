@@ -339,3 +339,35 @@ at the end of this file.
 103. NPC, Monster and Full Manifestation sheets and every Item sheet: open one of each. Colors match
     the Character sheet's palette; nothing is unstyled, invisible or clipped. Play a card: the chat
     card uses the same gold accent.
+
+## 0.15.0: vitals sidebar, Core tab reorder
+
+104. Open a Character sheet. It opens about 1080px wide. A sidebar on the right shows, top to
+    bottom: Action Dice and Reaction Dice with − / + and big numbers; Resources (Stamina, Focus,
+    Mana) each with − / +, an input and "/ max", labels in the domain colors; Defenses as three
+    tiles (Fortitude, Composure, Harmony); Wounds with the Wound state, Resilience, Temporary
+    Wounds pips and Available, Core Wounds pips, Apply Damage / Recover Wound / Grant Recovery,
+    the Adaptability reroll tick; Conditions ("None" when there are none); a readout of Reach with
+    Pressure, Influence (Temporary and Core) and Standing. Switch tabs: the sidebar stays.
+105. Sidebar controls: − and + on Action Dice change the number; − and + on Stamina change the
+    input and the chat log shows nothing unexpected; type a value into Focus and blur: it saves.
+    Click a Temporary Wound pip and a Core Wound pip: they toggle and the Wound state label
+    updates. Apply Damage opens the same dialog as before. Fill all five Core Wounds: the Death
+    Track appears inside the Wounds panel; clear one and it goes away. Lock the sheet: the
+    steppers and pips still work, the inputs are disabled.
+106. Sidebar scrolls on its own: shrink the window height until the sidebar overflows; a
+    scrollbar appears on the sidebar and the tab body keeps its own. Edit a field in the sidebar
+    (re-render): both scroll positions hold.
+107. Core tab: Attributes only in the three domain boxes (no Resource or Defense rows), then
+    Resistances and Vulnerabilities, then General Features & Benefits (origin rows highlighted,
+    Add Feature works, the rich-text Description field types), then Languages with its allowance
+    note. No Wounds section on the tab.
+108. Combat tab: the header shows only Roll Initiative, End Turn and the Turn state (and the
+    prepared Action when one is held); no dice pool row; no Conditions section at the bottom.
+    Non-Combat tab: Career and Key Aspects, Non-Combat Skills, Connections, Influence, Reach; no
+    Languages field, no General Features table.
+109. Drag a Condition from the Conditions compendium onto the sheet: it appears in the sidebar's
+    Conditions panel with its sections; the pen opens it and the trash removes it.
+110. Narrow the window to about 800px: the sidebar drops under the tab body, capped at 40% of the
+    height with its own scrollbar; nothing overlaps. Widen past 860px: it returns to the right.
+111. Console: no error whose stack names `systems/essence-system` while doing 104 to 110.

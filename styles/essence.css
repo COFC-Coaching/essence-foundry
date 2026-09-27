@@ -114,6 +114,39 @@
 .essence.character .essence-sheet-root > .sheet-scroll { grid-column: 1; grid-row: 3; min-height: 0; }
 .essence.character .essence-sheet-root > .sheet-side { grid-column: 2; grid-row: 3; width: 300px; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; }
 .essence.character .essence-sheet-root > .sheet-side:empty { display: none; }
+/* Vitals sidebar contents (0.15.0): the Core and Combat tab blocks moved here whole, so their own
+   rules (.wounds-row, .pip-track, .condition-list, .resource-step) still apply; these rules only
+   stack them into panels and turn the wide flex rows into a column. */
+.essence .sheet-side { display: flex; flex-direction: column; gap: 10px; padding-right: 4px; }
+.essence .side-panel { background: var(--essence-panel); border: 1px solid var(--essence-line); border-radius: var(--essence-radius-sm); padding: 10px 12px; }
+.essence .side-label { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; text-transform: uppercase; font-size: 0.8em; letter-spacing: 0.05em; color: var(--essence-muted); }
+.essence .side-state { color: var(--essence-accent); text-transform: none; letter-spacing: 0; font-weight: 600; }
+.essence .side-pools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.essence .side-pool { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.essence .side-pool .side-label { margin-bottom: 0; }
+.essence .side-pool-row { display: flex; align-items: center; gap: 8px; }
+.essence .side-pool-num { font-family: var(--essence-font-display); font-size: 2.2em; line-height: 1; color: var(--essence-ink-bright); min-width: 1.2em; text-align: center; }
+.essence .side-pool-note { grid-column: 1 / -1; text-align: center; font-size: 0.8em; }
+.essence .side-resource { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px; }
+.essence .side-resource-controls { display: inline-flex; align-items: center; gap: 4px; }
+.essence .side-domain-label { font-weight: 600; text-transform: capitalize; }
+.essence .domain-physical .side-domain-label { color: var(--essence-domain-physical-ink); }
+.essence .domain-mental .side-domain-label { color: var(--essence-domain-mental-ink); }
+.essence .domain-spiritual .side-domain-label { color: var(--essence-domain-spiritual-ink); }
+.essence .side-defenses { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.essence .side-defense { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 4px; border-radius: var(--essence-radius-sm); background: var(--essence-well); border: 1px solid var(--essence-line); }
+.essence .side-defense .side-domain-label { font-size: 0.75em; }
+.essence .side-defense-num { font-family: var(--essence-font-display); font-size: 1.8em; line-height: 1; }
+.essence .sheet-side .wounds-row { flex-direction: column; align-items: stretch; gap: 6px; margin-bottom: 6px; }
+.essence .sheet-side .wound-block { justify-content: space-between; flex-wrap: wrap; }
+.essence .sheet-side .wound-block .attr-label { flex: 1 1 auto; }
+.essence .sheet-side .side-buttons { justify-content: stretch; gap: 4px; }
+.essence .sheet-side .side-buttons button { flex: 1 1 auto; font-size: 0.85em; padding: 2px 4px; }
+.essence .sheet-side .equipment-bonus-sources { font-size: 0.8em; margin-bottom: 6px; }
+.essence .sheet-side .condition-list { gap: 4px; }
+.essence .sheet-side .condition-entry { padding: 3px 6px; }
+.essence .side-readout { display: flex; flex-direction: column; gap: 4px; font-size: 0.9em; }
+.essence .side-readout > div { display: flex; justify-content: space-between; gap: 8px; }
 @container (max-width: 1100px) {
   .essence.character .essence-sheet-root > .sheet-side { width: 240px; }
 }

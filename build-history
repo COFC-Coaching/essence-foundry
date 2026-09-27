@@ -3539,3 +3539,33 @@ version line). Not live-tested; checks 96-103 in `design/live-test-pending.md`.
   column flexbox; only the character sheet is a grid.
 - Verification: `npm test` (rules 116, migration 59), `node --check` on every module, template
   block balance on the five touched templates, both new lang keys resolve, CSS braces balanced.
+
+### 2026-09-27 -- 0.15.0: sheet redesign part two (vitals sidebar, Core tab reorder)
+
+Step 4 and the Core / Non-Combat part of step 5 of `design/css-migration-plan.md`. Shane's
+direction on the concept canvas the same day: Wounds only in the sidebar; Passive Features and
+Languages on Core, removed from Non-Combat; the art peeking through everywhere. Not live-tested;
+checks 104-111 in `design/live-test-pending.md`.
+
+- **Move, do not rewrite.** Every block in the sidebar is the Core or Combat tab markup cut and
+  pasted: same `data-action` names, same `name=` bindings, same partial for the Death Track. The
+  sheet class did not change except for the default window width. If a sidebar control misbehaves
+  in the live test, the cause is layout (a rule under `.sheet-side`), not wiring.
+- **The plan said to wait for Ryan on steps 4 to 8.** Shane owns the sheet layout and asked for it
+  now; Ryan's review is about rules. Recorded in the plan's step 4 note so the "waits for Ryan"
+  line there is read as history.
+- **Resources and Defenses left the domain boxes.** The Core tab's three domain boxes now hold
+  Attributes only; the sidebar reads the same `context.domains` entries (resourceLabel,
+  resourceField, resourceCurrent, resourceMax, defenseLabel, defenseValue) so no new context was
+  built. `.resource-row` / `.defense-row` rules stay because the NPC and Monster templates still use
+  them.
+- **Readout is read-only.** Reach, Pressure, Influence and Standing in the sidebar print derived
+  fields (`effectiveReach`, `reachPressure`, `coreInfluenceFilled`, `standing`); the inputs and pips
+  that change them stay on the Non-Combat tab. New lang keys for the Resources and Defenses labels,
+  the base-pools note, the Influence readout and the empty Conditions text.
+- **Width.** `position.width` 760 to 1080 so a fresh sheet shows the sidebar beside the tabs. Foundry
+  remembers a user's resized width per sheet, so existing users who had dragged it narrow may see
+  the stacked layout first and will need to widen once.
+- Verification: `npm test` (rules 116, migration 59), `node --check` on the two changed modules,
+  Handlebars block balance and HTML tag pair counts on the character template, all 269 localize
+  keys in the template resolve, CSS braces balanced.

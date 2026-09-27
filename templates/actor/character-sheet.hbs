@@ -31,9 +31,10 @@
 </nav>
 <div class="sheet-scroll">
 
-{{!-- ============ CORE: attributes, resources, defenses, wounds ============ --}}
+{{!-- ============ CORE: attributes, resistances, passive features, languages ============
+     Resources, Defenses, Wounds and the Death Track moved to the vitals sidebar (0.15.0). --}}
 <section class="tab core {{tabs.core.cssClass}}" data-group="primary" data-tab="core">
-  <h3 class="section-head">{{localize "ESSENCE.Sheet.AttributesResourcesDefenses"}}</h3>
+  <h3 class="section-head">{{localize "ESSENCE.Common.Attributes"}}</h3>
   <div class="domains grid-3">
     {{#each domains as |d|}}
       <div class="domain domain-{{d.key}}">
@@ -48,69 +49,10 @@
             </span>
           </div>
         {{/each}}
-        <div class="resource-row">
-          <span class="attr-label">{{d.resourceLabel}}</span>
-          <button type="button" class="resource-step" data-action="adjustResource" data-field="{{d.resourceField}}" data-delta="-1" aria-label="{{localize 'ESSENCE.Sheet.DecreaseAria' label=d.resourceLabel}}">−</button>
-          <input class="current-input" type="number" name="system.playState.{{d.resourceField}}" value="{{d.resourceCurrent}}">
-          <button type="button" class="resource-step" data-action="adjustResource" data-field="{{d.resourceField}}" data-delta="1" aria-label="{{localize 'ESSENCE.Sheet.IncreaseAria' label=d.resourceLabel}}">+</button>
-          / <span class="max-value">{{d.resourceMax}}</span>
-        </div>
-        <div class="defense-row">
-          <span class="attr-label">{{d.defenseLabel}}</span>
-          <span class="max-value">{{d.defenseValue}}</span>
-        </div>
       </div>
     {{/each}}
   </div>
 
-  <h3 class="section-head">{{localize "ESSENCE.Common.Wounds"}} <span class="muted">— {{system.woundState}}</span></h3>
-  <div class="wounds-row">
-    <div class="wound-block">
-      <span class="attr-label">{{localize "ESSENCE.Common.Resilience"}}</span>
-      <input class="current-input" type="number" name="system.resilience" value="{{system.resilience}}">
-      {{#if (ne system.effectiveResilience system.resilience)}}<span class="muted">{{localize "ESSENCE.Sheet.EffectiveResilienceNote" n=system.effectiveResilience}}</span>{{/if}}
-    </div>
-    <div class="wound-block">
-      <span class="attr-label">{{localize "ESSENCE.Common.TemporaryWounds"}}</span>
-      <span class="pip-track">
-        {{#each temporaryWoundPips as |filled i|}}
-          <button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempWound" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="{{localize 'ESSENCE.Sheet.TemporaryWoundAria' n=(addOne i)}}"></button>
-        {{/each}}
-      </span>
-      {{!-- How many Temporary Wounds gear and features grant. Nothing derives this field and no
-            Active Effect writes it, so it needs a real input somewhere; it used to live on the
-            Character Wizard's Wounds step, which was removed as play state. --}}
-      <label class="muted" title="{{localize 'ESSENCE.Sheet.TemporaryWoundsAvailableHint'}}">{{localize "ESSENCE.Common.Available"}}
-        <input type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" style="width:3em" min="0" max="5">
-      </label>
-    </div>
-    <div class="wound-block">
-      <span class="attr-label">{{localize "ESSENCE.Common.CoreWounds"}}</span>
-      <span class="pip-track">
-        {{#each system.coreWounds as |w i|}}
-          <button type="button" class="pip toggle {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" title="{{w.condition}}" aria-pressed="{{w.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreWoundAria' n=(addOne i)}}{{#if w.condition}}: {{w.condition}}{{/if}}"></button>
-        {{/each}}
-      </span>
-    </div>
-    <div class="wound-block">
-      <button type="button" data-action="applyDamage">{{localize "ESSENCE.Sheet.ApplyDamage"}}</button>
-      <button type="button" data-action="recoverWound">{{localize "ESSENCE.Sheet.RecoverWound"}}</button>
-      <button type="button" data-action="grantRecovery">{{localize "ESSENCE.Sheet.GrantRecovery"}}</button>
-    </div>
-    <div class="wound-block">
-      <label style="display:flex;align-items:center;gap:4px;" title="{{localize 'ESSENCE.Sheet.AdaptabilityRerollHint'}}">
-        <input type="checkbox" data-action="toggleAdaptabilityReroll" {{#if system.playState.adaptabilityRerollAvailable}}checked{{/if}}> {{localize "ESSENCE.Sheet.AdaptabilityReroll"}}
-      </label>
-    </div>
-  </div>
-  {{#if equipmentBonusSources.length}}
-    <div class="muted equipment-bonus-sources">
-      {{localize "ESSENCE.Sheet.EquipmentBonusSourcesLabel"}}:
-      {{#each equipmentBonusSources as |b|}}
-        <span class="equipment-bonus-source">{{b.name}} ({{#if b.fortitude}}{{localize "ESSENCE.Common.Fortitude"}} {{b.fortitude}}{{/if}}{{#if b.resilience}}{{#if b.fortitude}}, {{/if}}{{localize "ESSENCE.Common.Resilience"}} {{b.resilience}}{{/if}}{{#if b.movement}}{{#if (or b.fortitude b.resilience)}}, {{/if}}{{localize "ESSENCE.Common.Movement"}} {{b.movement}}{{/if}}{{#if b.reach}}{{#if (or b.fortitude b.resilience b.movement)}}, {{/if}}{{localize "ESSENCE.Sheet.Reach"}} {{b.reach}}{{/if}}){{#unless @last}}; {{/unless}}</span>
-      {{/each}}
-    </div>
-  {{/if}}
   <div class="resistances-row">
     <div class="resistance-block">
       <span class="attr-label">{{localize "ESSENCE.Common.Resistances"}}</span>
@@ -131,25 +73,42 @@
       <button type="button" data-action="addVulnerability">{{localize "ESSENCE.Sheet.AddVulnerability"}}</button>
     </div>
   </div>
-  {{> "systems/essence-system/templates/actor/parts/death-track.hbs"}}
+
+  {{!-- Passive Features and Languages, moved here from the Non-Combat tab (0.15.0). --}}
+  <h3 class="section-head">{{localize "ESSENCE.Character.GeneralFeaturesBenefits"}}</h3>
+  <table class="item-table">
+    <thead><tr><th>{{localize "ESSENCE.Character.Feature"}}</th><th>{{localize "ESSENCE.Common.Source"}}</th><th>{{localize "ESSENCE.Common.Description"}}</th><th></th></tr></thead>
+    <tbody>
+      {{#each originFeatures as |f|}}
+        <tr class="origin-feature-row" title="{{localize 'ESSENCE.Character.OriginFeatureTooltip'}}">
+          <td>{{f.name}}</td>
+          <td>{{f.source}}</td>
+          <td>{{{f.text}}}</td>
+          <td></td>
+        </tr>
+      {{/each}}
+      {{#each system.passiveFeatures as |f i|}}
+        <tr>
+          <td><input name="system.passiveFeatures.{{i}}.name" type="text" value="{{f.name}}"></td>
+          <td><input name="system.passiveFeatures.{{i}}.source" type="text" value="{{f.source}}"></td>
+          <td>{{essenceEditor f.text target=(concat "system.passiveFeatures." i ".text") button=true}}</td>
+          <td><button type="button" data-action="deleteArrayRow" data-array="passiveFeatures" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Character.DeleteFeatureAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button></td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <button type="button" data-action="addArrayRow" data-array="passiveFeatures"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Character.AddFeature"}}</button>
+
+  <div class="career-row">
+    <label title="{{localize 'ESSENCE.Character.LanguagesHint' n=system.languageCount}}">{{localize "ESSENCE.Character.Languages"}} <input name="system.languages" type="text" value="{{system.languages}}" placeholder="{{localize 'ESSENCE.Character.LanguagesPlaceholder'}}"> <span class="muted">{{localize "ESSENCE.Character.LanguagesAllowance" n=system.languageCount acuity=system.acuity}}</span></label>
+  </div>
 </section>
 
 {{!-- ============ COMBAT: skills, cards, dice lifecycle ============ --}}
 <section class="tab combat {{tabs.combat.cssClass}}" data-group="primary" data-tab="combat">
+  {{!-- The Action and Reaction dice pools moved to the vitals sidebar (0.15.0); the header keeps
+       the Turn controls and state. --}}
   <div class="combat-header">
-    <div class="combat-header-left">
-      <div class="action-pool">
-        <span class="attr-label">{{localize "ESSENCE.Common.ActionDice"}}</span>
-        <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="actionDice" data-delta="-1" aria-label="{{localize 'ESSENCE.Sheet.DecreaseAria' label=(localize 'ESSENCE.Common.ActionDice')}}">−</button>
-        {{system.playState.actionDice}}
-        <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="actionDice" data-delta="1" aria-label="{{localize 'ESSENCE.Sheet.IncreaseAria' label=(localize 'ESSENCE.Common.ActionDice')}}">+</button>
-        &nbsp;|&nbsp;
-        <span class="attr-label">{{localize "ESSENCE.Common.ReactionDice"}}</span>
-        <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="reactionDice" data-delta="-1" aria-label="{{localize 'ESSENCE.Sheet.DecreaseAria' label=(localize 'ESSENCE.Common.ReactionDice')}}">−</button>
-        {{system.playState.reactionDice}}
-        <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="reactionDice" data-delta="1" aria-label="{{localize 'ESSENCE.Sheet.IncreaseAria' label=(localize 'ESSENCE.Common.ReactionDice')}}">+</button>
-      </div>
-    </div>
     <div class="combat-header-right">
       <div class="combat-controls">
         <button type="button" data-action="rollInitiative">{{localize "ESSENCE.Sheet.RollInitiative"}}</button>
@@ -428,21 +387,7 @@
     </ul>
   {{/if}}
 
-  <h3 class="section-head">{{localize "ESSENCE.Sheet.Conditions"}}</h3>
-  <ul class="item-list condition-list">
-    {{#each conditions as |item|}}
-      <li class="condition-entry">
-        <div class="condition-head">
-          <strong>{{item.name}}</strong>
-          <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
-          <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button>
-        </div>
-        {{#each item.system.sections as |s|}}
-          <div class="condition-section"><span class="condition-label">{{s.label}}</span> {{{s.html}}}</div>
-        {{/each}}
-      </li>
-    {{/each}}
-  </ul>
+  {{!-- Conditions moved to the vitals sidebar (0.15.0). --}}
 </section>
 
 {{!-- ============ EQUIPMENT: inventory / temporary / armory ============ --}}
@@ -560,10 +505,6 @@
     {{/each}}
   </div>
 
-  <div class="career-row">
-    <label title="{{localize 'ESSENCE.Character.LanguagesHint' n=system.languageCount}}">{{localize "ESSENCE.Character.Languages"}} <input name="system.languages" type="text" value="{{system.languages}}" placeholder="{{localize 'ESSENCE.Character.LanguagesPlaceholder'}}"> <span class="muted">{{localize "ESSENCE.Character.LanguagesAllowance" n=system.languageCount acuity=system.acuity}}</span></label>
-  </div>
-
   <h3 class="section-head">{{localize "ESSENCE.Character.NonCombatSkills"}}</h3>
   <div class="noncombat-skills grid-2">
     {{#each system.nonCombatSkills as |s i|}}
@@ -655,30 +596,7 @@
   <button type="button" data-action="addArrayRow" data-array="reachTriggers" title="{{localize 'ESSENCE.Character.ReachTriggerBreachNote'}}"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.AddReachTrigger"}}</button>
   <button type="button" data-action="resetAdventureUses" title="{{localize 'ESSENCE.Sheet.ResetAdventureUsesTooltip'}}">{{localize "ESSENCE.Sheet.ResetAdventureUses"}}</button>
   <button type="button" data-action="newEncounter" title="{{localize 'ESSENCE.Sheet.NewEncounterTooltip'}}">{{localize "ESSENCE.Sheet.NewEncounter"}}</button>
-
-  <h3 class="section-head">{{localize "ESSENCE.Character.GeneralFeaturesBenefits"}}</h3>
-  <table class="item-table">
-    <thead><tr><th>{{localize "ESSENCE.Character.Feature"}}</th><th>{{localize "ESSENCE.Common.Source"}}</th><th>{{localize "ESSENCE.Common.Description"}}</th><th></th></tr></thead>
-    <tbody>
-      {{#each originFeatures as |f|}}
-        <tr class="origin-feature-row" title="{{localize 'ESSENCE.Character.OriginFeatureTooltip'}}">
-          <td>{{f.name}}</td>
-          <td>{{f.source}}</td>
-          <td>{{{f.text}}}</td>
-          <td></td>
-        </tr>
-      {{/each}}
-      {{#each system.passiveFeatures as |f i|}}
-        <tr>
-          <td><input name="system.passiveFeatures.{{i}}.name" type="text" value="{{f.name}}"></td>
-          <td><input name="system.passiveFeatures.{{i}}.source" type="text" value="{{f.source}}"></td>
-          <td>{{essenceEditor f.text target=(concat "system.passiveFeatures." i ".text") button=true}}</td>
-          <td><button type="button" data-action="deleteArrayRow" data-array="passiveFeatures" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Character.DeleteFeatureAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button></td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-  <button type="button" data-action="addArrayRow" data-array="passiveFeatures"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Character.AddFeature"}}</button>
+  {{!-- General Features & Benefits and Languages moved to the Core tab (0.15.0). --}}
 </section>
 
 {{!-- ============ BIOGRAPHY ============ --}}
@@ -725,7 +643,135 @@
   <label>{{localize "ESSENCE.Character.GeneralNotes"}}<textarea name="system.playState.sessionNotes">{{system.playState.sessionNotes}}</textarea></label>
 </section>
 </div>
-{{!-- Vitals sidebar (frame in 0.14.0, contents in 0.15.0). It is a second scroll region beside the
-     tab body; while it is empty the stylesheet hides it and the grid collapses to one column. --}}
-<aside class="sheet-side sheet-scroll"></aside>
+{{!-- Vitals sidebar (frame 0.14.0, contents 0.15.0): the blocks that used to sit on the Core and
+     Combat tabs, moved whole. Every data-action keeps its name, so the sheet class is unchanged.
+     It is a second scroll region beside the tab body and is visible on every tab. --}}
+<aside class="sheet-side sheet-scroll">
+  <div class="side-panel side-pools">
+    <div class="side-pool">
+      <span class="side-label">{{localize "ESSENCE.Common.ActionDice"}}</span>
+      <div class="side-pool-row">
+        <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="actionDice" data-delta="-1" aria-label="{{localize 'ESSENCE.Sheet.DecreaseAria' label=(localize 'ESSENCE.Common.ActionDice')}}">−</button>
+        <span class="side-pool-num">{{system.playState.actionDice}}</span>
+        <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="actionDice" data-delta="1" aria-label="{{localize 'ESSENCE.Sheet.IncreaseAria' label=(localize 'ESSENCE.Common.ActionDice')}}">+</button>
+      </div>
+    </div>
+    <div class="side-pool">
+      <span class="side-label">{{localize "ESSENCE.Common.ReactionDice"}}</span>
+      <div class="side-pool-row">
+        <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="reactionDice" data-delta="-1" aria-label="{{localize 'ESSENCE.Sheet.DecreaseAria' label=(localize 'ESSENCE.Common.ReactionDice')}}">−</button>
+        <span class="side-pool-num">{{system.playState.reactionDice}}</span>
+        <button type="button" class="resource-step" data-action="adjustPoolDice" data-field="reactionDice" data-delta="1" aria-label="{{localize 'ESSENCE.Sheet.IncreaseAria' label=(localize 'ESSENCE.Common.ReactionDice')}}">+</button>
+      </div>
+    </div>
+    <span class="muted side-pool-note">{{localize "ESSENCE.Sheet.BasePoolsNote" base=system.baseCombatDice bonus=system.poolBonus}}</span>
+  </div>
+
+  <div class="side-panel">
+    <span class="side-label">{{localize "ESSENCE.Sheet.Resources"}}</span>
+    {{#each domains as |d|}}
+      <div class="side-resource domain-{{d.key}}">
+        <span class="side-domain-label">{{d.resourceLabel}}</span>
+        <span class="side-resource-controls">
+          <button type="button" class="resource-step" data-action="adjustResource" data-field="{{d.resourceField}}" data-delta="-1" aria-label="{{localize 'ESSENCE.Sheet.DecreaseAria' label=d.resourceLabel}}">−</button>
+          <input class="current-input" type="number" name="system.playState.{{d.resourceField}}" value="{{d.resourceCurrent}}">
+          <button type="button" class="resource-step" data-action="adjustResource" data-field="{{d.resourceField}}" data-delta="1" aria-label="{{localize 'ESSENCE.Sheet.IncreaseAria' label=d.resourceLabel}}">+</button>
+          <span class="muted">/ <span class="max-value">{{d.resourceMax}}</span></span>
+        </span>
+      </div>
+    {{/each}}
+  </div>
+
+  <div class="side-panel">
+    <span class="side-label">{{localize "ESSENCE.Sheet.Defenses"}}</span>
+    <div class="side-defenses">
+      {{#each domains as |d|}}
+        <div class="side-defense domain-{{d.key}}">
+          <span class="side-defense-num">{{d.defenseValue}}</span>
+          <span class="side-domain-label">{{d.defenseLabel}}</span>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="side-panel side-wounds">
+    <span class="side-label">{{localize "ESSENCE.Common.Wounds"}} <span class="side-state">{{system.woundState}}</span></span>
+    <div class="wounds-row">
+      <div class="wound-block">
+        <span class="attr-label">{{localize "ESSENCE.Common.Resilience"}}</span>
+        <input class="current-input" type="number" name="system.resilience" value="{{system.resilience}}">
+        {{#if (ne system.effectiveResilience system.resilience)}}<span class="muted">{{localize "ESSENCE.Sheet.EffectiveResilienceNote" n=system.effectiveResilience}}</span>{{/if}}
+      </div>
+      <div class="wound-block">
+        <span class="attr-label">{{localize "ESSENCE.Common.TemporaryWounds"}}</span>
+        <span class="pip-track">
+          {{#each temporaryWoundPips as |filled i|}}
+            <button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempWound" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="{{localize 'ESSENCE.Sheet.TemporaryWoundAria' n=(addOne i)}}"></button>
+          {{/each}}
+        </span>
+        {{!-- How many Temporary Wounds gear and features grant. Nothing derives this field and no
+              Active Effect writes it, so it needs a real input somewhere; it used to live on the
+              Character Wizard's Wounds step, which was removed as play state. --}}
+        <label class="muted" title="{{localize 'ESSENCE.Sheet.TemporaryWoundsAvailableHint'}}">{{localize "ESSENCE.Common.Available"}}
+          <input type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" style="width:3em" min="0" max="5">
+        </label>
+      </div>
+      <div class="wound-block">
+        <span class="attr-label">{{localize "ESSENCE.Common.CoreWounds"}}</span>
+        <span class="pip-track">
+          {{#each system.coreWounds as |w i|}}
+            <button type="button" class="pip toggle {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" title="{{w.condition}}" aria-pressed="{{w.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreWoundAria' n=(addOne i)}}{{#if w.condition}}: {{w.condition}}{{/if}}"></button>
+          {{/each}}
+        </span>
+      </div>
+      <div class="wound-block side-buttons">
+        <button type="button" data-action="applyDamage">{{localize "ESSENCE.Sheet.ApplyDamage"}}</button>
+        <button type="button" data-action="recoverWound">{{localize "ESSENCE.Sheet.RecoverWound"}}</button>
+        <button type="button" data-action="grantRecovery">{{localize "ESSENCE.Sheet.GrantRecovery"}}</button>
+      </div>
+      <div class="wound-block">
+        <label style="display:flex;align-items:center;gap:4px;" title="{{localize 'ESSENCE.Sheet.AdaptabilityRerollHint'}}">
+          <input type="checkbox" data-action="toggleAdaptabilityReroll" {{#if system.playState.adaptabilityRerollAvailable}}checked{{/if}}> {{localize "ESSENCE.Sheet.AdaptabilityReroll"}}
+        </label>
+      </div>
+    </div>
+    {{#if equipmentBonusSources.length}}
+      <div class="muted equipment-bonus-sources">
+        {{localize "ESSENCE.Sheet.EquipmentBonusSourcesLabel"}}:
+        {{#each equipmentBonusSources as |b|}}
+          <span class="equipment-bonus-source">{{b.name}} ({{#if b.fortitude}}{{localize "ESSENCE.Common.Fortitude"}} {{b.fortitude}}{{/if}}{{#if b.resilience}}{{#if b.fortitude}}, {{/if}}{{localize "ESSENCE.Common.Resilience"}} {{b.resilience}}{{/if}}{{#if b.movement}}{{#if (or b.fortitude b.resilience)}}, {{/if}}{{localize "ESSENCE.Common.Movement"}} {{b.movement}}{{/if}}{{#if b.reach}}{{#if (or b.fortitude b.resilience b.movement)}}, {{/if}}{{localize "ESSENCE.Sheet.Reach"}} {{b.reach}}{{/if}}){{#unless @last}}; {{/unless}}</span>
+        {{/each}}
+      </div>
+    {{/if}}
+    {{> "systems/essence-system/templates/actor/parts/death-track.hbs"}}
+  </div>
+
+  <div class="side-panel">
+    <span class="side-label">{{localize "ESSENCE.Sheet.Conditions"}}</span>
+    {{#if conditions.length}}
+      <ul class="item-list condition-list">
+        {{#each conditions as |item|}}
+          <li class="condition-entry">
+            <div class="condition-head">
+              <strong>{{item.name}}</strong>
+              <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
+              <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button>
+            </div>
+            {{#each item.system.sections as |s|}}
+              <div class="condition-section"><span class="condition-label">{{s.label}}</span> {{{s.html}}}</div>
+            {{/each}}
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <span class="muted">{{localize "ESSENCE.Sheet.NoConditions"}}</span>
+    {{/if}}
+  </div>
+
+  <div class="side-panel side-readout">
+    <div><span class="muted">{{localize "ESSENCE.Sheet.Reach"}}</span><span>{{system.effectiveReach}} · {{localize "ESSENCE.Sheet.ReachPressureShort" n=system.reachPressure max=system.effectiveReach}}</span></div>
+    <div><span class="muted">{{localize "ESSENCE.Sheet.Influence"}}</span><span>{{localize "ESSENCE.Sheet.InfluenceReadout" temp=system.playState.currentTemporaryInfluence max=system.temporaryInfluence core=system.coreInfluenceFilled slots=system.coreInfluence.length}}</span></div>
+    <div><span class="muted">{{localize "ESSENCE.Sheet.Standing"}}</span><span>{{system.standing}}</span></div>
+  </div>
+</aside>
 </div>

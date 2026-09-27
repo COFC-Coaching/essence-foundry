@@ -67,7 +67,9 @@ const ARRAY_ROW_DEFAULTS = {
 export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["essence", "actor", "character"],
-    position: { width: 760, height: 820 },
+    // Wide enough for the tab body plus the 300px vitals sidebar (0.15.0); under 860px the
+    // stylesheet's container query drops the sidebar below the tabs instead.
+    position: { width: 1080, height: 820 },
     form: { submitOnChange: true },
     window: { resizable: true },
     // Scoped to .draggable-row rather than a bare [data-item-id] selector, since plenty of other

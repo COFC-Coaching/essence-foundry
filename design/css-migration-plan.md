@@ -12,11 +12,12 @@ parallel versions.
 
 ## Status (2026-09-27)
 
-Steps 0 to 3 shipped in 0.14.0 (see the CHANGELOG entry). One decision made while doing step 1:
+Steps 0 to 3 shipped in 0.14.0, step 4 and the Core / Non-Combat part of step 5 in 0.15.0 (see
+the CHANGELOG entries). One decision made while doing step 1:
 the sheet is a self-themed dark surface, not a consumer of Foundry's `--color-*` theme variables.
 Foundry's light theme puts dark text on parchment; over cover art and translucent panels that is
 unreadable, and the concept was drawn dark. So the tokens hold our own palette in both themes and
-read only Foundry's fonts (`--font-h1`, `--font-body`). Steps 4 to 8 are next, in order.
+read only Foundry's fonts (`--font-h1`, `--font-body`). The rest of step 5, then 6 to 8, are next.
 
 ## Where the stylesheet stood before 0.14.0
 
@@ -120,6 +121,10 @@ sheet looks the same; the grid is only live once step 4 fills it. Size: small.
 
 ### 4. Move the vitals into the sidebar
 
+Done in 0.15.0, on Shane's go-ahead (2026-09-27, "we need to now put this in place"). Contents in
+the concept's order: pools, Resources, Defenses, Wounds (with the Death Track partial and the
+equipment bonus note), Conditions, Reach / Influence / Standing readout. Tooltips are still
+`title=`; the `data-tooltip` conversion is folded into step 8. The default window width is 1080.
 Pools, Resources, Defenses, Wounds and Death Track, Conditions, and the Reach and Influence readout
 move from the Core and Combat tabs into the sidebar. Blocks move as whole partials
 (`wounds-header.hbs`, `death-track.hbs`) with their `data-action` names unchanged, so the sheet
@@ -128,7 +133,10 @@ Depends on Ryan: which vitals belong in the sidebar. Size: medium.
 
 ### 5. Per-tab reorders and the card row
 
-Core in Ryan's 02 to 03 order (Attributes, combat traits) followed by Passive Features and
+Core and Non-Combat done in 0.15.0: Core is Attributes, Resistances and Vulnerabilities, General
+Features & Benefits, Languages; Non-Combat lost the last two. Still open: L L S S C squares, the
+Combat card rail and inline Commit / Cost, the Equipment `ContextMenu`, Temporary Influence as a
+stepper, the Biography order, `SearchFilter`. Core in Ryan's 02 to 03 order (Attributes, combat traits) followed by Passive Features and
 Languages moved in from Non-Combat, since Wounds now live only in the sidebar; L L S S C squares
 (`.sq`, same buttons and actions as the pips) for Core Wounds in the sidebar and Core Influence;
 Combat's card rows gain the type rail (`--essence-card-*`) and inline Commit and Cost; Equipment's
