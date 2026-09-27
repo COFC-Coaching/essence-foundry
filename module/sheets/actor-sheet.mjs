@@ -64,6 +64,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     classes: ["essence", "actor", "character"],
     position: { width: 760, height: 820 },
     form: { submitOnChange: true },
+    window: { resizable: true },
     // Scoped to .draggable-row rather than a bare [data-item-id] selector, since plenty of other
     // elements on this sheet (Edit/Delete buttons on card rows, condition entries, etc.) also carry
     // data-item-id without being meant to drag — only the Equipment tab's Inventory/Temporary/
@@ -153,7 +154,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   }
 
   static PARTS = {
-    body: { template: "systems/essence-system/templates/actor/character-sheet.hbs" }
+    body: { template: "systems/essence-system/templates/actor/character-sheet.hbs", scrollable: [".sheet-scroll"] }
   };
 
   #activeTab = "core";

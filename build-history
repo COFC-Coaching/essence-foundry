@@ -3167,3 +3167,25 @@ driven through the real sheet controls:
   look at.
 - **Unrelated noise.** When the browser pane is hidden during a world load, Foundry logs WebGL and
   0×0-resolution errors. Those are the pane, not this system.
+
+### 2026-09-27 -- 0.8.1: resizable sheets, fixed header, scroll regions, design tokens
+
+Requested after the sheet concept canvas (https://claude.ai/artifact/X1kPYCFHPp64nymJE4giST) raised
+scrolling and resizing: use what Foundry already has rather than anything custom.
+
+- **Resize:** `window: { resizable: true }` in `DEFAULT_OPTIONS` on the Character, NPC, Full
+  Manifestation and Team sheets (Team already had it from 0.8.0). Monster inherits it from NPC
+  through ApplicationV2's `inheritanceChain()` merge of `DEFAULT_OPTIONS`.
+- **Scroll:** each actor template wraps everything after `</header>` (or `</nav>` where there is a
+  tab strip) in `<div class="sheet-scroll">`, and `PARTS.body.scrollable = [".sheet-scroll"]`, so
+  `HandlebarsApplicationMixin` saves and restores its scroll offset across the `submitOnChange`
+  re-render. `.essence-sheet-root` is now `overflow: hidden`; the region carries the scrollbar.
+- **Minimum size:** CSS `min-width/min-height` on `.application.essence.actor`. ApplicationV2 has no
+  minimum-size option; the inline size it writes is overridden by the CSS floor.
+- **Tokens:** `--essence-*` custom properties on `.application.essence` and `.essence.roll-card`,
+  values from the concept. Unused by design until the concept is approved
+  (`design/sheet-redesign-groundwork.md` has the region-to-code map and order of work).
+- **Verification:** `npm test` (34 migration, 25 rules); the five actor templates balanced after the
+  wrapper insert (opening/closing counts per tag). Not live-tested in this session: no Foundry
+  instance in the cloud container. First live check should confirm the scroll offset survives an
+  edit on the Combat tab and that the corner resize handle appears on the Character sheet.

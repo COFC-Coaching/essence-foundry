@@ -30,6 +30,7 @@
   <a data-action="changeTab" data-tab="noncombat" role="tab" tabindex="0">{{localize "ESSENCE.Character.TabNonCombat"}}</a>
   <a data-action="changeTab" data-tab="bio" role="tab" tabindex="0">{{localize "ESSENCE.Character.TabBiography"}}</a>
 </nav>
+<div class="sheet-scroll">
 
 {{!-- ============ CORE: attributes, resources, defenses, wounds ============ --}}
 <section class="tab core" data-tab="core">
@@ -672,4 +673,5 @@
   <label>{{localize "ESSENCE.Character.Backstory"}}{{essenceEditor system.backstory target="system.backstory" button=true}}</label>
   <label>{{localize "ESSENCE.Character.GeneralNotes"}}<textarea name="system.playState.sessionNotes">{{system.playState.sessionNotes}}</textarea></label>
 </section>
+</div>
 </div>

@@ -50,6 +50,7 @@
     </div>
   </div>
 </header>
+<div class="sheet-scroll">
 
 {{#if (eq system.grade "Mook")}}
   <h3 class="section-head" title="{{localize 'ESSENCE.Item.Monster.TacticsHint'}}">{{localize "ESSENCE.Item.Monster.Tactics"}}</h3>
@@ -393,4 +394,5 @@
 
 <h3 class="section-head">{{localize "ESSENCE.Sheet.GmNotes"}} <span class="muted">{{localize "ESSENCE.Sheet.GmNotesHint"}}</span></h3>
 {{essenceEditor system.gmNotes target="system.gmNotes" button=true}}
+</div>
 </div>

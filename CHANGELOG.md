@@ -2,6 +2,19 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.8.1
+
+**Resizable sheets with a fixed header.** Every actor sheet (Character, NPC, Monster, Full
+Manifestation, Team) now has Foundry's resize handle in the corner, and Foundry remembers the size
+you choose. The portrait, name and tab strip stay put; only the content below them scrolls, and
+your scroll position no longer jumps to the top when you edit a field. Windows can't be shrunk
+below 560 × 420.
+
+**Groundwork for the sheet redesign.** The stylesheet now defines the redesign's design tokens
+(colors, domain and card-type colors, fonts) as CSS variables. Nothing uses them yet, so the sheet
+looks the same. `design/sheet-redesign-groundwork.md` maps each region of the concept canvas to the
+template and CSS it becomes, and which parts wait on Ryan.
+
 ## 0.8.0
 
 **First v0.6 rules release: the Team, Team Tier, pools of 6, and Advancement Points.** This brings

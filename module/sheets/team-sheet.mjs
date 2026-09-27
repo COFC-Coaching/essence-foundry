@@ -50,7 +50,7 @@ export default class EssenceTeamSheet extends HandlebarsApplicationMixin(ActorSh
   };
 
   static PARTS = {
-    body: { template: "systems/essence-system/templates/actor/team-sheet.hbs" }
+    body: { template: "systems/essence-system/templates/actor/team-sheet.hbs", scrollable: [".sheet-scroll"] }
   };
 
   #activeTab = "team";

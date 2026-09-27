@@ -1,4 +1,48 @@
-.essence .essence-sheet-root { display: flex; flex-direction: column; height: 100%; padding: 4px 8px; overflow-y: auto; }
+/* ---------------------------------------------------------------------------------------------
+   Design tokens (0.8.1). The values come from the sheet redesign concept
+   (design/sheet-redesign-groundwork.md). Nothing below reads them yet on purpose: the current sheet
+   keeps its look until Ryan approves the new one, at which point rules switch to var(--essence-*)
+   instead of literal colors. Card-type colors reuse this system's existing success/fail green/red
+   and equipment amber, so they are already consistent with the roll card and content-type rails. */
+.application.essence, .essence.roll-card {
+  --essence-ground: #141210;
+  --essence-panel: #201d19;
+  --essence-panel-raised: #25211c;
+  --essence-well: #17150f;
+  --essence-line: #33302a;
+  --essence-line-strong: #4a443b;
+  --essence-ink: #ece6da;
+  --essence-ink-bright: #f3eee4;
+  --essence-muted: #a89f90;
+  --essence-accent: #d4b06a;
+  --essence-accent-ink: #1b1813;
+  --essence-danger: #c85a4a;
+  --essence-domain-physical: #c8553d;
+  --essence-domain-mental: #3d85c6;
+  --essence-domain-spiritual: #9b59b6;
+  --essence-domain-physical-ink: #e07a5f;
+  --essence-domain-mental-ink: #6fa8dc;
+  --essence-domain-spiritual-ink: #b48ad9;
+  --essence-card-action: #43a047;
+  --essence-card-reaction: #e05252;
+  --essence-card-equipment: #f9a825;
+  --essence-card-basic: #8f8677;
+  --essence-font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --essence-font-body: "Source Sans 3", system-ui, sans-serif;
+  --essence-radius: 8px;
+  --essence-radius-sm: 6px;
+}
+
+/* Sheet frame (0.8.1). The window is resizable (DEFAULT_OPTIONS.window.resizable on every actor
+   sheet); the header and tab strip stay put and only .sheet-scroll scrolls. Each sheet's PARTS lists
+   .sheet-scroll as `scrollable`, so Foundry restores its scroll position across the re-render that
+   submitOnChange triggers on every edit. The redesign adds a second scroll region (the vitals
+   sidebar) beside this one; the frame is already a column flexbox so that is a grid change here,
+   not a template rewrite. */
+.essence .essence-sheet-root { display: flex; flex-direction: column; height: 100%; padding: 4px 8px; overflow: hidden; }
+.essence .essence-sheet-root > .sheet-header, .essence .essence-sheet-root > .sheet-tabs { flex: 0 0 auto; }
+.essence .sheet-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; padding-right: 4px; scrollbar-width: thin; }
+.application.essence.actor { min-width: 560px; min-height: 420px; }
 /* .essence-sheet-root is a column flexbox, so any element placed directly inside it — rather than
    inside a section/div wrapper, as everything else on every sheet is — inherits the column's
    default cross-axis stretch and silently becomes full sheet-width. Invisible on a div or table

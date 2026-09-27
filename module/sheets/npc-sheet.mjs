@@ -38,6 +38,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     classes: ["essence", "actor", "npc"],
     position: { width: 760, height: 720 },
     form: { submitOnChange: true },
+    window: { resizable: true },
     // Scoped to .draggable-row rather than a bare [data-item-id] selector — see the matching
     // comment in actor-sheet.mjs's DEFAULT_OPTIONS.
     dragDrop: [{ dragSelector: ".draggable-row", dropSelector: null }],
@@ -121,7 +122,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   }
 
   static PARTS = {
-    body: { template: "systems/essence-system/templates/actor/npc-sheet.hbs" }
+    body: { template: "systems/essence-system/templates/actor/npc-sheet.hbs", scrollable: [".sheet-scroll"] }
   };
 
   /** Sheet-wide safety lock — see EssenceActorSheet#applyEditable for the full rationale. */

@@ -26,7 +26,7 @@ export default class EssenceMonsterSheet extends EssenceNpcSheet {
   };
 
   static PARTS = {
-    body: { template: "systems/essence-system/templates/actor/monster-sheet.hbs" }
+    body: { template: "systems/essence-system/templates/actor/monster-sheet.hbs", scrollable: [".sheet-scroll"] }
   };
 
   async _prepareContext(options) {

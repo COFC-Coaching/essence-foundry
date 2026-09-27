@@ -18,6 +18,7 @@ export default class EssenceManifestationSheet extends HandlebarsApplicationMixi
     classes: ["essence", "actor", "manifestation"],
     position: { width: 520, height: 640 },
     form: { submitOnChange: true },
+    window: { resizable: true },
     actions: {
       editTokenImage: EssenceManifestationSheet.#onEditTokenImage,
       toggleEditLock: EssenceManifestationSheet.#onToggleEditLock,
@@ -36,7 +37,7 @@ export default class EssenceManifestationSheet extends HandlebarsApplicationMixi
   };
 
   static PARTS = {
-    body: { template: "systems/essence-system/templates/actor/manifestation-sheet.hbs" }
+    body: { template: "systems/essence-system/templates/actor/manifestation-sheet.hbs", scrollable: [".sheet-scroll"] }
   };
 
   #editUnlocked = false;
