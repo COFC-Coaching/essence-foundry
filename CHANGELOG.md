@@ -2,6 +2,10 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.13.4
+
+**Live-test fix (check 54).** The enemy sheet's "Show Attributes, Styles, cards and Pools" checkbox was disabled by the sheet's edit lock, so a GM could not open the Elite-style detail without unlocking the sheet first. It is a view control, not a field, and now works while locked, like the card filter and sort controls.
+
 ## 0.13.3
 
 **Live-test fix (check 18).** A later-acquired Distinction's General Features row printed the whole benefit instead of its later-acquisition clause: 0.13.0 reworded every Distinction to the Doc's "If this Distinction is acquired later, ..." and the parser still looked for "If acquired later:". Both wordings are accepted now.

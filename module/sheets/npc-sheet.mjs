@@ -173,10 +173,10 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     const body = this.element.querySelector(".window-content") ?? this.element;
     if (!this.isEditable) {
       // See EssenceActorSheet#applyEditable — [data-card-filter]/[data-card-sort] are pure
-    // client-side view controls with no `name` attribute, so the safety lock has nothing to
+    // client-side view controls with no `name` attribute (as is the full-stats toggle), so the lock has nothing to
     // protect by disabling them.
     for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) {
-      if (el.matches("[data-card-filter], [data-card-sort]")) continue;
+      if (el.matches("[data-card-filter], [data-card-sort], [data-action=\"toggleFullStats\"]")) continue;
       el.disabled = true;
     }
       for (const el of body.querySelectorAll("button[data-action], a[data-action]")) {
@@ -187,10 +187,10 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     }
     if (this.#editUnlocked) return;
     // See EssenceActorSheet#applyEditable — [data-card-filter]/[data-card-sort] are pure
-    // client-side view controls with no `name` attribute, so the safety lock has nothing to
+    // client-side view controls with no `name` attribute (as is the full-stats toggle), so the lock has nothing to
     // protect by disabling them.
     for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) {
-      if (el.matches("[data-card-filter], [data-card-sort]")) continue;
+      if (el.matches("[data-card-filter], [data-card-sort], [data-action=\"toggleFullStats\"]")) continue;
       el.disabled = true;
     }
   }
