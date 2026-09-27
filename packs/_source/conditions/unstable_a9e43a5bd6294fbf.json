@@ -12,11 +12,11 @@
       },
       {
         "label": "EFFECT",
-        "html": "While Unstable, you cannot change your current Adaptation or assume a different form."
+        "html": "While Unstable, maintaining an Adaptation costs 1 additional Stamina at upkeep. Efficient Transformation does not reduce this additional cost."
       },
       {
         "label": "DURATION",
-        "html": "Remove Unstable at the end of your next turn unless an effect removes it earlier."
+        "html": "During your Turn, you may burn 2 Action dice to end Unstable. It also ends when you complete a Turn without maintaining an Adaptation or when the Encounter ends. Unstable does not itself prevent Gestalt Actions or force an immediate reversion."
       },
       {
         "label": "REMOVAL",

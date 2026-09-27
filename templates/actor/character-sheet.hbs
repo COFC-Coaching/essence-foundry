@@ -157,6 +157,14 @@
         <button type="button" data-action="rollInitiative">{{localize "ESSENCE.Sheet.RollInitiative"}}</button>
         <button type="button" data-action="endTurn">{{localize "ESSENCE.Sheet.EndTurn"}}</button>
       </div>
+      {{#if preparedAction}}
+        <div class="combat-state prepared-action" title="{{localize 'ESSENCE.Sheet.PrepareNote'}}">
+          <p><strong>{{localize "ESSENCE.Sheet.PreparedAction"}}:</strong> {{localize "ESSENCE.Sheet.PreparedSummary" name=preparedAction.cardName reserved=preparedAction.reserved trigger=preparedAction.trigger}}
+            <button type="button" data-action="firePreparedAction">{{localize "ESSENCE.Sheet.PreparedFire"}}</button>
+            <button type="button" data-action="cancelPreparedAction">{{localize "ESSENCE.Sheet.PreparedCancel"}}</button>
+          </p>
+        </div>
+      {{/if}}
       <div class="combat-state">
         <p>{{#if combatRound}}{{localize "ESSENCE.Sheet.RoundLabel" round=combatRound}} — {{/if}}{{turnLabel system.playState.combatTurn}}{{#if system.playState.initiativeCommitted}} — {{localize "ESSENCE.Character.InitiativeLabel" total=system.playState.initiativeTotal dice=system.playState.initiativeDice}}{{/if}}</p>
       </div>
@@ -378,7 +386,7 @@
       {{#each equipmentCards as |c|}}
         <li>
           <div class="card-row-top">
-            <button type="button" data-action="rollEquipmentCard" data-card-name="{{c.name}}" data-item-id="{{c.itemId}}" data-card-index="{{c.cardIndex}}">{{c.name}}</button>
+            <button type="button" data-action="rollEquipmentCard" data-card-name="{{c.name}}" data-item-id="{{c.itemId}}" data-card-index="{{c.cardIndex}}" data-card-effect="{{c.effect}}">{{c.name}}</button>
             <span class="card-meta muted">{{c.source}}{{#if c.uses}} · {{localize "ESSENCE.Common.UsesFraction" remaining=c.usesRemaining total=c.uses}}{{/if}}</span>
             <button type="button" class="card-expand-toggle" data-action="toggleEquipmentCard" aria-label="{{localize 'ESSENCE.Sheet.ExpandCardAria' name=c.name}}"><i class="fa-solid fa-chevron-down"></i></button>
           </div>

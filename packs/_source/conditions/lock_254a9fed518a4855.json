@@ -11,16 +11,12 @@
         "html": "Ballistics · Creature · Source-linked"
       },
       {
-        "label": "ESTABLISH",
-        "html": "When declaring a Ballistics Action against a creature in line of sight, you may spend one additional die without rolling it to establish your Lock on that creature before resolving the Action."
-      },
-      {
-        "label": "LIMIT",
-        "html": "You may normally maintain one Lock. Establishing a new Lock ends your previous Lock. Different Ballistics users may each Lock the same creature independently."
+        "label": "EFFECT",
+        "html": "Lock is source-linked: a particular Ballistics user maintains Lock on a particular target. It identifies that target for the owner's Ballistics effects but provides no universal numerical bonus by itself. Several characters can independently Lock the same creature."
       },
       {
         "label": "LOSS",
-        "html": "Lose your Lock if the target remains completely outside your line of sight through the end of your turn."
+        "html": "Lock ends when its owner replaces or consumes it, a rule explicitly ends it, the Encounter ends, or the owner has lost sufficient detection to target the creature and has not restored it by the end of their Turn. Applicable special Senses count as detection; line of sight is not required. Lock itself neither detects nor reveals a target and does not waive any attack's targeting requirements."
       },
       {
         "label": "REMOVAL",

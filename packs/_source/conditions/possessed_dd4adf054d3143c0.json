@@ -8,23 +8,19 @@
     "sections": [
       {
         "label": "SPECIALTY CONDITION",
-        "html": "Ritualism · Any creature · Limited 1"
+        "html": "Ritualism · Any creature"
       },
       {
         "label": "EFFECT",
-        "html": "A Possessed creature is a source-linked conduit for the Ritualist's Rites. Individual Ritualism cards may establish, trigger, modify, transfer, or consume Possessed."
+        "html": "Possessed attaches a particular Rite to a creature. It does not grant control of that creature. Record the Rite and its owner; the Rite moves with the Possessed creature and continues to use its own Trigger, Echo, and Echo Limit."
       },
       {
-        "label": "ECHO",
-        "html": "The first time each round one of that Ritualist's Rites triggers because of their Possessed creature, resolve that Echo without reducing the Rite's remaining Echoes."
-      },
-      {
-        "label": "LIMIT",
-        "html": "A creature can have only one Possessed condition at a time."
+        "label": "STACKING",
+        "html": "Different Rites can separately Possess the same creature. A new same-named effect replaces the old application; the old effect does not return when the replacement ends. Stacking requires an explicit exception."
       },
       {
         "label": "REMOVAL",
-        "html": "Effects that remove ordinary Conditions do not remove Specialty Conditions unless they explicitly say so."
+        "html": "During its Turn, an unwilling subject may burn 3 Action dice to sever one hostile Possessed link and end that Rite's effects on itself unless the Rite supplies another removal condition. Possessed also ends when the Rite itself ends, exhausts its Echoes, is replaced, or is explicitly severed. Effects that remove ordinary Conditions do not remove it."
       }
     ]
   },

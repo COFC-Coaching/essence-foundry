@@ -21,7 +21,7 @@
     "body": [
       {
         "label": "Effect",
-        "html": "Burn 3 Action dice. Choose one: ready, stow, recover, or hand over one complete physically accessible combat-ready item; swap one such item you are using for another; or exchange one installed Augment or one combat-replaceable Fitting for a compatible replacement physically available to you. No roll is required."
+        "html": "Burn 3 Action dice. Choose one: ready, stow, recover, or hand over one complete physically accessible combat-ready item; swap one such item you are using for another; exchange one installed Augment or one combat-replaceable Fitting for a compatible replacement physically available to you; or establish, change, or end one permitted Linked Mount Link on accessible equipment. No roll is required."
       },
       {
         "label": "Effect",
@@ -35,7 +35,9 @@
       "meta": ""
     },
     "nonCombatTask": false,
-    "noSurges": false
+    "noSurges": false,
+    "burnDice": 3,
+    "noRoll": true
   },
   "folder": "490568d9eb375ca8",
   "flags": {},

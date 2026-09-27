@@ -181,6 +181,9 @@
 .essence .attr-input, .essence .current-input { width: 3em; }
 /* Attribute-only Non-Combat roll (0.9.0, Doc L1237): same footprint as the Style roll die button. */
 .essence .attr-row .attr-roll { flex: 0 0 auto; width: 26px; height: 22px; padding: 0; line-height: 1; }
+/* Prepare Action (0.10.0): the held preparation sits with the combat state, amber like the other live-state notes. */
+.essence .combat-state.prepared-action { border: 1px solid #f9a825; border-radius: 4px; padding: 2px 6px; margin-bottom: 4px; }
+.essence .combat-state.prepared-action button { height: 22px; padding: 0 6px; font-size: 0.85em; }
 .essence .max-value { font-weight: bold; }
 /* Quick +/- for a resource's current value — a plain action button, so it (unlike the number
    input next to it) always works even while the sheet's safety lock is on; see

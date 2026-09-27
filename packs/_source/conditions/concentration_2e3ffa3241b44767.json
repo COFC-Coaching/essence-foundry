@@ -8,19 +8,23 @@
     "sections": [
       {
         "label": "SPECIALTY CONDITION",
-        "html": "Magecraft · Self · Limited 1"
+        "html": "Magecraft or equipment · Self · Limited 1"
       },
       {
         "label": "EFFECT",
-        "html": "Concentration provides no benefit by itself. It maintains the ongoing spell effect that established it."
+        "html": "Concentration maintains an effect that explicitly requires it. A character may normally maintain one Concentration effect; establishing another ends the previous one. Threads do not require Concentration merely to remain stored."
       },
       {
-        "label": "REPLACEMENT",
-        "html": "Beginning a new Concentration ends the spell effect maintained by your previous Concentration."
+        "label": "UPKEEP",
+        "html": "Pay any printed upkeep at the end of your Turn. If you cannot or choose not to pay, Concentration and its maintained effect end at that upkeep step. There is no additional universal Focus cost."
       },
       {
         "label": "BREAK",
-        "html": "Suffering a Core Wound breaks Concentration. Temporary Wounds do not break it unless an effect specifically says otherwise."
+        "html": "Whenever you suffer a Core Wound, burn 1 die from your currently available Action or Reaction Pool or end Concentration. If no appropriate die is available, Concentration ends. This payment is not a Reaction. A Temporary Wound absorbing the harm does not trigger it."
+      },
+      {
+        "label": "ENDING",
+        "html": "You may voluntarily end Concentration for free during your own Turn. It ends immediately on unconsciousness or death (Dying alone does not end it), when its maintained effect expires, when the Encounter ends, or when an explicit disruption ends it."
       },
       {
         "label": "REMOVAL",

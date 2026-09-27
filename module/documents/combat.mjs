@@ -19,6 +19,8 @@
 // same per-round/per-turn dice reset as anyone else, even though entering/dismissing itself
 // deliberately does NOT grant a fresh Action Pool (that's handled by copying playState directly in
 // manifestation.mjs, not by this lifecycle hook).
+import { initiativeTieBreak } from "../utils.mjs";
+
 const COMBATANT_TYPES = ["character", "npc", "monster", "manifestation"];
 
 /**
@@ -73,27 +75,19 @@ export default class EssenceCombat extends Combat {
       if (!combatant?.isOwner) continue;
       const actor = combatant.actor;
       const base = actor.system.baseCombatDice;
+      // Doc L3386: "Choose from 1 die up to your base Action Pool size." No 0-die pass.
       const committed = await promptDiceCount({
         title: `Roll Initiative — ${actor.name}`,
-        label: `Commit how many dice to Initiative? (0 = Pass, max ${base}). Whatever you don't commit carries over as your first turn's Action Dice.`,
-        min: 0, max: base, initial: base
+        label: `Commit how many dice to Initiative? (1 to ${base}). The chosen dice reduce only your first Action Pool; your starting Reaction Pool is not reduced.`,
+        min: 1, max: base, initial: base
       });
       if (committed === null) continue;
 
-      let faces = [];
-      let total = 0;
-      if (committed > 0) {
-        const roll = new Roll(`${committed}d10`);
-        await roll.evaluate();
-        faces = roll.terms[0].results.map((r) => r.result);
-        total = faces.reduce((a, b) => a + b, 0);
-        await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor: "Initiative" });
-      } else {
-        await ChatMessage.create({
-          speaker: ChatMessage.getSpeaker({ actor }),
-          content: `<p><strong>${actor.name}</strong> passes on Initiative.</p>`
-        });
-      }
+      const roll = new Roll(`${committed}d10`);
+      await roll.evaluate();
+      const faces = roll.terms[0].results.map((r) => r.result);
+      const total = faces.reduce((a, b) => a + b, 0);
+      await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor: "Initiative" });
 
       await actor.update({
         "system.playState.initiativeDice": committed,
@@ -104,6 +98,20 @@ export default class EssenceCombat extends Combat {
       await combatant.update({ initiative: total });
     }
     return this;
+  }
+
+  /**
+   * Initiative ties (Doc L3402-L3406): Player Characters win ties against enemies; tied PCs may
+   * arrange their own order and the GM resolves ties among enemies, so those fall through to
+   * Foundry's default ordering.
+   */
+  _sortCombatants(a, b) {
+    const ia = Number.isFinite(a.initiative) ? a.initiative : -Infinity;
+    const ib = Number.isFinite(b.initiative) ? b.initiative : -Infinity;
+    if (ia !== ib) return ib - ia;
+    const tie = initiativeTieBreak(a.actor?.type, b.actor?.type);
+    if (tie !== 0) return tie;
+    return super._sortCombatants(a, b);
   }
 
   /**
@@ -179,9 +187,25 @@ export default class EssenceCombat extends Combat {
     const ps = actor.system.playState;
     const base = actor.system.baseCombatDice;
     const isFirst = ps.combatTurn === "notStarted";
+    // Start of Turn order (Doc L3443-L3446): 1. clear the Reaction Pool and expire any prepared
+    // Action with its reserved dice; 2. reset accumulated Damage; 3. form the Action Pool, then
+    // resolve Dazed's one-time burn; 4. start-of-Turn effects.
+    let actionDice = base - (isFirst ? (ps.initiativeDice || 0) : 0);
+    const prepared = ps.preparedAction;
+    const expiredPreparation = !!(prepared?.cardName || prepared?.reserved);
+    // Dazed (Doc L4182): "burn 3 Action dice, or all remaining dice if fewer than 3 remain. Then
+    // remove Dazed." Mooks and Normals waive it (their reduced engine has no Pool).
+    const dazed = actor.system.usesSimplifiedWounds && actor.system.grade && actor.system.grade !== "Elite"
+      ? null
+      : actor.items?.find((i) => i.type === "condition" && (i.name || "").toUpperCase() === "DAZED") ?? null;
+    let dazedBurn = 0;
+    if (dazed) {
+      dazedBurn = Math.min(3, actionDice);
+      actionDice -= dazedBurn;
+    }
     const update = {
       "system.playState.combatTurn": isFirst ? "first" : "active",
-      "system.playState.actionDice": base - (isFirst ? (ps.initiativeDice || 0) : 0),
+      "system.playState.actionDice": actionDice,
       "system.playState.reactionDice": 0,
       // Accumulated Damage resets at the start of each of the character's own Turns
       // (Doc L3445). accumulatedDamageWounds is no longer read (see ordinaryDamageWounds in
@@ -189,6 +213,10 @@ export default class EssenceCombat extends Combat {
       "system.playState.accumulatedDamage": 0,
       "system.playState.accumulatedDamageWounds": 0
     };
+
+    if (expiredPreparation) {
+      update["system.playState.preparedAction"] = { cardId: "", cardName: "", trigger: "", reserved: 0 };
+    }
 
     // A Cunning Contingency not used by its Trigger expires at the start of the character's
     // next Turn (see part-iv-combat.md § Contingency).
@@ -216,6 +244,7 @@ export default class EssenceCombat extends Combat {
     // state model). Adversaries never use the Death Track at all (V6 §2415) — see actor-adversary.mjs.
     const usesDeathTrack = !actor.system.usesSimplifiedWounds;
     const trackIsFull = actor.system.coreWoundsFilled === actor.system.coreWounds.length;
+    let died = false;
     if (usesDeathTrack && trackIsFull && ps.deathTrackState === "dying") {
       // V6 Deathless Nature (design/v6-revision-delta.md §2.3): the cap is 7 for a Deathless
       // character, 5 otherwise — see actor-combatant.mjs's deathTrackMax (derived once, read here
@@ -223,15 +252,20 @@ export default class EssenceCombat extends Combat {
       const max = actor.system.deathTrackMax ?? 5;
       const next = Math.min(max, (ps.deathTrackStep ?? 0) + 1);
       update["system.playState.deathTrackStep"] = next;
-      if (next >= max) {
-        ui.notifications.error(game.i18n.format("ESSENCE.Notify.EndOfDeathTrack", { name: actor.name }));
-        await ChatMessage.create({
-          speaker: ChatMessage.getSpeaker({ actor }),
-          content: `<p><strong>${actor.name}</strong>'s Death Track has reached its final step.</p>`
-        });
-      }
+      // Doc L4059: reaching the threshold causes death, which is final. EssenceActor#markDead sets
+      // the terminal state and Foundry's defeated status; a "dead" actor never re-enters this branch.
+      died = next >= max;
+      if (died) ui.notifications.error(game.i18n.format("ESSENCE.Notify.EndOfDeathTrack", { name: actor.name }));
     }
 
     await actor.update(update);
+    if (expiredPreparation) {
+      await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p><strong>${actor.name}</strong>'s prepared ${prepared.cardName || "Action"} expires; ${prepared.reserved} reserved dice are discarded.</p>` });
+    }
+    if (dazed) {
+      await dazed.delete();
+      await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p><strong>${actor.name}</strong> is Dazed: burns ${dazedBurn} Action dice after forming the Pool, then Dazed ends.</p>` });
+    }
+    if (died) await actor.markDead();
   }
 }

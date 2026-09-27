@@ -2,11 +2,13 @@ import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { EXPERTISE_DATABASE, THREAD_EFFECTS } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { addSecondDistinction } from "../data/origin-select.mjs";
+import { playBurnOnlyCard } from "./card-play.mjs";
+import { dismissManifestation } from "../apps/manifestation.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, tierQualifiesForGrant } from "../data/item-grants.mjs";
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, isDistinctionStyle, distinctionUnlocks, teamForActor, teamTierFor, componentTiers, assembledComponentIds, computeSlotUsage, computeTierGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, ordinaryDamageWounds, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, isDistinctionStyle, distinctionUnlocks, teamForActor, teamTierFor, componentTiers, assembledComponentIds, computeSlotUsage, computeTierGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, ordinaryDamageWounds, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns, resetEncounterSpecialties, equipmentCardCommitment, recoveryBaseAmount } from "../utils.mjs";
 import { availableSubtypes, enterManifestation } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -80,6 +82,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       toggleEditLock: EssenceActorSheet.#onToggleEditLock,
       rollSkill: EssenceActorSheet.#onRollSkill,
       rollItem: EssenceActorSheet.#onRollItem,
+      firePreparedAction: EssenceActorSheet.#onFirePreparedAction,
+      cancelPreparedAction: EssenceActorSheet.#onCancelPreparedAction,
       rollEquipmentCard: EssenceActorSheet.#onRollEquipmentCard,
       toggleEquipmentCard: EssenceActorSheet.#onToggleEquipmentCard,
       postEquipmentToChat: EssenceActorSheet.#onPostEquipmentToChat,
@@ -385,6 +389,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     context.isEditable = this.isEditable;
     context.editUnlocked = this.#editUnlocked;
     context.combatRound = game.combat?.round ?? null;
+    context.preparedAction = system.playState.preparedAction?.cardName ? system.playState.preparedAction : null;
+    context.isDead = system.playState.deathTrackState === "dead";
     const system = this.actor.system;
     context.system = system;
     context.attributeOptions = ATTRIBUTES;
@@ -944,7 +950,14 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // Key Aspect) separately, consuming no further Action dice. Routed to its own handler entirely,
     // rather than threading a special case through every line below, since its cost/roll shape is
     // genuinely different (burned dice never become the rolled pool).
+    if (this.actor.system.playState.deathTrackState === "dead") {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.DeadActor", { name: this.actor.name }));
+      return;
+    }
     if (sys.nonCombatTask) return EssenceActorSheet.#onPerformTask(this.actor, item);
+    // Burn-only cards (Dash, Reconfigure, Stabilize, Prepare Action, Species cards; Doc L3639) spend
+    // their printed dice and roll nothing — see card-play.mjs.
+    if (await playBurnOnlyCard(this.actor, item)) return;
     if (cardOnCooldown(item)) {
       ui.notifications.warn(`${item.name} is on cooldown (${sys.cooldownFrequency === "perEncounter" ? "once per Encounter" : "once per Round"}) and isn't available yet.`);
       return;
@@ -970,24 +983,47 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
     if (isReaction) EssenceActorSheet.#warnIfLikelySecondReaction(this.actor);
 
-    // V6 §5.2.8: an unaware target no longer blocks a Reaction outright — it's now a cost (burn 1
-    // additional Reaction die on top of whatever's committed to the roll itself). Action Cards have
-    // no such concept, so the checkbox only appears for Reaction Cards.
+    // Reactions: the unaware tax (Doc L4460) burns 1 extra Reaction die on top of the roll; it is
+    // a cost, never rolled, and can't be skipped by committing every die (checked below).
+    // Actions: a helpless target (Doc L4530) makes the card unopposed; declared when playing it.
     const promptResult = await EssenceActorSheet.#promptDiceCount({
       title: `Use ${item.name}`,
       label: `Commit how many ${poolLabel} Dice? (min ${cardMin}, max ${available})`,
       min: cardMin, max: available, initial: cardMin,
       note: EssenceActorSheet.#maxRolledDiceNote(this.actor, sys),
-      extraCheckbox: isReaction ? { label: "Target is unaware (burn 1 additional Reaction die)" } : null
+      extraCheckbox: isReaction
+        ? { label: "Target is unaware (burn 1 additional Reaction die)" }
+        : { label: game.i18n.localize("ESSENCE.Sheet.HelplessTarget") }
     });
     if (promptResult === null) return;
-    const committed = isReaction ? promptResult.count : promptResult;
+    const committed = promptResult.count;
     const unawareTax = isReaction && promptResult.extra ? 1 : 0;
+    const helpless = !isReaction && promptResult.extra;
+    if (committed + unawareTax > available) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.UnawareTaxUnaffordable", { name: this.actor.name, needed: committed + unawareTax, min: committed, available }));
+      return;
+    }
 
+    await EssenceActorSheet.#finishCardPlay(this.actor, item, { committed, unawareTax, poolField, available, unopposed: !!sys.unopposed || helpless });
+  }
+
+  /**
+   * Pays a card's remaining costs, records the Reaction, starts the cooldown and rolls. Shared by
+   * the ordinary play above and a prepared Action fired from its reserved dice (Doc L4324: "Pay its
+   * current dice requirements from the reserved dice, never from Reaction dice").
+   */
+  static async #finishCardPlay(actor, item, { committed, unawareTax = 0, poolField, available, unopposed, fromReserved = false }) {
+    const sys = item.system;
+    const isReaction = item.type === "reaction-card";
     const defenseKey = (sys.defense || "").toLowerCase();
     const { defense, targets } = await EssenceActorSheet.#resolveTargets(defenseKey);
-    const poolSpend = Math.min(available, committed + unawareTax);
-    const update = { [`system.playState.${poolField}`]: available - poolSpend };
+    const update = {};
+    if (fromReserved) {
+      // Doc L4330: after firing, discard all remaining reserved dice.
+      update["system.playState.preparedAction"] = { cardId: "", cardName: "", trigger: "", reserved: 0 };
+    } else {
+      update[`system.playState.${poolField}`] = available - (committed + unawareTax);
+    }
 
     // A card's printed Cost is paid from its Domain's resource pool (Physical/Mental/Spiritual ->
     // Stamina/Focus/Mana) on top of the Action/Reaction Dice spent above — see the rules' own
@@ -997,31 +1033,72 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     if (cost > 0) {
       const resKey = domainResource(sys.domain).toLowerCase();
       if (resKey) {
-        const current = this.actor.system.resources[resKey].value;
+        const current = actor.system.resources[resKey].value;
         update[`system.playState.current${capitalize(resKey)}`] = Math.max(0, current - cost);
         if (cost > current) {
-          ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CardCostExceedsResource", { name: item.name, cost, resource: capitalize(resKey), actorName: this.actor.name, current }));
+          ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CardCostExceedsResource", { name: item.name, cost, resource: capitalize(resKey), actorName: actor.name, current }));
         }
       }
     }
 
-    if (isReaction && game.combat) {
+    // A prepared Action fired in a chain uses the character's one response (Doc L4326).
+    if ((isReaction || fromReserved) && game.combat) {
       update["system.playState.lastReactionRound"] = game.combat.round;
       update["system.playState.lastReactionCombatantId"] = game.combat.combatant?.id ?? "";
     }
 
-    await this.actor.update(update);
+    await actor.update(update);
     // V6 §6.8 (plan): a cooldown starts the moment the card is PLAYED (here — dice committed and
     // spent), even if the roll below fails or is interrupted, so this fires unconditionally before
     // rollEssencePool resolves.
-    await applyCardCooldown(this.actor, item);
-    const bonusSurges = hasMastery(sys, this.actor.system.expertises) ? 1 : 0;
-    await rollEssencePool({ pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges, unopposed: !!sys.unopposed, nonCombat: !!sys.noSurges });
+    await applyCardCooldown(actor, item);
+    const bonusSurges = hasMastery(sys, actor.system.expertises) ? 1 : 0;
+    await rollEssencePool({ pool: committed, defense, targets, label: fromReserved ? `${item.name} (prepared)` : item.name, actor, surgeOptions: sys.surges, bonusSurges, unopposed, nonCombat: !!sys.noSurges });
     // V6 "Acting While Dying" (design/v6-revision-delta.md §2.4): this Combat/Reaction Card is an
     // Action or Reaction, so it's eligible — see #applyDyingExertion for the once-per-Round gate.
     // Fires even if the roll above failed or was interrupted (the book: "a failed or interrupted
     // card still counts"), since this line runs unconditionally after rollEssencePool resolves.
-    await EssenceActorSheet.#applyDyingExertion(this.actor);
+    await EssenceActorSheet.#applyDyingExertion(actor);
+  }
+
+  /** Fires the held Prepare Action from its reserved dice (Doc L4324-L4330). */
+  static async #onFirePreparedAction() {
+    const prepared = this.actor.system.playState.preparedAction;
+    if (!prepared?.cardName) {
+      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.NoPreparedAction"));
+      return;
+    }
+    const item = this.actor.items.get(prepared.cardId);
+    if (!item) {
+      ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.PreparedCardMissing"));
+      await this.actor.clearPreparedAction();
+      return;
+    }
+    const sys = item.system;
+    const cardMin = Math.max(2, parseInt(sys.min, 10) || 1);
+    const reserved = prepared.reserved ?? 0;
+    if (reserved < cardMin) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CardRequiresMoreDice", { name: item.name, min: cardMin, available: reserved, label: "reserved" }));
+      return;
+    }
+    const promptResult = await EssenceActorSheet.#promptDiceCount({
+      title: `Fire ${item.name}`,
+      label: `Commit how many reserved dice? (min ${cardMin}, max ${reserved}). Unused reserved dice are discarded.`,
+      min: cardMin, max: reserved, initial: reserved,
+      note: EssenceActorSheet.#maxRolledDiceNote(this.actor, sys),
+      extraCheckbox: { label: game.i18n.localize("ESSENCE.Sheet.HelplessTarget") }
+    });
+    if (promptResult === null) return;
+    await EssenceActorSheet.#finishCardPlay(this.actor, item, { committed: promptResult.count, poolField: "actionDice", available: reserved, unopposed: !!sys.unopposed || promptResult.extra, fromReserved: true });
+  }
+
+  static async #onCancelPreparedAction() {
+    const prepared = this.actor.system.playState.preparedAction;
+    if (!(await this.actor.clearPreparedAction())) return;
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: `<p><strong>${this.actor.name}</strong> cancels the prepared ${prepared.cardName}; ${prepared.reserved} reserved dice are discarded.</p>`
+    });
   }
 
   /**
@@ -1043,13 +1120,26 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const cardIndex = target.dataset.cardIndex !== "" ? Number(target.dataset.cardIndex) : null;
 
     const available = this.actor.system.playState.actionDice ?? 0;
-    const cardMin = 2;
+    // Doc L4204: an Equipment Card uses its printed minimum (at least 2), or burns 2 when it prints
+    // no roll or dice cost. Parsed from the card text, which is the only place it's written.
+    const commitment = equipmentCardCommitment(target.dataset.cardEffect || "");
+    const cardMin = commitment.min ?? commitment.burn;
     if (available <= 0) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoPoolDiceRemaining", { label: "Action" }));
       return;
     }
     if (cardMin > available) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CardRequiresMoreDice", { name, min: cardMin, available, label: "Action" }));
+      return;
+    }
+    if (commitment.burn) {
+      await EssenceActorSheet.#spendEquipmentCardUse(this.actor, itemId, cardIndex, name);
+      await this.actor.update({ "system.playState.actionDice": available - commitment.burn });
+      await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        content: `<div class="essence content-type-action-card"><p><strong>${this.actor.name}</strong> uses <strong>${name}</strong>: burns ${commitment.burn} Action dice, no roll.</p><p>${target.dataset.cardEffect || ""}</p></div>`
+      });
+      await EssenceActorSheet.#applyDyingExertion(this.actor);
       return;
     }
 
@@ -1083,36 +1173,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     });
     if (committed === null) return;
 
-    if (itemId) {
-      const item = this.actor.items.get(itemId);
-      if (item) {
-        if (cardIndex !== null) {
-          const cards = (item.system.equipmentCards ?? []).map((c) => ({ ...c }));
-          const card = cards[cardIndex];
-          if (card?.uses != null) {
-            if ((card.usesRemaining ?? 0) <= 0) {
-              ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoUsesRemaining", { name }));
-              return;
-            }
-            card.usesRemaining -= 1;
-            await item.update({ "system.equipmentCards": cards });
-          }
-        } else if (item.system.uses != null) {
-          if ((item.system.usesRemaining ?? 0) <= 0) {
-            ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoUsesRemaining", { name }));
-            return;
-          }
-          await item.update({ "system.usesRemaining": item.system.usesRemaining - 1 });
-        }
-        // Used-vs-unused preparation commitment (design/v6-revision-delta.md §3.5) — rolling an
-        // Equipment Card is a "meaningful use" of whichever equipment/chassis/fitting Item granted
-        // it, so its Inventory/Armory allocation is now committed for the rest of the Adventure.
-        // Augments never carry this flag (they're always 0 capacity — nothing to commit).
-        if (["equipment", "chassis", "fitting"].includes(item.type) && !item.system.usedThisAdventure) {
-          await item.update({ "system.usedThisAdventure": true });
-        }
-      }
-    }
+    if (!(await EssenceActorSheet.#spendEquipmentCardUse(this.actor, itemId, cardIndex, name))) return;
 
     await this.actor.update({ "system.playState.actionDice": available - committed });
     const domain = DOMAINS.find((d) => d.key === domainKey);
@@ -1121,6 +1182,39 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // V6 "Acting While Dying" (design/v6-revision-delta.md §2.4) — see #onRollItem's identical hook
     // above and #applyDyingExertion for the once-per-Round gate.
     await EssenceActorSheet.#applyDyingExertion(this.actor);
+  }
+
+  /** Spends one Use of an Equipment Card (when it tracks Uses) and commits its source Item for the
+   *  Adventure. Returns false when no Uses remain. */
+  static async #spendEquipmentCardUse(actor, itemId, cardIndex, name) {
+    if (!itemId) return true;
+    const item = actor.items.get(itemId);
+    if (!item) return true;
+    if (cardIndex !== null) {
+      const cards = (item.system.equipmentCards ?? []).map((c) => ({ ...c }));
+      const card = cards[cardIndex];
+      if (card?.uses != null) {
+        if ((card.usesRemaining ?? 0) <= 0) {
+          ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoUsesRemaining", { name }));
+          return false;
+        }
+        card.usesRemaining -= 1;
+        await item.update({ "system.equipmentCards": cards });
+      }
+    } else if (item.system.uses != null) {
+      if ((item.system.usesRemaining ?? 0) <= 0) {
+        ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoUsesRemaining", { name }));
+        return false;
+      }
+      await item.update({ "system.usesRemaining": item.system.usesRemaining - 1 });
+    }
+    // Used-vs-unused preparation commitment (design/v6-revision-delta.md §3.5): using an Equipment
+    // Card is a meaningful use of the Item that granted it, so its allocation is committed for the
+    // Adventure. Augments never carry this flag (0 capacity, nothing to commit).
+    if (["equipment", "chassis", "fitting"].includes(item.type) && !item.system.usedThisAdventure) {
+      await item.update({ "system.usedThisAdventure": true });
+    }
+    return true;
   }
 
   /** Purely a display toggle — no actor data involved, so a plain DOM mutation is enough; no need
@@ -1307,6 +1401,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     });
     if (next >= max) {
       ui.notifications.error(game.i18n.format("ESSENCE.Notify.EndOfDeathTrack", { name: actor.name }));
+      await actor.markDead();
     }
   }
 
@@ -1557,6 +1652,11 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // V6 Wound Cards: attach the matching Condition Item for each newly filled Core Wound space —
     // batched into one createEmbeddedDocuments call rather than one call per Wound (Finding 7).
     if (filledSlots.length) await attachWoundCards(this.actor, filledSlots);
+    // Overflow Wounds advanced the track (Doc L4059): reaching the threshold is death.
+    if (update["system.playState.deathTrackState"] === "dying" || sys.playState.deathTrackState === "dying") {
+      const step = update["system.playState.deathTrackStep"] ?? sys.playState.deathTrackStep ?? 0;
+      if (step >= (sys.deathTrackMax ?? 5)) await this.actor.markDead();
+    }
 
     const domainSummary = Object.entries(result.domainAmounts).filter(([, n]) => n > 0).map(([d, n]) => `${n} ${d}`).join(" + ");
     await ChatMessage.create({
@@ -1605,6 +1705,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
     await this.actor.update(update);
     await removeWoundCard(this.actor, slot);
+    // Doc L4117: unconsciousness from a full track "lasts until at least one Wound space opens".
+    await this.actor.setUnconscious(false);
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content: `<p><strong>${this.actor.name}</strong> recovers from their <strong>${recovered.condition}</strong>.</p>`
@@ -1623,6 +1725,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    */
   static async #onGrantRecovery() {
     const anima = this.actor.system.anima ?? 0;
+    // Fatigued (Doc L2701, L4139): halve each base amount and round up again, before Anima.
+    const fatiguedItem = this.actor.items.find((i) => i.type === "condition" && (i.name || "").toUpperCase() === "FATIGUED") ?? null;
     const result = await new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
         window: { title: "Grant Recovery" },
@@ -1683,7 +1787,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       const resource = sys.resources[key];
       // V6: "restore 25% of maximum, rounded up" — was Math.round, silently shorting a GM who left
       // the default 25% in place on any max not divisible by 4.
-      const restored = Math.ceil(resource.max * (result.pct / 100));
+      const restored = recoveryBaseAmount(resource.max, result.pct, !!fatiguedItem);
       const afterPct = Math.min(resource.max, resource.value + restored);
       // V6 Anima benefit: extra points land AFTER the 25% restoration, clamped at this Resource's
       // max same as the 25% step — "allocate Anima's extra points only where capacity remains; any
@@ -1771,6 +1875,16 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     if (deathTrackReduced) parts.push("Death Track reduced by 1");
     if (manifestationWoundRecovered) parts.push("1 Manifestation Wound removed");
     if (adaptabilityRestored) parts.push("Adaptability Exploration reroll restored");
+    if (fatiguedItem) {
+      parts.push("Fatigued halved the base Resource amounts");
+      // Doc L2703: after the reduced gains, remove Fatigued if the Recovery remedies every cause.
+      const remedied = await foundry.applications.api.DialogV2.confirm({
+        window: { title: "Fatigued" },
+        content: "<p>Did this Recovery remedy every recorded cause of Fatigued (rest, care, resupply)? If so it is removed now, after the reduced gains.</p>",
+        rejectClose: false
+      });
+      if (remedied) { await fatiguedItem.delete(); parts.push("Fatigued removed"); }
+    }
 
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
@@ -2013,13 +2127,24 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    *  Influence Consequence Card states its own repair requirement instead — see attachConsequenceCard). */
   static async #onRecoverInfluenceInjury() {
     const coreInfluence = this.actor.system.coreInfluence.map((c) => ({ ...c }));
-    let slot = -1;
-    for (let i = coreInfluence.length - 1; i >= 0; i--) {
-      if (coreInfluence[i].filled) { slot = i; break; }
-    }
-    if (slot === -1) {
+    const filled = coreInfluence.map((c, i) => ({ ...c, i })).filter((c) => c.filled);
+    if (!filled.length) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoCoreInfluenceToRecover", { name: this.actor.name }));
       return;
+    }
+    // Consequence Cards recover independently, so the GM picks which space clears (Phase 3.16),
+    // instead of always the last one filled.
+    let slot = filled[filled.length - 1].i;
+    if (filled.length > 1) {
+      slot = await new Promise((resolve) => {
+        new foundry.applications.api.DialogV2({
+          window: { title: game.i18n.localize("ESSENCE.Sheet.RecoverInfluence") },
+          content: `<label>${game.i18n.localize("ESSENCE.Sheet.RecoverInfluenceChoose")}<select name="slot">${filled.map((c) => `<option value="${c.i}">${c.condition || `${SEVERITY_BY_INDEX[c.i]} (space ${c.i + 1})`}</option>`).join("")}</select></label>`,
+          buttons: [{ action: "recover", label: "Recover", default: true, callback: (event, button) => Number(button.form.elements.slot.value) }],
+          submit: (result) => resolve(result === "recover" ? null : result)
+        }).render(true);
+      });
+      if (slot === null || slot === undefined) return;
     }
 
     const recovered = coreInfluence[slot];
@@ -2225,9 +2350,17 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    */
   static async #onNewEncounter() {
     await resetEncounterCooldowns(this.actor);
+    // What ends with the Encounter (Doc L5842, L5930, L6032, L6186, L5882, L5978, L6360).
+    const cleared = await resetEncounterSpecialties(this.actor);
+    const subtype = this.actor.system.specialties?.activeManifestation;
+    if (subtype) {
+      const record = this.actor.system.specialties.manifestationRecords?.find((r) => r.subtype === subtype);
+      const profile = record?.actorId ? game.actors.get(record.actorId) : null;
+      if (profile) { await dismissManifestation(profile); cleared.push("Full Manifestation"); }
+    }
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> begins a new Encounter — once-per-Encounter Combat/Reaction Cards are available again.</p>`
+      content: `<p><strong>${this.actor.name}</strong> begins a new Encounter — once-per-Encounter Combat/Reaction Cards are available again${cleared.length ? `; ${cleared.join(", ")} cleared` : ""}.</p>`
     });
   }
 

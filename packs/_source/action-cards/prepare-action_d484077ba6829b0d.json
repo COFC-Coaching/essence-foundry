@@ -1,0 +1,56 @@
+{
+  "_id": "d484077ba6829b0d",
+  "name": "Prepare Action",
+  "type": "action-card",
+  "img": "icons/svg/card-hand.svg",
+  "system": {
+    "domain": "physical",
+    "rank": 0,
+    "style": "",
+    "subtype": "",
+    "attr": "",
+    "skill": "",
+    "defense": "",
+    "unopposed": false,
+    "min": "2",
+    "cost": "",
+    "expertises": "",
+    "expertisesMode": "any",
+    "tags": "",
+    "flavor": "",
+    "body": [
+      {
+        "label": "Set up",
+        "html": "Burn 2 Action dice without rolling. Choose one Action and a specific perceivable trigger, then reserve X additional dice from your remaining Action Pool for that Action. You can hold only one preparation, which expires at the start of your next Turn. You cannot prepare Prepare Action itself. Setting up does not yet play the chosen Action: it does not trigger its Rider, start its cooldown, or spend its Resource or Use costs."
+      },
+      {
+        "label": "Trigger",
+        "html": "When the trigger occurs outside your Turn, you may play the chosen Action as your response in the current Reaction chain, or open a chain if none exists. Pay its dice from the reserved dice, never from Reaction dice. Pay its other costs, choose legal targets, roll, and purchase Surges normally. Free dice cannot pay its minimum primary commitment."
+      },
+      {
+        "label": "Reserved dice",
+        "html": "Reserved dice are separate from both Pools. They cannot fund other cards, extra Movement, upkeep, or Concentration and do not convert into Reaction dice. You may decline one occurrence and wait for another before expiry. After firing, canceling, replacing, or expiring the preparation, discard all remaining reserved dice."
+      },
+      {
+        "label": "Limits",
+        "html": "The prepared card still counts as an Action for Style, Rider, availability, and once-per-Round limits, and uses your one response in that chain. A preparation cannot interrupt closed resolution without explicit permission. Enemies and Full Manifestations require explicit permission to use Prepare Action. Preparing never delays your Turn or changes Initiative."
+      }
+    ],
+    "surges": [],
+    "rider": {
+      "title": "",
+      "html": "",
+      "meta": ""
+    },
+    "nonCombatTask": false,
+    "noSurges": true,
+    "burnDice": 2,
+    "noRoll": true
+  },
+  "folder": "490568d9eb375ca8",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!d484077ba6829b0d"
+}

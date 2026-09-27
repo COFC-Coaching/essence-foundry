@@ -471,11 +471,13 @@ Hooks.on("deleteCombat", async (combat) => {
       "system.playState.combatStarted": false,
       "system.playState.combatTurn": "notStarted"
     };
-    // Everything else that happened in Combat persists (spent resources, Wounds, equipment
-    // damage — part-iv-combat.md § What Persists After Combat) except these two Specialties,
-    // which explicitly end when the Encounter ends.
-    if (actor.system.specialties?.threads?.length) update["system.specialties.threads"] = [];
-    if (actor.system.specialties?.authority?.length) update["system.specialties.authority"] = [];
+    // Everything else persists. Threads and Authority used to be cleared here too, but they end
+    // when the ENCOUNTER ends, not when Combat does (Doc L3039: "A Social Encounter may become
+    // Combat without creating a fresh Encounter"); the explicit New Encounter action clears them
+    // (utils.mjs resetEncounterSpecialties). A held Prepare Action has no meaning outside Combat.
+    if (actor.system.playState?.preparedAction?.cardName || actor.system.playState?.preparedAction?.reserved) {
+      update["system.playState.preparedAction"] = { cardId: "", cardName: "", trigger: "", reserved: 0 };
+    }
     await actor.update(update);
   }
 });

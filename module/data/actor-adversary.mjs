@@ -124,6 +124,10 @@ export default class EssenceAdversaryData extends EssenceCombatantData {
       );
     }
     this.coreWoundsFilled = this.coreWounds.filter((w) => w.filled).length;
-    this.woundState = this.coreWoundsFilled >= capacity ? "Defeated" : "";
+    // Stabilize on a Defeated enemy (Doc L4280): "stops dying from the treated injuries but remains
+    // Defeated and unable to act." EssenceActor#stabilize records it in deathTrackState.
+    this.woundState = this.coreWoundsFilled >= capacity
+      ? (this.playState?.deathTrackState === "stabilized" ? "Defeated (stable)" : "Defeated")
+      : "";
   }
 }

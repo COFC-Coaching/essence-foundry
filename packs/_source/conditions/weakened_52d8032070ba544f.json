@@ -12,7 +12,7 @@
       },
       {
         "label": "EFFECT",
-        "html": "Damage you deal is reduced by 1, minimum 0. This modifies Damage after the card determines its amount but before the target applies Resistance, Vulnerability, Resilience, or Breach."
+        "html": "Reduce Damage you deal by 1 per target, minimum 0, before target protections. Reduce the highest component; the damaged creature chooses between ties. Apply the reduction once to the total."
       }
     ]
   },

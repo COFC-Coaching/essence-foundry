@@ -21,11 +21,11 @@
     "body": [
       {
         "label": "Target",
-        "html": "One creature within the Range of a ranged Source you can use."
+        "html": "One creature within the Range of a ranged Source you can use, or one unattended object that the Source can plausibly damage."
       },
       {
         "label": "Effect",
-        "html": "Roll against Fortitude, committing at least 2 Action dice. The maximum is Grace + Ballistics, or 2 if that sum is lower. On success, deal 1 Physical Damage of a type appropriate to the Source."
+        "html": "Against a creature, roll against Fortitude unless Helpless Targets applies; against an object use its declared Difficulty. Commit at least 2 Action dice. The maximum is Grace + Ballistics, or 2 if that sum is lower. On success, deal 1 Physical Damage of a type appropriate to the Source. An attack into a suspected space burns 1 extra die."
       }
     ],
     "surges": [

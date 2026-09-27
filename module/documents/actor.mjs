@@ -91,10 +91,74 @@ export default class EssenceActor extends Actor {
 
   async reduceDeathTrack() {
     const ps = this.system.playState;
-    if (!ps || ps.deathTrackState === "dying") return false;
+    if (!ps || ps.deathTrackState === "dying" || ps.deathTrackState === "dead") return false;
     const step = ps.deathTrackStep ?? 0;
     if (step <= 0) return false;
     await this.update({ "system.playState.deathTrackStep": step - 1 });
+    return true;
+  }
+
+  /**
+   * Death (Doc L4059): "Reaching the character's death threshold causes death... Death is final
+   * under the game rules." Sets the terminal state, applies Foundry's own defeated status so the
+   * Combat Tracker and token show it, and posts the note. Idempotent.
+   */
+  async markDead() {
+    if (this.system.playState?.deathTrackState === "dead") return false;
+    await this.update({ "system.playState.deathTrackState": "dead" });
+    const defeated = CONFIG.specialStatusEffects?.DEFEATED;
+    if (defeated) await this.toggleStatusEffect(defeated, { active: true, overlay: true });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      content: `<p><strong>${this.name}</strong> has died. Death is final; only explicit GM fiat can change it.</p>`
+    });
+    return true;
+  }
+
+  /**
+   * Stabilize (Doc L4276-L4280): a full-track Dying or Stabilized character stops deteriorating.
+   * For a simplified enemy (Defeated), it "stops dying from the treated injuries but remains
+   * Defeated and unable to act"; the same state field records that. Heals nothing.
+   * @returns {Promise<boolean>} false when there was nothing to stabilize
+   */
+  async stabilize() {
+    const ps = this.system.playState;
+    if (!ps || ps.deathTrackState === "dead") return false;
+    const simplified = !!this.system.usesSimplifiedWounds;
+    const eligible = simplified
+      ? this.system.woundState === "Defeated"
+      : ps.deathTrackState === "dying" || ps.deathTrackState === "stabilized";
+    if (!eligible) return false;
+    await this.update({ "system.playState.deathTrackState": "stabilized" });
+    return true;
+  }
+
+  /** Foundry's unconscious status, used for nonlethal defeat and Defeated enemies (Doc L4117,
+   *  L4127). A no-op when the status isn't configured. */
+  async setUnconscious(active) {
+    const id = CONFIG.statusEffects.find((s) => s.id === "unconscious") ? "unconscious" : null;
+    if (!id) return false;
+    await this.toggleStatusEffect(id, { active });
+    return true;
+  }
+
+  /** Prepare Action (Doc L4320): hold one preparation; its reserved dice leave the Action Pool. */
+  async setPreparedAction({ cardId, cardName, trigger, reserved }) {
+    const ps = this.system.playState;
+    const available = ps.actionDice ?? 0;
+    const n = Math.max(0, Math.min(available, reserved));
+    await this.update({
+      "system.playState.actionDice": available - n,
+      "system.playState.preparedAction": { cardId, cardName, trigger, reserved: n }
+    });
+    return n;
+  }
+
+  /** Discards the held preparation and its reserved dice (Doc L4330: after firing, canceling,
+   *  replacing, or expiring, "discard all remaining reserved dice"). */
+  async clearPreparedAction() {
+    if (!this.system.playState?.preparedAction?.cardName && !this.system.playState?.preparedAction?.reserved) return false;
+    await this.update({ "system.playState.preparedAction": { cardId: "", cardName: "", trigger: "", reserved: 0 } });
     return true;
   }
 }

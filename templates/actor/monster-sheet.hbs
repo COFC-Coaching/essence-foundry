@@ -343,7 +343,7 @@
     {{#each equipmentCards as |c|}}
       <li>
         <div class="card-row-top">
-          <button type="button" data-action="rollEquipmentCard" data-card-name="{{c.name}}" data-item-id="{{c.itemId}}" data-card-index="{{c.cardIndex}}">{{c.name}}</button>
+          <button type="button" data-action="rollEquipmentCard" data-card-name="{{c.name}}" data-item-id="{{c.itemId}}" data-card-index="{{c.cardIndex}}" data-card-effect="{{c.effect}}">{{c.name}}</button>
           <span class="card-meta muted">{{c.source}}{{#if c.uses}} · {{localize "ESSENCE.Common.UsesFraction" remaining=c.usesRemaining total=c.uses}}{{/if}}</span>
           <button type="button" class="card-expand-toggle" data-action="toggleEquipmentCard" aria-label="{{localize 'ESSENCE.Sheet.ExpandCardAria' name=c.name}}"><i class="fa-solid fa-chevron-down"></i></button>
         </div>

@@ -1,0 +1,34 @@
+{
+  "_id": "020a1f1dd33268f0",
+  "name": "Fatigued",
+  "type": "condition",
+  "img": "icons/svg/skull.svg",
+  "system": {
+    "classification": "ordinary",
+    "sections": [
+      {
+        "label": "ORDINARY CONDITION",
+        "html": "<b>Fatigued</b>."
+      },
+      {
+        "label": "EFFECT",
+        "html": "Halve the base Resource restoration from Recovery, rounding up, then add Anima's flat additional Resource points normally and respect the maxima. Apply this reduction even if the Recovery will remove Fatigued. Fatigued does not alter Wound care, Death Track recovery, Manifestation Wound recovery, or other Recovery benefits unless its source explicitly does so."
+      },
+      {
+        "label": "DURATION",
+        "html": "Fatigued persists until all recorded causes are remedied or an effect removes this ordinary Condition. Record causes such as physical strain, mental strain, or deprivation, but apply only one Fatigued penalty. Reapplication adds no second magnitude."
+      },
+      {
+        "label": "REMOVAL",
+        "html": "The applying hazard or task states the necessary remedy. If appropriate rest, care, or resupply remedies every cause during a Recovery, apply that Recovery's reduced gains before removing Fatigued. Removing the Condition by another effect does not supply food, water, or rest, reset exposure clocks, or prevent a continuing source from applying it again."
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!020a1f1dd33268f0"
+}

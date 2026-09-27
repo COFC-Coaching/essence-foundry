@@ -247,19 +247,19 @@ function coverCardToItem(cc) {
  */
 const ORDINARY_CONDITIONS = [
   { name: "Blinded",
-    effect: "Ordinary sight cannot detect creatures, points, or details farther than 1 unit. Sight-dependent targeting or abilities fail unless another Sense provides the required information. Other Senses can compensate normally.",
+    effect: "Ordinary sight cannot detect creatures, points, or details farther than 1 unit. Other Senses can locate targets and support abilities that accept their information. An ability explicitly requiring sight still requires visual information.",
     activeEffects: [] },
   { name: "Burning",
     effect: "At the start of your Turn, suffer 1 Physical Fire Damage. During your Turn, you may burn 2 Action dice to extinguish yourself when doing so is physically possible. Appropriate external aid or environmental circumstances can also end Burning.",
     activeEffects: [] },
   { name: "Dazed",
-    effect: "The first Action you play on each of your Turns and the first Reaction you play between your Turns each require 1 additional burned die. Dazed never prevents you from acting; it increases the immediate commitment required.",
+    effect: "At the start of your next Turn, immediately after forming your Action Pool, burn 3 Action dice, or all remaining dice if fewer than 3 remain. Then remove Dazed. Reapplication does not add another penalty. Dazed has no immediate application cost and does not tax individual Actions or Reactions. It can empty a small Action Pool; otherwise-legal Movement remains available. Mooks and Normals waive this Pool penalty under their reduced engine.",
     activeEffects: [] },
   { name: "Immobilized",
     effect: "Your voluntary Movement is 0 and you cannot gain voluntary extra Movement. You may still take Actions and Reactions normally, and forced movement can still move you unless the source of Immobilized says otherwise.",
     activeEffects: [] },
   { name: "Prone",
-    effect: "Standing costs 2 units of Movement. While Prone, your voluntary Movement costs double. You gain +1 Fortitude against physically obstructable attacks originating more than 1 unit away and suffer -1 Fortitude against adjacent physical attacks.",
+    effect: "You may freely drop Prone during your own Turn when physically feasible; doing so off-turn requires explicit permission. Standing costs 2 units of Movement. While Prone, voluntary Movement costs double. Gain +1 Fortitude against physically obstructable attacks originating more than 1 unit away and suffer −1 Fortitude against adjacent physical attacks.",
     activeEffects: [] },
   { name: "Restrained",
     effect: "You cannot voluntarily leave your current space and suffer -1 Fortitude. You can still act, use Reactions, and attack unless the source of the restraint specifically prevents a required limb, item, or other action.",
@@ -267,8 +267,12 @@ const ORDINARY_CONDITIONS = [
   { name: "Silenced",
     effect: "You cannot speak or intentionally produce a usable voice. Abilities requiring speech, command words, audible performance, or other explicit vocalization cannot be used. Silenced does not prevent non-vocal Actions or Reactions.",
     activeEffects: [] },
+  // Doc L4137-L4143 (0.10.0). Grant Recovery reads this by name (actor-sheet.mjs).
+  { name: "Fatigued",
+    effect: "Halve the base Resource restoration from Recovery, rounding up, then add Anima's flat additional Resource points normally and respect the maxima. Apply this reduction even if the Recovery will remove Fatigued. Fatigued persists until all recorded causes are remedied or an effect removes this ordinary Condition; apply only one Fatigued penalty. If appropriate rest, care, or resupply remedies every cause during a Recovery, apply that Recovery's reduced gains before removing Fatigued.",
+    activeEffects: [] },
   { name: "Weakened",
-    effect: "Damage you deal is reduced by 1, minimum 0. This modifies Damage after the card determines its amount but before the target applies Resistance, Vulnerability, Resilience, or Breach.",
+    effect: "Reduce Damage you deal by 1 per target, minimum 0, before target protections. Reduce the highest component; the damaged creature chooses between ties. Apply the reduction once to the total.",
     activeEffects: [] }
 ];
 
@@ -564,14 +568,14 @@ function cardToItem(row, type, folderMap) {
 const BASIC_CARDS = [
   { kind: "action", name: "Basic Melee Attack", domain: "physical", attr: "might", skill: "prowess", defense: "fortitude", min: "2",
     body: [
-      { label: "Target", html: "One creature within the Range of a melee Source you can use." },
-      { label: "Effect", html: "Roll against Fortitude, committing at least 2 Action dice. The maximum is Might + Prowess, or 2 if that sum is lower. If the Source explicitly permits another Physical Attribute, substitute it for Might. On success, deal 1 Physical Damage of a type appropriate to the Source. An unarmed attack uses Range 1 and can always use Bludgeoning." }
+      { label: "Target", html: "One creature within the Range of a melee Source you can use, or one unattended object that the Source can plausibly damage." },
+      { label: "Effect", html: "Against a creature, roll against Fortitude unless Helpless Targets applies; against an object use its declared Difficulty. Commit at least 2 Action dice. The maximum is Might + Prowess, or 2 if that sum is lower. If the Source explicitly permits another Physical Attribute, substitute it for Might. On success, deal 1 Physical Damage of a type appropriate to the Source. An unarmed attack uses Range 1 and can always use Bludgeoning. An attack into a suspected space burns 1 extra die." }
     ],
     surges: [{ n: "2", html: "Deal +1 Damage." }] },
   { kind: "action", name: "Basic Ranged Attack", domain: "physical", attr: "grace", skill: "ballistics", defense: "fortitude", min: "2",
     body: [
-      { label: "Target", html: "One creature within the Range of a ranged Source you can use." },
-      { label: "Effect", html: "Roll against Fortitude, committing at least 2 Action dice. The maximum is Grace + Ballistics, or 2 if that sum is lower. On success, deal 1 Physical Damage of a type appropriate to the Source." }
+      { label: "Target", html: "One creature within the Range of a ranged Source you can use, or one unattended object that the Source can plausibly damage." },
+      { label: "Effect", html: "Against a creature, roll against Fortitude unless Helpless Targets applies; against an object use its declared Difficulty. Commit at least 2 Action dice. The maximum is Grace + Ballistics, or 2 if that sum is lower. On success, deal 1 Physical Damage of a type appropriate to the Source. An attack into a suspected space burns 1 extra die." }
     ],
     surges: [{ n: "2", html: "Deal +1 Damage." }] },
   { kind: "reaction", name: "Defend", domain: "physical", attr: "", skill: "", defense: "", min: "2", unopposed: true,
@@ -580,21 +584,31 @@ const BASIC_CARDS = [
       { label: "Effect", html: "Choose the Endurance Attribute of the targeted Defense: Vigor for Fortitude, Resolve for Composure, or Anima for Harmony. Roll at least 2 Reaction dice, up to that Attribute; if the Attribute is 1, your maximum is 2 instead. This Reaction is unopposed. Gain +1 to the targeted Defense against the triggering card." }
     ],
     surges: [{ n: "2", html: "Increase that Defense by an additional +1 against the triggering card." }] },
-  { kind: "action", name: "Dash", domain: "physical", attr: "", skill: "", defense: "", min: "2",
+  { kind: "action", name: "Dash", domain: "physical", attr: "", skill: "", defense: "", min: "2", burnDice: 2, noRoll: true,
     body: [
       { label: "Effect", html: "Burn 2 Action dice to move up to 4 additional units. This movement is voluntary and follows ordinary terrain and movement restrictions. It is in addition to normal Movement for the Turn." }
     ],
     surges: [] },
-  { kind: "action", name: "Reconfigure", domain: "physical", attr: "", skill: "", defense: "", min: "3",
+  { kind: "action", name: "Reconfigure", domain: "physical", attr: "", skill: "", defense: "", min: "3", burnDice: 3, noRoll: true,
     body: [
-      { label: "Effect", html: "Burn 3 Action dice. Choose one: ready, stow, recover, or hand over one complete physically accessible combat-ready item; swap one such item you are using for another; or exchange one installed Augment or one combat-replaceable Fitting for a compatible replacement physically available to you. No roll is required." },
+      { label: "Effect", html: "Burn 3 Action dice. Choose one: ready, stow, recover, or hand over one complete physically accessible combat-ready item; swap one such item you are using for another; exchange one installed Augment or one combat-replaceable Fitting for a compatible replacement physically available to you; or establish, change, or end one permitted Linked Mount Link on accessible equipment. No roll is required." },
       { label: "Effect", html: "This includes drawing into an empty hand, picking up an item within reach, or handing a held item to an adjacent willing creature. A recipient can immediately use it only if the required hands and other handling requirements are already satisfied; any further swap or preparation uses that recipient's own Reconfigure. Prepared items and Temporary Equipment use the same handling procedure without changing their Inventory accounting. Reconfigure cannot reach an item left elsewhere, waive compatibility, or complete major structural rebuilding." }
     ],
     surges: [] },
-  { kind: "action", name: "Stabilize", domain: "physical", attr: "", skill: "", defense: "", min: "3", noSurges: true,
+  { kind: "action", name: "Stabilize", domain: "physical", attr: "", skill: "", defense: "", min: "3", noSurges: true, burnDice: 3, noRoll: true,
     body: [
-      { label: "Effect", html: "Burn 3 Action dice while adjacent to a full-track Dying or Stabilized target. You must satisfy the immediate treatment requirements printed by that target's Critical Wound Card. If those requirements are met, Stabilization succeeds automatically. This Action does not heal a Wound and has no Surges." },
-      { label: "Effect", html: "Treatment follows the Critical Wound Card. It may require a Medical Toolkit, ritual support, a spiritual anchor, removal of an ongoing cause, another specific tool, or a combination appropriate to the Wound." }
+      { label: "Effect", html: "Burn 3 Action dice to Stabilize yourself or an adjacent full-track Dying or Stabilized target, or a Defeated living creature using simplified enemy Wounds. Apply a cost modifier only when its rule explicitly affects Stabilize or the user's Actions generally; the minimum commitment remains 2 Pool dice. Wound severity, Attributes, Skills, tools, and assistance do not change this cost by themselves." },
+      { label: "Requirements", html: "You must be able to act, reach the injury, and provide its treatment. A full-track target uses its Critical Wound Card's immediate treatment requirements. For a simplified enemy, the GM states the appropriate care before commitment. If those requirements are met, Stabilization succeeds automatically. This Action does not heal a Wound and has no Surges." },
+      { label: "Treatment", html: "Treatment follows the Critical Wound Card. It may require a Medical Toolkit, ritual support, a spiritual anchor, removal of an ongoing cause, another specific tool, or a combination appropriate to the Wound. A treated simplified enemy stops dying but remains Defeated and unable to act." }
+    ],
+    surges: [] },
+  // Doc L4318-L4342 (0.10.0). Burn 2 and reserve dice for a chosen Action; see card-play.mjs.
+  { kind: "action", name: "Prepare Action", domain: "physical", attr: "", skill: "", defense: "", min: "2", noSurges: true, burnDice: 2, noRoll: true,
+    body: [
+      { label: "Set up", html: "Burn 2 Action dice without rolling. Choose one Action and a specific perceivable trigger, then reserve X additional dice from your remaining Action Pool for that Action. You can hold only one preparation, which expires at the start of your next Turn. You cannot prepare Prepare Action itself. Setting up does not yet play the chosen Action: it does not trigger its Rider, start its cooldown, or spend its Resource or Use costs." },
+      { label: "Trigger", html: "When the trigger occurs outside your Turn, you may play the chosen Action as your response in the current Reaction chain, or open a chain if none exists. Pay its dice from the reserved dice, never from Reaction dice. Pay its other costs, choose legal targets, roll, and purchase Surges normally. Free dice cannot pay its minimum primary commitment." },
+      { label: "Reserved dice", html: "Reserved dice are separate from both Pools. They cannot fund other cards, extra Movement, upkeep, or Concentration and do not convert into Reaction dice. You may decline one occurrence and wait for another before expiry. After firing, canceling, replacing, or expiring the preparation, discard all remaining reserved dice." },
+      { label: "Limits", html: "The prepared card still counts as an Action for Style, Rider, availability, and once-per-Round limits, and uses your one response in that chain. A preparation cannot interrupt closed resolution without explicit permission. Enemies and Full Manifestations require explicit permission to use Prepare Action. Preparing never delays your Turn or changes Initiative." }
     ],
     surges: [] },
   { kind: "action", name: "Perform Task", domain: "physical", attr: "", skill: "", defense: "", min: "2", nonCombatTask: true, noSurges: true,
@@ -637,7 +651,10 @@ function basicCardToItem(bc, folderMap) {
       surges: bc.surges,
       rider: { title: "", html: "", meta: "" },
       nonCombatTask: !!bc.nonCombatTask,
-      noSurges: !!bc.noSurges
+      noSurges: !!bc.noSurges,
+      // 0.10.0: burn-only cards (Doc L3639) never roll; the sheet spends `burnDice` and posts the card.
+      burnDice: bc.burnDice ?? null,
+      noRoll: !!bc.noRoll
     },
     folder: folderMap ? (folderMap[BASIC_FOLDER_NAME] ?? null) : null,
     flags: {},
@@ -710,7 +727,10 @@ function speciesCardToItem(sc, folderId) {
       surges: [],
       rider: { title: "", html: "", meta: "" },
       speciesGranted: true,
-      cooldownFrequency: sc.cooldownFrequency
+      cooldownFrequency: sc.cooldownFrequency,
+      // Doc L5421: each Species card "burns 2 Action dice... requires no roll".
+      burnDice: 2,
+      noRoll: true
     },
     folder: folderId ?? null,
     flags: {},

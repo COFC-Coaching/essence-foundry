@@ -3232,3 +3232,43 @@ through the Drive export in this session (line numbers below are that export's).
   collisions. Not live-tested in this session (no Foundry in the container). First live checks:
   a Non-Combat Skill roll with and without a Difficulty; dropping a second Distinction; the
   wizard's Non-Combat step showing the 5 + Intellect pool.
+
+### 2026-09-27 -- 0.10.0: Phase 3 part one (dice, Turns, Prepare Action, Stabilize, death, Conditions)
+
+Phase 3 was split: this release is the procedure and state work; 0.10.1 is the Damage-component
+rework (3.6 to 3.8), Recovery's Wound picker (3.13) and Concentration (3.15).
+
+- **Initiative** (`combat.mjs`): prompt min 1, no pass (Doc L3386); `_sortCombatants` override
+  with `initiativeTieBreak()` so PCs win ties (L3402).
+- **Start of Turn** (`_onStartTurn`): prepared Action expiry, then Pool formation, then Dazed's
+  burn of 3 (L3443-L3446, L4182). Dazed is found by Condition item name and deleted after; Mooks
+  and Normals are skipped by grade. Death at the threshold goes through `EssenceActor#markDead`.
+- **Burn-only cards** (`module/sheets/card-play.mjs`, `utils.burnOnlyProfile`): schema fields
+  `burnDice`/`noRoll` on cards plus a name table for stored copies. Character and NPC `#onRollItem`
+  call `playBurnOnlyCard` first. Stabilize confirms treatment and calls `EssenceActor#stabilize` on
+  the first targeted token's actor, else self (L4276-L4280). Prepare Action stores
+  `playState.preparedAction` and removes reserved dice from the Action Pool; `firePreparedAction`
+  pays through the new `#finishCardPlay` with `fromReserved` (L4324-L4330).
+- **Death** (`markDead`): state "dead" (additive choice), Foundry's `DEFEATED` special status as
+  overlay, chat note; `deathTrackAfterWoundRemoval/Filled` return null for "dead". Critical
+  removal resets the step in any state (L2729); activation no longer zeroes the step (L4100).
+- **Unconscious** (`setUnconscious`): Defeated enemies on Apply Damage; cleared when a space opens.
+- **Unaware tax** can't be absorbed: `committed + tax > available` refuses (L4460). **Helpless**
+  checkbox on Actions sets `unopposed` (L4530). **Equipment Cards** parse `equipmentCardCommitment`
+  from the effect text carried on the row button (`data-card-effect`, L4204).
+- **Encounter boundary** (`resetEncounterSpecialties`): Combo, Lock, Threads, Authority, and the
+  Stance/Unstable Condition items; the character sheet also dismisses an active Full
+  Manifestation. `deleteCombat` in `essence.mjs` stops clearing Threads/Authority (L3039) and only
+  drops a held preparation.
+- **Fatigued**: new ordinary Condition (hand-authored in build-packs.mjs `ORDINARY_CONDITIONS` and
+  as a `_source` doc); `recoveryBaseAmount()` halves; Grant Recovery offers removal after (L2701-
+  L2703). **Recover Influence** picks the space when several are filled.
+- **Packs.** No Neon cache in this clone, so `scripts/compile-packs.mjs` (compile-only) was added
+  and used for `conditions` and `action-cards` after editing `_source` docs by hand, with
+  build-packs.mjs's hand-authored lists updated to match (BASIC_CARDS gains Prepare Action and the
+  burn fields; `speciesCardToItem` sets burn 2). Ids use the builder's md5 `stableId`.
+- **Verification:** `npm test` (migration and rules, new cases for every helper above); templates
+  balanced; lang keys resolve. Not live-tested here. First live checks: Dash from the card row
+  (burns 2, no prompt); Prepare Action then Fire from the Combat tab; Stabilize with a targeted
+  Dying character; a Death Track reaching 5 marks the token defeated; Dazed on a token then
+  advancing the tracker to that combatant.

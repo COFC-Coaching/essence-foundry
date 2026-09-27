@@ -96,6 +96,13 @@ class EssenceCardData extends foundry.abstract.TypeDataModel {
       // rollEssencePool's `nonCombat` suppression flag (see #onRollItem) rather than adding a
       // second suppression mechanism.
       noSurges: new fields.BooleanField({ initial: false }),
+      // v0.6 "Burned Dice" (Doc L3639): a card that says "burn N Action dice" and rolls nothing —
+      // Dash, Reconfigure, Stabilize, Prepare Action, the Species cards. `burnDice` is the printed
+      // burn; `noRoll` says the card never rolls, so the sheet spends the dice and posts the card
+      // instead of opening the commit-and-roll prompt. Burned dice never satisfy a rolled minimum.
+      // Cards saved before 0.10.0 fall back to utils.mjs's burnOnlyProfile() name table.
+      burnDice: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 }),
+      noRoll: new fields.BooleanField({ initial: false }),
       // V6 §6.8 (plan): cooldowns / once-per-Encounter tracking for PLAYER Combat Cards, mirroring
       // the shape the adversary `abilities` array already uses (actor-adversary.mjs: frequency +
       // usesRemaining/usedThisRound). A card is "available unless printed otherwise"; a cooldown

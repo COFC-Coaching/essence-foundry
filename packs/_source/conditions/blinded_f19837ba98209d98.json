@@ -12,7 +12,7 @@
       },
       {
         "label": "EFFECT",
-        "html": "Ordinary sight cannot detect creatures, points, or details farther than 1 unit. Sight-dependent targeting or abilities fail unless another Sense provides the required information. Other Senses can compensate normally."
+        "html": "Ordinary sight cannot detect creatures, points, or details farther than 1 unit. Other Senses can locate targets and support abilities that accept their information. An ability explicitly requiring sight still requires visual information."
       }
     ]
   },

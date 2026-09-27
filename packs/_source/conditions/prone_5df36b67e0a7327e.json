@@ -12,7 +12,7 @@
       },
       {
         "label": "EFFECT",
-        "html": "Standing costs 2 units of Movement. While Prone, your voluntary Movement costs double. You gain +1 Fortitude against physically obstructable attacks originating more than 1 unit away and suffer -1 Fortitude against adjacent physical attacks."
+        "html": "You may freely drop Prone during your own Turn when physically feasible; doing so off-turn requires explicit permission. Standing costs 2 units of Movement. While Prone, voluntary Movement costs double. Gain +1 Fortitude against physically obstructable attacks originating more than 1 unit away and suffer −1 Fortitude against adjacent physical attacks."
       }
     ]
   },

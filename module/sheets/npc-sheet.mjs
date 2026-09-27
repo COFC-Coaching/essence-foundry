@@ -1,3 +1,4 @@
+import { playBurnOnlyCard } from "./card-play.mjs";
 import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
@@ -5,7 +6,7 @@ import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, tierQua
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceMonsterWizard from "../apps/monster-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, ordinaryDamageWounds, teamTierFor, componentTiers, assembledComponentIds, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, ordinaryDamageWounds, teamTierFor, componentTiers, assembledComponentIds, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, buildEnemyHeaderLabel, SEVERITY_BY_INDEX, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns , resetEncounterSpecialties , equipmentCardCommitment } from "../utils.mjs";
 import { dismissManifestation, applyManifestationDefeat, MANIFESTATION_FLAG_SCOPE } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -501,6 +502,9 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     const sys = item.system;
     // See EssenceActorSheet#onRollItem — V6 §6.8's cooldown rule applies identically to an Elite's
     // explicitly-granted learned cards.
+    // Burn-only cards spend their printed dice and roll nothing (card-play.mjs). Stabilize on an
+    // Elite can target a Defeated enemy or a full-track character the same way.
+    if (await playBurnOnlyCard(this.actor, item)) return;
     if (cardOnCooldown(item)) {
       ui.notifications.warn(`${item.name} is on cooldown (${sys.cooldownFrequency === "perEncounter" ? "once per Encounter" : "once per Round"}) and isn't available yet.`);
       return;
@@ -534,11 +538,16 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     if (promptResult === null) return;
     const committed = isReaction ? promptResult.count : promptResult;
     const unawareTax = isReaction && promptResult.extra ? 1 : 0;
+    // Doc L4460: the unaware tax is a cost on top of the roll; it can't be absorbed by committing
+    // every die.
+    if (committed + unawareTax > available) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.UnawareTaxUnaffordable", { name: this.actor.name, needed: committed + unawareTax, min: committed, available }));
+      return;
+    }
 
     const defenseKey = (sys.defense || "").toLowerCase();
     const { defense, targets } = await EssenceNpcSheet.#resolveTargets(defenseKey);
-    const poolSpend = Math.min(available, committed + unawareTax);
-    const update = { [`system.playState.${poolField}`]: available - poolSpend };
+    const update = { [`system.playState.${poolField}`]: available - (committed + unawareTax) };
 
     // See EssenceActorSheet#onRollItem — a card's printed Cost is paid from its Domain's
     // resource pool on top of the Action/Reaction Dice spent above.
@@ -575,13 +584,24 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     const cardIndex = target.dataset.cardIndex !== "" ? Number(target.dataset.cardIndex) : null;
 
     const available = this.actor.system.playState.actionDice ?? 0;
-    const cardMin = 2;
+    // Doc L4204: the printed minimum (at least 2), or burn 2 when the card prints no roll.
+    const commitment = equipmentCardCommitment(target.dataset.cardEffect || "");
+    const cardMin = commitment.min ?? commitment.burn;
     if (available <= 0) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoPoolDiceRemaining", { label: "Action" }));
       return;
     }
     if (cardMin > available) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CardRequiresMoreDice", { name, min: cardMin, available, label: "Action" }));
+      return;
+    }
+
+    if (commitment.burn) {
+      await this.actor.update({ "system.playState.actionDice": available - commitment.burn });
+      await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        content: `<div class="essence content-type-action-card"><p><strong>${this.actor.name}</strong> uses <strong>${name}</strong>: burns ${commitment.burn} Action dice, no roll.</p><p>${target.dataset.cardEffect || ""}</p></div>`
+      });
       return;
     }
 
@@ -888,6 +908,8 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
 
     if (becameDefeated) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.EnemyDefeated", { name: this.actor.name }));
+      // Doc L4062: a Defeated simplified enemy is unconscious (Foundry's own status).
+      await this.actor.setUnconscious(true);
     }
   }
 
@@ -909,7 +931,10 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       "system.coreWounds": coreWounds,
       "system.playState.currentCoreWounds": coreWounds.slice(0, capacity).filter((w) => w.filled).length
     };
+    // A space opened: no longer Defeated, so no longer unconscious or stabilized (Doc L4117).
+    if (this.actor.system.playState.deathTrackState === "stabilized") update["system.playState.deathTrackState"] = "none";
     await this.actor.update(update);
+    await this.actor.setUnconscious(false);
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content: `<p><strong>${this.actor.name}</strong> recovers a ${recovered.domain || ""} Wound.</p>`
@@ -1289,9 +1314,10 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   /** See EssenceActorSheet#onNewEncounter / resetEncounterCooldowns() in utils.mjs. */
   static async #onNewEncounter() {
     await resetEncounterCooldowns(this.actor);
+    const cleared = await resetEncounterSpecialties(this.actor);
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> begins a new Encounter — once-per-Encounter Combat/Reaction Cards are available again.</p>`
+      content: `<p><strong>${this.actor.name}</strong> begins a new Encounter — once-per-Encounter Combat/Reaction Cards are available again${cleared.length ? `; ${cleared.join(", ")} cleared` : ""}.</p>`
     });
   }
 

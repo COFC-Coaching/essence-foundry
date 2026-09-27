@@ -7,7 +7,7 @@
  * here; module/utils.mjs has no imports and loads under plain Node.
  */
 
-import { ordinaryDamageWounds, isDistinctionStyle, distinctionUnlocks, componentTiers, computeTierGate } from "../module/utils.mjs";
+import { ordinaryDamageWounds, isDistinctionStyle, distinctionUnlocks, componentTiers, computeTierGate, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, burnOnlyProfile, equipmentCardCommitment, recoveryBaseAmount, initiativeTieBreak } from "../module/utils.mjs";
 import { resolveNonCombatRoll } from "../module/dice/essence-roll.mjs";
 import { laterAcquisitionText } from "../module/data/origin-features.mjs";
 import { ITEM_GRANT_REGISTRY, tierQualifiesForGrant } from "../module/data/item-grants.mjs";
@@ -68,6 +68,41 @@ check("L4921 a later Distinction unlocks its restricted Style", distinctionUnloc
 check("no Distinction unlocks nothing", distinctionUnlocks([], "magecraft"), false);
 check("L4919 later-acquisition text is the clause after the marker", laterAcquisitionText(strategist.system.benefit), "instead increase Cunning to a minimum of 2 pips, then gain one additional Cunning Expertise.");
 check("no marker: the whole benefit", laterAcquisitionText(arcanist.system.benefit), "Gain access to Magecraft.");
+
+console.log("\n--- Death Track edges (Part VII, Doc L2729, L4057-L4100) ---");
+check("L2729 removing the Critical Wound resets the step even when not governed", deathTrackAfterWoundRemoval("none", 4)?.resetStep, true);
+check("removing a Light Wound while not governed changes nothing", deathTrackAfterWoundRemoval("none", 0), null);
+check("removing any Wound while dying stops the track", deathTrackAfterWoundRemoval("dying", 1)?.state, "none");
+check("removing a Light Wound while dying keeps the step", deathTrackAfterWoundRemoval("dying", 1)?.resetStep, false);
+check("L4059 death is final: removal does nothing", deathTrackAfterWoundRemoval("dead", 4), null);
+check("L4100 a refilled track resumes from the recorded step", deathTrackAfterWoundFilled("none", false, true)?.deathTrackStep, undefined);
+check("L4057 filling the fifth space starts dying", deathTrackAfterWoundFilled("none", false, true)?.deathTrackState, "dying");
+check("an overflow Wound breaks Stabilization", deathTrackAfterWoundFilled("stabilized", true, true)?.deathTrackState, "dying");
+check("death is final: overflow does nothing", deathTrackAfterWoundFilled("dead", true, true), null);
+
+console.log("\n--- Burned dice and printed commitments (Doc L3639, L3680, L4258, L4276, L4320, L5421, L4204) ---");
+check("Dash burns 2 by name", burnOnlyProfile({}, "Dash")?.burn, 2);
+check("Stabilize burns 3 by name", burnOnlyProfile({}, "Stabilize")?.burn, 3);
+check("Prepare Action burns 2 by name", burnOnlyProfile({}, "Prepare Action")?.burn, 2);
+check("a Species card burns 2", burnOnlyProfile({ speciesGranted: true }, "Shaper")?.burn, 2);
+check("schema fields win over the name table", burnOnlyProfile({ noRoll: true, burnDice: 4 }, "Dash")?.burn, 4);
+check("a rolling card has no burn profile", burnOnlyProfile({ min: "2" }, "Basic Melee Attack"), null);
+check("L4204 Equipment Card: printed burn", equipmentCardCommitment("REACTION • Burn 2 • USES 2").burn, 2);
+check("L4204 Equipment Card: printed roll minimum", equipmentCardCommitment("Roll 3+ Action dice against Fortitude.").min, 3);
+check("L4204 Equipment Card: nothing printed burns 2", equipmentCardCommitment("Gain +1 Fortitude until your next Turn.").burn, 2);
+check("L3592 a printed burn below 2 is floored at 2", equipmentCardCommitment("Burn 1 die.").burn, 2);
+
+console.log("\n--- Recovery and Fatigued (Doc L2701, L2709, L2713) ---");
+check("L2709 Stamina 9: base 3", recoveryBaseAmount(9), 3);
+check("L2709 Focus 7: base 2", recoveryBaseAmount(7), 2);
+check("L2713 Fatigued Stamina 9: 2", recoveryBaseAmount(9, 25, true), 2);
+check("L2713 Fatigued Focus 7: 1", recoveryBaseAmount(7, 25, true), 1);
+check("L2713 Fatigued Mana 6: 1", recoveryBaseAmount(6, 25, true), 1);
+
+console.log("\n--- Initiative ties (Doc L3402) ---");
+check("a PC goes before a tied enemy", initiativeTieBreak("character", "npc") < 0, true);
+check("an enemy goes after a tied PC", initiativeTieBreak("monster", "character") > 0, true);
+check("two PCs: no rule here", initiativeTieBreak("character", "character"), 0);
 
 console.log("\n--- Team Tier access (Part III, Team Tier and Acquisition, Doc L1793) ---");
 const part = (id, type, tier) => ({ id, type, system: { tier } });

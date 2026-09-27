@@ -338,7 +338,21 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
         // `deathTrackMax` below (derived in prepareDerivedData) — every call site that used to
         // hardcode `5` as an advance/clamp/display ceiling now reads that instead.
         deathTrackStep: new fields.NumberField({ integer: true, initial: 0, min: 0, max: 7 }),
-        deathTrackState: new fields.StringField({ initial: "none", choices: ["none", "dying", "stabilized"] }),
+        // 0.10.0 adds "dead" (Doc L4059, "Death is final under the game rules"): set when the track
+        // reaches the character's threshold. Every automatic transition is locked out afterwards
+        // (deathTrackAfterWoundRemoval/Filled return null for it); only a GM edit or explicit fiat
+        // undoes it. An additive choice, so stored actors need no migration.
+        deathTrackState: new fields.StringField({ initial: "none", choices: ["none", "dying", "stabilized", "dead"] }),
+        // Prepare Action (Doc L4318-L4342): one held preparation. `reserved` dice were removed from
+        // the Action Pool when set aside; they are "separate from both Pools", never join the
+        // Reaction Pool, and are discarded when the preparation fires, is replaced, or expires at
+        // the start of the character's next Turn (EssenceCombat#_onStartTurn).
+        preparedAction: new fields.SchemaField({
+          cardId: new fields.StringField({ initial: "" }),
+          cardName: new fields.StringField({ initial: "" }),
+          trigger: new fields.StringField({ initial: "" }),
+          reserved: new fields.NumberField({ integer: true, initial: 0, min: 0 })
+        }),
 
         // V6 Adaptability Attribute benefit (design/v6-revision-delta.md §2.2): "Completing a
         // Recovery also restores your one use of Adaptability's Exploration reroll. An unused use

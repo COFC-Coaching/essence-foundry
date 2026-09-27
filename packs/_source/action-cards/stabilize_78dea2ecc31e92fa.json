@@ -21,11 +21,15 @@
     "body": [
       {
         "label": "Effect",
-        "html": "Burn 3 Action dice while adjacent to a full-track Dying or Stabilized target. You must satisfy the immediate treatment requirements printed by that target's Critical Wound Card. If those requirements are met, Stabilization succeeds automatically. This Action does not heal a Wound and has no Surges."
+        "html": "Burn 3 Action dice to Stabilize yourself or an adjacent full-track Dying or Stabilized target, or a Defeated living creature using simplified enemy Wounds. Apply a cost modifier only when its rule explicitly affects Stabilize or the user's Actions generally; the minimum commitment remains 2 Pool dice. Wound severity, Attributes, Skills, tools, and assistance do not change this cost by themselves."
       },
       {
-        "label": "Effect",
-        "html": "Treatment follows the Critical Wound Card. It may require a Medical Toolkit, ritual support, a spiritual anchor, removal of an ongoing cause, another specific tool, or a combination appropriate to the Wound."
+        "label": "Requirements",
+        "html": "You must be able to act, reach the injury, and provide its treatment. A full-track target uses its Critical Wound Card's immediate treatment requirements. For a simplified enemy, the GM states the appropriate care before commitment. If those requirements are met, Stabilization succeeds automatically. This Action does not heal a Wound and has no Surges."
+      },
+      {
+        "label": "Treatment",
+        "html": "Treatment follows the Critical Wound Card. It may require a Medical Toolkit, ritual support, a spiritual anchor, removal of an ongoing cause, another specific tool, or a combination appropriate to the Wound. A treated simplified enemy stops dying but remains Defeated and unable to act."
       }
     ],
     "surges": [],
@@ -35,7 +39,9 @@
       "meta": ""
     },
     "nonCombatTask": false,
-    "noSurges": true
+    "noSurges": true,
+    "burnDice": 3,
+    "noRoll": true
   },
   "folder": "490568d9eb375ca8",
   "flags": {},

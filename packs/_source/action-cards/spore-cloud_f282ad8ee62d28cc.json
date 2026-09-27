@@ -38,7 +38,9 @@
       "meta": ""
     },
     "speciesGranted": true,
-    "cooldownFrequency": "perEncounter"
+    "cooldownFrequency": "perEncounter",
+    "burnDice": 2,
+    "noRoll": true
   },
   "folder": "8f1cb97c10476c47",
   "flags": {},

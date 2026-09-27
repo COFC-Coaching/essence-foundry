@@ -2,6 +2,55 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.10.0
+
+**Phase 3, part one: dice, Turns, Prepare Action, Stabilize, death, Conditions.**
+
+**Initiative.** You commit 1 to your base pool of dice; there is no 0-die pass. Player Characters
+win Initiative ties against enemies in the Combat Tracker.
+
+**Start of Turn** follows the book's order: any held preparation and its reserved dice expire, the
+Action Pool forms, and Dazed then burns 3 Action dice (or all remaining) and ends. Mooks and Normals
+skip the Dazed burn.
+
+**Burned dice.** Dash, Reconfigure, Stabilize, Prepare Action and the Species cards no longer open
+the commit-and-roll prompt. They burn their printed dice from the pool and post the card. The same
+applies to an Equipment Card that prints "Burn N", and an Equipment Card now uses its printed
+minimum instead of a flat 2.
+
+**Prepare Action** is a new Basic card. Play it to burn 2, pick an Action and a trigger, and
+reserve dice. The Combat tab shows the preparation with Fire and Cancel; Fire pays the Action from
+the reserved dice as your one response in the chain. Reserved dice never join the Reaction Pool and
+are discarded at the start of your next Turn.
+
+**Stabilize** now does what it says: with the treatment requirements confirmed, the targeted token
+(or you) becomes Stabilized. It also works on a Defeated enemy, which shows as "Defeated (stable)".
+
+**Death is final.** Reaching the Death Track threshold marks the character dead, applies Foundry's
+defeated status, and locks every automatic transition. Removing the Critical Wound always resets
+the step to 0; a refilled track resumes from the recorded step.
+
+**Unconscious.** A Defeated enemy gets Foundry's unconscious status; opening a Wound space clears it.
+
+**Reactions and targets.** The unaware tax can no longer be skipped by committing every die: a
+Reaction needs its dice plus the burned one. An Action can be declared against a helpless target,
+which makes it unopposed.
+
+**New Encounter** clears Combo, Lock, Threads, Authority, Stance and Unstable and returns a Full
+Manifestation. Ending a Combat no longer clears Threads and Authority, since Combat can end inside
+an Encounter that continues.
+
+**Recovery.** Fatigued is a new ordinary Condition; Grant Recovery halves the base Resource amounts
+(rounded up) when it is present and offers to remove it afterwards. Recover Influence asks which
+Core Influence space clears when more than one is filled.
+
+**Condition text** for Blinded, Dazed, Prone and Weakened, and the Specialty Conditions Exposed,
+Rallied, Stance, Unstable, Broken, Possessed, Lock and Concentration, now matches the rulebook.
+Basic Melee and Ranged Attack mention objects, helpless targets and suspected spaces.
+
+**For existing worlds.** Every actor loads. Cards saved before this release play as burn-only by
+name; a rebuilt compendium copy carries the new fields.
+
 ## 0.9.0
 
 **Phase 2 of the v0.6 rules: Attributes, creation, the Non-Combat tab.**

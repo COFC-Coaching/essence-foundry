@@ -12,11 +12,11 @@
       },
       {
         "label": "EFFECT",
-        "html": "When a creature makes a roll that targets or directly affects you, that creature may consume your Exposed to roll 1 additional die."
+        "html": "An Exposed creature suffers −1 to all Defenses. Exposed lasts until the end of that creature's next Turn unless the effect specifies another duration. Reapplication refreshes or extends duration without shortening the time remaining; the penalty does not stack."
       },
       {
         "label": "LIMIT",
-        "html": "Exposed cannot be consumed for a roll that does not target or directly affect the Exposed creature."
+        "html": "Exposed does not automatically remove Cover, reveal a Hidden creature, or cancel another defensive effect."
       },
       {
         "label": "REMOVAL",

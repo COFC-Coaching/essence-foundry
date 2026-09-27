@@ -15,9 +15,13 @@
       </span>
     </div>
     <div class="wound-block">
-      <label style="display:flex;align-items:center;gap:4px;">
-        <input type="checkbox" data-action="toggleDeathTrackStabilized" {{#if (eq system.playState.deathTrackState "stabilized")}}checked{{/if}}> {{localize "ESSENCE.Sheet.Stabilized"}}
-      </label>
+      {{#if (eq system.playState.deathTrackState "dead")}}
+        <span class="reach-warning">{{localize "ESSENCE.Sheet.DeadNote"}}</span>
+      {{else}}
+        <label style="display:flex;align-items:center;gap:4px;">
+          <input type="checkbox" data-action="toggleDeathTrackStabilized" {{#if (eq system.playState.deathTrackState "stabilized")}}checked{{/if}}> {{localize "ESSENCE.Sheet.Stabilized"}}
+        </label>
+      {{/if}}
     </div>
   </div>
 {{/if}}

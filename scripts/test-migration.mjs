@@ -201,5 +201,13 @@ check("Connection rows keep their fields",
 check("a stored Intellect-sourced Skill still loads", migrate(EssenceCharacterData, { nonCombatSkills: [{ name: "History", rating: 1, source: "intellect" }] }).nonCombatSkills[0].source, "intellect");
 check("a Distinction saved before acquiredLater loads", migrate(EssenceDistinctionData, { keyCombatSkill: "Cunning" }).keyCombatSkill, "Cunning");
 
+console.log("\n--- 0.10.0 (Phase 3a) fields ---");
+const { EssenceActionCardData } = await import("../module/data/item-card.mjs");
+check("dead is an accepted Death Track state", migrate(EssenceCharacterData, { playState: { deathTrackState: "dead" } }).playState.deathTrackState, "dead");
+check("an unknown Death Track state falls back to none", migrate(EssenceCharacterData, { playState: { deathTrackState: "gone" } }).playState.deathTrackState, "none");
+check("a stored prepared Action keeps its reserved dice", migrate(EssenceCharacterData, { playState: { preparedAction: { cardId: "x", cardName: "Dash", trigger: "t", reserved: 3 } } }).playState.preparedAction.reserved, 3);
+check("a card saved before burnDice loads", migrate(EssenceActionCardData, { min: "2" }).min, "2");
+check("a negative burnDice is clamped", migrate(EssenceActionCardData, { burnDice: -1 }).burnDice, 0);
+
 console.log(`\n${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);

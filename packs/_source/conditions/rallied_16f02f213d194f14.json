@@ -12,11 +12,11 @@
       },
       {
         "label": "EFFECT",
-        "html": "The next time you use an Action or Reaction, roll 1 additional bonus die, then remove Rallied. This die is rolled normally and may contribute to success or generate Surges."
+        "html": "A Rallied creature may consume Rallied before rolling its next Action or Reaction to gain 1 free die on that card. The free die can exceed the normal maximum but does not satisfy the card's minimum commitment."
       },
       {
-        "label": "ALLY",
-        "html": "An ally never includes yourself."
+        "label": "DURATION",
+        "html": "Rallied expires at the end of the recipient's next Turn if unused. Reapplication refreshes or extends duration without shortening the time remaining and never banks several free dice. Rallied grants no extra Action, illegal Reaction, or Resource restoration."
       },
       {
         "label": "REMOVAL",

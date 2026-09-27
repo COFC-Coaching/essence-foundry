@@ -238,8 +238,13 @@ export const SEVERITY_BY_INDEX = ["Light", "Light", "Serious", "Serious", "Criti
  * when there's nothing to change (the track wasn't governing this actor in the first place).
  */
 export function deathTrackAfterWoundRemoval(currentState, slot) {
-  if (!currentState || currentState === "none") return null;
-  return { state: "none", resetStep: slot === (SEVERITY_BY_INDEX.length - 1) };
+  const critical = slot === (SEVERITY_BY_INDEX.length - 1);
+  // Death is final (Doc L4059): opening a Wound space cannot resurrect.
+  if (currentState === "dead") return null;
+  // Doc L2729 / L4100: "Removing the Critical Wound clears any remaining Death Track progress to
+  // 0", whether or not the track is currently governing the character.
+  if (!currentState || currentState === "none") return critical ? { state: "none", resetStep: true } : null;
+  return { state: "none", resetStep: critical };
 }
 
 /**
@@ -270,7 +275,10 @@ export function deathTrackAfterWoundRemoval(currentState, slot) {
  */
 export function deathTrackAfterWoundFilled(currentState, wasFull, nowFull) {
   const state = currentState || "none";
-  if (!wasFull && nowFull && state === "none") return { deathTrackState: "dying", deathTrackStep: 0 };
+  if (state === "dead") return null;
+  // Doc L4100: a refilled track resumes from the recorded step while the Critical Wound remains,
+  // so activation no longer zeroes the step (removing the Critical Wound is what resets it).
+  if (!wasFull && nowFull && state === "none") return { deathTrackState: "dying" };
   if (wasFull) return { deathTrackState: "dying" };
   return null;
 }
@@ -299,6 +307,51 @@ export function deathTrackAfterWoundFilled(currentState, wasFull, nowFull) {
  *   Track by 1, and the dyingExertionRound value to persist either way (unchanged when not
  *   advancing, set to currentCombatRound when advancing)
  */
+/** Initiative ties (Doc L3402): "Player Characters win ties against enemies." Returns a sort
+ *  comparator result for two combatants with equal Initiative: negative puts `a` first. */
+export function initiativeTieBreak(aType, bType) {
+  const aPc = aType === "character" ? 0 : 1;
+  const bPc = bType === "character" ? 0 : 1;
+  return aPc - bPc;
+}
+
+/**
+ * The burn-only play shape of a card (Doc L3639, "Burned Dice"; L3680 Dash; L4258 Reconfigure;
+ * L4276 Stabilize; L4320 Prepare Action; L5421 Species cards). Reads the card's own `burnDice` /
+ * `noRoll` fields when set, else a name table for cards saved before 0.10.0. Null means the card
+ * is a rolling card.
+ * @returns {{burn: number}|null}
+ */
+export function burnOnlyProfile(cardSystem, cardName = "") {
+  if (cardSystem?.noRoll && typeof cardSystem.burnDice === "number") return { burn: cardSystem.burnDice };
+  if (cardSystem?.speciesGranted) return { burn: 2 };
+  const table = { "Dash": 2, "Reconfigure": 3, "Stabilize": 3, "Prepare Action": 2 };
+  const burn = table[cardName];
+  return burn ? { burn } : null;
+}
+
+/**
+ * An Equipment Card's printed commitment (Doc L4204): "at least 2 dice, or its higher printed
+ * minimum... Roll or burn as instructed; if no roll or dice cost is specified, burn 2." Parsed from
+ * the card's prose, since Equipment Cards carry no structured dice fields.
+ * @returns {{burn: number}|{min: number}}
+ */
+export function equipmentCardCommitment(effectText) {
+  const text = stripHtml(effectText || "");
+  const burn = /burn\s+(\d+)/i.exec(text);
+  if (burn) return { burn: Math.max(2, parseInt(burn[1], 10)) };
+  const roll = /roll\s+(\d+)\s*\+?/i.exec(text);
+  if (roll) return { min: Math.max(2, parseInt(roll[1], 10)) };
+  return { burn: 2 };
+}
+
+/** Recovery's base Resource restoration (Doc L2701): 25% of maximum rounded up; Fatigued halves
+ *  that and rounds up again. Anima's extra points are added afterwards by the caller. */
+export function recoveryBaseAmount(max, pct = 25, fatigued = false) {
+  const base = Math.ceil((max || 0) * (pct / 100));
+  return fatigued ? Math.ceil(base / 2) : base;
+}
+
 export function deathTrackAfterCardWhileDying(currentState, dyingExertionRound, currentCombatRound) {
   if (currentState !== "dying" || currentCombatRound == null || dyingExertionRound === currentCombatRound) {
     return { advance: false, dyingExertionRound };
@@ -672,6 +725,31 @@ export async function applyCardCooldown(actor, item) {
  * (Reach pressure, Adventure Uses, etc. all reset via an explicit GM button, never an implicit hook).
  * @param {Actor} actor
  */
+/**
+ * What ends when the Encounter ends (Doc L5842 Combo, L5930 Lock, L6032 Threads, L6186 Authority,
+ * L5882 Stance, L5978 Unstable). Called by the explicit New Encounter action only; deleting the
+ * Combat document no longer clears anything, since Combat can end inside an Encounter that goes
+ * on (Doc L3039). A Full Manifestation also ends (L6360); the sheet handles that return, since it
+ * lives in apps/manifestation.mjs.
+ * @returns {Promise<string[]>} the names of what was cleared, for the chat note
+ */
+export async function resetEncounterSpecialties(actor) {
+  const sp = actor.system.specialties ?? {};
+  const update = {};
+  const cleared = [];
+  if (sp.combo) { update["system.specialties.combo"] = 0; cleared.push("Combo"); }
+  if (sp.lock) { update["system.specialties.lock"] = ""; cleared.push("Lock"); }
+  if (sp.threads?.length) { update["system.specialties.threads"] = []; cleared.push("Threads"); }
+  if (sp.authority?.length) { update["system.specialties.authority"] = []; cleared.push("Authority"); }
+  if (Object.keys(update).length) await actor.update(update);
+  const ending = actor.items.filter((i) => i.type === "condition" && ["STANCE", "UNSTABLE"].includes((i.name || "").toUpperCase()));
+  if (ending.length) {
+    await actor.deleteEmbeddedDocuments("Item", ending.map((i) => i.id));
+    cleared.push(...ending.map((i) => capitalize(i.name.toLowerCase())));
+  }
+  return cleared;
+}
+
 export async function resetEncounterCooldowns(actor) {
   const cards = actor.items.filter((i) => (i.type === "action-card" || i.type === "reaction-card") && i.system.cooldownFrequency === "perEncounter" && i.system.cooldownUsed);
   for (const card of cards) await card.update({ "system.cooldownUsed": false });
