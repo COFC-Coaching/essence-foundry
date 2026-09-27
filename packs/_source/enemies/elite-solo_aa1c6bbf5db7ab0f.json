@@ -1,0 +1,112 @@
+{
+  "_id": "aa1c6bbf5db7ab0f",
+  "name": "Elite Solo",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "grade": "Elite",
+    "battlefieldRole": "Defender",
+    "eliteType": "Solo",
+    "resilience": 3,
+    "movement": 10,
+    "temporaryWoundsAvailable": 0,
+    "taskDice": null,
+    "rollLimit": 6,
+    "reactionsPerRound": 2,
+    "printedDefenses": {
+      "fortitude": 7,
+      "composure": 7,
+      "harmony": 7
+    },
+    "abilities": [
+      {
+        "name": "Crushing Action",
+        "text": "Minimum 3 dice; Range 1; vs. Fortitude. On success, deal 2 Physical Bludgeoning Damage. Surge 1: move yourself or the target 1 unit after resolution.",
+        "kind": "action",
+        "dice": 3,
+        "defense": "fortitude",
+        "unopposed": false,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Pressure Wave",
+        "text": "Triggered Ability, once per Round. After the second enemy Turn other than the Solo's own Turn ends in a Round, choose a point within 3 units. Creatures other than the Solo within 1 unit of that point must each move 1 unit away from the point if possible. This is forced movement, not another full Turn.",
+        "kind": "triggered",
+        "dice": null,
+        "defense": "",
+        "unopposed": false,
+        "frequency": "perRound",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Solo Reaction Limit",
+        "text": "The Solo may use up to two Reactions in a Round, but still no more than one response within any single Reaction chain. Each Reaction must have a legal trigger and be paid normally.",
+        "kind": "passive",
+        "dice": null,
+        "defense": "",
+        "unopposed": false,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Adaptive Guard",
+        "text": "Trigger: the Solo is targeted by an opposed Action. Minimum 2 dice, unopposed. Gain +1 to the targeted Defense against the triggering Action. If the Action fails, the Solo may move 1 unit after resolution.",
+        "kind": "reaction",
+        "dice": 2,
+        "defense": "",
+        "unopposed": true,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      }
+    ],
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ],
+    "gmNotes": "<p><strong>Role use.</strong> Boss example. The Solo remains active between its own Turns without receiving several complete PC-like Turns. The triggered ability should be visible and predictable once it occurs so players can respond tactically.</p><p class=\"muted\">Starting Enemy Example (Essence v0.6, Part XIV). Playtest reference; change its fictional presentation freely.</p>"
+  },
+  "items": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!aa1c6bbf5db7ab0f"
+}

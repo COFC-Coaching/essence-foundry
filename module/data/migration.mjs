@@ -55,7 +55,8 @@ export const LEGACY_FIELD_RENAMES = {
 export const LEGACY_VALUE_ALIASES = {
   slot: { signature: "inventory" },
   battlefieldRole: { Artillery: "Blaster" },
-  grade: { Minion: "Mook", Standard: "Normal", Nemesis: "Elite" }
+  grade: { Minion: "Mook", Standard: "Normal", Nemesis: "Elite" },
+  frequency: { perCombat: "betweenRecoveries" } // enemy abilities, 0.11.0 (Doc L6921)
 };
 
 /** Every repair made this session, for the console record and the GM-facing summary. */

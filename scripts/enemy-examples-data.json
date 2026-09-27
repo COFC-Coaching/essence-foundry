@@ -1,0 +1,125 @@
+{
+  "_source": "Essence System v0.6 Google Doc, Part XIV 'Starting Enemy Examples' (export lines 7187-7375, read 2026-09-27). Playtest references; fictional presentation is the GM's.",
+  "enemies": [
+    {
+      "name": "Mook Skirmisher", "grade": "Mook", "role": "Skirmisher",
+      "wounds": 2, "fortitude": 5, "composure": 5, "harmony": 5, "resilience": 0, "movement": 12, "taskDice": 4,
+      "abilities": [
+        { "name": "Harrier Strike", "kind": "action", "frequency": "atWill", "dice": 2, "defense": "fortitude",
+          "text": "Range 1; vs. Fortitude. On success, deal 1 Physical Slashing Damage. Surge 1: move 1 unit after resolution." },
+        { "name": "Slip Away", "kind": "reaction", "frequency": "atWill", "dice": 2, "unopposed": true,
+          "text": "Trigger: an adjacent enemy targets you with an opposed Action. Roll 2d10, unopposed. Gain +1 Fortitude against the triggering Action. If it fails to affect you, move 1 unit after it resolves." }
+      ],
+      "roleUse": "Force target switching, chase vulnerable characters, and make position matter. Do not use several if the battlefield is too cramped for movement to be meaningful."
+    },
+    {
+      "name": "Mook Striker", "grade": "Mook", "role": "Striker",
+      "wounds": 2, "fortitude": 5, "composure": 5, "harmony": 5, "resilience": 0, "movement": 10, "taskDice": 4,
+      "abilities": [
+        { "name": "Opening Strike", "kind": "action", "frequency": "atWill", "dice": 2, "defense": "fortitude",
+          "text": "Range 1; vs. Fortitude. On success, deal 1 Physical Piercing Damage. Surge 2: deal +1 Damage." },
+        { "name": "Exploit the Opening", "kind": "passive", "frequency": "betweenRecoveries",
+          "text": "Before rolling Opening Strike against a target that is Exposed, Restrained, or has no other ally within 2 units, gain 1 free die for that Action. Add it to the printed roll; no Pool is spent." }
+      ],
+      "roleUse": "Threaten a compromised or isolated target while other enemies hold attention. No native Reaction; only two Wounds and no Resilience, so it relies on positioning and supporting allies."
+    },
+    {
+      "name": "Mook Support", "grade": "Mook", "role": "Support",
+      "wounds": 2, "fortitude": 4, "composure": 6, "harmony": 5, "resilience": 0, "movement": 10, "taskDice": 4,
+      "abilities": [
+        { "name": "Set Up", "kind": "action", "frequency": "atWill", "dice": 2, "unopposed": true,
+          "text": "Roll 2d10, unopposed. Choose one ally within 4 units. That ally gains 1 free die on its next Action before the start of your next Turn." },
+        { "name": "Emergency Cover", "kind": "triggered", "frequency": "betweenRecoveries",
+          "text": "When an ally within 3 units would suffer a Wound, grant that ally 1 Temporary Wound before the Wound is resolved. This is not a Reaction and cannot be used if the Support is unable to detect the ally." }
+      ],
+      "roleUse": "The Mook itself is fragile; its value comes from making another enemy more efficient. Players who identify and remove it should feel the encounter become easier."
+    },
+    {
+      "name": "Normal Defender", "grade": "Normal", "role": "Defender",
+      "wounds": 4, "fortitude": 7, "composure": 5, "harmony": 5, "resilience": 2, "movement": 8, "taskDice": 5,
+      "abilities": [
+        { "name": "Hold the Line", "kind": "action", "frequency": "atWill", "dice": 2, "defense": "fortitude",
+          "text": "Range 1; vs. Fortitude. On success, deal 1 Physical Bludgeoning Damage and move the target 1 unit. Surge 1: the target becomes Exposed until the end of its next Turn." },
+        { "name": "Interpose", "kind": "reaction", "frequency": "atWill", "dice": 2, "unopposed": true,
+          "text": "Trigger: an adjacent ally is targeted by a physically obstructable attack. Roll 2d10, unopposed. The ally gains +1 Fortitude against the triggering attack; after resolution you may exchange spaces with that ally if both can legally occupy the new spaces." },
+        { "name": "Brace", "kind": "triggered", "frequency": "betweenRecoveries",
+          "text": "At the start of your Turn, increase Resilience by 2 until the start of your next Turn." }
+      ],
+      "roleUse": "Place the Defender where players can choose whether to break through, go around, attack another Defense, or force the Defender away from the objective."
+    },
+    {
+      "name": "Normal Striker", "grade": "Normal", "role": "Striker",
+      "wounds": 4, "fortitude": 5, "composure": 5, "harmony": 5, "resilience": 1, "movement": 10, "taskDice": 5,
+      "abilities": [
+        { "name": "Punishing Strike", "kind": "action", "frequency": "atWill", "dice": 3, "defense": "fortitude",
+          "text": "Range 1; vs. Fortitude. On success, deal 1 Physical Slashing Damage. If the target is Exposed, Restrained, or has no other ally within 2 units, deal +1 Damage. Surge 2: deal +1 Damage." },
+        { "name": "Commit", "kind": "passive", "frequency": "betweenRecoveries",
+          "text": "Before rolling Punishing Strike, gain 1 free die and become Exposed until the end of your next Turn." }
+      ],
+      "roleUse": "Threaten isolated or already-compromised targets. Its best Damage should come from setup by other Roles rather than unconditional output."
+    },
+    {
+      "name": "Normal Controller", "grade": "Normal", "role": "Controller",
+      "wounds": 4, "fortitude": 5, "composure": 6, "harmony": 5, "resilience": 1, "movement": 10, "taskDice": 5,
+      "abilities": [
+        { "name": "Deny Ground", "kind": "action", "frequency": "atWill", "dice": 2, "unopposed": true,
+          "text": "Roll 2d10, unopposed. Choose a point within 5 units. Create Difficult Terrain in a Sphere with hex radius 1 (7 hexes) until the start of your next Turn. Creatures entering the area for the first time each Turn lose 1 additional Movement." },
+        { "name": "Bind Position", "kind": "action", "frequency": "betweenRecoveries", "dice": 3, "defense": "fortitude",
+          "text": "Once between Recoveries. Range 4; vs. Fortitude or Harmony, chosen when the enemy is built. On success, the target becomes Immobilized until the end of its next Turn. Surge 2: also make the target Exposed for the same duration." }
+      ],
+      "roleUse": "Change paths and timing rather than dealing much Damage. A Controller becomes more dangerous when a Striker or Blaster can exploit the spaces it denies."
+    },
+    {
+      "name": "Normal Blaster", "grade": "Normal", "role": "Blaster",
+      "wounds": 4, "fortitude": 5, "composure": 5, "harmony": 5, "resilience": 1, "movement": 9, "taskDice": 5,
+      "abilities": [
+        { "name": "Burst", "kind": "action", "frequency": "atWill", "dice": 3, "defense": "fortitude",
+          "text": "Choose a point within 6 units; Sphere with hex radius 1 (7 hexes); vs. Fortitude. On success, each affected enemy suffers 1 Physical Force Damage. Surge 2: choose one successfully affected creature to suffer +1 Damage." },
+        { "name": "Scatter", "kind": "triggered", "frequency": "betweenRecoveries",
+          "text": "After Burst resolves, move each successfully affected creature 1 unit directly away from the Sphere center if that space is legal." }
+      ],
+      "roleUse": "Discourage clustering and create a reason to spread out. Do not combine several Blasters unless the battlefield gives players enough room to respond."
+    },
+    {
+      "name": "Elite Champion", "grade": "Elite", "role": "Striker", "eliteType": "Champion",
+      "wounds": 5, "fortitude": 7, "composure": 6, "harmony": 6, "resilience": 2, "movement": 10, "rollLimit": 6,
+      "abilities": [
+        { "name": "Champion Strike", "kind": "action", "frequency": "atWill", "dice": 3, "defense": "fortitude",
+          "text": "Minimum 3 dice; Range 1; vs. Fortitude. On success, deal 2 Physical Slashing Damage. Surge 2: move the target 1 unit or move yourself 1 unit after resolution." },
+        { "name": "Challenge", "kind": "action", "frequency": "atWill", "dice": 2, "defense": "composure",
+          "text": "Minimum 2 dice; Range 4; vs. Composure. On success, the target suffers -1 to all Defenses against the Champion until the end of the target's next Turn. This is not Exposed and therefore can stack with Exposed." },
+        { "name": "Turn Aside", "kind": "reaction", "frequency": "atWill", "dice": 2, "unopposed": true,
+          "text": "Trigger: you are targeted by an opposed Action. Minimum 2 dice, unopposed. Gain +1 to the targeted Defense against the triggering Action. Surge 2: move 1 unit after it resolves." }
+      ],
+      "roleUse": "A Champion is an Elite ordinary enemy, not automatically a Boss. It can anchor a Severe or Critical encounter alongside other enemies without changing the encounter into a Leader or Solo structure."
+    },
+    {
+      "name": "Elite Leader", "grade": "Elite", "role": "Support", "eliteType": "Leader",
+      "wounds": 5, "fortitude": 6, "composure": 7, "harmony": 6, "resilience": 2, "movement": 9, "rollLimit": 6,
+      "abilities": [
+        { "name": "Command Strike", "kind": "action", "frequency": "atWill", "dice": 3, "defense": "composure",
+          "text": "Minimum 3 dice; Range 5; vs. Composure. On success, the target becomes Exposed until the end of its next Turn. One ally within 5 units may move 2 units after resolution." },
+        { "name": "Coordinated Assault", "kind": "triggered", "frequency": "perRound",
+          "text": "Once per Round. When an ally successfully affects an Exposed enemy, another ally within 5 units gains 1 free die on its next Action before the start of the Leader's next Turn." },
+        { "name": "Redirect", "kind": "reaction", "frequency": "atWill", "dice": 2, "unopposed": true,
+          "text": "Trigger: an ally within 4 units is targeted by an opposed Action. Minimum 2 dice, unopposed. Move that ally 1 unit. If the movement makes the ally an illegal target, the triggering Action fails against that ally normally." }
+      ],
+      "roleUse": "Boss example. The Leader becomes less dangerous as supporting enemies disappear. Build the Boss encounter around that relationship rather than increasing the Leader's Wound capacity."
+    },
+    {
+      "name": "Elite Solo", "grade": "Elite", "role": "Defender", "eliteType": "Solo",
+      "wounds": 5, "fortitude": 7, "composure": 7, "harmony": 7, "resilience": 3, "movement": 10, "rollLimit": 6, "reactionsPerRound": 2,
+      "abilities": [
+        { "name": "Crushing Action", "kind": "action", "frequency": "atWill", "dice": 3, "defense": "fortitude",
+          "text": "Minimum 3 dice; Range 1; vs. Fortitude. On success, deal 2 Physical Bludgeoning Damage. Surge 1: move yourself or the target 1 unit after resolution." },
+        { "name": "Pressure Wave", "kind": "triggered", "frequency": "perRound",
+          "text": "Triggered Ability, once per Round. After the second enemy Turn other than the Solo's own Turn ends in a Round, choose a point within 3 units. Creatures other than the Solo within 1 unit of that point must each move 1 unit away from the point if possible. This is forced movement, not another full Turn." },
+        { "name": "Solo Reaction Limit", "kind": "passive", "frequency": "atWill",
+          "text": "The Solo may use up to two Reactions in a Round, but still no more than one response within any single Reaction chain. Each Reaction must have a legal trigger and be paid normally." },
+        { "name": "Adaptive Guard", "kind": "reaction", "frequency": "atWill", "dice": 2, "unopposed": true,
+          "text": "Trigger: the Solo is targeted by an opposed Action. Minimum 2 dice, unopposed. Gain +1 to the targeted Defense against the triggering Action. If the Action fails, the Solo may move 1 unit after resolution." }
+      ],
+      "roleUse": "Boss example. The Solo remains active between its own Turns without receiving several complete PC-like Turns. The triggered ability should be visible and predictable once it occurs so players can respond tactically."
+    }
+  ]
+}

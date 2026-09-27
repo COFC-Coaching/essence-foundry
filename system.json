@@ -2,18 +2,28 @@
   "id": "essence-system",
   "title": "The Essence System",
   "description": "Official Foundry VTT system for The Essence System — a d10 dice-pool tabletop RPG with tactical card-driven combat.",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "compatibility": {
     "minimum": "12",
     "verified": "14"
   },
   "authors": [
-    { "name": "COFC Coaching" }
+    {
+      "name": "COFC Coaching"
+    }
   ],
-  "esmodules": ["module/essence.mjs"],
-  "styles": ["styles/essence.css"],
+  "esmodules": [
+    "module/essence.mjs"
+  ],
+  "styles": [
+    "styles/essence.css"
+  ],
   "languages": [
-    { "lang": "en", "name": "English", "path": "lang/en.json" }
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
   ],
   "grid": {
     "distance": 1,
@@ -104,6 +114,13 @@
       "name": "manifestations",
       "label": "Calling Full Manifestations",
       "path": "packs/manifestations",
+      "type": "Actor",
+      "system": "essence-system"
+    },
+    {
+      "name": "enemies",
+      "label": "Starting Enemy Examples",
+      "path": "packs/enemies",
       "type": "Actor",
       "system": "essence-system"
     },

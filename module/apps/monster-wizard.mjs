@@ -204,7 +204,11 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
     const ownedNames = new Set(ownedCards.map((i) => i.name));
     const search = this.#cardSearch.trim().toLowerCase();
 
-    const qualifies = (cardSystem) => {
+    // Doc L6868: "enemies do not automatically receive Basic Melee Attack, Basic Ranged Attack, or
+    // Defend." Prepare Action needs permission too (L7966).
+    const neverPicked = new Set(["Basic Melee Attack", "Basic Ranged Attack", "Defend", "Prepare Action"]);
+    const qualifies = (cardSystem, name = "") => {
+      if (neverPicked.has(name)) return false;
       const skill = (cardSystem.skill || "").toLowerCase();
       if (!skill) return true;
       const gateDistinction = SKILL_GATE[skill];
@@ -435,7 +439,11 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
 
     const topSkills = [...SKILLS].sort((a, b) => system[b] - system[a]).slice(0, 3);
 
-    const qualifies = (cardSystem) => {
+    // Doc L6868: "enemies do not automatically receive Basic Melee Attack, Basic Ranged Attack, or
+    // Defend." Prepare Action needs permission too (L7966).
+    const neverPicked = new Set(["Basic Melee Attack", "Basic Ranged Attack", "Defend", "Prepare Action"]);
+    const qualifies = (cardSystem, name = "") => {
+      if (neverPicked.has(name)) return false;
       const skill = (cardSystem.skill || "").toLowerCase();
       if (!skill) return true;
       const gate = SKILL_GATE[skill];
@@ -462,8 +470,8 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
       game.packs.get("essence-system.action-cards")?.getDocuments() ?? [],
       game.packs.get("essence-system.reaction-cards")?.getDocuments() ?? []
     ]);
-    const actionChoices = weightedPick(actionPack.filter((d) => qualifies(d.system)), budget.actionCards);
-    const reactionChoices = weightedPick(reactionPack.filter((d) => qualifies(d.system)), budget.reactionCards);
+    const actionChoices = weightedPick(actionPack.filter((d) => qualifies(d.system, d.name)), budget.actionCards);
+    const reactionChoices = weightedPick(reactionPack.filter((d) => qualifies(d.system, d.name)), budget.reactionCards);
     const toCreate = [...actionChoices, ...reactionChoices].map((d) => d.toObject());
     if (toCreate.length) await document.createEmbeddedDocuments("Item", toCreate);
   }

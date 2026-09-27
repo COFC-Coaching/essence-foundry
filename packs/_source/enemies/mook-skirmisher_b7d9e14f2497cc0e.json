@@ -1,0 +1,70 @@
+{
+  "_id": "b7d9e14f2497cc0e",
+  "name": "Mook Skirmisher",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "grade": "Mook",
+    "battlefieldRole": "Skirmisher",
+    "eliteType": "",
+    "resilience": 0,
+    "movement": 12,
+    "temporaryWoundsAvailable": 0,
+    "taskDice": 4,
+    "rollLimit": null,
+    "reactionsPerRound": null,
+    "printedDefenses": {
+      "fortitude": 5,
+      "composure": 5,
+      "harmony": 5
+    },
+    "abilities": [
+      {
+        "name": "Harrier Strike",
+        "text": "Range 1; vs. Fortitude. On success, deal 1 Physical Slashing Damage. Surge 1: move 1 unit after resolution.",
+        "kind": "action",
+        "dice": 2,
+        "defense": "fortitude",
+        "unopposed": false,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Slip Away",
+        "text": "Trigger: an adjacent enemy targets you with an opposed Action. Roll 2d10, unopposed. Gain +1 Fortitude against the triggering Action. If it fails to affect you, move 1 unit after it resolves.",
+        "kind": "reaction",
+        "dice": 2,
+        "defense": "",
+        "unopposed": true,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      }
+    ],
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ],
+    "gmNotes": "<p><strong>Role use.</strong> Force target switching, chase vulnerable characters, and make position matter. Do not use several if the battlefield is too cramped for movement to be meaningful.</p><p class=\"muted\">Starting Enemy Example (Essence v0.6, Part XIV). Playtest reference; change its fictional presentation freely.</p>"
+  },
+  "items": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!b7d9e14f2497cc0e"
+}

@@ -2,6 +2,37 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.11.0
+
+**Phase 4: enemies follow Part XIV.**
+
+**Two engines.** Mooks and Normals run the reduced engine: no Pools, no Stamina, Focus or Mana.
+Initiative is a plain 2d10 roll with no prompt and no Action cost. Each Turn grants printed Actions
+(Mook 1, Normal 2) and each Round a printed Reaction allowance, both tracked on the sheet and reset
+by the combat tracker. Abilities roll their printed dice against a named Defense, or unopposed. One
+utility Basic Action (Stabilize, Prepare Action excepted) per Turn spends an Action and no dice.
+Basic Melee Attack, Basic Ranged Attack, Defend and Prepare Action are refused without GM
+permission, and the enemy wizard never picks them. Task Dice (Mook 4, Normal 5) roll against a
+Difficulty. Elites keep the full engine: an ability's dice are its minimum commitment, paid from
+the Pool through the usual prompt, with the profile's Roll Limit shown as advice.
+
+**Enemy data.** Abilities gain a kind (Action, Reaction, Triggered, Passive), printed dice, a
+target Defense and an unopposed flag. The old "per Combat" frequency is now "between Recoveries"
+and old data maps over. Printed Defenses override the Attribute-derived values when set. New
+optional allowance fields (Initiative dice, Actions per Turn, Reactions per Round, Task Dice, Roll
+Limit) fall back to the Grade defaults when blank.
+
+**Limited uses.** Uses no longer refill at Round 1. A Recovery button on the sheet refreshes them.
+Reaction allowances refresh at the start of each Round.
+
+**Compact sheet.** Mook and Normal sheets show Grade, Role, Wounds, Defenses, Resilience, Movement,
+Senses and Abilities. A GM toggle reveals Attributes, Styles, cards and Pools for hand-building.
+
+**Budgets.** Default Resilience is Mook 0, Normal 1, Elite 2 and no Temporary Wounds, matching the
+Starting Enemy Examples.
+
+**Content.** New "Starting Enemy Examples" compendium with the ten profiles from Part XIV.
+
 ## 0.10.1
 
 **Phase 3, part two: Damage components, Recovery, Concentration.**

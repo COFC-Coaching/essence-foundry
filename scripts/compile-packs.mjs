@@ -18,7 +18,7 @@ const PACK_TYPES = {
   "action-cards": "Item", "reaction-cards": "Item", conditions: "Item", equipment: "Item",
   species: "Item", heritages: "Item", distinctions: "Item",
   "combat-styles": "JournalEntry", guide: "JournalEntry",
-  manifestations: "Actor"
+  manifestations: "Actor", enemies: "Actor"
 };
 
 const ONLY = process.argv.slice(2).find((a) => a.startsWith("--only="))?.slice("--only=".length).split(",") ?? null;

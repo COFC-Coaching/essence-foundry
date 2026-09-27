@@ -1,0 +1,100 @@
+{
+  "_id": "91b8e81aa4172666",
+  "name": "Elite Leader",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "grade": "Elite",
+    "battlefieldRole": "Support",
+    "eliteType": "Leader",
+    "resilience": 2,
+    "movement": 9,
+    "temporaryWoundsAvailable": 0,
+    "taskDice": null,
+    "rollLimit": 6,
+    "reactionsPerRound": null,
+    "printedDefenses": {
+      "fortitude": 6,
+      "composure": 7,
+      "harmony": 6
+    },
+    "abilities": [
+      {
+        "name": "Command Strike",
+        "text": "Minimum 3 dice; Range 5; vs. Composure. On success, the target becomes Exposed until the end of its next Turn. One ally within 5 units may move 2 units after resolution.",
+        "kind": "action",
+        "dice": 3,
+        "defense": "composure",
+        "unopposed": false,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Coordinated Assault",
+        "text": "Once per Round. When an ally successfully affects an Exposed enemy, another ally within 5 units gains 1 free die on its next Action before the start of the Leader's next Turn.",
+        "kind": "triggered",
+        "dice": null,
+        "defense": "",
+        "unopposed": false,
+        "frequency": "perRound",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Redirect",
+        "text": "Trigger: an ally within 4 units is targeted by an opposed Action. Minimum 2 dice, unopposed. Move that ally 1 unit. If the movement makes the ally an illegal target, the triggering Action fails against that ally normally.",
+        "kind": "reaction",
+        "dice": 2,
+        "defense": "",
+        "unopposed": true,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      }
+    ],
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ],
+    "gmNotes": "<p><strong>Role use.</strong> Boss example. The Leader becomes less dangerous as supporting enemies disappear. Build the Boss encounter around that relationship rather than increasing the Leader's Wound capacity.</p><p class=\"muted\">Starting Enemy Example (Essence v0.6, Part XIV). Playtest reference; change its fictional presentation freely.</p>"
+  },
+  "items": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!91b8e81aa4172666"
+}

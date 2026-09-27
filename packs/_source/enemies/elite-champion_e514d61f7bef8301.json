@@ -1,0 +1,100 @@
+{
+  "_id": "e514d61f7bef8301",
+  "name": "Elite Champion",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "grade": "Elite",
+    "battlefieldRole": "Striker",
+    "eliteType": "Champion",
+    "resilience": 2,
+    "movement": 10,
+    "temporaryWoundsAvailable": 0,
+    "taskDice": null,
+    "rollLimit": 6,
+    "reactionsPerRound": null,
+    "printedDefenses": {
+      "fortitude": 7,
+      "composure": 6,
+      "harmony": 6
+    },
+    "abilities": [
+      {
+        "name": "Champion Strike",
+        "text": "Minimum 3 dice; Range 1; vs. Fortitude. On success, deal 2 Physical Slashing Damage. Surge 2: move the target 1 unit or move yourself 1 unit after resolution.",
+        "kind": "action",
+        "dice": 3,
+        "defense": "fortitude",
+        "unopposed": false,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Challenge",
+        "text": "Minimum 2 dice; Range 4; vs. Composure. On success, the target suffers -1 to all Defenses against the Champion until the end of the target's next Turn. This is not Exposed and therefore can stack with Exposed.",
+        "kind": "action",
+        "dice": 2,
+        "defense": "composure",
+        "unopposed": false,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Turn Aside",
+        "text": "Trigger: you are targeted by an opposed Action. Minimum 2 dice, unopposed. Gain +1 to the targeted Defense against the triggering Action. Surge 2: move 1 unit after it resolves.",
+        "kind": "reaction",
+        "dice": 2,
+        "defense": "",
+        "unopposed": true,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      }
+    ],
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ],
+    "gmNotes": "<p><strong>Role use.</strong> A Champion is an Elite ordinary enemy, not automatically a Boss. It can anchor a Severe or Critical encounter alongside other enemies without changing the encounter into a Leader or Solo structure.</p><p class=\"muted\">Starting Enemy Example (Essence v0.6, Part XIV). Playtest reference; change its fictional presentation freely.</p>"
+  },
+  "items": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!e514d61f7bef8301"
+}

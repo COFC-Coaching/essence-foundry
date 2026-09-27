@@ -1,0 +1,82 @@
+{
+  "_id": "8c81955139944d01",
+  "name": "Normal Striker",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "grade": "Normal",
+    "battlefieldRole": "Striker",
+    "eliteType": "",
+    "resilience": 1,
+    "movement": 10,
+    "temporaryWoundsAvailable": 0,
+    "taskDice": 5,
+    "rollLimit": null,
+    "reactionsPerRound": null,
+    "printedDefenses": {
+      "fortitude": 5,
+      "composure": 5,
+      "harmony": 5
+    },
+    "abilities": [
+      {
+        "name": "Punishing Strike",
+        "text": "Range 1; vs. Fortitude. On success, deal 1 Physical Slashing Damage. If the target is Exposed, Restrained, or has no other ally within 2 units, deal +1 Damage. Surge 2: deal +1 Damage.",
+        "kind": "action",
+        "dice": 3,
+        "defense": "fortitude",
+        "unopposed": false,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Commit",
+        "text": "Before rolling Punishing Strike, gain 1 free die and become Exposed until the end of your next Turn.",
+        "kind": "passive",
+        "dice": null,
+        "defense": "",
+        "unopposed": false,
+        "frequency": "betweenRecoveries",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      }
+    ],
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ],
+    "gmNotes": "<p><strong>Role use.</strong> Threaten isolated or already-compromised targets. Its best Damage should come from setup by other Roles rather than unconditional output.</p><p class=\"muted\">Starting Enemy Example (Essence v0.6, Part XIV). Playtest reference; change its fictional presentation freely.</p>"
+  },
+  "items": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!8c81955139944d01"
+}

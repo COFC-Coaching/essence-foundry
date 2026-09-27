@@ -1,0 +1,70 @@
+{
+  "_id": "15676478445a5159",
+  "name": "Mook Support",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "grade": "Mook",
+    "battlefieldRole": "Support",
+    "eliteType": "",
+    "resilience": 0,
+    "movement": 10,
+    "temporaryWoundsAvailable": 0,
+    "taskDice": 4,
+    "rollLimit": null,
+    "reactionsPerRound": null,
+    "printedDefenses": {
+      "fortitude": 4,
+      "composure": 6,
+      "harmony": 5
+    },
+    "abilities": [
+      {
+        "name": "Set Up",
+        "text": "Roll 2d10, unopposed. Choose one ally within 4 units. That ally gains 1 free die on its next Action before the start of your next Turn.",
+        "kind": "action",
+        "dice": 2,
+        "defense": "",
+        "unopposed": true,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Emergency Cover",
+        "text": "When an ally within 3 units would suffer a Wound, grant that ally 1 Temporary Wound before the Wound is resolved. This is not a Reaction and cannot be used if the Support is unable to detect the ally.",
+        "kind": "triggered",
+        "dice": null,
+        "defense": "",
+        "unopposed": false,
+        "frequency": "betweenRecoveries",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      }
+    ],
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ],
+    "gmNotes": "<p><strong>Role use.</strong> The Mook itself is fragile; its value comes from making another enemy more efficient. Players who identify and remove it should feel the encounter become easier.</p><p class=\"muted\">Starting Enemy Example (Essence v0.6, Part XIV). Playtest reference; change its fictional presentation freely.</p>"
+  },
+  "items": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!15676478445a5159"
+}

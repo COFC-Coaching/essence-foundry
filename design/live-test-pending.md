@@ -1,7 +1,8 @@
-# Live test: 0.8.1 through 0.10.1
+# Live test: 0.8.1 through 0.11.0
 
 Branch `claude/elastic-lamarr-32f578-lza4a9`, commits `cac234e` (0.8.1), `0b5e315` (0.9.0),
-`6243178` (0.10.0) and the 0.10.1 release commit after it. None was live-tested when built (cloud session, no Foundry). Run this in a world on Foundry
+`6243178` (0.10.0), `cfc5147` (0.10.1) and the 0.11.0 release commit after it. None was
+live-tested when built (cloud session, no Foundry). Run this in a world on Foundry
 v14 with the branch checked out into `Data/systems/essence-system`. Record results in
 build-history under a new dated heading; delete this file once everything below has passed.
 
@@ -151,3 +152,55 @@ build-history under a new dated heading; delete this file once everything below 
     only space 2: it clears, spaces 1 and 3 stay, the state and step are unchanged.
 53. Full Manifestation profile: Apply Damage with a full track adds to overflow Wounds by the
     surplus, as before.
+
+## 0.11.0: Enemies (Part XIV)
+
+54. The "Starting Enemy Examples" compendium lists ten actors. Import Mook Skirmisher: the sheet is
+    the compact record (Grade, Role, Wounds 2, Defenses 5/5/5, Resilience 0, Movement 12, Senses,
+    Abilities). No Attributes, Styles, card sections or Pools show. Tick "Show Attributes, Styles,
+    cards and Pools": they appear; untick: they hide. No console error either way.
+55. Same actor: the header shows Initiative dice, Actions per Turn, Reactions per Round and Task
+    Dice inputs, all blank, and the read-back reads 2 / 1 / 1 / 4 (Doc L7962). Import Normal
+    Defender: 2 / 2 / 1 / 5. Import Elite Champion: the header shows Roll Limit 6 instead of Task
+    Dice, plus the normal Pools.
+56. Mook Skirmisher's Defenses read 5 / 5 / 5 although its Attributes are all 0. Clear a Printed
+    Defense: that Defense falls back to the Attribute-derived value. Type it back: it overrides
+    again. Strain does not change a printed value.
+57. Abilities table: Harrier Strike shows kind Action, At Will, 2 dice, vs Fortitude; Slip Away
+    shows Reaction, 2 dice, unopposed. Add an ability: the new row defaults to Action, At Will,
+    blank dice, no Defense.
+58. Open a pre-0.11.0 enemy whose ability was saved as "per Combat": it now reads "Between
+    Recoveries" and the uses count is unchanged.
+59. Combat with Mook Skirmisher and a character. Roll initiative for the Mook: no prompt; chat
+    shows a 2d10 roll flavored "Initiative (printed dice)"; the tracker gets its total; the Mook's
+    Pools stay blank.
+60. Start combat. The Mook's combat header reads "This Turn: 0 / 1 Actions | Reactions this Round:
+    0 / 1". Use Harrier Strike with a target selected: chat says "uses Harrier Strike (printed
+    2d10)", the roll is 2d10 vs the target's Fortitude, and the header reads 1 / 1. Use it again:
+    a warning says the Mook has used its 1 Action, and the roll still goes through (warn, not
+    block).
+61. Use Slip Away: 2d10 unopposed, Reactions read 1 / 1. Advance to the next Round: Reactions read
+    0 / 1 again. On the Mook's next Turn: Actions read 0 / 1.
+62. Drop Stabilize on the Mook (Elite-style hand-build, via the full-stats toggle) and play it:
+    chat says it is this Turn's utility Action with no dice cost, Actions read 1 / 1. Play it
+    again the same Turn: a warning says the utility Action is used. Play Basic Melee Attack,
+    Defend or Prepare Action on a Mook: a warning asks for GM permission, nothing rolls.
+63. Click "Roll Task Dice" on Normal Defender with Difficulty 6: a 5d10 roll against Difficulty 6,
+    no Surges. Blank Difficulty: the roll posts with the highest-die reading.
+64. End the Mook's Turn: no Reaction Pool forms, and no console error. A character in the same
+    combat still forms its Reaction Pool normally.
+65. Mook Striker's Exploit the Opening reads "Between Recoveries", 1 use. Use it: 0 uses. Use again:
+    the "no uses remaining" warning. Advance to Round 2 and again to a new combat (end and start):
+    still 0. Click Recovery: 1 use, chat says the uses were refreshed.
+66. Elite Champion in combat with Action dice 6: use Champion Strike: the dice prompt opens with
+    min 3, max 6 and an advisory line "Roll Limit is 6 dice"; commit 3: Action dice read 3 and a
+    3d10 roll vs Fortitude posts. Use Challenge with only 1 Action die left: the "requires at
+    least 2 dice" warning, no roll.
+67. Elite Solo: Reactions per Round reads 2 (a printed value), Pressure Wave reads Triggered, Once
+    per Round; use it twice in one Round: the second is blocked. Its dice-less abilities post text
+    only.
+68. Enemy wizard: build a Mook and a Normal several times. No Basic Melee Attack, Basic Ranged
+    Attack, Defend or Prepare Action appears among the picked cards. Default Resilience is 0 for a
+    Mook, 1 for a Normal, 2 for an Elite; Temporary Wounds default to 0.
+69. Monster (not NPC) sheet: repeat checks 54, 57 and 60 on a `monster` actor set to Mook: same
+    compact record, same allowance line, no console error.

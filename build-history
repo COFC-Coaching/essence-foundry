@@ -3294,3 +3294,40 @@ rework (3.6 to 3.8), Recovery's Wound picker (3.13) and Concentration (3.15).
   auto-ends with none (L4632). Triggered only by real Core Wound fills, not Temporary absorption.
 - **Verification:** `npm test` (rules 86, migration 45); templates balanced; lang keys resolve.
   Not live-tested; checks 45-53 in `design/live-test-pending.md`.
+
+### 2026-09-27 -- 0.11.0: Phase 4 (enemies on two engines, Part XIV)
+
+- **Data** (`actor-adversary.mjs`): abilities gain `kind`, `dice`, `defense`, `unopposed`;
+  frequency `perCombat` becomes `betweenRecoveries` through `LEGACY_VALUE_ALIASES` (test added).
+  New nullable allowance fields (`initiativeDice`, `actionsPerTurn`, `reactionsPerRound`,
+  `taskDice`, `rollLimit`), `printedDefenses` (override derived Defenses when set, Doc L6979) and
+  the `enemyTurn` counters. Derived `engine` ("reduced" for Mook/Normal, "full" for Elite) plus
+  `effective*` fallbacks (Doc L7962: 2d10 / Mook 1 or Normal 2 Actions / 1 Reaction when a
+  Reaction ability exists / Task Dice 4 or 5; Elites fall back to `rollLimit`).
+- **Combat** (`combat.mjs`): reduced-engine initiative is an unprompted `Nd10` (L6876);
+  `startingCombatState` nulls the Pools and zeroes `enemyTurn`; `_onStartRound` no longer refills
+  limited uses at Round 1 (L6921) and resets `reactionsUsed` each Round (L6878); `_onStartTurn`
+  has a reduced branch that resets the Turn's Actions and utility slot and skips Pool formation,
+  Dazed and the unaware tax. `formEndOfTurnReactionPool` (actor.mjs) just ends the Turn for a
+  reduced enemy (L3464).
+- **Sheet** (`npc-sheet.mjs`, both enemy templates): compact record by default for Mook/Normal with
+  a non-persisted `#showFullStats` toggle; header allowance inputs; Printed Defenses inputs;
+  abilities table with kind/frequency/dice/defense/unopposed; Recovery and Roll Task Dice
+  buttons; the combat header shows "This Turn: x / y Actions" and "Reactions this Round" for the
+  reduced engine, Pools for Elites. `#onUseAbility` spends allowances (warn, not block) and rolls
+  printed dice for the reduced engine, or prompts a Pool commitment (min max(2, dice)) for Elites.
+  Card play on a reduced enemy is a printed roll of the card's minimum; Basic attacks, Defend and
+  Prepare Action are refused (L6868, L7966). `playBurnOnlyCard` handles the one utility Basic per
+  Turn (L6870).
+- **Budgets/wizard**: Resilience base 0 / 1 / 2, perTier 0, Temporary Wounds 0 (the examples'
+  values). The wizard's `qualifies` takes the card name and skips the four permission cards.
+- **Content**: `scripts/enemy-examples-data.json` (ten Starting Enemy Examples, L7187-L7375),
+  `enemyExampleToActor` in build-packs.mjs, the `enemies` Actor pack in system.json and
+  compile-packs.mjs. Wound capacity comes from the Grade budget (2 / 4 / 5).
+- **Near-miss**: both enemy templates first used a `ternary` Handlebars helper that was never
+  registered (only addOne, essenceEditor, capitalize, equipmentCategoryLabel, turnLabel,
+  fitTitleSize, domainResource, fittingReconfigureCost exist). Foundry would have thrown on
+  render of every enemy sheet. Rewritten as `{{#if}}`. Lesson: grep `module/essence.mjs` for any
+  helper name a template uses that isn't a Foundry built-in.
+- **Verification:** `npm test` (rules 86, migration 51); templates balanced; lang keys resolve.
+  Not live-tested; checks 54-69 in `design/live-test-pending.md`.

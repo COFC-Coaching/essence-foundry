@@ -85,17 +85,56 @@ export default class EssenceAdversaryData extends EssenceCombatantData {
         text: new fields.HTMLField({ initial: "" })
       })),
 
+      // v0.6 Part XIV "Enemy Construction" (Doc L6866-L6884, 0.11.0): a Mook or Normal ability is
+      // a printed roll (`dice` d10, no Pool) with a kind (Action per Turn, Reaction per Round,
+      // Triggered, or a passive modifier) and an optional Defense it rolls against. For an Elite,
+      // `dice` is the card-style minimum commitment. "betweenRecoveries" replaces the old
+      // "perCombat" (Doc L6921: uses refresh only after a genuine Recovery); migration.mjs maps
+      // the stored value.
       abilities: new fields.ArrayField(new fields.SchemaField({
         name: new fields.StringField({ initial: "" }),
         text: new fields.HTMLField({ initial: "" }),
-        frequency: new fields.StringField({ initial: "atWill", choices: ["atWill", "perRound", "perCombat"] }),
+        kind: new fields.StringField({ initial: "action", choices: ["action", "reaction", "triggered", "passive"] }),
+        dice: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 }),
+        defense: new fields.StringField({ initial: "", blank: true, choices: ["", "fortitude", "composure", "harmony"] }),
+        unopposed: new fields.BooleanField({ initial: false }),
+        frequency: new fields.StringField({ initial: "atWill", choices: ["atWill", "perRound", "betweenRecoveries"] }),
         usesMax: new fields.NumberField({ integer: true, initial: 1, min: 1 }),
         usesRemaining: new fields.NumberField({ integer: true, initial: 1, min: 0 }),
         usedThisRound: new fields.BooleanField({ initial: false })
       })),
 
+      // Reduced-engine allowances (Doc L6874-L6878, L7962). Null means "use the Grade default":
+      // Mook 1 Action, 4 Task Dice; Normal 2 Actions, 5 Task Dice; both 2d10 Initiative; 1
+      // Reaction per Round when a Reaction ability is listed. Elites use Pools and `rollLimit`
+      // (Doc L7193) instead; Task Dice fall back to the Roll Limit (L6872).
+      initiativeDice: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 1 }),
+      actionsPerTurn: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 }),
+      reactionsPerRound: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 }),
+      taskDice: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 }),
+      rollLimit: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 }),
+      // Printed Defenses (Doc L6979, "Defenses Should Create a Profile"): an enemy's Defenses are
+      // printed, not derived. Null keeps the Attribute-derived value for that Defense.
+      printedDefenses: new fields.SchemaField({
+        fortitude: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 }),
+        composure: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 }),
+        harmony: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 })
+      }),
+      // Per-Turn and per-Round counters for the reduced engine, reset by EssenceCombat.
+      enemyTurn: new fields.SchemaField({
+        actionsUsed: new fields.NumberField({ integer: true, initial: 0, min: 0 }),
+        utilityUsed: new fields.BooleanField({ initial: false }),
+        reactionsUsed: new fields.NumberField({ integer: true, initial: 0, min: 0 })
+      }),
+
       gmNotes: new fields.HTMLField({ initial: "" })
     };
+  }
+
+  /** Doc L6866: Mooks and Normals run the reduced engine (printed rolls, no Pools); Elites the full
+   *  one. A blank Grade counts as Normal, matching getGradeBudget's fallback. */
+  get isReducedEngine() {
+    return this.grade !== "Elite";
   }
 
   /**
@@ -105,6 +144,22 @@ export default class EssenceAdversaryData extends EssenceCombatantData {
    */
   prepareDerivedData() {
     super.prepareDerivedData();
+
+    // Printed Defenses override the Attribute-derived ones (Doc L6979); Strain and bonuses do not
+    // apply on top of a printed value, since the profile is the whole statement.
+    for (const key of ["fortitude", "composure", "harmony"]) {
+      const printed = this.printedDefenses?.[key];
+      if (typeof printed === "number") this.defenses[key] = printed;
+    }
+
+    // Reduced-engine defaults (Doc L7962, L7193).
+    const mook = this.grade === "Mook";
+    this.engine = this.isReducedEngine ? "reduced" : "full";
+    this.effectiveInitiativeDice = this.initiativeDice ?? 2;
+    this.effectiveActionsPerTurn = this.actionsPerTurn ?? (mook ? 1 : 2);
+    const hasReaction = (this.abilities ?? []).some((a) => a.kind === "reaction");
+    this.effectiveReactionsPerRound = this.reactionsPerRound ?? (hasReaction ? 1 : 0);
+    this.effectiveTaskDice = this.taskDice ?? (this.isReducedEngine ? (mook ? 4 : 5) : (this.rollLimit ?? null));
 
     // V6 §2415: every enemy grade uses a simplified Wound model — a flat filled/capacity counter,
     // no Light/Serious/Critical spaces, no Wound Cards, no Wound State track, no Death Track.

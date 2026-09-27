@@ -1,0 +1,82 @@
+{
+  "_id": "d13c2fdcae54fbea",
+  "name": "Normal Controller",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "grade": "Normal",
+    "battlefieldRole": "Controller",
+    "eliteType": "",
+    "resilience": 1,
+    "movement": 10,
+    "temporaryWoundsAvailable": 0,
+    "taskDice": 5,
+    "rollLimit": null,
+    "reactionsPerRound": null,
+    "printedDefenses": {
+      "fortitude": 5,
+      "composure": 6,
+      "harmony": 5
+    },
+    "abilities": [
+      {
+        "name": "Deny Ground",
+        "text": "Roll 2d10, unopposed. Choose a point within 5 units. Create Difficult Terrain in a Sphere with hex radius 1 (7 hexes) until the start of your next Turn. Creatures entering the area for the first time each Turn lose 1 additional Movement.",
+        "kind": "action",
+        "dice": 2,
+        "defense": "",
+        "unopposed": true,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Bind Position",
+        "text": "Once between Recoveries. Range 4; vs. Fortitude or Harmony, chosen when the enemy is built. On success, the target becomes Immobilized until the end of its next Turn. Surge 2: also make the target Exposed for the same duration.",
+        "kind": "action",
+        "dice": 3,
+        "defense": "fortitude",
+        "unopposed": false,
+        "frequency": "betweenRecoveries",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      }
+    ],
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ],
+    "gmNotes": "<p><strong>Role use.</strong> Change paths and timing rather than dealing much Damage. A Controller becomes more dangerous when a Striker or Blaster can exploit the spaces it denies.</p><p class=\"muted\">Starting Enemy Example (Essence v0.6, Part XIV). Playtest reference; change its fictional presentation freely.</p>"
+  },
+  "items": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!d13c2fdcae54fbea"
+}

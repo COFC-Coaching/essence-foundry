@@ -81,6 +81,11 @@ export default class EssenceActor extends Actor {
   async formEndOfTurnReactionPool() {
     const ps = this.system.playState;
     if (!ps || !["first", "active"].includes(ps.combatTurn)) return false;
+    // Doc L3464: "Mooks and Normals do not form Pools or convert unused Actions into Reactions."
+    if (this.system.engine === "reduced") {
+      await this.update({ "system.playState.combatTurn": "ended" });
+      return true;
+    }
     await this.update({
       "system.playState.combatTurn": "ended",
       "system.playState.reactionDice": (this.system.baseCombatDice ?? 0) + (ps.actionDice ?? 0),

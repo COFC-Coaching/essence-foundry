@@ -81,6 +81,9 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       addAbility: EssenceNpcSheet.#onAddAbility,
       deleteAbility: EssenceNpcSheet.#onDeleteAbility,
       useAbility: EssenceNpcSheet.#onUseAbility,
+      enemyRecovery: EssenceNpcSheet.#onEnemyRecovery,
+      rollTaskDice: EssenceNpcSheet.#onRollTaskDice,
+      toggleFullStats: EssenceNpcSheet.#onToggleFullStats,
       itemView: EssenceNpcSheet.#onItemView,
       itemEdit: EssenceNpcSheet.#onItemEdit,
       itemDelete: EssenceNpcSheet.#onItemDelete,
@@ -125,6 +128,10 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   static PARTS = {
     body: { template: "systems/essence-system/templates/actor/npc-sheet.hbs", scrollable: [".sheet-scroll"] }
   };
+
+  /** Reduced-engine sheets hide Attributes, Styles, cards and Pools by default (Doc L7128, compact
+   *  records); this GM toggle shows them for hand-building. Not persisted. */
+  #showFullStats = false;
 
   /** Sheet-wide safety lock — see EssenceActorSheet#applyEditable for the full rationale. */
   #editUnlocked = false;
@@ -274,6 +281,12 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     // Reduced Engine template split is gone, so this list is just a plain general-purpose ability
     // reference available on any Grade (see actor-adversary.mjs's class doc comment).
     context.abilities = (system.abilities ?? []).map((a, i) => ({ ...a, i }));
+    // 0.11.0 reduced engine (Doc L6866): Mooks and Normals get the compact record; Elites the full
+    // sheet. The compact view can be expanded for hand-building.
+    context.isReduced = system.engine === "reduced";
+    context.showFullStats = !context.isReduced || this.#showFullStats;
+    context.enemyTurn = system.enemyTurn ?? { actionsUsed: 0, utilityUsed: false, reactionsUsed: 0 };
+    context.effectiveTaskDice = system.effectiveTaskDice;
 
     context.temporaryWoundPips = pips(system.playState.currentTemporaryWounds, system.temporaryWoundsAvailable);
     // V6: track length is deathTrackMax (5, or 7 for Deathless — design/v6-revision-delta.md §2.3).
@@ -505,6 +518,25 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     // Burn-only cards spend their printed dice and roll nothing (card-play.mjs). Stabilize on an
     // Elite can target a Defeated enemy or a full-track character the same way.
     if (await playBurnOnlyCard(this.actor, item)) return;
+    // Reduced engine (Doc L6866, L7966): a Mook or Normal has no Pool. A card it holds is played as
+    // a printed roll of the card's minimum, spending one of its Actions or Reactions. Basic attacks
+    // and Defend need explicit permission, so those are refused.
+    if (this.actor.system.engine === "reduced") {
+      if (["Basic Melee Attack", "Basic Ranged Attack", "Defend"].includes(item.name)) {
+        ui.notifications.warn(game.i18n.format("ESSENCE.Notify.EnemyNeedsPermission", { name: this.actor.name, card: item.name }));
+        return;
+      }
+      const isReaction = item.type === "reaction-card";
+      const turn = this.actor.system.enemyTurn ?? { actionsUsed: 0, reactionsUsed: 0 };
+      const update = isReaction
+        ? { "system.enemyTurn.reactionsUsed": (turn.reactionsUsed ?? 0) + 1 }
+        : { "system.enemyTurn.actionsUsed": (turn.actionsUsed ?? 0) + 1 };
+      await this.actor.update(update);
+      const pool = Math.max(2, parseInt(sys.min, 10) || 2);
+      const { defense, targets } = await EssenceNpcSheet.#resolveTargets((sys.defense || "").toLowerCase());
+      await rollEssencePool({ pool, defense, targets, label: `${item.name} (printed ${pool}d10)`, actor: this.actor, surgeOptions: sys.surges, unopposed: !!sys.unopposed, nonCombat: !!sys.noSurges });
+      return;
+    }
     if (cardOnCooldown(item)) {
       ui.notifications.warn(`${item.name} is on cooldown (${sys.cooldownFrequency === "perEncounter" ? "once per Encounter" : "once per Round"}) and isn't available yet.`);
       return;
@@ -1303,7 +1335,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
    *  actor-adversary.mjs's class doc comment — this stopped being a Mook/Normal-only "Reduced
    *  Engine" concept in V6). An empty list is just an empty list on any Grade that hasn't used it. */
   static async #onAddAbility() {
-    const abilities = [...(this.actor.system.abilities ?? []), { name: "", text: "", frequency: "atWill", usesMax: 1, usesRemaining: 1, usedThisRound: false }];
+    const abilities = [...(this.actor.system.abilities ?? []), { name: "", text: "", kind: "action", dice: null, defense: "", unopposed: false, frequency: "atWill", usesMax: 1, usesRemaining: 1, usedThisRound: false }];
     await this.actor.update({ "system.abilities": abilities });
   }
 
@@ -1316,29 +1348,112 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   /** "At Will" tracks nothing and just posts to chat. "1 per Round" and "X per Combat" enforce
    *  their own limit here and reset on the normal combat cadence — see EssenceCombat#_onStartTurn
    *  (perRound) and #_onStartRound (perCombat) in documents/combat.mjs. */
+  /**
+   * Uses a printed ability (0.11.0, Doc L6874-L6882). Reduced engine: an Action spends one of the
+   * Turn's Actions, a Reaction one of the Round's; `dice` is the printed roll, made with no Pool.
+   * Full engine (Elites): `dice` is the minimum commitment, paid from the matching Pool through the
+   * usual prompt. Limits warn rather than block, per this project's convention; frequency limits
+   * (per Round, between Recoveries) do block, since those are spent uses.
+   */
   static async #onUseAbility(event, target) {
     const i = Number(target.dataset.index);
     const abilities = [...(this.actor.system.abilities ?? [])];
     const ability = abilities[i];
     if (!ability) return;
+    const sys = this.actor.system;
+    const name = ability.name || "Ability";
 
     if (ability.frequency === "perRound" && ability.usedThisRound) {
-      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AbilityAlreadyUsedThisRound", { name: ability.name || "Ability" }));
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AbilityAlreadyUsedThisRound", { name }));
       return;
     }
-    if (ability.frequency === "perCombat" && ability.usesRemaining <= 0) {
-      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AbilityNoUsesRemaining", { name: ability.name || "Ability" }));
+    if (ability.frequency === "betweenRecoveries" && ability.usesRemaining <= 0) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AbilityNoUsesRemaining", { name }));
       return;
     }
 
+    const update = {};
     if (ability.frequency === "perRound") abilities[i] = { ...ability, usedThisRound: true };
-    else if (ability.frequency === "perCombat") abilities[i] = { ...ability, usesRemaining: ability.usesRemaining - 1 };
-    await this.actor.update({ "system.abilities": abilities });
+    else if (ability.frequency === "betweenRecoveries") abilities[i] = { ...ability, usesRemaining: ability.usesRemaining - 1 };
+    update["system.abilities"] = abilities;
 
+    const dice = ability.dice ?? 0;
+    let pool = 0;
+    const reduced = sys.engine === "reduced";
+    if (reduced) {
+      const turn = sys.enemyTurn ?? { actionsUsed: 0, reactionsUsed: 0 };
+      if (ability.kind === "action") {
+        if ((turn.actionsUsed ?? 0) >= (sys.effectiveActionsPerTurn ?? 1)) ui.notifications.warn(game.i18n.format("ESSENCE.Notify.EnemyActionsUsed", { name: this.actor.name, n: sys.effectiveActionsPerTurn }));
+        update["system.enemyTurn.actionsUsed"] = (turn.actionsUsed ?? 0) + 1;
+      } else if (ability.kind === "reaction") {
+        if ((turn.reactionsUsed ?? 0) >= (sys.effectiveReactionsPerRound ?? 0)) ui.notifications.warn(game.i18n.format("ESSENCE.Notify.EnemyReactionsUsed", { name: this.actor.name, n: sys.effectiveReactionsPerRound }));
+        update["system.enemyTurn.reactionsUsed"] = (turn.reactionsUsed ?? 0) + 1;
+      }
+      pool = dice;
+    } else if (dice > 0 && ["action", "reaction"].includes(ability.kind)) {
+      const poolField = ability.kind === "reaction" ? "reactionDice" : "actionDice";
+      const available = sys.playState[poolField] ?? 0;
+      const min = Math.max(2, dice);
+      if (available < min) {
+        ui.notifications.warn(game.i18n.format("ESSENCE.Notify.CardRequiresMoreDice", { name, min, available, label: ability.kind === "reaction" ? "Reaction" : "Action" }));
+        return;
+      }
+      const committed = await EssenceNpcSheet.#promptDiceCount({
+        title: `Use ${name}`,
+        label: `Commit how many ${ability.kind === "reaction" ? "Reaction" : "Action"} Dice? (min ${min}, max ${available})`,
+        min, max: available, initial: min,
+        note: typeof sys.rollLimit === "number" ? `Advisory: this profile's Roll Limit is ${sys.rollLimit} dice.` : ""
+      });
+      if (committed === null) return;
+      pool = committed;
+      update[`system.playState.${poolField}`] = available - committed;
+    }
+
+    await this.actor.update(update);
+    const text = ability.text ? `<p>${ability.text}</p>` : "";
+    if (pool > 0) {
+      const { defense, targets } = ability.unopposed ? { defense: null, targets: null } : await EssenceNpcSheet.#resolveTargets(ability.defense || "");
+      await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        content: `<div class="essence content-type-action-card"><p><strong>${this.actor.name}</strong> uses <strong>${name}</strong>${reduced ? ` (printed ${pool}d10)` : ""}.</p>${text}</div>`
+      });
+      await rollEssencePool({ pool, defense, targets, label: name, actor: this.actor, unopposed: !!ability.unopposed });
+    } else {
+      await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        content: `<p><strong>${this.actor.name}</strong> uses <strong>${name}</strong>.</p>${text}`
+      });
+    }
+  }
+
+  /** Doc L6921: limited uses refresh only after a genuine Recovery. */
+  static async #onEnemyRecovery() {
+    const abilities = (this.actor.system.abilities ?? []).map((a) => ({ ...a, usesRemaining: a.usesMax }));
+    await this.actor.update({ "system.abilities": abilities });
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> uses <strong>${ability.name || "an Ability"}</strong>.</p>${ability.text ? `<p>${ability.text}</p>` : ""}`
+      content: `<p>${game.i18n.format("ESSENCE.Notify.AbilityUsesRefreshed", { name: this.actor.name })}</p>`
     });
+  }
+
+  /** Doc L6872: an uncertain task rolls the profile's Task Dice against the Difficulty, no Surges. */
+  static async #onRollTaskDice() {
+    const dice = this.actor.system.effectiveTaskDice ?? 0;
+    if (!dice) return;
+    const difficulty = await new Promise((resolve) => {
+      new foundry.applications.api.DialogV2({
+        window: { title: game.i18n.localize("ESSENCE.Item.Monster.RollTask") },
+        content: `<label>${game.i18n.localize("ESSENCE.Sheet.DifficultyPrompt")}<input type="number" name="difficulty" value="" min="1" max="10" placeholder="${game.i18n.localize("ESSENCE.Sheet.DifficultyBlank")}"></label>`,
+        buttons: [{ action: "roll", label: "Roll", default: true, callback: (event, button) => { const n = parseInt(button.form.elements.difficulty.value, 10); return Number.isFinite(n) && n > 0 ? n : null; } }],
+        submit: (result) => resolve(result === "roll" ? null : result)
+      }).render(true);
+    });
+    await rollEssencePool({ pool: dice, difficulty, label: `Task (${dice}d10)`, actor: this.actor, nonCombat: true });
+  }
+
+  static #onToggleFullStats() {
+    this.#showFullStats = !this.#showFullStats;
+    this.render();
   }
 
   /** See EssenceActorSheet#onItemView — same "eye" View button, same reasoning. */

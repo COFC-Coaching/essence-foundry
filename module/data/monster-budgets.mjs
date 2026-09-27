@@ -18,7 +18,7 @@ export const GRADE_BUDGETS = {
   Mook: {
     attributePool: 2, attributeMax: 2,
     skillPool: 2, skillMax: 2,
-    resilienceBase: 1, resiliencePerTier: 1,
+    resilienceBase: 0, resiliencePerTier: 0,
     temporaryWoundsAvailable: 0,
     actionCards: 1, reactionCards: 0,
     equipmentCount: 1,
@@ -30,8 +30,8 @@ export const GRADE_BUDGETS = {
   Normal: {
     attributePool: 7, attributeMax: 3,
     skillPool: 5, skillMax: 3,
-    resilienceBase: 3, resiliencePerTier: 2,
-    temporaryWoundsAvailable: 1,
+    resilienceBase: 1, resiliencePerTier: 0,
+    temporaryWoundsAvailable: 0,
     actionCards: 2, reactionCards: 1,
     equipmentCount: 2,
     woundCapacity: 4
@@ -39,8 +39,8 @@ export const GRADE_BUDGETS = {
   Elite: {
     attributePool: 13, attributeMax: 5,
     skillPool: 12, skillMax: 5,
-    resilienceBase: 7, resiliencePerTier: 4,
-    temporaryWoundsAvailable: 3,
+    resilienceBase: 2, resiliencePerTier: 0,
+    temporaryWoundsAvailable: 0,
     actionCards: 4, reactionCards: 3,
     equipmentCount: 4,
     // Solo keeps the standard Elite Wound capacity of five (V6 §2467) — eliteType doesn't affect
@@ -59,10 +59,9 @@ export function getGradeBudget(grade) {
   return stored ? { ...defaults, ...stored } : defaults;
 }
 
-/** Default Resilience for a Grade. Enemies had a Tier until v0.6, and this used to be
- *  base + Tier x perTier. Part XIV now says "Team Tier is not an enemy rating," so the default is
- *  the old Tier 1 value (base + perTier, e.g. Mook 2 / Normal 5 / Elite 11). The two fields stay
- *  separate so a GM's customized budget table keeps working; the GM still sets Resilience directly. */
+/** Default Resilience for a Grade: the Starting Enemy Examples' values (Doc L7204-L7363: Mooks 0,
+ *  Normals 1 to 2, Elites 2 to 3), as base + perTier so a GM's customized budget table keeps
+ *  working. The GM still sets Resilience directly; Temporary Wounds default to 0 (no example has any). */
 export function computeResilience(grade) {
   const budget = getGradeBudget(grade);
   return budget.resilienceBase + budget.resiliencePerTier;

@@ -25,6 +25,26 @@ function cardText(item) {
 export async function playBurnOnlyCard(actor, item) {
   const profile = burnOnlyProfile(item.system, item.name);
   if (!profile) return false;
+  // Reduced engine (Doc L6870): a utility Basic "uses one of the profile's available Actions but
+  // costs no dice or Resources", at most one per Turn. Prepare Action needs explicit permission
+  // (L7966), so it is refused here.
+  if (actor.system.engine === "reduced") {
+    if (item.name === "Prepare Action") {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.EnemyNeedsPermission", { name: actor.name, card: item.name }));
+      return true;
+    }
+    const turn = actor.system.enemyTurn ?? { actionsUsed: 0, utilityUsed: false };
+    if (turn.utilityUsed) ui.notifications.warn(game.i18n.format("ESSENCE.Notify.EnemyUtilityUsed", { name: actor.name }));
+    if ((turn.actionsUsed ?? 0) >= (actor.system.effectiveActionsPerTurn ?? 1)) ui.notifications.warn(game.i18n.format("ESSENCE.Notify.EnemyActionsUsed", { name: actor.name, n: actor.system.effectiveActionsPerTurn }));
+    await actor.update({ "system.enemyTurn.actionsUsed": (turn.actionsUsed ?? 0) + 1, "system.enemyTurn.utilityUsed": true });
+    let extra = "";
+    if (item.name === "Stabilize") extra = await stabilizePlay(actor);
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: `<div class="essence content-type-action-card"><p><strong>${actor.name}</strong> uses <strong>${item.name}</strong> as this Turn's utility Action (no dice cost).</p>${cardText(item)}${extra}</div>`
+    });
+    return true;
+  }
   const isReaction = item.type === "reaction-card";
   const poolField = isReaction ? "reactionDice" : "actionDice";
   const poolLabel = isReaction ? "Reaction" : "Action";

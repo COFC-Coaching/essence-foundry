@@ -209,5 +209,13 @@ check("a stored prepared Action keeps its reserved dice", migrate(EssenceCharact
 check("a card saved before burnDice loads", migrate(EssenceActionCardData, { min: "2" }).min, "2");
 check("a negative burnDice is clamped", migrate(EssenceActionCardData, { burnDice: -1 }).burnDice, 0);
 
+console.log("\n--- 0.11.0 (Phase 4) enemy fields ---");
+check("ability frequency perCombat -> betweenRecoveries", migrate(EssenceNpcData, { abilities: [{ name: "Brace", frequency: "perCombat" }] }).abilities[0].frequency, "betweenRecoveries");
+check("monster ability frequency alias (subclass inherits)", migrate(EssenceMonsterData, { abilities: [{ name: "Burst", frequency: "perCombat" }] }).abilities[0].frequency, "betweenRecoveries");
+check("an unknown ability kind falls back to action", migrate(EssenceNpcData, { abilities: [{ name: "X", kind: "spell" }] }).abilities[0].kind, "action");
+check("printed Defenses load", migrate(EssenceNpcData, { printedDefenses: { fortitude: 7, composure: null, harmony: 5 } }).printedDefenses.fortitude, 7);
+check("a negative Task Dice value is clamped", migrate(EssenceNpcData, { taskDice: -2 }).taskDice, 0);
+check("an enemy saved before 0.11.0 still loads", migrate(EssenceNpcData, { ...modernNpc }).grade, modernNpc.grade);
+
 console.log(`\n${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);

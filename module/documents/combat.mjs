@@ -74,6 +74,23 @@ export default class EssenceCombat extends Combat {
       const combatant = this.combatants.get(id);
       if (!combatant?.isOwner) continue;
       const actor = combatant.actor;
+      // Reduced engine (Doc L6876): Mooks and Normals "roll 2d10 and total the results. This costs
+      // no Action." No prompt, no Pool.
+      if (actor.system.engine === "reduced") {
+        const n = actor.system.effectiveInitiativeDice ?? 2;
+        const roll = new Roll(`${n}d10`);
+        await roll.evaluate();
+        const total = roll.total;
+        await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor: "Initiative (printed dice)" });
+        await actor.update({
+          "system.playState.initiativeDice": 0,
+          "system.playState.initiativeFaces": roll.terms[0].results.map((r) => r.result),
+          "system.playState.initiativeTotal": total,
+          "system.playState.initiativeCommitted": true
+        });
+        await combatant.update({ initiative: total });
+        continue;
+      }
       const base = actor.system.baseCombatDice;
       // Doc L3386: "Choose from 1 die up to your base Action Pool size." No 0-die pass.
       const committed = await promptDiceCount({
@@ -123,6 +140,17 @@ export default class EssenceCombat extends Combat {
    * Action Pool.
    */
   static startingCombatState(actor) {
+    // Reduced engine (Doc L6878): no Pools; the Reaction allowance is refreshed at the start of
+    // each Round, and a late arrival "receives its allowance on entry".
+    if (actor.system.engine === "reduced") {
+      return {
+        "system.playState.combatStarted": true,
+        "system.playState.combatTurn": "notStarted",
+        "system.playState.actionDice": null,
+        "system.playState.reactionDice": null,
+        "system.enemyTurn": { actionsUsed: 0, utilityUsed: false, reactionsUsed: 0 }
+      };
+    }
     return {
       "system.playState.combatStarted": true,
       "system.playState.combatTurn": "notStarted",
@@ -134,17 +162,18 @@ export default class EssenceCombat extends Combat {
   /** Fires once per round, awaited before _onStartTurn. Round 1 is combat's actual start. */
   async _onStartRound(context) {
     await super._onStartRound(context);
-    if (context.round !== 1) return;
     for (const combatant of this.combatants) {
       const actor = combatant.actor;
       if (!COMBATANT_TYPES.includes(actor?.type)) continue;
-      const update = EssenceCombat.startingCombatState(actor);
-      // Reduced Engine "X per Combat" Abilities (module/data/actor-adversary.mjs) refill once,
-      // here, at the true start of combat — never mid-combat, unlike "per Round" below.
-      if (actor.system.abilities?.length) {
-        update["system.abilities"] = actor.system.abilities.map((a) => ({ ...a, usesRemaining: a.usesMax }));
+      if (context.round === 1) {
+        // Limited uses no longer refill here (Doc L6921: "Combat ending does not refresh them...
+        // Returning enemies keep their spent uses until they recover"); the enemy sheet's Recovery
+        // action does.
+        await actor.update(EssenceCombat.startingCombatState(actor));
+      } else if (actor.system.engine === "reduced" && (actor.system.enemyTurn?.reactionsUsed ?? 0) > 0) {
+        // Doc L6878: "Refresh the printed allowance at the start of each Round."
+        await actor.update({ "system.enemyTurn.reactionsUsed": 0 });
       }
-      await actor.update(update);
     }
   }
 
@@ -187,6 +216,22 @@ export default class EssenceCombat extends Combat {
     const ps = actor.system.playState;
     const base = actor.system.baseCombatDice;
     const isFirst = ps.combatTurn === "notStarted";
+    // Reduced engine (Doc L3450, L6874): no Pool steps; refresh the Turn's Action allowance and
+    // utility slot, reset accumulated Damage, re-enable per-Round abilities.
+    if (actor.system.engine === "reduced") {
+      const update = {
+        "system.playState.combatTurn": isFirst ? "first" : "active",
+        "system.playState.accumulatedDamage": 0,
+        "system.playState.accumulatedDamageWounds": 0,
+        "system.enemyTurn.actionsUsed": 0,
+        "system.enemyTurn.utilityUsed": false
+      };
+      if (actor.system.abilities?.some((a) => a.usedThisRound)) {
+        update["system.abilities"] = actor.system.abilities.map((a) => ({ ...a, usedThisRound: false }));
+      }
+      await actor.update(update);
+      return;
+    }
     // Start of Turn order (Doc L3443-L3446): 1. clear the Reaction Pool and expire any prepared
     // Action with its reserved dice; 2. reset accumulated Damage; 3. form the Action Pool, then
     // resolve Dazed's one-time burn; 4. start-of-Turn effects.

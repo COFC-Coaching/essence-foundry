@@ -1,0 +1,70 @@
+{
+  "_id": "ef913b8d86a3c669",
+  "name": "Mook Striker",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "grade": "Mook",
+    "battlefieldRole": "Striker",
+    "eliteType": "",
+    "resilience": 0,
+    "movement": 10,
+    "temporaryWoundsAvailable": 0,
+    "taskDice": 4,
+    "rollLimit": null,
+    "reactionsPerRound": null,
+    "printedDefenses": {
+      "fortitude": 5,
+      "composure": 5,
+      "harmony": 5
+    },
+    "abilities": [
+      {
+        "name": "Opening Strike",
+        "text": "Range 1; vs. Fortitude. On success, deal 1 Physical Piercing Damage. Surge 2: deal +1 Damage.",
+        "kind": "action",
+        "dice": 2,
+        "defense": "fortitude",
+        "unopposed": false,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Exploit the Opening",
+        "text": "Before rolling Opening Strike against a target that is Exposed, Restrained, or has no other ally within 2 units, gain 1 free die for that Action. Add it to the printed roll; no Pool is spent.",
+        "kind": "passive",
+        "dice": null,
+        "defense": "",
+        "unopposed": false,
+        "frequency": "betweenRecoveries",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      }
+    ],
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ],
+    "gmNotes": "<p><strong>Role use.</strong> Threaten a compromised or isolated target while other enemies hold attention. No native Reaction; only two Wounds and no Resilience, so it relies on positioning and supporting allies.</p><p class=\"muted\">Starting Enemy Example (Essence v0.6, Part XIV). Playtest reference; change its fictional presentation freely.</p>"
+  },
+  "items": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!ef913b8d86a3c669"
+}

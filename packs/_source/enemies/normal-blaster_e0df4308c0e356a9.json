@@ -1,0 +1,82 @@
+{
+  "_id": "e0df4308c0e356a9",
+  "name": "Normal Blaster",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "grade": "Normal",
+    "battlefieldRole": "Blaster",
+    "eliteType": "",
+    "resilience": 1,
+    "movement": 9,
+    "temporaryWoundsAvailable": 0,
+    "taskDice": 5,
+    "rollLimit": null,
+    "reactionsPerRound": null,
+    "printedDefenses": {
+      "fortitude": 5,
+      "composure": 5,
+      "harmony": 5
+    },
+    "abilities": [
+      {
+        "name": "Burst",
+        "text": "Choose a point within 6 units; Sphere with hex radius 1 (7 hexes); vs. Fortitude. On success, each affected enemy suffers 1 Physical Force Damage. Surge 2: choose one successfully affected creature to suffer +1 Damage.",
+        "kind": "action",
+        "dice": 3,
+        "defense": "fortitude",
+        "unopposed": false,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Scatter",
+        "text": "After Burst resolves, move each successfully affected creature 1 unit directly away from the Sphere center if that space is legal.",
+        "kind": "triggered",
+        "dice": null,
+        "defense": "",
+        "unopposed": false,
+        "frequency": "betweenRecoveries",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      }
+    ],
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ],
+    "gmNotes": "<p><strong>Role use.</strong> Discourage clustering and create a reason to spread out. Do not combine several Blasters unless the battlefield gives players enough room to respond.</p><p class=\"muted\">Starting Enemy Example (Essence v0.6, Part XIV). Playtest reference; change its fictional presentation freely.</p>"
+  },
+  "items": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!e0df4308c0e356a9"
+}

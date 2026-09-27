@@ -1189,6 +1189,46 @@ function manifestationProfileToActor(profile) {
   };
 }
 
+/**
+ * The ten Starting Enemy Examples (Doc L7187-L7375, 0.11.0), authored in
+ * scripts/enemy-examples-data.json and compiled into the "enemies" Actor pack. Each is an `npc`
+ * actor on the reduced engine (Mooks and Normals) or the full one (Elites), with printed Defenses
+ * and structured Abilities; Wound capacity comes from the Grade budget (2 / 4 / 5). No Basic
+ * attacks or Defend are attached (Doc L6868).
+ */
+function enemyExampleToActor(e) {
+  const _id = stableId(`enemy-example:${e.name}`).slice(0, 16);
+  const abilities = e.abilities.map((a) => ({
+    name: a.name, text: a.text, kind: a.kind ?? "action", dice: a.dice ?? null, defense: a.defense ?? "",
+    unopposed: !!a.unopposed, frequency: a.frequency ?? "atWill", usesMax: 1, usesRemaining: 1, usedThisRound: false
+  }));
+  return {
+    _id,
+    name: e.name,
+    type: "npc",
+    img: "icons/svg/mystery-man.svg",
+    system: {
+      grade: e.grade,
+      battlefieldRole: e.role,
+      eliteType: e.eliteType ?? "",
+      resilience: e.resilience,
+      movement: e.movement,
+      temporaryWoundsAvailable: 0,
+      taskDice: e.taskDice ?? null,
+      rollLimit: e.rollLimit ?? null,
+      reactionsPerRound: e.reactionsPerRound ?? null,
+      printedDefenses: { fortitude: e.fortitude, composure: e.composure, harmony: e.harmony },
+      abilities,
+      coreWounds: Array.from({ length: e.wounds }, () => ({ filled: false, domain: "", severity: "", condition: "" })),
+      gmNotes: `<p><strong>Role use.</strong> ${e.roleUse}</p><p class="muted">Starting Enemy Example (Essence v0.6, Part XIV). Playtest reference; change its fictional presentation freely.</p>`
+    },
+    items: [],
+    folder: null,
+    flags: {},
+    ownership: { default: 0 }
+  };
+}
+
 function combatStyleToJournal(cs) {
   const list = (items) => `<ul>${items.map((i) => `<li>${i}</li>`).join("")}</ul>`;
   const content = `
@@ -1390,6 +1430,12 @@ async function main() {
     styleCount = combatStyles.length;
   }
 
+  if (wants("enemies")) {
+    const data = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "enemy-examples-data.json"), "utf8"));
+    for (const e of data.enemies) writeSourceDoc("enemies", enemyExampleToActor(e), "actors");
+    console.log(`Source docs written: ${data.enemies.length} enemy examples.`);
+  }
+
   if (wants("manifestations")) {
     const profiles = JSON.parse(fs.readFileSync(path.join(ROOT, "scripts", "calling-profiles-data.json"), "utf8"));
     for (const p of profiles) writeSourceDoc("manifestations", manifestationProfileToActor(p), "actors");
@@ -1408,7 +1454,7 @@ async function main() {
     "action-cards": "Item", "reaction-cards": "Item", conditions: "Item", equipment: "Item",
     species: "Item", heritages: "Item", distinctions: "Item",
     "combat-styles": "JournalEntry", guide: "JournalEntry",
-    manifestations: "Actor"
+    manifestations: "Actor", enemies: "Actor"
   };
   for (const [packName, type] of Object.entries(packTypes)) {
     if (!wants(packName)) continue;

@@ -1,0 +1,94 @@
+{
+  "_id": "e9448a95ecdd1f63",
+  "name": "Normal Defender",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "grade": "Normal",
+    "battlefieldRole": "Defender",
+    "eliteType": "",
+    "resilience": 2,
+    "movement": 8,
+    "temporaryWoundsAvailable": 0,
+    "taskDice": 5,
+    "rollLimit": null,
+    "reactionsPerRound": null,
+    "printedDefenses": {
+      "fortitude": 7,
+      "composure": 5,
+      "harmony": 5
+    },
+    "abilities": [
+      {
+        "name": "Hold the Line",
+        "text": "Range 1; vs. Fortitude. On success, deal 1 Physical Bludgeoning Damage and move the target 1 unit. Surge 1: the target becomes Exposed until the end of its next Turn.",
+        "kind": "action",
+        "dice": 2,
+        "defense": "fortitude",
+        "unopposed": false,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Interpose",
+        "text": "Trigger: an adjacent ally is targeted by a physically obstructable attack. Roll 2d10, unopposed. The ally gains +1 Fortitude against the triggering attack; after resolution you may exchange spaces with that ally if both can legally occupy the new spaces.",
+        "kind": "reaction",
+        "dice": 2,
+        "defense": "",
+        "unopposed": true,
+        "frequency": "atWill",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      },
+      {
+        "name": "Brace",
+        "text": "At the start of your Turn, increase Resilience by 2 until the start of your next Turn.",
+        "kind": "triggered",
+        "dice": null,
+        "defense": "",
+        "unopposed": false,
+        "frequency": "betweenRecoveries",
+        "usesMax": 1,
+        "usesRemaining": 1,
+        "usedThisRound": false
+      }
+    ],
+    "coreWounds": [
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      },
+      {
+        "filled": false,
+        "domain": "",
+        "severity": "",
+        "condition": ""
+      }
+    ],
+    "gmNotes": "<p><strong>Role use.</strong> Place the Defender where players can choose whether to break through, go around, attack another Defense, or force the Defender away from the objective.</p><p class=\"muted\">Starting Enemy Example (Essence v0.6, Part XIV). Playtest reference; change its fictional presentation freely.</p>"
+  },
+  "items": [],
+  "folder": null,
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!actors!e9448a95ecdd1f63"
+}
