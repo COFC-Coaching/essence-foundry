@@ -3399,3 +3399,73 @@ rework (3.6 to 3.8), Recovery's Wound picker (3.13) and Concentration (3.15).
   "flat" covers in the Neon data). Recorded in the plan.
 - **Verification:** `npm test` (rules 116, migration 59); templates balanced; lang keys resolve.
   Not live-tested; checks 88-95 in `design/live-test-pending.md`.
+
+### 2026-09-27 -- Live test of 0.8.1 through 0.13.5
+
+Run on Foundry v14 (Build 367) in the `essence-test` world, driven from a local Claude Code
+session through the desktop app's built-in browser (page scripts against `game`, the real sheet
+buttons and DialogV2 prompts; no Playwright install was needed). The system folder under
+`AppData/Local/FoundryVTT/Data/systems/essence-system` was backed up (`essence-system.bak-0.8.0-
+2026-09-27` beside `Data/`) and mirrored from the branch with robocopy; Foundry was closed and
+relaunched with `world: essence-test` in `options.json` (restored to the campaign world
+afterwards). The wiki patch was applied and pushed (`essence-foundry.wiki` 4b13d69) and
+`design/wiki/` removed. Each fix below was copied into the running system and rerun before commit.
+
+**Setup notes.** A force-killed Electron leaves `Config/options.json.lock`; the next launch dies
+with "already locked by another process" until the folder is removed. Two clients logged in as the
+same GM user (the Foundry window and the test browser) both run Combat turn events, so start-of-
+Turn chat lines post twice and the second Dazed delete throws `does not exist in the
+EmbeddedCollection`; that is the environment, not the system. Sheets open Locked: array rows
+(Connections, Non-Combat Skills) and header fields only save after Unlock, which is by design.
+
+**Fixed (five 0.13.x releases on the branch).**
+- 0.13.1 (check 28): every Character sheet threw `Cannot access 'system' before initialization`
+  in `_prepareContext` (the Prepare Action lines from 0.10.0 read `system` before its `const`).
+- 0.13.2 (35, 38): an Unopposed play printed a Success Die and Defense it did not use; the
+  enemy sheet never printed its Wound state and the pip toggle did not apply the unconscious
+  status the way Apply Damage and Recover Wound do.
+- 0.13.3 (18): `laterAcquisitionText` still looked for "If acquired later:" after 0.13.0 reworded
+  every Distinction to "If this Distinction is acquired later,".
+- 0.13.4 (54): the edit lock disabled the "Show Attributes, Styles, cards and Pools" checkbox.
+- 0.13.5 (85): Grant Recovery's "nothing to recover" exit ignored the Manifestation Wound track
+  and the Death Track step, so a Broken caller with full Resources stayed Broken.
+
+**Passed** (after the fixes above where named): 1-16, 17 (compendium half), 18-52, 54, 56-88,
+90-95. Check 8 rolled Attribute + 5; 11 rolled the Attribute alone; 29 listed the character first
+on a tie; 31 formed the Reaction Pool as base + unused unreserved dice; 36 walked the Death Track
+to step 5 and applied Foundry's dead status; 45 filled Physical/Light, Mental/Light,
+Mental/Serious with Wound Cards on slots 0-2; 60-67 ran the reduced engine end to end; 84
+collapsed the Beast, attached Unmoored Essence and listed the 2 Psychic still to resolve.
+
+**Failed and left for Shane.**
+- 89: the Damage-type picker works and records "Fire" on the Trait, but nothing writes it into
+  Resistances. No Species Trait sub-choice feeds a mechanical field (Keen does not feed Senses
+  either); they only suffix the General Features text. Needs a decision on where sub-choices
+  should land before adding a mechanism.
+
+**Blocked.**
+- 17 (second half): no character in the test world owns a legacy Dilettante; a hand-made item does
+  not reproduce imported data.
+- 53: superseded by 0.12.0's collapse rule (checked as 84 instead of the old overflow count).
+
+**Checks whose wording disagrees with the build (checks left as written).**
+- 46: the "same setup" (Resilience 2) gives 0 Wounds from 2 Psychic; the unit test that models
+  Doc L3918 uses Resilience 0, and at Resilience 0 the sheet gives the two Mental Wounds.
+- 52: Grant Recovery also reduced the Death Track by 1 (the dialog says it does); the step is
+  not "unchanged" when it started above 0.
+- 55: the Elite header shows Task Dice beside Roll Limit by design; Mook Skirmisher's pack entry
+  stores Task Dice 4 rather than blank.
+- 44: Aegis (an Equipment Card printed as a REACTION) burned 2 Action dice, not Reaction dice.
+- 71: Threads render as one chip per Thread ("Fire ✕" twice); the summary line reads "Fire ×2".
+- 87: the Rank 2 form's own cards print min 3, so the raise from 2 to 3 was only visible as the
+  "Native minimum for a Rank 2 form: 3 dice" line.
+
+**Data observations (no code changed).** The 12 weapon and shield Chassis in the equipment pack
+store `compatibleFittingCategory: "Grip"` although the label is now Handling. Card `system.skill`
+values mix cases ("Ballistics" and "ballistics", "Prowess" and "prowess"). Fence's Cache is one
+text block, not two paragraphs. The world's first "Caelon Voss" copy carries a two-space Core
+Wound track from earlier hand edits, so it goes Dying at two Wounds.
+
+**Console.** No error whose stack names `systems/essence-system` at any point after 0.13.1. The
+only warnings were Foundry's own screen-size notices and the duplicate-GM artifact above.
+`design/live-test-pending.md` and `design/live-test-runbook.md` stay until 89 is decided.
