@@ -491,6 +491,8 @@
   "ESSENCE.Chat.Success": "Success",
   "ESSENCE.Chat.Failure": "Failure",
   "ESSENCE.Chat.SuccessDie": "Success Die",
+  "ESSENCE.Chat.Unopposed": "Unopposed",
+  "ESSENCE.Chat.UnopposedNote": "auto-success; no Success Die reserved, every 6+ is a Surge",
   "ESSENCE.Chat.Mastery": "Mastery",
   "ESSENCE.Chat.FreeSurge": "+{n} free Surge",
   "ESSENCE.Chat.Surges": "Surges",

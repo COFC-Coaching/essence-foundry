@@ -190,6 +190,7 @@
     <span class="pip-track">
       {{#each system.coreWounds as |w i|}}<button type="button" class="pip toggle {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" {{#unless ../system.usesSimplifiedWounds}}title="{{w.condition}}"{{/unless}} aria-pressed="{{w.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreWoundAria' n=(addOne i)}}{{#if w.condition}}: {{w.condition}}{{/if}}"></button>{{/each}}
     </span>
+    {{#if system.woundState}}<span class="muted wound-state">— {{system.woundState}}</span>{{/if}}
   </div>
   <div class="wound-block">
     <button type="button" data-action="applyDamage">{{localize "ESSENCE.Sheet.ApplyDamage"}}</button>

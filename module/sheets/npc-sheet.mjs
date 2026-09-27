@@ -816,7 +816,14 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     coreWounds[i].filled = !coreWounds[i].filled;
     if (!coreWounds[i].filled) { coreWounds[i].domain = ""; coreWounds[i].severity = ""; coreWounds[i].condition = ""; }
     const filled = coreWounds.slice(0, capacity).filter((w) => w.filled).length;
-    await this.actor.update({ "system.coreWounds": coreWounds, "system.playState.currentCoreWounds": filled });
+    const wasDefeated = this.actor.system.coreWoundsFilled >= capacity;
+    const nowDefeated = filled >= capacity;
+    const update = { "system.coreWounds": coreWounds, "system.playState.currentCoreWounds": filled };
+    // Same status handling as #onApplyDamage and #onRecoverWound (Doc L4062, L4117): a Defeated
+    // simplified enemy is unconscious; opening a space clears that and any stabilized state.
+    if (wasDefeated && !nowDefeated && this.actor.system.playState.deathTrackState === "stabilized") update["system.playState.deathTrackState"] = "none";
+    await this.actor.update(update);
+    if (this.actor.system.usesSimplifiedWounds && wasDefeated !== nowDefeated) await this.actor.setUnconscious(nowDefeated);
   }
 
   static async #onToggleDeathTrack(event, target) {

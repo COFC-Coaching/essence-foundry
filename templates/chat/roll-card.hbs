@@ -35,7 +35,10 @@
           {{/each}}
         </tbody>
       </table>
-      <p class="muted">{{localize "ESSENCE.Chat.SuccessDie"}}: {{successDie}}</p>
+      {{#unless unopposed}}<p class="muted">{{localize "ESSENCE.Chat.SuccessDie"}}: {{successDie}}</p>{{/unless}}
+    {{else if unopposed}}
+      {{!-- V6 §5.2.3: an Unopposed card auto-succeeds; no die is reserved as the Success Die and every 6+ is a Surge. --}}
+      <p><strong>{{localize "ESSENCE.Chat.Unopposed"}}</strong> — <span class="pass">{{localize "ESSENCE.Chat.UnopposedNote"}}</span></p>
     {{else}}
       <p><strong>{{localize "ESSENCE.Chat.SuccessDie"}}:</strong> {{successDie}} —
         {{#if succeeded}}<span class="pass">{{localize "ESSENCE.Chat.Success"}}</span>{{else}}<span class="fail">{{localize "ESSENCE.Chat.Failure"}}</span>{{/if}}

@@ -2,6 +2,10 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.13.2
+
+**Live-test fixes (checks 35 and 38).** An Unopposed play (helpless target, or a card that is unopposed by nature) now says so on the chat card instead of printing a Success Die and a Defense it did not use; the dice and Surge count were already right. The NPC and Monster sheet prints the Wound state (Defeated, Defeated (stable)) beside the Wound Capacity pips, and filling or clearing the last pip by hand applies or removes Foundry's unconscious status the same way Apply Damage and Recover Wound already did.
+
 ## 0.13.1
 
 **Live-test fix (check 28).** Character sheets threw "Cannot access 'system' before initialization" on open: the Prepare Action context lines added in 0.10.0 read `system` two lines before it was declared. Every Character sheet failed to render since 0.10.0; NPC, Monster, Team and Manifestation sheets were unaffected.
