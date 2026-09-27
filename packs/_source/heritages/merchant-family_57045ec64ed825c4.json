@@ -4,10 +4,10 @@
   "type": "heritage",
   "img": "icons/svg/house.svg",
   "system": {
-    "description": "Raised around shops, caravans, counting houses, warehouses, or family ventures in which every possession had a cost and every relationship had practical value.",
+    "description": "You were raised around shops, caravans, counting houses, warehouses, or family ventures in which every possession had a cost and every relationship had practical value.",
     "legacy": {
       "name": "Family Ledger",
-      "text": "At the beginning of each adventure, gain 1 Temporary Influence, up to your normal maximum. Any Temporary Influence granted by this Legacy that remains at the end of the adventure is lost."
+      "text": "At the beginning of each Adventure, gain 1 Temporary Influence. Temporary Influence granted by this Legacy that remains when the Adventure ends is lost."
     },
     "familiarity": {
       "name": "Commercial Networks",

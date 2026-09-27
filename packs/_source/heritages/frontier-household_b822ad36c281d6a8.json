@@ -4,7 +4,7 @@
   "type": "heritage",
   "img": "icons/svg/house.svg",
   "system": {
-    "description": "Grew up in an isolated settlement, border territory, remote colony, or community that could not depend upon immediate aid from outside.",
+    "description": "You grew up in an isolated settlement, border territory, remote colony, or community that could not depend upon immediate aid from outside.",
     "legacy": {
       "name": "Prepared Cache",
       "text": "You may reveal that you previously packed, purchased, or concealed one ordinary non-combat item appropriate to the current environment. It must be something your character could reasonably obtain through the Team's ordinary access and the character's actual circumstances and cannot be a Weapon, Armor, Guard, Implement, Consumable Kit, or other significant Combat equipment. The item becomes Temporary Equipment. The first use each Adventure is free. Each additional use creates 1 ordinary Influence pressure."

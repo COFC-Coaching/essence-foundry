@@ -14,7 +14,7 @@ export const EQUIPMENT_CATEGORY_LABELS = {
   weapon: "Melee Weapon",
   ranged: "Ranged Weapon",
   armor: "Armor",
-  shield: "Shield",
+  shield: "Guard", // v0.6 Doc L1401: the printed category is "Guard item"; the `shield` value stays
   implement: "Implement",
   toolkit: "Toolkit",
   "consumable-kit": "Consumable Kit",

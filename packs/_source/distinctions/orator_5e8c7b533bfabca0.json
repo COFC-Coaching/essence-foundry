@@ -4,16 +4,16 @@
   "type": "distinction",
   "img": "icons/svg/star.svg",
   "system": {
-    "description": "Battlefield commanders, officers, champions, performers, and leaders whose presence changes how others fight. They issue orders, provoke enemies, raise standards, and lead through personal action.",
+    "description": "Orators are battlefield commanders, officers, champions, performers, and leaders whose presence changes how others fight. They issue orders, provoke enemies, raise standards, protect allies, and lead through personal action. Orators are rarely removed from the fighting. They place themselves where their direction and example have the greatest effect.",
     "keyCombatSkill": "Leadership",
     "primaryAttr": "Presence",
     "unlocks": "",
-    "benefit": "Gain one additional Leadership Expertise and two additional Leadership Action Cards. If acquired later: instead increase Leadership to a minimum of 2 pips, then gain one additional Leadership Expertise and four additional Leadership Action Cards.",
+    "benefit": "Gain one additional Leadership Expertise and two additional Leadership Combat Cards. If this Distinction is acquired later, instead increase Leadership to a minimum of Rank 2, then gain one additional Leadership Expertise and four additional Leadership Combat Cards.",
     "creationExpertiseBonus": 1,
     "creationActionCardBonus": 2,
     "origin": {
       "name": "Commanding Authority",
-      "text": "Whenever you would store Authority, you may choose up to two results rolled for that Leadership action and store both. When you spend that Authority, choose which stored result is used, then discard both."
+      "text": "Each occupied Leadership card can hold up to two Authority results. After resolving a Leadership Action, you may store up to two results from separate dice actually rolled for it on that Action's card. Keep or individually replace existing results, without exceeding two. Each rolled die supplies at most one stored result. The card occupies one Authority capacity slot. Spending one result leaves the other available, and neither can be transferred to another card. You still cannot substitute more than one Authority result per Action or Reaction."
     }
   },
   "effects": [],

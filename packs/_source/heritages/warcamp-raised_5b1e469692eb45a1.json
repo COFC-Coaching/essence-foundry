@@ -4,14 +4,14 @@
   "type": "heritage",
   "img": "icons/svg/house.svg",
   "system": {
-    "description": "Raised among soldiers, camp followers, quartermasters, healers, and families that traveled with an army or lived around a permanent garrison.",
+    "description": "You were raised among soldiers, camp followers, quartermasters, healers, and the families that traveled with an army or lived around a permanent garrison.",
     "legacy": {
       "name": "Quartermaster's Due",
       "text": "During Character Creation, gain one Chassis and one compatible Fitting, each up to 1 Tier above the Team's normal procurement Tier, to a maximum of Tier 5. In a Tier 1 Team, you can choose a Tier 2 Chassis and Tier 2 Fitting. The assembled item occupies Armory and Inventory capacity normally."
     },
     "familiarity": {
       "name": "Camp Discipline",
-      "text": "You recognize common military ranks, unit markings, signals, supply arrangements, watch rotations, and camp layouts. You can move through an organized military position without disrupting operations and know how to approach the proper person for supplies, information, or an audience. This grants no military rank or authority."
+      "text": "You recognize common military ranks, unit markings, signals, supply arrangements, watch rotations, and camp layouts. You know how to move through an organized military position without disrupting its operations and how to approach the appropriate person when requesting supplies, information, or an audience. This grants no military rank or authority."
     }
   },
   "folder": null,

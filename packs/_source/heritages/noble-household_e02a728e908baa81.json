@@ -4,14 +4,14 @@
   "type": "heritage",
   "img": "icons/svg/house.svg",
   "system": {
-    "description": "Born or raised within a titled family, political dynasty, landed household, or another lineage whose name carries recognized social weight.",
+    "description": "You were born or raised within a titled family, political dynasty, landed household, or another lineage whose name carries recognized social weight.",
     "legacy": {
       "name": "Letters of Standing",
       "text": "You may invoke your family name when dealing with an established institution such as a merchant guild, government office, temple, academy, or military command. For the current Encounter, treat your Reach as 1 higher and gain 1 Temporary Influence that can only be used during that Encounter. The first use each Adventure is free. Each additional use creates 1 ordinary Influence pressure."
     },
     "familiarity": {
       "name": "Unspoken Precedence",
-      "text": "You understand formal etiquette, inheritance, favors, veiled insults, and the difference between official title and practical authority. In elite gatherings you can recognize who holds informal influence and when an apparently polite gesture carries political meaning."
+      "text": "You understand formal etiquette, inheritance, favors, veiled insults, and the difference between official title and practical authority. In elite gatherings, you can recognize who holds informal influence and when an apparently polite gesture carries political meaning."
     }
   },
   "folder": null,

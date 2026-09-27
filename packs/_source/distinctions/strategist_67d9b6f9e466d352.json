@@ -4,16 +4,16 @@
   "type": "distinction",
   "img": "icons/svg/star.svg",
   "system": {
-    "description": "Problem-solvers, infiltrators, engineers, field medics, tacticians, and manipulators who win by understanding what is likely to happen before it occurs.",
+    "description": "Strategists are problem-solvers, infiltrators, engineers, field medics, tacticians, and manipulators who win by understanding what is likely to happen before it occurs. Their advantage comes from preparing responses, limiting enemy choices, and turning predictable behavior into exploitable openings.",
     "keyCombatSkill": "Cunning",
     "primaryAttr": "Intellect",
     "unlocks": "",
-    "benefit": "Gain one additional Cunning Expertise and two additional Cunning Action Cards. If acquired later: instead increase Cunning to a minimum of 2 pips, then gain one additional Cunning Expertise and four additional Cunning Action Cards.",
+    "benefit": "Gain one additional Cunning Expertise and two additional Cunning Combat Cards. If this Distinction is acquired later, instead increase Cunning to a minimum of Rank 2, then gain one additional Cunning Expertise and four additional Cunning Combat Cards.",
     "creationExpertiseBonus": 1,
     "creationActionCardBonus": 2,
     "origin": {
       "name": "Branching Plans",
-      "text": "You may establish a second Contingency each round. You may still trigger only one Contingency per round."
+      "text": "You may establish a second Contingency each round. You may still trigger only one Contingency per round unless another rule says otherwise."
     }
   },
   "effects": [],

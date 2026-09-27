@@ -4,10 +4,10 @@
   "type": "species",
   "img": "icons/svg/wing.svg",
   "system": {
-    "description": "Artificial peoples created through machinery, magic, alchemy, or craftsmanship. Bodies may be metal, stone, wood, ceramic, crystal, synthetic flesh, or other designed materials. The chosen Module may be replaced during significant downtime.",
+    "description": "Constructs are artificial peoples created through machinery, magic, alchemy, craftsmanship, or some combination of those methods. Their bodies may be made from metal, stone, wood, ceramic, crystal, synthetic flesh, or other designed materials.",
     "nature": {
       "name": "Artificial Nature",
-      "text": "You do not need to breathe or eat and do not sleep in the ordinary manner. Ordinary biological diseases and poisons do not affect you, though you must still rest and recover normally."
+      "text": "You do not need to breathe or eat and do not sleep in the ordinary manner. Ordinary biological diseases and poisons do not affect you, though you must still rest and recover normally. Choose one Construct Species Trait. You may replace your chosen Species Trait during significant Downtime, representing modification or reconstruction of your body."
     },
     "traitLabel": "Construct Module",
     "traitCount": 1,
@@ -28,7 +28,7 @@
       },
       {
         "name": "Anchor Mode",
-        "text": "At the end of your turn, you may anchor yourself to a stable surface. While anchored, your Movement is 0 and involuntary movement against you is reduced to 0. You may release the anchor at the start of your turn.",
+        "text": "At the end of your Turn, you may anchor yourself to a stable surface. While anchored, your Movement is 0; you cannot voluntarily leave your space or gain voluntary extra Movement, including through Dash or other granted movement, unless an effect explicitly bypasses the anchor. Involuntary movement against you is reduced to 0. You may release the anchor at the start of your Turn.",
         "chosen": false
       },
       {
@@ -55,7 +55,7 @@
       },
       {
         "name": "Redundant Systems",
-        "text": "The first time each adventure a Wound Condition or other effect would disable one of your limbs, Senses, or Movement modes, that function remains available until the end of the current scene.",
+        "text": "The first time each Adventure a Wound Condition or other effect would disable one of your limbs, Senses, or Movement modes, that function remains available for one minute (six Rounds).",
         "chosen": false
       },
       {
@@ -65,7 +65,7 @@
       },
       {
         "name": "Sensor Suite",
-        "text": "Choose two special Senses (low-light vision, keen hearing, heat perception, vibration sense, or another narrow Sense approved by the GM). Within 2 units, creatures and objects cannot remain Hidden from you when one of those Senses could reasonably detect them.",
+        "text": "Choose two: Low-Light Vision, Keen Hearing, Heat Perception, Vibration Sense, or a fully defined narrow Sense appropriate to the Campaign. Use Senses and Detection above. Within 2 units, creatures and objects cannot remain Hidden from you when a chosen Sense can detect them under its stated conditions; its blockers still apply.",
         "chosen": false,
         "subChoice": {
           "label": "Senses",
@@ -82,7 +82,7 @@
       },
       {
         "name": "Utility Limb",
-        "text": "You possess an additional arm, tool mount, cable, or similar mechanism. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Inventory Limit, and the limb does not grant additional Actions.",
+        "text": "You possess an additional arm, tool mount, cable, or similar mechanism. It may hold and use one small item that can be used with one hand, other than a weapon or Guard. The item itself occupies equipment capacity normally. The limb does not grant additional Actions.",
         "chosen": false
       }
     ],

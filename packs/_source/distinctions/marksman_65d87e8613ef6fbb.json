@@ -4,16 +4,16 @@
   "type": "distinction",
   "img": "icons/svg/star.svg",
   "system": {
-    "description": "Combatants who project force accurately across the battlefield — archers, snipers, gunslingers, siege specialists, and anyone who relies on distance, precision, and careful target selection.",
+    "description": "Marksmen project force accurately across the battlefield. They may be archers, snipers, gunslingers, siege specialists, or other combatants who rely on distance, precision, and deliberate target selection.",
     "keyCombatSkill": "Ballistics",
     "primaryAttr": "Grace",
     "unlocks": "",
-    "benefit": "Gain one additional Ballistics Expertise and two additional Ballistics Action Cards. If acquired later: instead increase Ballistics to a minimum of 2 pips, then gain one additional Ballistics Expertise and four additional Ballistics Action Cards.",
+    "benefit": "Gain one additional Ballistics Expertise and two additional Ballistics Combat Cards. If this Distinction is acquired later, instead increase Ballistics to a minimum of Rank 2, then gain one additional Ballistics Expertise and four additional Ballistics Combat Cards.",
     "creationExpertiseBonus": 1,
     "creationActionCardBonus": 2,
     "origin": {
       "name": "Split Focus",
-      "text": "You may maintain two Locks at once. If you would establish a Lock on a third creature, choose which existing Lock ends."
+      "text": "You may maintain two Locks at once. If you would establish Lock on a third creature, choose which existing Lock ends."
     }
   },
   "effects": [],

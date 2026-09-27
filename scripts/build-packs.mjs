@@ -83,7 +83,7 @@ const WOUND_CARDS = [
     activeEffects: [{ label: "Debilitated Body: Movement -2", key: "system.movementBonus", mode: AE_ADD, value: -2 }] },
   { domain: "Physical", severity: "Critical", name: "Catastrophic Injury",
     effect: "Halve Movement, rounded up. Physical Actions and Reactions require 1 additional burned die.",
-    recovery: "Stabilize: end ongoing harm and provide appropriate medical treatment or equivalent supernatural aid. Recovery: extended safe treatment appropriate to the injury, or qualifying Critical healing. Exact duration remains to be finalized.",
+    recovery: "Stabilize: end ongoing harm and provide appropriate medical treatment or equivalent supernatural aid. Recovery (Critical Recovery, Playtest): four weeks of appropriate extended care during Downtime, that is twenty-eight qualifying days of safe rest plus the treatment, support, or spiritual care this Wound requires. Count elapsed days, not focused Downtime activity days; begin once immediate danger is controlled and the care is available. An interruption pauses progress without erasing completed days. At completion, clear this Wound and its effects and reset Death Track progress normally; lower-severity Wounds need not clear first. Qualifying active Critical healing can remove it sooner.",
     activeEffects: [] },
   { domain: "Mental", severity: "Light", name: "Disrupted Mind",
     effect: "-1 Composure.",
@@ -95,7 +95,7 @@ const WOUND_CARDS = [
     activeEffects: [{ label: "Cognitive Trauma: Composure -1", key: "system.composureBonus", mode: AE_ADD, value: -1 }] },
   { domain: "Mental", severity: "Critical", name: "Fractured Consciousness",
     effect: "-2 Composure. Mental Actions and Reactions require 1 additional burned die.",
-    recovery: "Stabilize: contain the ongoing cognitive or psychic cause and provide appropriate professional, relational, technological, or supernatural support. Recovery: extended safe treatment appropriate to the injury, or qualifying Critical healing. Exact duration remains to be finalized.",
+    recovery: "Stabilize: contain the ongoing cognitive or psychic cause and provide appropriate professional, relational, technological, or supernatural support. Recovery (Critical Recovery, Playtest): four weeks of appropriate extended care during Downtime, that is twenty-eight qualifying days of safe rest plus the treatment, support, or spiritual care this Wound requires. Count elapsed days, not focused Downtime activity days; begin once immediate danger is controlled and the care is available. An interruption pauses progress without erasing completed days. At completion, clear this Wound and its effects and reset Death Track progress normally; lower-severity Wounds need not clear first. Qualifying active Critical healing can remove it sooner.",
     activeEffects: [{ label: "Fractured Consciousness: Composure -2", key: "system.composureBonus", mode: AE_ADD, value: -2 }] },
   { domain: "Spiritual", severity: "Light", name: "Unmoored Essence",
     effect: "-1 Harmony.",
@@ -107,7 +107,7 @@ const WOUND_CARDS = [
     activeEffects: [{ label: "Spiritual Trauma: Harmony -1", key: "system.harmonyBonus", mode: AE_ADD, value: -1 }] },
   { domain: "Spiritual", severity: "Critical", name: "Severed Essence",
     effect: "-2 Harmony. Spiritual Actions and Reactions require 1 additional burned die.",
-    recovery: "Stabilize: contain the ongoing spiritual cause and establish an appropriate anchor through a person, rite, vessel, place, or equivalent method. Recovery: extended safe treatment appropriate to the injury, or qualifying Critical healing. Exact duration remains to be finalized.",
+    recovery: "Stabilize: contain the ongoing spiritual cause and establish an appropriate anchor through a person, rite, vessel, place, or equivalent method. Recovery (Critical Recovery, Playtest): four weeks of appropriate extended care during Downtime, that is twenty-eight qualifying days of safe rest plus the treatment, support, or spiritual care this Wound requires. Count elapsed days, not focused Downtime activity days; begin once immediate danger is controlled and the care is available. An interruption pauses progress without erasing completed days. At completion, clear this Wound and its effects and reset Death Track progress normally; lower-severity Wounds need not clear first. Qualifying active Critical healing can remove it sooner.",
     activeEffects: [{ label: "Severed Essence: Harmony -2", key: "system.harmonyBonus", mode: AE_ADD, value: -2 }] }
 ];
 
@@ -424,7 +424,7 @@ const COMPONENT_CATEGORY_FOLDERS = [
   ["weapon", "Melee Weapon"],
   ["ranged", "Ranged Weapon"],
   ["armor", "Armor"],
-  ["shield", "Shield"],
+  ["shield", "Guard"], // v0.6 Doc L1401: "Guard item"
   ["implement", "Implement"]
 ];
 const AUGMENT_KIND_FOLDERS = [["function", "Function"], ["support", "Support"]];
@@ -615,7 +615,9 @@ const BASIC_CARDS = [
     body: [
       { label: "Effect", html: "Burn 2 Action dice. Attempt one ordinary task that can reasonably be performed in a brief action, such as operating a reachable mechanism, opening a lock with suitable tools, or making one step of a repair. You must have the necessary access, tools, and capability. A routine feasible task succeeds without a roll. For meaningful uncertainty, the GM states the Difficulty, result, and foreseeable consequences before you commit." },
       { label: "Effect", html: "If a roll is needed, roll the full relevant Attribute + Non-Combat Skill, or Attribute + 5 for a directly applicable Key Aspect, at the normal card-roll step. This task roll does not consume further Action dice or use a Combat Style maximum. Use the normal Non-Combat success rules; it generates no Surges. Resolve legal Reactions before applying the task result. The two burned Action dice remain spent even if the attempt fails or is interrupted." },
-      { label: "Effect", html: "Use Perform Task for meaningful handling of ordinary objects. Ready, recover, stow, swap, or hand over combat equipment with Reconfigure instead. Perform Task cannot replace an attack, Reconfigure, Stabilize, or another defined Action to bypass its costs or requirements. Outside Combat, use the normal task procedure without an Action Pool cost." }
+      { label: "Effect", html: "Use Perform Task for meaningful handling of ordinary objects. Ready, recover, stow, swap, or hand over combat equipment with Reconfigure instead. Perform Task cannot replace an attack, Reconfigure, Stabilize, or another defined Action to bypass its costs or requirements. Outside Combat, use the normal task procedure without an Action Pool cost." },
+      // Doc L4303-L4305 and Appendix D (L8015): Help is an option of Perform Task, not a card.
+      { label: "Help", html: "Use Perform Task to prepare meaningful assistance for another ally's specified task. Pay Perform Task's normal cost; you make no roll. The ally gains 1 free die on its next roll for that task before the start of your next Turn, provided your assistance is still available when it rolls. Each helper can contribute only once to that roll. When everyone must succeed independently, each makes their own attempt and cannot use Help. Assistance never adds dice to attacks, Defend, or other Combat rolls without explicit permission. Help is an Action on the helper's Turn. Outside Combat, use Cooperation without an Action Pool cost." }
     ],
     surges: [] }
 ];

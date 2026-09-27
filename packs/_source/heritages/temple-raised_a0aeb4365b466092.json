@@ -4,10 +4,10 @@
   "type": "heritage",
   "img": "icons/svg/house.svg",
   "system": {
-    "description": "Raised within a temple, monastery, shrine, religious family, or institution whose doctrine and observances shaped daily life.",
+    "description": "You were raised within a temple, monastery, shrine, religious family, or institution whose doctrine and observances shaped daily life.",
     "legacy": {
       "name": "Sacred Trust",
-      "text": "The first time each adventure you would take Influence Damage, you may reduce that damage to 0. This protection does not prevent Influence Breach."
+      "text": "The first time each Adventure ordinary Influence pressure would pass through your Reach and remove Temporary Influence or mark Core Influence, reduce that pressure by 1. This protection does not prevent Influence Breach."
     },
     "familiarity": {
       "name": "Sacred Practice",

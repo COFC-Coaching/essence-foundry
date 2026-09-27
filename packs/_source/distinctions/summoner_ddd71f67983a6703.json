@@ -4,16 +4,16 @@
   "type": "distinction",
   "img": "icons/svg/star.svg",
   "system": {
-    "description": "Conduits who forge bonds with entities, forces, or powers beyond the material world. They channel bonds into healing and support, then allow a summoned entity to fully manifest.",
+    "description": "Summoners are conduits who forge bonds with extraordinary entities, forces, or powers whose nature and origin are established by the Campaign. They channel portions of those bonds through Calling Actions and may eventually allow a manifestation to fully enter the battlefield.",
     "keyCombatSkill": "Calling",
     "primaryAttr": "Anima",
     "unlocks": "calling",
-    "benefit": "Gain access to the Calling Combat Skill. If acquired later: gain access to Calling, gain 2 pips in it, then gain one additional Calling Expertise and two additional Calling Action Cards.",
+    "benefit": "Gain access to the Calling Combat Style. If this Distinction is acquired later, gain access to Calling, increase it to Rank 2, then gain one additional Calling Expertise and two additional Calling Combat Cards.",
     "creationExpertiseBonus": 0,
     "creationActionCardBonus": 0,
     "origin": {
       "name": "Greater Manifestation",
-      "text": "Full Manifestations cost one fewer die than normal, to a minimum cost of 2 dice."
+      "text": "Reduce the additional burned-die cost of Full Manifestation by 1, to a minimum of 0. This does not reduce the normal dice commitment of the Calling Combat Card used to enter Full Manifestation."
     }
   },
   "effects": [],

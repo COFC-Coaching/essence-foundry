@@ -151,7 +151,7 @@ const TEMPLATES = {
     example: {
       name: "Edge Striker", category: "weapon", tier: "2", fortitude: "", resilience: "",
       movement: "", effect: "", passive: "", special: "", flavor: "", grantsEquipmentCard: "false",
-      compatibleFittingCategory: "Grip", mountCount: "2"
+      compatibleFittingCategory: "Handling", mountCount: "2"
     }
   },
   fitting: {

@@ -2,6 +2,34 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.13.0
+
+**Phase 6: content, guide and docs follow the v0.6 Doc.**
+
+**Species, Heritages and Distinctions.** Every Species intro, Nature, Species Trait, Heritage
+Legacy and Familiarity, and Distinction benefit now carries the Doc's Part IX wording. Planarborn
+gain Native Motion, Planar Sense and Resonant Step; Aegis of Origin picks one of the twelve Damage
+types. "Scene" durations are now Encounters or "one minute (six Rounds)"; Natural and Draconic
+Armament have Range 1 and a chosen Damage type; Prehensile Limb and its siblings hold a one-handed
+item; Tireless has its 24-hour and 6-hour numbers; Sacred Trust, Fence's Cache and Family Ledger
+read as printed. Athlete's Peak Performance, Gifted's Efficient Transformation, Psyker's
+Sacrificial Power, Orator's Commanding Authority and Summoner's Greater Manifestation match the
+rules the sheet now runs. Existing characters keep their chosen Traits; re-import a Species,
+Heritage or Distinction to pick up the new text.
+
+**Equipment terminology.** Melee and Guard Fittings are labelled "Handling" and the shield
+category "Guard" (the stored value is unchanged). The equipment compendium's Shield folders are
+now Guard.
+
+**Basic Cards.** Perform Task carries its Help option. Critical Wound Cards state the Critical
+Recovery playtest baseline: four weeks (twenty-eight qualifying days) of appropriate Downtime care.
+
+**Player & GM Guide.** Rewritten for v0.6: new pages for Attribute Benefits, Adventures &
+Downtime, Enemy Construction and Team Tier & Economic Scale; Setting Up NPCs, Grade Budgets
+(formerly Role Budget System), Running Combat, Wounds & Recovery, Combat, Combat Style Specialties
+and the whole Full Manifestation Guide brought up to date. The GitHub wiki gains a v0.6 Update
+Notes page covering the same ground.
+
 ## 0.12.0
 
 **Phase 5: Combat Styles follow Part X and Appendix E.**

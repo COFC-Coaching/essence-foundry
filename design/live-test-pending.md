@@ -271,3 +271,33 @@ build-history under a new dated heading; delete this file once everything below 
 87. Import Familiar from the compendium: five Wound pips (was three). Play a native Action card
     with min 2 on a Rank 2 form: the prompt's minimum reads 3 (native minimum); a Reaction's
     reads 2. Type Roll Limit 5 in the header: the advisory line names it.
+
+## 0.13.0: Content, guide, docs
+
+88. Species compendium: Planarborn lists seven Traits including Native Motion, Planar Sense and
+    Resonant Step; Aegis of Origin's sub-choice offers the twelve Damage types; Native Motion's
+    offers Climb 10 / Swim 10 / Controlled gliding. Mortal-Kin's Tireless mentions twenty-four
+    hours and six-hour blocks. No "scene" appears in any Trait text.
+89. Character Creation Wizard: pick Planarborn, then Aegis of Origin: the Damage-type picker
+    appears and the chosen type lands in the character's Resistances. Pick Keen (Mortal-Kin):
+    the two-sense picker still works.
+90. Distinctions compendium: Gifted's Origin Benefit reads "minimum of 0" and mentions Unstable;
+    Orator's reads two results per occupied card; Summoner's reads "additional burned-die cost
+    ... minimum of 0"; Athlete's reads "double your normal Movement allowance" on the first Turn.
+    Athlete still carries the Resilience +1 effect.
+91. Heritages compendium: Temple Raised's Sacred Trust reads "reduce that pressure by 1";
+    Underworld Raised's Fence's Cache has two paragraphs about the Cached Item.
+92. Conditions compendium: Catastrophic Injury, Fractured Consciousness and Severed Essence's
+    Natural Recovery mention four weeks / twenty-eight qualifying days. Action Cards: Perform
+    Task shows a Help section.
+93. Equipment compendium: the category folders read Guard (not Shield) at the top level and under
+    Chassis and Fitting. Open a melee Chassis: its fitting-category placeholder says Handling; an
+    assembled melee item's parts read "Striker" and "Handling". Create a Chassis with category
+    Guard from the Create Content wizard: it files into the Guard folder.
+94. Player & GM Guide journal: three entries with 9, 6 and 6 pages. "Attribute Benefits",
+    "Adventures & Downtime", "Enemy Construction" and "Team Tier & Economic Scale" exist; "Grade
+    Budgets" replaces "Role Budget System"; the Full Manifestation Guide's cost table shows six
+    Ranks and the profile table has no Wound Capacity column. Every table renders (no raw HTML).
+95. Wiki: https://github.com/COFC-Coaching/essence-foundry/wiki/V0.6-Update-Notes opens and is
+    linked from Home and the sidebar (if the push from the build session was refused, push the
+    prepared commit from a machine with wiki write access; see build-history).

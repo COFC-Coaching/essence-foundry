@@ -4,10 +4,10 @@
   "type": "species",
   "img": "icons/svg/wing.svg",
   "system": {
-    "description": "Sapient peoples whose defining physical qualities are drawn from animals — mammals, birds, reptiles, insects, or combinations. Choose an animal or group that informs appearance and traits.",
+    "description": "Beastfolk are sapient peoples whose defining physical qualities are drawn from animals. They may resemble mammals, birds, reptiles, insects, or combinations of several creatures. Choose an animal or related group of animals that informs your character's appearance and traits.",
     "nature": {
       "name": "Heightened Instincts",
-      "text": "Choose a narrow special Sense appropriate to your lineage (low-light vision, keen hearing, keen scent, heat perception, or vibration sense). Within 2 units, creatures and objects cannot remain Hidden from you when that Sense could reasonably detect them and no sealed barrier blocks it. You may also follow fresh trails using that Sense without specialized equipment.",
+      "text": "Choose Low-Light Vision, Keen Hearing, Keen Scent, Heat Perception, Vibration Sense, or a fully defined narrow Sense appropriate to your lineage. Use Senses and Detection above. Within 2 units, creatures and objects cannot remain Hidden from you when that Sense can detect them under its stated conditions. You can follow fresh trails when the Sense can perceive the traces; this does not create traces for a Sense that cannot detect them. Choose one Beastfolk Species Trait.",
       "subChoice": {
         "label": "Sense",
         "type": "fixed",
@@ -37,12 +37,12 @@
       },
       {
         "name": "Glider",
-        "text": "While falling, you may glide using your full Movement and may Dash normally. You cannot gain height through this Trait or remain airborne without descending.",
+        "text": "You may glide using the Gliding procedure in Combat Encounters: Movement, including normal use of Dash. This Trait does not allow you to gain height or hover.",
         "chosen": false
       },
       {
         "name": "Natural Armament",
-        "text": "Choose claws, horns, fangs, a tail, mandibles, or another natural weapon. It counts as a basic one-handed weapon, does not count against your Inventory Limit, and cannot be disarmed. You must leave one hand or equivalent limb free while using it.",
+        "text": "Choose claws, horns, fangs, a tail, mandibles, or another natural weapon. It otherwise counts as a basic one-handed weapon, does not consume Armory or Inventory capacity, and cannot be disarmed, but it uses the chosen anatomy rather than automatically requiring a free hand. Claws normally require the relevant hand or limb; horns or fangs require the head or mouth; a tail requires the tail. The required body part must be available when you attack with it. Its default Range is 1. When choosing the Trait, choose Bludgeoning, Piercing, or Slashing Damage appropriate to its anatomy with the GM. It uses Basic Melee Attack’s normal Damage and Surge option and grants no additional equipment properties or Mounts unless another rule provides them.",
         "chosen": false,
         "subChoice": {
           "label": "Natural Weapon",
@@ -60,7 +60,7 @@
       },
       {
         "name": "Prehensile Limb",
-        "text": "You possess a tail, trunk, secondary arm, or similar limb. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Inventory Limit, and the limb does not grant additional Actions.",
+        "text": "You possess a tail, trunk, secondary arm, or similar limb. It may hold and use one small item that can be used with one hand, other than a weapon or Guard. The item itself occupies equipment capacity normally. The limb does not grant additional Actions.",
         "chosen": false
       },
       {
@@ -70,12 +70,12 @@
       },
       {
         "name": "Shell or Hide",
-        "text": "Reduce involuntary movement against you by 1 unit. The first time each adventure an ordinary environmental hazard would cause you Damage, reduce that Damage to 0.",
+        "text": "Reduce involuntary movement against you by 1 unit. The first time each Adventure an ordinary environmental hazard would cause you Damage, reduce that Damage to 0. This benefit does not apply to Damage with Breach.",
         "chosen": false
       },
       {
         "name": "Swimmer",
-        "text": "Gain Swim 10 and increase the amount of time you can remain underwater to ten times the normal duration. This does not allow you to breathe underwater.",
+        "text": "Gain Swim 10. This changes your movement through water; it does not grant underwater breathing.",
         "chosen": false
       }
     ],

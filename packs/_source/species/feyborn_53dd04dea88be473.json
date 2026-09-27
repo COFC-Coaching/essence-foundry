@@ -4,47 +4,47 @@
   "type": "species",
   "img": "icons/svg/wing.svg",
   "system": {
-    "description": "Beings whose bodies and spirits are intertwined with glamour, dreams, emotion, living nature, or shadow. Includes woodland peoples, fair folk, winged sprites, horned revelers, embodied nature spirits, dreamborn beings, and changelings.",
+    "description": "Feyborn are beings whose bodies and spirits are intertwined with glamour, dreams, emotion, living nature, shadow, and other liminal forces. They may appear nearly mortal or possess features that openly reveal their supernatural nature. Feyborn may include long-lived woodland peoples, fair folk, winged sprites, horned revelers, embodied nature spirits, dreamborn beings, changelings of fey origin, and shadow-touched peoples.",
     "nature": {
       "name": "Between Places",
-      "text": "You may move through spaces occupied by other creatures, though you cannot end your movement in an occupied space. Choose one Feyborn Trait."
+      "text": "You may move through spaces occupied by other creatures, though you cannot end your movement in an occupied space. Choose one Feyborn Species Trait."
     },
     "traitLabel": "Feyborn Trait",
     "traitCount": 1,
     "traits": [
       {
         "name": "Dreamtouched",
-        "text": "You remain aware of your surroundings while resting. The first time each scene an effect alters your perception, memory, dreams, or emotions, you immediately recognize that an outside influence is affecting you, even if you cannot identify its source or prevent its effects.",
+        "text": "You remain aware of your surroundings while resting. Awareness can wake you from ordinary sleep when circumstances warrant, but does not let you act while still asleep or override injury-based unconsciousness. The first time each Encounter an effect alters your perception, memory, dreams, or emotions, you immediately recognize that an outside influence is affecting you, even if you cannot identify its source or prevent the effect.",
         "chosen": false
       },
       {
         "name": "Glamour",
-        "text": "After one minute of concentration, you may assume a different appearance within your general size and body plan. You may alter your apparent lineage, age, coloration, voice, scent, clothing, and similar details. Ordinary observation cannot identify the Glamour as false, though touch, deliberate examination, and supernatural Senses may reveal inconsistencies.",
+        "text": "After one minute of preparation, you may assume a different appearance within your general size and body plan, altering apparent lineage, age, coloration, voice, scent, clothing, and similar details. This is not Concentration. The Glamour lasts until you end it, replace it, or become unconscious. Ordinary observation cannot identify it as false, though touch, deliberate examination, or supernatural Senses may reveal inconsistencies.",
         "chosen": false
       },
       {
         "name": "Glimmerwing",
-        "text": "You possess wings or another supernatural means of controlled descent. While falling, you may glide using your full Movement and may Dash normally. You cannot gain height through this Trait or remain airborne without descending.",
+        "text": "You possess wings or another supernatural means of controlled descent. You may glide using the Gliding procedure in Combat Encounters: Movement, including normal use of Dash. This Trait does not allow you to gain height or hover.",
         "chosen": false
       },
       {
         "name": "Greenstep",
-        "text": "Natural vegetation, undergrowth, mud, roots, and similar natural terrain do not count as difficult terrain for you. You also gain Climb 5 when climbing living plants or natural rock.",
+        "text": "Natural vegetation, undergrowth, mud, roots, and similar natural terrain do not count as Difficult Terrain for you. You also gain Climb 5 when climbing living plants or natural rock.",
         "chosen": false
       },
       {
         "name": "Gloamstep",
-        "text": "Gain low-light vision. The first time each turn you enter dim light, darkness, or substantial shadow, move 1 additional unit without spending Movement.",
+        "text": "Gain Low-Light Vision. The first time each turn you enter dim light, darkness, or substantial shadow, move 1 additional unit without spending Movement.",
         "chosen": false
       },
       {
         "name": "Veiled Presence",
-        "text": "You may suppress the visible and sensory signs of your supernatural nature. While suppressed, ordinary magical or spiritual detection recognizes that you are alive but does not automatically identify you as Feyborn. Direct examination or an effect specifically designed to reveal Species may still expose you.",
+        "text": "You may suppress visible and sensory signs of your supernatural nature. While suppressed, ordinary magical or spiritual detection recognizes that you are alive but does not automatically identify you as Feyborn. Direct examination or an effect specifically designed to reveal Species may still expose you.",
         "chosen": false
       },
       {
         "name": "Wild Escape",
-        "text": "The first time each scene another creature would prevent your movement, restrain you, or reduce your Movement to 0, you may immediately move 1 unit after that effect resolves. This movement cannot pass through a solid barrier.",
+        "text": "The first time each Encounter another creature would prevent your movement, restrain you, or reduce your Movement to 0, you may immediately move 1 unit after that effect resolves. For this move only, ignore the movement restriction created by the triggering effect. This does not ignore unrelated restrictions or permit passage through a solid barrier. The triggering effect remains afterward unless its own ending condition has been met.",
         "chosen": false
       }
     ],

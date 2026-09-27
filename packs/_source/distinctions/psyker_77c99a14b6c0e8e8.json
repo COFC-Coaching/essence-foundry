@@ -4,16 +4,16 @@
   "type": "distinction",
   "img": "icons/svg/star.svg",
   "system": {
-    "description": "Characters whose minds operate beyond ordinary limits. Abilities may manifest as telekinetic force, mental influence, expanded perception, projected thought, or other expressions of focused consciousness.",
+    "description": "Psykers possess minds that operate beyond ordinary limits. Their abilities may manifest as telekinetic force, mental influence, expanded perception, projected thought, bodily control, or other expressions of focused consciousness.",
     "keyCombatSkill": "Psionics",
     "primaryAttr": "Resolve",
     "unlocks": "psionics",
-    "benefit": "Gain access to the Psionics Combat Skill. If acquired later: gain access to Psionics, gain 2 pips in it, then gain one additional Psionics Expertise and two additional Psionics Action Cards.",
+    "benefit": "Gain access to the Psionics Combat Style. If this Distinction is acquired later, gain access to Psionics, increase it to Rank 2, then gain one additional Psionics Expertise and two additional Psionics Combat Cards.",
     "creationExpertiseBonus": 0,
     "creationActionCardBonus": 0,
     "origin": {
       "name": "Sacrificial Power",
-      "text": "You may spend Temporary Wounds as though they were dice when using Psionics Actions or Reactions."
+      "text": "When using a Psionics Action or Reaction, first pay its full minimum primary commitment from the appropriate Pool, never fewer than 2 Pool dice. A minimum-3 card still consumes at least 3 Pool dice. After that payment, you may spend Temporary Wounds instead of additional dice. Each Temporary Wound replacing an additional rolled die supplies one normal d10, subject to the card's usual roll maximum. Each Temporary Wound replacing an additional burned die pays that secondary cost without a roll. These substitutions do not waive any other requirements or costs."
     }
   },
   "effects": [],

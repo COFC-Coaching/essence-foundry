@@ -4,27 +4,27 @@
   "type": "species",
   "img": "icons/svg/wing.svg",
   "system": {
-    "description": "Naturally born peoples — humans, smallfolk, giant-blooded peoples, orcish and goblinoid peoples, and other broadly mortal lineages. They vary dramatically in stature, proportions, endurance, and sensory ability.",
+    "description": "Mortal-Kin are naturally born peoples whose bodies are not fundamentally defined by supernatural energy, animal physiology, undeath, or artificial construction. They vary dramatically in stature, proportions, endurance, and sensory capability. Mortal-Kin may include humans, smallfolk, giant-blooded peoples, orcish and goblinoid peoples, and other broadly mortal lineages. Spirit-bonded or psychically connected peoples may remain Mortal-Kin when that connection changes their abilities without fundamentally changing their underlying biology.",
     "nature": {
       "name": "Adaptive Physiology",
-      "text": "Choose two Mortal Traits."
+      "text": "Choose two Mortal Species Traits."
     },
     "traitLabel": "Mortal Trait",
     "traitCount": 2,
     "traits": [
       {
         "name": "Compact Frame",
-        "text": "You may move through spaces occupied by substantially larger creatures, though you cannot end your movement in an occupied space. You can also pass through narrow openings and comfortably use spaces designed for creatures roughly half your height, provided your equipment fits.",
+        "text": "You may move through spaces occupied by creatures at least one Size category larger than you, though you cannot end in an occupied space. You can use a passage suitable for the next smaller Size without the usual squeezing penalties, provided your body and equipment actually fit. This does not permit squeezing down several Size categories.",
         "chosen": false
       },
       {
         "name": "Hardy",
-        "text": "Ordinary environmental exposure takes three times as long to affect you. The first time each adventure an ordinary environmental hazard would cause you Damage, reduce that Damage to 0. This does not prevent Breach.",
+        "text": "Ordinary environmental exposure takes three times as long to affect you. The first time each Adventure an ordinary environmental hazard would cause you Damage, reduce that Damage to 0. This benefit does not apply to Damage with Breach.",
         "chosen": false
       },
       {
         "name": "Keen",
-        "text": "Choose two special Senses: low-light vision, keen hearing, or keen scent. Within 2 units, creatures and objects cannot remain Hidden from you when the chosen Sense could reasonably detect them and no sealed barrier blocks it.",
+        "text": "Choose two: Low-Light Vision, Keen Hearing, or Keen Scent. Use Senses and Detection above. Within 2 units, a creature or object cannot remain Hidden from you when a chosen Sense can detect it under that Sense's stated conditions; its blockers still apply.",
         "chosen": false,
         "subChoice": {
           "label": "Senses",
@@ -39,12 +39,12 @@
       },
       {
         "name": "Long-Limbed",
-        "text": "You may reach, retrieve, manipulate, or operate unattended objects up to 1 unit farther away than normal. This does not increase the range of attacks, Reactions, Combat Cards, or other effects targeting creatures.",
+        "text": "You may reach, retrieve, manipulate, or operate unattended objects up to 1 unit farther away than normal. This does not increase the Range of attacks, Reactions, Combat Cards, or other effects targeting creatures.",
         "chosen": false
       },
       {
         "name": "Powerful Build",
-        "text": "You count as substantially larger when lifting, carrying, pushing, dragging, or breaking ordinary objects. You may carry one willing or incapacitated character without reducing your Movement, provided their total size and equipment are within what your body could reasonably support.",
+        "text": "You count as one Size category larger for lifting, carrying, pushing, dragging, and breaking ordinary objects. Double your effective carrying capacity; this does not change your occupied footprint, and multiple larger-for-hauling benefits do not repeatedly double it unless explicit. You may carry one willing or incapacitated creature without the hauling movement penalty when its body, equipment, and load fit your capacity and required support. Your hands remain occupied as needed, and terrain and other movement costs still apply.",
         "chosen": false
       },
       {
@@ -54,7 +54,7 @@
       },
       {
         "name": "Sure-Footed",
-        "text": "Ignore the first 2 units of difficult terrain you cross during each turn. You can maintain your footing on ordinary narrow, uneven, or unstable surfaces without special assistance.",
+        "text": "Ignore the first 2 units of Difficult Terrain you cross during each turn. You can maintain your footing on ordinary narrow, uneven, or unstable surfaces without special assistance.",
         "chosen": false
       },
       {
@@ -64,7 +64,7 @@
       },
       {
         "name": "Tireless",
-        "text": "Ordinary travel and sustained physical labor take three times as long to cause exhaustion or similar consequences. The first time each adventure fatigue or lack of rest would impose a condition or cause Damage, ignore that consequence.",
+        "text": "Ordinary travel and sustained physical labor take three times as long to cause fatigue: begin ordinary-work checks after twenty-four hours and make subsequent checks at the start of each six-hour block. The first time each Adventure fatigue or lack of rest would impose a Condition or cause Damage, ignore that consequence. This does not remove actual biological needs or change Vigor's breath-holding limit.",
         "chosen": false
       }
     ],

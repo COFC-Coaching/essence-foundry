@@ -683,7 +683,7 @@
   "ESSENCE.Wizard.Finalize": "Finalize",
   "ESSENCE.Wizard.EquipmentLibrary": "Equipment Library",
   "ESSENCE.Wizard.BuildEquipment": "Build New Equipment",
-  "ESSENCE.Wizard.BuildEquipmentHint": "Weapons, Armor, Shields and Implements are always assembled from a Chassis + Fitting rather than picked whole. Create one here and its sheet opens so you can name it and choose its parts from the catalog.",
+  "ESSENCE.Wizard.BuildEquipmentHint": "Weapons, Armor, Guards and Implements are always assembled from a Chassis + Fitting rather than picked whole. Create one here and its sheet opens so you can name it and choose its parts from the catalog.",
   "ESSENCE.Wizard.NewEquipmentNamed": "New {label}",
   "ESSENCE.Wizard.PointsRemaining": "Points remaining",
   "ESSENCE.Wizard.StepOf": "Step {step} of {total} — {name}",

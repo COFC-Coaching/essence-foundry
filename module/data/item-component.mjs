@@ -8,12 +8,12 @@ const { fields } = foundry.data;
  * any installed Augments; see EssenceEquipmentData in item-card.mjs for the assembled-item side of
  * this relationship (chassisItemId/fittingItemId/mounts).
  *
- * Category names differ per equipment type in the printed rules (Striker/Grip for Melee,
- * Launcher/Payload for Ranged, Shell/Rigging for Armor, Shield/Grip for Shields, Focus/
+ * Category names differ per equipment type in the printed rules (Striker/Handling for Melee,
+ * Launcher/Payload for Ranged, Shell/Rigging for Armor, Guard/Handling for Guards, Focus/
  * Interface for Magical Implements — see CHASSIS_LABELS/FITTING_LABELS below) but that's flavor
  * text over the same mechanical shape — `category` here is the equipment-type key, not the
  * Chassis/Fitting's in-fiction name (which lives on `item.name`, e.g. "Edge Striker" or "Extended
- * Grip").
+ * Handling").
  */
 class EssenceComponentData extends foundry.abstract.TypeDataModel {
   /** See module/data/migration.mjs — repairs any value an older version of this system saved that
@@ -174,10 +174,11 @@ export const CHASSIS_LABELS = {
   shield: "Guard",
   implement: "Focus"
 };
+// v0.6 Doc L1396-L1403: Melee and Guard Fittings are "Handling" (was "Grip" in V6 draft text).
 export const FITTING_LABELS = {
-  weapon: "Grip",
+  weapon: "Handling",
   ranged: "Payload",
   armor: "Rigging",
-  shield: "Grip",
+  shield: "Handling",
   implement: "Interface"
 };

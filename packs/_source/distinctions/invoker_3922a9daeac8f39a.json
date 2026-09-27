@@ -4,11 +4,11 @@
   "type": "distinction",
   "img": "icons/svg/star.svg",
   "system": {
-    "description": "Characters who prepare supernatural effects that bind power into creatures, objects, locations, and declared conditions — layering Wards, Hexes, Rites, and other effects across the battlefield.",
+    "description": "Invokers prepare supernatural effects that bind power into creatures, objects, locations, and declared conditions. In Combat, they establish Wards, Hexes, Divinations, Imbuements, Offerings, and other Rites, then exploit the moments when those Rites are fulfilled. Their strength comes from preparation, prediction, and maintaining the right combination of effects as the Encounter changes.",
     "keyCombatSkill": "Ritualism",
     "primaryAttr": "Adaptability",
     "unlocks": "ritualism",
-    "benefit": "Gain access to the Ritualism Combat Skill. If acquired later: gain access to Ritualism, gain 2 pips in it, then gain one additional Ritualism Expertise and two additional Ritualism Action Cards.",
+    "benefit": "Gain access to the Ritualism Combat Style. If this Distinction is acquired later, gain access to Ritualism, increase it to Rank 2, then gain one additional Ritualism Expertise and two additional Ritualism Combat Cards.",
     "creationExpertiseBonus": 0,
     "creationActionCardBonus": 0,
     "origin": {

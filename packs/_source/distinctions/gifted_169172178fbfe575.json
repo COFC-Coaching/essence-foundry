@@ -4,16 +4,16 @@
   "type": "distinction",
   "img": "icons/svg/star.svg",
   "system": {
-    "description": "Characters whose capabilities are part of what they are rather than something learned. They unleash these qualities through powerful transformations, quickly shifting form to fill whatever role is needed.",
+    "description": "The Gifted possess capabilities that are part of what they are rather than something learned entirely through study or ritual. They reshape themselves to meet changing problems, altering their bodies to fill whatever role is most useful in the moment.",
     "keyCombatSkill": "Gestalt",
     "primaryAttr": "Vigor",
     "unlocks": "gestalt",
-    "benefit": "Gain access to the Gestalt Combat Skill. If acquired later: gain access to Gestalt, gain 2 pips in it, then gain one additional Gestalt Expertise and two additional Gestalt Action Cards.",
+    "benefit": "Gain access to the Gestalt Combat Style. If this Distinction is acquired later, gain access to Gestalt, increase it to Rank 2, then gain one additional Gestalt Expertise and two additional Gestalt Combat Cards.",
     "creationExpertiseBonus": 0,
     "creationActionCardBonus": 0,
     "origin": {
       "name": "Efficient Transformation",
-      "text": "Reduce the Stamina cost of transformation upkeep by 1, to a minimum of 1."
+      "text": "Reduce the Stamina upkeep of your maintained Adaptation by 1, to a minimum of 0. This does not reduce the initial cost of assuming an Adaptation. The additional upkeep caused by Unstable is not reduced by this benefit."
     }
   },
   "effects": [],

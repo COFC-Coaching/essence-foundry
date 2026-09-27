@@ -4,7 +4,7 @@
   "type": "heritage",
   "img": "icons/svg/house.svg",
   "system": {
-    "description": "Grew up in a smithy, workshop, mill, studio, construction yard, or another household centered on skilled production.",
+    "description": "You grew up in a smithy, workshop, mill, studio, construction yard, or another household centered on skilled production.",
     "legacy": {
       "name": "Inherited Tools",
       "text": "Choose one ordinary Toolkit during Character Creation. It does not consume Armory capacity and may be included in your Inventory without consuming Inventory capacity. You may replace it at the end of an Adventure or during suitable Downtime."

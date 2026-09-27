@@ -4,27 +4,27 @@
   "type": "species",
   "img": "icons/svg/wing.svg",
   "system": {
-    "description": "Characters who continue to exist after ordinary biological life has ended, or are sustained between life and death. May depend upon necromancy, spiritual force, hunger, memory, shadow, or unfinished purpose.",
+    "description": "Deathless characters continue to exist after ordinary biological life has ended or are sustained in a condition between life and death. Their continued existence may depend upon necromancy, spiritual force, hunger, memory, shadow, unfinished purpose, or another extraordinary condition.",
     "nature": {
       "name": "Deathless Nature",
-      "text": "You do not need to breathe or eat and do not sleep in the ordinary manner. Ordinary biological diseases and poisons do not affect you, though you must still rest and recover normally. Deathless Nature - Playtest: your Death Track ends at 7 instead of 5. When all five Core Wound spaces first fill, become Dying at 0/7; reaching 7 causes death. Advancement of the Death Track, exertion while Dying, additional Wounds, Stabilization, retained progress, and recovery otherwise follow the normal rules. Your Core Wound track still has five spaces. Sense: Low-Light Vision."
+      "text": "You do not need to breathe or eat and do not sleep in the ordinary manner. Ordinary biological diseases and poisons do not affect you, though you must still rest and recover normally. Deathless Nature - Playtest: your Death Track ends at 7 instead of 5. When all five Core Wound spaces first fill, become Dying at 0/7; reaching 7 causes death. Advancement of the Death Track, exertion while Dying, additional Wounds, Stabilization, retained progress, and recovery otherwise follow the normal rules. Your Core Wound track still has five spaces. Choose one Deathless Species Trait."
     },
     "traitLabel": "Deathless Trait",
     "traitCount": 1,
     "traits": [
       {
         "name": "Borrowed Life",
-        "text": "After one minute of preparation, you may imitate the visible signs of life, including warmth, breathing, coloration, and a heartbeat. Ordinary observation cannot identify you as Deathless, though deliberate medical or supernatural examination may reveal your nature.",
+        "text": "After one minute of preparation, you may imitate warmth, breathing, coloration, a heartbeat, and similar signs of life. This is not Concentration. The effect lasts until you end it, replace it, or become unconscious. Ordinary observation cannot identify you as Deathless; medical or supernatural examination may reveal your nature.",
         "chosen": false
       },
       {
         "name": "Detached Scout",
-        "text": "You may detach a small sensory part of your body (an eye, hand, tooth, or fragment of bone) and perceive through it while it remains within 5 units. It cannot move on its own, and you lose the corresponding Sense or function from your main body while it is detached.",
+        "text": "Use Perform Task to detach or reattach one small sensory part within reach, burning its normal 2 Action dice in Combat. Choose one ordinary Sense to perceive through the part. Within 5 units, you receive that Sense from the part's position with its normal limitations. Your main body loses the corresponding Sense or function while the part is detached. The part cannot move or act and grants no extra Actions. Perception costs no further dice. It stops if the part is destroyed or moves beyond 5 units, and resumes if the intact part returns within range. Reattachment restores the body's function. If the part is destroyed, appropriate care during a Recovery restores both the part and its function.",
         "chosen": false
       },
       {
         "name": "Grave Sense",
-        "text": "You detect whether creatures within 3 units are living, dead, Deathless, or artificially animated. Ordinary visual concealment does not block this Sense, though sealed barriers do.",
+        "text": "Within 3 units, pinpoint creatures and remains and distinguish living, dead, Deathless, and artificially animated subjects. Ordinary visual concealment does not block this Sense; a sealed barrier or an effect explicitly masking this detection does. It does not reveal identity, thoughts, cause of death, or concealed abilities. Empty objects without life, remains, or animation do not register.",
         "chosen": false
       },
       {
@@ -34,12 +34,12 @@
       },
       {
         "name": "Spectral Flexibility",
-        "text": "You may move through spaces occupied by other creatures and pass through narrow openings that can accommodate your equipment. You cannot end your movement in an occupied space or pass through solid walls and sealed barriers.",
+        "text": "You may pass through openings your spectral body and equipment can actually fit through, bypassing the usual one-Size squeezing limit. Apply the normal squeezing Movement cost and −1 Fortitude. You may move through creatures’ spaces but cannot end in a space still occupied by a conscious creature, or pass through solid walls or sealed barriers.",
         "chosen": false
       },
       {
         "name": "Stitched Form",
-        "text": "You possess an additional arm, skeletal limb, tendril, or other appendage. It may hold and use one small Off-Hand item with a cost of 1 that is not a weapon or shield. The item still counts against your Inventory Limit, and the limb does not grant additional Actions.",
+        "text": "You possess an additional arm, skeletal limb, tendril, or other appendage. It may hold and use one small item that can be used with one hand, other than a weapon or Guard. The item itself occupies equipment capacity normally. The limb does not grant additional Actions.",
         "chosen": false
       },
       {
@@ -49,7 +49,7 @@
       },
       {
         "name": "Unyielding Remains",
-        "text": "The first time each adventure a Wound Condition would reduce your Movement, disable a limb, or impair one of your Senses, ignore that portion of the condition until the end of the current scene.",
+        "text": "The first time each Adventure a Wound Condition would reduce your Movement, disable a limb, or impair one of your Senses, ignore that portion of the Condition for one minute (six Rounds).",
         "chosen": false
       }
     ],

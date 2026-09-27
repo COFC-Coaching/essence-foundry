@@ -4,10 +4,10 @@
   "type": "species",
   "img": "icons/svg/wing.svg",
   "system": {
-    "description": "Peoples fundamentally shaped by an elemental, celestial, infernal, astral, or void force. Choose an Origin (Earth, Stone, Metal, Crystal, Flame, Water, Air, Frost, Storm, Celestial, Infernal, Astral, Void, or similar).",
+    "description": "Planarborn are peoples whose bodies are fundamentally shaped by a supernatural environment or force. That influence may be inherited, naturally occurring, or the result of a lineage transformed over generations. When selecting this Species, define an Origin with the GM that fits the Campaign. An Origin might be an elemental plane, an altered region, or another supernatural source; these are examples, not a required cosmology. Identify the specific material, energy, or environmental influence associated with it so the Species' benefits can be applied consistently. The Origin grants no benefits beyond the printed rules.",
     "nature": {
       "name": "Planar Attunement",
-      "text": "Ordinary environmental exposure directly associated with your Origin does not harm you. You immediately recognize significant manifestations of that Origin and can sense a concealed concentration within 2 units, provided it is not contained behind a sealed supernatural barrier. This does not protect you from attacks or other hostile effects. Choose one Planarborn Trait.",
+      "text": "Ordinary environmental exposure directly associated with your Origin does not harm you. You immediately recognize significant manifestations of that Origin and can sense a concealed concentration of it within 2 units, provided it is not contained behind a sealed supernatural barrier. This does not protect you from attacks or other hostile effects. Choose one Planarborn Species Trait.",
       "subChoice": {
         "label": "Origin",
         "type": "free",
@@ -20,12 +20,25 @@
     "traits": [
       {
         "name": "Aegis of Origin",
-        "text": "Gain one narrow Resistance associated with your Origin. The Resistance must be approved by the GM and cannot apply to an overly broad category of Damage.",
+        "text": "Gain Resistance to one Damage type appropriate to your agreed Origin. Choose from the Damage types defined in Combat Encounters.",
         "chosen": false,
         "subChoice": {
-          "label": "Resistance",
-          "type": "free",
-          "options": [],
+          "label": "Resistance (Damage type)",
+          "type": "fixed",
+          "options": [
+            "Bludgeoning",
+            "Piercing",
+            "Slashing",
+            "Fire",
+            "Cold",
+            "Lightning",
+            "Acid",
+            "Force",
+            "Psychic",
+            "Arcane",
+            "Radiant",
+            "Necrotic"
+          ],
           "count": 1
         }
       },
@@ -35,13 +48,38 @@
         "chosen": false
       },
       {
+        "name": "Native Motion",
+        "text": "Gain Climb 10, Swim 10, or controlled gliding, as appropriate to your Origin. Controlled gliding follows the Gliding procedure in Combat Encounters: Movement and does not allow you to gain height or hover.",
+        "chosen": false,
+        "subChoice": {
+          "label": "Movement mode",
+          "type": "fixed",
+          "options": [
+            "Climb 10",
+            "Swim 10",
+            "Controlled gliding"
+          ],
+          "count": 1
+        }
+      },
+      {
+        "name": "Planar Sense",
+        "text": "Within 3 units, locate active portals, planar boundaries, extradimensional spaces, and significant disturbances in reality, even through ordinary visual concealment or physical barriers. A sealed supernatural barrier that blocks planar detection prevents this Sense. Identify the general kind of boundary, but not its destination, occupants, contents, or safe passage conditions.",
+        "chosen": false
+      },
+      {
+        "name": "Resonant Step",
+        "text": "Terrain composed primarily of your Origin does not count as Difficult Terrain for you. The first time each turn you enter such terrain, move 1 additional unit without spending Movement.",
+        "chosen": false
+      },
+      {
         "name": "Shaper",
-        "text": "Once per turn, you may manipulate a small amount of ordinary material or energy associated with your Origin in an adjacent unoccupied space. You may create or remove 1 unit of difficult terrain, produce a simple shape, or cause a comparable environmental change. You may maintain only one altered space at a time.",
+        "text": "Gain the Shaper Species Combat Card under Species Combat Cards later in this chapter. It manipulates a small amount of ordinary material or energy associated with your Origin in an adjacent unoccupied space; you may maintain only one altered space at a time.",
         "chosen": false
       },
       {
         "name": "Planar Vessel",
-        "text": "Once per adventure, when you would spend the final point of one of your Resources, retain 1 point instead. The Resource must be chosen when you select this Trait and should reflect your Origin.",
+        "text": "Once per Adventure, when you would spend the final point of one of your Resources, retain 1 point instead. Choose the affected Resource when you select this Species Trait. It should reasonably reflect your Origin.",
         "chosen": false,
         "subChoice": {
           "label": "Resource",

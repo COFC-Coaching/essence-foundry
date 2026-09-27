@@ -4,16 +4,16 @@
   "type": "distinction",
   "img": "icons/svg/star.svg",
   "system": {
-    "description": "Combatants who have pushed their physical capabilities through discipline, experience, or relentless conditioning — brawlers, duelists, soldiers, martial artists, bodyguards.",
+    "description": "Athletes are combatants who have pushed their physical capabilities through discipline, experience, or relentless conditioning. They may be brawlers, duelists, soldiers, martial artists, bodyguards, or any other characters whose Combat identity begins with what their bodies can accomplish.",
     "keyCombatSkill": "Prowess",
     "primaryAttr": "Might",
     "unlocks": "",
-    "benefit": "Gain one additional Prowess Expertise and two additional Prowess Action Cards. If acquired later: instead increase Prowess to a minimum of 2 pips, then gain one additional Prowess Expertise and four additional Prowess Action Cards.",
+    "benefit": "Gain one additional Prowess Expertise and two additional Prowess Combat Cards. If this Distinction is acquired later, instead increase Prowess to a minimum of Rank 2, then gain one additional Prowess Expertise and four additional Prowess Combat Cards.",
     "creationExpertiseBonus": 1,
     "creationActionCardBonus": 2,
     "origin": {
       "name": "Peak Performance",
-      "text": "Increase your Resilience by 1. During your first turn, Movement that brings you closer to an enemy costs half as much Movement."
+      "text": "Increase your Resilience by 1. During your first Turn of an Encounter, double your normal Movement allowance. Apply ordinary terrain costs and movement restrictions. Extra Movement granted by Dash, burned dice, or another ability is not doubled. If you have several movement modes, this doubles their normal allowances without granting additional separate movement budgets."
     }
   },
   "effects": [

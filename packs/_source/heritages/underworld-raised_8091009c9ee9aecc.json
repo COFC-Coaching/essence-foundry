@@ -4,14 +4,14 @@
   "type": "heritage",
   "img": "icons/svg/house.svg",
   "system": {
-    "description": "Grew up among crowded streets, informal shelters, smugglers, thieves, fences, and people who survived outside official systems.",
+    "description": "You grew up among crowded streets, informal shelters, smugglers, thieves, fences, and people who survived outside official systems. You learned where goods disappear, who moves them, and which rules matter when the law offers no protection.",
     "legacy": {
       "name": "Fence's Cache",
-      "text": "At the end of each adventure, you may preserve one Temporary Item instead of discarding it (your Cached Item). When you have access to a black market or fence, you may exchange it for another Temporary Item of equal or lower Availability (cannot exceed your Reach)."
+      "text": "At the end of an Adventure, you may preserve one piece of Temporary Equipment as your Cached Item. It remains usable Temporary Equipment across Adventures and counts against neither Armory nor Inventory capacity while cached. This Legacy preserves the item’s actual condition and remaining Uses; it does not repair or replenish it. You may keep only one Cached Item. With access to a black market, fence, or appropriate illicit organization, you may exchange it for Temporary Equipment of comparable or lower access that the Team's Tier and actual connections could reasonably obtain. The replacement becomes your Cached Item. If you replace a cached item without exchanging it, or stop preserving it, resolve the former item normally: admit it to your Armory within capacity, sell, trade, return, or discard it."
     },
     "familiarity": {
       "name": "Quiet Rules",
-      "text": "You recognize territorial signs, protection arrangements, false storefronts, informal shelters, hidden markets, secondary routes, and the people who actually control illicit trade. You know how to find a discreet intermediary, safe meeting place, or overlooked refuge without presenting yourself as an obvious victim or agent of authority."
+      "text": "You recognize territorial signs, protection arrangements, false storefronts, informal shelters, hidden markets, secondary routes, and the people who actually control illicit trade. You know how to locate a discreet intermediary, safe meeting place, or overlooked refuge without immediately presenting yourself as an obvious victim or agent of authority."
     }
   },
   "folder": null,

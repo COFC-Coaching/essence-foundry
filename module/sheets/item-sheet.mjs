@@ -612,7 +612,7 @@ export class EssenceComponentSheet extends EssenceItemSheetBase {
 
   /**
    * Category names differ per equipment type (Striker/Grip for Melee Weapon, Launcher/Payload
-   * for Ranged, Shell/Rigging for Armor, Shield/Grip for Shields, Focus/Interface for Magical
+   * for Ranged, Shell/Rigging for Armor, Guard/Handling for Guards, Focus/Interface for Magical
    * Implements — see CHASSIS_LABELS/FITTING_LABELS in item-component.mjs). The sheet should show
    * these instead of the generic words "Chassis"/"Fitting" wherever a category is known — both for
    * the category dropdown's own option labels (every category, since the player is choosing among

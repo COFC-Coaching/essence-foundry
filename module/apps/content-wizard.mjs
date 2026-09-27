@@ -38,7 +38,7 @@ const TYPE_CONFIG = {
     // Chassis/Fitting/Augment used to be their own separate (always-empty) compendium packs —
     // folded into "equipment" as folders instead (see build-packs.mjs's COMPONENT_TYPES_FOR_FOLDERS)
     // so a GM authoring reusable Components has one shared library, not four mostly-empty tabs.
-    // Each type folder is now split by category (Melee Weapon/Ranged Weapon/Armor/Shield/
+    // Each type folder is now split by category (Melee Weapon/Ranged Weapon/Armor/Guard/
     // Implement — build-packs.mjs's COMPONENT_CATEGORY_FOLDERS), so these track their Category
     // field into the right child folder exactly as Equipment tracks its own.
     folder: "Chassis",
@@ -184,7 +184,7 @@ export default class EssenceContentWizard extends HandlebarsApplicationMixin(App
    * under Chassis/Fitting/Augment, so a GM-authored one lands exactly where a pre-loaded one with
    * that Category would.
    *
-   * The match is scoped to one level of the tree on purpose: "Armor", "Shield" and "Implement" now
+   * The match is scoped to one level of the tree on purpose: "Armor", "Guard" and "Implement" now
    * each name BOTH a top-level equipment-category folder and a child of Chassis/Fitting, so an
    * unscoped `find(f => f.name === ...)` could file a GM's new Chassis into the equipment folder
    * (or vice versa) depending on pack order alone.

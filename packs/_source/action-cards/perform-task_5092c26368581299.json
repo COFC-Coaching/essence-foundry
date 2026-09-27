@@ -30,6 +30,10 @@
       {
         "label": "Effect",
         "html": "Use Perform Task for meaningful handling of ordinary objects. Ready, recover, stow, swap, or hand over combat equipment with Reconfigure instead. Perform Task cannot replace an attack, Reconfigure, Stabilize, or another defined Action to bypass its costs or requirements. Outside Combat, use the normal task procedure without an Action Pool cost."
+      },
+      {
+        "label": "Help",
+        "html": "Use Perform Task to prepare meaningful assistance for another ally's specified task. Pay Perform Task's normal cost; you make no roll. The ally gains 1 free die on its next roll for that task before the start of your next Turn, provided your assistance is still available when it rolls. Each helper can contribute only once to that roll. When everyone must succeed independently, each makes their own attempt and cannot use Help. Assistance never adds dice to attacks, Defend, or other Combat rolls without explicit permission. Help is an Action on the helper's Turn. Outside Combat, use Cooperation without an Action Pool cost."
       }
     ],
     "surges": [],

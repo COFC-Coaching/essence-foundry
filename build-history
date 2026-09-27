@@ -3369,3 +3369,33 @@ rework (3.6 to 3.8), Recovery's Wound picker (3.13) and Concentration (3.15).
   `#finishCardPlay` takes `extraSurges` and `costNotes`.
 - **Verification:** `npm test` (rules 116, migration 59); templates balanced; lang keys resolve; no
   leaf/prefix collisions. Not live-tested; checks 70-87 in `design/live-test-pending.md`.
+
+### 2026-09-27 -- 0.13.0: Phase 6 (content, guide, docs)
+
+- **Part IX text sync** (`scripts/origin-data.json`): rather than hand-edit the plan's list of
+  items, a one-off script parsed the Doc export by heading (species L5054-L5418, heritages
+  L5464-L5572, distinctions L5607-L5730) and applied every entry by name, keeping each trait's
+  `subChoice`, the Athlete Resilience effect and the creation bonuses. 115 entries changed; the
+  three missing Planarborn Traits were added (Native Motion with a movement-mode sub-choice) and
+  Aegis of Origin's sub-choice became the twelve Damage types (Doc L5147). The file was
+  reformatted by JSON.stringify, hence the large diff. `build-packs.mjs --only=species,heritages,
+  distinctions,guide` runs without the Neon cache, so those packs were rebuilt the normal way.
+- **Wound Cards / Basic Cards**: `WOUND_CARDS` Critical recovery text and the three `_source`
+  Condition docs carry the Critical Recovery playtest baseline (Decision 4, Doc L4025-L4031).
+  `BASIC_CARDS` Perform Task gained a Help section (Doc L4303-L4305); the `_source` doc was edited
+  to match and both packs recompiled with `compile-packs.mjs` (Neon not needed).
+- **Equipment labels**: `EQUIPMENT_CATEGORY_LABELS.shield` -> "Guard", `FITTING_LABELS`
+  weapon/shield -> "Handling" (Doc L1396-L1403). `compatibleFittingCategory` is free text with
+  no matching logic, so the rename is display-only. The content wizard files a new Component by
+  `EQUIPMENT_CATEGORY_LABELS`, so the three "Shield" folders in the equipment pack were renamed
+  "Guard" (`COMPONENT_CATEGORY_FOLDERS` and the `_source` folder docs) to keep that lookup working.
+- **Guide journal** (`scripts/guide-data.json`): rewritten for v0.6; 21 pages across the three
+  entries (was 17). The pack was rebuilt.
+- **Wiki mirror**: the wiki is a separate GitHub repo and this session's git proxy refuses to push
+  to it (and `add_repo` cannot attach it). The new `V0.6-Update-Notes.md` page and the Home/Sidebar
+  links are committed in a local clone and exported as `design/wiki/0001-v0.6-update-notes.patch`
+  with instructions; delete `design/wiki/` once pushed. The wiki's Part pages still mirror V5.
+- **Not done**: converting flat Armor/Shield/Focus items to modular ones (needs a decision on what
+  "flat" covers in the Neon data). Recorded in the plan.
+- **Verification:** `npm test` (rules 116, migration 59); templates balanced; lang keys resolve.
+  Not live-tested; checks 88-95 in `design/live-test-pending.md`.
