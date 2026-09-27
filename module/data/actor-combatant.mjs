@@ -203,6 +203,10 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
         active: new fields.BooleanField({ initial: false })
       })),
       movement: new fields.NumberField({ integer: true, initial: 10 }),
+      // v0.6 Part VII "Size and Squeezing" (Doc L3500): "Ordinary characters are Size 1 unless a
+      // feature or agreed profile says otherwise... it grants no extra Damage, Range, Defenses, or
+      // Actions." Recorded only; footprints and squeezing are not automated (plan, "Not building").
+      size: new fields.NumberField({ required: true, integer: true, initial: 1, min: 0, max: 5 }),
       senses: new fields.ArrayField(new fields.StringField()),
 
       expertises: new fields.ArrayField(new fields.SchemaField({
@@ -266,21 +270,10 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
         currentCoreWounds: new fields.NumberField({ integer: true, initial: 0 }),
         currentTemporaryWounds: new fields.NumberField({ integer: true, initial: 0 }),
         currentTemporaryInfluence: new fields.NumberField({ integer: true, initial: 0 }),
-        // V6 Presence benefit (design/v6-revision-delta.md §3.4, new — no prior plan section):
-        // "Once during preparation for each Adventure, gain Temporary Influence equal to your
-        // Presence... Record it separately; any unspent portion expires when that Adventure ends...
-        // Does not increase Reach or Armory or Inventory limits." A SEPARATE tracked bucket, not
-        // folded into the scalar `temporaryInfluence` above, since it has its own expiry the scalar
-        // can't represent (§2.7's own recommendation: bundle the model change with this grant
-        // rather than rebuilding the whole Temporary Influence model as arrays-of-grants).
-        // Deliberately minimal — one small bucket for this one specific grant, not a general
-        // expiring-Influence-grant framework. `presenceGrantActive` is whether the once-per-
-        // Adventure grant is still available to take (reset true by resetAdventureUses() at the
-        // "new Adventure" boundary, set false once taken); `presenceGrantRemaining` is the
-        // unspent pool itself (reset to 0 — expired — by that same "new Adventure" boundary, so any
-        // leftover never carries into the next Adventure).
-        presenceGrantActive: new fields.BooleanField({ initial: true }),
-        presenceGrantRemaining: new fields.NumberField({ integer: true, initial: 0, min: 0 }),
+        // The V6-draft "Presence grant" (once per Adventure, Temporary Influence equal to Presence)
+        // lived here as presenceGrantActive/presenceGrantRemaining until 0.9.0. v0.6 replaced that
+        // benefit with Connections (Doc L1155, L2474); the fields are gone and Foundry drops the
+        // stale keys from stored actors on clean. Nothing needs migrating.
         currentCoreInfluence: new fields.NumberField({ integer: true, initial: 0 }),
         pinnedCards: new fields.ArrayField(new fields.StringField()),
         sessionNotes: new fields.StringField({ initial: "" }),
@@ -500,17 +493,12 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
     // Resolve "Sustained attention": Resolve HOURS of demanding watch/study/surveillance before
     // strain from uninterrupted attention calls for a roll.
     this.sustainedAttentionHours = this.resolve || 0;
-    // Acuity "Extended senses": +0 units at Acuity 1-2, +1 at 3-4, +2 at 5 — added to a specialty
-    // Sense's own finite detection range. This is a MANUAL reference value, not an auto-applied
-    // modifier: Species-granted Senses (scripts/origin-data.json) are stored as free-text Trait
-    // descriptions (e.g. "Within 2 units..." baked into prose), not structured numeric range fields,
-    // so there is nothing here to reliably parse and rewrite — the sheet shows the bonus and the
-    // player/GM apply it to whichever Sense actually qualifies. The fallback "precise natural
-    // vision" (for a character with no eligible finite-range Sense) is a SEPARATE flat 10x Acuity
-    // units, not this bonus stacked onto a base — the book states them as alternative benefits, and
-    // this system has no reliable structured way to tell which branch applies to a given character,
-    // so both values are surfaced together with their conditions stated in the label text.
-    this.extendedSensesBonus = (this.acuity || 0) >= 5 ? 2 : (this.acuity || 0) >= 3 ? 1 : 0;
-    this.preciseVisionRange = 10 * (this.acuity || 0);
+    // Acuity "Languages" (Doc L1133, L7828): one primary language plus permanent Acuity additional
+    // ones. This replaced the V6-draft "Extended senses" benefit: "Acuity grants languages, not
+    // extended detection" (Doc L8072). Reference value for the sheet's Languages field.
+    this.languageCount = 1 + (this.acuity || 0);
+    // Presence "Connections" (Doc L1155, L7832): up to permanent Presence dependable allies.
+    // Reference allowance for the Connections list; play relationships beyond it are unrestricted.
+    this.connectionLimit = this.presence || 0;
   }
 }

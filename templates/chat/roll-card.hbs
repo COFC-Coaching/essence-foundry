@@ -9,7 +9,19 @@
     {{/each}}
   </div>
   <div class="roll-summary">
-    <p><strong>{{localize "ESSENCE.Chat.Pool"}}:</strong> {{pool}}d10{{#if defense}} {{localize "ESSENCE.Chat.VsDefense" defense=defense}}{{/if}}</p>
+    <p><strong>{{localize "ESSENCE.Chat.Pool"}}:</strong> {{pool}}d10{{#if defense}} {{localize "ESSENCE.Chat.VsDefense" defense=defense}}{{/if}}{{#if difficulty}} {{localize "ESSENCE.Chat.VsDifficulty" difficulty=difficulty}}{{/if}}</p>
+    {{#if nonCombat}}
+      {{!-- Non-Combat task (Doc L1238): read the highest die; it meets or beats the Difficulty or
+           it doesn't. No Surges, no Success Die reservation, no per-target table. --}}
+      <p><strong>{{localize "ESSENCE.Chat.HighestDie"}}:</strong> {{successDie}} —
+        {{#if difficulty}}
+          {{#if taskSucceeded}}<span class="pass">{{localize "ESSENCE.Chat.Success"}}</span>{{else}}<span class="fail">{{localize "ESSENCE.Chat.Failure"}}</span>{{/if}}
+        {{else}}
+          <span class="muted">{{localize "ESSENCE.Chat.GmSetsDifficulty"}}</span>
+        {{/if}}
+      </p>
+      <p class="muted non-combat-note">{{localize "ESSENCE.Chat.NoSurgesNonCombat"}}</p>
+    {{else}}
     {{#if targets.length}}
       <table class="target-results">
         <thead><tr><th>{{localize "ESSENCE.Chat.Target"}}</th><th>{{localize "ESSENCE.Chat.Defense"}}</th><th>{{localize "ESSENCE.Chat.Result"}}</th></tr></thead>
@@ -32,9 +44,7 @@
     {{#if bonusSurges}}
       <p class="muted mastery-note"><strong>{{localize "ESSENCE.Chat.Mastery"}}:</strong> {{localize "ESSENCE.Chat.FreeSurge" n=bonusSurges}}</p>
     {{/if}}
-    {{#if suppressSurges}}
-      <p class="muted non-combat-note">{{localize "ESSENCE.Chat.NoSurgesNonCombat"}}</p>
-    {{else if openRoll}}
+    {{#if openRoll}}
       <p class="muted open-roll-note">
         <strong>{{localize "ESSENCE.Chat.Surges"}}:</strong>
         {{#if (eq surges 1)}}{{localize "ESSENCE.Chat.OpenRollNoteSingular" surges=surges}}{{else}}{{localize "ESSENCE.Chat.OpenRollNotePlural" surges=surges}}{{/if}}
@@ -51,6 +61,6 @@
     {{else}}
       <p><strong>{{localize "ESSENCE.Chat.Surges"}}:</strong> {{surges}}</p>
     {{/if}}
-    <p class="muted"><strong>{{localize "ESSENCE.Chat.OpenDifficultySuccesses"}}:</strong> {{poolSuccesses}}</p>
+    {{/if}}
   </div>
 </div>

@@ -2,6 +2,44 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.9.0
+
+**Phase 2 of the v0.6 rules: Attributes, creation, the Non-Combat tab.**
+
+**Non-Combat rolls follow the book.** Every non-combat roll (Non-Combat Skill, Key Aspect, and
+the new per-Attribute die button on the Core tab) asks for the GM's Difficulty. The chat card
+reads the highest die against it: success or failure, no Surges. Leave Difficulty blank and the
+card shows the highest die for the GM to judge. The old "open-difficulty successes (6+)" count is
+gone, and so is rolling Attribute + Combat Style outside Combat: Styles are rolled through their
+cards. Perform Task can now be attempted on an Attribute alone.
+
+**Skill Points are one pool: 5 + Intellect, plus explicit grants.** The wizard no longer has the
+"one free Rank-1 Skill per Intellect" sub-step. Points buy Ranks in new or existing Skills, max
+Rank 2 at creation. A field records explicit grants from features.
+
+**Languages and Connections.** The Non-Combat tab and the wizard have a Languages field (one
+primary plus Acuity additional; the sheet shows the total) and a Connections list of up to
+permanent Presence allies, each with an area of involvement, a relationship and a scope.
+
+**Retired.** The once-per-Adventure Presence Influence grant and the Acuity "extended senses" note
+are gone; v0.6 gives Acuity languages and Presence Connections instead. Nothing else about
+Temporary Influence changed.
+
+**Size.** A Size field (0 to 5, default 1) in the character header. Recorded only.
+
+**Distinctions.** Dilettante is removed from the compendium; characters who own it keep their
+copy. A character may hold a second Distinction: drop one onto a sheet that already has its
+starting Distinction and it's added as a later acquisition, using its later-acquisition benefit
+(not its Origin Benefit) and raising its own Style's Expertise limit by 1. A Distinction's Style
+can take an Expertise at Rank 0 in the wizard.
+
+**Wizard.** Steps now run Concept, Identity, Attributes, Non-Combat, Combat Styles, Passive
+Features, Equipment, Finalize, matching the book's order. The checklist checks the Armory limit
+and Connections, and the Finalize step records the starting Advancement Point.
+
+**For existing worlds.** Every existing actor loads. New fields start empty or at their defaults;
+the removed Presence-grant values are dropped silently.
+
 ## 0.8.1
 
 **Resizable sheets with a fixed header.** Every actor sheet (Character, NPC, Monster, Full

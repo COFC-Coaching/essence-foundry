@@ -179,6 +179,8 @@
 .essence .attr-row, .essence .resource-row, .essence .defense-row { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
 .essence .attr-label { flex: 0 0 80px; text-transform: capitalize; }
 .essence .attr-input, .essence .current-input { width: 3em; }
+/* Attribute-only Non-Combat roll (0.9.0, Doc L1237): same footprint as the Style roll die button. */
+.essence .attr-row .attr-roll { flex: 0 0 auto; width: 26px; height: 22px; padding: 0; line-height: 1; }
 .essence .max-value { font-weight: bold; }
 /* Quick +/- for a resource's current value — a plain action button, so it (unlike the number
    input next to it) always works even while the sheet's safety lock is on; see

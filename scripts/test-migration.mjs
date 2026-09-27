@@ -190,5 +190,16 @@ check("record rows keep their fields",
   [{ name: "Van", tags: "Asset, Obligation", notes: "" }]);
 check("a character's legacy personal Tier still loads", migrate(EssenceCharacterData, { tier: 3 }).tier, 3);
 
+console.log("\n--- 0.9.0 (Phase 2) fields ---");
+const { EssenceDistinctionData } = await import("../module/data/item-origin.mjs");
+check("Size above 5 is clamped", migrate(EssenceCharacterData, { size: 9 }).size, 5);
+check("Size below 0 is clamped", migrate(EssenceCharacterData, { size: -1 }).size, 0);
+check("Languages and skillPointBonus load", migrate(EssenceCharacterData, { languages: "Common, Old Tongue", skillPointBonus: 1 }).languages, "Common, Old Tongue");
+check("Connection rows keep their fields",
+  migrate(EssenceCharacterData, { connections: [{ name: "Bren", area: "docks", relationship: "cousin", scope: "local" }] }).connections,
+  [{ name: "Bren", area: "docks", relationship: "cousin", scope: "local" }]);
+check("a stored Intellect-sourced Skill still loads", migrate(EssenceCharacterData, { nonCombatSkills: [{ name: "History", rating: 1, source: "intellect" }] }).nonCombatSkills[0].source, "intellect");
+check("a Distinction saved before acquiredLater loads", migrate(EssenceDistinctionData, { keyCombatSkill: "Cunning" }).keyCombatSkill, "Cunning");
+
 console.log(`\n${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);

@@ -17,8 +17,9 @@
     <div class="header-fields">
       <label>{{localize "ESSENCE.Item.SpeciesLabel"}} <input name="system.species" type="text" value="{{system.species}}"></label>
       <label>{{localize "ESSENCE.Item.HeritageLabel"}} <input name="system.heritage" type="text" value="{{system.heritage}}"></label>
-      <label>{{localize "ESSENCE.Item.DistinctionLabel"}} <input name="system.distinction" type="text" value="{{system.distinction}}"></label>
+      <label>{{localize "ESSENCE.Item.DistinctionLabel"}} <input name="system.distinction" type="text" value="{{system.distinction}}">{{#if secondDistinction}} <span class="muted" title="{{localize 'ESSENCE.Character.SecondDistinctionHint'}}">+ {{secondDistinction.name}}</span>{{/if}}</label>
       <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}{{#if (ne system.totalMovement system.movement)}} <span class="muted">{{localize "ESSENCE.Character.EffectiveMovementNote" n=system.totalMovement}}</span>{{/if}}</label>
+      <label title="{{localize 'ESSENCE.Common.SizeHint'}}">{{localize "ESSENCE.Common.Size"}} <input name="system.size" type="number" min="0" max="5" value="{{system.size}}" style="width:3em"></label>
     </div>
   </div>
 </header>
@@ -42,6 +43,7 @@
         {{#each d.attrs as |a|}}
           <div class="attr-row">
             <span class="attr-label" {{#if a.benefit}}title="{{a.benefit}}"{{/if}}>{{a.label}}</span>
+            <button type="button" class="attr-roll" data-action="rollAttribute" data-attr="{{a.key}}" aria-label="{{localize 'ESSENCE.Sheet.RollAttributeAria' name=a.label}}" title="{{localize 'ESSENCE.Sheet.RollAttributeAria' name=a.label}}"><i class="fa-solid fa-dice-d10"></i></button>
             <input class="attr-input" name="system.{{a.key}}" type="number" value="{{a.value}}">
             <span class="pip-track">
               {{#each a.pips as |filled|}}<span class="pip {{#if filled}}filled{{/if}}"></span>{{/each}}
@@ -519,6 +521,10 @@
     {{/each}}
   </div>
 
+  <div class="career-row">
+    <label title="{{localize 'ESSENCE.Character.LanguagesHint' n=system.languageCount}}">{{localize "ESSENCE.Character.Languages"}} <input name="system.languages" type="text" value="{{system.languages}}" placeholder="{{localize 'ESSENCE.Character.LanguagesPlaceholder'}}"> <span class="muted">{{localize "ESSENCE.Character.LanguagesAllowance" n=system.languageCount acuity=system.acuity}}</span></label>
+  </div>
+
   <h3 class="section-head">{{localize "ESSENCE.Character.NonCombatSkills"}}</h3>
   <div class="noncombat-skills grid-2">
     {{#each system.nonCombatSkills as |s i|}}
@@ -531,6 +537,24 @@
     {{/each}}
   </div>
   <button type="button" data-action="addArrayRow" data-array="nonCombatSkills"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Character.AddSkill"}}</button>
+
+  <h3 class="section-head">{{localize "ESSENCE.Character.Connections"}} <span class="muted">({{connections.length}} / {{system.connectionLimit}}) · {{localize "ESSENCE.Character.ConnectionsHint"}}</span></h3>
+  {{#if connectionsOverLimit}}<p class="muted bio-standing-note">{{localize "ESSENCE.Character.ConnectionsOverLimit" n=system.connectionLimit}}</p>{{/if}}
+  <table class="item-table">
+    <thead><tr><th>{{localize "ESSENCE.Common.Name"}}</th><th>{{localize "ESSENCE.Character.ConnectionArea"}}</th><th>{{localize "ESSENCE.Character.ConnectionRelationship"}}</th><th>{{localize "ESSENCE.Character.ConnectionScope"}}</th><th></th></tr></thead>
+    <tbody>
+      {{#each connections as |c|}}
+        <tr>
+          <td><input name="system.connections.{{c.i}}.name" type="text" value="{{c.name}}"></td>
+          <td><input name="system.connections.{{c.i}}.area" type="text" value="{{c.area}}"></td>
+          <td><input name="system.connections.{{c.i}}.relationship" type="text" value="{{c.relationship}}"></td>
+          <td><input name="system.connections.{{c.i}}.scope" type="text" value="{{c.scope}}" placeholder="{{localize 'ESSENCE.Character.ConnectionScopePlaceholder'}}"></td>
+          <td><button type="button" data-action="deleteArrayRow" data-array="connections" data-index="{{c.i}}" aria-label="{{localize 'ESSENCE.Character.DeleteConnectionAria' n=(addOne c.i)}}"><i class="fa-solid fa-trash"></i></button></td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <button type="button" data-action="addArrayRow" data-array="connections"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Character.AddConnection"}}</button>
 
   <h3 class="section-head">{{localize "ESSENCE.Sheet.Influence"}} <span class="muted">— {{system.standing}}</span></h3>
   <div class="influence-row">
@@ -554,18 +578,6 @@
       <button type="button" data-action="applyInfluenceInjury">{{localize "ESSENCE.Sheet.ApplyInfluenceInjury"}}</button>
       <button type="button" data-action="recoverInfluenceInjury">{{localize "ESSENCE.Sheet.RecoverInfluence"}}</button>
       <button type="button" data-action="contributeToGoal">{{localize "ESSENCE.Sheet.ContributeToSharedGoal"}}</button>
-    </div>
-    <div class="wound-block">
-      <span class="attr-label" title="{{localize 'ESSENCE.Sheet.PresenceGrantTooltip'}}">{{localize "ESSENCE.Sheet.PresenceGrant"}}</span>
-      {{#if system.playState.presenceGrantActive}}
-        <button type="button" data-action="takePresenceGrant">{{localize "ESSENCE.Sheet.TakePresenceGrant" n=system.presence}}</button>
-      {{else}}
-        <span class="pip-track">
-          <button type="button" data-action="adjustPresenceGrant" data-delta="-1" {{#unless system.playState.presenceGrantRemaining}}disabled{{/unless}}>-</button>
-          <span class="wizard-value">{{system.playState.presenceGrantRemaining}}</span>
-          <button type="button" data-action="adjustPresenceGrant" data-delta="1">+</button>
-        </span>
-      {{/if}}
     </div>
   </div>
   <h3 class="section-head">{{localize "ESSENCE.Sheet.Reach"}}</h3>

@@ -1,11 +1,12 @@
 import { rollEssencePool } from "../dice/essence-roll.mjs";
 import { EXPERTISE_DATABASE, THREAD_EFFECTS } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
+import { addSecondDistinction } from "../data/origin-select.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, tierQualifiesForGrant } from "../data/item-grants.mjs";
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
-import { capitalize, cardSummary, domainResource, hasMastery, isDistinctionStyle, teamForActor, teamTierFor, componentTiers, assembledComponentIds, computeSlotUsage, computeTierGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, ordinaryDamageWounds, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
+import { capitalize, cardSummary, domainResource, hasMastery, isDistinctionStyle, distinctionUnlocks, teamForActor, teamTierFor, componentTiers, assembledComponentIds, computeSlotUsage, computeTierGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, ordinaryDamageWounds, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns } from "../utils.mjs";
 import { availableSubtypes, enterManifestation } from "../apps/manifestation.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -38,7 +39,7 @@ function pips(value, max = PIP_MAX) {
   return Array.from({ length: max }, (_, i) => i < value);
 }
 
-// V6's five remaining per-Attribute benefits (Might/Grace/Vigor/Acuity/Resolve) — one short
+// v0.6's per-Attribute benefits (Might/Grace/Vigor/Acuity/Resolve/Presence; Doc L7820-L7834) — one short
 // localized reminder line per Attribute, sourced from the derived reference values computed in
 // EssenceCombatantData#prepareDerivedData (actor-combatant.mjs). Character-sheet only: NPC/Monster
 // sheets have no comparable derived-Attribute display to extend (their attr-row is a bare label +
@@ -48,13 +49,15 @@ const ATTR_BENEFIT = {
   might: (s) => game.i18n.format("ESSENCE.Sheet.ExceptionalLoad", { lb: s.exceptionalLoad }),
   grace: (s) => game.i18n.format("ESSENCE.Sheet.RunningJump", { units: s.runningJumpDistance }),
   vigor: (s) => game.i18n.format("ESSENCE.Sheet.ExtremeExertion", { minutes: s.extremeExertionMinutes, rounds: s.extremeExertionRounds }),
-  acuity: (s) => game.i18n.format("ESSENCE.Sheet.ExtendedSenses", { bonus: s.extendedSensesBonus, range: s.preciseVisionRange }),
-  resolve: (s) => game.i18n.format("ESSENCE.Sheet.SustainedAttention", { hours: s.sustainedAttentionHours })
+  acuity: (s) => game.i18n.format("ESSENCE.Sheet.LanguagesBenefit", { n: s.languageCount }),
+  resolve: (s) => game.i18n.format("ESSENCE.Sheet.SustainedAttention", { hours: s.sustainedAttentionHours }),
+  presence: (s) => game.i18n.format("ESSENCE.Sheet.ConnectionsBenefit", { n: s.connectionLimit })
 };
 
 /** Default new-row shape for each free-length array field, keyed by the sheet's data-array value. */
 const ARRAY_ROW_DEFAULTS = {
   nonCombatSkills: { name: "", rating: 0 },
+  connections: { name: "", area: "", relationship: "", scope: "" },
   passiveFeatures: { name: "", source: "", text: "" },
   reachTriggers: { name: "", tempBonus: 1, tempInfluenceGrant: 0, usedThisAdventure: false, active: false }
 };
@@ -124,8 +127,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       deactivateReachTrigger: EssenceActorSheet.#onDeactivateReachTrigger,
       resetAdventureUses: EssenceActorSheet.#onResetAdventureUses,
       newEncounter: EssenceActorSheet.#onNewEncounter,
-      takePresenceGrant: EssenceActorSheet.#onTakePresenceGrant,
-      adjustPresenceGrant: EssenceActorSheet.#onAdjustPresenceGrant,
+      rollAttribute: EssenceActorSheet.#onRollAttribute,
       chooseGrantedItem: EssenceActorSheet.#onChooseGrantedItem,
       openManifestation: EssenceActorSheet.#onOpenManifestation,
       addResistance: EssenceActorSheet.#onAddResistance,
@@ -299,7 +301,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   }
 
   /**
-   * A character has exactly one Species/Heritage/Distinction — dropping a new one replaces the old.
+   * A character has exactly one Species and Heritage — dropping a new one replaces the old. A
+   * Distinction replaces only until the character has one; a second is added (see below).
    *
    * Also handles the Equipment tab's Inventory/Temporary/Armory drop zones (see
    * `resolveEquipmentDropSlot` in utils.mjs): dropping a NEW equipment Item (from a compendium, the
@@ -323,6 +326,14 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
         await created.update({ "system.slot": dropSlot });
       }
       return created;
+    }
+
+    // A second Distinction (Doc L4911): when the sheet already holds a starting one, a dropped
+    // Distinction is added as a later acquisition rather than replacing it. The wizard's creation
+    // pick still replaces (setOriginItem), since creation grants exactly one.
+    if (item.type === "distinction" && item.actor?.id !== this.actor.id
+      && this.actor.items.some((i) => i.type === "distinction" && !i.system.acquiredLater)) {
+      return addSecondDistinction(this.actor, item);
     }
 
     const created = await super._onDropItem(event, item);
@@ -384,10 +395,15 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const equipmentResolver = await buildEquipmentResolver(this.actor);
     context.equipmentBonusSources = computeEquipmentBonusSources(this.actor.items, (item) => deriveEquipmentStats(equipmentResolver, item));
 
-    const distinctionItem = this.actor.items.find((i) => i.type === "distinction");
+    // v0.6 allows two Distinctions (Doc L4911): the starting one, and one acquired later through
+    // the Skill Tree, flagged acquiredLater. Style gating and Expertise limits read both.
+    const distinctionItems = this.actor.items.filter((i) => i.type === "distinction");
+    const distinctionItem = distinctionItems.find((i) => !i.system.acquiredLater) ?? distinctionItems[0];
     const speciesItem = this.actor.items.find((i) => i.type === "species");
     const heritageItem = this.actor.items.find((i) => i.type === "heritage");
     context.distinctionItem = distinctionItem;
+    context.distinctionItems = distinctionItems;
+    context.secondDistinction = distinctionItems.find((i) => i.system.acquiredLater) ?? null;
     context.speciesItem = speciesItem;
     context.heritageItem = heritageItem;
 
@@ -395,7 +411,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // these traits — derived here rather than copied into system.passiveFeatures, so there's
     // nothing to keep in sync if the player swaps Species/Heritage/Distinction or picks
     // different Species Traits later.
-    context.originFeatures = deriveOriginFeatures({ speciesItem, heritageItem, distinctionItem });
+    context.originFeatures = deriveOriginFeatures({ speciesItem, heritageItem, distinctionItems });
 
     context.domains = DOMAINS.map((d) => ({
       ...d,
@@ -405,7 +421,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       })),
       skills: d.skills.map((key) => {
         const gateDistinction = SKILL_GATE[key];
-        const gateOpen = !gateDistinction || distinctionItem?.system.unlocks === key;
+        const gateOpen = !gateDistinction || distinctionUnlocks(distinctionItems, key);
         const expertiseOptions = EXPERTISE_DATABASE[key] || [];
         return {
           key,
@@ -429,6 +445,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     }));
 
     context.keyAspects = system.keyAspects.map((value, i) => ({ value, i, n: i + 1 }));
+    context.connections = system.connections.map((c, i) => ({ ...c, i }));
+    context.connectionsOverLimit = system.connections.length > (system.connectionLimit ?? 0);
     context.temporaryWoundPips = pips(system.playState.currentTemporaryWounds, system.temporaryWoundsAvailable);
     // V6: track length is deathTrackMax (5, or 7 for Deathless — design/v6-revision-delta.md §2.3).
     context.deathTrackPips = pips(system.playState.deathTrackStep, system.deathTrackMax);
@@ -697,36 +715,47 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       return;
     }
 
-    const picked = await EssenceActorSheet.#promptAttrAndCooperation(`Roll ${capitalize(skill)}`);
-    if (!picked) return;
-    const pool = (this.actor.system[picked.attr] ?? 0) + (this.actor.system[skill] ?? 0);
-    await rollEssencePool({ pool, freeDice: picked.freeDice, label: `${capitalize(picked.attr)} + ${capitalize(skill)}`, actor: this.actor, nonCombat: true });
+    // v0.6 dropped the pre-0.9.0 "Attribute + Combat Style" open roll outside Combat: a Non-Combat
+    // task uses Attribute + Non-Combat Skill, Attribute + 5 for a Key Aspect, or Attribute alone
+    // (Doc L1237). Combat Styles are only rolled through their cards.
+    ui.notifications.info(game.i18n.localize("ESSENCE.Notify.StyleRollOutsideCombat"));
   }
 
   /**
-   * Shared attribute picker for every non-combat roll (open Attribute check, Non-Combat Skill,
-   * Key Aspect). Also asks for Cooperation free dice (V6 §5.5, plan): each meaningfully-helping
-   * character grants 1 free die to the lead roller's non-combat roll. No shared multi-actor-picker
-   * component exists in this codebase yet (build-history's 0.6.81/0.6.100 both flagged this same
-   * gap), so rather than inventing per-helper actor selection UI this asks the roller directly for
-   * the total number of helpers/free dice to add — the GM/table still tracks who actually helped,
-   * same "simplest dialog shape that satisfies the rule" call the Anima-distribution UI made.
-   * @returns {Promise<{attr: string, freeDice: number}|null>}
+   * Shared prompt for every non-combat roll (Attribute check, Non-Combat Skill, Key Aspect).
+   * Asks for the Attribute (Doc L1259: chosen from the approach), the GM's Difficulty (Doc L1265:
+   * set from the circumstances; blank means the GM reads the result off the chat card), and
+   * Cooperation free dice (Doc L1285: each meaningfully-helping character grants 1 free die). No
+   * shared multi-actor-picker component exists in this codebase yet (build-history's 0.6.81/0.6.100
+   * both flagged this same gap), so rather than inventing per-helper actor selection UI this asks
+   * the roller directly for the total number of free dice — the table still tracks who helped.
+   * @param {string} title
+   * @param {object} [opts]
+   * @param {boolean} [opts.fixedAttr] - hide the Attribute select (the roll already knows it)
+   * @returns {Promise<{attr: string, difficulty: number|null, freeDice: number}|null>}
    */
-  static async #promptAttrAndCooperation(title) {
+  static async #promptAttrAndCooperation(title, { fixedAttr = null } = {}) {
+    const attrField = fixedAttr
+      ? `<input type="hidden" name="attr" value="${fixedAttr}">`
+      : `<label>${game.i18n.localize("ESSENCE.Common.Attribute")}<select name="attr">${ATTRIBUTES.map((a) => `<option value="${a}">${capitalize(a)}</option>`).join("")}</select></label>`;
     return new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
         window: { title },
-        content: `<select name="attr">${ATTRIBUTES.map((a) => `<option value="${a}">${capitalize(a)}</option>`).join("")}</select>
-          <label>Free dice from Cooperation (helpers)<input type="number" name="freeDice" value="0" min="0" step="1"></label>`,
+        content: `${attrField}
+          <label>${game.i18n.localize("ESSENCE.Sheet.DifficultyPrompt")}<input type="number" name="difficulty" value="" min="1" max="10" step="1" placeholder="${game.i18n.localize("ESSENCE.Sheet.DifficultyBlank")}"></label>
+          <label>${game.i18n.localize("ESSENCE.Sheet.CooperationPrompt")}<input type="number" name="freeDice" value="0" min="0" step="1"></label>`,
         buttons: [{
           action: "roll",
           label: "Roll",
           default: true,
-          callback: (event, button) => ({
-            attr: button.form.elements.attr.value,
-            freeDice: Math.max(0, parseInt(button.form.elements.freeDice.value, 10) || 0)
-          })
+          callback: (event, button) => {
+            const raw = parseInt(button.form.elements.difficulty.value, 10);
+            return {
+              attr: button.form.elements.attr.value,
+              difficulty: Number.isFinite(raw) && raw > 0 ? raw : null,
+              freeDice: Math.max(0, parseInt(button.form.elements.freeDice.value, 10) || 0)
+            };
+          }
         }],
         submit: (result) => resolve(result ?? null)
       }).render(true);
@@ -734,9 +763,21 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   }
 
   /**
-   * A Non-Combat Skill rolls exactly like a Combat Style's own open check (see #onRollSkill's
-   * final branch above) — pick an Attribute to pair it with, then roll Attribute + the skill's own
-   * rating as the dice pool. Unlike Combat Styles, Non-Combat Skills are freeform (name typed by
+   * Attribute-only Non-Combat roll, "or Attribute alone when no Skill applies" (Doc L1237). The
+   * Core tab's per-Attribute die button. A character with Attribute 1 rolls a single die (L1241).
+   */
+  static async #onRollAttribute(event, target) {
+    const attr = target.dataset.attr;
+    if (!ATTRIBUTES.includes(attr)) return;
+    const picked = await EssenceActorSheet.#promptAttrAndCooperation(`Roll ${capitalize(attr)}`, { fixedAttr: attr });
+    if (!picked) return;
+    const pool = this.actor.system[attr] ?? 0;
+    await rollEssencePool({ pool, freeDice: picked.freeDice, difficulty: picked.difficulty, label: capitalize(attr), actor: this.actor, nonCombat: true });
+  }
+
+  /**
+   * A Non-Combat Skill roll: pick an Attribute to pair it with, then roll Attribute + the skill's
+   * own rating as the dice pool (Doc L1237). Unlike Combat Styles, Non-Combat Skills are freeform (name typed by
    * the player, not one of a fixed list), so this reads the row's current name/rating directly
    * from the actor rather than off a fixed `data-skill` key.
    */
@@ -748,7 +789,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const picked = await EssenceActorSheet.#promptAttrAndCooperation(`Roll ${entry.name}`);
     if (!picked) return;
     const pool = (this.actor.system[picked.attr] ?? 0) + (entry.rating ?? 0);
-    await rollEssencePool({ pool, freeDice: picked.freeDice, label: `${capitalize(picked.attr)} + ${entry.name}`, actor: this.actor, nonCombat: true });
+    await rollEssencePool({ pool, freeDice: picked.freeDice, difficulty: picked.difficulty, label: `${capitalize(picked.attr)} + ${entry.name}`, actor: this.actor, nonCombat: true });
   }
 
   /**
@@ -764,7 +805,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const picked = await EssenceActorSheet.#promptAttrAndCooperation(`Roll Key Aspect: ${value}`);
     if (!picked) return;
     const pool = (this.actor.system[picked.attr] ?? 0) + 5;
-    await rollEssencePool({ pool, freeDice: picked.freeDice, label: `${capitalize(picked.attr)} + 5 (${value})`, actor: this.actor, nonCombat: true });
+    await rollEssencePool({ pool, freeDice: picked.freeDice, difficulty: picked.difficulty, label: `${capitalize(picked.attr)} + 5 (${value})`, actor: this.actor, nonCombat: true });
   }
 
   /**
@@ -793,11 +834,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const skillOptions = actor.system.nonCombatSkills
       .map((s, i) => ({ kind: "skill", index: i, label: `Skill: ${s.name} (Rank ${s.rating})` }))
       .filter((o) => actor.system.nonCombatSkills[o.index].name);
-    const basisOptions = [...keyAspectOptions, ...skillOptions];
-    if (!basisOptions.length) {
-      ui.notifications.warn("No Non-Combat Skills or Key Aspects are set on this character to perform the task with.");
-      return;
-    }
+    // "Or Attribute alone when no Skill applies" (Doc L1237, L7632): always offered last.
+    const basisOptions = [...keyAspectOptions, ...skillOptions, { kind: "attribute", index: -1, label: game.i18n.localize("ESSENCE.Sheet.AttributeOnly") }];
 
     const picked = await new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
@@ -828,10 +866,14 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const { basis, attr, freeDice } = picked;
     const pool = basis.kind === "keyAspect"
       ? (actor.system[attr] ?? 0) + 5
-      : (actor.system[attr] ?? 0) + (actor.system.nonCombatSkills[basis.index]?.rating ?? 0);
+      : basis.kind === "attribute"
+        ? (actor.system[attr] ?? 0)
+        : (actor.system[attr] ?? 0) + (actor.system.nonCombatSkills[basis.index]?.rating ?? 0);
     const label = basis.kind === "keyAspect"
       ? `Perform Task — ${capitalize(attr)} + 5 (${actor.system.keyAspects[basis.index]})`
-      : `Perform Task — ${capitalize(attr)} + ${actor.system.nonCombatSkills[basis.index].name}`;
+      : basis.kind === "attribute"
+        ? `Perform Task — ${capitalize(attr)}`
+        : `Perform Task — ${capitalize(attr)} + ${actor.system.nonCombatSkills[basis.index].name}`;
     await rollEssencePool({ pool, freeDice, label, actor, nonCombat: true });
     await EssenceActorSheet.#applyDyingExertion(actor);
   }
@@ -2189,36 +2231,6 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     });
   }
 
-  /**
-   * V6 Presence benefit (design/v6-revision-delta.md §3.4): "Once during preparation for each
-   * Adventure, gain Temporary Influence equal to your Presence." One-shot per Adventure — the
-   * button only renders while `presenceGrantActive` is true (see character-sheet.hbs), and this
-   * flips it false so the grant can't be taken twice for the same Adventure. Availability resets
-   * only via resetAdventureUses() at the explicit "new Adventure" boundary.
-   */
-  static async #onTakePresenceGrant() {
-    const amount = this.actor.system.presence ?? 0;
-    await this.actor.update({
-      "system.playState.presenceGrantRemaining": amount,
-      "system.playState.presenceGrantActive": false
-    });
-    await ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> gains ${amount} Temporary Influence from Presence (Adventure preparation). Tracked separately; unspent when this Adventure ends is lost.</p>`
-    });
-  }
-
-  /** Manual spend-down for the Presence grant bucket — this system tracks Influence spend by hand
-   *  throughout (Temporary Influence's own pip toggles included), so a +/- stepper matches the
-   *  established convention rather than wiring an automated spend-priority order (see design/
-   *  v6-revision-delta.md §2.7's own recommendation against rebuilding that model here). */
-  static async #onAdjustPresenceGrant(event, target) {
-    const delta = Number(target.dataset.delta);
-    const current = this.actor.system.playState.presenceGrantRemaining ?? 0;
-    const next = Math.max(0, current + delta);
-    await this.actor.update({ "system.playState.presenceGrantRemaining": next });
-  }
-
   static async #onAddArrayRow(event, target) {
     const key = target.dataset.array;
     const rows = this.actor.system[key].map((row) => foundry.utils.deepClone(row));
@@ -2251,9 +2263,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   static async #onAddExpertise(event, target) {
     const skill = target.dataset.skill;
     const expertises = this.actor.system.expertises.map((e) => ({ name: e.name, skill: e.skill }));
-    const distinctionItem = this.actor.items.find((i) => i.type === "distinction");
+    const distinctionItems = this.actor.items.filter((i) => i.type === "distinction");
     const rank = this.actor.system[skill] ?? 0;
-    const bonus = isDistinctionStyle(distinctionItem, skill) ? 1 : 0;
+    const bonus = isDistinctionStyle(distinctionItems, skill) ? 1 : 0;
     const styleLimit = rank + bonus;
     const styleChosen = expertises.filter((e) => e.skill === skill).length;
     if (styleChosen >= styleLimit) {

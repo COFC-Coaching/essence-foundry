@@ -3189,3 +3189,46 @@ scrolling and resizing: use what Foundry already has rather than anything custom
   wrapper insert (opening/closing counts per tag). Not live-tested in this session: no Foundry
   instance in the cloud container. First live check should confirm the scroll offset survives an
   edit on the Combat tab and that the corner resize handle appears on the Character sheet.
+
+### 2026-09-27 -- 0.9.0: Phase 2 (Attributes, creation, the Non-Combat tab)
+
+Built from `design/v0.6-doc-implementation-plan.md` Phase 2 (2.1 to 2.8), reading the Doc text
+through the Drive export in this session (line numbers below are that export's).
+
+- **Non-Combat rolls (2.7).** `resolveNonCombatRoll(faces, difficulty)` in `essence-roll.mjs`:
+  highest die meets or beats the Difficulty (Doc L1238-L1239). `rollEssencePool` takes
+  `difficulty`; the chat card gets a `nonCombat` branch (highest die, Success/Failure or "GM
+  decides", no Surges) and the legacy `countD10Successes` / "open-difficulty successes" line is
+  gone. `#promptAttrAndCooperation` gained the Difficulty input (blank = null). New
+  `rollAttribute` action and per-Attribute die button on the Core tab (L1237, L1241). The
+  out-of-Combat "Attribute + Combat Style" branch of `#onRollSkill` now posts a notice instead
+  (L1238 dropped it). Perform Task offers "Attribute only" (L7632). The NPC sheet's non-combat
+  roll was left as is (enemies).
+- **Skill Points (2.1).** `skillPointPool()` = 5 + Intellect + `skillPointBonus` (new character
+  field, hand-entered; Doc L815). The Intellect sub-step, its action, handler, template block and
+  four lang keys are gone. `nonCombatSkills[].source` stays in the schema with its `choices`, so
+  stored `"intellect"` tags still load (migration test).
+- **Languages (2.2), Connections (2.3), Size (2.5).** `languages` (string), `connections` (array
+  of name/area/relationship/scope) and `skillPointBonus` on `actor-character.mjs`; `size` (0-5,
+  initial 1) on `actor-combatant.mjs`. Derived `languageCount = 1 + acuity` and
+  `connectionLimit = presence`. Sheet: Languages row and Connections table on the Non-Combat tab,
+  Size in the header. Wizard: Languages and Connections in the Non-Combat step.
+- **Retired (2.4).** `playState.presenceGrantActive/Remaining`, the two sheet actions, the template
+  block, `resetAdventureUses`'s reset of them, and `extendedSensesBonus/preciseVisionRange` with
+  the Acuity tooltip. `ATTR_BENEFIT` now shows Languages for Acuity and Connections for Presence.
+- **Distinctions (2.6).** Dilettante removed from `scripts/origin-data.json` and its `_source`
+  doc deleted; `node scripts/build-packs.mjs --only=distinctions` rebuilt the pack (9 entries).
+  `acquiredLater` flag on the Distinction schema; `addSecondDistinction()` in `origin-select.mjs`;
+  `_onDropItem` adds a second when a starting one exists (same name refused); `isDistinctionStyle`
+  accepts an array; new `distinctionUnlocks()`; `deriveOriginFeatures` takes `distinctionItems`
+  and uses `laterAcquisitionText()` (the "If acquired later:" clause) for the second one, never its
+  Origin Benefit (L4919). The wizard offers the Distinction's Style for Expertises at Rank 0
+  (L5592). Header shows "+ Second" beside the Distinction field.
+- **Wizard (2.8).** STEPS reordered (Non-Combat before Combat Styles) with the switch and the
+  template blocks swapped; Finalize gets the starting-AP fields (L939-L941) and the checklist adds
+  Armory and Connections rows. The footer's hard-coded "of 10" became 8.
+- **Verification:** `npm test` (migration + rules, new cases for every schema field, the
+  Difficulty roll and the two-Distinction helpers); templates balanced; lang keys with 0 leaf/prefix
+  collisions. Not live-tested in this session (no Foundry in the container). First live checks:
+  a Non-Combat Skill roll with and without a Difficulty; dropping a second Distinction; the
+  wizard's Non-Combat step showing the 5 + Intellect pool.

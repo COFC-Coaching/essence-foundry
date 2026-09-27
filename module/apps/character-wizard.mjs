@@ -1,7 +1,7 @@
 import { EXPERTISE_DATABASE, SUBTYPE_DATABASE } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
-import { assembledComponentIds, capitalize, computeTierGate, computeSlotUsage, isDistinctionStyle, teamForActor, teamTierFor, componentTiers } from "../utils.mjs";
+import { assembledComponentIds, capitalize, computeTierGate, computeSlotUsage, isDistinctionStyle, distinctionUnlocks, teamForActor, teamTierFor, componentTiers } from "../utils.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, tierQualifiesForGrant } from "../data/item-grants.mjs";
 import { EQUIPMENT_CATEGORY_LABELS, MODULAR_EQUIPMENT_CATEGORIES } from "../data/item-card.mjs";
 
@@ -20,6 +20,13 @@ const SKILL_MAX_AT_CREATION = 2;
 const EXPERTISE_COUNT = 4;
 const NONCOMBAT_POOL = 5;
 const NONCOMBAT_MAX = 2;
+/** Doc L815: "5 + permanent Intellect Skill Points, plus any explicit grants." */
+function skillPointPool(system) {
+  return NONCOMBAT_POOL + (system.intellect ?? 0) + (system.skillPointBonus ?? 0);
+}
+function skillPointsSpent(system) {
+  return system.nonCombatSkills.reduce((sum, s) => sum + Math.max(0, s.rating || 0), 0);
+}
 const CARD_LIMIT = 10;
 
 /**
@@ -85,13 +92,14 @@ function creationBonusFor(distinctionItem) {
  *  Influence, and every one of those fields is already editable on the character sheet once play
  *  starts — a creation step that only ever showed empty tracks was two clicks of nothing. */
 const STEPS = [
-  "Concept", "Identity", "Attributes", "Combat Styles",
-  "Non-Combat", "Passive Features", "Equipment", "Finalize"
+  "Concept", "Identity", "Attributes", "Non-Combat",
+  "Combat Styles", "Passive Features", "Equipment", "Finalize"
 ];
 
 /**
- * Walks the creation steps (Concept, Identity, Attributes, Combat Styles, Non-Combat, Passive
- * Features, Equipment, Finalize — see STEPS for why Wounds and Influence aren't among them), writing
+ * Walks the creation steps (Concept, Identity, Attributes, Non-Combat, Combat Styles, Passive
+ * Features, Equipment, Finalize — Career, Skills and Languages come before Styles, as in the
+ * Doc's own Step 4 to Step 6 order — see STEPS for why Wounds and Influence aren't among them), writing
  * directly to an existing Actor rather than building a separate draft — every choice here is a
  * normal actor.update()/createEmbeddedDocuments() call, so closing and reopening the wizard loses
  * nothing and the main sheet already reflects every choice live.
@@ -118,7 +126,8 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       grantBasicCards: EssenceCharacterWizard.#onGrantBasicCards,
       toggleCard: EssenceCharacterWizard.#onToggleCard,
       addNonCombatSkill: EssenceCharacterWizard.#onAddNonCombatSkill,
-      addIntellectSkill: EssenceCharacterWizard.#onAddIntellectSkill,
+      addConnection: EssenceCharacterWizard.#onAddConnection,
+      deleteConnection: EssenceCharacterWizard.#onDeleteConnection,
       deleteNonCombatSkill: EssenceCharacterWizard.#onDeleteNonCombatSkill,
       adjustNonCombatRating: EssenceCharacterWizard.#onAdjustNonCombatRating,
       addPassiveFeature: EssenceCharacterWizard.#onAddPassiveFeature,
@@ -277,8 +286,8 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     switch (this.#step) {
       case 1: await this.#prepareIdentity(context, speciesItem, heritageItem, distinctionItem); break;
       case 2: this.#prepareAttributes(context); break;
-      case 3: await this.#prepareCombatSkills(context, distinctionItem); break;
-      case 4: this.#prepareNonCombat(context); break;
+      case 3: this.#prepareNonCombat(context); break;
+      case 4: await this.#prepareCombatSkills(context, distinctionItem); break;
       case 5: context.originFeatures = deriveOriginFeatures({ speciesItem, heritageItem, distinctionItem }); break;
       case 6: await this.#prepareEquipment(context); break;
       case 7: this.#prepareFinalize(context, speciesItem, heritageItem, distinctionItem); break;
@@ -340,14 +349,16 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     context.skillRemaining = SKILL_POOL - spent;
     context.skills = SKILLS.map((key) => {
       const gateDistinction = SKILL_GATE[key];
-      const gateOpen = !gateDistinction || distinctionItem?.system.unlocks === key;
+      const gateOpen = !gateDistinction || distinctionUnlocks(distinctionItem ? [distinctionItem] : [], key);
       return { key, label: capitalize(key), value: system[key], gateDistinction, gateOpen };
     });
 
     const bonus = creationBonusFor(distinctionItem);
     context.expertiseCount = EXPERTISE_COUNT + bonus.expertise;
     context.expertiseSpent = system.expertises.length;
-    context.eligibleSkills = SKILLS.filter((key) => system[key] >= 1);
+    // Doc L5592: "An Expertise granted directly by that Distinction may override the normal Rank 1
+    // requirement for that associated Style", so the Distinction's own Style is offered at Rank 0.
+    context.eligibleSkills = SKILLS.filter((key) => system[key] >= 1 || isDistinctionStyle(distinctionItem, key));
     context.expertisesBySkill = context.eligibleSkills.map((key) => ({
       key,
       options: (EXPERTISE_DATABASE[key] || []).map((name) => ({
@@ -432,28 +443,16 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     context.missingBasicCount = 7 - context.ownedBasicCards.length;
   }
 
+  /** v0.6 Step 5 (Doc L815): one pool of 5 + permanent Intellect + explicit grants. Points buy Ranks
+   *  in new or existing Skills, no Skill above Rank 2 at creation. The pre-0.9.0 "one free Rank-1
+   *  Skill per Intellect" sub-step is gone; a stored `source: "intellect"` tag is just an ordinary
+   *  entry now. */
   #prepareNonCombat(context) {
     const system = context.system;
-    // design/v6-revision-delta.md §3.4 (Intellect): "Gain one different Non-Combat Skill at Rank 1
-    // per point of permanent Intellect... make these selections BEFORE spending the ordinary 5
-    // Skill Points." A sub-step inside this existing Non-Combat step (per the delta report's own
-    // "add the sub-step inside the existing step; do not insert a new step" guidance), shown first.
-    // Only the free Rank-1 grant itself is exempt from the 5-point pool — points spent RAISING an
-    // Intellect-granted Skill beyond Rank 1 (up to the Rank-2 starting cap) still draw from it.
-    context.intellectSkillCount = system.intellect ?? 0;
-    context.intellectEntries = system.nonCombatSkills
-      .map((s, i) => ({ ...s, i }))
-      .filter((s) => s.source === "intellect");
-    context.intellectRemaining = context.intellectSkillCount - context.intellectEntries.length;
-
-    const ordinarySpend = system.nonCombatSkills.reduce((sum, s) => {
-      const baseline = s.source === "intellect" ? 1 : 0;
-      return sum + Math.max(0, (s.rating || 0) - baseline);
-    }, 0);
-    context.nonCombatPool = NONCOMBAT_POOL;
-    context.nonCombatSpent = ordinarySpend;
-    context.nonCombatRemaining = NONCOMBAT_POOL - ordinarySpend;
-    context.nonCombatEntries = system.nonCombatSkills.map((s, i) => ({ ...s, i })).filter((s) => s.source !== "intellect");
+    context.nonCombatPool = skillPointPool(system);
+    context.nonCombatSpent = skillPointsSpent(system);
+    context.nonCombatRemaining = context.nonCombatPool - context.nonCombatSpent;
+    context.nonCombatEntries = system.nonCombatSkills.map((s, i) => ({ ...s, i }));
   }
 
   /** Equipment plus the three Component types — the Wizard's loadout lists and its Library both
@@ -572,12 +571,13 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const skillSpent = SKILLS.reduce((sum, key) => sum + system[key], 0);
     const ownedCards = this.document.items.filter((i) => i.type === "action-card" || i.type === "reaction-card");
     const nonBasicCardCount = ownedCards.filter((i) => !isBasicCard(i.system) && !isSpeciesCard(i.system)).length;
-    const ncSpent = system.nonCombatSkills.reduce((sum, s) => sum + Math.max(0, (s.rating || 0) - (s.source === "intellect" ? 1 : 0)), 0);
-    const intellectGranted = system.nonCombatSkills.filter((s) => s.source === "intellect").length;
-    const intellectCount = system.intellect ?? 0;
+    const ncSpent = skillPointsSpent(system);
+    const ncPool = skillPointPool(system);
     // Matches the Equipment step's own accounting — computeSlotUsage counts a loose Component as
     // ½ a slot and an assembled one as free, which a plain per-item count of `equipment` missed.
     const inventoryUsed = computeSlotUsage(this.document.items, "inventory");
+    // Armory 8 includes the Inventory 4 (Doc, Part III): stored + prepared against the Armory limit.
+    const armoryUsed = inventoryUsed + computeSlotUsage(this.document.items, "armory");
     const bonus = creationBonusFor(distinctionItem);
     const expertiseCount = EXPERTISE_COUNT + bonus.expertise;
     const cardLimit = CARD_LIMIT + bonus.actionCards;
@@ -589,9 +589,10 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       { label: `Expertises chosen (${system.expertises.length} / ${expertiseCount})`, ok: system.expertises.length === expertiseCount },
       { label: `Basic Combat Cards granted (${ownedCards.filter((i) => isBasicCard(i.system)).length} / 7)`, ok: ownedCards.filter((i) => isBasicCard(i.system)).length === 7 },
       { label: `Combat Cards chosen (${nonBasicCardCount} / ${cardLimit})`, ok: nonBasicCardCount <= cardLimit },
-      { label: `Non-Combat Skill points spent (${ncSpent} / ${NONCOMBAT_POOL})`, ok: ncSpent === NONCOMBAT_POOL },
-      { label: `Skills granted from Intellect (${intellectGranted} / ${intellectCount})`, ok: intellectGranted === intellectCount },
-      { label: `Inventory Equipment within limit (${inventoryUsed} / ${system.inventoryLimit})`, ok: inventoryUsed <= system.inventoryLimit }
+      { label: `Skill Points spent (${ncSpent} / ${ncPool})`, ok: ncSpent === ncPool },
+      { label: `Connections within permanent Presence (${system.connections.length} / ${system.connectionLimit})`, ok: system.connections.length <= system.connectionLimit },
+      { label: `Inventory Equipment within limit (${inventoryUsed} / ${system.inventoryLimit})`, ok: inventoryUsed <= system.inventoryLimit },
+      { label: `Armory within limit (${armoryUsed} / ${system.armoryLimit})`, ok: armoryUsed <= system.armoryLimit }
     ];
     context.resources = system.resources;
     context.defenses = system.defenses;
@@ -823,23 +824,6 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     await this.document.update({ "system.nonCombatSkills": nonCombatSkills });
   }
 
-  /**
-   * design/v6-revision-delta.md §3.4: "Gain one different Non-Combat Skill at Rank 1 per point of
-   * permanent Intellect... Each selection must be a Skill you do not already possess." One free
-   * Rank-1 entry per point of Intellect, tagged `source: "intellect"` — see #prepareNonCombat.
-   */
-  static async #onAddIntellectSkill() {
-    const nonCombatSkills = this.document.system.nonCombatSkills.map((s) => ({ ...s }));
-    const intellectCount = this.document.system.intellect ?? 0;
-    const haveCount = nonCombatSkills.filter((s) => s.source === "intellect").length;
-    if (haveCount >= intellectCount) {
-      ui.notifications.warn(game.i18n.format("ESSENCE.Notify.IntellectSkillsAlreadyGranted", { count: intellectCount }));
-      return;
-    }
-    nonCombatSkills.push({ name: "", rating: 1, source: "intellect" });
-    await this.document.update({ "system.nonCombatSkills": nonCombatSkills });
-  }
-
   static async #onDeleteNonCombatSkill(event, target) {
     const i = Number(target.dataset.index);
     const nonCombatSkills = this.document.system.nonCombatSkills.map((s) => ({ ...s }));
@@ -852,16 +836,28 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const delta = Number(target.dataset.delta);
     const nonCombatSkills = this.document.system.nonCombatSkills.map((s) => ({ ...s }));
     const row = nonCombatSkills[i];
-    // An Intellect-granted Skill's Rank 1 is free (not paid from the 5-point pool) — only the
-    // portion ABOVE that baseline counts against `spent`/NONCOMBAT_POOL below, and the rating can
-    // never drop below that baseline via this stepper (removing the grant entirely is a delete).
-    const baseline = row.source === "intellect" ? 1 : 0;
-    const spent = nonCombatSkills.reduce((sum, s) => sum + Math.max(0, (s.rating || 0) - (s.source === "intellect" ? 1 : 0)), 0);
+    const spent = skillPointsSpent(this.document.system);
     const current = row.rating || 0;
-    if (delta > 0 && (current >= NONCOMBAT_MAX || spent >= NONCOMBAT_POOL)) return;
-    if (delta < 0 && current <= baseline) return;
+    if (delta > 0 && (current >= NONCOMBAT_MAX || spent >= skillPointPool(this.document.system))) return;
+    if (delta < 0 && current <= 0) return;
     row.rating = current + delta;
     await this.document.update({ "system.nonCombatSkills": nonCombatSkills });
+  }
+
+  static async #onAddConnection() {
+    const connections = this.document.system.connections.map((c) => ({ ...c }));
+    if (connections.length >= (this.document.system.connectionLimit ?? 0)) {
+      ui.notifications.warn(game.i18n.format("ESSENCE.Character.ConnectionsOverLimit", { n: this.document.system.connectionLimit }));
+    }
+    connections.push({ name: "", area: "", relationship: "", scope: "" });
+    await this.document.update({ "system.connections": connections });
+  }
+
+  static async #onDeleteConnection(event, target) {
+    const i = Number(target.dataset.index);
+    const connections = this.document.system.connections.map((c) => ({ ...c }));
+    connections.splice(i, 1);
+    await this.document.update({ "system.connections": connections });
   }
 
   static async #onAddPassiveFeature() {

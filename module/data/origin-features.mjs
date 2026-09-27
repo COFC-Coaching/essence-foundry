@@ -16,8 +16,17 @@ function withSubChoiceSuffix(text, subChoice) {
  * Distinction Items — shared by the actor sheet and the character-creation wizard so there's one
  * place that knows how a Nature/Trait/Legacy/Familiarity/origin trait becomes a feature row.
  */
-export function deriveOriginFeatures({ speciesItem, heritageItem, distinctionItem }) {
+/** The benefit text a later-acquired Distinction grants: the "If acquired later:" clause when the
+ *  entry prints one (every shipped Distinction does), else the whole benefit. */
+export function laterAcquisitionText(benefitHtml) {
+  const text = benefitHtml || "";
+  const m = /if acquired later:?\s*/i.exec(text);
+  return m ? text.slice(m.index + m[0].length) : text;
+}
+
+export function deriveOriginFeatures({ speciesItem, heritageItem, distinctionItem, distinctionItems }) {
   const originFeatures = [];
+  const distinctions = distinctionItems ?? (distinctionItem ? [distinctionItem] : []);
   if (speciesItem) {
     const sp = speciesItem.system;
     if (sp.nature?.name) {
@@ -36,9 +45,14 @@ export function deriveOriginFeatures({ speciesItem, heritageItem, distinctionIte
     if (h.legacy?.name) originFeatures.push({ name: h.legacy.name, source: `Heritage: ${heritageItem.name}`, text: h.legacy.text });
     if (h.familiarity?.name) originFeatures.push({ name: h.familiarity.name, source: `Heritage: ${heritageItem.name}`, text: h.familiarity.text });
   }
-  if (distinctionItem) {
-    const d = distinctionItem.system;
-    if (d.origin?.name) originFeatures.push({ name: d.origin.name, source: `Distinction: ${distinctionItem.name}`, text: d.origin.text });
+  for (const item of distinctions) {
+    const d = item.system;
+    if (d.acquiredLater) {
+      // Doc L4919: "use the later-acquisition benefit... Do not gain its Origin Benefit."
+      originFeatures.push({ name: `${item.name} (later acquisition)`, source: `Distinction: ${item.name}`, text: laterAcquisitionText(d.benefit) });
+    } else if (d.origin?.name) {
+      originFeatures.push({ name: d.origin.name, source: `Distinction: ${item.name}`, text: d.origin.text });
+    }
   }
   return originFeatures;
 }

@@ -196,9 +196,21 @@ export function ordinaryDamageWounds(resilience, accumulated, amount) {
   return Math.max(0, (amount ?? 0) - remaining);
 }
 
+/** Whether `skill` is the Style associated with any of the character's Distinctions. Takes one
+ *  Distinction Item or an array of them (v0.6 allows two, Doc L4911); each raises its own Style's
+ *  Expertise limit by 1 (L4921). */
 export function isDistinctionStyle(distinctionItem, skill) {
-  const key = (distinctionItem?.system.keyCombatSkill ?? "").trim().toLowerCase();
-  return !!key && key === (skill ?? "").toLowerCase();
+  const items = Array.isArray(distinctionItem) ? distinctionItem : [distinctionItem];
+  const wanted = (skill ?? "").toLowerCase();
+  return items.some((item) => {
+    const key = (item?.system?.keyCombatSkill ?? "").trim().toLowerCase();
+    return !!key && key === wanted;
+  });
+}
+
+/** Whether any of the character's Distinctions unlocks the restricted Style `skill`. */
+export function distinctionUnlocks(distinctionItems, skill) {
+  return (distinctionItems ?? []).some((item) => item?.system?.unlocks === skill);
 }
 
 export function hasMastery(cardSystem, actorExpertises) {
@@ -607,15 +619,9 @@ export function computeTierGate(item, teamTier, items) {
  */
 export async function resetAdventureUses(actor) {
   const triggers = actor.system.reachTriggers.map((t) => ({ ...t, usedThisAdventure: false }));
-  // V6 Presence benefit (design/v6-revision-delta.md §3.4): a new Adventure's preparation both
-  // expires any unspent portion of the LAST Adventure's grant (presenceGrantRemaining -> 0) and
-  // makes the once-per-Adventure grant takeable again (presenceGrantActive -> true) — see
-  // actor-combatant.mjs's schema comment for the full field-shape reasoning.
   await actor.update({
     "system.reachTriggers": triggers,
-    "system.reachPressure": 0,
-    "system.playState.presenceGrantActive": true,
-    "system.playState.presenceGrantRemaining": 0
+    "system.reachPressure": 0
   });
 
   const augments = actor.items.filter((i) => i.type === "augment" && i.system.kind === "function" && i.system.uses != null);

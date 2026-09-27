@@ -7,7 +7,9 @@
  * here; module/utils.mjs has no imports and loads under plain Node.
  */
 
-import { ordinaryDamageWounds, isDistinctionStyle, componentTiers, computeTierGate } from "../module/utils.mjs";
+import { ordinaryDamageWounds, isDistinctionStyle, distinctionUnlocks, componentTiers, computeTierGate } from "../module/utils.mjs";
+import { resolveNonCombatRoll } from "../module/dice/essence-roll.mjs";
+import { laterAcquisitionText } from "../module/data/origin-features.mjs";
 import { ITEM_GRANT_REGISTRY, tierQualifiesForGrant } from "../module/data/item-grants.mjs";
 
 let pass = 0;
@@ -44,6 +46,28 @@ check("capitalized Distinction matches lowercase key", isDistinctionStyle(athlet
 check("different Style", isDistinctionStyle(athlete, "cunning"), false);
 check("no Distinction", isDistinctionStyle(null, "prowess"), false);
 check("'None' key matches nothing", isDistinctionStyle({ system: { keyCombatSkill: "None" } }, "prowess"), false);
+
+console.log("\n--- Non-Combat resolution (Part I, Doc L1238-L1241, L1265-L1269) ---");
+// "A final highest result meeting or exceeding the Difficulty succeeds"; the dice are never summed.
+check("L1239 highest die meets Difficulty", resolveNonCombatRoll([3, 7, 5], 7).succeeded, true);
+check("L1239 highest die below Difficulty", resolveNonCombatRoll([3, 6, 5], 7).succeeded, false);
+check("L1238 read the highest, not the sum", resolveNonCombatRoll([4, 4, 4], 8).succeeded, false);
+check("L1241 Attribute 1, no Skill: one die", resolveNonCombatRoll([9], 8).succeeded, true);
+check("L1269 Difficulty above 10 is unreachable", resolveNonCombatRoll([10, 10], 11).succeeded, false);
+check("no Difficulty: the GM decides", resolveNonCombatRoll([8, 2], null).succeeded, null);
+check("highest die is reported", resolveNonCombatRoll([8, 2], null).highest, 8);
+
+console.log("\n--- Two Distinctions (Part VIII, Doc L4911-L4921, L5592) ---");
+const strategist = { system: { keyCombatSkill: "Cunning", unlocks: null, benefit: "Gain one additional Cunning Expertise. If acquired later: instead increase Cunning to a minimum of 2 pips, then gain one additional Cunning Expertise." } };
+const arcanist = { system: { keyCombatSkill: "Magecraft", unlocks: "magecraft", benefit: "Gain access to Magecraft." } };
+check("L4921 each Distinction raises its own Style", isDistinctionStyle([strategist, arcanist], "magecraft"), true);
+check("L4921 the first still counts", isDistinctionStyle([strategist, arcanist], "cunning"), true);
+check("an unrelated Style is not raised", isDistinctionStyle([strategist, arcanist], "prowess"), false);
+check("single item still accepted", isDistinctionStyle(strategist, "cunning"), true);
+check("L4921 a later Distinction unlocks its restricted Style", distinctionUnlocks([strategist, arcanist], "magecraft"), true);
+check("no Distinction unlocks nothing", distinctionUnlocks([], "magecraft"), false);
+check("L4919 later-acquisition text is the clause after the marker", laterAcquisitionText(strategist.system.benefit), "instead increase Cunning to a minimum of 2 pips, then gain one additional Cunning Expertise.");
+check("no marker: the whole benefit", laterAcquisitionText(arcanist.system.benefit), "Gain access to Magecraft.");
 
 console.log("\n--- Team Tier access (Part III, Team Tier and Acquisition, Doc L1793) ---");
 const part = (id, type, tier) => ({ id, type, system: { tier } });

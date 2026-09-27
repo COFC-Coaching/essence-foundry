@@ -123,6 +123,12 @@ export class EssenceDistinctionData extends foundry.abstract.TypeDataModel {
       // their own benefit text, so they're left at 0 here.
       creationExpertiseBonus: new fields.NumberField({ integer: true, initial: 0, min: 0 }),
       creationActionCardBonus: new fields.NumberField({ integer: true, initial: 0, min: 0 }),
+      // v0.6 "Distinctions Through Advancement" (Doc L4911-L4921): a character may hold two. The
+      // second, bought through a Skill Tree node, uses the later-acquisition benefit printed in its
+      // entry and does NOT grant its Origin Benefit. Set when a Distinction is dropped onto a sheet
+      // that already has one (actor-sheet.mjs _onDropItem); the wizard's creation pick leaves it
+      // false. deriveOriginFeatures (origin-features.mjs) reads it.
+      acquiredLater: new fields.BooleanField({ initial: false }),
       origin: new fields.SchemaField({
         name: new fields.StringField({ initial: "" }),
         text: new fields.HTMLField({ initial: "" })

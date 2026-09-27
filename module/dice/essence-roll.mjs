@@ -4,9 +4,18 @@
  * Foundry rolls agree with the web app's roller and card resolution.
  */
 
-/** Legacy d10-pool successes: 10 = 2 successes, 6-9 = 1 success, 1-5 = 0. Used for open-difficulty / non-combat checks. */
-export function countD10Successes(faces) {
-  return faces.reduce((sum, f) => sum + (f === 10 ? 2 : f >= 6 ? 1 : 0), 0);
+/**
+ * Non-Combat task resolution (Doc L1238-L1239): "Read the highest result without adding the dice
+ * together... A final highest result meeting or exceeding the Difficulty succeeds." With no
+ * Difficulty given, the GM reads the highest die off the chat card and decides.
+ * @param {number[]} faces
+ * @param {number|null} difficulty
+ * @returns {{highest: number, succeeded: boolean|null}}
+ */
+export function resolveNonCombatRoll(faces, difficulty = null) {
+  const highest = faces.length ? Math.max(...faces) : 0;
+  const succeeded = difficulty == null ? null : highest >= difficulty;
+  return { highest, succeeded };
 }
 
 /**
@@ -85,8 +94,10 @@ export function resolveCombatRoll(faces, defense = null, unopposed = false) {
  *   replaced with a short "no Surges — non-combat roll" note, and the message's stored
  *   `surgesAvailable`/`surgeOptions` flags are zeroed so the click-to-spend handler in essence.mjs
  *   has nothing to spend even if a card somehow supplied `surgeOptions` alongside `nonCombat`.
+ * @param {number|null} [options.difficulty] - Non-Combat only (Doc L1265): the GM's Difficulty.
+ *   The highest die meeting or beating it succeeds. null means the GM decides from the card.
  */
-export async function rollEssencePool({ pool, defense = null, targets = null, label = "Essence Roll", actor = null, surgeOptions = [], bonusSurges = 0, freeDice = 0, unopposed = false, nonCombat = false } = {}) {
+export async function rollEssencePool({ pool, defense = null, targets = null, label = "Essence Roll", actor = null, surgeOptions = [], bonusSurges = 0, freeDice = 0, unopposed = false, nonCombat = false, difficulty = null } = {}) {
   const n = Math.max(1, Math.floor(pool));
   const nFree = Math.max(0, Math.floor(freeDice) || 0);
   const roll = new Roll(`${n + nFree}d10`);
@@ -102,7 +113,7 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
   const openRoll = !unopposed && !multi && defense == null;
   const combat = resolveCombatRoll(faces, multi ? null : defense, unopposed);
   combat.surges += bonusSurges;
-  const poolSuccesses = countD10Successes(faces);
+  const task = nonCombat ? resolveNonCombatRoll(faces, difficulty) : null;
 
   const targetResults = multi
     ? targets.map((t) => ({
@@ -123,8 +134,10 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
       successDie: combat.successDie,
       succeeded: combat.succeeded,
       surges: combat.surges,
-      openRoll,
-      poolSuccesses,
+      openRoll: nonCombat ? false : openRoll,
+      nonCombat,
+      difficulty: nonCombat ? difficulty : null,
+      taskSucceeded: task?.succeeded ?? null,
       targets: targetResults,
       surgeOptions: nonCombat ? [] : surgeOptions.map((opt, i) => ({ i, n: opt.n, html: opt.html })),
       bonusSurges,
@@ -146,5 +159,5 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
     }
   });
 
-  return { roll, faces, ...combat, poolSuccesses, targets: targetResults };
+  return { roll, faces, ...combat, task, targets: targetResults };
 }
