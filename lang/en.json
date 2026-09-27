@@ -863,6 +863,7 @@
   "ESSENCE.Notify.EnemyUtilityUsed": "{name} has already used this Turn's one utility Basic Action.",
   "ESSENCE.Notify.EnemyActionsUsed": "{name} has used its {n} Action(s) this Turn.",
   "ESSENCE.Notify.EnemyReactionsUsed": "{name} has used its {n} Reaction(s) this Round.",
+  "ESSENCE.Notify.EnemyUnawarePrompt": "Is the target unaware? That costs one additional Reaction from this Round's allowance.",
   "ESSENCE.Notify.AbilityUsesRefreshed": "{name}'s limited abilities are refreshed by the Recovery.",
   "ESSENCE.Notify.UnawareTaxUnaffordable": "{name} needs {needed} Reaction dice ({min} to roll plus 1 burned for being unaware) but has {available}.",
   "ESSENCE.Notify.NoPreparedAction": "No Action is prepared.",

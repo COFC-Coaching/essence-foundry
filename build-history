@@ -3699,3 +3699,13 @@ burn 2. All five lookups lowercase the key now.
 clause (obsolete since 0.15.0); the veil strength; the concept puts the vitals on the left with a
 hero header and Resource bars, the build has them on the right with the old header. Apply
 buttons on the chat card wait for Ryan. `design/live-test-pending.md` and the runbook stay.
+
+### 2026-09-27 -- 0.18.1: Mooks and Normals take Dazed and the unaware surcharge (gap question 4)
+
+Shane: "treat them as if what would happen to players." Mapped onto what a reduced-engine
+profile has: no Pool, so Dazed costs the Turn's Action allowance (`enemyTurn.actionsUsed` set to
+the allowance in `EssenceCombat._onStartTurn`'s reduced branch, then the Condition is removed and
+chat says so), and an unaware target costs one additional Reaction from the Round's allowance
+(`DialogV2.confirm` when a reduced-engine Reaction ability is used). Elites already used the
+character rules. Live-verified: a Dazed Mook Skirmisher started its Turn at 1 / 1 Actions with
+Dazed gone; Slip Away with "unaware" answered Yes moved Reactions from 0 to 2.

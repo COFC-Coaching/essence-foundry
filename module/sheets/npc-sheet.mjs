@@ -1417,7 +1417,10 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
         update["system.enemyTurn.actionsUsed"] = (turn.actionsUsed ?? 0) + 1;
       } else if (ability.kind === "reaction") {
         if ((turn.reactionsUsed ?? 0) >= (sys.effectiveReactionsPerRound ?? 0)) ui.notifications.warn(game.i18n.format("ESSENCE.Notify.EnemyReactionsUsed", { name: this.actor.name, n: sys.effectiveReactionsPerRound }));
-        update["system.enemyTurn.reactionsUsed"] = (turn.reactionsUsed ?? 0) + 1;
+        // Unaware target (Shane, 2026-09-27, gap question 4): the surcharge applies as for a
+        // character; with no Pool it costs one additional Reaction from this Round's allowance.
+        const unaware = await foundry.applications.api.DialogV2.confirm({ window: { title: name }, content: `<p>${game.i18n.localize("ESSENCE.Notify.EnemyUnawarePrompt")}</p>`, rejectClose: false, defaultNo: true });
+        update["system.enemyTurn.reactionsUsed"] = (turn.reactionsUsed ?? 0) + 1 + (unaware ? 1 : 0);
       }
       pool = dice;
     } else if (dice > 0 && ["action", "reaction"].includes(ability.kind)) {

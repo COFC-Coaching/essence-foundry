@@ -2,6 +2,10 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.1
+
+**Mooks and Normals take Dazed and the unaware surcharge like characters (Shane, 2026-09-27, gap question 4).** The old blanket waivers are gone. A Dazed Mook or Normal loses its Action allowance for the Turn instead of burning 3 Pool dice it does not have, and Dazed then ends. A Mook or Normal Reaction against an unaware target costs one additional Reaction from the Round's allowance; the sheet asks when the Reaction is used. Elites already followed the character rules.
+
 ## 0.18.0
 
 **Sheet redesign, part four: the chat card and the card read view (plan step 6).**

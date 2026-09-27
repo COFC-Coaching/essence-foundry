@@ -236,10 +236,18 @@ export default class EssenceCombat extends Combat {
       if (actor.system.abilities?.some((a) => a.usedThisRound)) {
         update["system.abilities"] = actor.system.abilities.map((a) => ({ ...a, usedThisRound: false }));
       }
+      // Dazed on a Mook or Normal (Shane, 2026-09-27, gap question 4): as for a character, but
+      // these profiles have no Pool, so the burn costs this Turn's Action allowance instead.
+      const dazedItem = actor.items?.find((i) => i.type === "condition" && (i.name || "").toUpperCase() === "DAZED") ?? null;
+      if (dazedItem) update["system.enemyTurn.actionsUsed"] = actor.system.effectiveActionsPerTurn ?? 1;
       const timer = EssenceCombat.enemyDeathTimer(actor);
       Object.assign(update, timer.update);
       await actor.update(update);
       if (timer.step) await EssenceCombat.postEnemyDeathTimer(actor, timer);
+      if (dazedItem) {
+        await dazedItem.delete();
+        await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p><strong>${actor.name}</strong> is Dazed: it loses this Turn's Action allowance, then Dazed ends.</p>` });
+      }
       if (timer.died) await actor.markDead();
       return;
     }
