@@ -74,6 +74,12 @@ replace every hex literal in `essence.css` with the matching `var(--essence-*)`.
   face later, it is registered through `CONFIG.fontDefinitions` with files under `styles/fonts/`,
   never a Google Fonts link (worlds run offline).
 - The chat card shares the token block (`.essence.roll-card`), so it converts in the same pass.
+- Translucency (Shane, 2026-09-27): the concept shows the cover art behind the whole sheet at low
+  visibility, with panels about 86% opaque. In tokens that is `--essence-panel` and
+  `--essence-panel-raised` as rgba values plus a `--essence-veil` overlay on
+  `.essence-sheet-root::before`. The art itself is a world or system setting read by the sheet
+  class (same source as the header), never a hard-coded URL. Inputs, selects and the tab strip
+  stay opaque enough to read; check both Foundry themes.
 - Verification: screenshot the five character tabs, an NPC sheet, an item card and a chat card
   before and after with Playwright against the local Foundry; the images must match pixel for
   pixel except where a token was retuned on purpose.
@@ -108,7 +114,9 @@ Depends on Ryan: which vitals belong in the sidebar. Size: medium.
 
 ### 5. Per-tab reorders and the card row
 
-Core in Ryan's 02 to 04 order with L L S S C squares (`.sq`, same buttons and actions as the pips);
+Core in Ryan's 02 to 03 order (Attributes, combat traits) followed by Passive Features and
+Languages moved in from Non-Combat, since Wounds now live only in the sidebar; L L S S C squares
+(`.sq`, same buttons and actions as the pips) for Core Wounds in the sidebar and Core Influence;
 Combat's card rows gain the type rail (`--essence-card-*`) and inline Commit and Cost; Equipment's
 per-row icons fold into a `ContextMenu`; Non-Combat in the 07 to 09 order with Temporary Influence
 as a stepper; Biography with Team and Advancement first. The card filter box moves to
