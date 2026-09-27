@@ -3088,3 +3088,82 @@ was driven through the real sheet buttons and dialogs, or Foundry's own Combat A
 
 No console errors apart from Foundry's minimum-window-size warning in the narrow browser pane. All
 test changes to that world were reverted afterwards.
+
+
+### 2026-09-27 -- Phase 1 (0.8.0): the Team actor, pools of 6, Level as AP, Team Tier access
+
+Built from `design/v0.6-doc-implementation-plan.md` Phase 1, using the decision to put Team Tier on
+a new `team` Actor type. It was live-tested in the local `essence-test` world, as 0.7.10 was.
+
+**The Team (`module/data/actor-team.mjs`, `module/sheets/team-sheet.mjs`).**
+- **Membership** is a list of member Actor ids held on the Team, so joining never writes to the
+  character. `teamForActor()`/`teamTierFor()` in utils.mjs find a character's Team; no Team means
+  Tier 1 (Doc L2171).
+- **Adding members** uses ActorSheetV2's own `_onDropActor` hook. A character is on one Team;
+  dropping it on another moves it.
+- **Team Tier rules live in the data model's `_preUpdate`/`_onUpdate`,** so they hold however the
+  Tier changes. It only increases (Doc L2283), and only a GM may change it. A refused change is
+  removed from the update rather than failing it, so other fields in the same submit still save.
+  An increase clears every member's Temporary Influence (L2287) from the updating GM's client.
+- **A refused change leaves nothing to save,** so no re-render happens, and the sheet showed the
+  refused value until the data model re-rendered it explicitly. That was found in live testing.
+- **Record rows** (Things, Organizations) use data-array/-index/-record-field inputs, a
+  read-modify-write listener, and `stopPropagation` so the form's submitOnChange doesn't also fire.
+  This is Recurring bug pattern #1's fix, applied up front.
+- **The sheet's `_prepareContext` must set `context.actor` itself;** the other sheets do. Leaving it
+  out rendered an empty name and a broken portrait, which live testing caught.
+- **New Teams get `icons/environment/people/group.webp`,** set in `EssenceActor._preCreate`.
+
+**Character `system.tier` is now legacy** and nothing reads it for rules. It's kept so stored actors
+load. Its one remaining reader is the one-time `notifiedPersonalTierRemoved` GM whisper, which reads
+`_source` and lists characters who had a Tier above 1 (no automatic conversion, per the recorded
+decision).
+
+**Equipment access.**
+- `computeReachGate` (item `cost` vs personal Reach) is gone. `componentTiers()` and
+  `computeTierGate()` check each Chassis and Fitting Tier against Team Tier (Doc L1793).
+- The item fields `reachExceptionSource`/`reachExceptionMargin` keep their names for stored data,
+  but the margin now counts Tiers above Team Tier.
+- Item grants use `tierMargin` (null = no limit) and `tierQualifiesForGrant()` (capped at Tier 5).
+- NPCs and Monsters get no access check: Team Tier "is not an enemy rating".
+- The per-item Reach `cost` field is hidden from the equipment sheet and the content wizard, but
+  kept in the schema.
+
+**Reach Trigger extra uses** (Letters of Standing, Prepared Cache) now go through
+`#computeOrdinaryPressure` (Reach first) on both the character and NPC sheets, instead of the
+Breach helper. The Temporary Influence grant is no longer capped (Doc L1976).
+
+**Floors** (Doc L982) apply in `prepareDerivedData` only. The caps of 5 and the Attribute floor of
+1 were left out on purpose: enforcing them in the schema would clamp stored values in live worlds.
+
+**Verification.**
+- `npm test`: 34 migration tests (new: Team Tier clamps, record rows keep their fields, legacy
+  character Tier loads) and 25 rules tests (new: per-Component access against the Doc's examples,
+  Quartermaster's Due at the Tier 5 cap, Internal Compartment, Inherited Tools).
+- Static checks: 704 lang keys with 0 leaf/prefix collisions, and all templates balanced.
+- Rebuilt Species and Heritages packs with `--only=species,heritages`; the only changes were the six
+  feature texts, across 5 source files.
+
+**Live test.** The world was restarted for the new Actor type with `game.shutDown()`, which also
+released the pack locks. The files were copied, then the world was relaunched. Each item below was
+driven through the real sheet controls:
+- **Startup.** 0.8.0 loaded with the `team` type registered and the one-time notice sent. Pools
+  read 6 on every sheet.
+- **Team sheet.** It rendered, and two members were added through `_onDropActor`.
+- **Raising Tier 1 to 2.** It cleared both members' Temporary Influence (3 to 0) and posted the
+  chat note.
+- **Decreasing Tier.** It was refused with a warning, and the sheet snapped back after the fix above.
+- **Record rows.** Each field survived separate edits.
+- **Character header.** It shows "Team: … · Team Tier 2"; a character with no Team shows "No Team
+  (Team Tier 1)".
+- **Equipment.** A loose Tier 3 Chassis was flagged against Team Tier 2 with the new tooltip; a
+  Tier 2 Chassis was not.
+- **Other sheets.** NPC and Monster sheets rendered, showing Pool bonus instead of Tier and Level.
+  The wizard showed the Team line. The AP overspend flag appeared and cleared.
+- **Letters of Standing, second use.** Its 1 pressure went to Reach (0 to 1), not to Temporary
+  Influence.
+- **Console.** No errors from the system.
+- **Cleanup.** All test changes were reverted except "Test Team (Claude)", left for the user to
+  look at.
+- **Unrelated noise.** When the browser pane is hidden during a world load, Foundry logs WebGL and
+  0×0-resolution errors. Those are the pane, not this system.

@@ -13,7 +13,6 @@
     <div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Category"}}</span><span>{{equipmentCategoryLabel system.category}}</span></div>
     {{#if item.actor}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Slot"}}</span><span>{{capitalize system.slot}}</span></div>{{/if}}
     {{#if system.tier}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Tier"}}</span><span>{{system.tier}}</span></div>{{/if}}
-    {{#if system.cost}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Item.Equipment.Reach"}}</span><span>{{system.cost}}</span></div>{{/if}}
     {{#if isWornCategory}}
       {{#if stats.fortitude}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Fortitude"}}</span><span>{{stats.fortitude}}</span></div>{{/if}}
       {{#if stats.resilience}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Resilience"}}</span><span>{{stats.resilience}}</span></div>{{/if}}
@@ -81,7 +80,6 @@
     </select>
   </label>
   <label>{{localize "ESSENCE.Common.Tier"}} <input name="system.tier" type="number" value="{{system.tier}}"></label>
-  <label>{{localize "ESSENCE.Item.Equipment.Reach"}} <input name="system.cost" type="text" value="{{system.cost}}"></label>
   {{#if item.actor}}
     <label>{{localize "ESSENCE.Common.Slot"}}
       <select name="system.slot">

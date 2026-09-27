@@ -45,8 +45,7 @@
           </select>
         </label>
       {{/if}}
-      <label>{{localize "ESSENCE.Common.Tier"}} <input name="system.tier" type="number" value="{{system.tier}}" style="width:3em"></label>
-      <label>{{localize "ESSENCE.Common.Level"}} <input name="system.level" type="number" value="{{system.level}}" style="width:3em"></label>
+      <label title="{{localize 'ESSENCE.Common.PoolBonusHint'}}">{{localize "ESSENCE.Common.PoolBonus"}} <input name="system.poolBonus" type="number" min="0" value="{{system.poolBonus}}" style="width:3em"> <span class="muted">{{localize "ESSENCE.Common.BasePoolsNote" n=system.baseCombatDice}}</span></label>
       <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}{{#if (ne system.totalMovement system.movement)}} <span class="muted">{{localize "ESSENCE.Character.EffectiveMovementNote" n=system.totalMovement}}</span>{{/if}}</label>
     </div>
   </div>
@@ -313,7 +312,7 @@
         <button type="button" data-action="endTurn">{{localize "ESSENCE.Sheet.EndTurn"}}</button>
       </div>
       <div class="combat-state">
-        <p>{{localize "ESSENCE.Sheet.RoundLabel" round=combatRound}} — {{turnLabel system.playState.combatTurn}}</p>
+        <p>{{#if combatRound}}{{localize "ESSENCE.Sheet.RoundLabel" round=combatRound}} — {{/if}}{{turnLabel system.playState.combatTurn}}</p>
       </div>
     </div>
   </div>
@@ -425,9 +424,6 @@
   {{#each equipment as |item|}}
     <li class="draggable-row" draggable="true" data-item-id="{{item.id}}">{{item.name}} <span class="muted">{{equipmentCategoryLabel item.system.category}}</span>
       {{#if item.tracksUsedFlag}}<button type="button" class="used-toggle{{#if item.system.usedThisAdventure}} used{{/if}}" data-action="toggleItemUsed" data-item-id="{{item.id}}" title="{{#if item.system.usedThisAdventure}}{{localize 'ESSENCE.Sheet.UsedThisAdventure'}}{{else}}{{localize 'ESSENCE.Sheet.UnusedThisAdventure'}}{{/if}}" aria-label="{{localize 'ESSENCE.Sheet.ToggleItemUsedAria' name=item.name}}" aria-pressed="{{#if item.system.usedThisAdventure}}true{{else}}false{{/if}}"><i class="fa-solid fa-flag"></i></button>{{/if}}
-      {{#if item.overReach}}
-        <span class="muted reach-warning" title="{{#if item.exceptionSource}}{{localize 'ESSENCE.Sheet.ExceedsReachException' source=item.exceptionSource}}{{else}}{{localize 'ESSENCE.Sheet.ExceedsReachNpc'}}{{/if}}"><i class="fa-solid fa-triangle-exclamation"></i></span>
-      {{/if}}
       <button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.ViewAria' name=item.name}}"><i class="fa-solid fa-eye"></i></button>
       <button type="button" data-action="postEquipmentToChat" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Sheet.PostToChatAria' name=item.name}}"><i class="fa-solid fa-comment"></i></button>
       <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>

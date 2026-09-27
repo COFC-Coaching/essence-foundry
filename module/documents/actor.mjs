@@ -12,6 +12,11 @@ export default class EssenceActor extends Actor {
     if (data.type === "character" && data.prototypeToken?.actorLink === undefined) {
       this.updateSource({ prototypeToken: { actorLink: true } });
     }
+    // A Team is a group, so give a new one Foundry's own group icon instead of the default
+    // single-person silhouette.
+    if (data.type === "team" && !data.img) {
+      this.updateSource({ img: "icons/environment/people/group.webp" });
+    }
   }
 
   /**

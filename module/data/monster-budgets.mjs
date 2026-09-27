@@ -59,7 +59,11 @@ export function getGradeBudget(grade) {
   return stored ? { ...defaults, ...stored } : defaults;
 }
 
-export function computeResilience(grade, tier) {
+/** Default Resilience for a Grade. Enemies had a Tier until v0.6, and this used to be
+ *  base + Tier x perTier. Part XIV now says "Team Tier is not an enemy rating," so the default is
+ *  the old Tier 1 value (base + perTier, e.g. Mook 2 / Normal 5 / Elite 11). The two fields stay
+ *  separate so a GM's customized budget table keeps working; the GM still sets Resilience directly. */
+export function computeResilience(grade) {
   const budget = getGradeBudget(grade);
-  return budget.resilienceBase + Math.max(0, tier || 0) * budget.resiliencePerTier;
+  return budget.resilienceBase + budget.resiliencePerTier;
 }

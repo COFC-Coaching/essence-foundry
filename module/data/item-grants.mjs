@@ -1,3 +1,5 @@
+import { componentTiers } from "../utils.mjs";
+
 /**
  * Heritage Legacies and Species Traits that let a character choose a specific Equipment item
  * as a standing benefit (part-ii-character-creation.md's Warcamp Raised "Quartermaster's Due";
@@ -14,42 +16,43 @@
  * need any awareness that a grant exists at all.
  *
  * `matchers`: an item qualifies if it satisfies ANY one matcher's `category`. Equipment's
- * `category` is now the one flat field for "what this item is" (weapon/armor/shield/implement/
- * toolkit/consumable-kit/gear — see item-card.mjs), so a grant just lists which categories
- * qualify; an empty matcher `{}` means "any category."
- * `reachMargin`: added to the actor's effectiveReach when picking (0 for "does not exceed Reach").
- * `exactCost`: when set, only items whose Reach cost equals this value qualify (Internal
- * Compartment's "a cost of 1"); reachMargin is ignored in that case.
- * `countsAgainstLimit`: whether the granted item still spends an Inventory Equipment slot — false
- * sets the granted item's `system.slotCost` to 0 so computeSlotUsage() doesn't charge for it.
+ * `category` is the one flat field for "what this item is" (weapon/ranged/armor/shield/implement/
+ * toolkit/consumable-kit/gear — see item-card.mjs); an empty matcher `{}` means "any category."
+ * `tierMargin`: how many Tiers above Team Tier each of the item's Components may be (see
+ * componentTiers/computeTierGate in utils.mjs). `null` means the feature sets no access limit.
+ * Pre-v0.6 these were Reach-based (`reachMargin`/`exactCost` against an item's Reach cost); v0.6
+ * moves ordinary access to Team Tier (Doc L1793).
+ * `countsAgainstLimit`: false sets the granted item's `system.slotCost` to 0, so it uses no Armory
+ * or Inventory capacity (computeSlotUsage counts slotCost for both).
  */
 export const ITEM_GRANT_REGISTRY = {
-  // "Main-Hand, Off-Hand, or Armor item" (part-ii-character-creation.md) — a worn/wielded item,
-  // not a Toolkit or Consumable Kit.
+  // Warcamp Raised (Doc L5470, L1829): "one Chassis and one compatible Fitting, each up to 1 Tier
+  // above the Team's normal procurement Tier, to a maximum of Tier 5... The assembled item occupies
+  // Armory and Inventory capacity normally." The player chooses the assembled item.
   "Quartermaster's Due": {
-    matchers: [{ category: "weapon" }, { category: "armor" }, { category: "shield" }, { category: "implement" }],
-    reachMargin: 1,
-    exactCost: null,
+    matchers: [{ category: "weapon" }, { category: "ranged" }, { category: "armor" }, { category: "shield" }, { category: "implement" }],
+    tierMargin: 1,
     countsAgainstLimit: true
   },
-  // "Choose one small Other Equipment item" — any category except the two Kit shapes (a Toolkit
-  // or Consumable Kit isn't "a small item," it's a whole maintained collection).
+  // Constructs (L5405): "one small item of ordinary utility equipment within the Team's ordinary
+  // access... does not consume Armory or Inventory capacity". Utility, so not weapons or armor.
   "Internal Compartment": {
-    matchers: [{ category: "weapon" }, { category: "armor" }, { category: "shield" }, { category: "implement" }, { category: "gear" }],
-    reachMargin: 0,
-    exactCost: 1,
+    matchers: [{ category: "gear" }, { category: "toolkit" }, { category: "consumable-kit" }],
+    tierMargin: 0,
     countsAgainstLimit: false
   },
+  // Constructs (L5402): "one ordinary Non-Combat Toolkit... does not consume Armory or Inventory
+  // capacity".
   "Integrated Tool": {
     matchers: [{ category: "toolkit" }],
-    reachMargin: 0,
-    exactCost: null,
+    tierMargin: null,
     countsAgainstLimit: false
   },
+  // Artisan Household (L5508): "one ordinary Toolkit... does not consume Armory capacity and may be
+  // included in your Inventory without consuming Inventory capacity".
   "Inherited Tools": {
     matchers: [{ category: "toolkit" }],
-    reachMargin: 0,
-    exactCost: null,
+    tierMargin: null,
     countsAgainstLimit: false
   }
 };
@@ -59,20 +62,25 @@ export function equipmentMatchesGrant(system, grant) {
   return grant.matchers.some((m) => !m.category || system.category === m.category);
 }
 
-/** Whether an Equipment Item's Reach cost qualifies for a grant, given the actor's effectiveReach. */
-export function reachQualifiesForGrant(system, grant, effectiveReach) {
-  const raw = (system.cost ?? "").trim();
-  const cost = raw === "" ? null : Number(raw);
-  if (grant.exactCost != null) return cost === grant.exactCost;
-  if (cost == null || Number.isNaN(cost)) return true;
-  return cost <= effectiveReach + grant.reachMargin;
+/**
+ * Whether an item's Components are within a grant's access limit: each at most Team Tier +
+ * `tierMargin`, and never above Tier 5 (Quartermaster's Due: "to a maximum of Tier 5").
+ * @param {Item} item
+ * @param {object} grant - an ITEM_GRANT_REGISTRY entry
+ * @param {number} teamTier - teamTierFor(actor)
+ * @param {Iterable<Item>} items - the owning actor's items, to resolve a modular item's parts
+ */
+export function tierQualifiesForGrant(item, grant, teamTier, items) {
+  if (grant.tierMargin == null) return true;
+  const limit = Math.min(5, (teamTier ?? 1) + grant.tierMargin);
+  return componentTiers(item, items).every((t) => t <= limit);
 }
 
 /**
  * Which of the actor's Heritage Legacy / chosen Species Traits name a feature in the
  * registry — one row per matching name, each carrying its own registry config plus whichever
  * already-owned Equipment item (if any) currently fulfills it (matched by `reachExceptionSource`,
- * the same field the Reach-gating exception already uses — see computeReachGate() in utils.mjs).
+ * the same field the Team Tier access exception uses — see computeTierGate() in utils.mjs).
  * No separate persisted "grant" record on the actor: the fulfilling item, if chosen, already is
  * the record.
  */

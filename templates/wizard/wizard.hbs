@@ -17,8 +17,8 @@
       <label>{{localize "ESSENCE.Wizard.Character.PlayerName"}} <input type="text" name="system.playerName" value="{{system.playerName}}"></label>
     </div>
     <div class="wizard-row">
-      <label>{{localize "ESSENCE.Common.Tier"}} <input type="number" name="system.tier" value="{{system.tier}}" style="width:4em"></label>
-      <label>{{localize "ESSENCE.Common.Level"}} <input type="number" name="system.level" value="{{system.level}}" style="width:4em"></label>
+      <span title="{{localize 'ESSENCE.Character.TeamTierHint'}}">{{#if team}}{{localize "ESSENCE.Character.TeamLabel"}} <strong>{{team.name}}</strong> &middot; {{localize "ESSENCE.Team.Tier"}} {{teamTier}}{{else}}<span class="muted">{{localize "ESSENCE.Character.NoTeam"}}</span>{{/if}}</span>
+      <label title="{{localize 'ESSENCE.Character.LevelHint'}}">{{localize "ESSENCE.Common.Level"}} <input type="number" name="system.level" min="1" value="{{system.level}}" style="width:4em"></label>
     </div>
     <div class="wizard-row">
       <label>{{localize "ESSENCE.Wizard.Character.Pronouns"}} <input type="text" name="system.pronouns" value="{{system.pronouns}}"></label>
@@ -320,11 +320,11 @@
     {{!-- Reach gates what a character may carry, so its input lives with the loadout it governs
           now that the Influence step (its old home) is gone. --}}
     <label>{{localize "ESSENCE.Sheet.Reach"}} <input type="number" name="system.reach" value="{{system.reach}}" style="width:4em"></label>
-    <h3 class="section-head">{{localize "ESSENCE.Wizard.InventoryLoadout" used=inventoryUsed limit=inventoryLimit reach=reach}}</h3>
+    <h3 class="section-head">{{localize "ESSENCE.Wizard.InventoryLoadout" used=inventoryUsed limit=inventoryLimit tier=teamTier}}</h3>
     <ul class="item-list">
       {{#each inventoryItems as |item|}}
         <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{item.meta}}</span>
-          {{#if item.overReach}}<span class="muted reach-warning" title="{{localize 'ESSENCE.Wizard.Character.ExceedsReachYours'}}"><i class="fa-solid fa-triangle-exclamation"></i></span>{{/if}}
+          {{#if item.overTier}}<span class="muted reach-warning" title="{{localize 'ESSENCE.Sheet.AboveTeamTier' tier=../teamTier}}"><i class="fa-solid fa-triangle-exclamation"></i></span>{{/if}}
           <button type="button" data-action="toggleEquipment" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
       {{/each}}
     </ul>

@@ -4,16 +4,14 @@ export function capitalize(str) {
 }
 
 /**
- * "Tier 3 Elite — Controller (Leader)" — the enemy-identity header format from Things To Work
- * On/Enemies and NPC's.txt (see its "Example headers" list). Shared between the NPC sheet header
- * and the Monster Wizard's Concept step so both read the same three-tag identity (Tier/Grade,
- * battlefieldRole, eliteType) the same way. Falls back gracefully as fields are left blank —
- * a brand-new NPC with nothing set yet just shows "Tier 1".
+ * "Elite — Controller (Leader)" — the enemy-identity header format from Things To Work On/Enemies
+ * and NPC's.txt. Shared between the NPC sheet header and the Monster Wizard's Concept step so both
+ * read the same identity (Grade, battlefieldRole, eliteType) the same way. Tier used to lead this
+ * label; v0.6 Part XIV drops it ("Team Tier is not an enemy rating"). A brand-new NPC with nothing
+ * set yet shows "Enemy".
  */
 export function buildEnemyHeaderLabel(system) {
-  const parts = [`Tier ${system.tier ?? 1}`];
-  if (system.grade) parts.push(system.grade);
-  let label = parts.join(" ");
+  let label = system.grade || game.i18n.localize("ESSENCE.Common.Enemy");
   if (system.battlefieldRole) label += ` — ${system.battlefieldRole}`;
   if (system.grade === "Elite" && system.eliteType) label += ` (${system.eliteType})`;
   return label;
@@ -154,6 +152,29 @@ export function stripHtml(html) {
  * @param {Item|null|undefined} distinctionItem
  * @param {string} skill
  */
+/**
+ * The Team a character belongs to: the first `team` Actor whose member list holds this actor's
+ * id, or null. Team data lives on the Team actor (module/data/actor-team.mjs), not the character.
+ * A synthetic token actor resolves through its base Actor's id.
+ * @param {Actor} actor
+ * @returns {Actor|null}
+ */
+export function teamForActor(actor) {
+  const id = actor?.isToken ? actor.token?.actorId : actor?.id;
+  if (!id || !globalThis.game?.actors) return null;
+  return game.actors.find((a) => a.type === "team" && (a.system.members ?? []).includes(id)) ?? null;
+}
+
+/**
+ * The Team Tier that applies to a character: its Team's Tier, or 1 with no Team ("Standard Team
+ * Tier: 1", Doc L2171).
+ * @param {Actor} actor
+ * @returns {number}
+ */
+export function teamTierFor(actor) {
+  return teamForActor(actor)?.system.tier ?? 1;
+}
+
 /**
  * Wounds caused by one event of ordinary (non-Breach) Damage, v0.6 Part VII "Resilience and
  * Accumulated Damage" (Doc L3877): "Remaining protection = current Resilience - accumulated
@@ -518,30 +539,51 @@ export function computeSlotUsage(items, slotKey) {
 }
 
 /**
- * Reach gating (part-ii-character-creation.md §§ Reach / Inventory Equipment; see
- * design/reach-and-economy.md for the full reference): an Equipment Item's `system.cost` field IS
- * its Reach requirement — "a value of 1 in that column means the item exists at Reach Level 1,"
- * not a spend value and not the same thing as `system.tier` (which is a Chassis/Fitting/Component's
- * own sophistication rating for the *modular assembly* system — see equipment-features.mjs — a
- * completely separate axis). A 2026-09-08 pass wrongly conflated the two and read `tier` here
- * instead; this is the corrected version. `cost` is a StringField (matches how Fortitude/
- * Resilience/Movement are also stored as signed text elsewhere in this schema) so it needs parsing,
- * and an empty string means "no stated Reach requirement" — skip the check entirely rather than
- * treating blank as 0.
- * @param {object} equipmentSystem - an `equipment` Item's `system` data
- * @param {number} effectiveReach - the actor's `system.effectiveReach` (base Reach + active Reach Triggers)
- * @returns {{reachCost: number|null, exceptionSource: string, overReach: boolean}}
+ * The Tier of each Component that decides an item's ordinary access (v0.6 Part III "Team Tier and
+ * Acquisition", Doc L1793): "Check each Component separately; a complete modular item has no
+ * combined Tier." An assembled item contributes its Chassis and Fitting; a loose Chassis or Fitting
+ * its own Tier; a non-modular item (Toolkit, Kit, Gear) its own `tier` if one is set. Augments are
+ * Tierless ("Tierless Augments follow their own access rules") and contribute nothing.
+ * @param {Item|object} item - an equipment/chassis/fitting/augment Item (or `{type, system}`)
+ * @param {Iterable<Item>} items - the owning actor's items, to resolve a modular item's parts
+ * @returns {number[]}
  */
-export function computeReachGate(equipmentSystem, effectiveReach) {
-  const raw = (equipmentSystem.cost ?? "").trim();
-  const reachCost = raw === "" ? null : Number(raw);
-  const exceptionSource = equipmentSystem.reachExceptionSource || "";
-  const allowance = effectiveReach + (exceptionSource ? (equipmentSystem.reachExceptionMargin ?? 0) : 0);
-  return {
-    reachCost,
-    exceptionSource,
-    overReach: reachCost != null && !Number.isNaN(reachCost) && reachCost > allowance
-  };
+export function componentTiers(item, items) {
+  const tierOf = (i) => (i && Number.isFinite(i.system?.tier) ? i.system.tier : null);
+  if (item.type === "chassis" || item.type === "fitting") return [tierOf(item)].filter((t) => t != null);
+  if (item.type !== "equipment") return [];
+  if (item.system.isModular) {
+    const list = [...(items ?? [])];
+    const find = (id) => (id ? list.find((i) => i.id === id) ?? null : null);
+    return [find(item.system.chassisItemId), find(item.system.fittingItemId)].map(tierOf).filter((t) => t != null);
+  }
+  return [tierOf(item)].filter((t) => t != null);
+}
+
+/**
+ * Team Tier access check (v0.6 Part III "Team Tier and Acquisition", Doc L1793-1795): through
+ * routine channels a character obtains a Chassis or Fitting whose Tier is no higher than Team
+ * Tier. "A higher personal Reach can absorb more expenditure within that scale, but does not by
+ * itself open higher-Tier suppliers." This replaces the pre-v0.6 check of an item's `cost` against
+ * personal Reach. Reach itself is unchanged: it still absorbs the Influence cost of getting the
+ * item.
+ *
+ * A soft warning only, and about acquisition only: "Once equipment is actually obtained, this
+ * acquisition guideline does not prevent its use or retention" (L1795). A feature that grants access
+ * above the Team's (Quartermaster's Due: +1) is recorded on the item as `reachExceptionSource` /
+ * `reachExceptionMargin`. Those names are pre-v0.6 and kept so stored items still load; the margin
+ * now counts Tiers above Team Tier.
+ * @param {Item|object} item
+ * @param {number} teamTier - teamTierFor(actor)
+ * @param {Iterable<Item>} items - the owning actor's items
+ * @returns {{componentTier: number|null, exceptionSource: string, overTier: boolean}}
+ */
+export function computeTierGate(item, teamTier, items) {
+  const tiers = componentTiers(item, items);
+  const exceptionSource = item.system?.reachExceptionSource || "";
+  const allowance = (teamTier ?? 1) + (exceptionSource ? (item.system.reachExceptionMargin ?? 0) : 0);
+  const componentTier = tiers.length ? Math.max(...tiers) : null;
+  return { componentTier, exceptionSource, overTier: componentTier != null && componentTier > allowance };
 }
 
 /**

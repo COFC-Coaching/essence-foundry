@@ -1,4 +1,5 @@
 import { migrateSource } from "./migration.mjs";
+import { BASE_COMBAT_POOL } from "./actor-combatant.mjs";
 const { fields } = foundry.data;
 
 /**
@@ -43,9 +44,11 @@ export default class EssenceManifestationData extends foundry.abstract.TypeDataM
       // as every other Combat Style Specialty in this system.
       aspect: new fields.StringField({ initial: "", blank: true, choices: ["", "Fire", "Cold", "Lightning"] }),
 
-      // Synced from the caller's own Tier at each entry (see manifestation.mjs) — drives
-      // baseCombatDice below exactly like a character's or NPC's Tier does.
+      // Legacy: pools used to be 5 + Tier. Kept so stored profiles still load; nothing reads it.
       tier: new fields.NumberField({ integer: true, initial: 1, min: 1 }),
+      // Synced from the caller's own poolBonus at each entry (see manifestation.mjs) — the form
+      // shares the caller's base pool size (v0.6: 6 plus explicit grants).
+      poolBonus: new fields.NumberField({ integer: true, initial: 0, min: 0 }),
       fortitude: new fields.NumberField({ integer: true, initial: 0 }),
       composure: new fields.NumberField({ integer: true, initial: 0 }),
       harmony: new fields.NumberField({ integer: true, initial: 0 }),
@@ -93,7 +96,7 @@ export default class EssenceManifestationData extends foundry.abstract.TypeDataM
   }
 
   prepareDerivedData() {
-    this.baseCombatDice = 5 + (this.tier || 0);
+    this.baseCombatDice = BASE_COMBAT_POOL + (this.poolBonus ?? 0);
     this.defenses = { fortitude: this.fortitude, composure: this.composure, harmony: this.harmony };
     const filled = this.coreWounds.filter((w) => w.filled).length;
     this.woundsFilled = filled;

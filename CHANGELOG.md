@@ -2,6 +2,61 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.8.0
+
+**First v0.6 rules release: the Team, Team Tier, pools of 6, and Advancement Points.** This brings
+the system in line with the Essence System v0.6 rulebook's biggest structural change: characters no
+longer have a personal Tier.
+
+**New: the Team actor.** Create one from the Actors directory, then drag characters onto it to add
+them. It holds everything the rulebook's Team record does:
+- Team Tier.
+- Identity, Reason to Cooperate, Major Goal, Methods, Principles, how the Team makes decisions,
+  and Team Roles.
+- Things and Commitments, with tags such as Asset, Obligation, Borrowed and Pledged.
+- Organizations and Relationships.
+
+Team Tier follows the rulebook exactly. Only the GM raises it, and it never goes down. Raising it
+clears every member's Temporary Influence and posts a chat note, because backing from the old scale
+is now inconsequential. Each character's sheet shows its Team and Team Tier. A character with no
+Team uses Team Tier 1.
+
+**Pools are a flat 6.** Base Action and Reaction Pools were 5 + Tier; they are now 6 each, raised
+only by explicit grants. The new Pool bonus field raises both at once. This applies to characters,
+NPCs, Monsters and Full Manifestations.
+
+**Level is Advancement Points earned.** A new character is Level 1, having earned 1 AP, and there
+is no level cap. A new AP spent field shows how many remain, and warns if spending ever exceeds
+Level. Skill Tree nodes themselves are still in playtest and aren't built.
+
+**Equipment access uses Team Tier, not Reach.** Your Reach is unchanged: it's still yours, and it
+still absorbs Influence costs first, before Temporary and Core Influence. What changed is the
+warning on equipment:
+- The Inventory table now shows each item's Component Tier.
+- It flags a Chassis or Fitting above your Team's Tier, per "Check each Component separately".
+- It's only about ordinary acquisition; gear you already have is always usable.
+- NPCs and Monsters no longer get this check, since Team Tier isn't an enemy rating.
+
+**Features rewritten to the rulebook:**
+- **Quartermaster's Due:** a Chassis and a Fitting, each up to 1 Tier above Team Tier, maximum 5.
+- **Internal Compartment:** one small utility item within the Team's ordinary access.
+- **Integrated Tool** and **Inherited Tools:** use no Armory or Inventory capacity.
+- **Letters of Standing** and **Prepared Cache:** extra uses now cost 1 ordinary Influence pressure,
+  which Reach absorbs first. They were costing Influence Breach, which skips Reach.
+- The Temporary Influence these triggers grant is no longer capped at 5, because Temporary
+  Influence has no maximum.
+
+**Floors.** Defenses, Movement, Resilience and Resources never drop below 0. A lowered Resource
+maximum caps the current amount without changing anything saved.
+
+**Enemies.** NPCs and Monsters no longer show Tier or Level. The Monster Creator's default
+Resilience uses the old Tier 1 value, and the GM sets it directly as before.
+
+**For existing worlds.** Nothing is converted automatically, and every existing actor still loads.
+On the first GM login, a one-time whisper lists any character whose old personal Tier was above 1.
+Their pools are now 6 and their Level now means AP earned, so adjust by hand if needed. It also
+explains how to set up a Team.
+
 ## 0.7.10
 
 Fixes for bugs affecting tables now. Each one is wrong under both the old rules and the new

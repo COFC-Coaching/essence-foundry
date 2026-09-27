@@ -15,15 +15,10 @@
     </div>
     <h1><input name="name" type="text" value="{{actor.name}}"></h1>
     <div class="header-fields">
-      <label>{{localize "ESSENCE.Common.Tier"}} <input name="system.tier" type="number" value="{{system.tier}}" style="width:3em"></label>
-      <label>{{localize "ESSENCE.Common.Level"}} <input name="system.level" type="number" value="{{system.level}}" style="width:3em"></label>
-      <label class="muted" title="{{localize 'ESSENCE.Character.AdvancementPointsTooltip'}}">{{localize "ESSENCE.Character.AdvancementPoints"}} <span>{{system.advancementPoints}}</span></label>
-      <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}{{#if (ne system.totalMovement system.movement)}} <span class="muted">{{localize "ESSENCE.Character.EffectiveMovementNote" n=system.totalMovement}}</span>{{/if}}</label>
-    </div>
-    <div class="header-fields">
       <label>{{localize "ESSENCE.Item.SpeciesLabel"}} <input name="system.species" type="text" value="{{system.species}}"></label>
       <label>{{localize "ESSENCE.Item.HeritageLabel"}} <input name="system.heritage" type="text" value="{{system.heritage}}"></label>
       <label>{{localize "ESSENCE.Item.DistinctionLabel"}} <input name="system.distinction" type="text" value="{{system.distinction}}"></label>
+      <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}{{#if (ne system.totalMovement system.movement)}} <span class="muted">{{localize "ESSENCE.Character.EffectiveMovementNote" n=system.totalMovement}}</span>{{/if}}</label>
     </div>
   </div>
 </header>
@@ -160,7 +155,7 @@
         <button type="button" data-action="endTurn">{{localize "ESSENCE.Sheet.EndTurn"}}</button>
       </div>
       <div class="combat-state">
-        <p>{{localize "ESSENCE.Sheet.RoundLabel" round=combatRound}} — {{turnLabel system.playState.combatTurn}} — {{localize "ESSENCE.Character.InitiativeLabel" total=system.playState.initiativeTotal dice=system.playState.initiativeDice}}</p>
+        <p>{{#if combatRound}}{{localize "ESSENCE.Sheet.RoundLabel" round=combatRound}} — {{/if}}{{turnLabel system.playState.combatTurn}}{{#if system.playState.initiativeCommitted}} — {{localize "ESSENCE.Character.InitiativeLabel" total=system.playState.initiativeTotal dice=system.playState.initiativeDice}}{{/if}}</p>
       </div>
     </div>
   </div>
@@ -411,20 +406,20 @@
 {{!-- ============ EQUIPMENT: inventory / temporary / armory ============ --}}
 <section class="tab equipment" data-tab="equipment">
   <div class="equipment-drop-zone" data-drop-slot="inventory">
-  <h3 class="section-head">{{localize "ESSENCE.Sheet.InventoryEquipment"}} <span class="muted">({{inventoryUsed}} / {{system.inventoryLimit}}) &middot; {{localize "ESSENCE.Item.Equipment.Reach"}} {{system.effectiveReach}}</span></h3>
+  <h3 class="section-head">{{localize "ESSENCE.Sheet.InventoryEquipment"}} <span class="muted">({{inventoryUsed}} / {{system.inventoryLimit}}) &middot; {{localize "ESSENCE.Team.Tier"}} {{teamTier}}</span></h3>
   {{#if (gt inventoryOverLimit 0)}}
     <p class="muted inventory-overlimit-note">{{#if (gt inventoryOverLimit 1)}}{{localize "ESSENCE.Sheet.OverInventoryLimitPlural" n=inventoryOverLimit}}{{else}}{{localize "ESSENCE.Sheet.OverInventoryLimitSingular" n=inventoryOverLimit}}{{/if}} <button type="button" data-action="payInventorySupport">{{localize "ESSENCE.Sheet.SpendInfluenceForExtraSlot"}}</button></p>
   {{/if}}
   <table class="item-table">
-    <thead><tr><th>{{localize "ESSENCE.Common.Item"}}</th><th>{{localize "ESSENCE.Common.Category"}}</th><th>{{localize "ESSENCE.Item.Equipment.Reach"}}</th><th>{{localize "ESSENCE.Common.Effect"}}</th><th></th></tr></thead>
+    <thead><tr><th>{{localize "ESSENCE.Common.Item"}}</th><th>{{localize "ESSENCE.Common.Category"}}</th><th>{{localize "ESSENCE.Common.Tier"}}</th><th>{{localize "ESSENCE.Common.Effect"}}</th><th></th></tr></thead>
     <tbody>
       {{#each inventoryEquipment as |item|}}
         <tr class="draggable-row" draggable="true" data-item-id="{{item.id}}">
           <td>{{item.name}} {{#if item.tracksUsedFlag}}<button type="button" class="used-toggle{{#if item.usedThisAdventure}} used{{/if}}" data-action="toggleItemUsed" data-item-id="{{item.id}}" title="{{#if item.usedThisAdventure}}{{localize 'ESSENCE.Sheet.UsedThisAdventure'}}{{else}}{{localize 'ESSENCE.Sheet.UnusedThisAdventure'}}{{/if}}" aria-label="{{localize 'ESSENCE.Sheet.ToggleItemUsedAria' name=item.name}}" aria-pressed="{{#if item.usedThisAdventure}}true{{else}}false{{/if}}"><i class="fa-solid fa-flag"></i></button>{{/if}}</td><td>{{equipmentCategoryLabel item.category}}</td>
           <td>
-            {{item.reachCost}}
-            {{#if item.overReach}}
-              <span class="muted reach-warning" title="{{#if item.exceptionSource}}{{localize 'ESSENCE.Sheet.ExceedsReachException' source=item.exceptionSource}}{{else}}{{localize 'ESSENCE.Character.ExceedsReachCharacter'}}{{/if}}"><i class="fa-solid fa-triangle-exclamation"></i></span>
+            {{#if item.componentTier}}{{item.componentTier}}{{else}}<span class="muted" title="{{localize 'ESSENCE.Sheet.NoComponentTier'}}">—</span>{{/if}}
+            {{#if item.overTier}}
+              <span class="reach-warning" role="img" tabindex="0" aria-label="{{#if item.exceptionSource}}{{localize 'ESSENCE.Sheet.AboveTeamTierException' source=item.exceptionSource}}{{else}}{{localize 'ESSENCE.Sheet.AboveTeamTier' tier=../teamTier}}{{/if}}" title="{{#if item.exceptionSource}}{{localize 'ESSENCE.Sheet.AboveTeamTierException' source=item.exceptionSource}}{{else}}{{localize 'ESSENCE.Sheet.AboveTeamTier' tier=../teamTier}}{{/if}}"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></span>
             {{/if}}
           </td>
           <td><div class="effect-clamp">{{{item.effectText}}}</div></td>
@@ -636,6 +631,41 @@
 
 {{!-- ============ BIOGRAPHY ============ --}}
 <section class="tab bio" data-tab="bio">
+  <div class="bio-standing">
+    <h3 class="section-head">{{localize "ESSENCE.Character.TeamAndAdvancement"}}</h3>
+    <div class="bio-standing-grid">
+      <div class="bio-cell bio-cell-wide" title="{{localize 'ESSENCE.Character.TeamCellHint'}}">
+        <span class="bio-cell-label">{{localize "ESSENCE.Character.Team"}}</span>
+        <span class="bio-cell-value">{{#if team}}<a data-action="openTeam">{{team.name}}</a>{{else}}<span class="muted">{{localize "ESSENCE.Character.NoTeamShort"}}</span>{{/if}}</span>
+      </div>
+      <div class="bio-cell" title="{{localize 'ESSENCE.Character.TeamTierHint'}}">
+        <span class="bio-cell-label">{{localize "ESSENCE.Team.Tier"}}</span>
+        <span class="bio-cell-value">{{teamTier}}</span>
+      </div>
+      <label class="bio-cell" title="{{localize 'ESSENCE.Character.LevelHint'}}">
+        <span class="bio-cell-label">{{localize "ESSENCE.Common.Level"}}</span>
+        <input name="system.level" type="number" min="1" value="{{system.level}}">
+      </label>
+      <label class="bio-cell{{#if apOverspent}} bio-cell-warn{{/if}}" title="{{localize 'ESSENCE.Character.AdvancementPointsTooltip'}}">
+        <span class="bio-cell-label">{{localize "ESSENCE.Character.AdvancementPointsSpent"}}</span>
+        <input name="system.advancementPointsSpent" type="number" min="0" value="{{system.advancementPointsSpent}}" {{#if apOverspent}}aria-invalid="true" aria-describedby="essence-ap-overspent-{{actor.id}}"{{/if}}>
+      </label>
+      <div class="bio-cell{{#if apOverspent}} bio-cell-warn{{/if}}" title="{{localize 'ESSENCE.Character.AdvancementPointsTooltip'}}">
+        <span class="bio-cell-label">{{localize "ESSENCE.Character.AdvancementPointsAvailable"}}</span>
+        <span class="bio-cell-value">{{apBalanceLabel}}</span>
+      </div>
+      <label class="bio-cell" title="{{localize 'ESSENCE.Common.PoolBonusHint'}}">
+        <span class="bio-cell-label">{{localize "ESSENCE.Common.PoolBonus"}}</span>
+        <input name="system.poolBonus" type="number" min="0" value="{{system.poolBonus}}">
+      </label>
+      <div class="bio-cell" title="{{localize 'ESSENCE.Common.PoolBonusHint'}}">
+        <span class="bio-cell-label">{{localize "ESSENCE.Character.BasePools"}}</span>
+        <span class="bio-cell-value">{{system.baseCombatDice}} <span class="muted bio-cell-note">{{localize "ESSENCE.Character.BasePoolsFormula" bonus=system.poolBonus}}</span></span>
+      </div>
+    </div>
+    {{#unless team}}<p class="muted bio-standing-note">{{localize "ESSENCE.Character.NoTeamHint"}}</p>{{/unless}}
+    {{#if apOverspent}}<p class="bio-standing-note reach-warning" id="essence-ap-overspent-{{actor.id}}"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> {{localize "ESSENCE.Character.AdvancementPointsOverspent"}}</p>{{/if}}
+  </div>
   <label>{{localize "ESSENCE.Character.Concept"}}{{essenceEditor system.concept target="system.concept" button=true}}</label>
   <label>{{localize "ESSENCE.Character.Appearance"}}{{essenceEditor system.appearance target="system.appearance" button=true}}</label>
   <label>{{localize "ESSENCE.Character.Personality"}}{{essenceEditor system.personality target="system.personality" button=true}}</label>

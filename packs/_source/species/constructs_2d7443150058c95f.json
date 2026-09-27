@@ -33,7 +33,7 @@
       },
       {
         "name": "Integrated Tool",
-        "text": "Choose one ordinary Non-Combat toolkit and incorporate it into your body. It does not count against your Inventory Limit, cannot be disarmed, and remains available whenever the relevant parts of your body are functional.",
+        "text": "Choose one ordinary Non-Combat Toolkit and incorporate it into your body. It does not consume Armory or Inventory capacity, cannot be disarmed, and remains available whenever the relevant portions of your body are functional.",
         "chosen": false,
         "subChoice": {
           "label": "Toolkit",
@@ -44,7 +44,7 @@
       },
       {
         "name": "Internal Compartment",
-        "text": "Choose one small Other Equipment item with a cost of 1 whose Availability does not exceed your Reach. While installed inside your body, it does not count against your Inventory Limit and is not discovered through casual observation. You may replace it during significant downtime.",
+        "text": "Choose one small item of ordinary utility equipment within the Team's ordinary access. While installed inside your body, it does not consume Armory or Inventory capacity and is not discovered through casual observation. You may replace it during significant Downtime.",
         "chosen": false,
         "subChoice": {
           "label": "Equipment Item",

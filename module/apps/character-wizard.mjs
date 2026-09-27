@@ -1,8 +1,8 @@
 import { EXPERTISE_DATABASE, SUBTYPE_DATABASE } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
-import { assembledComponentIds, capitalize, computeReachGate, computeSlotUsage, isDistinctionStyle } from "../utils.mjs";
-import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, reachQualifiesForGrant } from "../data/item-grants.mjs";
+import { assembledComponentIds, capitalize, computeTierGate, computeSlotUsage, isDistinctionStyle, teamForActor, teamTierFor, componentTiers } from "../utils.mjs";
+import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, tierQualifiesForGrant } from "../data/item-grants.mjs";
 import { EQUIPMENT_CATEGORY_LABELS, MODULAR_EQUIPMENT_CATEGORIES } from "../data/item-card.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -260,6 +260,9 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     context.system = system;
     context.steps = STEPS.map((name, i) => ({ name, i }));
     context.step = this.#step;
+    // Team Tier is the Team's (actor-team.mjs), shown read-only; the GM sets it on the Team sheet.
+    context.team = teamForActor(this.document);
+    context.teamTier = teamTierFor(this.document);
     context.stepName = STEPS[this.#step];
     context.isFirst = this.#step === 0;
     context.isLast = this.#step === STEPS.length - 1;
@@ -459,12 +462,12 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
   static #EQUIPMENT_STEP_TYPES = ["equipment", "chassis", "fitting", "augment"];
 
   /** One row's grey subtitle, for both the owned loadout lists and the Library — an assembled
-   *  Equipment item is identified by Category and Reach, a Component by what kind of part it is,
-   *  for what category, at what Tier (it has no Reach cost of its own). */
+   *  Equipment item is identified by Category (it has no Tier of its own: "a complete modular item
+   *  has no combined Tier", Doc L1793), a Component by what kind of part it is, for what category,
+   *  at what Tier. */
   static #rowMeta(doc) {
     if (doc.type === "equipment") {
-      const label = EQUIPMENT_CATEGORY_LABELS[doc.system.category] ?? capitalize(doc.system.category);
-      return `${label} · ${game.i18n.localize("ESSENCE.Item.Equipment.Reach")} ${doc.system.cost}`;
+      return EQUIPMENT_CATEGORY_LABELS[doc.system.category] ?? capitalize(doc.system.category);
     }
     return [capitalize(doc.type), EQUIPMENT_CATEGORY_LABELS[doc.system.category], doc.system.tier ? `T${doc.system.tier}` : null]
       .filter(Boolean).join(" · ");
@@ -473,17 +476,17 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
   async #prepareEquipment(context) {
     const system = context.system;
     const owned = this.document.items.filter((i) => EssenceCharacterWizard.#EQUIPMENT_STEP_TYPES.includes(i.type));
-    // See EssenceActorSheet#_prepareContext for the full Reach-gating reasoning (computeReachGate()
-    // in utils.mjs). Soft, non-blocking flag only — the Wizard still lets you add an over-Reach
-    // item, same as the character sheet does.
+    // Team Tier access (computeTierGate in utils.mjs). Soft, non-blocking flag only — the Wizard
+    // still lets you add the item, same as the character sheet does.
     context.reach = system.effectiveReach ?? system.reach;
+    const teamTier = teamTierFor(this.document);
     const equipmentRow = (i) => ({
       id: i.id,
       uuid: i.uuid,
       name: i.name,
       system: i.system,
       meta: EssenceCharacterWizard.#rowMeta(i),
-      overReach: i.type === "equipment" && computeReachGate(i.system, context.reach).overReach
+      overTier: computeTierGate(i, teamTier, this.document.items).overTier
     });
     // Augments are never "carried" independently of what they're mounted in — same rule the
     // character sheet applies (actor-sheet.mjs), so they always list under Armory. A Component
@@ -955,9 +958,9 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const grant = ITEM_GRANT_REGISTRY[sourceName];
     if (!grant) return;
 
-    const reach = this.document.system.effectiveReach;
+    const teamTier = teamTierFor(this.document);
     const owned = this.document.items.filter((i) => i.type === "equipment" && i.system.reachExceptionSource !== sourceName);
-    const eligible = owned.filter((i) => equipmentMatchesGrant(i.system, grant) && reachQualifiesForGrant(i.system, grant, reach));
+    const eligible = owned.filter((i) => equipmentMatchesGrant(i.system, grant) && tierQualifiesForGrant(i, grant, teamTier, this.document.items));
     if (!eligible.length) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoQualifyingEquipmentChoice", { source: sourceName }));
       return;
@@ -967,7 +970,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       new foundry.applications.api.DialogV2({
         window: { title: `Choose Item — ${sourceName}` },
         content: `<label>Item
-          <select name="itemId">${eligible.map((i) => `<option value="${i.id}">${i.name} (Reach ${i.system.cost || 0})</option>`).join("")}</select>
+          <select name="itemId">${eligible.map((i) => `<option value="${i.id}">${i.name}${(() => { const t = componentTiers(i, this.document.items); return t.length ? ` (Tier ${Math.max(...t)})` : ""; })()}</option>`).join("")}</select>
         </label>`,
         buttons: [{
           action: "choose",
@@ -987,7 +990,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     await chosen.update({
       "system.slot": "inventory",
       "system.reachExceptionSource": sourceName,
-      "system.reachExceptionMargin": grant.reachMargin,
+      "system.reachExceptionMargin": grant.tierMargin ?? 0,
       "system.slotCost": grant.countsAgainstLimit ? 1 : 0
     });
   }

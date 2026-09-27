@@ -7,7 +7,7 @@
     "description": "Born or raised within a titled family, political dynasty, landed household, or another lineage whose name carries recognized social weight.",
     "legacy": {
       "name": "Letters of Standing",
-      "text": "When dealing with an established institution (merchant guild, government office, temple, academy, military command), treat your Reach as 1 higher and gain 1 Temporary Influence usable only during that scene. The first use each adventure is free; each additional use causes 1 Influence Breach."
+      "text": "You may invoke your family name when dealing with an established institution such as a merchant guild, government office, temple, academy, or military command. For the current Encounter, treat your Reach as 1 higher and gain 1 Temporary Influence that can only be used during that Encounter. The first use each Adventure is free. Each additional use creates 1 ordinary Influence pressure."
     },
     "familiarity": {
       "name": "Unspoken Precedence",
