@@ -8,53 +8,50 @@
 </header>
 
 {{#if viewMode}}
-<div class="card-view">
-  {{#if system.skill}}
-    <div class="card-view-style-row">{{capitalize system.skill}}{{#if system.subtype}} <span class="card-view-subtype">| {{system.subtype}}</span>{{/if}}</div>
-  {{/if}}
-  {{#if system.expertises}}<div class="card-view-expertises">{{system.expertises}}</div>{{/if}}
-
-  <div class="card-view-infogrid">
-    <div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Rank"}}</span><span>{{system.rank}}</span></div>
-    {{#if system.min}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Item.Card.Commitment"}}</span><span>{{localize "ESSENCE.Common.Dice"}} {{system.min}}+{{#if system.cost}} · {{localize "ESSENCE.Common.Cost"}} {{system.cost}} {{domainResource system.domain}}{{/if}}</span></div>{{/if}}
-    {{#if system.attr}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Attribute"}}</span><span>{{system.attr}}</span></div>{{/if}}
-    {{#if system.defense}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Defense"}}</span><span>{{system.defense}}</span></div>{{/if}}
-    {{#if system.unopposed}}<div><span class="card-view-statlabel">{{localize "ESSENCE.Common.Defense"}}</span><span>{{localize "ESSENCE.Item.Card.Unopposed"}}</span></div>{{/if}}
+{{!-- Read view (plan step 6, concept "Card anatomy and colors"): type band, name, Style and Rank
+     chips, Requires, the Commit / Cost / Roll / Against stat tiles, body lines, numbered Surges,
+     the Rider, then tags. Colors come from the card-type and domain tokens. --}}
+<div class="card-view kind-{{cardView.kind}}">
+  <div class="cv-band">
+    <span>{{cardView.kindLabel}}{{#if system.subtype}} · {{system.subtype}}{{/if}}</span>
+    <span>{{#if system.skill}}{{capitalize system.skill}} R{{system.rank}}{{else}}{{localize "ESSENCE.Item.Card.Universal"}}{{/if}}</span>
   </div>
-  {{#if system.tags}}<div class="card-view-tags muted">{{system.tags}}</div>{{/if}}
-
-  {{#each system.body as |line|}}
-    {{#if line.html}}
-      <div class="card-view-line">
-        <div class="card-view-label">{{line.label}}</div>
-        <div class="card-view-text">{{{line.html}}}</div>
+  <div class="cv-body">
+    <div class="cv-chips">
+      {{#if system.skill}}<span class="chip dom-{{system.domain}}">{{capitalize system.skill}}</span><span class="chip">{{localize "ESSENCE.Common.Rank"}} {{system.rank}}</span>{{else}}<span class="chip dom-{{system.domain}}">{{capitalize system.domain}}</span><span class="chip">{{localize "ESSENCE.Item.Card.UnrankedNoStyle"}}</span>{{/if}}
+    </div>
+    <div class="cv-sec"><b>{{localize "ESSENCE.Item.Card.Requires"}}</b><span>{{#if system.expertises}}{{#if (eq system.expertisesMode "any2")}}{{localize "ESSENCE.Item.Card.AnyTwoOf"}}{{else}}{{localize "ESSENCE.Item.Card.AnyOf"}}{{/if}} {{system.expertises}}{{else}}<span class="muted">{{localize "ESSENCE.Item.Card.NoExpertise"}}</span>{{/if}}</span></div>
+    <div class="cv-stats">
+      <div class="cv-stat"><span class="cv-lbl">{{localize "ESSENCE.Item.Card.Commit"}}</span><span class="cv-v cv-accent">{{cardView.commit}}</span>{{#if cardView.commitNote}}<span class="muted">{{cardView.commitNote}}</span>{{/if}}</div>
+      <div class="cv-stat"><span class="cv-lbl">{{localize "ESSENCE.Common.Cost"}}</span><span class="cv-v cv-accent">{{#if system.cost}}{{system.cost}} {{cardView.resource}}{{else}}—{{/if}}</span><span class="muted">{{#if system.cost}}{{cardView.resourceNote}}{{else}}{{localize "ESSENCE.Item.Card.NoResource"}}{{/if}}</span></div>
+      {{#if system.attr}}<div class="cv-stat"><span class="cv-lbl">{{localize "ESSENCE.Item.Card.Roll"}}</span><span class="cv-v">{{capitalize system.attr}}</span></div>{{/if}}
+      <div class="cv-stat"><span class="cv-lbl">{{localize "ESSENCE.Item.Card.Against"}}</span><span class="cv-v">{{#if system.unopposed}}{{localize "ESSENCE.Chat.Unopposed"}}{{else if system.defense}}{{capitalize system.defense}}{{else}}—{{/if}}</span></div>
+    </div>
+    {{#each system.body as |line|}}
+      {{#if line.html}}<div class="cv-sec"><b>{{line.label}}</b><span>{{{line.html}}}</span></div>{{/if}}
+    {{/each}}
+    {{#if system.surges.length}}
+      <div class="cv-surges">
+        <span class="cv-lbl">{{localize "ESSENCE.Common.Surges"}} <span class="muted cv-lbl-note">{{localize "ESSENCE.Item.Card.SurgeNote"}}</span></span>
+        {{#each system.surges as |s|}}
+          {{#if s.html}}<div class="cv-surge"><span class="n">{{s.n}}</span><span>{{{s.html}}}</span></div>{{/if}}
+        {{/each}}
       </div>
     {{/if}}
-  {{/each}}
-
-  {{#if system.surges.length}}
-    <div class="card-view-label">{{localize "ESSENCE.Common.Surges"}}</div>
-    <div class="card-view-surges">
-      {{#each system.surges as |s|}}
-        {{#if s.html}}
-          <div class="surge-option"><span class="cost">{{s.n}}</span><span class="surge-text">{{{s.html}}}</span></div>
-        {{/if}}
-      {{/each}}
-    </div>
-  {{/if}}
-
-  {{#if system.rider.html}}
-    <div class="card-view-rider">
-      {{#if system.rider.title}}<div class="card-view-rider-title">{{system.rider.title}}</div>{{/if}}
-      <div>{{{system.rider.html}}}</div>
-      {{#if system.rider.meta}}<div class="muted">{{system.rider.meta}}</div>{{/if}}
-    </div>
-  {{/if}}
-
-  {{#if system.flavor}}<div class="card-view-flavor">{{{system.flavor}}}</div>{{/if}}
+    {{#if system.rider.html}}
+      <div class="cv-rider">
+        {{#if system.rider.title}}<span class="cv-rider-title">{{system.rider.title}} <span class="muted">{{localize "ESSENCE.Item.Card.StyleRider"}}</span></span>{{/if}}
+        <span>{{{system.rider.html}}}</span>
+        {{#if system.rider.meta}}<span class="muted">{{system.rider.meta}}</span>{{/if}}
+      </div>
+    {{else}}
+      <div class="cv-rider cv-rider-none"><span class="muted">{{#if cardView.isReaction}}{{localize "ESSENCE.Item.Card.NoRiderReaction"}}{{else}}{{localize "ESSENCE.Item.Card.NoRider"}}{{/if}}</span></div>
+    {{/if}}
+    {{#if system.flavor}}<div class="cv-flavor">{{{system.flavor}}}</div>{{/if}}
+    {{#if system.tags}}<div class="cv-tags muted">{{system.tags}}</div>{{/if}}
+  </div>
 </div>
 {{else}}
-
 <div class="card-fields grid-3">
   <label>{{localize "ESSENCE.Common.Rank"}} <input name="system.rank" type="number" value="{{system.rank}}"></label>
   <label>{{localize "ESSENCE.Common.Subtype"}}

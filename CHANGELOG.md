@@ -2,6 +2,16 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.0
+
+**Sheet redesign, part four: the chat card and the card read view (plan step 6).**
+
+**Chat card.** A played Combat or Equipment Card posts the concept's chat card: a type band in the card-type color (green Action, red Reaction, gold Equipment, neutral Basic) with the Subtype and Style Rank, the card's name, a line saying what was committed, rolled, burned and paid and where the Pool stands, the dice inside Foundry's own dice-roll markup with the Success Die in gold, Surge dice in green and burned dice dashed, the Success Die or per-target result, the Surge options as numbered rows, and the card's own Target, Effect and Rider text. Plain Attribute, Initiative and Task rolls keep a simple header. Apply buttons wait for Ryan's answer.
+
+**Card read view.** A card opened from the sheet reads as the printed card: the type band, Style and Rank chips in the domain color, Requires, four stat tiles (Commit with the character's maximum, Cost with its Resource, Roll, Against), the body lines, numbered Surges, the Rider under a dashed rule, then flavor and tags.
+
+**Fix.** The card's normal maximum (Attribute + Style Rank) is read case-insensitively. Pack cards store "Intellect" and "Magecraft" while the sheet stores lowercase keys, so the maximum came out 0; since 0.17.1 that made burn the difference roll one die and burn the rest of any commitment on such a card.
+
 ## 0.17.2
 
 **Live-test fixes for the sheet redesign (checks 97, 102, 105, 110) and the enemy Origin dropdown.**

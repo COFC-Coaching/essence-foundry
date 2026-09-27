@@ -7,7 +7,9 @@ Run this in a world on Foundry v14 with the branch checked out into `Data/system
 Record results in build-history under a new dated heading; delete this file once everything below
 has passed.
 
-**Where this stands (2026-09-27).** Checks 1 to 95 were run on the local machine against 0.13.5
+**Where this stands (2026-09-27, evening).** Checks 96 to 120 and 89 were run on the local machine against 0.17.1 (build-history, "Live test of 0.14.0 through 0.18.0"). All passed after the 0.17.2 fixes except two clauses left for Shane: 98's arrow-key tab navigation (Foundry core has no such handler; the tab strip is native and keyboard focus works, but arrows do nothing) and 102's "empty aside is display: none" (0.15.0 filled the sidebar, so it is never empty). 103's chat card passes with 0.18.0. Earlier status:
+
+**Where this stood (2026-09-27, morning).** Checks 1 to 95 were run on the local machine against 0.13.5
 (build-history, "Live test of 0.8.1 through 0.13.5"): all passed after the 0.13.1 to 0.13.5 fixes
 except 89 (Species Trait sub-choices do not feed Resistances; waiting on a decision), 17's second
 half (no legacy Dilettante in the test world) and 53 (superseded by 84). The wiki patch was pushed

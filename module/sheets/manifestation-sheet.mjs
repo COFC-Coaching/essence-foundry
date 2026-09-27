@@ -250,7 +250,7 @@ export default class EssenceManifestationSheet extends HandlebarsApplicationMixi
       }
     }
 
-    await rollEssencePool({ pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges: 0 });
+    await rollEssencePool({ card: item, play: { committed, available, after: available - committed, poolLabel, cost: Number(sys.cost) || 0, domain: sys.domain }, pool: committed, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges: 0 });
   }
 
   /**

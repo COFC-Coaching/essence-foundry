@@ -1,18 +1,41 @@
-<div class="essence roll-card">
-  <h3>{{label}}</h3>
-  <div class="dice-faces">
-    {{#each faces as |face i|}}
-      {{!-- Surges are counted AFTER the Defense check: the Success Die never gets the surge-die
-           class even at 6+, since it was already spent meeting Defense (see essence-roll.mjs's
-           resolveCombatRoll, 2026-09-09 rule clarification). --}}
-      <span class="die {{#if (eq i ../successDieIndex)}}success-die{{/if}} {{#if (and (gte face 6) (ne i ../successDieIndex))}}surge-die{{/if}}">{{face}}</span>
-    {{/each}}
+{{!-- Chat card for every Essence roll (plan step 6, concept "Chat cards after a play"). The dice sit
+     inside Foundry's own .dice-roll / .dice-result markup so the chat log styles them and Dice So
+     Nice keeps its hook; the Essence parts (Success Die, Surges, Effect and Rider) layer on top.
+     `card` and `play` are set only when a Combat or Equipment Card was played; a plain Attribute,
+     Initiative or Task roll has neither and falls back to the label alone. --}}
+<div class="essence roll-card{{#if card}} kind-{{card.kind}}{{else}} kind-roll{{/if}}">
+  {{#if card}}
+    <div class="rc-band">
+      <span>{{card.kindLabel}}{{#if card.subtype}} · {{card.subtype}}{{/if}}</span>
+      <span>{{#if card.style}}{{card.style}} R{{card.rank}}{{else if card.domainLabel}}{{card.domainLabel}}{{/if}}</span>
+    </div>
+    <h2 class="rc-title">{{label}}</h2>
+    {{#if play}}
+      <p class="rc-meta">
+        {{#if play.burnOnly}}{{localize "ESSENCE.Chat.Burned" n=play.committed pool=play.poolLabel}}{{else}}{{localize "ESSENCE.Chat.Committed" n=play.committed max=play.available pool=play.poolLabel}}{{/if}}{{#if play.burned}} · {{localize "ESSENCE.Chat.RolledBurned" rolled=play.rolled burned=play.burned}}{{/if}}{{#if play.cost}} · {{localize "ESSENCE.Chat.Paid" cost=play.cost resource=play.resource}}{{/if}}{{#if play.hasAfter}} · {{localize "ESSENCE.Chat.PoolAfter" pool=play.poolLabel before=play.available after=play.after}}{{/if}}
+      </p>
+    {{/if}}
+  {{else}}
+    <h3 class="rc-title">{{label}}</h3>
+  {{/if}}
+
+  <div class="dice-roll">
+    <div class="dice-result">
+      <div class="dice-formula">{{pool}}d10{{#if defense}} {{localize "ESSENCE.Chat.VsDefense" defense=defense}}{{/if}}{{#if difficulty}} {{localize "ESSENCE.Chat.VsDifficulty" difficulty=difficulty}}{{/if}}</div>
+      <div class="dice-faces">
+        {{#each faces as |face i|}}
+          {{!-- The Success Die never carries surge-die: Surges are counted after the Defense check
+               and the Success Die is excluded from that count (resolveCombatRoll). --}}
+          <span class="die {{#if (eq i ../successDieIndex)}}success-die{{/if}} {{#if (and (gte face 6) (ne i ../successDieIndex))}}surge-die{{/if}}" aria-label="{{face}}">{{face}}</span>
+        {{/each}}
+        {{#if play.burned}}{{#each play.burnedList}}<span class="die burned-die" aria-label="{{localize 'ESSENCE.Chat.BurnedDie'}}">·</span>{{/each}}{{/if}}
+        {{#if card.attr}}<span class="rc-dice-note">{{card.attr}}{{#if play.maxRolled}}, {{localize "ESSENCE.Chat.Max" n=play.maxRolled}}{{/if}}</span>{{/if}}
+      </div>
+    </div>
   </div>
+
   <div class="roll-summary">
-    <p><strong>{{localize "ESSENCE.Chat.Pool"}}:</strong> {{pool}}d10{{#if defense}} {{localize "ESSENCE.Chat.VsDefense" defense=defense}}{{/if}}{{#if difficulty}} {{localize "ESSENCE.Chat.VsDifficulty" difficulty=difficulty}}{{/if}}</p>
     {{#if nonCombat}}
-      {{!-- Non-Combat task (Doc L1238): read the highest die; it meets or beats the Difficulty or
-           it doesn't. No Surges, no Success Die reservation, no per-target table. --}}
       <p><strong>{{localize "ESSENCE.Chat.HighestDie"}}:</strong> {{successDie}} —
         {{#if difficulty}}
           {{#if taskSucceeded}}<span class="pass">{{localize "ESSENCE.Chat.Success"}}</span>{{else}}<span class="fail">{{localize "ESSENCE.Chat.Failure"}}</span>{{/if}}
@@ -23,21 +46,16 @@
       <p class="muted non-combat-note">{{localize "ESSENCE.Chat.NoSurgesNonCombat"}}</p>
     {{else}}
     {{#if targets.length}}
-      <table class="target-results">
-        <thead><tr><th>{{localize "ESSENCE.Chat.Target"}}</th><th>{{localize "ESSENCE.Chat.Defense"}}</th><th>{{localize "ESSENCE.Chat.Result"}}</th></tr></thead>
-        <tbody>
-          {{#each targets as |t|}}
-            <tr>
-              <td>{{t.name}}</td>
-              <td>{{#if t.defense}}{{t.defense}}{{else}}—{{/if}}</td>
-              <td>{{#if t.succeeded}}<span class="pass">{{localize "ESSENCE.Chat.Success"}}</span>{{else}}<span class="fail">{{localize "ESSENCE.Chat.Failure"}}</span>{{/if}}</td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
+      <div class="rc-results">
+        <span class="rc-lbl">{{localize "ESSENCE.Chat.Target"}}</span><span class="rc-lbl">{{localize "ESSENCE.Chat.Defense"}}</span><span class="rc-lbl">{{localize "ESSENCE.Chat.Result"}}</span>
+        {{#each targets as |t|}}
+          <span class="rc-target">{{t.name}}</span>
+          <span class="num">{{#if t.defense}}{{t.defense}}{{else}}—{{/if}}</span>
+          <span>{{#if t.succeeded}}<span class="pass">{{localize "ESSENCE.Chat.Success"}}</span>{{else}}<span class="fail">{{localize "ESSENCE.Chat.Failure"}}</span>{{/if}}</span>
+        {{/each}}
+      </div>
       {{#unless unopposed}}<p class="muted">{{localize "ESSENCE.Chat.SuccessDie"}}: {{successDie}}</p>{{/unless}}
     {{else if unopposed}}
-      {{!-- V6 §5.2.3: an Unopposed card auto-succeeds; no die is reserved as the Success Die and every 6+ is a Surge. --}}
       <p><strong>{{localize "ESSENCE.Chat.Unopposed"}}</strong> — <span class="pass">{{localize "ESSENCE.Chat.UnopposedNote"}}</span></p>
     {{else}}
       <p><strong>{{localize "ESSENCE.Chat.SuccessDie"}}:</strong> {{successDie}} —
@@ -56,7 +74,7 @@
       </p>
     {{else if surgeOptions.length}}
       <div class="surge-options">
-        <p class="surges-remaining"><strong>{{localize "ESSENCE.Chat.Surges"}}:</strong> <span class="remaining">{{surges}}</span> / {{surges}} {{localize "ESSENCE.Chat.Available"}}</p>
+        <p class="surges-remaining"><span class="rc-lbl">{{localize "ESSENCE.Chat.Surges"}}</span> <span class="muted"><span class="remaining">{{surges}}</span> / {{surges}} {{localize "ESSENCE.Chat.Available"}}</span></p>
         {{#each surgeOptions as |opt|}}
           <button type="button" class="surge-option" data-index="{{opt.i}}" data-cost="{{opt.n}}">
             <span class="cost">{{opt.n}}</span> <span class="surge-text">{{{opt.html}}}</span>
@@ -68,4 +86,15 @@
     {{/if}}
     {{/if}}
   </div>
+
+  {{#if card.body.length}}
+    <div class="rc-text">
+      {{#each card.body as |line|}}
+        <div class="rc-sec"><b>{{line.label}}</b><span>{{{line.html}}}</span></div>
+      {{/each}}
+      {{#if card.rider}}
+        <div class="rc-sec rc-rider"><b>{{localize "ESSENCE.Item.Card.Rider"}}</b><span>{{#if card.rider.title}}<strong class="rc-accent">{{card.rider.title}}</strong> {{/if}}{{{card.rider.html}}}{{#if card.rider.meta}} <span class="muted">{{card.rider.meta}}</span>{{/if}}</span></div>
+      {{/if}}
+    </div>
+  {{/if}}
 </div>

@@ -446,7 +446,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       return `Advisory: this card's printed roll limit is ${sys.rollLimit} dice. Committing more is allowed but exceeds the printed maximum.`;
     }
     if (!sys?.attr || !sys?.skill) return "";
-    const raw = (actor.system[sys.attr] ?? 0) + (actor.system[sys.skill] ?? 0);
+    const raw = (actor.system[String(sys.attr).toLowerCase()] ?? 0) + (actor.system[String(sys.skill).toLowerCase()] ?? 0);
     if (raw < 2) return `Advisory: this card's normal maximum is ${raw} dice (${capitalize(sys.attr)} + ${capitalize(sys.skill)} Rank). The minimum is still paid; the difference is burned, not rolled.`;
     return `Advisory: this card's normal maximum is ${raw} dice (${capitalize(sys.attr)} + ${capitalize(sys.skill)} Rank). Committing more is allowed but exceeds the printed maximum.`;
   }
@@ -550,7 +550,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       await this.actor.update(update);
       const pool = Math.max(2, parseInt(sys.min, 10) || 2);
       const { defense, targets } = await EssenceNpcSheet.#resolveTargets((sys.defense || "").toLowerCase());
-      await rollEssencePool({ pool, defense, targets, label: `${item.name} (printed ${pool}d10)`, actor: this.actor, surgeOptions: sys.surges, unopposed: !!sys.unopposed, nonCombat: !!sys.noSurges });
+      await rollEssencePool({ card: item, pool, defense, targets, label: `${item.name} (printed ${pool}d10)`, actor: this.actor, surgeOptions: sys.surges, unopposed: !!sys.unopposed, nonCombat: !!sys.noSurges });
       return;
     }
     if (cardOnCooldown(item)) {
@@ -621,10 +621,10 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     await applyCardCooldown(this.actor, item);
     const bonusSurges = hasMastery(sys, this.actor.system.expertises) ? 1 : 0;
     // Burn the difference (Ryan, 2026-09-27): pay the minimum, roll only the card's normal maximum.
-    const maxRolled = typeof sys.rollLimit === "number" || !sys.attr || !sys.skill ? null : (this.actor.system[sys.attr] ?? 0) + (this.actor.system[sys.skill] ?? 0);
+    const maxRolled = typeof sys.rollLimit === "number" || !sys.attr || !sys.skill ? null : (this.actor.system[String(sys.attr).toLowerCase()] ?? 0) + (this.actor.system[String(sys.skill).toLowerCase()] ?? 0);
     const { rolled, burned } = splitCommitment(committed, cardMin, maxRolled);
     if (burned > 0) await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: `<p><strong>${this.actor.name}</strong> plays <strong>${item.name}</strong>: pays ${committed} ${poolLabel} dice, rolls ${rolled}, burns ${burned} (maximum below the minimum).</p>` });
-    await rollEssencePool({ pool: rolled, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges, unopposed: !!sys.unopposed, nonCombat: !!sys.noSurges });
+    await rollEssencePool({ card: item, play: { committed, rolled, burned, available, after: available - (committed + unawareTax), poolLabel, cost: Number(sys.cost) || 0, domain: sys.domain, maxRolled }, pool: rolled, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges, unopposed: !!sys.unopposed, nonCombat: !!sys.noSurges });
   }
 
   /** See EssenceActorSheet#onRollEquipmentCard — same V6 §9.6 fold-into-Combat-Card-flow, same

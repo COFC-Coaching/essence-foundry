@@ -140,6 +140,23 @@ export class EssenceCardSheet extends EssenceItemSheetBase {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.skillOptions = COMBAT_STYLES.map((key) => ({ key, label: key }));
+    // Read view (plan step 6): the band kind, the Commit tile and the Cost resource.
+    const sys = context.system;
+    const isReaction = this.item.type === "reaction-card";
+    const kind = isReaction ? "reaction" : sys.skill ? "action" : "basic";
+    const kindLabel = kind === "basic" ? `${game.i18n.localize("ESSENCE.Item.Card.Basic")} · ${isReaction ? game.i18n.localize("ESSENCE.Item.Card.Reaction") : game.i18n.localize("ESSENCE.Item.Card.Action")}` : game.i18n.localize(isReaction ? "ESSENCE.Item.Card.Reaction" : "ESSENCE.Item.Card.Action");
+    const min = Math.max(2, parseInt(sys.min, 10) || 1);
+    const burnOnly = sys.noRoll && typeof sys.burnDice === "number";
+    const actor = this.item.actor;
+    const max = actor && sys.attr && sys.skill ? (actor.system[String(sys.attr).toLowerCase()] ?? 0) + (actor.system[String(sys.skill).toLowerCase()] ?? 0) : null;
+    const attrRank = sys.attr && sys.skill ? `${sys.attr.charAt(0).toUpperCase() + sys.attr.slice(1)} + ${sys.skill.charAt(0).toUpperCase() + sys.skill.slice(1)}` : "";
+    const resource = { physical: "Stamina", mental: "Focus", spiritual: "Mana" }[sys.domain] ?? "";
+    context.cardView = {
+      kind, kindLabel, isReaction,
+      commit: burnOnly ? game.i18n.format("ESSENCE.Item.Card.BurnDice", { n: sys.burnDice }) : game.i18n.format("ESSENCE.Item.Card.RollDice", { n: min }),
+      commitNote: burnOnly ? game.i18n.localize("ESSENCE.Item.Card.NoRollAutomatic") : (max !== null ? game.i18n.format("ESSENCE.Item.Card.MaxNote", { max, attrRank }) : attrRank),
+      resource, resourceNote: resource ? game.i18n.format("ESSENCE.Item.Card.ResourceNote", { domain: sys.domain.charAt(0).toUpperCase() + sys.domain.slice(1) }) : ""
+    };
     // Action Subtypes are nested under the card's own Combat Style (each skill has its own fixed
     // set — see expertise-database.mjs's SUBTYPE_DATABASE) rather than being free text — a Basic/
     // Universal card (no skill set) has no subtype list to offer. If the stored subtype isn't in

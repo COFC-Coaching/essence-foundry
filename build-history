@@ -3654,3 +3654,48 @@ local Foundry after a relaunch (two packs rebuilt).
   Temporary Influence grants (Q7) are the next release. Guide and wiki text for the death timer,
   burn the difference and enemy Surges should follow once the Doc carries the rulings.
 - Verification: `npm test` (rules 120, migration 59), `node --check` on every changed module.
+
+### 2026-09-27 -- Live test of 0.14.0 through 0.18.0 (sheet redesign, checks 96 to 120 and 89)
+
+Same method as the morning run: system folder backed up (`essence-system.bak-0.14.0-2026-09-27`)
+and mirrored, Foundry relaunched, driven from the desktop app's built-in browser. Layout checks
+were screenshotted at a 1080px and an 820px sheet width and read against the concept canvas
+Shane linked. The Foundry window stayed logged in as a second GM client; no combat turn events
+were needed this run.
+
+**Passed:** 96 (minimum 13, verified 14, world launched clean), 97 after the fix below, 98 except
+its keyboard clause, 99, 100, 101 (the setting, the variable, the veil and the translucent panels
+all work; with a dark image the art is barely visible, with parchment it tints the ground, so the
+veil strength is a taste call), 102 and 110 after the fix below, 103 (item sheets take the
+palette; the chat card passes with 0.18.0), 104 to 109 (105's Wound label after the fix below),
+111 to 120, and 89 (Aegis of Origin writes a Fire Resistance row, Keen writes two Senses,
+switching Species removes them). No console error named `systems/essence-system` at any point.
+
+**Fixed, 0.17.2.**
+- 97: headings, inputs, selects and textareas inherited Foundry's theme colors; in the light theme
+  every heading and field went dark on the dark sheet. Pinned to tokens; locked fields at 0.85
+  opacity since a sheet opens locked.
+- 102 and 110: `container-type` sat on `.essence-sheet-root`, the element the query also styled.
+  An element cannot match a container query on its own size, so the sidebar's child rules moved it
+  to row 4 while the root kept two columns and the tab body got 0px. Moved to `.window-content`.
+  Stacked rows are `minmax(0, 3fr) minmax(0, 2fr)`; a `40%` cap never resolved.
+- 105: a hand-filled Core Wound stored no severity, so the Wound state stayed Unharmed. The pip
+  toggle now writes the slot severity (`SEVERITY_BY_INDEX`).
+- Shane, mid-run: Origin on the NPC and Monster sheets is a Species and a Distinction dropdown
+  (same `setOriginItem` / `clearOriginItem` path as the buttons; exempt from the edit lock).
+
+**Built, 0.18.0** (Shane: "cards and chat cards were supposed to be changed to the new style").
+`roll-card.hbs` rebuilt from the concept's chat-card artboard on Foundry's `.dice-roll` /
+`.dice-result` markup: band, title, commit/paid/Pool line, dice (gold Success Die, green Surge
+dice, dashed burned dice), results, Surge rows, then the card's body and Rider. `rollEssencePool`
+takes `card` (the Item) and `play` (what left the Pool); `finishCardPlay`, the Elite path and
+the Manifestation path pass them. `card-sheet.hbs` read view rebuilt from the card-anatomy
+artboard with a `cardView` context from `EssenceCardSheet`. The surge-spend handler and its
+selectors are unchanged. Found on the way: `actor.system[sys.attr]` with the pack's capitalized
+"Intellect" gave a maximum of 0, which since 0.17.1 turned a 3-die commitment into roll 1,
+burn 2. All five lookups lowercase the key now.
+
+**Left for Shane.** 98's arrow keys (add a handler, or drop the clause); 102's empty-aside
+clause (obsolete since 0.15.0); the veil strength; the concept puts the vitals on the left with a
+hero header and Resource bars, the build has them on the right with the old header. Apply
+buttons on the chat card wait for Ryan. `design/live-test-pending.md` and the runbook stay.

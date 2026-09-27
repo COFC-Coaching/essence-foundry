@@ -696,109 +696,113 @@
 .essence .tab.bio .bio-standing .bio-cell input[type="number"] { width: 100%; font-size: 1.05em; }
 
 
-/* NOTE: the roll-card's root element is <div class="essence roll-card"> — both classes on the
-   SAME node. A descendant-combinator selector like ".essence .roll-card X" requires .roll-card
-   to be a *different*, nested descendant of .essence, which never happens here, so any such
-   rule silently never matches. Every rule below uses the compound ".essence.roll-card X" form
-   (no space) instead, which matches an element carrying both classes directly. */
-.essence.roll-card { padding: 6px 8px; }
-.essence.roll-card h3 { margin: 0 0 6px; }
-.essence.roll-card .dice-faces { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 8px; }
+/* ============ Chat roll card (plan step 6) ============
+   The root is <div class="essence roll-card kind-*"> — both classes on ONE node, so every rule
+   uses the compound ".essence.roll-card" form. The dice sit in Foundry's own .dice-roll /
+   .dice-result markup; the Essence parts (band, Success Die, Surges, Effect, Rider) layer on top.
+   Kind colors are the card-type tokens; the gold accent is the Success Die. Foundry's chat
+   message keeps its own background: the card draws its own panel so it reads the same on the
+   parchment (light) and dark chat logs. */
+.essence.roll-card { padding: 0; margin: 2px 0; border: 1px solid var(--essence-line); border-radius: 8px; overflow: hidden; background: var(--essence-panel-raised); color: var(--essence-ink); font-family: var(--essence-font-body); }
+.essence.roll-card .rc-band { display: flex; justify-content: space-between; gap: 8px; padding: 4px 10px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--essence-accent-ink); background: var(--essence-muted-soft); }
+.essence.roll-card.kind-action .rc-band { background: var(--essence-card-action); }
+.essence.roll-card.kind-reaction .rc-band { background: var(--essence-card-reaction); }
+.essence.roll-card.kind-equipment .rc-band { background: var(--essence-card-equipment); }
+.essence.roll-card.kind-basic .rc-band { background: var(--essence-card-basic); }
+.essence.roll-card .rc-title { margin: 8px 10px 4px; font-family: var(--essence-font-display); font-size: 1.35em; line-height: 1.1; color: var(--essence-ink-bright); border: none; }
+.essence.roll-card h3.rc-title { font-size: 1.1em; }
+.essence.roll-card .rc-meta, .essence.roll-card .muted { color: var(--essence-muted); font-size: 0.9em; }
+.essence.roll-card .rc-meta { margin: 0 10px 6px; }
+.essence.roll-card .rc-lbl { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--essence-muted); }
+.essence.roll-card .rc-accent { color: var(--essence-accent); }
+.essence.roll-card .dice-roll { margin: 0 10px; }
+.essence.roll-card .dice-roll .dice-result { color: inherit; }
+.essence.roll-card .dice-formula { display: inline-block; margin: 0 0 4px; padding: 0; border: none; background: none; box-shadow: none; font-size: 0.85em; color: var(--essence-muted); text-align: left; }
+.essence.roll-card .dice-faces { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: 0 0 8px; }
 .essence.roll-card .die {
-  display: inline-flex; align-items: flex-start; justify-content: center;
-  width: 36px; height: 36px; padding-top: 9px; box-sizing: border-box;
-  font-size: 15px; font-weight: bold; background: var(--essence-panel-raised); border: 1px solid var(--essence-line-bright); color: var(--essence-ink);
-  /* Kite/rhombus outline, matching a d10's face shape rather than a generic square die. */
-  clip-path: polygon(50% 0%, 100% 35%, 82% 100%, 18% 100%, 0% 35%);
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.6));
+  display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; box-sizing: border-box;
+  border-radius: 7px; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums;
+  background: var(--essence-well); border: 1px solid var(--essence-line-bright); color: var(--essence-muted);
 }
-.essence.roll-card .die.success-die { background: var(--essence-success); color: #fff; filter: drop-shadow(0 2px 3px rgba(var(--essence-success-rgb),0.7)); }
-.essence.roll-card .die.surge-die { background: var(--essence-accent); border-color: var(--essence-accent-bright); color: var(--essence-accent-ink); }
-/* No .success-die.surge-die combined rule: since the 2026-09-09 rule change, Surges are counted
-   AFTER the Defense check and the Success Die is excluded from that count (see resolveCombatRoll),
-   so a die is never both classes at once — success-die and surge-die are mutually exclusive now. */
-/* var(--essence-success)/var(--essence-condition) (this system's "success"/"fail" green/red everywhere else, e.g. the success-die
-   background) measure ~2.8:1 and ~1.7:1 as TEXT on this sheet's rgb(48,40,49) background — both
-   well under WCAG AA's 4.5:1 floor, and pass/fail here is color-only, no icon or shape backup.
-   Lifted just for text-on-dark use; the darker tones stay correct wherever they're a background
-   under white text (success-die, spent Surge cost badge), which already passes. */
+.essence.roll-card .die.success-die { background: var(--essence-accent); border-color: var(--essence-accent); color: var(--essence-accent-ink); box-shadow: 0 0 0 3px rgba(var(--essence-accent-rgb), 0.25); }
+.essence.roll-card .die.surge-die { background: var(--essence-success); border-color: var(--essence-success); color: var(--essence-ink-bright); }
+.essence.roll-card .die.burned-die { background: transparent; border-style: dashed; color: var(--essence-line-bright); }
+.essence.roll-card .rc-dice-note { margin-left: 4px; font-size: 0.85em; color: var(--essence-muted); }
+.essence.roll-card .roll-summary { padding: 0 10px 8px; }
+.essence.roll-card .roll-summary p { margin: 2px 0; }
 .essence.roll-card .pass { color: var(--essence-success-ink); font-weight: bold; }
 .essence.roll-card .fail { color: var(--essence-danger); font-weight: bold; }
-.essence.roll-card .muted { opacity: 0.7; font-size: 0.9em; }
-.essence.roll-card .target-results { width: 100%; border-collapse: collapse; margin: 4px 0; font-size: 0.9em; }
-.essence.roll-card .target-results th, .essence.roll-card .target-results td { border: 1px solid var(--essence-line); padding: 2px 6px; text-align: left; }
-.essence.roll-card .target-results th { background: rgba(255,255,255,0.05); }
-.essence.roll-card .surge-options { margin: 6px 0; }
-.essence.roll-card .surges-remaining { margin-bottom: 4px; }
+.essence.roll-card .rc-results { display: grid; grid-template-columns: minmax(0, 1fr) 70px 80px; gap: 2px 8px; margin: 4px 0; font-size: 0.9em; }
+.essence.roll-card .rc-results .rc-target { font-weight: 600; }
+.essence.roll-card .surge-options { margin: 6px 0 2px; display: flex; flex-direction: column; gap: 4px; }
+.essence.roll-card .surges-remaining { display: flex; justify-content: space-between; align-items: baseline; margin: 0 0 2px; }
 .essence.roll-card .surge-option {
-  display: flex; gap: 6px; align-items: flex-start; width: 100%; text-align: left;
-  background: rgba(var(--essence-accent-rgb), 0.12); border: 1px solid var(--essence-accent); border-radius: 4px;
-  padding: 4px 6px; margin-bottom: 3px; cursor: pointer; color: inherit; font-size: 0.85em;
-  /* Foundry v14 loads system CSS via @import ... layer(system), which loses to ANY unlayered
-     core rule of matching selector regardless of specificity (only !important reliably wins
-     against that, since layered !important outranks unlayered normal AND unlayered !important
-     per the CSS Cascade Layers spec) — core's own `button { height: 2rem }` was clamping this
-     multi-line text to one line's worth of height and spilling it onto the next chat element. */
+  display: flex; gap: 8px; align-items: center; width: 100%; text-align: left;
+  background: var(--essence-panel); border: 1px solid var(--essence-line-strong); border-radius: 6px;
+  padding: 5px 8px; margin: 0; cursor: pointer; color: var(--essence-ink); font-size: 0.85em;
+  /* Foundry v14 loads system CSS in layer(system); core's own button height wins unless forced. */
   height: auto !important; min-height: 0 !important; line-height: 1.3 !important; white-space: normal !important;
 }
 .essence.roll-card .surge-option .cost {
-  flex: 0 0 auto; min-width: 1.4em; text-align: center; font-weight: bold;
-  background: var(--essence-accent); color: var(--essence-accent-ink); border-radius: 3px; padding: 1px 3px; align-self: flex-start;
+  flex: 0 0 auto; width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 11px; background: var(--essence-well); border: 1px solid var(--essence-accent); color: var(--essence-accent);
 }
 .essence.roll-card .surge-option .surge-text { flex: 1; }
-.essence.roll-card .surge-option.spent { background: rgba(var(--essence-success-rgb), 0.25); border-color: var(--essence-success); opacity: 0.85; }
-.essence.roll-card .surge-option.spent .cost { background: var(--essence-success); color: #fff; }
-.essence.roll-card .surge-option:disabled { opacity: 0.4; cursor: not-allowed; }
+.essence.roll-card .surge-option.spent { background: rgba(var(--essence-success-rgb), 0.22); border-color: var(--essence-success); }
+.essence.roll-card .surge-option.spent .cost { background: var(--essence-success); border-color: var(--essence-success); color: var(--essence-ink-bright); }
+.essence.roll-card .surge-option:disabled { opacity: 0.45; cursor: not-allowed; }
+.essence.roll-card .rc-text { display: flex; flex-direction: column; gap: 6px; padding: 8px 10px 10px; border-top: 1px solid var(--essence-line); }
+.essence.roll-card .rc-sec { display: flex; gap: 8px; line-height: 1.4; font-size: 0.9em; }
+.essence.roll-card .rc-sec > b { flex: 0 0 60px; padding-top: 2px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--essence-muted); }
+.essence.roll-card .rc-sec > span > p { margin: 0; }
+.essence.roll-card .rc-rider { border-top: 1px dashed var(--essence-line-dashed); padding-top: 6px; }
 
-/* ============ Card sheet: read view ============
-   Cards are opened to be read far more than edited — the edit form (grid of bare inputs, ProseMirror
-   boxes for every line) is the wrong default. This reuses the chat roll-card's own amber Surge-badge
-   language so the card in your hand, on the sheet, and in chat all read as the same object. */
+/* ============ Card sheet: read view (plan step 6) ============
+   Framed like the printed card: a type band, the name, Style and Rank chips, Requires, the four
+   stat tiles (Commit, Cost, Roll, Against), the body lines, numbered Surges, the Rider. */
 .essence .card-view-toggle {
   flex: 0 0 auto; align-self: center; width: auto; white-space: nowrap;
   background: rgba(var(--essence-accent-rgb), 0.12); border: 1px solid var(--essence-accent); color: var(--essence-accent);
 }
 .essence .card-view-toggle:hover { background: rgba(var(--essence-accent-rgb), 0.22); }
-/* Framed like a physical card — a bordered box separate from the rest of the sheet chrome,
-   closer to how the rules' own card-anatomy reference presents one. */
-.essence .card-view {
-  border: 1px solid var(--essence-line-strong); border-radius: 8px; padding: 10px 12px; background: rgba(0,0,0,0.15);
-}
-.essence .card-view-style-row { font-weight: bold; text-transform: uppercase; letter-spacing: 0.03em; font-size: 1.05em; }
-.essence .card-view-subtype { font-weight: normal; opacity: 0.8; text-transform: none; }
-.essence .card-view-expertises { font-size: 0.85em; opacity: 0.8; margin-bottom: 6px; }
-.essence .card-view-infogrid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; margin: 8px 0;
-  border: 1px solid var(--essence-line); border-radius: 4px; padding: 6px 10px; background: rgba(255,255,255,0.03);
-}
-.essence .card-view-infogrid > div { display: flex; flex-direction: column; }
-.essence .card-view-statlabel {
-  font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.65;
-}
-.essence .card-view-tags { font-size: 0.8em; text-transform: capitalize; margin-bottom: 6px; }
-.essence .card-view-line { margin-bottom: 10px; }
-.essence .card-view-label {
-  font-weight: bold; text-transform: uppercase; font-size: 0.75em; letter-spacing: 0.05em;
-  color: var(--essence-accent); margin-bottom: 2px;
-}
-.essence .card-view-text { line-height: 1.4; }
-.essence .card-view-text p { margin: 0 0 4px; }
-.essence .card-view-surges { margin: 10px 0; }
-.essence .card-view-surges .surge-option {
-  display: flex; gap: 6px; align-items: flex-start; background: rgba(var(--essence-accent-rgb), 0.12);
-  border: 1px solid var(--essence-accent); border-radius: 4px; padding: 4px 6px; margin-bottom: 3px; font-size: 0.85em;
-}
-.essence .card-view-surges .cost {
-  flex: 0 0 auto; min-width: 1.4em; text-align: center; font-weight: bold;
-  background: var(--essence-accent); color: var(--essence-accent-ink); border-radius: 3px; padding: 1px 3px;
-}
-.essence .card-view-surges .surge-text { flex: 1; }
-.essence .card-view-rider {
-  border: 1px solid var(--essence-line); border-left: 3px solid var(--essence-accent); border-radius: 4px;
-  padding: 6px 8px; margin: 10px 0; background: rgba(255,255,255,0.03);
-}
-.essence .card-view-rider-title { font-weight: bold; text-transform: uppercase; font-size: 0.8em; letter-spacing: 0.05em; margin-bottom: 3px; }
-.essence .card-view-flavor { font-style: italic; opacity: 0.8; margin-top: 10px; }
+.essence .card-view { border: 1px solid var(--essence-line-strong); border-radius: 10px; overflow: hidden; background: var(--essence-panel-raised); display: flex; flex-direction: column; }
+.essence .card-view.kind-action { border-color: var(--essence-card-action); }
+.essence .card-view.kind-reaction { border-color: var(--essence-card-reaction); }
+.essence .card-view.kind-equipment { border-color: var(--essence-card-equipment); }
+.essence .card-view.kind-basic { border-color: var(--essence-line-bright); }
+.essence .cv-band { display: flex; justify-content: space-between; gap: 8px; padding: 6px 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--essence-accent-ink); background: var(--essence-muted-soft); }
+.essence .kind-action .cv-band { background: var(--essence-card-action); }
+.essence .kind-reaction .cv-band { background: var(--essence-card-reaction); }
+.essence .kind-equipment .cv-band { background: var(--essence-card-equipment); }
+.essence .kind-basic .cv-band { background: var(--essence-card-basic); }
+.essence .cv-body { padding: 12px 12px 10px; display: flex; flex-direction: column; gap: 9px; }
+.essence .cv-chips, .essence .cv-chips .chip { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.essence .chip { align-items: center; height: 22px; padding: 0 9px; border-radius: 11px; font-size: 11px; font-weight: 600; background: var(--essence-well); border: 1px solid var(--essence-line-strong); color: var(--essence-ink); }
+.essence .chip.dom-physical { color: var(--essence-domain-physical-ink); }
+.essence .chip.dom-mental { color: var(--essence-domain-mental-ink); }
+.essence .chip.dom-spiritual { color: var(--essence-domain-spiritual-ink); }
+.essence .cv-sec { display: flex; gap: 8px; font-size: 0.95em; line-height: 1.4; }
+.essence .cv-sec > b { flex: 0 0 62px; padding-top: 2px; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--essence-muted); }
+.essence .cv-sec > span > p { margin: 0; }
+.essence .cv-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.essence .cv-stat { display: flex; flex-direction: column; gap: 1px; padding: 6px 8px; border-radius: 6px; background: var(--essence-well); border: 1px solid var(--essence-line); min-width: 0; }
+.essence .cv-lbl { font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--essence-muted); }
+.essence .cv-lbl-note { text-transform: none; letter-spacing: 0; font-weight: 400; }
+.essence .cv-v { font-weight: 700; font-size: 1em; line-height: 1.2; }
+.essence .cv-accent { color: var(--essence-accent); }
+.essence .kind-action .cv-accent { color: var(--essence-success-ink); }
+.essence .kind-reaction .cv-accent { color: var(--essence-condition-ink); }
+.essence .cv-stat .muted { font-size: 10.5px; }
+.essence .cv-surges { display: flex; flex-direction: column; gap: 5px; }
+.essence .cv-surge { display: flex; gap: 8px; align-items: flex-start; font-size: 0.95em; line-height: 1.35; }
+.essence .cv-surge .n { flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; background: var(--essence-well); border: 1px solid var(--essence-accent); color: var(--essence-accent); }
+.essence .cv-surge > span > p { margin: 0; }
+.essence .cv-rider { border-top: 1px dashed var(--essence-line-dashed); padding-top: 8px; display: flex; flex-direction: column; gap: 3px; font-size: 0.95em; line-height: 1.35; }
+.essence .cv-rider-none { border-top-style: dotted; }
+.essence .cv-rider-title { font-weight: 700; color: var(--essence-accent); }
+.essence .cv-rider > span > p { margin: 0; }
+.essence .cv-flavor { font-style: italic; color: var(--essence-muted); }
+.essence .cv-tags { font-size: 0.85em; text-transform: capitalize; }
 
 /* ============ Condition/Equipment/Chassis/Fitting/Augment sheets: read view ============
    Same read-first/edit-toggle mechanism as the amber Action/Reaction Card block above

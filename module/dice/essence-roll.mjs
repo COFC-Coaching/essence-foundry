@@ -97,7 +97,40 @@ export function resolveCombatRoll(faces, defense = null, unopposed = false) {
  * @param {number|null} [options.difficulty] - Non-Combat only (Doc L1265): the GM's Difficulty.
  *   The highest die meeting or beating it succeeds. null means the GM decides from the card.
  */
-export async function rollEssencePool({ pool, defense = null, targets = null, label = "Essence Roll", actor = null, surgeOptions = [], bonusSurges = 0, freeDice = 0, unopposed = false, nonCombat = false, difficulty = null, noSurges = false } = {}) {
+
+const CARD_KIND_LABEL = { action: "Action", reaction: "Reaction", equipment: "Equipment", basic: "Basic" };
+const RESOURCE_BY_DOMAIN = { physical: "Stamina", mental: "Focus", spiritual: "Mana" };
+const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : "");
+
+/** The card half of a chat card (plan step 6): kind, band text, body lines and Rider, read off
+ *  the played Item so the chat card shows what the card says without reopening it. */
+export function cardChatContext(item) {
+  if (!item) return null;
+  const sys = item.system ?? {};
+  const isEquipment = item.type === "equipment" || item.type === "augment" || item.kind === "equipment";
+  const kind = isEquipment ? "equipment" : item.type === "reaction-card" ? "reaction" : sys.skill ? "action" : "basic";
+  const kindLabel = kind === "basic" ? `${CARD_KIND_LABEL.basic} · ${item.type === "reaction-card" ? "Reaction" : "Action"}` : kind === "equipment" && item.kind === "equipment" ? `Equipment${item.reaction ? " · Reaction" : ""}` : CARD_KIND_LABEL[kind];
+  return {
+    kind, kindLabel, name: item.name, subtype: sys.subtype || "", style: sys.skill ? cap(sys.skill) : "", rank: sys.rank ?? 0,
+    domainLabel: sys.domain ? cap(sys.domain) : "", attr: sys.attr ? cap(sys.attr) : "",
+    body: (sys.body ?? []).filter((l) => l?.html),
+    rider: sys.rider?.html ? sys.rider : null
+  };
+}
+
+/** The play half: what left the Pool and what was paid (finishCardPlay knows; the roll does not). */
+export function playChatContext(play) {
+  if (!play) return null;
+  const burned = play.burned | 0;
+  const resource = play.domain ? RESOURCE_BY_DOMAIN[play.domain] ?? "" : play.resource ?? "";
+  const after = play.after ?? (typeof play.available === "number" ? play.available - (play.committed | 0) - (play.extraBurn | 0) : null);
+  return {
+    committed: play.committed | 0, rolled: play.rolled ?? play.committed, burned, burnedList: Array.from({ length: burned }),
+    available: play.available ?? null, after, hasAfter: typeof after === "number" && typeof play.available === "number",
+    poolLabel: play.poolLabel ?? "Action", cost: Number(play.cost) || 0, resource, maxRolled: play.maxRolled ?? null, burnOnly: !!play.burnOnly
+  };
+}
+export async function rollEssencePool({ pool, defense = null, targets = null, label = "Essence Roll", actor = null, surgeOptions = [], bonusSurges = 0, freeDice = 0, unopposed = false, nonCombat = false, difficulty = null, noSurges = false, card = null, play = null } = {}) {
   const n = Math.max(1, Math.floor(pool));
   const nFree = Math.max(0, Math.floor(freeDice) || 0);
   const roll = new Roll(`${n + nFree}d10`);
@@ -144,6 +177,8 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
       taskSucceeded: task?.succeeded ?? null,
       targets: targetResults,
       surgeOptions: nonCombat ? [] : surgeOptions.map((opt, i) => ({ i, n: opt.n, html: opt.html })),
+      card: cardChatContext(card),
+      play: playChatContext(play),
       bonusSurges: noSurges ? 0 : bonusSurges,
       suppressSurges: nonCombat
     }

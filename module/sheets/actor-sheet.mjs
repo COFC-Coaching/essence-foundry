@@ -737,7 +737,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       return `Advisory: this card's printed roll limit is ${sys.rollLimit} dice. Committing more is allowed but exceeds the printed maximum.`;
     }
     if (!sys?.attr || !sys?.skill) return "";
-    const raw = (actor.system[sys.attr] ?? 0) + (actor.system[sys.skill] ?? 0);
+    const raw = (actor.system[String(sys.attr).toLowerCase()] ?? 0) + (actor.system[String(sys.skill).toLowerCase()] ?? 0);
     // Burn the difference (Ryan, 2026-09-27): no floor; below the minimum, the difference is paid
     // from the Pool but not rolled (see utils.mjs splitCommitment).
     if (raw < 2) return `Advisory: this card's normal maximum is ${raw} dice (${capitalize(sys.attr)} + ${capitalize(sys.skill)} Rank). The minimum is still paid; the difference is burned, not rolled.`;
@@ -1082,7 +1082,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   /** A card's normal maximum (Attribute + Style Rank), or null when the card names neither. */
   static #cardMaxRolled(actor, sys) {
     if (typeof sys?.rollLimit === "number" || !sys?.attr || !sys?.skill) return null;
-    return (actor.system[sys.attr] ?? 0) + (actor.system[sys.skill] ?? 0);
+    return (actor.system[String(sys.attr).toLowerCase()] ?? 0) + (actor.system[String(sys.skill).toLowerCase()] ?? 0);
   }
 
   static async #finishCardPlay(actor, item, { committed, unawareTax = 0, poolField, available, unopposed, fromReserved = false, extraSurges = 0, costNotes = [], cardMin = 2 }) {
@@ -1131,7 +1131,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // rollEssencePool resolves.
     await applyCardCooldown(actor, item);
     const bonusSurges = (hasMastery(sys, actor.system.expertises) ? 1 : 0) + (extraSurges | 0);
-    await rollEssencePool({ pool: rolled, defense, targets, label: fromReserved ? `${item.name} (prepared)` : item.name, actor, surgeOptions: sys.surges, bonusSurges, unopposed, nonCombat: !!sys.noSurges });
+    const play = { committed, rolled, burned, available, after: fromReserved ? null : available - (committed + unawareTax), poolLabel: poolField === "reactionDice" ? "Reaction" : "Action", cost, domain: sys.domain, maxRolled: EssenceActorSheet.#cardMaxRolled(actor, sys) };
+    await rollEssencePool({ card: item, play, pool: rolled, defense, targets, label: fromReserved ? `${item.name} (prepared)` : item.name, actor, surgeOptions: sys.surges, bonusSurges, unopposed, nonCombat: !!sys.noSurges });
     // V6 "Acting While Dying" (design/v6-revision-delta.md §2.4): this Combat/Reaction Card is an
     // Action or Reaction, so it's eligible — see #applyDyingExertion for the once-per-Round gate.
     // Fires even if the roll above failed or was interrupted (the book: "a failed or interrupted
