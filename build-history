@@ -3726,3 +3726,25 @@ Dazed gone; Slip Away with "unaware" answered Yes moved Reactions from 0 to 2.
   `design/live-test-pending.md` and `design/live-test-runbook.md` are deleted in this commit.
 - Packs: two cards stored lowercase Style/Attribute values; all are capitalized now. Action,
   Reaction and Equipment packs rebuilt.
+
+### 2026-09-27 -- 0.18.4: plan step 8, tooltips and the token reference
+
+No Foundry in the cloud session (Shane), so this release is static-checked only: `npm test`
+(120 and 59 pass), `node --check`, and a grep that no `title="` remains in templates or modules.
+- Dead rules: a scan of the 283 class names in `essence.css` selectors against every template,
+  module and the lang file found 16 with no literal reference, all built dynamically (`kind-*`,
+  `dom-*`, `content-type-*`, `component-view-*`) or Foundry's own `.editor-content`. Nothing removed.
+- Comment blocks: the tabs comment was rewritten in 0.14.0 and the card-search comment in 0.16.0;
+  none left describes a workaround a native piece replaced.
+- Tooltips: 155 `title=` attributes across 13 templates and the 3 in `card-play.mjs`'s dialog HTML
+  are `data-tooltip-text` (plain text, so a user-entered Thread or Wound name cannot be read as
+  HTML; standalone since V13 per foundryvtt#12355, and 13 is the system minimum). Ten icon-only
+  buttons and links (`token-image-btn`, `removeContingency`, `deleteRite`, the Wizard's
+  `addToInventory` / `addToArmory`, and the others in the diff) had no `aria-label`; they got one
+  with the tooltip's text, since `title` was their accessible name.
+- Token list: `design/sheet-redesign-groundwork.md` gains a "Design tokens" section listing every
+  `--essence-*` custom property by role. `design/css-migration-plan.md` status: steps 6 and 8 done;
+  only the step 5 decision items remain.
+**Left for Shane.** Hover one converted tooltip on each sheet type (Character, NPC, Monster, Team,
+Manifestation, an Item sheet, the Wizard, the play-card dialog's Breach / Non-lethal boxes) to
+confirm Foundry's tooltip appears and reads the localized text, not a key.

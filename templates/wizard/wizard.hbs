@@ -17,8 +17,8 @@
       <label>{{localize "ESSENCE.Wizard.Character.PlayerName"}} <input type="text" name="system.playerName" value="{{system.playerName}}"></label>
     </div>
     <div class="wizard-row">
-      <span title="{{localize 'ESSENCE.Character.TeamTierHint'}}">{{#if team}}{{localize "ESSENCE.Character.TeamLabel"}} <strong>{{team.name}}</strong> &middot; {{localize "ESSENCE.Team.Tier"}} {{teamTier}}{{else}}<span class="muted">{{localize "ESSENCE.Character.NoTeam"}}</span>{{/if}}</span>
-      <label title="{{localize 'ESSENCE.Character.LevelHint'}}">{{localize "ESSENCE.Common.Level"}} <input type="number" name="system.level" min="1" value="{{system.level}}" style="width:4em"></label>
+      <span data-tooltip-text="{{localize 'ESSENCE.Character.TeamTierHint'}}">{{#if team}}{{localize "ESSENCE.Character.TeamLabel"}} <strong>{{team.name}}</strong> &middot; {{localize "ESSENCE.Team.Tier"}} {{teamTier}}{{else}}<span class="muted">{{localize "ESSENCE.Character.NoTeam"}}</span>{{/if}}</span>
+      <label data-tooltip-text="{{localize 'ESSENCE.Character.LevelHint'}}">{{localize "ESSENCE.Common.Level"}} <input type="number" name="system.level" min="1" value="{{system.level}}" style="width:4em"></label>
     </div>
     <div class="wizard-row">
       <label>{{localize "ESSENCE.Wizard.Character.Pronouns"}} <input type="text" name="system.pronouns" value="{{system.pronouns}}"></label>
@@ -153,7 +153,7 @@
       <label>{{localize "ESSENCE.Character.KeyAspect"}} 2 <input type="text" name="system.keyAspects.1" value="{{lookup system.keyAspects 1}}"></label>
       <label>{{localize "ESSENCE.Character.KeyAspect"}} 3 <input type="text" name="system.keyAspects.2" value="{{lookup system.keyAspects 2}}"></label>
     </div>
-    <label title="{{localize 'ESSENCE.Character.LanguagesHint' n=system.languageCount}}">{{localize "ESSENCE.Character.Languages"}} <input type="text" name="system.languages" value="{{system.languages}}" placeholder="{{localize 'ESSENCE.Character.LanguagesPlaceholder'}}"> <span class="muted">{{localize "ESSENCE.Character.LanguagesAllowance" n=system.languageCount acuity=system.acuity}}</span></label>
+    <label data-tooltip-text="{{localize 'ESSENCE.Character.LanguagesHint' n=system.languageCount}}">{{localize "ESSENCE.Character.Languages"}} <input type="text" name="system.languages" value="{{system.languages}}" placeholder="{{localize 'ESSENCE.Character.LanguagesPlaceholder'}}"> <span class="muted">{{localize "ESSENCE.Character.LanguagesAllowance" n=system.languageCount acuity=system.acuity}}</span></label>
 
     {{!-- v0.6 Step 5 (Doc L815): "Distribute 5 + permanent Intellect Skill Points, plus any explicit
          grants. One point buys one Rank in a new or existing Skill. No Skill can exceed Rank 2." One
@@ -322,7 +322,7 @@
     <ul class="item-list">
       {{#each inventoryItems as |item|}}
         <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{item.meta}}</span>
-          {{#if item.overTier}}<span class="muted reach-warning" title="{{localize 'ESSENCE.Sheet.AboveTeamTier' tier=../teamTier}}"><i class="fa-solid fa-triangle-exclamation"></i></span>{{/if}}
+          {{#if item.overTier}}<span class="muted reach-warning" data-tooltip-text="{{localize 'ESSENCE.Sheet.AboveTeamTier' tier=../teamTier}}"><i class="fa-solid fa-triangle-exclamation"></i></span>{{/if}}
           <button type="button" data-action="toggleEquipment" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.RemoveAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></li>
       {{/each}}
     </ul>
@@ -390,8 +390,8 @@
     <ul class="item-list wizard-scroll-list">
       {{#each browsableEquipment as |item|}}
         <li><a data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</a> <span class="muted">{{item.meta}}</span>
-          {{#unless item.isAugment}}<button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" data-slot="inventory" aria-label="{{localize 'ESSENCE.Wizard.AddToInventoryAria' name=item.name}}" title="{{localize 'ESSENCE.Wizard.AddToInventory'}}"><i class="fa-solid fa-star"></i></button>{{/unless}}
-          <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" data-slot="armory" aria-label="{{localize 'ESSENCE.Wizard.AddToArmoryAria' name=item.name}}" title="{{localize 'ESSENCE.Wizard.AddToArmory'}}"><i class="fa-solid fa-warehouse"></i></button></li>
+          {{#unless item.isAugment}}<button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" data-slot="inventory" aria-label="{{localize 'ESSENCE.Wizard.AddToInventoryAria' name=item.name}}" data-tooltip-text="{{localize 'ESSENCE.Wizard.AddToInventory'}}"><i class="fa-solid fa-star"></i></button>{{/unless}}
+          <button type="button" data-action="toggleEquipment" data-pack="essence-system.equipment" data-id="{{item.id}}" data-slot="armory" aria-label="{{localize 'ESSENCE.Wizard.AddToArmoryAria' name=item.name}}" data-tooltip-text="{{localize 'ESSENCE.Wizard.AddToArmory'}}"><i class="fa-solid fa-warehouse"></i></button></li>
       {{/each}}
     </ul>
   {{/if}}

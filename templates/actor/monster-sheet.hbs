@@ -1,14 +1,14 @@
 <div class="essence-sheet-root">
 <header class="sheet-header">
   <div class="portrait-wrap">
-    <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="editImage" title="{{localize 'ESSENCE.Sheet.PortraitTooltip'}}">
-    <button type="button" class="token-image-btn" data-action="editTokenImage" title="{{localize 'ESSENCE.Sheet.TokenImageTooltip'}}"><i class="fa-solid fa-chess-pawn"></i></button>
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="editImage" data-tooltip-text="{{localize 'ESSENCE.Sheet.PortraitTooltip'}}">
+    <button type="button" class="token-image-btn" data-action="editTokenImage" data-tooltip-text="{{localize 'ESSENCE.Sheet.TokenImageTooltip'}}" aria-label="{{localize 'ESSENCE.Sheet.TokenImageTooltip'}}"><i class="fa-solid fa-chess-pawn"></i></button>
   </div>
   <div class="header-main">
     <div class="header-actions">
-      <button type="button" class="wizard-launch" data-action="openWizard" title="{{localize 'ESSENCE.Npc.MonsterCreatorTooltip'}}"><i class="fa-solid fa-dragon"></i> {{localize "ESSENCE.Npc.MonsterCreator"}}</button>
+      <button type="button" class="wizard-launch" data-action="openWizard" data-tooltip-text="{{localize 'ESSENCE.Npc.MonsterCreatorTooltip'}}"><i class="fa-solid fa-dragon"></i> {{localize "ESSENCE.Npc.MonsterCreator"}}</button>
       {{#if isEditable}}
-        <button type="button" class="edit-lock-btn" data-action="toggleEditLock" aria-pressed="{{editUnlocked}}" title="{{#if editUnlocked}}{{localize 'ESSENCE.Sheet.UnlockedTooltip'}}{{else}}{{localize 'ESSENCE.Sheet.LockedTooltip'}}{{/if}}">
+        <button type="button" class="edit-lock-btn" data-action="toggleEditLock" aria-pressed="{{editUnlocked}}" data-tooltip-text="{{#if editUnlocked}}{{localize 'ESSENCE.Sheet.UnlockedTooltip'}}{{else}}{{localize 'ESSENCE.Sheet.LockedTooltip'}}{{/if}}">
           <i class="fa-solid {{#if editUnlocked}}fa-lock-open{{else}}fa-lock{{/if}}"></i> {{#if editUnlocked}}{{localize "ESSENCE.Common.Unlocked"}}{{else}}{{localize "ESSENCE.Common.Locked"}}{{/if}}
         </button>
       {{/if}}
@@ -45,19 +45,19 @@
           </select>
         </label>
       {{/if}}
-      <label title="{{localize 'ESSENCE.Common.PoolBonusHint'}}">{{localize "ESSENCE.Common.PoolBonus"}} <input name="system.poolBonus" type="number" min="0" value="{{system.poolBonus}}" style="width:3em"> <span class="muted">{{localize "ESSENCE.Common.BasePoolsNote" n=system.baseCombatDice}}</span></label>
+      <label data-tooltip-text="{{localize 'ESSENCE.Common.PoolBonusHint'}}">{{localize "ESSENCE.Common.PoolBonus"}} <input name="system.poolBonus" type="number" min="0" value="{{system.poolBonus}}" style="width:3em"> <span class="muted">{{localize "ESSENCE.Common.BasePoolsNote" n=system.baseCombatDice}}</span></label>
       <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}{{#if (ne system.totalMovement system.movement)}} <span class="muted">{{localize "ESSENCE.Character.EffectiveMovementNote" n=system.totalMovement}}</span>{{/if}}</label>
       {{#if isReduced}}
-        <label title="{{localize 'ESSENCE.Item.Monster.EngineReduced'}}">{{localize "ESSENCE.Item.Monster.InitiativeDice"}} <input name="system.initiativeDice" type="number" min="1" value="{{system.initiativeDice}}" placeholder="{{system.effectiveInitiativeDice}}" style="width:3em">d10</label>
+        <label data-tooltip-text="{{localize 'ESSENCE.Item.Monster.EngineReduced'}}">{{localize "ESSENCE.Item.Monster.InitiativeDice"}} <input name="system.initiativeDice" type="number" min="1" value="{{system.initiativeDice}}" placeholder="{{system.effectiveInitiativeDice}}" style="width:3em">d10</label>
         <label>{{localize "ESSENCE.Item.Monster.ActionsPerTurn"}} <input name="system.actionsPerTurn" type="number" min="0" value="{{system.actionsPerTurn}}" placeholder="{{system.effectiveActionsPerTurn}}" style="width:3em"></label>
         <label>{{localize "ESSENCE.Item.Monster.ReactionsPerRound"}} <input name="system.reactionsPerRound" type="number" min="0" value="{{system.reactionsPerRound}}" placeholder="{{system.effectiveReactionsPerRound}}" style="width:3em"></label>
-        <label>{{localize "ESSENCE.Item.Monster.TaskDice"}} <input name="system.taskDice" type="number" min="0" value="{{system.taskDice}}" placeholder="{{system.effectiveTaskDice}}" style="width:3em"> <button type="button" class="link-button" data-action="rollTaskDice" title="{{localize 'ESSENCE.Item.Monster.RollTask'}}"><i class="fa-solid fa-dice-d10"></i></button></label>
+        <label>{{localize "ESSENCE.Item.Monster.TaskDice"}} <input name="system.taskDice" type="number" min="0" value="{{system.taskDice}}" placeholder="{{system.effectiveTaskDice}}" style="width:3em"> <button type="button" class="link-button" data-action="rollTaskDice" data-tooltip-text="{{localize 'ESSENCE.Item.Monster.RollTask'}}" aria-label="{{localize 'ESSENCE.Item.Monster.RollTask'}}"><i class="fa-solid fa-dice-d10"></i></button></label>
       {{else}}
-        <label title="{{localize 'ESSENCE.Item.Monster.EngineFull'}}">{{localize "ESSENCE.Item.Monster.RollLimit"}} <input name="system.rollLimit" type="number" min="0" value="{{system.rollLimit}}" style="width:3em"></label>
-        <label>{{localize "ESSENCE.Item.Monster.TaskDice"}} <input name="system.taskDice" type="number" min="0" value="{{system.taskDice}}" placeholder="{{system.effectiveTaskDice}}" style="width:3em"> <button type="button" class="link-button" data-action="rollTaskDice" title="{{localize 'ESSENCE.Item.Monster.RollTask'}}"><i class="fa-solid fa-dice-d10"></i></button></label>
+        <label data-tooltip-text="{{localize 'ESSENCE.Item.Monster.EngineFull'}}">{{localize "ESSENCE.Item.Monster.RollLimit"}} <input name="system.rollLimit" type="number" min="0" value="{{system.rollLimit}}" style="width:3em"></label>
+        <label>{{localize "ESSENCE.Item.Monster.TaskDice"}} <input name="system.taskDice" type="number" min="0" value="{{system.taskDice}}" placeholder="{{system.effectiveTaskDice}}" style="width:3em"> <button type="button" class="link-button" data-action="rollTaskDice" data-tooltip-text="{{localize 'ESSENCE.Item.Monster.RollTask'}}" aria-label="{{localize 'ESSENCE.Item.Monster.RollTask'}}"><i class="fa-solid fa-dice-d10"></i></button></label>
       {{/if}}
       <span class="header-fields-break" style="flex-basis:100%"></span>
-      <label title="{{localize 'ESSENCE.Item.Monster.PrintedDefensesHint'}}">{{localize "ESSENCE.Item.Monster.PrintedDefenses"}}
+      <label data-tooltip-text="{{localize 'ESSENCE.Item.Monster.PrintedDefensesHint'}}">{{localize "ESSENCE.Item.Monster.PrintedDefenses"}}
         {{localize "ESSENCE.Common.Fortitude"}} <input name="system.printedDefenses.fortitude" type="number" min="0" value="{{system.printedDefenses.fortitude}}" placeholder="{{system.defenses.fortitude}}" style="width:3em">
         {{localize "ESSENCE.Common.Composure"}} <input name="system.printedDefenses.composure" type="number" min="0" value="{{system.printedDefenses.composure}}" placeholder="{{system.defenses.composure}}" style="width:3em">
         {{localize "ESSENCE.Common.Harmony"}} <input name="system.printedDefenses.harmony" type="number" min="0" value="{{system.printedDefenses.harmony}}" placeholder="{{system.defenses.harmony}}" style="width:3em">
@@ -68,7 +68,7 @@
 <div class="sheet-scroll">
 
 {{#if (eq system.grade "Mook")}}
-  <h3 class="section-head" title="{{localize 'ESSENCE.Item.Monster.TacticsHint'}}">{{localize "ESSENCE.Item.Monster.Tactics"}}</h3>
+  <h3 class="section-head" data-tooltip-text="{{localize 'ESSENCE.Item.Monster.TacticsHint'}}">{{localize "ESSENCE.Item.Monster.Tactics"}}</h3>
   <ol class="npc-tactics-list">
     {{#each tactics as |t|}}
       <li>
@@ -81,7 +81,7 @@
 {{/if}}
 
 {{#if (eq system.eliteType "Leader")}}
-  <h3 class="section-head" title="{{localize 'ESSENCE.Item.Monster.LeaderAbilitiesHint'}}">{{localize "ESSENCE.Item.Monster.LeaderAbilities"}}</h3>
+  <h3 class="section-head" data-tooltip-text="{{localize 'ESSENCE.Item.Monster.LeaderAbilitiesHint'}}">{{localize "ESSENCE.Item.Monster.LeaderAbilities"}}</h3>
   <table class="item-table">
     <tbody>
       {{#each leaderAbilities as |a|}}
@@ -97,7 +97,7 @@
 {{/if}}
 
 {{#if (eq system.eliteType "Solo")}}
-  <h3 class="section-head" title="{{localize 'ESSENCE.Item.Monster.SoloAbilitiesHint'}}">{{localize "ESSENCE.Item.Monster.SoloAbilities"}}</h3>
+  <h3 class="section-head" data-tooltip-text="{{localize 'ESSENCE.Item.Monster.SoloAbilitiesHint'}}">{{localize "ESSENCE.Item.Monster.SoloAbilities"}}</h3>
   <table class="item-table">
     <tbody>
       {{#each soloAbilities as |a|}}
@@ -166,7 +166,7 @@
         <div class="skill-box {{#unless s.gateOpen}}gated{{/unless}}">
           <div class="skill-head">
             <span class="skill-name">{{s.label}}</span>
-            <button type="button" data-action="rollSkill" data-skill="{{s.key}}" aria-label="{{localize 'ESSENCE.Character.RollSkillAria' name=s.label}}" title="{{localize 'ESSENCE.Character.RollSkillAria' name=s.label}}"><i class="fa-solid fa-dice-d10"></i></button>
+            <button type="button" data-action="rollSkill" data-skill="{{s.key}}" aria-label="{{localize 'ESSENCE.Character.RollSkillAria' name=s.label}}" data-tooltip-text="{{localize 'ESSENCE.Character.RollSkillAria' name=s.label}}"><i class="fa-solid fa-dice-d10"></i></button>
             <span class="pip-track">{{#each s.pips as |filled|}}<span class="pip {{#if filled}}filled{{/if}}"></span>{{/each}}</span>
           </div>
           {{#unless s.gateOpen}}<div class="gate-note"><i class="fa-solid fa-lock"></i> {{localize "ESSENCE.Sheet.RequiresDistinction" name=s.gateDistinction}}</div>{{/unless}}
@@ -193,7 +193,7 @@
   <div class="wound-block">
     <span class="attr-label">{{#if system.usesSimplifiedWounds}}{{localize "ESSENCE.Sheet.WoundCapacity"}}{{else}}{{localize "ESSENCE.Common.CoreWounds"}}{{/if}}</span>
     <span class="pip-track">
-      {{#each system.coreWounds as |w i|}}<button type="button" class="pip toggle {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" {{#unless ../system.usesSimplifiedWounds}}title="{{w.condition}}"{{/unless}} aria-pressed="{{w.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreWoundAria' n=(addOne i)}}{{#if w.condition}}: {{w.condition}}{{/if}}"></button>{{/each}}
+      {{#each system.coreWounds as |w i|}}<button type="button" class="pip toggle {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" {{#unless ../system.usesSimplifiedWounds}}data-tooltip-text="{{w.condition}}"{{/unless}} aria-pressed="{{w.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreWoundAria' n=(addOne i)}}{{#if w.condition}}: {{w.condition}}{{/if}}"></button>{{/each}}
     </span>
   </div>
   <div class="wound-block">
@@ -231,7 +231,7 @@
 </div>
 {{> "systems/essence-system/templates/actor/parts/death-track.hbs"}}
 
-  <h3 class="section-head" title="{{localize 'ESSENCE.Item.Monster.AbilitiesHint'}}">{{localize "ESSENCE.Item.Monster.Abilities"}}</h3>
+  <h3 class="section-head" data-tooltip-text="{{localize 'ESSENCE.Item.Monster.AbilitiesHint'}}">{{localize "ESSENCE.Item.Monster.Abilities"}}</h3>
   <table class="item-table">
     <tbody>
       {{#each abilities as |a|}}
@@ -249,7 +249,7 @@
               <option value="perRound" {{#if (eq a.frequency "perRound")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.FrequencyPerRound"}}</option>
               <option value="betweenRecoveries" {{#if (eq a.frequency "betweenRecoveries")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.FrequencyBetweenRecoveries"}}</option>
             </select>
-            <label title="{{localize 'ESSENCE.Item.Monster.AbilityDiceHint'}}">{{localize "ESSENCE.Item.Monster.AbilityDice"}} <input type="number" name="system.abilities.{{a.i}}.dice" value="{{a.dice}}" min="0" style="width:3em"></label>
+            <label data-tooltip-text="{{localize 'ESSENCE.Item.Monster.AbilityDiceHint'}}">{{localize "ESSENCE.Item.Monster.AbilityDice"}} <input type="number" name="system.abilities.{{a.i}}.dice" value="{{a.dice}}" min="0" style="width:3em"></label>
             <label>{{localize "ESSENCE.Item.Monster.AbilityDefense"}}
               <select name="system.abilities.{{a.i}}.defense">
                 <option value="" {{#if (eq a.defense "")}}selected{{/if}}>—</option>
@@ -276,7 +276,7 @@
   </table>
   <div class="button-row">
     <button type="button" data-action="addAbility"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Item.Monster.AddAbility"}}</button>
-    <button type="button" data-action="enemyRecovery" title="{{localize 'ESSENCE.Item.Monster.EnemyRecoveryHint'}}">{{localize "ESSENCE.Item.Monster.EnemyRecovery"}}</button>
+    <button type="button" data-action="enemyRecovery" data-tooltip-text="{{localize 'ESSENCE.Item.Monster.EnemyRecoveryHint'}}">{{localize "ESSENCE.Item.Monster.EnemyRecovery"}}</button>
   </div>
 
   <div class="combat-header">
@@ -416,16 +416,16 @@
   {{/each}}
 </ul>
 <div class="equipment-drop-zone" data-drop-slot="inventory">
-<h3 class="section-head">{{localize "ESSENCE.Sheet.Equipment"}} <i class="fa-solid fa-flag muted" title="{{localize 'ESSENCE.Sheet.UsedThisAdventureHint'}}"></i></h3>
+<h3 class="section-head">{{localize "ESSENCE.Sheet.Equipment"}} <i class="fa-solid fa-flag muted" data-tooltip-text="{{localize 'ESSENCE.Sheet.UsedThisAdventureHint'}}"></i></h3>
 <ul class="item-list">
   {{#each equipment as |item|}}
     <li class="draggable-row" draggable="true" data-item-id="{{item.id}}">{{item.name}} <span class="muted">{{equipmentCategoryLabel item.system.category}}</span>
-      {{#if item.tracksUsedFlag}}<button type="button" class="used-toggle{{#if item.system.usedThisAdventure}} used{{/if}}" data-action="toggleItemUsed" data-item-id="{{item.id}}" title="{{#if item.system.usedThisAdventure}}{{localize 'ESSENCE.Sheet.UsedThisAdventure'}}{{else}}{{localize 'ESSENCE.Sheet.UnusedThisAdventure'}}{{/if}}" aria-label="{{localize 'ESSENCE.Sheet.ToggleItemUsedAria' name=item.name}}" aria-pressed="{{#if item.system.usedThisAdventure}}true{{else}}false{{/if}}"><i class="fa-solid fa-flag"></i></button>{{/if}}
+      {{#if item.tracksUsedFlag}}<button type="button" class="used-toggle{{#if item.system.usedThisAdventure}} used{{/if}}" data-action="toggleItemUsed" data-item-id="{{item.id}}" data-tooltip-text="{{#if item.system.usedThisAdventure}}{{localize 'ESSENCE.Sheet.UsedThisAdventure'}}{{else}}{{localize 'ESSENCE.Sheet.UnusedThisAdventure'}}{{/if}}" aria-label="{{localize 'ESSENCE.Sheet.ToggleItemUsedAria' name=item.name}}" aria-pressed="{{#if item.system.usedThisAdventure}}true{{else}}false{{/if}}"><i class="fa-solid fa-flag"></i></button>{{/if}}
       <button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.ViewAria' name=item.name}}"><i class="fa-solid fa-eye"></i></button>
       <button type="button" data-action="postEquipmentToChat" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Sheet.PostToChatAria' name=item.name}}"><i class="fa-solid fa-comment"></i></button>
       <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
-      <button type="button" data-action="reconfigureItem" data-item-id="{{item.id}}" title="{{localize 'ESSENCE.Item.Component.Reconfigure'}}" aria-label="{{localize 'ESSENCE.Sheet.ReconfigureItemAria' name=item.name}}"><i class="fa-solid fa-arrows-rotate"></i></button>
-      <button type="button" data-action="releaseItem" data-item-id="{{item.id}}" title="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}" aria-label="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}"><i class="fa-solid fa-hand"></i></button>
+      <button type="button" data-action="reconfigureItem" data-item-id="{{item.id}}" data-tooltip-text="{{localize 'ESSENCE.Item.Component.Reconfigure'}}" aria-label="{{localize 'ESSENCE.Sheet.ReconfigureItemAria' name=item.name}}"><i class="fa-solid fa-arrows-rotate"></i></button>
+      <button type="button" data-action="releaseItem" data-item-id="{{item.id}}" data-tooltip-text="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}" aria-label="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}"><i class="fa-solid fa-hand"></i></button>
       <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button>
     </li>
   {{/each}}
@@ -437,8 +437,8 @@
 <div class="wizard-row">
   <label>{{localize "ESSENCE.Sheet.Reach"}} <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>
   {{#if (gt system.effectiveReach system.reach)}}<span class="muted">{{localize "ESSENCE.Sheet.EffectiveReachNote" n=system.effectiveReach}}</span>{{/if}}
-  <button type="button" data-action="resetAdventureUses" title="{{localize 'ESSENCE.Sheet.ResetAdventureUsesTooltip'}}">{{localize "ESSENCE.Sheet.ResetAdventureUses"}}</button>
-  <button type="button" data-action="newEncounter" title="{{localize 'ESSENCE.Sheet.NewEncounterTooltip'}}">{{localize "ESSENCE.Sheet.NewEncounter"}}</button>
+  <button type="button" data-action="resetAdventureUses" data-tooltip-text="{{localize 'ESSENCE.Sheet.ResetAdventureUsesTooltip'}}">{{localize "ESSENCE.Sheet.ResetAdventureUses"}}</button>
+  <button type="button" data-action="newEncounter" data-tooltip-text="{{localize 'ESSENCE.Sheet.NewEncounterTooltip'}}">{{localize "ESSENCE.Sheet.NewEncounter"}}</button>
 </div>
 
 <h3 class="section-head">{{localize "ESSENCE.Sheet.GmNotes"}} <span class="muted">{{localize "ESSENCE.Sheet.GmNotesHint"}}</span></h3>

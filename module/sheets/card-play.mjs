@@ -162,8 +162,8 @@ export async function promptDamageComponents({ title = "Apply Damage", types, ro
     <div class="damage-component" style="display:grid;grid-template-columns:4em 1fr auto auto;gap:6px;align-items:center;margin-bottom:4px;">
       <input type="number" name="amount${i}" value="${i === 0 ? 1 : 0}" min="0" aria-label="Component ${i + 1} amount"${i === 0 ? " autofocus" : ""}>
       <select name="type${i}" aria-label="Component ${i + 1} Damage type">${typeOptions}</select>
-      <label title="${game.i18n.localize("ESSENCE.Sheet.BreachHint")}"><input type="checkbox" name="breach${i}"> ${game.i18n.localize("ESSENCE.Sheet.Breach")}</label>
-      <label title="${game.i18n.localize("ESSENCE.Sheet.NonlethalHint")}"><input type="checkbox" name="nonlethal${i}"> ${game.i18n.localize("ESSENCE.Sheet.Nonlethal")}</label>
+      <label data-tooltip-text="${game.i18n.localize("ESSENCE.Sheet.BreachHint")}"><input type="checkbox" name="breach${i}"> ${game.i18n.localize("ESSENCE.Sheet.Breach")}</label>
+      <label data-tooltip-text="${game.i18n.localize("ESSENCE.Sheet.NonlethalHint")}"><input type="checkbox" name="nonlethal${i}"> ${game.i18n.localize("ESSENCE.Sheet.Nonlethal")}</label>
     </div>`;
   const result = await new Promise((resolve) => {
     new foundry.applications.api.DialogV2({
@@ -173,7 +173,7 @@ export async function promptDamageComponents({ title = "Apply Damage", types, ro
         ${Array.from({ length: rows }, (_, i) => row(i)).join("")}
         <div style="display:flex;gap:12px;align-items:center;margin-top:6px;">
           <label>${game.i18n.localize("ESSENCE.Sheet.FlatReduction")} <input type="number" name="reduction" value="0" min="0" style="width:4em"></label>
-          <label title="${game.i18n.localize("ESSENCE.Sheet.WeakenedHint")}"><input type="checkbox" name="weakened"> ${game.i18n.localize("ESSENCE.Sheet.AttackerWeakened")}</label>
+          <label data-tooltip-text="${game.i18n.localize("ESSENCE.Sheet.WeakenedHint")}"><input type="checkbox" name="weakened"> ${game.i18n.localize("ESSENCE.Sheet.AttackerWeakened")}</label>
         </div>`,
       buttons: [{
         action: "apply", label: "Apply", default: true,

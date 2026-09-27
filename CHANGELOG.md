@@ -2,6 +2,10 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.4
+
+**Sheet redesign, part five: cleanup (plan step 8).** Every tooltip on the actor sheets, item sheets, wizards and the play-card dialogs is now Foundry's own tooltip (`data-tooltip-text`) instead of the browser's `title` bubble, so tooltips match the rest of Foundry and show without the browser delay. The ten icon-only buttons that had relied on the browser tooltip for their name now carry an explicit label for screen readers. The stylesheet had no dead rules to remove (every class the templates stopped naming was already gone; the rest are built from data), and the design token list is recorded in `design/sheet-redesign-groundwork.md` as the sheet's style reference. No visual change.
+
 ## 0.18.3
 
 **Dialogs no longer stretch to the window.** Foundry v14 sizes a dialog to its content, and any prompt with a stretchy column (Apply Damage's type selects, long hints) grew to the full width. Every dialog is capped at 560px.

@@ -92,7 +92,7 @@
         <h3 class="section-head">{{localize "ESSENCE.Common.Surges"}}</h3>
         {{#each system.surges as |s i|}}
           <div class="array-row wizard-array-block">
-            <input type="text" data-array="surges" data-index="{{i}}" data-field="n" value="{{s.n}}" style="width:3em" title="{{localize 'ESSENCE.Wizard.Content.SurgeCostTooltip'}}">
+            <input type="text" data-array="surges" data-index="{{i}}" data-field="n" value="{{s.n}}" style="width:3em" data-tooltip-text="{{localize 'ESSENCE.Wizard.Content.SurgeCostTooltip'}}">
             <button type="button" data-action="deleteArrayRow" data-array="surges" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Item.Card.DeleteSurgeAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button>
             <textarea data-array="surges" data-index="{{i}}" data-field="html" rows="2" placeholder="{{localize 'ESSENCE.Common.HtmlAllowed'}}">{{s.html}}</textarea>
           </div>

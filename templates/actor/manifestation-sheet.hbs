@@ -1,13 +1,13 @@
 <div class="essence-sheet-root">
 <header class="sheet-header">
   <div class="portrait-wrap">
-    <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="editImage" title="{{localize 'ESSENCE.Sheet.PortraitTooltip'}}">
-    <button type="button" class="token-image-btn" data-action="editTokenImage" title="{{localize 'ESSENCE.Sheet.TokenImageTooltip'}}"><i class="fa-solid fa-chess-pawn"></i></button>
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="editImage" data-tooltip-text="{{localize 'ESSENCE.Sheet.PortraitTooltip'}}">
+    <button type="button" class="token-image-btn" data-action="editTokenImage" data-tooltip-text="{{localize 'ESSENCE.Sheet.TokenImageTooltip'}}" aria-label="{{localize 'ESSENCE.Sheet.TokenImageTooltip'}}"><i class="fa-solid fa-chess-pawn"></i></button>
   </div>
   <div class="header-main">
     <div class="header-actions">
       {{#if isEditable}}
-        <button type="button" class="edit-lock-btn" data-action="toggleEditLock" aria-pressed="{{editUnlocked}}" title="{{#if editUnlocked}}{{localize 'ESSENCE.Sheet.UnlockedTooltip'}}{{else}}{{localize 'ESSENCE.Sheet.LockedTooltip'}}{{/if}}">
+        <button type="button" class="edit-lock-btn" data-action="toggleEditLock" aria-pressed="{{editUnlocked}}" data-tooltip-text="{{#if editUnlocked}}{{localize 'ESSENCE.Sheet.UnlockedTooltip'}}{{else}}{{localize 'ESSENCE.Sheet.LockedTooltip'}}{{/if}}">
           <i class="fa-solid {{#if editUnlocked}}fa-lock-open{{else}}fa-lock{{/if}}"></i> {{#if editUnlocked}}{{localize "ESSENCE.Common.Unlocked"}}{{else}}{{localize "ESSENCE.Common.Locked"}}{{/if}}
         </button>
       {{/if}}
@@ -19,8 +19,8 @@
     </div>
     <div class="header-fields">
       <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}</label>
-      <label title="{{localize 'ESSENCE.Common.PoolBonusHint'}}">{{localize "ESSENCE.Common.PoolBonus"}} <input name="system.poolBonus" type="number" min="0" value="{{system.poolBonus}}" style="width:3em"></label>
-      <label title="{{localize 'ESSENCE.Manifestation.RollLimitHint'}}">{{localize "ESSENCE.Item.Monster.RollLimit"}} <input name="system.rollLimit" type="number" min="0" value="{{system.rollLimit}}" style="width:3em" placeholder="—"></label>
+      <label data-tooltip-text="{{localize 'ESSENCE.Common.PoolBonusHint'}}">{{localize "ESSENCE.Common.PoolBonus"}} <input name="system.poolBonus" type="number" min="0" value="{{system.poolBonus}}" style="width:3em"></label>
+      <label data-tooltip-text="{{localize 'ESSENCE.Manifestation.RollLimitHint'}}">{{localize "ESSENCE.Item.Monster.RollLimit"}} <input name="system.rollLimit" type="number" min="0" value="{{system.rollLimit}}" style="width:3em" placeholder="—"></label>
       {{#if (eq system.subtype "Elemental")}}
         <label>Aspect
           <select name="system.aspect">
@@ -67,7 +67,7 @@
   <div class="wound-block">
     <span class="attr-label">{{localize "ESSENCE.Common.CoreWounds"}}</span>
     <span class="pip-track">
-      {{#each woundBoxes as |w|}}<button type="button" class="pip toggle {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{w.i}}" title="{{w.condition}}" aria-pressed="{{w.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreWoundAria' n=(addOne w.i)}}{{#if w.condition}}: {{w.condition}}{{/if}}"></button>{{/each}}
+      {{#each woundBoxes as |w|}}<button type="button" class="pip toggle {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{w.i}}" data-tooltip-text="{{w.condition}}" aria-pressed="{{w.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreWoundAria' n=(addOne w.i)}}{{#if w.condition}}: {{w.condition}}{{/if}}"></button>{{/each}}
     </span>
   </div>
   <div class="wound-block">
@@ -92,7 +92,7 @@
   <div class="combat-header-right">
     <div class="combat-controls">
       <button type="button" data-action="endTurn">{{localize "ESSENCE.Sheet.EndTurn"}}</button>
-      <button type="button" data-action="dismissManifestation" title="{{localize 'ESSENCE.Manifestation.ReturnHint'}}">{{localize "ESSENCE.Manifestation.Return"}}</button>
+      <button type="button" data-action="dismissManifestation" data-tooltip-text="{{localize 'ESSENCE.Manifestation.ReturnHint'}}">{{localize "ESSENCE.Manifestation.Return"}}</button>
     </div>
   </div>
 </div>

@@ -36,6 +36,28 @@ switch is a bounded change once the concept is approved or amended.
 | Card anatomy (item view) | `card-sheet.hbs` view mode: type band, Requires, Commit/Cost/Roll/Against stats, body lines, Surges, Rider with `rider.meta` | `.card-view` rules move to tokens and `--essence-card-*` | No |
 | Chat card | `roll-card.hbs`: type band, commit and cost line, dice with Success Die and Surge styling (exists), Reaction-window strip, Effect and Rider lines with apply buttons | The Effect/Rider lines need the card's `body` and `rider` passed into the chat context | Which apply buttons the roll card should offer |
 
+## Design tokens (the sheet's style reference, 0.18.4)
+
+Declared on `.application.essence`, `.essence.roll-card` and `.essence-whats-new` at the top of
+`styles/essence.css`. Every color rule in the stylesheet reads one of these (0.14.0); a new rule
+must too. The sheet is a self-themed dark surface: the values hold in both Foundry themes, and only
+the two font tokens read Foundry's own variables. Change a value here, not in a rule.
+
+| Role | Tokens |
+|---|---|
+| Surfaces | `--essence-ground`, `--essence-veil` (the overlay on the cover art), `--essence-sheet-art` (`none` unless the cover-art setting supplies a URL), `--essence-panel`, `--essence-panel-raised` (both rgba so the art reads through on the Character sheet; the other sheets override them opaque), `--essence-well` (inputs, wells), `--essence-editor-bg`, `--essence-editor-menu`, `--essence-editor-content` |
+| Lines | `--essence-line-soft`, `--essence-line`, `--essence-line-strong`, `--essence-line-dashed`, `--essence-line-bright` |
+| Ink | `--essence-ink`, `--essence-ink-bright`, `--essence-muted`, `--essence-muted-soft` |
+| Accent (amber) | `--essence-accent`, `--essence-accent-rgb`, `--essence-accent-bright`, `--essence-accent-ink` (text on an accent fill) |
+| States | `--essence-warn`, `--essence-danger`, `--essence-danger-rgb`, `--essence-success`, `--essence-success-rgb`, `--essence-success-ink` |
+| Item types (read views, content wizard, chips) | Condition: `--essence-condition`, `-rgb`, `-ink`, `-border`, `-soft-rgb`. Equipment: `--essence-equipment`, `-rgb`, `-ink`. Chassis: `--essence-chassis`, `-rgb`, `-ink`, `-soft`. Fitting: `--essence-fitting`, `-ink`. Augment: `--essence-augment`, `-rgb`, `-ink` |
+| Domains | `--essence-domain-physical`, `-mental`, `-spiritual`, each with an `-ink` twin for text and chip borders |
+| Card types (rails, bands) | `--essence-card-action` (green), `--essence-card-reaction` (red), `--essence-card-equipment` (gold), `--essence-card-basic` (neutral) |
+| Type and shape | `--essence-font-display` (reads `--font-h1`), `--essence-font-body` (reads `--font-body`), `--essence-radius`, `--essence-radius-sm` |
+
+The `-rgb` twins exist for the rules that need an alpha (`rgba(var(--essence-accent-rgb), .15)`).
+Tooltips are Foundry's `data-tooltip-text` everywhere (0.18.4), so tooltip styling is core's, not ours.
+
 ## Order of work once approved
 
 1. Tokens: switch existing color rules to `var(--essence-*)`. No visual change if the token values

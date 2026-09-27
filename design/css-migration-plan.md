@@ -19,8 +19,9 @@ Foundry's light theme puts dark text on parchment; over cover art and translucen
 unreadable, and the concept was drawn dark. So the tokens hold our own palette in both themes and
 read only Foundry's fonts (`--font-h1`, `--font-body`). Shane (2026-09-27): the enemy sheets (NPC,
 Monster) stay basic: no art, no veil, opaque panels, plain card rows. Everything in this plan about
-art, translucency and the card grid is Character sheet only (0.16.1). Step 7 shipped in 0.17.0. Next: steps 6
-and 8, and the step 5 items that wait on a decision (listed under step 5).
+art, translucency and the card grid is Character sheet only (0.16.1). Step 7 shipped in 0.17.0, step 6 in
+0.18.0 (chat card and card read view) and 0.18.2 (the Apply and Card buttons), step 8 in 0.18.4.
+What remains is the step 5 items that wait on a decision (listed under step 5).
 
 ## Where the stylesheet stood before 0.14.0
 
@@ -126,8 +127,8 @@ sheet looks the same; the grid is only live once step 4 fills it. Size: small.
 
 Done in 0.15.0, on Shane's go-ahead (2026-09-27, "we need to now put this in place"). Contents in
 the concept's order: pools, Resources, Defenses, Wounds (with the Death Track partial and the
-equipment bonus note), Conditions, Reach / Influence / Standing readout. Tooltips are still
-`title=`; the `data-tooltip` conversion is folded into step 8. The default window width is 1080.
+equipment bonus note), Conditions, Reach / Influence / Standing readout. Tooltips stayed `title=`
+until step 8 converted them in 0.18.4. The default window width is 1080.
 Pools, Resources, Defenses, Wounds and Death Track, Conditions, and the Reach and Influence readout
 move from the Core and Combat tabs into the sidebar. Blocks move as whole partials
 (`wounds-header.hbs`, `death-track.hbs`) with their `data-action` names unchanged, so the sheet
@@ -154,7 +155,8 @@ release per tab.
 
 ### 6. Card item view and chat card
 
-`card-sheet.hbs` view mode adopts the type band and stat strip (Commit, Cost with "—" when blank,
+Done in 0.18.0 (both views, on the concept's artboards) and 0.18.2 (Apply Damage per targeted
+token and a Card button on the chat card, Shane's call). As planned: `card-sheet.hbs` view mode adopts the type band and stat strip (Commit, Cost with "—" when blank,
 Roll, Against). `roll-card.hbs` is rebuilt on Foundry's `.dice-roll` markup so inline roll
 tooltips, Dice So Nice and chat-log styling work unchanged, with the Essence additions (Success Die
 and Surge highlighting, the Reaction-window strip, Effect and Rider lines) layered on top. Depends
@@ -169,7 +171,12 @@ Wound, Consequence and Cover Conditions are left out on purpose. A `DialogV2` li
 
 ### 8. Cleanup
 
-Remove rules no template references (grep each class name), remove the comment blocks that
+Done in 0.18.4. No rule was dead: the sixteen class names no template spells out are built from
+data (`kind-*`, `dom-*`, `content-type-*`, `component-view-*`) or are Foundry's `.editor-content`.
+The comment blocks had been rewritten as each native piece landed. Every `title=` tooltip (155 in
+the templates, 3 in `card-play.mjs`) is `data-tooltip-text`, with an `aria-label` added to the ten
+icon-only buttons that had relied on `title` for their name. The token list is in the groundwork
+doc. As planned: remove rules no template references (grep each class name), remove the comment blocks that
 explain workarounds the native pieces made unnecessary, and record the token list in the
 groundwork doc as the sheet's style reference. Size: small.
 

@@ -1,14 +1,14 @@
 <div class="essence-sheet-root"{{#if sheetArt}} style="--essence-sheet-art: url('{{sheetArt}}')"{{/if}}>
 <header class="sheet-header">
   <div class="portrait-wrap">
-    <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="editImage" title="{{localize 'ESSENCE.Sheet.PortraitTooltip'}}">
-    <button type="button" class="token-image-btn" data-action="editTokenImage" title="{{localize 'ESSENCE.Sheet.TokenImageTooltip'}}"><i class="fa-solid fa-chess-pawn"></i></button>
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="editImage" data-tooltip-text="{{localize 'ESSENCE.Sheet.PortraitTooltip'}}">
+    <button type="button" class="token-image-btn" data-action="editTokenImage" data-tooltip-text="{{localize 'ESSENCE.Sheet.TokenImageTooltip'}}" aria-label="{{localize 'ESSENCE.Sheet.TokenImageTooltip'}}"><i class="fa-solid fa-chess-pawn"></i></button>
   </div>
   <div class="header-main">
     <div class="header-actions">
-      <button type="button" class="wizard-launch" data-action="openWizard" title="{{localize 'ESSENCE.Character.WizardTooltip'}}"><i class="fa-solid fa-hat-wizard"></i> {{localize "ESSENCE.Character.Wizard"}}</button>
+      <button type="button" class="wizard-launch" data-action="openWizard" data-tooltip-text="{{localize 'ESSENCE.Character.WizardTooltip'}}"><i class="fa-solid fa-hat-wizard"></i> {{localize "ESSENCE.Character.Wizard"}}</button>
       {{#if isEditable}}
-        <button type="button" class="edit-lock-btn" data-action="toggleEditLock" aria-pressed="{{editUnlocked}}" title="{{#if editUnlocked}}{{localize 'ESSENCE.Sheet.UnlockedTooltip'}}{{else}}{{localize 'ESSENCE.Sheet.LockedTooltip'}}{{/if}}">
+        <button type="button" class="edit-lock-btn" data-action="toggleEditLock" aria-pressed="{{editUnlocked}}" data-tooltip-text="{{#if editUnlocked}}{{localize 'ESSENCE.Sheet.UnlockedTooltip'}}{{else}}{{localize 'ESSENCE.Sheet.LockedTooltip'}}{{/if}}">
           <i class="fa-solid {{#if editUnlocked}}fa-lock-open{{else}}fa-lock{{/if}}"></i> {{#if editUnlocked}}{{localize "ESSENCE.Common.Unlocked"}}{{else}}{{localize "ESSENCE.Common.Locked"}}{{/if}}
         </button>
       {{/if}}
@@ -17,9 +17,9 @@
     <div class="header-fields">
       <label>{{localize "ESSENCE.Item.SpeciesLabel"}} <input name="system.species" type="text" value="{{system.species}}"></label>
       <label>{{localize "ESSENCE.Item.HeritageLabel"}} <input name="system.heritage" type="text" value="{{system.heritage}}"></label>
-      <label>{{localize "ESSENCE.Item.DistinctionLabel"}} <input name="system.distinction" type="text" value="{{system.distinction}}">{{#if secondDistinction}} <span class="muted" title="{{localize 'ESSENCE.Character.SecondDistinctionHint'}}">+ {{secondDistinction.name}}</span>{{/if}}</label>
+      <label>{{localize "ESSENCE.Item.DistinctionLabel"}} <input name="system.distinction" type="text" value="{{system.distinction}}">{{#if secondDistinction}} <span class="muted" data-tooltip-text="{{localize 'ESSENCE.Character.SecondDistinctionHint'}}">+ {{secondDistinction.name}}</span>{{/if}}</label>
       <label>{{localize "ESSENCE.Common.Movement"}} <input name="system.movement" type="number" value="{{system.movement}}" style="width:4em"> {{localize "ESSENCE.Common.Units"}}{{#if (ne system.totalMovement system.movement)}} <span class="muted">{{localize "ESSENCE.Character.EffectiveMovementNote" n=system.totalMovement}}</span>{{/if}}</label>
-      <label title="{{localize 'ESSENCE.Common.SizeHint'}}">{{localize "ESSENCE.Common.Size"}} <input name="system.size" type="number" min="0" max="5" value="{{system.size}}" style="width:3em"></label>
+      <label data-tooltip-text="{{localize 'ESSENCE.Common.SizeHint'}}">{{localize "ESSENCE.Common.Size"}} <input name="system.size" type="number" min="0" max="5" value="{{system.size}}" style="width:3em"></label>
     </div>
   </div>
 </header>
@@ -41,8 +41,8 @@
         <h4>{{d.label}}</h4>
         {{#each d.attrs as |a|}}
           <div class="attr-row">
-            <span class="attr-label" {{#if a.benefit}}title="{{a.benefit}}"{{/if}}>{{a.label}}</span>
-            <button type="button" class="attr-roll" data-action="rollAttribute" data-attr="{{a.key}}" aria-label="{{localize 'ESSENCE.Sheet.RollAttributeAria' name=a.label}}" title="{{localize 'ESSENCE.Sheet.RollAttributeAria' name=a.label}}"><i class="fa-solid fa-dice-d10"></i></button>
+            <span class="attr-label" {{#if a.benefit}}data-tooltip-text="{{a.benefit}}"{{/if}}>{{a.label}}</span>
+            <button type="button" class="attr-roll" data-action="rollAttribute" data-attr="{{a.key}}" aria-label="{{localize 'ESSENCE.Sheet.RollAttributeAria' name=a.label}}" data-tooltip-text="{{localize 'ESSENCE.Sheet.RollAttributeAria' name=a.label}}"><i class="fa-solid fa-dice-d10"></i></button>
             <input class="attr-input" name="system.{{a.key}}" type="number" min="1" value="{{a.value}}">
             <span class="pip-track">
               {{#each a.pips as |filled|}}<span class="pip {{#if filled}}filled{{/if}}"></span>{{/each}}
@@ -80,7 +80,7 @@
     <thead><tr><th>{{localize "ESSENCE.Character.Feature"}}</th><th>{{localize "ESSENCE.Common.Source"}}</th><th>{{localize "ESSENCE.Common.Description"}}</th><th></th></tr></thead>
     <tbody>
       {{#each originFeatures as |f|}}
-        <tr class="origin-feature-row" title="{{localize 'ESSENCE.Character.OriginFeatureTooltip'}}">
+        <tr class="origin-feature-row" data-tooltip-text="{{localize 'ESSENCE.Character.OriginFeatureTooltip'}}">
           <td>{{f.name}}</td>
           <td>{{f.source}}</td>
           <td>{{{f.text}}}</td>
@@ -100,7 +100,7 @@
   <button type="button" data-action="addArrayRow" data-array="passiveFeatures"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Character.AddFeature"}}</button>
 
   <div class="career-row">
-    <label title="{{localize 'ESSENCE.Character.LanguagesHint' n=system.languageCount}}">{{localize "ESSENCE.Character.Languages"}} <input name="system.languages" type="text" value="{{system.languages}}" placeholder="{{localize 'ESSENCE.Character.LanguagesPlaceholder'}}"> <span class="muted">{{localize "ESSENCE.Character.LanguagesAllowance" n=system.languageCount acuity=system.acuity}}</span></label>
+    <label data-tooltip-text="{{localize 'ESSENCE.Character.LanguagesHint' n=system.languageCount}}">{{localize "ESSENCE.Character.Languages"}} <input name="system.languages" type="text" value="{{system.languages}}" placeholder="{{localize 'ESSENCE.Character.LanguagesPlaceholder'}}"> <span class="muted">{{localize "ESSENCE.Character.LanguagesAllowance" n=system.languageCount acuity=system.acuity}}</span></label>
   </div>
 </section>
 
@@ -115,7 +115,7 @@
         <button type="button" data-action="endTurn">{{localize "ESSENCE.Sheet.EndTurn"}}</button>
       </div>
       {{#if preparedAction}}
-        <div class="combat-state prepared-action" title="{{localize 'ESSENCE.Sheet.PrepareNote'}}">
+        <div class="combat-state prepared-action" data-tooltip-text="{{localize 'ESSENCE.Sheet.PrepareNote'}}">
           <p><strong>{{localize "ESSENCE.Sheet.PreparedAction"}}:</strong> {{localize "ESSENCE.Sheet.PreparedSummary" name=preparedAction.cardName reserved=preparedAction.reserved trigger=preparedAction.trigger}}
             <button type="button" data-action="firePreparedAction">{{localize "ESSENCE.Sheet.PreparedFire"}}</button>
             <button type="button" data-action="cancelPreparedAction">{{localize "ESSENCE.Sheet.PreparedCancel"}}</button>
@@ -135,7 +135,7 @@
           <div class="skill-box {{#unless s.gateOpen}}gated{{/unless}}">
             <div class="skill-head">
               <span class="skill-name">{{s.label}}</span>
-              <button type="button" data-action="rollSkill" data-skill="{{s.key}}" aria-label="{{localize 'ESSENCE.Character.RollSkillAria' name=s.label}}" title="{{localize 'ESSENCE.Character.RollSkillAria' name=s.label}}"><i class="fa-solid fa-dice-d10"></i></button>
+              <button type="button" data-action="rollSkill" data-skill="{{s.key}}" aria-label="{{localize 'ESSENCE.Character.RollSkillAria' name=s.label}}" data-tooltip-text="{{localize 'ESSENCE.Character.RollSkillAria' name=s.label}}"><i class="fa-solid fa-dice-d10"></i></button>
               <span class="pip-track">
                 {{#each s.pips as |filled|}}<span class="pip {{#if filled}}filled{{/if}}"></span>{{/each}}
               </span>
@@ -166,19 +166,19 @@
     <div class="specialties">
       {{#if (gt system.prowess 0)}}
         <div class="specialty-row">
-          <span class="attr-label" title="{{localize 'ESSENCE.Character.ComboTooltip'}}">{{localize "ESSENCE.Character.ComboLabel"}}</span>
+          <span class="attr-label" data-tooltip-text="{{localize 'ESSENCE.Character.ComboTooltip'}}">{{localize "ESSENCE.Character.ComboLabel"}}</span>
           <span class="pip-track">
             {{#each comboPips as |filled i|}}<button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleCombo" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="{{localize 'ESSENCE.Character.ComboAria' n=(addOne i)}}"></button>{{/each}}
           </span>
-          <label class="muted" title="{{localize 'ESSENCE.Character.ComboDealtDamageHint'}}"><input type="checkbox" name="system.specialties.comboDealtDamage" {{#if system.specialties.comboDealtDamage}}checked{{/if}}> {{localize "ESSENCE.Character.ComboDealtDamage"}}</label>
+          <label class="muted" data-tooltip-text="{{localize 'ESSENCE.Character.ComboDealtDamageHint'}}"><input type="checkbox" name="system.specialties.comboDealtDamage" {{#if system.specialties.comboDealtDamage}}checked{{/if}}> {{localize "ESSENCE.Character.ComboDealtDamage"}}</label>
         </div>
       {{/if}}
       {{#if (gt system.ballistics 0)}}
         <div class="specialty-row specialty-row-wrap">
-          <span class="attr-label" title="{{localize 'ESSENCE.Character.LockTooltip'}}">{{localize "ESSENCE.Character.LockLabel" max=lockCap}}</span>
+          <span class="attr-label" data-tooltip-text="{{localize 'ESSENCE.Character.LockTooltip'}}">{{localize "ESSENCE.Character.LockLabel" max=lockCap}}</span>
           <div class="thread-chips">
             {{#each lockEntries as |l|}}
-              <button type="button" class="thread-chip active" data-action="removeLock" data-index="{{l.i}}" title="{{localize 'ESSENCE.Character.LockEndHint'}}">{{l.name}}</button>
+              <button type="button" class="thread-chip active" data-action="removeLock" data-index="{{l.i}}" data-tooltip-text="{{localize 'ESSENCE.Character.LockEndHint'}}">{{l.name}}</button>
             {{/each}}
           </div>
           <button type="button" data-action="addLock">{{localize "ESSENCE.Character.EstablishLock"}}</button>
@@ -186,23 +186,23 @@
       {{/if}}
       {{#if (gt system.gestalt 0)}}
         <div class="specialty-row">
-          <span class="attr-label" title="{{localize 'ESSENCE.Character.AdaptationTooltip'}}">{{localize "ESSENCE.Character.AdaptationLabel"}}</span>
+          <span class="attr-label" data-tooltip-text="{{localize 'ESSENCE.Character.AdaptationTooltip'}}">{{localize "ESSENCE.Character.AdaptationLabel"}}</span>
           <input type="text" name="system.specialties.adaptation.name" value="{{system.specialties.adaptation.name}}" placeholder="{{localize 'ESSENCE.Character.AdaptationNamePlaceholder'}}">
           <label class="muted">{{localize "ESSENCE.Character.Upkeep"}} <input type="number" name="system.specialties.adaptation.upkeep" value="{{system.specialties.adaptation.upkeep}}" style="width:3em" min="0"></label>
-          {{#if system.specialties.adaptation.name}}<span class="muted" title="{{localize 'ESSENCE.Character.UpkeepDueHint'}}">{{localize "ESSENCE.Character.UpkeepDue" n=adaptationDue}}</span>{{/if}}
-          <label class="muted" title="{{localize 'ESSENCE.Character.DeferUpkeepHint'}}"><input type="checkbox" name="system.specialties.adaptation.deferUpkeep" {{#if system.specialties.adaptation.deferUpkeep}}checked{{/if}}> {{localize "ESSENCE.Character.DeferUpkeep"}}</label>
+          {{#if system.specialties.adaptation.name}}<span class="muted" data-tooltip-text="{{localize 'ESSENCE.Character.UpkeepDueHint'}}">{{localize "ESSENCE.Character.UpkeepDue" n=adaptationDue}}</span>{{/if}}
+          <label class="muted" data-tooltip-text="{{localize 'ESSENCE.Character.DeferUpkeepHint'}}"><input type="checkbox" name="system.specialties.adaptation.deferUpkeep" {{#if system.specialties.adaptation.deferUpkeep}}checked{{/if}}> {{localize "ESSENCE.Character.DeferUpkeep"}}</label>
           <button type="button" data-action="endAdaptation">{{localize "ESSENCE.Common.End"}}</button>
         </div>
       {{/if}}
       {{#if (gt system.cunning 0)}}
         <div class="specialty-row specialty-row-wrap">
-          <span class="attr-label" title="{{localize 'ESSENCE.Character.ContingencyTooltip'}}">{{localize "ESSENCE.Character.ContingencyLabel" max=contingencyCap}}</span>
+          <span class="attr-label" data-tooltip-text="{{localize 'ESSENCE.Character.ContingencyTooltip'}}">{{localize "ESSENCE.Character.ContingencyLabel" max=contingencyCap}}</span>
           <div class="array-rows">
             {{#each contingencyEntries as |c|}}
               <div class="array-row">
                 <input type="text" name="system.specialties.contingencies.{{c.i}}" value="{{c.text}}" placeholder="{{localize 'ESSENCE.Character.ContingencyPlaceholder'}}">
-                <button type="button" data-action="triggerContingency" data-index="{{c.i}}" title="{{localize 'ESSENCE.Character.TriggerContingencyHint'}}">{{localize "ESSENCE.Character.TriggerContingency"}}</button>
-                <a data-action="removeContingency" data-index="{{c.i}}" title="{{localize 'ESSENCE.Common.Clear'}}"><i class="fa-solid fa-trash"></i></a>
+                <button type="button" data-action="triggerContingency" data-index="{{c.i}}" data-tooltip-text="{{localize 'ESSENCE.Character.TriggerContingencyHint'}}">{{localize "ESSENCE.Character.TriggerContingency"}}</button>
+                <a data-action="removeContingency" data-index="{{c.i}}" data-tooltip-text="{{localize 'ESSENCE.Common.Clear'}}" aria-label="{{localize 'ESSENCE.Common.Clear'}}"><i class="fa-solid fa-trash"></i></a>
               </div>
             {{/each}}
           </div>
@@ -212,18 +212,18 @@
       {{/if}}
       {{#if (gt system.magecraft 0)}}
         <div class="specialty-row specialty-row-wrap">
-          <span class="attr-label" title="{{localize 'ESSENCE.Character.ThreadsTooltip'}}">{{localize "ESSENCE.Character.ThreadsLabel" n=system.specialties.threads.length}}</span>
+          <span class="attr-label" data-tooltip-text="{{localize 'ESSENCE.Character.ThreadsTooltip'}}">{{localize "ESSENCE.Character.ThreadsLabel" n=system.specialties.threads.length}}</span>
           <div class="thread-chips">
             {{#each threadFamilies as |family|}}
               {{#each family.threads as |t|}}
-                <button type="button" class="thread-chip {{#if t.active}}active{{/if}}" data-action="addThread" data-thread="{{t.name}}" title="{{t.title}}">{{t.name}}{{#if (gt t.count 1)}} ×{{t.count}}{{/if}}</button>
+                <button type="button" class="thread-chip {{#if t.active}}active{{/if}}" data-action="addThread" data-thread="{{t.name}}" data-tooltip-text="{{t.title}}">{{t.name}}{{#if (gt t.count 1)}} ×{{t.count}}{{/if}}</button>
               {{/each}}
             {{/each}}
           </div>
           {{#if activeThreads.length}}
             <ul class="active-thread-effects muted">
               {{#each activeThreads as |t|}}
-                <li><button type="button" class="thread-chip active" data-action="consumeThread" data-index="{{t.i}}" title="{{localize 'ESSENCE.Character.ConsumeThreadHint'}}">{{t.name}} ✕</button> {{t.effect}}</li>
+                <li><button type="button" class="thread-chip active" data-action="consumeThread" data-index="{{t.i}}" data-tooltip-text="{{localize 'ESSENCE.Character.ConsumeThreadHint'}}">{{t.name}} ✕</button> {{t.effect}}</li>
               {{/each}}
             </ul>
           {{/if}}
@@ -231,26 +231,26 @@
       {{/if}}
       {{#if (gt system.psionics 0)}}
         <div class="specialty-row specialty-row-wrap">
-          <span class="attr-label" title="{{localize 'ESSENCE.Character.StrainTooltip'}}">{{localize "ESSENCE.Character.StrainLabel"}}</span>
+          <span class="attr-label" data-tooltip-text="{{localize 'ESSENCE.Character.StrainTooltip'}}">{{localize "ESSENCE.Character.StrainLabel"}}</span>
           <input type="number" name="system.specialties.strain" value="{{system.specialties.strain}}" style="width:3em" min="0" max="6">
-          <button type="button" data-action="ventStrain" title="{{localize 'ESSENCE.Character.VentStrainHint'}}">{{localize "ESSENCE.Character.VentStrain"}}</button>
-          <button type="button" data-action="forceStrain" title="{{localize 'ESSENCE.Character.ForceStrainHint'}}">{{localize "ESSENCE.Character.ForceStrain"}}</button>
+          <button type="button" data-action="ventStrain" data-tooltip-text="{{localize 'ESSENCE.Character.VentStrainHint'}}">{{localize "ESSENCE.Character.VentStrain"}}</button>
+          <button type="button" data-action="forceStrain" data-tooltip-text="{{localize 'ESSENCE.Character.ForceStrainHint'}}">{{localize "ESSENCE.Character.ForceStrain"}}</button>
           {{#if system.psionicsBurnSurcharge}}
-            <span class="muted strain-burn-surcharge" title="{{localize 'ESSENCE.Character.StrainBurnSurcharge'}}">{{localize "ESSENCE.Character.StrainBurnSurcharge"}}</span>
+            <span class="muted strain-burn-surcharge" data-tooltip-text="{{localize 'ESSENCE.Character.StrainBurnSurcharge'}}">{{localize "ESSENCE.Character.StrainBurnSurcharge"}}</span>
           {{/if}}
           {{#if system.specialties.strainVented}}<span class="muted">{{localize "ESSENCE.Character.StrainVentedNote"}}</span>{{/if}}
         </div>
       {{/if}}
       {{#if (gt system.leadership 0)}}
         <div class="specialty-row specialty-row-wrap">
-          <span class="attr-label" title="{{localize 'ESSENCE.Character.AuthorityTooltip'}}">{{localize "ESSENCE.Character.AuthorityLabel" max=authorityCap}}</span>
+          <span class="attr-label" data-tooltip-text="{{localize 'ESSENCE.Character.AuthorityTooltip'}}">{{localize "ESSENCE.Character.AuthorityLabel" max=authorityCap}}</span>
           <div class="array-rows">
             {{#each authorityEntries as |a|}}
               <div class="array-row">
                 <span class="muted">{{#if a.card}}{{a.card}}{{else}}{{localize "ESSENCE.Character.AuthorityUnnamedCard"}}{{/if}}:</span>
                 <div class="thread-chips">
                   {{#each a.results as |r|}}
-                    <button type="button" class="thread-chip active" data-action="spendAuthority" data-card="{{a.i}}" data-index="{{r.i}}" title="{{localize 'ESSENCE.Character.ClickToSpendDiscard'}}">{{r.value}}</button>
+                    <button type="button" class="thread-chip active" data-action="spendAuthority" data-card="{{a.i}}" data-index="{{r.i}}" data-tooltip-text="{{localize 'ESSENCE.Character.ClickToSpendDiscard'}}">{{r.value}}</button>
                   {{/each}}
                 </div>
               </div>
@@ -262,17 +262,17 @@
       {{/if}}
       {{#if (gt system.ritualism 0)}}
         <div class="specialty-row specialty-row-wrap">
-          <span class="attr-label" title="{{localize 'ESSENCE.Character.RitesTooltip'}}">{{localize "ESSENCE.Character.RitesLabel" max=riteCap}}</span>
+          <span class="attr-label" data-tooltip-text="{{localize 'ESSENCE.Character.RitesTooltip'}}">{{localize "ESSENCE.Character.RitesLabel" max=riteCap}}</span>
           <div class="array-rows">
             {{#each riteEntries as |r|}}
               <div class="array-row">
                 <input type="text" name="system.specialties.rites.{{r.i}}.name" value="{{r.name}}" placeholder="{{localize 'ESSENCE.Character.RiteName'}}" style="max-width:9em">
                 <input type="text" name="system.specialties.rites.{{r.i}}.trigger" value="{{r.trigger}}" placeholder="{{localize 'ESSENCE.Character.Trigger'}}">
                 <input type="text" name="system.specialties.rites.{{r.i}}.echo" value="{{r.echo}}" placeholder="{{localize 'ESSENCE.Character.Echo'}}">
-                <input type="number" name="system.specialties.rites.{{r.i}}.echoLimit" value="{{r.echoLimit}}" style="width:3em" min="1" title="{{localize 'ESSENCE.Character.EchoLimit'}}">
-                <input type="text" name="system.specialties.rites.{{r.i}}.subject" value="{{r.subject}}" placeholder="{{localize 'ESSENCE.Character.PossessedSubject'}}" style="max-width:9em" title="{{localize 'ESSENCE.Character.PossessedHint'}}">
-                <button type="button" data-action="echoRite" data-index="{{r.i}}" title="{{localize 'ESSENCE.Character.EchoRiteHint'}}">{{localize "ESSENCE.Character.EchoRite"}}</button>
-                <a data-action="deleteRite" data-index="{{r.i}}" title="{{localize 'ESSENCE.Character.RemoveRiteHint'}}"><i class="fa-solid fa-trash"></i></a>
+                <input type="number" name="system.specialties.rites.{{r.i}}.echoLimit" value="{{r.echoLimit}}" style="width:3em" min="1" data-tooltip-text="{{localize 'ESSENCE.Character.EchoLimit'}}">
+                <input type="text" name="system.specialties.rites.{{r.i}}.subject" value="{{r.subject}}" placeholder="{{localize 'ESSENCE.Character.PossessedSubject'}}" style="max-width:9em" data-tooltip-text="{{localize 'ESSENCE.Character.PossessedHint'}}">
+                <button type="button" data-action="echoRite" data-index="{{r.i}}" data-tooltip-text="{{localize 'ESSENCE.Character.EchoRiteHint'}}">{{localize "ESSENCE.Character.EchoRite"}}</button>
+                <a data-action="deleteRite" data-index="{{r.i}}" data-tooltip-text="{{localize 'ESSENCE.Character.RemoveRiteHint'}}" aria-label="{{localize 'ESSENCE.Character.RemoveRiteHint'}}"><i class="fa-solid fa-trash"></i></a>
               </div>
             {{/each}}
           </div>
@@ -282,8 +282,8 @@
       {{/if}}
       {{#if (gt system.calling 0)}}
         <div class="specialty-row specialty-row-wrap">
-          <span class="attr-label" title="{{localize 'ESSENCE.Character.ManifestationTooltip'}}">{{localize "ESSENCE.Character.ManifestationLabel"}}</span>
-          <span class="pip-track" title="{{localize 'ESSENCE.Character.ManifestationTrackHint'}}">
+          <span class="attr-label" data-tooltip-text="{{localize 'ESSENCE.Character.ManifestationTooltip'}}">{{localize "ESSENCE.Character.ManifestationLabel"}}</span>
+          <span class="pip-track" data-tooltip-text="{{localize 'ESSENCE.Character.ManifestationTrackHint'}}">
             {{#each manifestationPips as |filled i|}}<button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleManifestationWound" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="{{localize 'ESSENCE.Character.ManifestationWoundAria' n=(addOne i)}}"></button>{{/each}}
           </span>
           {{#if system.specialties.activeManifestation}}
@@ -412,21 +412,21 @@
     <tbody>
       {{#each inventoryEquipment as |item|}}
         <tr class="draggable-row" draggable="true" data-item-id="{{item.id}}">
-          <td>{{item.name}} {{#if item.tracksUsedFlag}}<button type="button" class="used-toggle{{#if item.usedThisAdventure}} used{{/if}}" data-action="toggleItemUsed" data-item-id="{{item.id}}" title="{{#if item.usedThisAdventure}}{{localize 'ESSENCE.Sheet.UsedThisAdventure'}}{{else}}{{localize 'ESSENCE.Sheet.UnusedThisAdventure'}}{{/if}}" aria-label="{{localize 'ESSENCE.Sheet.ToggleItemUsedAria' name=item.name}}" aria-pressed="{{#if item.usedThisAdventure}}true{{else}}false{{/if}}"><i class="fa-solid fa-flag"></i></button>{{/if}}</td><td>{{equipmentCategoryLabel item.category}}</td>
+          <td>{{item.name}} {{#if item.tracksUsedFlag}}<button type="button" class="used-toggle{{#if item.usedThisAdventure}} used{{/if}}" data-action="toggleItemUsed" data-item-id="{{item.id}}" data-tooltip-text="{{#if item.usedThisAdventure}}{{localize 'ESSENCE.Sheet.UsedThisAdventure'}}{{else}}{{localize 'ESSENCE.Sheet.UnusedThisAdventure'}}{{/if}}" aria-label="{{localize 'ESSENCE.Sheet.ToggleItemUsedAria' name=item.name}}" aria-pressed="{{#if item.usedThisAdventure}}true{{else}}false{{/if}}"><i class="fa-solid fa-flag"></i></button>{{/if}}</td><td>{{equipmentCategoryLabel item.category}}</td>
           <td>
-            {{#if item.componentTier}}{{item.componentTier}}{{else}}<span class="muted" title="{{localize 'ESSENCE.Sheet.NoComponentTier'}}">—</span>{{/if}}
+            {{#if item.componentTier}}{{item.componentTier}}{{else}}<span class="muted" data-tooltip-text="{{localize 'ESSENCE.Sheet.NoComponentTier'}}">—</span>{{/if}}
             {{#if item.overTier}}
-              <span class="reach-warning" role="img" tabindex="0" aria-label="{{#if item.exceptionSource}}{{localize 'ESSENCE.Sheet.AboveTeamTierException' source=item.exceptionSource}}{{else}}{{localize 'ESSENCE.Sheet.AboveTeamTier' tier=../teamTier}}{{/if}}" title="{{#if item.exceptionSource}}{{localize 'ESSENCE.Sheet.AboveTeamTierException' source=item.exceptionSource}}{{else}}{{localize 'ESSENCE.Sheet.AboveTeamTier' tier=../teamTier}}{{/if}}"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></span>
+              <span class="reach-warning" role="img" tabindex="0" aria-label="{{#if item.exceptionSource}}{{localize 'ESSENCE.Sheet.AboveTeamTierException' source=item.exceptionSource}}{{else}}{{localize 'ESSENCE.Sheet.AboveTeamTier' tier=../teamTier}}{{/if}}" data-tooltip-text="{{#if item.exceptionSource}}{{localize 'ESSENCE.Sheet.AboveTeamTierException' source=item.exceptionSource}}{{else}}{{localize 'ESSENCE.Sheet.AboveTeamTier' tier=../teamTier}}{{/if}}"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></span>
             {{/if}}
           </td>
           <td><div class="effect-clamp">{{{item.effectText}}}</div></td>
           <td><button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.ViewAria' name=item.name}}"><i class="fa-solid fa-eye"></i></button>
               <button type="button" data-action="postEquipmentToChat" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Sheet.PostToChatAria' name=item.name}}"><i class="fa-solid fa-comment"></i></button>
               <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
-              <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="temporary" title="{{localize 'ESSENCE.Sheet.MoveToTemporary'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToTemporaryAria' name=item.name}}"><i class="fa-solid fa-clock"></i></button>
-              <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="armory" title="{{localize 'ESSENCE.Sheet.MoveToArmory'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToArmoryAria' name=item.name}}"><i class="fa-solid fa-warehouse"></i></button>
-              <button type="button" data-action="reconfigureItem" data-item-id="{{item.id}}" title="{{localize 'ESSENCE.Item.Component.Reconfigure'}}" aria-label="{{localize 'ESSENCE.Sheet.ReconfigureItemAria' name=item.name}}"><i class="fa-solid fa-arrows-rotate"></i></button>
-              <button type="button" data-action="releaseItem" data-item-id="{{item.id}}" title="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}" aria-label="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}"><i class="fa-solid fa-hand"></i></button>
+              <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="temporary" data-tooltip-text="{{localize 'ESSENCE.Sheet.MoveToTemporary'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToTemporaryAria' name=item.name}}"><i class="fa-solid fa-clock"></i></button>
+              <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="armory" data-tooltip-text="{{localize 'ESSENCE.Sheet.MoveToArmory'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToArmoryAria' name=item.name}}"><i class="fa-solid fa-warehouse"></i></button>
+              <button type="button" data-action="reconfigureItem" data-item-id="{{item.id}}" data-tooltip-text="{{localize 'ESSENCE.Item.Component.Reconfigure'}}" aria-label="{{localize 'ESSENCE.Sheet.ReconfigureItemAria' name=item.name}}"><i class="fa-solid fa-arrows-rotate"></i></button>
+              <button type="button" data-action="releaseItem" data-item-id="{{item.id}}" data-tooltip-text="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}" aria-label="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}"><i class="fa-solid fa-hand"></i></button>
               <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
       {{/each}}
@@ -460,14 +460,14 @@
     <tbody>
       {{#each temporaryEquipment as |item|}}
         <tr class="draggable-row" draggable="true" data-item-id="{{item.id}}">
-          <td>{{item.name}} {{#if item.tracksUsedFlag}}<button type="button" class="used-toggle{{#if item.usedThisAdventure}} used{{/if}}" data-action="toggleItemUsed" data-item-id="{{item.id}}" title="{{#if item.usedThisAdventure}}{{localize 'ESSENCE.Sheet.UsedThisAdventure'}}{{else}}{{localize 'ESSENCE.Sheet.UnusedThisAdventure'}}{{/if}}" aria-label="{{localize 'ESSENCE.Sheet.ToggleItemUsedAria' name=item.name}}" aria-pressed="{{#if item.usedThisAdventure}}true{{else}}false{{/if}}"><i class="fa-solid fa-flag"></i></button>{{/if}}</td><td>{{item.type}}</td><td><div class="effect-clamp">{{{item.effectText}}}</div></td>
+          <td>{{item.name}} {{#if item.tracksUsedFlag}}<button type="button" class="used-toggle{{#if item.usedThisAdventure}} used{{/if}}" data-action="toggleItemUsed" data-item-id="{{item.id}}" data-tooltip-text="{{#if item.usedThisAdventure}}{{localize 'ESSENCE.Sheet.UsedThisAdventure'}}{{else}}{{localize 'ESSENCE.Sheet.UnusedThisAdventure'}}{{/if}}" aria-label="{{localize 'ESSENCE.Sheet.ToggleItemUsedAria' name=item.name}}" aria-pressed="{{#if item.usedThisAdventure}}true{{else}}false{{/if}}"><i class="fa-solid fa-flag"></i></button>{{/if}}</td><td>{{item.type}}</td><td><div class="effect-clamp">{{{item.effectText}}}</div></td>
           <td><button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.ViewAria' name=item.name}}"><i class="fa-solid fa-eye"></i></button>
               <button type="button" data-action="postEquipmentToChat" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Sheet.PostToChatAria' name=item.name}}"><i class="fa-solid fa-comment"></i></button>
               <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
-              <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="inventory" title="{{localize 'ESSENCE.Sheet.MoveToInventory'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToInventoryAria' name=item.name}}"><i class="fa-solid fa-star"></i></button>
-              <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="armory" title="{{localize 'ESSENCE.Sheet.MoveToArmory'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToArmoryAria' name=item.name}}"><i class="fa-solid fa-warehouse"></i></button>
-              <button type="button" data-action="reconfigureItem" data-item-id="{{item.id}}" title="{{localize 'ESSENCE.Item.Component.Reconfigure'}}" aria-label="{{localize 'ESSENCE.Sheet.ReconfigureItemAria' name=item.name}}"><i class="fa-solid fa-arrows-rotate"></i></button>
-              <button type="button" data-action="releaseItem" data-item-id="{{item.id}}" title="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}" aria-label="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}"><i class="fa-solid fa-hand"></i></button>
+              <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="inventory" data-tooltip-text="{{localize 'ESSENCE.Sheet.MoveToInventory'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToInventoryAria' name=item.name}}"><i class="fa-solid fa-star"></i></button>
+              <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="armory" data-tooltip-text="{{localize 'ESSENCE.Sheet.MoveToArmory'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToArmoryAria' name=item.name}}"><i class="fa-solid fa-warehouse"></i></button>
+              <button type="button" data-action="reconfigureItem" data-item-id="{{item.id}}" data-tooltip-text="{{localize 'ESSENCE.Item.Component.Reconfigure'}}" aria-label="{{localize 'ESSENCE.Sheet.ReconfigureItemAria' name=item.name}}"><i class="fa-solid fa-arrows-rotate"></i></button>
+              <button type="button" data-action="releaseItem" data-item-id="{{item.id}}" data-tooltip-text="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}" aria-label="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}"><i class="fa-solid fa-hand"></i></button>
               <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
       {{/each}}
@@ -477,20 +477,20 @@
   </div>
 
   <div class="equipment-drop-zone" data-drop-slot="armory">
-  <h3 class="section-head">{{localize "ESSENCE.Item.Equipment.Armory"}} <span class="muted">({{localize "ESSENCE.Sheet.ArmoryCapacity" used=armoryUsed limit=system.armoryLimit stored=armoryStored prepared=inventoryUsed}}) <i class="fa-solid fa-flag" title="{{localize 'ESSENCE.Sheet.UsedThisAdventureHint'}}"></i></span></h3>
+  <h3 class="section-head">{{localize "ESSENCE.Item.Equipment.Armory"}} <span class="muted">({{localize "ESSENCE.Sheet.ArmoryCapacity" used=armoryUsed limit=system.armoryLimit stored=armoryStored prepared=inventoryUsed}}) <i class="fa-solid fa-flag" data-tooltip-text="{{localize 'ESSENCE.Sheet.UsedThisAdventureHint'}}"></i></span></h3>
   <table class="item-table">
     <thead><tr><th>{{localize "ESSENCE.Common.Item"}}</th><th>{{localize "ESSENCE.Common.Category"}}</th><th>{{localize "ESSENCE.Common.Notes"}}</th><th></th></tr></thead>
     <tbody>
       {{#each armoryEquipment as |item|}}
         <tr class="draggable-row" draggable="true" data-item-id="{{item.id}}">
-          <td>{{item.name}} {{#if item.tracksUsedFlag}}<button type="button" class="used-toggle{{#if item.usedThisAdventure}} used{{/if}}" data-action="toggleItemUsed" data-item-id="{{item.id}}" title="{{#if item.usedThisAdventure}}{{localize 'ESSENCE.Sheet.UsedThisAdventure'}}{{else}}{{localize 'ESSENCE.Sheet.UnusedThisAdventure'}}{{/if}}" aria-label="{{localize 'ESSENCE.Sheet.ToggleItemUsedAria' name=item.name}}" aria-pressed="{{#if item.usedThisAdventure}}true{{else}}false{{/if}}"><i class="fa-solid fa-flag"></i></button>{{/if}}</td><td>{{equipmentCategoryLabel item.category}}</td><td><div class="effect-clamp">{{{item.effectText}}}</div></td>
+          <td>{{item.name}} {{#if item.tracksUsedFlag}}<button type="button" class="used-toggle{{#if item.usedThisAdventure}} used{{/if}}" data-action="toggleItemUsed" data-item-id="{{item.id}}" data-tooltip-text="{{#if item.usedThisAdventure}}{{localize 'ESSENCE.Sheet.UsedThisAdventure'}}{{else}}{{localize 'ESSENCE.Sheet.UnusedThisAdventure'}}{{/if}}" aria-label="{{localize 'ESSENCE.Sheet.ToggleItemUsedAria' name=item.name}}" aria-pressed="{{#if item.usedThisAdventure}}true{{else}}false{{/if}}"><i class="fa-solid fa-flag"></i></button>{{/if}}</td><td>{{equipmentCategoryLabel item.category}}</td><td><div class="effect-clamp">{{{item.effectText}}}</div></td>
           <td><button type="button" data-action="itemView" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.ViewAria' name=item.name}}"><i class="fa-solid fa-eye"></i></button>
               <button type="button" data-action="postEquipmentToChat" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Sheet.PostToChatAria' name=item.name}}"><i class="fa-solid fa-comment"></i></button>
               <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
-              <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="inventory" title="{{localize 'ESSENCE.Sheet.MoveToInventory'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToInventoryAria' name=item.name}}"><i class="fa-solid fa-star"></i></button>
-              <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="temporary" title="{{localize 'ESSENCE.Sheet.MoveToTemporary'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToTemporaryAria' name=item.name}}"><i class="fa-solid fa-clock"></i></button>
-              <button type="button" data-action="reconfigureItem" data-item-id="{{item.id}}" title="{{localize 'ESSENCE.Item.Component.Reconfigure'}}" aria-label="{{localize 'ESSENCE.Sheet.ReconfigureItemAria' name=item.name}}"><i class="fa-solid fa-arrows-rotate"></i></button>
-              <button type="button" data-action="releaseItem" data-item-id="{{item.id}}" title="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}" aria-label="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}"><i class="fa-solid fa-hand"></i></button>
+              <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="inventory" data-tooltip-text="{{localize 'ESSENCE.Sheet.MoveToInventory'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToInventoryAria' name=item.name}}"><i class="fa-solid fa-star"></i></button>
+              <button type="button" data-action="moveEquipmentSlot" data-item-id="{{item.id}}" data-slot="temporary" data-tooltip-text="{{localize 'ESSENCE.Sheet.MoveToTemporary'}}" aria-label="{{localize 'ESSENCE.Sheet.MoveToTemporaryAria' name=item.name}}"><i class="fa-solid fa-clock"></i></button>
+              <button type="button" data-action="reconfigureItem" data-item-id="{{item.id}}" data-tooltip-text="{{localize 'ESSENCE.Item.Component.Reconfigure'}}" aria-label="{{localize 'ESSENCE.Sheet.ReconfigureItemAria' name=item.name}}"><i class="fa-solid fa-arrows-rotate"></i></button>
+              <button type="button" data-action="releaseItem" data-item-id="{{item.id}}" data-tooltip-text="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}" aria-label="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}"><i class="fa-solid fa-hand"></i></button>
               <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
       {{/each}}
@@ -510,7 +510,7 @@
     {{#each keyAspects as |aspect|}}
       <div class="key-aspect-row">
         <label>{{localize "ESSENCE.Character.KeyAspect"}} {{aspect.n}}<input name="system.keyAspects.{{aspect.i}}" type="text" value="{{aspect.value}}"></label>
-        <button type="button" data-action="rollKeyAspect" data-index="{{aspect.i}}" aria-label="Roll Key Aspect {{aspect.n}}" title="Roll Attribute + 5 (replaces a Skill Rank)"><i class="fa-solid fa-dice-d10"></i></button>
+        <button type="button" data-action="rollKeyAspect" data-index="{{aspect.i}}" aria-label="Roll Key Aspect {{aspect.n}}" data-tooltip-text="Roll Attribute + 5 (replaces a Skill Rank)"><i class="fa-solid fa-dice-d10"></i></button>
       </div>
     {{/each}}
   </div>
@@ -521,7 +521,7 @@
       <div class="nc-skill-row">
         <input name="system.nonCombatSkills.{{i}}.name" type="text" value="{{s.name}}" placeholder="{{localize 'ESSENCE.Common.Skill'}}">
         <input name="system.nonCombatSkills.{{i}}.rating" type="number" value="{{s.rating}}" style="width:3em">
-        <button type="button" data-action="rollNonCombatSkill" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Character.RollSkillAria' name=s.name}}" title="{{localize 'ESSENCE.Character.RollSkillAria' name=s.name}}"><i class="fa-solid fa-dice-d10"></i></button>
+        <button type="button" data-action="rollNonCombatSkill" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Character.RollSkillAria' name=s.name}}" data-tooltip-text="{{localize 'ESSENCE.Character.RollSkillAria' name=s.name}}"><i class="fa-solid fa-dice-d10"></i></button>
         <button type="button" data-action="deleteArrayRow" data-array="nonCombatSkills" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Character.DeleteSkillAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button>
       </div>
     {{/each}}
@@ -557,10 +557,10 @@
       </span>
     </div>
     <div class="wound-block">
-      <span class="attr-label" title="{{localize 'ESSENCE.Sheet.InfluenceRecoveryNote'}}">{{localize "ESSENCE.Sheet.CoreInfluence"}}</span>
+      <span class="attr-label" data-tooltip-text="{{localize 'ESSENCE.Sheet.InfluenceRecoveryNote'}}">{{localize "ESSENCE.Sheet.CoreInfluence"}}</span>
       <span class="pip-track">
         {{#each system.coreInfluence as |c i|}}
-          <button type="button" class="pip toggle labeled sq {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}" title="{{c.condition}}" aria-pressed="{{c.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreInfluenceAria' n=(addOne i)}}{{#if c.condition}}: {{c.condition}}{{/if}}">{{lookup ../coreInfluenceLabels i}}</button>
+          <button type="button" class="pip toggle labeled sq {{#if c.filled}}filled{{/if}}" data-action="toggleCoreInfluence" data-index="{{i}}" data-tooltip-text="{{c.condition}}" aria-pressed="{{c.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreInfluenceAria' n=(addOne i)}}{{#if c.condition}}: {{c.condition}}{{/if}}">{{lookup ../coreInfluenceLabels i}}</button>
         {{/each}}
       </span>
     </div>
@@ -573,11 +573,11 @@
   <h3 class="section-head">{{localize "ESSENCE.Sheet.Reach"}}</h3>
   <div class="influence-row">
     <div class="wound-block">
-      <label title="{{localize 'ESSENCE.Character.ReachHint'}}">{{localize "ESSENCE.Sheet.Reach"}} <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>
+      <label data-tooltip-text="{{localize 'ESSENCE.Character.ReachHint'}}">{{localize "ESSENCE.Sheet.Reach"}} <input name="system.reach" type="number" value="{{system.reach}}" style="width:3em"></label>
       {{#if (gt system.effectiveReach system.reach)}}
         <span class="muted">{{localize "ESSENCE.Sheet.EffectiveReachNote" n=system.effectiveReach}}</span>
       {{/if}}
-      <span class="muted" title="{{localize 'ESSENCE.Sheet.ReachPressureNote' n=system.reachPressure max=system.effectiveReach}}">{{localize "ESSENCE.Sheet.ReachPressureShort" n=system.reachPressure max=system.effectiveReach}}</span>
+      <span class="muted" data-tooltip-text="{{localize 'ESSENCE.Sheet.ReachPressureNote' n=system.reachPressure max=system.effectiveReach}}">{{localize "ESSENCE.Sheet.ReachPressureShort" n=system.reachPressure max=system.effectiveReach}}</span>
     </div>
   </div>
 
@@ -603,9 +603,9 @@
       </tbody>
     </table>
   {{/if}}
-  <button type="button" data-action="addArrayRow" data-array="reachTriggers" title="{{localize 'ESSENCE.Character.ReachTriggerBreachNote'}}"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.AddReachTrigger"}}</button>
-  <button type="button" data-action="resetAdventureUses" title="{{localize 'ESSENCE.Sheet.ResetAdventureUsesTooltip'}}">{{localize "ESSENCE.Sheet.ResetAdventureUses"}}</button>
-  <button type="button" data-action="newEncounter" title="{{localize 'ESSENCE.Sheet.NewEncounterTooltip'}}">{{localize "ESSENCE.Sheet.NewEncounter"}}</button>
+  <button type="button" data-action="addArrayRow" data-array="reachTriggers" data-tooltip-text="{{localize 'ESSENCE.Character.ReachTriggerBreachNote'}}"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.AddReachTrigger"}}</button>
+  <button type="button" data-action="resetAdventureUses" data-tooltip-text="{{localize 'ESSENCE.Sheet.ResetAdventureUsesTooltip'}}">{{localize "ESSENCE.Sheet.ResetAdventureUses"}}</button>
+  <button type="button" data-action="newEncounter" data-tooltip-text="{{localize 'ESSENCE.Sheet.NewEncounterTooltip'}}">{{localize "ESSENCE.Sheet.NewEncounter"}}</button>
   {{!-- General Features & Benefits and Languages moved to the Core tab (0.15.0). --}}
 </section>
 
@@ -614,31 +614,31 @@
   <div class="bio-standing">
     <h3 class="section-head">{{localize "ESSENCE.Character.TeamAndAdvancement"}}</h3>
     <div class="bio-standing-grid">
-      <div class="bio-cell bio-cell-wide" title="{{localize 'ESSENCE.Character.TeamCellHint'}}">
+      <div class="bio-cell bio-cell-wide" data-tooltip-text="{{localize 'ESSENCE.Character.TeamCellHint'}}">
         <span class="bio-cell-label">{{localize "ESSENCE.Character.Team"}}</span>
         <span class="bio-cell-value">{{#if team}}<a data-action="openTeam">{{team.name}}</a>{{else}}<span class="muted">{{localize "ESSENCE.Character.NoTeamShort"}}</span>{{/if}}</span>
       </div>
-      <div class="bio-cell" title="{{localize 'ESSENCE.Character.TeamTierHint'}}">
+      <div class="bio-cell" data-tooltip-text="{{localize 'ESSENCE.Character.TeamTierHint'}}">
         <span class="bio-cell-label">{{localize "ESSENCE.Team.Tier"}}</span>
         <span class="bio-cell-value">{{teamTier}}</span>
       </div>
-      <label class="bio-cell" title="{{localize 'ESSENCE.Character.LevelHint'}}">
+      <label class="bio-cell" data-tooltip-text="{{localize 'ESSENCE.Character.LevelHint'}}">
         <span class="bio-cell-label">{{localize "ESSENCE.Common.Level"}}</span>
         <input name="system.level" type="number" min="1" value="{{system.level}}">
       </label>
-      <label class="bio-cell{{#if apOverspent}} bio-cell-warn{{/if}}" title="{{localize 'ESSENCE.Character.AdvancementPointsTooltip'}}">
+      <label class="bio-cell{{#if apOverspent}} bio-cell-warn{{/if}}" data-tooltip-text="{{localize 'ESSENCE.Character.AdvancementPointsTooltip'}}">
         <span class="bio-cell-label">{{localize "ESSENCE.Character.AdvancementPointsSpent"}}</span>
         <input name="system.advancementPointsSpent" type="number" min="0" value="{{system.advancementPointsSpent}}" {{#if apOverspent}}aria-invalid="true" aria-describedby="essence-ap-overspent-{{actor.id}}"{{/if}}>
       </label>
-      <div class="bio-cell{{#if apOverspent}} bio-cell-warn{{/if}}" title="{{localize 'ESSENCE.Character.AdvancementPointsTooltip'}}">
+      <div class="bio-cell{{#if apOverspent}} bio-cell-warn{{/if}}" data-tooltip-text="{{localize 'ESSENCE.Character.AdvancementPointsTooltip'}}">
         <span class="bio-cell-label">{{localize "ESSENCE.Character.AdvancementPointsAvailable"}}</span>
         <span class="bio-cell-value">{{apBalanceLabel}}</span>
       </div>
-      <label class="bio-cell" title="{{localize 'ESSENCE.Common.PoolBonusHint'}}">
+      <label class="bio-cell" data-tooltip-text="{{localize 'ESSENCE.Common.PoolBonusHint'}}">
         <span class="bio-cell-label">{{localize "ESSENCE.Common.PoolBonus"}}</span>
         <input name="system.poolBonus" type="number" min="0" value="{{system.poolBonus}}">
       </label>
-      <div class="bio-cell" title="{{localize 'ESSENCE.Common.PoolBonusHint'}}">
+      <div class="bio-cell" data-tooltip-text="{{localize 'ESSENCE.Common.PoolBonusHint'}}">
         <span class="bio-cell-label">{{localize "ESSENCE.Character.BasePools"}}</span>
         <span class="bio-cell-value">{{system.baseCombatDice}} <span class="muted bio-cell-note">{{localize "ESSENCE.Character.BasePoolsFormula" bonus=system.poolBonus}}</span></span>
       </div>
@@ -722,7 +722,7 @@
         {{!-- How many Temporary Wounds gear and features grant. Nothing derives this field and no
               Active Effect writes it, so it needs a real input somewhere; it used to live on the
               Character Wizard's Wounds step, which was removed as play state. --}}
-        <label class="muted" title="{{localize 'ESSENCE.Sheet.TemporaryWoundsAvailableHint'}}">{{localize "ESSENCE.Common.Available"}}
+        <label class="muted" data-tooltip-text="{{localize 'ESSENCE.Sheet.TemporaryWoundsAvailableHint'}}">{{localize "ESSENCE.Common.Available"}}
           <input type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" style="width:3em" min="0" max="5">
         </label>
       </div>
@@ -730,7 +730,7 @@
         <span class="attr-label">{{localize "ESSENCE.Common.CoreWounds"}}</span>
         <span class="pip-track">
           {{#each system.coreWounds as |w i|}}
-            <button type="button" class="pip toggle labeled sq {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" title="{{w.condition}}" aria-pressed="{{w.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreWoundAria' n=(addOne i)}}{{#if w.condition}}: {{w.condition}}{{/if}}">{{lookup ../coreWoundLabels i}}</button>
+            <button type="button" class="pip toggle labeled sq {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" data-tooltip-text="{{w.condition}}" aria-pressed="{{w.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreWoundAria' n=(addOne i)}}{{#if w.condition}}: {{w.condition}}{{/if}}">{{lookup ../coreWoundLabels i}}</button>
           {{/each}}
         </span>
       </div>
@@ -740,7 +740,7 @@
         <button type="button" data-action="grantRecovery">{{localize "ESSENCE.Sheet.GrantRecovery"}}</button>
       </div>
       <div class="wound-block">
-        <label style="display:flex;align-items:center;gap:4px;" title="{{localize 'ESSENCE.Sheet.AdaptabilityRerollHint'}}">
+        <label style="display:flex;align-items:center;gap:4px;" data-tooltip-text="{{localize 'ESSENCE.Sheet.AdaptabilityRerollHint'}}">
           <input type="checkbox" data-action="toggleAdaptabilityReroll" {{#if system.playState.adaptabilityRerollAvailable}}checked{{/if}}> {{localize "ESSENCE.Sheet.AdaptabilityReroll"}}
         </label>
       </div>
@@ -757,7 +757,7 @@
   </div>
 
   <div class="side-panel">
-    <span class="side-label">{{localize "ESSENCE.Sheet.Conditions"}} <button type="button" class="side-add" data-action="addCondition" title="{{localize 'ESSENCE.Sheet.AddCondition'}}"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.Add"}}</button></span>
+    <span class="side-label">{{localize "ESSENCE.Sheet.Conditions"}} <button type="button" class="side-add" data-action="addCondition" data-tooltip-text="{{localize 'ESSENCE.Sheet.AddCondition'}}"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.Add"}}</button></span>
     {{#if conditions.length}}
       <ul class="item-list condition-list">
         {{#each conditions as |item|}}

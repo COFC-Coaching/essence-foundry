@@ -1,12 +1,12 @@
 <div class="essence-sheet-root team-sheet">
 <header class="sheet-header team-header">
   <div class="portrait-wrap">
-    <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="editImage" alt="" title="{{localize 'ESSENCE.Sheet.PortraitTooltip'}}">
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="editImage" alt="" data-tooltip-text="{{localize 'ESSENCE.Sheet.PortraitTooltip'}}">
   </div>
   <div class="header-main">
     <div class="header-actions">
       {{#if isEditable}}
-        <button type="button" class="edit-lock-btn" data-action="toggleEditLock" aria-pressed="{{editUnlocked}}" title="{{#if editUnlocked}}{{localize 'ESSENCE.Sheet.UnlockedTooltip'}}{{else}}{{localize 'ESSENCE.Sheet.LockedTooltip'}}{{/if}}">
+        <button type="button" class="edit-lock-btn" data-action="toggleEditLock" aria-pressed="{{editUnlocked}}" data-tooltip-text="{{#if editUnlocked}}{{localize 'ESSENCE.Sheet.UnlockedTooltip'}}{{else}}{{localize 'ESSENCE.Sheet.LockedTooltip'}}{{/if}}">
           <i class="fa-solid {{#if editUnlocked}}fa-lock-open{{else}}fa-lock{{/if}}"></i> {{#if editUnlocked}}{{localize "ESSENCE.Common.Unlocked"}}{{else}}{{localize "ESSENCE.Common.Locked"}}{{/if}}
         </button>
       {{/if}}
@@ -17,13 +17,13 @@
       <input name="system.identity" type="text" value="{{system.identity}}" placeholder="{{localize 'ESSENCE.Team.IdentityPlaceholder'}}">
     </label>
   </div>
-  <div class="team-tier" title="{{localize 'ESSENCE.Team.TierHint'}}">
+  <div class="team-tier" data-tooltip-text="{{localize 'ESSENCE.Team.TierHint'}}">
     <span class="team-field-label">{{localize "ESSENCE.Team.Tier"}}</span>
     <span class="team-tier-value">{{system.tier}}<span class="muted"> / {{tierMax}}</span></span>
     {{#if isGM}}
       <div class="team-tier-actions">
-        <button type="button" data-action="raiseTier" {{#unless canRaiseTier}}disabled{{/unless}} title="{{localize 'ESSENCE.Team.RaiseTooltip'}}"><i class="fa-solid fa-arrow-up"></i> {{localize "ESSENCE.Team.Raise"}}</button>
-        <button type="button" class="link-button" data-action="correctTier" title="{{localize 'ESSENCE.Team.CorrectTooltip'}}">{{localize "ESSENCE.Team.Correct"}}</button>
+        <button type="button" data-action="raiseTier" {{#unless canRaiseTier}}disabled{{/unless}} data-tooltip-text="{{localize 'ESSENCE.Team.RaiseTooltip'}}"><i class="fa-solid fa-arrow-up"></i> {{localize "ESSENCE.Team.Raise"}}</button>
+        <button type="button" class="link-button" data-action="correctTier" data-tooltip-text="{{localize 'ESSENCE.Team.CorrectTooltip'}}">{{localize "ESSENCE.Team.Correct"}}</button>
       </div>
     {{/if}}
   </div>
@@ -47,7 +47,7 @@
             <td><a class="team-member-link" data-action="openMember" data-actor-id="{{m.id}}"><img src="{{m.img}}" alt="" width="26" height="26"> {{m.name}}</a></td>
             <td>{{m.level}}</td>
             <td>{{m.temporaryInfluence}}</td>
-            <td><button type="button" data-action="removeMember" data-actor-id="{{m.id}}" title="{{localize 'ESSENCE.Team.RemoveMemberAria' name=m.name}}" aria-label="{{localize 'ESSENCE.Team.RemoveMemberAria' name=m.name}}"><i class="fa-solid fa-user-minus"></i></button></td>
+            <td><button type="button" data-action="removeMember" data-actor-id="{{m.id}}" data-tooltip-text="{{localize 'ESSENCE.Team.RemoveMemberAria' name=m.name}}" aria-label="{{localize 'ESSENCE.Team.RemoveMemberAria' name=m.name}}"><i class="fa-solid fa-user-minus"></i></button></td>
           </tr>
         {{/each}}
       </tbody>
@@ -75,7 +75,7 @@
             <td><input type="text" value="{{t.name}}" data-array="things" data-index="{{t.i}}" data-record-field="name" aria-label="{{localize 'ESSENCE.Common.Name'}}"></td>
             <td><input type="text" value="{{t.tags}}" data-array="things" data-index="{{t.i}}" data-record-field="tags" list="essence-team-tags-{{../actor.id}}" placeholder="{{localize 'ESSENCE.Team.TagsPlaceholder'}}" aria-label="{{localize 'ESSENCE.Team.Tags'}}: {{t.name}}"></td>
             <td><textarea rows="2" data-array="things" data-index="{{t.i}}" data-record-field="notes" placeholder="{{localize 'ESSENCE.Team.ThingsNotesPlaceholder'}}" aria-label="{{localize 'ESSENCE.Team.Notes'}}: {{t.name}}">{{t.notes}}</textarea></td>
-            <td><button type="button" data-action="deleteRecordRow" data-array="things" data-index="{{t.i}}" title="{{localize 'ESSENCE.Common.DeleteAria' name=t.name}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=t.name}}"><i class="fa-solid fa-trash"></i></button></td>
+            <td><button type="button" data-action="deleteRecordRow" data-array="things" data-index="{{t.i}}" data-tooltip-text="{{localize 'ESSENCE.Common.DeleteAria' name=t.name}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=t.name}}"><i class="fa-solid fa-trash"></i></button></td>
           </tr>
         {{/each}}
       </tbody>
@@ -95,7 +95,7 @@
             <td><input type="text" value="{{o.name}}" data-array="organizations" data-index="{{o.i}}" data-record-field="name" aria-label="{{localize 'ESSENCE.Common.Name'}}"></td>
             <td><input type="text" value="{{o.relationship}}" data-array="organizations" data-index="{{o.i}}" data-record-field="relationship" list="essence-team-relationships-{{../actor.id}}" placeholder="{{localize 'ESSENCE.Team.RelationshipPlaceholder'}}" aria-label="{{localize 'ESSENCE.Team.Relationship'}}: {{o.name}}"></td>
             <td><textarea rows="2" data-array="organizations" data-index="{{o.i}}" data-record-field="notes" placeholder="{{localize 'ESSENCE.Team.OrganizationsNotesPlaceholder'}}" aria-label="{{localize 'ESSENCE.Team.Notes'}}: {{o.name}}">{{o.notes}}</textarea></td>
-            <td><button type="button" data-action="deleteRecordRow" data-array="organizations" data-index="{{o.i}}" title="{{localize 'ESSENCE.Common.DeleteAria' name=o.name}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=o.name}}"><i class="fa-solid fa-trash"></i></button></td>
+            <td><button type="button" data-action="deleteRecordRow" data-array="organizations" data-index="{{o.i}}" data-tooltip-text="{{localize 'ESSENCE.Common.DeleteAria' name=o.name}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=o.name}}"><i class="fa-solid fa-trash"></i></button></td>
           </tr>
         {{/each}}
       </tbody>
