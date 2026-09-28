@@ -48,6 +48,19 @@
       </ul>
     </div>
   {{/if}}
+  {{!-- A Chassis or Fitting that grants an Equipment Card (Channeling Interface, Projection
+        Interface) is left out of the Combined Effect and played from the Combat tab, so the read
+        view lists it here; before 0.18.10 only the edit view did, and the card looked missing. --}}
+  {{#if stats.grantedCards.length}}
+    <div class="card-view-line">
+      <div class="card-view-label">{{localize "ESSENCE.Item.Equipment.GrantedEquipmentCards"}}</div>
+      <ul class="combined-effect">
+        {{#each stats.grantedCards as |g|}}
+          <li><strong>{{g.source}}</strong>{{#if g.uses}} ({{localize "ESSENCE.Common.UsesFraction" remaining=g.usesRemaining total=g.uses}}){{/if}} — {{{g.effect}}}</li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/if}}
   {{#if system.effect}}
     <div class="card-view-line">
       <div class="card-view-label">{{localize "ESSENCE.Common.Effect"}}</div>

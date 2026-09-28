@@ -9,11 +9,20 @@ or Augment from the catalog while building an item adds a copy of it to the char
 to a different one (Stable Focus, then Channeling Focus) left the first copy behind as loose gear
 in the Armory, costing half a slot. Now a copy made for that item is removed when it is swapped
 out or cleared. A part the character already owned before assembling is still kept as loose gear.
+This also happened without deliberately switching: the Chassis list picks an option on every
+arrow-key press, so moving through it with the keyboard (Stable Focus is first) added a copy of
+each Focus passed on the way. Each of those copies is now removed as the next one is picked.
 Copies left behind before this fix aren't marked, so the system can't tell them from parts you
 own. Delete those from the Armory by hand.
 
 This is a different path from the 0.7.8 fix, which stopped parts that are *in* an item from
 listing separately. That still works.
+
+**Fix: an item's read view left out the Equipment Card its parts grant.** A Chassis or Fitting
+that grants an Equipment Card, such as the Channeling Interface, is played from the Combat tab's
+Equipment Cards, not folded into the item's Combined Effect. The read view showed only the
+Combined Effect, so the Interface looked missing from the item. It now lists them under
+"Granted Equipment Cards", as the edit view already did.
 
 **Fix: item read views ran their labels into their values.** The Equipment, Chassis, Fitting,
 Augment and Condition sheets' read view showed "CategoryImplement" and "SlotInventory" in an
