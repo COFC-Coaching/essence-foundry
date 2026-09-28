@@ -62,8 +62,15 @@
   --essence-domain-spiritual-ink: #b48ad9;
   --essence-card-action: #43a047;
   --essence-card-reaction: #e05252;
-  --essence-card-equipment: #d4b06a;
+  /* Card type colours (concept "Card anatomy and colors"): one colour per type on the band, the
+     border, the commitment and the Play button; the -ink shade is for text on dark panels.
+     Equipment is amber, not the gold accent, so it never reads as the Success Die (0.18.9). */
+  --essence-card-equipment: #f9a825;
   --essence-card-basic: #8f8677;
+  --essence-card-action-ink: #8fd694;
+  --essence-card-reaction-ink: #f4a3a3;
+  --essence-card-equipment-ink: #f7cf7a;
+  --essence-card-basic-ink: #cfc7ba;
   --essence-font-display: var(--font-h1, "Modesto Condensed", Georgia, serif);
   --essence-font-body: var(--font-body, var(--font-primary, "Signika", system-ui, sans-serif));
   --essence-radius: 8px;
@@ -652,7 +659,10 @@
 .essence.character .card-list .card-meta { flex: 0 0 auto; font-size: 0.8em; white-space: nowrap; }
 .essence.character .card-list .card-row-actions { display: flex; justify-content: flex-end; gap: 4px; }
 .essence.character .card-list .card-row-actions button { padding: 2px 6px; font-size: 0.85em; }
-.essence.character .card-list .card-play { background: var(--essence-accent); color: var(--essence-accent-ink); border-color: var(--essence-accent); font-weight: 600; }
+.essence.character .card-list .card-play { background: var(--essence-card-basic-ink); color: #141210; border-color: var(--essence-card-basic-ink); font-weight: 600; }
+.essence.character .card-list[data-card-list="action"] .card-play { background: var(--essence-card-action); border-color: var(--essence-card-action); color: #0d1a0e; }
+.essence.character .card-list[data-card-list="reaction"] .card-play { background: var(--essence-card-reaction); border-color: var(--essence-card-reaction); color: #1f0d0d; }
+.essence.character .card-list[data-card-list="equipment"] .card-play { background: var(--essence-card-equipment); border-color: var(--essence-card-equipment); color: #1f1704; }
 .essence .card-list .card-tags { opacity: 0.8; }
 .essence .style-chip {
   display: inline-flex; align-items: center; font-size: 0.75em; padding: 1px 8px; border-radius: 10px;
@@ -861,9 +871,17 @@
 .essence.roll-card .rc-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 10px 8px; }
 .essence.roll-card .rc-actions button { width: auto; flex: 0 0 auto; height: 28px !important; min-height: 0 !important; line-height: 1 !important; padding: 0 10px; border-radius: var(--essence-radius-sm); font-size: 12px; font-weight: 600; background: var(--essence-well); border: 1px solid var(--essence-line-strong); color: var(--essence-ink); cursor: pointer; }
 .essence.roll-card .rc-actions .rc-card { margin-left: auto; }
-.essence.roll-card.kind-action .rc-apply { background: var(--essence-card-action); border-color: var(--essence-card-action); color: var(--essence-ink-bright); }
-.essence.roll-card.kind-reaction .rc-apply { background: var(--essence-card-reaction); border-color: var(--essence-card-reaction); color: var(--essence-ink-bright); }
-.essence.roll-card.kind-equipment .rc-apply, .essence.roll-card.kind-basic .rc-apply { background: var(--essence-accent); border-color: var(--essence-accent); color: var(--essence-accent-ink); }
+/* Type colour on the Apply button, the card border and emphasised rules text (damage amounts). */
+.essence.roll-card.kind-action { border-color: #2e7d32; --rc-ink: var(--essence-card-action-ink); }
+.essence.roll-card.kind-reaction { border-color: #c62828; --rc-ink: var(--essence-card-reaction-ink); }
+.essence.roll-card.kind-equipment { border-color: #c98a10; --rc-ink: var(--essence-card-equipment-ink); }
+.essence.roll-card.kind-basic { border-color: #5d564c; --rc-ink: var(--essence-card-basic-ink); }
+.essence.roll-card .rc-sec strong { color: var(--rc-ink, var(--essence-ink-bright)); }
+.essence.roll-card .rc-sec .rc-accent { color: var(--essence-accent); }
+.essence.roll-card.kind-action .rc-apply { background: var(--essence-card-action); border-color: var(--essence-card-action); color: #0d1a0e; }
+.essence.roll-card.kind-reaction .rc-apply { background: var(--essence-card-reaction); border-color: var(--essence-card-reaction); color: #1f0d0d; }
+.essence.roll-card.kind-equipment .rc-apply { background: var(--essence-card-equipment); border-color: var(--essence-card-equipment); color: #1f1704; }
+.essence.roll-card.kind-basic .rc-apply { background: var(--essence-card-basic-ink); border-color: var(--essence-card-basic-ink); color: #141210; }
 .essence.roll-card .rc-text { display: flex; flex-direction: column; gap: 6px; padding: 8px 10px 10px; border-top: 1px solid var(--essence-line); }
 .essence.roll-card .rc-sec { display: flex; gap: 8px; line-height: 1.4; font-size: 0.9em; }
 .essence.roll-card .rc-sec > b { flex: 0 0 60px; padding-top: 2px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--essence-muted); }
@@ -885,8 +903,8 @@
 .essence .card-view { border: 1px solid var(--essence-line-strong); border-radius: 10px; overflow: hidden; background: var(--essence-panel-raised); display: flex; flex-direction: column; }
 .essence .card-view.kind-action { border-color: var(--essence-card-action); }
 .essence .card-view.kind-reaction { border-color: var(--essence-card-reaction); }
-.essence .card-view.kind-equipment { border-color: var(--essence-card-equipment); }
-.essence .card-view.kind-basic { border-color: var(--essence-line-bright); }
+.essence .card-view.kind-equipment { border-color: #c98a10; }
+.essence .card-view.kind-basic { border-color: #5d564c; }
 .essence .cv-band { display: flex; justify-content: space-between; gap: 8px; padding: 6px 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--essence-accent-ink); background: var(--essence-muted-soft); }
 .essence .kind-action .cv-band { background: var(--essence-card-action); }
 .essence .kind-reaction .cv-band { background: var(--essence-card-reaction); }
@@ -907,8 +925,10 @@
 .essence .cv-lbl-note { text-transform: none; letter-spacing: 0; font-weight: 400; }
 .essence .cv-v { font-weight: 700; font-size: 1em; line-height: 1.2; }
 .essence .cv-accent { color: var(--essence-accent); }
-.essence .kind-action .cv-accent { color: var(--essence-success-ink); }
-.essence .kind-reaction .cv-accent { color: var(--essence-condition-ink); }
+.essence .kind-action .cv-accent { color: var(--essence-card-action-ink); }
+.essence .kind-reaction .cv-accent { color: var(--essence-card-reaction-ink); }
+.essence .kind-equipment .cv-accent { color: var(--essence-card-equipment-ink); }
+.essence .kind-basic .cv-accent { color: var(--essence-card-basic-ink); }
 .essence .cv-stat .muted { font-size: 10.5px; }
 .essence .cv-surges { display: flex; flex-direction: column; gap: 5px; }
 .essence .cv-surge { display: flex; gap: 8px; align-items: flex-start; font-size: 0.95em; line-height: 1.35; }

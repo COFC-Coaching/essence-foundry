@@ -21,6 +21,14 @@ All notable changes to the essence-foundry system are recorded here.
   same label, such as two Effect lines, shows the label once.
 - **Older messages:** chat cards already posted keep their old look.
 
+**The card colour system, carried through.** Action is green, Reaction red, Equipment amber and
+Basic neutral, as in the card concept.
+- **Equipment amber:** Equipment was gold, the same as the Success Die. It is amber now.
+- **Chat cards:** the card border and the Apply Damage button take the type's colour, and
+  emphasised rules text such as damage amounts is tinted to match.
+- **Play buttons:** on the Combat tab they take their card's type colour instead of all being
+  gold.
+
 **Sidebar fixes from the second design review.**
 - **Narrow sheet:** under 860px wide, the sidebar used to shrink to a thin strip below the tabs.
   It now takes its full share of the height.
