@@ -3845,3 +3845,34 @@ every changed module, Handlebars block balance on the two templates, en.json par
 - **Template gotcha.** The `{{#if pending}}...{{else}}...{{/if}}` in roll-card.hbs wraps the dice
   and the summary only; the card's Effect text and the Apply/Card buttons sit outside it so a
   pending card still reads as the card.
+
+### 2026-09-28 -- Live test of 0.19.0, fixed as 0.19.1
+
+Same method as the 0.14 to 0.18 run: `essence-system.bak-0.18.14-2026-09-28` beside `Data/`,
+robocopy `/E` from the clone (the sandbox refuses `/MIR`; `packs/` was deleted and recopied
+instead so no stale LevelDB generation files sat beside the rebuilt ones), Foundry closed and
+relaunched on `essence-test`, driven from the desktop app's built-in browser. The Gamemaster user
+now has a password; Shane logged the pane in by hand. Every check was scripted against `game` and
+the real sheet actions (`sheet.options.actions.rollItem` with a fake target element, dialogs
+driven through their DOM), so the prompts, hooks and templates ran as a player would run them.
+
+**Passed.** Migration (Caelon Voss: old boolean gone, `adaptabilityRerollsUsed` 0, derived 2/2,
+sidebar "2 / 2" with two steppers); rebuilt Defend and Basic Melee text from the compendia; the
+stepper (2/2 -> 1/2); a five-die Non-Combat roll at Difficulty 8 needing 2 Success Dice (reserved
+10 and 7, two gold dice, "2 required" on the card, failure since 7 < 8); the reroll button (use
+spent, original marked "Rerolled", new card titled "(Adaptability reroll)" with the remaining-uses
+note and no second button); Reset Adventure Uses (back to 2/2, chat line names the rerolls); a
+deferred Warp the Footing (prompt defaulted to defer in Combat, "Play" button, pending card with
+"Committed 3 of 6 Action dice · paid 1 Focus", no dice, Roll now and Cancelled); Roll now (Declare
+Fortitude prompt, Success Dice prompt, roll posted "Rolled at resolution" with 2 gold dice, pending
+card "Rolled below." with buttons disabled); Cancelled (confirm, state cancelled, chat line, dice
+still spent); an immediate play with the box unticked; the Elite prompt's Success Dice field (no
+defer box there, by design); Reach floor (reach 0, bonus −2 -> effectiveReach 0). No console error
+named `systems/essence-system`.
+
+**Failed and fixed (0.19.1).** None of the three new chat buttons fired. `renderChatMessageHTML`'s
+Apply/Card loop selects `.rc-actions [data-action]` and assigns `btn.onclick` to every match, so
+it replaced the reroll and pending handlers wired just above it with `fromUuid(undefined)`. The
+loop now skips anything but `applyDamage` and `openCard`. Lesson for the next chat button: that
+loop is a catch-all by selector, not by action name; add new actions to its skip list or give
+them a row class other than `.rc-actions`.

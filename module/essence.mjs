@@ -660,6 +660,9 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
   // The mark is a message flag; a player who cannot edit the message still sees it on their click.
   const applied = new Set(data?.appliedTo ?? []);
   for (const btn of html.querySelectorAll(".rc-actions [data-action]")) {
+    // Only the Apply and Card buttons belong to this loop; the reroll and pending-card buttons
+    // share the .rc-actions row and are wired above (0.19.0).
+    if (!["applyDamage", "openCard"].includes(btn.dataset.action)) continue;
     const markApplied = () => {
       btn.classList.add("applied");
       btn.querySelector(".rc-applied-mark")?.removeAttribute("hidden");

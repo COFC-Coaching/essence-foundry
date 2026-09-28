@@ -2,6 +2,10 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.19.1
+
+**Live-test fix for 0.19.0.** The Adaptability reroll button and the pending card's Roll now and Cancelled buttons did nothing: the chat hook's Apply and Card loop rebinds every button in the actions row and had overwritten their handlers. Only Apply and Card go through that loop now. Verified in the test world: reroll spends a use and posts the rerolled check, Roll now reads targets and the Success Dice requirement then rolls, Cancelled marks the card with its dice still spent.
+
 ## 0.19.0
 
 **The 2026-09-28 rules draft: roll at resolution, multiple Success Dice, Adaptability rerolls per Adventure.**
