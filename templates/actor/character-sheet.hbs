@@ -531,14 +531,14 @@
   <h3 class="section-head">{{localize "ESSENCE.Character.Connections"}} <span class="muted">({{connections.length}} / {{system.connectionLimit}}) · {{localize "ESSENCE.Character.ConnectionsHint"}}</span></h3>
   {{#if connectionsOverLimit}}<p class="muted bio-standing-note">{{localize "ESSENCE.Character.ConnectionsOverLimit" n=system.connectionLimit}}</p>{{/if}}
   <table class="item-table">
-    <thead><tr><th>{{localize "ESSENCE.Common.Name"}}</th><th>{{localize "ESSENCE.Character.ConnectionArea"}}</th><th>{{localize "ESSENCE.Character.ConnectionRelationship"}}</th><th>{{localize "ESSENCE.Character.ConnectionScope"}}</th><th></th></tr></thead>
+    <thead><tr><th>{{localize "ESSENCE.Common.Name"}}</th><th data-tooltip-text="{{localize 'ESSENCE.Character.ConnectionAreaHint'}}">{{localize "ESSENCE.Character.ConnectionArea"}}</th><th data-tooltip-text="{{localize 'ESSENCE.Character.ConnectionRelationshipHint'}}">{{localize "ESSENCE.Character.ConnectionRelationship"}}</th><th class="connection-tier-col" data-tooltip-text="{{localize 'ESSENCE.Character.ConnectionTierHint'}}">{{localize "ESSENCE.Character.ConnectionTier"}}</th><th></th></tr></thead>
     <tbody>
       {{#each connections as |c|}}
         <tr>
           <td><input name="system.connections.{{c.i}}.name" type="text" value="{{c.name}}"></td>
-          <td><input name="system.connections.{{c.i}}.area" type="text" value="{{c.area}}"></td>
-          <td><input name="system.connections.{{c.i}}.relationship" type="text" value="{{c.relationship}}"></td>
-          <td><input name="system.connections.{{c.i}}.scope" type="text" value="{{c.scope}}" placeholder="{{localize 'ESSENCE.Character.ConnectionScopePlaceholder'}}"></td>
+          <td><input name="system.connections.{{c.i}}.area" type="text" value="{{c.area}}" placeholder="{{localize 'ESSENCE.Character.ConnectionAreaPlaceholder'}}"></td>
+          <td><input name="system.connections.{{c.i}}.relationship" type="text" value="{{c.relationship}}" placeholder="{{localize 'ESSENCE.Character.ConnectionRelationshipPlaceholder'}}"></td>
+          <td class="connection-tier-col"><select name="system.connections.{{c.i}}.tier" data-dtype="Number" aria-label="{{localize 'ESSENCE.Character.ConnectionTier'}}">{{#each @root.connectionTierOptions as |o|}}<option value="{{o.value}}" {{#if (eq o.value c.tier)}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></td>
           <td><button type="button" data-action="deleteArrayRow" data-array="connections" data-index="{{c.i}}" aria-label="{{localize 'ESSENCE.Character.DeleteConnectionAria' n=(addOne c.i)}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
       {{/each}}
@@ -721,13 +721,13 @@
               the input is how many gear and features grant. Nothing derives the granted count and
               no Active Effect writes it, so it needs a real input somewhere. --}}
         <span class="side-tile-num-row">
-          <button type="button" class="resource-step" data-action="adjustTempWounds" data-delta="-1" aria-label="{{localize 'ESSENCE.Sheet.DecreaseAria' label=(localize 'ESSENCE.Common.TemporaryWounds')}}" {{#unless system.playState.currentTemporaryWounds}}disabled{{/unless}}>−</button>
-          <span class="side-tile-num">{{system.playState.currentTemporaryWounds}}</span>
-          <button type="button" class="resource-step" data-action="adjustTempWounds" data-delta="1" aria-label="{{localize 'ESSENCE.Sheet.IncreaseAria' label=(localize 'ESSENCE.Common.TemporaryWounds')}}" {{#unless tempWoundsCanRestore}}disabled{{/unless}}>+</button>
+          <button type="button" class="resource-step" data-action="adjustTempWounds" data-delta="-1" aria-label="{{localize 'ESSENCE.Sheet.SpendTempWoundAria'}}" data-tooltip-text="{{localize 'ESSENCE.Sheet.SpendTempWoundAria'}}" {{#unless system.playState.currentTemporaryWounds}}disabled{{/unless}}>−</button>
+          <span class="side-tile-num" role="img" aria-label="{{localize 'ESSENCE.Sheet.TempWoundsRemainingAria' n=system.playState.currentTemporaryWounds}}">{{system.playState.currentTemporaryWounds}}</span>
+          <button type="button" class="resource-step" data-action="adjustTempWounds" data-delta="1" aria-label="{{localize 'ESSENCE.Sheet.RestoreTempWoundAria'}}" data-tooltip-text="{{localize 'ESSENCE.Sheet.RestoreTempWoundAria'}}" {{#unless tempWoundsCanRestore}}disabled{{/unless}}>+</button>
         </span>
         <span class="side-tile-label">{{localize "ESSENCE.Sheet.TemporaryWoundsShort"}}</span>
         <label class="side-tile-note" data-tooltip-text="{{localize 'ESSENCE.Sheet.TemporaryWoundsAvailableHint'}}">{{localize "ESSENCE.Sheet.OfGranted"}}
-          <input class="side-tile-input" type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" min="0" max="5" aria-label="{{localize 'ESSENCE.Sheet.TemporaryWoundsAvailableAria'}}">
+          <input class="side-tile-input" type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" min="0" max="5" aria-label="{{localize 'ESSENCE.Sheet.TemporaryWoundsGrantedAria'}}">
         </label>
       </div>
     </div>
@@ -745,9 +745,9 @@
 
     {{!-- Apply Damage is the action used most in a fight, so it takes the full-width slot. --}}
     <div class="side-actions">
-      <button type="button" class="side-actions-wide" data-action="applyDamage" data-tooltip-text="{{localize 'ESSENCE.Sheet.ApplyDamageHint'}}">{{localize "ESSENCE.Sheet.ApplyDamage"}}</button>
-      <button type="button" data-action="recoverWound" data-tooltip-text="{{localize 'ESSENCE.Sheet.RecoverWoundHint'}}">{{localize "ESSENCE.Sheet.RecoverWound"}}</button>
-      <button type="button" data-action="grantRecovery" data-tooltip-text="{{localize 'ESSENCE.Sheet.GrantRecoveryHint'}}">{{localize "ESSENCE.Sheet.GrantRecovery"}}</button>
+      <button type="button" class="side-actions-wide" data-action="applyDamage" data-tooltip-text="{{localize 'ESSENCE.Sheet.ApplyDamageHint'}}" aria-description="{{localize 'ESSENCE.Sheet.ApplyDamageHint'}}">{{localize "ESSENCE.Sheet.ApplyDamage"}}</button>
+      <button type="button" data-action="recoverWound" data-tooltip-text="{{localize 'ESSENCE.Sheet.RecoverWoundHint'}}" aria-description="{{localize 'ESSENCE.Sheet.RecoverWoundHint'}}">{{localize "ESSENCE.Sheet.RecoverWound"}}</button>
+      <button type="button" data-action="grantRecovery" data-tooltip-text="{{localize 'ESSENCE.Sheet.GrantRecoveryHint'}}" aria-description="{{localize 'ESSENCE.Sheet.GrantRecoveryHint'}}">{{localize "ESSENCE.Sheet.GrantRecovery"}}</button>
     </div>
 
     {{!-- The checkbox carries the state for screen readers, so the Available/Used word is hidden
@@ -784,7 +784,7 @@
               {{!-- The rule text is folded: a Condition such as Fatigued runs to a dozen lines, and
                     the sidebar is for seeing what is active at a glance. --}}
               {{!-- data-item-id lets the sheet reopen this after a re-render (see #keepConditionRulesOpen). --}}
-              <details class="condition-rules" data-item-id="{{item.id}}">
+              <details class="condition-rules" data-item-id="{{item.id}}" {{#if (lookup @root.openConditionRules item.id)}}open{{/if}}>
                 <summary aria-label="{{localize 'ESSENCE.Sheet.ConditionRulesAria' name=item.name}}">{{localize "ESSENCE.Sheet.ConditionRules"}}</summary>
                 {{#each item.system.sections as |s|}}
                   <div class="condition-section"><span class="condition-label">{{s.label}}</span> {{{s.html}}}</div>

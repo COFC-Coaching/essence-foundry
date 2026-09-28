@@ -6,6 +6,9 @@ const { fields } = foundry.data;
 
 /** Adds the player-only fluff (Concept, Career, Non-Combat Skills, etc.) on top of the combat
  * fields every combatant shares — see actor-combatant.mjs. */
+const CONNECTION_TIER_MIN = 1;
+const CONNECTION_TIER_MAX = 5;
+
 export default class EssenceCharacterData extends EssenceCombatantData {
   /**
    * A character always has five Core Wound spaces and five Core Influence spaces: Light, Light,
@@ -27,6 +30,22 @@ export default class EssenceCharacterData extends EssenceCombatantData {
         : { filled: false, severity: "", condition: "" };
       while (track.length < SEVERITY_BY_INDEX.length) track.push({ ...blank });
       recordRepair(source, { path: key, from: `${from} spaces`, to: `${SEVERITY_BY_INDEX.length} spaces`, kind: "restored" });
+    }
+    // 0.18.9: a Connection's free-text `scope` became a 1-5 `tier`. A number in the old text
+    // ("2", "Tier 3") becomes the Tier; any other words are kept by appending them to the Area of
+    // Involvement, which now describes what the ally can do for you, so nothing typed is lost.
+    if (Array.isArray(source?.connections)) {
+      source.connections.forEach((c, i) => {
+        if (!c || typeof c !== "object" || !("scope" in c)) return;
+        const scope = String(c.scope ?? "").trim();
+        delete c.scope;
+        if (c.tier !== undefined && c.tier !== null) return;
+        const n = Number(scope.match(/\d+/)?.[0]);
+        c.tier = Number.isFinite(n) ? Math.min(CONNECTION_TIER_MAX, Math.max(CONNECTION_TIER_MIN, n)) : CONNECTION_TIER_MIN;
+        const words = scope.replace(/^\s*(tier|t)?\s*\d+\s*[:\-–—,.]?\s*/i, "").trim();
+        if (words) c.area = c.area ? `${c.area} (${words})` : words;
+        if (scope) recordRepair(source, { path: `connections.${i}.scope`, from: scope, to: `Tier ${c.tier}`, kind: "restored" });
+      });
     }
     return source;
   }
@@ -54,14 +73,15 @@ export default class EssenceCharacterData extends EssenceCombatantData {
       // Entered by hand from the granting feature's text; nothing derives it.
       skillPointBonus: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0 }),
       // v0.6 Part II "Connections" (Doc L1155): up to permanent Presence dependable allies, each with
-      // "a name, an area of involvement, and a relationship to you". `scope` is the Team Tier or
-      // reach of the ally's help, agreed with the GM (Doc L2608). Relationships gained through play
-      // are unrestricted, so the sheet warns past the allowance rather than blocking (L7832).
+      // "a name, an area of involvement, and a relationship to you". `tier` (1-5) is the Tier of
+      // the ally's help, agreed with the GM (Doc L2608); it replaced the free-text `scope` in
+      // 0.18.9 (see migrateData). Relationships gained through play are unrestricted, so the sheet
+      // warns past the allowance rather than blocking (L7832).
       connections: new fields.ArrayField(new fields.SchemaField({
         name: new fields.StringField({ initial: "" }),
         area: new fields.StringField({ initial: "" }),
         relationship: new fields.StringField({ initial: "" }),
-        scope: new fields.StringField({ initial: "" })
+        tier: new fields.NumberField({ required: true, integer: true, initial: CONNECTION_TIER_MIN, min: CONNECTION_TIER_MIN, max: CONNECTION_TIER_MAX })
       })),
       nonCombatSkills: new fields.ArrayField(new fields.SchemaField({
         name: new fields.StringField({ initial: "" }),

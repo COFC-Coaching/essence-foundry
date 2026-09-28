@@ -60,7 +60,7 @@ const ATTR_BENEFIT = {
 /** Default new-row shape for each free-length array field, keyed by the sheet's data-array value. */
 const ARRAY_ROW_DEFAULTS = {
   nonCombatSkills: { name: "", rating: 0 },
-  connections: { name: "", area: "", relationship: "", scope: "" },
+  connections: { name: "", area: "", relationship: "", tier: 1 },
   passiveFeatures: { name: "", source: "", text: "" },
   reachTriggers: { name: "", tempBonus: 1, tempInfluenceGrant: 0, usedThisAdventure: false, active: false }
 };
@@ -204,6 +204,23 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     this.#wireExpertiseSelects();
   }
 
+  /** Condition ids whose "Rules" fold is open. Every sheet action re-renders the sidebar, which
+   *  would otherwise close an open fold mid-combat (0.18.8). Not persisted: it is view state. The
+   *  template renders these folds already open (context.openConditionRules), so the sidebar's
+   *  restored scroll position lands on the full-height content instead of jumping (0.18.9); this
+   *  only records what the user opens and closes. */
+  #openConditionRules = new Set();
+
+  #keepConditionRulesOpen() {
+    for (const details of this.element.querySelectorAll("details.condition-rules[data-item-id]")) {
+      const id = details.dataset.itemId;
+      details.addEventListener("toggle", () => {
+        if (details.open) this.#openConditionRules.add(id);
+        else this.#openConditionRules.delete(id);
+      });
+    }
+  }
+
   /**
    * An Expertise's name <select> used to submit as `system.expertises.{i}.name` and rely on
    * Foundry's own form-submission path to merge it into the array — but ArrayField sub-fields
@@ -212,21 +229,6 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    * list (it's filtered by `skill` in _prepareContext). Read-modify-write the whole array in JS
    * instead, the same safe pattern #onAddExpertise/#onAddRite/etc. already use elsewhere.
    */
-  /** Condition ids whose "Rules" fold is open. Every sheet action re-renders the sidebar, which
-   *  would otherwise close an open fold mid-combat (0.18.8). Not persisted: it is view state. */
-  #openConditionRules = new Set();
-
-  #keepConditionRulesOpen() {
-    for (const details of this.element.querySelectorAll("details.condition-rules[data-item-id]")) {
-      const id = details.dataset.itemId;
-      if (this.#openConditionRules.has(id)) details.open = true;
-      details.addEventListener("toggle", () => {
-        if (details.open) this.#openConditionRules.add(id);
-        else this.#openConditionRules.delete(id);
-      });
-    }
-  }
-
   #wireExpertiseSelects() {
     for (const select of this.element.querySelectorAll(".expertise-name-select")) {
       select.addEventListener("change", async (event) => {
@@ -501,6 +503,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
     context.keyAspects = system.keyAspects.map((value, i) => ({ value, i, n: i + 1 }));
     context.connections = system.connections.map((c, i) => ({ ...c, i }));
+    context.connectionTierOptions = [1, 2, 3, 4, 5].map((n) => ({ value: n, label: game.i18n.format("ESSENCE.Character.ConnectionTierOption", { n }) }));
     context.connectionsOverLimit = system.connections.length > (system.connectionLimit ?? 0);
     context.temporaryWoundPips = pips(system.playState.currentTemporaryWounds, system.temporaryWoundsAvailable);
     // V6: track length is deathTrackMax (5, or 7 for Deathless — design/v6-revision-delta.md §2.3).
@@ -585,6 +588,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     context.basicReactionCards = allReactionCards.filter((i) => !i.system.skill).map(cardView).sort(byName);
     context.reactionCards = allReactionCards.filter((i) => i.system.skill).map(cardView);
     context.conditions = this.actor.items.filter((i) => i.type === "condition");
+    context.openConditionRules = Object.fromEntries([...this.#openConditionRules].map((id) => [id, true]));
     // Team Tier access (computeTierGate in utils.mjs, Doc L1793): each Chassis and Fitting Tier
     // against the Team's Tier. A soft warning only; obtained gear is always usable. Reach still
     // absorbs the Influence cost of getting an item and is shown on the Non-Combat tab.

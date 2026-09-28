@@ -170,7 +170,9 @@
 .essence .side-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto auto; gap: 0 6px; margin-bottom: 10px; }
 .essence .side-tile { display: grid; grid-row: span 3; grid-template-rows: subgrid; justify-items: center; align-items: center; row-gap: 3px; padding: 6px 4px; border-radius: var(--essence-radius-sm); background: var(--essence-well); border: 1px solid var(--essence-line); min-width: 0; }
 .essence .side-tile-num { font-family: var(--essence-font-display); font-size: 1.8em; line-height: 1; color: var(--essence-ink-bright); font-variant-numeric: tabular-nums; min-width: 1.2em; text-align: center; }
-.essence .side-tile-num-row { display: flex; align-items: center; gap: 6px; }
+.essence .side-tile-num-row { display: flex; align-items: center; gap: 4px; }
+.essence .side-tile-num-row .side-tile-num { min-width: 1em; }
+.essence .side-tile-num-row .resource-step { width: 24px; height: 24px; }
 .essence .side-tile-num-row .resource-step:disabled { opacity: 0.35; cursor: default; }
 .essence .side-tile-label,
 .essence .side-sublabel { font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; color: var(--essence-muted); line-height: 1.3; }
@@ -202,8 +204,12 @@
 .essence .sheet-side .wounds-row { flex-direction: column; align-items: stretch; gap: 6px; margin: 10px 0 0; padding-top: 8px; border-top: 1px solid var(--essence-line); }
 .essence .sheet-side .wound-block { flex-direction: column; align-items: stretch; gap: 5px; }
 .essence .sheet-side .wound-block .attr-label { flex: 0 0 auto; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; color: var(--essence-muted); }
-.essence .sheet-side .wound-block .attr-label .muted { color: var(--essence-condition-ink); opacity: 1; text-transform: none; letter-spacing: 0; font-weight: 600; }
-.essence .sheet-side .wounds-row .pip-track { display: grid; grid-template-columns: repeat(auto-fill, minmax(26px, 1fr)); gap: 6px; }
+.essence .sheet-side .wound-block .attr-label .muted { color: var(--essence-muted); opacity: 1; text-transform: none; letter-spacing: 0; font-weight: 600; }
+.essence .sheet-side .death-track[data-state="dying"] .attr-label .muted,
+.essence .sheet-side .death-track[data-state="dead"] .attr-label .muted { color: var(--essence-condition-ink); }
+.essence .sheet-side .death-track[data-state="stabilized"] .attr-label .muted { color: var(--essence-success-ink); }
+/* One equal column per step, like the Core Wound track above: 5 steps, or 7 for Deathless. */
+.essence .sheet-side .wounds-row .pip-track { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; }
 .essence .sheet-side .wounds-row .pip.toggle { width: auto; height: 26px; border-radius: var(--essence-radius-sm); }
 .essence .sheet-side .condition-list { gap: 4px; }
 .essence .side-add { font-size: 1em; min-height: 24px; padding: 2px 8px; line-height: 1.2; text-transform: none; letter-spacing: 0; }
@@ -234,7 +240,9 @@
 @container (max-width: 860px) {
   .essence.character .essence-sheet-root { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 3fr) minmax(0, 2fr); }
   .essence.character .essence-sheet-root > .sheet-scroll { grid-column: 1; grid-row: 3; }
-  .essence.character .essence-sheet-root > .sheet-side { grid-column: 1; grid-row: 4; width: auto; max-height: 40%; }
+  /* The grid row (2fr of the height) already bounds the sidebar; a percentage max-height on top
+     resolved against that row and shrank it to an 81px strip (0.18.9). */
+  .essence.character .essence-sheet-root > .sheet-side { grid-column: 1; grid-row: 4; width: auto; max-height: none; }
 }
 .application.essence.actor { min-width: 560px; min-height: 420px; }
 /* DialogV2 width defaults to auto in v14, so a prompt with a stretchy column (a select in a 1fr
@@ -706,6 +714,9 @@
   font-size: 0.78em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.65; font-weight: normal;
 }
 .essence .item-table tbody tr { border-bottom: 1px solid rgba(var(--essence-ink-rgb), 0.08); }
+/* Connections: Tier is a 1-5 dropdown (0.18.9), so its column only needs to fit "Tier 5". */
+.essence .item-table .connection-tier-col { width: 6.5em; }
+.essence .item-table .connection-tier-col select { width: 100%; }
 .essence .item-table tbody tr:last-child { border-bottom: none; }
 /* Rows in the Equipment tables are draggable and individually actionable (View/Edit/Move/Delete),
    so unlike a plain data table they benefit from the same "this row responds" cue a card-list row
@@ -807,14 +818,22 @@
 .essence.roll-card .dice-roll .dice-result { color: inherit; }
 .essence.roll-card .dice-formula { display: inline-block; margin: 0 0 4px; padding: 0; border: none; background: none; box-shadow: none; font-size: 0.85em; color: var(--essence-muted); text-align: left; }
 .essence.roll-card .dice-faces { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: 0 0 8px; }
+/* Dice are drawn d10s (0.18.9): templates/chat/d10-shape.hbs is the silhouette, the number sits on
+   the kite-shaped top face. Colour comes from the die's role, as in the concept. */
 .essence.roll-card .die {
-  display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; box-sizing: border-box;
-  border-radius: 7px; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums;
-  background: var(--essence-well); border: 1px solid var(--essence-line-bright); color: var(--essence-muted);
+  --d10-fill: var(--essence-well); --d10-face: var(--essence-panel); --d10-line: var(--essence-line-bright); --d10-ink: var(--essence-ink);
+  position: relative; display: inline-flex; flex: 0 0 auto; width: 34px; height: 37px;
+  font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--d10-ink);
 }
-.essence.roll-card .die.success-die { background: var(--essence-accent); border-color: var(--essence-accent); color: var(--essence-accent-ink); box-shadow: 0 0 0 3px rgba(var(--essence-accent-rgb), 0.25); }
-.essence.roll-card .die.surge-die { background: var(--essence-success); border-color: var(--essence-success); color: var(--essence-ink-bright); }
-.essence.roll-card .die.burned-die { background: transparent; border-style: dashed; color: var(--essence-line-bright); }
+.essence.roll-card .die .d10 { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.essence.roll-card .die .d10-body { fill: var(--d10-fill); stroke: var(--d10-line); stroke-width: 1.2; stroke-linejoin: round; }
+.essence.roll-card .die .d10-face { fill: var(--d10-face); stroke: var(--d10-line); stroke-width: 1; stroke-linejoin: round; }
+.essence.roll-card .die .d10-edge { fill: none; stroke: var(--d10-line); stroke-width: 1; }
+.essence.roll-card .die .die-num { position: absolute; left: 0; right: 0; top: 12px; text-align: center; line-height: 1; }
+.essence.roll-card .die.success-die { --d10-fill: #b8944f; --d10-face: var(--essence-accent); --d10-line: #7a6232; --d10-ink: var(--essence-accent-ink); filter: drop-shadow(0 0 3px rgba(var(--essence-accent-rgb), 0.45)); }
+.essence.roll-card .die.surge-die { --d10-fill: #256a29; --d10-face: var(--essence-success); --d10-line: #174a1a; --d10-ink: #fff; }
+.essence.roll-card .die.burned-die { --d10-fill: transparent; --d10-face: transparent; --d10-ink: var(--essence-line-bright); }
+.essence.roll-card .die.burned-die .d10 * { stroke-dasharray: 2.5 2; }
 .essence.roll-card .rc-dice-note { margin-left: 4px; font-size: 0.85em; color: var(--essence-muted); }
 .essence.roll-card .roll-summary { padding: 0 10px 8px; }
 .essence.roll-card .roll-summary p { margin: 2px 0; }
@@ -850,6 +869,10 @@
 .essence.roll-card .rc-sec > b { flex: 0 0 60px; padding-top: 2px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--essence-muted); }
 .essence.roll-card .rc-sec > span > p { margin: 0; }
 .essence.roll-card .rc-rider { border-top: 1px dashed var(--essence-line-dashed); padding-top: 6px; }
+.essence.roll-card .rc-lead { margin: 0 10px 6px; }
+.essence.roll-card .rc-cont { margin-top: -2px; }
+.essence.roll-card .rc-lbl-row { margin: 6px 0 2px; }
+.essence.roll-card .rc-text + .rc-actions { padding-top: 0; }
 
 /* ============ Card sheet: read view (plan step 6) ============
    Framed like the printed card: a type band, the name, Style and Rank chips, Requires, the four

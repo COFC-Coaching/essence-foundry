@@ -268,6 +268,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     context.actor = actor;
     context.system = system;
     context.steps = STEPS.map((name, i) => ({ name, i }));
+    context.connectionTierOptions = [1, 2, 3, 4, 5].map((n) => ({ value: n, label: game.i18n.format("ESSENCE.Character.ConnectionTierOption", { n }) }));
     context.step = this.#step;
     // Team Tier is the Team's (actor-team.mjs), shown read-only; the GM sets it on the Team sheet.
     context.team = teamForActor(this.document);
@@ -849,7 +850,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     if (connections.length >= (this.document.system.connectionLimit ?? 0)) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Character.ConnectionsOverLimit", { n: this.document.system.connectionLimit }));
     }
-    connections.push({ name: "", area: "", relationship: "", scope: "" });
+    connections.push({ name: "", area: "", relationship: "", tier: 1 });
     await this.document.update({ "system.connections": connections });
   }
 

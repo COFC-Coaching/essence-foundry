@@ -7,7 +7,7 @@
   and EssenceNpcSheet#_prepareContext (inherited unchanged by EssenceMonsterSheet) the same way.
 --}}
 {{#if deathTrackActive}}
-  <div class="wounds-row">
+  <div class="wounds-row death-track" data-state="{{system.playState.deathTrackState}}">
     <div class="wound-block">
       <span class="attr-label">{{localize "ESSENCE.Sheet.DeathTrack"}} <span class="muted">— {{localize (concat "ESSENCE.Sheet.DeathTrackState" (capitalize system.playState.deathTrackState))}}</span></span>
       <span class="pip-track">

@@ -16,6 +16,13 @@ export default class EssenceActor extends Actor {
   async _preUpdate(changes, options, user) {
     const sys = changes.system;
     if (sys) for (const k of ATTRIBUTES) if (typeof sys[k] === "number" && sys[k] < 1) sys[k] = 1;
+    // Lowering the Temporary Wounds granted below the number still available would leave the
+    // sidebar reading "3 of 1" and let Apply Damage spend Wounds the character no longer has.
+    if (sys && typeof sys.temporaryWoundsAvailable === "number") {
+      const granted = Math.max(0, sys.temporaryWoundsAvailable);
+      const current = sys.playState?.currentTemporaryWounds ?? this.system?.playState?.currentTemporaryWounds ?? 0;
+      if (current > granted) foundry.utils.setProperty(changes, "system.playState.currentTemporaryWounds", granted);
+    }
     return super._preUpdate(changes, options, user);
   }
   /**

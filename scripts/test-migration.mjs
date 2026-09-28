@@ -210,8 +210,8 @@ check("Size above 5 is clamped", migrate(EssenceCharacterData, { size: 9 }).size
 check("Size below 0 is clamped", migrate(EssenceCharacterData, { size: -1 }).size, 0);
 check("Languages and skillPointBonus load", migrate(EssenceCharacterData, { languages: "Common, Old Tongue", skillPointBonus: 1 }).languages, "Common, Old Tongue");
 check("Connection rows keep their fields",
-  migrate(EssenceCharacterData, { connections: [{ name: "Bren", area: "docks", relationship: "cousin", scope: "local" }] }).connections,
-  [{ name: "Bren", area: "docks", relationship: "cousin", scope: "local" }]);
+  migrate(EssenceCharacterData, { connections: [{ name: "Bren", area: "docks", relationship: "cousin", tier: 2 }] }).connections,
+  [{ name: "Bren", area: "docks", relationship: "cousin", tier: 2 }]);
 check("a stored Intellect-sourced Skill still loads", migrate(EssenceCharacterData, { nonCombatSkills: [{ name: "History", rating: 1, source: "intellect" }] }).nonCombatSkills[0].source, "intellect");
 check("a Distinction saved before acquiredLater loads", migrate(EssenceDistinctionData, { keyCombatSkill: "Cunning" }).keyCombatSkill, "Cunning");
 
@@ -243,6 +243,19 @@ check("a short Core Influence track is padded to five",
   migrate(EssenceCharacterData, { coreInfluence: [{ filled: false, severity: "", condition: "" }] }).coreInfluence.length, 5);
 check("an enemy's track is sized by Grade, never padded here",
   migrate(EssenceNpcData, { coreWounds: [wound(false), wound(false)] }).coreWounds.length, 2);
+
+console.log("\n--- a Connection's Scope became a 1-5 Tier (0.18.9) ---");
+const conn = (scope, extra = {}) => migrate(EssenceCharacterData, { connections: [{ name: "Ilsa", area: "fencing goods", relationship: "old friend", scope, ...extra }] }).connections[0];
+check("a numeric Scope becomes the Tier", conn("3").tier, 3);
+check("\"Tier 2\" becomes Tier 2", conn("Tier 2").tier, 2);
+check("a Scope above 5 is clamped", conn("9").tier, 5);
+check("a word-only Scope defaults to Tier 1", conn("what help is reasonable").tier, 1);
+check("a word-only Scope is kept in the Area", conn("local favours").area, "fencing goods (local favours)");
+check("words after a Tier number are kept", conn("T2 - city watch only").area, "fencing goods (city watch only)");
+check("an empty Scope leaves the Area alone", conn("").area, "fencing goods");
+check("the old scope key is gone", "scope" in conn("2"), false);
+check("an existing Tier is not overwritten", conn("4", { tier: 2 }).tier, 2);
+check("Scope text fills an empty Area", migrate(EssenceCharacterData, { connections: [{ name: "Ilsa", area: "", scope: "docks" }] }).connections[0].area, "docks");
 
 console.log(`\n${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);

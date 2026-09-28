@@ -61,7 +61,8 @@ Hooks.once("init", () => {
   // template AND registers it as a partial when given an array of paths.
   foundry.applications.handlebars.loadTemplates([
     "systems/essence-system/templates/actor/parts/death-track.hbs",
-    "systems/essence-system/templates/actor/parts/wounds-header.hbs"
+    "systems/essence-system/templates/actor/parts/wounds-header.hbs",
+    "systems/essence-system/templates/chat/d10-shape.hbs"
   ]);
 
   CONFIG.Actor.dataModels.character = EssenceCharacterData;

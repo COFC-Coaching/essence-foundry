@@ -181,9 +181,9 @@
     {{#each system.connections as |c i|}}
       <div class="wizard-row">
         <input type="text" name="system.connections.{{i}}.name" value="{{c.name}}" placeholder="{{localize 'ESSENCE.Common.Name'}}">
-        <input type="text" name="system.connections.{{i}}.area" value="{{c.area}}" placeholder="{{localize 'ESSENCE.Character.ConnectionArea'}}">
-        <input type="text" name="system.connections.{{i}}.relationship" value="{{c.relationship}}" placeholder="{{localize 'ESSENCE.Character.ConnectionRelationship'}}">
-        <input type="text" name="system.connections.{{i}}.scope" value="{{c.scope}}" placeholder="{{localize 'ESSENCE.Character.ConnectionScopePlaceholder'}}">
+        <input type="text" name="system.connections.{{i}}.area" value="{{c.area}}" placeholder="{{localize 'ESSENCE.Character.ConnectionAreaPlaceholder'}}" aria-label="{{localize 'ESSENCE.Character.ConnectionArea'}}" data-tooltip-text="{{localize 'ESSENCE.Character.ConnectionAreaHint'}}">
+        <input type="text" name="system.connections.{{i}}.relationship" value="{{c.relationship}}" placeholder="{{localize 'ESSENCE.Character.ConnectionRelationshipPlaceholder'}}" aria-label="{{localize 'ESSENCE.Character.ConnectionRelationship'}}" data-tooltip-text="{{localize 'ESSENCE.Character.ConnectionRelationshipHint'}}">
+        <select name="system.connections.{{i}}.tier" data-dtype="Number" aria-label="{{localize 'ESSENCE.Character.ConnectionTier'}}" data-tooltip-text="{{localize 'ESSENCE.Character.ConnectionTierHint'}}">{{#each @root.connectionTierOptions as |o|}}<option value="{{o.value}}" {{#if (eq o.value c.tier)}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>
         <button type="button" data-action="deleteConnection" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Character.DeleteConnectionAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button>
       </div>
     {{/each}}

@@ -10,6 +10,9 @@
       <span>{{#if card.style}}{{card.style}} R{{card.rank}}{{else if card.domainLabel}}{{card.domainLabel}}{{/if}}</span>
     </div>
     <h2 class="rc-title">{{label}}</h2>
+    {{#each card.lead as |line|}}
+      <div class="rc-sec rc-lead"><b>{{line.label}}</b><span>{{{line.html}}}</span></div>
+    {{/each}}
     {{#if play}}
       <p class="rc-meta">
         {{#if play.burnOnly}}{{localize "ESSENCE.Chat.Burned" n=play.committed pool=play.poolLabel}}{{else}}{{localize "ESSENCE.Chat.Committed" n=play.committed max=play.available pool=play.poolLabel}}{{/if}}{{#if play.burned}} · {{localize "ESSENCE.Chat.RolledBurned" rolled=play.rolled burned=play.burned}}{{/if}}{{#if play.cost}} · {{localize "ESSENCE.Chat.Paid" cost=play.cost resource=play.resource}}{{/if}}{{#if play.hasAfter}} · {{localize "ESSENCE.Chat.PoolAfter" pool=play.poolLabel before=play.available after=play.after}}{{/if}}
@@ -19,16 +22,18 @@
     <h3 class="rc-title">{{label}}</h3>
   {{/if}}
 
+  {{!-- Each die is drawn as a d10: a kite-shaped top face inside the ten-sided silhouette, the
+        number on the face. Gold is the Success Die, green made a Surge, dashed was burned. --}}
   <div class="dice-roll">
     <div class="dice-result">
-      <div class="dice-formula">{{pool}}d10{{#if defense}} {{localize "ESSENCE.Chat.VsDefense" defense=defense}}{{/if}}{{#if difficulty}} {{localize "ESSENCE.Chat.VsDifficulty" difficulty=difficulty}}{{/if}}</div>
+      {{#unless card}}<div class="dice-formula">{{pool}}d10{{#if defense}} {{localize "ESSENCE.Chat.VsDefense" defense=defense}}{{/if}}{{#if difficulty}} {{localize "ESSENCE.Chat.VsDifficulty" difficulty=difficulty}}{{/if}}</div>{{/unless}}
       <div class="dice-faces">
         {{#each faces as |face i|}}
           {{!-- The Success Die never carries surge-die: Surges are counted after the Defense check
                and the Success Die is excluded from that count (resolveCombatRoll). --}}
-          <span class="die {{#if (eq i ../successDieIndex)}}success-die{{/if}} {{#if (and (gte face 6) (ne i ../successDieIndex))}}surge-die{{/if}}" aria-label="{{face}}">{{face}}</span>
+          <span class="die {{#if (eq i ../successDieIndex)}}success-die{{/if}} {{#if (and (gte face 6) (ne i ../successDieIndex))}}surge-die{{/if}}" role="img" aria-label="{{#if (eq i ../successDieIndex)}}{{localize 'ESSENCE.Chat.SuccessDieAria' n=face}}{{else if (gte face 6)}}{{localize 'ESSENCE.Chat.SurgeDieAria' n=face}}{{else}}{{localize 'ESSENCE.Chat.RolledDieAria' n=face}}{{/if}}">{{> "systems/essence-system/templates/chat/d10-shape.hbs"}}<span class="die-num">{{face}}</span></span>
         {{/each}}
-        {{#if play.burned}}{{#each play.burnedList}}<span class="die burned-die" aria-label="{{localize 'ESSENCE.Chat.BurnedDie'}}">·</span>{{/each}}{{/if}}
+        {{#if play.burned}}{{#each play.burnedList}}<span class="die burned-die" role="img" aria-label="{{localize 'ESSENCE.Chat.BurnedDie'}}">{{> "systems/essence-system/templates/chat/d10-shape.hbs"}}<span class="die-num">·</span></span>{{/each}}{{/if}}
         {{#if card.attr}}<span class="rc-dice-note">{{card.attr}}{{#if play.maxRolled}}, {{localize "ESSENCE.Chat.Max" n=play.maxRolled}}{{/if}}</span>{{/if}}
       </div>
     </div>
@@ -68,8 +73,8 @@
     {{#if noSurges}}
       <p class="muted no-surges-note"><strong>{{localize "ESSENCE.Chat.Surges"}}:</strong> {{localize "ESSENCE.Chat.NoSurgesMook"}}</p>
     {{else if openRoll}}
+      <p class="rc-lbl-row"><span class="rc-lbl">{{localize "ESSENCE.Chat.Surges"}}</span></p>
       <p class="muted open-roll-note">
-        <strong>{{localize "ESSENCE.Chat.Surges"}}:</strong>
         {{#if (eq surges 1)}}{{localize "ESSENCE.Chat.OpenRollNoteSingular" surges=surges}}{{else}}{{localize "ESSENCE.Chat.OpenRollNotePlural" surges=surges}}{{/if}}
       </p>
     {{else if surgeOptions.length}}
@@ -87,20 +92,20 @@
     {{/if}}
   </div>
 
-  {{#if card}}
-    <div class="rc-actions">
-      {{#each applyTargets as |t|}}<button type="button" class="rc-apply" data-action="applyDamage" data-uuid="{{t.uuid}}">{{localize "ESSENCE.Chat.ApplyDamageTo" name=t.name}}</button>{{/each}}
-      {{#if cardUuid}}<button type="button" class="rc-card" data-action="openCard" data-uuid="{{cardUuid}}">{{localize "ESSENCE.Chat.OpenCard"}}</button>{{/if}}
-    </div>
-  {{/if}}
-  {{#if card.body.length}}
+  {{#if (or card.body.length card.rider)}}
     <div class="rc-text">
       {{#each card.body as |line|}}
-        <div class="rc-sec"><b>{{line.label}}</b><span>{{{line.html}}}</span></div>
+        <div class="rc-sec{{#unless line.label}} rc-cont{{/unless}}"><b>{{line.label}}</b><span>{{{line.html}}}</span></div>
       {{/each}}
       {{#if card.rider}}
         <div class="rc-sec rc-rider"><b>{{localize "ESSENCE.Item.Card.Rider"}}</b><span>{{#if card.rider.title}}<strong class="rc-accent">{{card.rider.title}}</strong> {{/if}}{{{card.rider.html}}}{{#if card.rider.meta}} <span class="muted">{{card.rider.meta}}</span>{{/if}}</span></div>
       {{/if}}
+    </div>
+  {{/if}}
+  {{#if card}}
+    <div class="rc-actions">
+      {{#each applyTargets as |t|}}<button type="button" class="rc-apply" data-action="applyDamage" data-uuid="{{t.uuid}}">{{localize "ESSENCE.Chat.ApplyDamageTo" name=t.name}}</button>{{/each}}
+      {{#if cardUuid}}<button type="button" class="rc-card" data-action="openCard" data-uuid="{{cardUuid}}">{{localize "ESSENCE.Chat.OpenCard"}}</button>{{/if}}
     </div>
   {{/if}}
 </div>

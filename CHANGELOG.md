@@ -2,6 +2,38 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.9
+
+**Connections: Area of Involvement, Relationship and Tier.**
+- **Area of Involvement:** the field hint now says "their job, what they can do for you".
+- **Relationship:** the hint says "how you are related".
+- **Tier replaces Scope:** it's a dropdown from Tier 1 to Tier 5, on the sheet and in the
+  Character Wizard.
+- **Nothing typed is lost:** a number in an old Scope ("2", "Tier 3") becomes the Tier. Any other
+  words are added to the end of Area of Involvement in brackets, and the Tier starts at 1.
+
+**Chat cards match the concept, with d10 dice.**
+- **Dice:** each die is drawn as a d10. Gold is the Success Die, green dice made Surges, and dashed
+  dice were burned.
+- **Order:** a Reaction's Trigger now sits above the commit line. Effect and Rider come before the
+  Apply Damage and Card buttons, which now sit at the bottom of the card.
+- **Labels:** the "2d10" formula line is gone from card plays. A card with two sections under the
+  same label, such as two Effect lines, shows the label once.
+- **Older messages:** chat cards already posted keep their old look.
+
+**Sidebar fixes from the second design review.**
+- **Narrow sheet:** under 860px wide, the sidebar used to shrink to a thin strip below the tabs.
+  It now takes its full share of the height.
+- **Death Track:** its steps fill one row, like the Core Wound boxes. The state is red for Dying
+  and Dead, green for Stabilized, and neutral otherwise.
+- **Temporary Wounds:** the − and + buttons are bigger and say "Spend" and "Restore a Temporary
+  Wound". Lowering the number granted also lowers the number still available, so the tile can no
+  longer read "3 of 1".
+- **Conditions:** an open Rules section no longer makes the sidebar jump when the sheet
+  refreshes.
+- **Keyboard:** Apply Damage, Recover Wound and Grant Recovery describe themselves to screen
+  readers, not only in hover tooltips.
+
 ## 0.18.8
 
 Fixes from a design review of the 0.18.7 sidebar.

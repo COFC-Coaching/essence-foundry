@@ -104,6 +104,15 @@ const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : "");
 
 /** The card half of a chat card (plan step 6): kind, band text, body lines and Rider, read off
  *  the played Item so the chat card shows what the card says without reopening it. */
+/** Splits a card's rules sections into the Trigger lines shown above the roll and the rest shown
+ *  after it, blanking a label that repeats the previous section's. */
+export function splitCardBody(lines) {
+  const lead = []; const body = [];
+  for (const l of lines) (/^\s*trigger\s*$/i.test(l.label ?? "") ? lead : body).push(l);
+  const dedupe = (list) => list.map((l, i) => ({ ...l, label: i && (list[i - 1].label ?? "").trim().toLowerCase() === (l.label ?? "").trim().toLowerCase() ? "" : l.label }));
+  return { lead: dedupe(lead), body: dedupe(body) };
+}
+
 export function cardChatContext(item) {
   if (!item) return null;
   const sys = item.system ?? {};
@@ -113,7 +122,10 @@ export function cardChatContext(item) {
   return {
     kind, kindLabel, name: item.name, subtype: sys.subtype || "", style: sys.skill ? cap(sys.skill) : "", rank: sys.rank ?? 0,
     domainLabel: sys.domain ? cap(sys.domain) : "", attr: sys.attr ? cap(sys.attr) : "",
-    body: (sys.body ?? []).filter((l) => l?.html),
+    // The concept's order: a Trigger states why the card fired, so it sits above the commit line;
+    // every other section follows the roll. A section whose label repeats the one before it (two
+    // Effect lines) shows its label once, as a continuation (0.18.9).
+    ...splitCardBody((sys.body ?? []).filter((l) => l?.html)),
     rider: sys.rider?.html ? sys.rider : null
   };
 }
