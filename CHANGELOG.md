@@ -12,7 +12,7 @@ empty right side. The layout no longer jumps from three columns to two as the sh
 very narrow sheet the boxes stack in one column. NPC and Monster sheets are unchanged.
 
 **The Character sheet opens narrower.** It now opens 960px wide instead of 1080. Every tab fits
-beside the vitals sidebar at that width. A sheet you've already resized keeps its size.
+beside the vitals sidebar at that width. You can still drag it wider.
 
 ## 0.18.12
 
