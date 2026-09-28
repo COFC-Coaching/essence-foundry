@@ -2,7 +2,7 @@ import { deriveEquipmentStats, buildEquipmentResolver } from "../data/equipment-
 import { SUBTYPE_DATABASE } from "../data/expertise-database.mjs";
 import { CHASSIS_LABELS, FITTING_LABELS } from "../data/item-component.mjs";
 import { EQUIPMENT_CATEGORY_LABELS, MODULAR_EQUIPMENT_CATEGORIES } from "../data/item-card.mjs";
-import { fittingReconfigureCost } from "../utils.mjs";
+import { fittingReconfigureCost, assembledComponentIds } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -357,8 +357,29 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
     delete data._id;
     delete data.folder;
     foundry.utils.setProperty(data, "_stats.compendiumSource", doc.uuid);
+    // Marks the copy as made for this item, so swapping it out removes it instead of leaving it as
+    // loose gear in the Armory (#releaseReplacedComponent). A Component the character owned
+    // before assembling carries no mark and stays theirs when swapped out.
+    foundry.utils.setProperty(data, "flags.essence-system.assembledInto", this.item.id);
     const [created] = await actor.createEmbeddedDocuments("Item", [data]);
     return created?.id ?? id;
+  }
+
+  /**
+   * After a Chassis, Fitting or Augment is swapped or cleared (0.18.10): the old one, if this
+   * sheet copied it from the catalog for this item and nothing else still uses it, is deleted.
+   * Picking "Stable Focus" and then "Channeling Focus" used to leave the Stable Focus copy behind
+   * as a loose Chassis in the Armory, costing half a slot. A Component the character already owned
+   * (dragged in, bought, found) has no mark and is left as loose gear, which is what it then is.
+   */
+  async #releaseReplacedComponent(oldId, newId) {
+    const actor = this.item.actor;
+    if (!actor || !oldId || oldId === newId) return;
+    const old = actor.items.get(oldId);
+    if (!old || old.getFlag("essence-system", "assembledInto") !== this.item.id) return;
+    const others = actor.items.filter((i) => i.id !== this.item.id);
+    if (assembledComponentIds(others).has(oldId)) return;
+    await old.delete();
   }
 
   /**
@@ -375,13 +396,17 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
   #wireModularSelects() {
     const chassisSelect = this.element.querySelector(".chassis-select");
     chassisSelect?.addEventListener("change", async (event) => {
+      const previous = this.item.system.chassisItemId;
       const id = await this.#materializeComponent(event.currentTarget.value);
       await this.item.update({ "system.chassisItemId": id });
+      await this.#releaseReplacedComponent(previous, id);
     });
     const fittingSelect = this.element.querySelector(".fitting-select");
     fittingSelect?.addEventListener("change", async (event) => {
+      const previous = this.item.system.fittingItemId;
       const id = await this.#materializeComponent(event.currentTarget.value);
       await this.item.update({ "system.fittingItemId": id });
+      await this.#releaseReplacedComponent(previous, id);
     });
     for (const select of this.element.querySelectorAll(".mount-augment-select")) {
       select.addEventListener("change", async (event) => {
@@ -389,8 +414,10 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
         const id = await this.#materializeComponent(event.currentTarget.value);
         const mounts = this.item.system.mounts.map((m) => ({ ...m }));
         while (mounts.length <= i) mounts.push({ augmentItemId: "", linkOn: true });
+        const previous = mounts[i].augmentItemId;
         mounts[i].augmentItemId = id;
         await this.item.update({ "system.mounts": mounts });
+        await this.#releaseReplacedComponent(previous, id);
       });
     }
   }

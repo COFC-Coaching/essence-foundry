@@ -2,6 +2,24 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.10
+
+**Fix: switching a Focus's Chassis left the old one in the Armory.** Choosing a Chassis, Fitting
+or Augment from the catalog while building an item adds a copy of it to the character. Switching
+to a different one (Stable Focus, then Channeling Focus) left the first copy behind as loose gear
+in the Armory, costing half a slot. Now a copy made for that item is removed when it is swapped
+out or cleared. A part the character already owned before assembling is still kept as loose gear.
+Copies left behind before this fix aren't marked, so the system can't tell them from parts you
+own. Delete those from the Armory by hand.
+
+This is a different path from the 0.7.8 fix, which stopped parts that are *in* an item from
+listing separately. That still works.
+
+**Fix: item read views ran their labels into their values.** The Equipment, Chassis, Fitting,
+Augment and Condition sheets' read view showed "CategoryImplement" and "SlotInventory" in an
+unpadded box. The 0.18.0 card redesign dropped the shared styles these sheets still used. They
+are back: a labelled stat block, spaced sections and padding inside the border.
+
 ## 0.18.9
 
 **Connections: Area of Involvement, Relationship and Tier.**
