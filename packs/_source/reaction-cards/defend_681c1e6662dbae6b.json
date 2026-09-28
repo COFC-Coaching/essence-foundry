@@ -21,11 +21,11 @@
     "body": [
       {
         "label": "Trigger",
-        "html": "You are targeted by an opposed Action or Reaction."
+        "html": "An opposed Action or Reaction declares you as an intended target or includes you in its declared potential area, including an announced Surge expansion or fallback."
       },
       {
         "label": "Effect",
-        "html": "Choose the Endurance Attribute of the targeted Defense: Vigor for Fortitude, Resolve for Composure, or Anima for Harmony. Roll at least 2 Reaction dice, up to that Attribute; if the Attribute is 1, your maximum is 2 instead. This Reaction is unopposed. Gain +1 to the targeted Defense against the triggering card."
+        "html": "Choose the Endurance Attribute of the targeted Defense: Vigor for Fortitude, Resolve for Composure, or Anima for Harmony. Commit at least 2 Reaction Dice; when Defend resolves, roll up to that Attribute. If the Attribute is 1, roll 1 die and burn the other die of the minimum commitment. This Reaction is unopposed. Gain +1 to the targeted Defense against the triggering card."
       }
     ],
     "surges": [

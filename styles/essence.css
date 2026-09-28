@@ -199,6 +199,9 @@
 .essence .side-toggle input[type="checkbox"] { margin: 0; width: 15px; height: 15px; flex: 0 0 auto; accent-color: var(--essence-accent); }
 .essence .side-toggle-label { flex: 1 1 auto; font-size: 0.9em; }
 .essence .side-toggle-state { font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; color: var(--essence-muted); }
+.essence .side-rerolls { cursor: default; }
+.essence .side-rerolls-row { gap: 4px; }
+.essence .side-rerolls-num { font-family: var(--essence-font-display); font-size: 1.1em; color: var(--essence-ink-bright); min-width: 3em; text-align: center; }
 .essence .side-toggle:has(input:checked) .side-toggle-state { color: var(--essence-success-ink); }
 .essence .side-toggle:has(input:disabled) { cursor: default; opacity: 0.6; }
 .essence .side-bonus { display: flex; flex-direction: column; gap: 3px; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--essence-line); }
@@ -901,6 +904,11 @@
 .essence.roll-card .rc-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 10px 8px; }
 .essence.roll-card .rc-actions button { width: auto; flex: 0 0 auto; height: 28px !important; min-height: 0 !important; line-height: 1 !important; padding: 0 10px; border-radius: var(--essence-radius-sm); font-size: 12px; font-weight: 600; background: var(--essence-well); border: 1px solid var(--essence-line-strong); color: var(--essence-ink); cursor: pointer; }
 .essence.roll-card .rc-actions .rc-card { margin-left: auto; }
+.essence.roll-card .rc-pending { padding: 4px 10px 0; }
+.essence.roll-card .rc-pending-note { margin: 0 0 6px; }
+.essence.roll-card .rc-pending-actions { padding: 0 0 8px; align-items: center; }
+.essence.roll-card .rc-pending-state:empty { display: none; }
+.essence.roll-card .rc-reroll { background: var(--essence-accent); border-color: var(--essence-accent); color: #141210; }
 /* Type colour on the Apply button, the card border and emphasised rules text (damage amounts). */
 .essence.roll-card.kind-action { border-color: #2e7d32; --rc-ink: var(--essence-card-action-ink); }
 .essence.roll-card.kind-reaction { border-color: #c62828; --rc-ink: var(--essence-card-reaction-ink); }

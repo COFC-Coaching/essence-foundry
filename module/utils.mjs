@@ -973,7 +973,10 @@ export async function resetAdventureUses(actor) {
   const triggers = actor.system.reachTriggers.map((t) => ({ ...t, usedThisAdventure: false }));
   await actor.update({
     "system.reachTriggers": triggers,
-    "system.reachPressure": 0
+    "system.reachPressure": 0,
+    // Adaptability's Non-Combat rerolls refresh at the start of each Adventure, never at Recovery
+    // (Doc 2026-09-28, Core Rules "Improvisation").
+    "system.playState.adaptabilityRerollsUsed": 0
   });
 
   const augments = actor.items.filter((i) => i.type === "augment" && i.system.kind === "function" && i.system.uses != null);
@@ -1100,6 +1103,20 @@ export function resolveEquipmentDropSlot(event) {
  * "Basic and Rank 0 cards roll at least 2" floor. `maxRolled` null means no maximum is known.
  * @returns {{rolled: number, burned: number}}
  */
+/**
+ * Adaptability's Non-Combat rerolls (Doc 2026-09-28, Core Rules "Improvisation"): uses per
+ * Adventure equal to Adaptability; a use rerolls every die of one of the character's own
+ * Non-Combat checks. `used` is what this Adventure has spent so far.
+ * @param {number} adaptability
+ * @param {number} used
+ * @returns {{max: number, used: number, remaining: number}}
+ */
+export function adaptabilityRerollState(adaptability, used = 0) {
+  const max = Math.max(0, Math.floor(adaptability) || 0);
+  const spent = Math.min(max, Math.max(0, Math.floor(used) || 0));
+  return { max, used: spent, remaining: max - spent };
+}
+
 export function splitCommitment(committed, cardMin, maxRolled) {
   if (typeof maxRolled !== "number" || !Number.isFinite(maxRolled) || maxRolled >= cardMin) return { rolled: committed, burned: 0 };
   const rolled = Math.max(1, Math.min(committed, maxRolled));

@@ -1,4 +1,5 @@
-import { migrateSource } from "./migration.mjs";
+import { migrateSource, recordRepair } from "./migration.mjs";
+import { adaptabilityRerollState } from "../utils.mjs";
 import { SEVERITY_BY_INDEX, DAMAGE_TYPES } from "../utils.mjs";
 import { deriveDeathTrackMax } from "./origin-features.mjs";
 
@@ -35,6 +36,26 @@ export const BASE_COMBAT_POOL = 6;
  * the schema-driven migrateSource repairs (it fixes values, not field types), hence a hand step.
  * Defensive like migration.mjs: never throws, leaves the source alone on anything unexpected.
  */
+/**
+ * 0.19.0: the per-Recovery boolean `adaptabilityRerollAvailable` became `adaptabilityRerollsUsed`,
+ * a count spent per Adventure. A used boolean counts as one spent use; the old key is removed so
+ * the schema does not keep an unknown field. Defensive like migrateSpecialties.
+ */
+export function migrateAdaptabilityReroll(source) {
+  try {
+    const ps = source?.playState;
+    if (!ps || typeof ps !== "object" || !("adaptabilityRerollAvailable" in ps)) return;
+    const wasUsed = ps.adaptabilityRerollAvailable === false;
+    delete ps.adaptabilityRerollAvailable;
+    if (ps.adaptabilityRerollsUsed == null) {
+      ps.adaptabilityRerollsUsed = wasUsed ? 1 : 0;
+      recordRepair(source, { path: "playState.adaptabilityRerollsUsed", from: wasUsed ? "used" : "available", to: ps.adaptabilityRerollsUsed, kind: "renamed-field" });
+    }
+  } catch (err) {
+    console.error("Essence System | Adaptability reroll migration skipped", err);
+  }
+}
+
 export function migrateSpecialties(source) {
   try {
     const sp = source?.specialties;
@@ -83,6 +104,7 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
    *  concrete model is actually loading, so this one implementation covers all of them. */
   static migrateData(source) {
     migrateSpecialties(source);
+    migrateAdaptabilityReroll(source);
     return migrateSource(this, super.migrateData(source));
   }
 
@@ -416,15 +438,15 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
           reserved: new fields.NumberField({ integer: true, initial: 0, min: 0 })
         }),
 
-        // V6 Adaptability Attribute benefit (design/v6-revision-delta.md §2.2): "Completing a
-        // Recovery also restores your one use of Adaptability's Exploration reroll. An unused use
-        // remains available and does not accumulate with the restored use." A plain boolean, never
-        // a counter, is what makes non-accumulation structurally impossible to get wrong — see
-        // #onGrantRecovery (actor-sheet.mjs), which sets this back to true, and the Character
-        // sheet's toggle next to it. Lives on the shared combatant base for the same reason Reach
-        // does (equipment/NPC portrayal parity), even though only PCs currently have Adaptability
-        // as a leveled Attribute.
-        adaptabilityRerollAvailable: new fields.BooleanField({ initial: true }),
+        // Adaptability (Doc 2026-09-28, Core Rules "Improvisation"): "reroll your own Non-Combat
+        // checks a number of times per Adventure equal to your Adaptability... At the start of each
+        // Adventure, set your available uses to your Adaptability. Unused uses do not carry over,
+        // and Recovery does not restore spent uses." Stored as the uses SPENT this Adventure, so a
+        // fresh actor (0) is full without knowing its Adaptability, and a later Attribute change
+        // moves the maximum without touching the count. `adaptabilityRerolls` (derived below) is
+        // what the sheet and the chat card read. resetAdventureUses (utils.mjs) clears it; the old
+        // per-Recovery boolean is migrated in migrateData.
+        adaptabilityRerollsUsed: new fields.NumberField({ integer: true, initial: 0, min: 0 }),
 
         // V6 "Acting While Dying - Provisional Playtest" (design/v6-revision-delta.md §2.4): the
         // first Action or Reaction played each Combat Round while Dying advances the Death Track by
@@ -506,9 +528,14 @@ export default class EssenceCombatantData extends foundry.abstract.TypeDataModel
     // (Letters of Standing et al. treat Reach as "1 higher" only "for the current Encounter" — see
     // reachTriggers above). Equipment tier checks and the sheet's Inventory Equipment header both
     // read this, never the raw `reach` field directly.
-    this.effectiveReach = this.reach + (this.reachBonus ?? 0) + (this.reachTriggers ?? [])
+    // Reach "cannot fall below 0" (Doc 2026-09-28, Core Rules "Reach"): at 0, ordinary pressure
+    // passes straight to Temporary Influence, then Core Influence.
+    this.effectiveReach = Math.max(0, this.reach + (this.reachBonus ?? 0) + (this.reachTriggers ?? [])
       .filter((t) => t.active)
-      .reduce((sum, t) => sum + (t.tempBonus || 0), 0);
+      .reduce((sum, t) => sum + (t.tempBonus || 0), 0));
+
+    // Adaptability's Non-Combat rerolls for the current Adventure (see playState.adaptabilityRerollsUsed).
+    this.adaptabilityRerolls = adaptabilityRerollState(this.adaptability, this.playState?.adaptabilityRerollsUsed);
 
     // Wound State (V6, part-iv-combat.md § Wound States): the HIGHEST occupied severity among
     // filled Core Wound spaces — not a count of how many are filled. `coreWoundsFilled` is exposed

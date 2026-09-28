@@ -2,6 +2,19 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.19.0
+
+**The 2026-09-28 rules draft: roll at resolution, multiple Success Dice, Adaptability rerolls per Adventure.**
+
+- **Roll when the card resolves.** The play prompt has a new box, "Commit now, roll when the card resolves", on by default for an opposed card during Combat. The dice leave the Pool and the costs are paid at once, but the chat card shows only what was committed and a **Roll now** button. Declare responses, then press it when the chain resolves back to the card: targets are read at that moment, the prompt asks how many Success Dice the card needs, and the roll posts below. **Cancelled** marks the card cancelled with its dice and costs still spent. Untick the box to roll immediately, as before.
+- **Multiple Success Dice.** Every roll prompt (Attribute, Non-Combat Skill, Key Aspect, card plays on characters and Elites) asks how many Success Dice are required, normally 1. The engine reserves that many highest dice; each must meet the Defense or Difficulty on its own, and a reserved die never counts as a Surge. The chat card lists the reserved dice.
+- **Adaptability rerolls.** The old "one reroll between Recoveries" checkbox is a counter: uses per Adventure equal to Adaptability, shown in the sidebar as remaining / maximum with − and + steppers. A character's Non-Combat chat card carries an **Adaptability reroll** button while uses remain; it rerolls every die with the same Difficulty and requirement and the new result stands. Reset Adventure Uses refreshes the count; Recovery no longer restores it. Existing characters migrate (a spent checkbox becomes one spent use).
+- **Reach cannot fall below 0.**
+- **Basic cards.** Basic Melee Attack, Basic Ranged Attack and Defend carry the new text: the roll maximum is Attribute + Rank with "roll 1, burn 1" when it is 1, and Defend also triggers when you are inside a card's declared potential area, Surge expansion or fallback. Re-import the three cards on existing characters. `scripts/build-packs.mjs` keeps the same text (and Dash's 1-per-die text) for the next full rebuild.
+- **Player's Guide journal** updated for all of the above.
+
+Not changed on purpose: Mooks and Normals still take Dazed and the unaware surcharge as characters do (0.18.1); the draft now calls that treatment provisional and per-profile, and this build's treatment is the stated one.
+
 ## 0.18.14
 
 **Senses on the Core tab.** The box beside Spiritual now holds Senses, Resistances and

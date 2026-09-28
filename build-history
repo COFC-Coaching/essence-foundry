@@ -3795,3 +3795,53 @@ a fixed 480 × 600, so anything below the fold was unreachable. `.essence.item .
 now scrolls, every item PART has `scrollable: [""]`, and the base item sheet is
 `window.resizable`. The effect HTML is `<p>` so it dropped under "Fortress Shell —";
 `.combined-effect li > p:first-of-type` is inline.
+
+### 2026-09-28 -- 0.19.0: the 2026-09-28 rules draft (roll at resolution, Success Dice, Adaptability)
+
+Source: the master Google Doc as exported on 2026-09-28 (the website's Rule Book was regenerated
+from it the same day, `essence-system` commit c341398; its per-Part change list is in that repo's
+`backups/rulebook-changes-2026-09-28.md`). Most of Ryan's 2026-09-27 rulings were already in
+0.13.6 to 0.18.2 (burn the difference, Dash, Mooks without Surges, Weakened per instance, the
+six-Round enemy death timer, Team Tier only increasing, Stabilize's flat cost), so this release is
+the remainder. Not live-tested: Foundry was running the campaign world during the session, so the
+install was not mirrored or relaunched. `npm test` (rules 135, migration 59), `node --check` on
+every changed module, Handlebars block balance on the two templates, en.json parses.
+
+- **Roll at resolution is a checkbox, not a mode switch.** `#promptDiceCount` gained a `defer`
+  checkbox (default: opposed card and `game.combat`), `#finishCardPlay` gained `defer` and
+  `requiredSuccesses`. A deferred play still pays dice, Resources and the cooldown and still
+  records the Reaction and the dying-exertion charge (the card counts as played), then calls
+  `postPendingCardPlay` (essence-roll.mjs) instead of `rollEssencePool`. The pending chat card
+  stores everything the roll needs in `flags.essence-system.pending`; the chat hook
+  (`wirePendingCardButtons`, essence.mjs) reads the user's targets at click time through the new
+  shared `resolveTargetsForDefense` (card-play.mjs; the sheet's private `#resolveTargets` now
+  delegates to it), asks the Success Dice requirement (`promptRequiredSuccesses`), rolls through
+  `resolvePendingCardPlay`, and sets `pendingState` so the buttons die for everyone. Cancel only
+  flips the state and posts a line: the costs were spent at play time, as the Doc says. The NPC
+  sheet's Elite path does not defer (its `#resolveTargets` copy is untouched); it did gain the
+  Success Dice field. Prepared Actions fired from reserved dice roll at once, as before.
+- **Success Dice live in the engine.** `resolveCombatRoll(faces, defense, unopposed, required)`
+  and `resolveNonCombatRoll(faces, difficulty, required)` return `successDice` /
+  `successDieIndices`; `successDie`/`successDieIndex` are kept for every existing reader. Surges
+  exclude every reserved die. Multi-target results check the same reservation against each
+  target's Defense (one roll, one reservation, per the Doc's Multi-Target Cards). The template
+  reads `multiSuccess`, `required`, `successDiceText`.
+- **Adaptability is stored as uses SPENT** (`playState.adaptabilityRerollsUsed`), derived to
+  `system.adaptabilityRerolls = {max, used, remaining}` by `adaptabilityRerollState` (utils.mjs,
+  pure, tested). Spent rather than remaining so a new actor is full without knowing its
+  Attribute and an Attribute change never desyncs the count. `migrateAdaptabilityReroll`
+  (actor-combatant.mjs) turns the old boolean into 0 or 1 spent and records the repair.
+  `resetAdventureUses` zeroes it; Grant Recovery's restore lines and dialog text are gone
+  (`adaptabilityRestored` is a constant false so the "nothing to recover" test keeps its shape).
+  The chat reroll button is offered only on `nonCombat` rolls by a `character` actor with uses
+  left and is refused by `wireRerollButton` if the count reached 0 meanwhile; the reroll's own
+  card passes `rerollOf` so it offers no second reroll.
+- **Left as is, on purpose.** Adaptations, Rites and Possessed links already survived Combat and
+  Encounter end (`resetEncounterSpecialties` never cleared them). Free dice already cannot be
+  both Success Die and Surge (the engine never lets a Success Die surge). Late-arriving Mooks and
+  Normals already get their full allowance. The Mook/Normal Dazed and unaware treatment stays as
+  0.18.1 built it (the Doc now says the GM states it per profile; this build's is the statement).
+  Critical Wound recovery's four-week baseline is Downtime bookkeeping the system does not track.
+- **Template gotcha.** The `{{#if pending}}...{{else}}...{{/if}}` in roll-card.hbs wraps the dice
+  and the summary only; the card's Effect text and the Apply/Card buttons sit outside it so a
+  pending card still reads as the card.

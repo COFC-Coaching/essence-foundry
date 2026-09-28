@@ -21,6 +21,8 @@ import EssenceActor from "./documents/actor.mjs";
 import EssenceContentWizard, { canCreateContent } from "./apps/content-wizard.mjs";
 import EssenceBulkImport from "./apps/bulk-import.mjs";
 import { capitalize, fitTitleSize, domainResource, fittingReconfigureCost } from "./utils.mjs";
+import { rollEssencePool, resolvePendingCardPlay } from "./dice/essence-roll.mjs";
+import { resolveTargetsForDefense, promptRequiredSuccesses } from "./sheets/card-play.mjs";
 import { syncEquipmentEffect } from "./data/equipment-effects.mjs";
 import { GRADE_BUDGETS } from "./data/monster-budgets.mjs";
 import EssenceGradeBudgetsSettings from "./apps/grade-budgets-settings.mjs";
@@ -496,6 +498,85 @@ Hooks.on("deleteCombat", async (combat) => {
 });
 
 /**
+ * Roll at resolution (Doc 2026-09-28, "Card Sequence"): a card played with "roll when it resolves"
+ * posts a chat card with these two buttons. Roll reads the user's targets NOW (targeting is
+ * finalized at resolution), asks for the Success Dice requirement (set before rolling) and rolls
+ * through the same engine as an immediate play. Cancel marks the card cancelled; its dice and
+ * Resources were spent when it was played and stay spent. Either way the pending card is marked
+ * so the buttons go away for everyone. Only the card's owner or a GM may act.
+ */
+function wirePendingCardButtons(message, html, data) {
+  const pending = data?.pending;
+  if (!pending) return;
+  const state = data.pendingState ?? "open";
+  const box = html.querySelector(".rc-pending");
+  if (!box) return;
+  if (state !== "open") {
+    box.querySelectorAll("button").forEach((b) => { b.disabled = true; });
+    const note = box.querySelector(".rc-pending-state");
+    if (note) note.textContent = game.i18n.localize(state === "cancelled" ? "ESSENCE.Chat.PendingCancelled" : "ESSENCE.Chat.PendingResolved");
+    return;
+  }
+  const mayAct = async () => {
+    const actor = pending.actorUuid ? await fromUuid(pending.actorUuid) : null;
+    if (game.user.isGM || actor?.isOwner) return true;
+    ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.PendingNotYours"));
+    return false;
+  };
+  const settle = async (next) => {
+    if (message.isOwner || game.user.isGM) await message.update({ "flags.essence-system.pendingState": next });
+  };
+  const rollBtn = box.querySelector("[data-action='resolvePending']");
+  if (rollBtn) rollBtn.onclick = async () => {
+    if (!(await mayAct())) return;
+    const { defense, targets } = await resolveTargetsForDefense(pending.unopposed ? "" : pending.defenseKey);
+    const required = await promptRequiredSuccesses(pending.label);
+    if (required === null) return;
+    await resolvePendingCardPlay(message, { defense, targets, requiredSuccesses: required });
+    await settle("resolved");
+  };
+  const cancelBtn = box.querySelector("[data-action='cancelPending']");
+  if (cancelBtn) cancelBtn.onclick = async () => {
+    if (!(await mayAct())) return;
+    const ok = await foundry.applications.api.DialogV2.confirm({
+      window: { title: pending.label }, classes: ["essence-dialog"],
+      content: `<p>${game.i18n.localize("ESSENCE.Chat.CancelPendingConfirm")}</p>`, rejectClose: false
+    });
+    if (!ok) return;
+    await settle("cancelled");
+    const actor = pending.actorUuid ? await fromUuid(pending.actorUuid) : null;
+    await ChatMessage.create({ speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(), content: `<p>${game.i18n.format("ESSENCE.Chat.PendingCancelledMsg", { name: actor?.name ?? "", card: pending.label })}</p>` });
+  };
+}
+
+/**
+ * Adaptability's Non-Combat reroll (Doc 2026-09-28, Core Rules "Improvisation"): the button on a
+ * character's Non-Combat chat card spends one of this Adventure's uses and rerolls every die of
+ * that check with the same Difficulty and requirement. "You must use the new result": the original
+ * card is marked rerolled and its button removed. The reroll's own card offers no further reroll.
+ */
+function wireRerollButton(message, html, data) {
+  const offer = data?.rerollOffer;
+  const btn = html.querySelector("[data-action='adaptabilityReroll']");
+  if (!offer || !btn) return;
+  if (data.rerolled) { btn.disabled = true; btn.textContent = game.i18n.localize("ESSENCE.Chat.Rerolled"); return; }
+  btn.onclick = async () => {
+    const actor = offer.actorUuid ? await fromUuid(offer.actorUuid) : null;
+    if (!actor) return;
+    if (!(game.user.isGM || actor.isOwner)) return ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.PendingNotYours"));
+    const state = actor.system.adaptabilityRerolls ?? { max: 0, used: 0, remaining: 0 };
+    if (state.remaining <= 0) return ui.notifications.warn(game.i18n.format("ESSENCE.Notify.NoRerollsLeft", { name: actor.name }));
+    await actor.update({ "system.playState.adaptabilityRerollsUsed": state.used + 1 });
+    if (message.isOwner || game.user.isGM) await message.update({ "flags.essence-system.rerolled": true });
+    await rollEssencePool({
+      pool: offer.pool, freeDice: offer.freeDice, difficulty: offer.difficulty, requiredSuccesses: offer.requiredSuccesses,
+      label: game.i18n.format("ESSENCE.Chat.RerollLabel", { label: offer.label }), actor, nonCombat: true,
+      rerollOf: { messageId: message.id, remaining: state.remaining - 1, max: state.max }
+    });
+  };
+}
+
+/**
  * Keeps an `equipment` Item's transferred "Equipment Bonus" ActiveEffect in sync with its own
  * Fortitude/Resilience/Movement/Reach fields and its `slot` (see equipment-effects.mjs for why
  * this uses Foundry's native transfer instead of the sheet's usual hand-summed derived data).
@@ -569,6 +650,8 @@ Hooks.on("preUpdateItem", (item, changes) => {
  */
 Hooks.on("renderChatMessageHTML", (message, html) => {
   const data = message.flags?.["essence-system"];
+  wirePendingCardButtons(message, html, data);
+  wireRerollButton(message, html, data);
   // Apply and Card buttons on a card play (Shane, 2026-09-27): Apply opens the target's own Apply
   // Damage dialog through the sheet's registered action, so the engine, Wound Cards and status
   // handling are exactly what the sheet button gives; Card opens the played card's sheet.

@@ -12,10 +12,14 @@
  * @param {number|null} difficulty
  * @returns {{highest: number, succeeded: boolean|null}}
  */
-export function resolveNonCombatRoll(faces, difficulty = null) {
+export function resolveNonCombatRoll(faces, difficulty = null, requiredSuccesses = 1) {
   const highest = faces.length ? Math.max(...faces) : 0;
-  const succeeded = difficulty == null ? null : highest >= difficulty;
-  return { highest, succeeded };
+  const required = Math.max(1, Math.floor(requiredSuccesses) || 1);
+  // Multiple Success Dice (Doc, Core Rules "Multiple Success Dice"): reserve the required number
+  // of highest dice; each must meet the Difficulty on its own, never summed. Too few dice fails.
+  const successDice = [...faces].sort((a, b) => b - a).slice(0, required);
+  const succeeded = difficulty == null ? null : successDice.length >= required && successDice.every((f) => f >= difficulty);
+  return { highest, succeeded, successDice, required };
 }
 
 /**
@@ -40,22 +44,28 @@ export function resolveNonCombatRoll(faces, difficulty = null) {
  *   candidate (see rollEssencePool's `openRoll` flag), while an Unopposed card's result is fully
  *   authoritative. Do not conflate the two signals.
  */
-export function resolveCombatRoll(faces, defense = null, unopposed = false) {
+export function resolveCombatRoll(faces, defense = null, unopposed = false, requiredSuccesses = 1) {
   if (!faces.length) {
-    return { successDieIndex: -1, successDie: 0, succeeded: false, surges: 0 };
+    return { successDieIndex: -1, successDieIndices: [], successDice: [], successDie: 0, succeeded: false, surges: 0, required: 1 };
   }
-  let successDieIndex = 0;
-  for (let i = 1; i < faces.length; i++) {
-    if (faces[i] > faces[successDieIndex]) successDieIndex = i;
-  }
+  const required = Math.max(1, Math.floor(requiredSuccesses) || 1);
+  // Multiple Success Dice (Doc, "Multiple Success Dice" and "Set Success Dice Before Rolling"):
+  // reserve the `required` highest dice, in face order (ties by position). Each reserved die must
+  // meet the Defense on its own; none of them can generate a Surge, even when it falls short.
+  const order = faces.map((f, i) => i).sort((a, b) => faces[b] - faces[a] || a - b);
+  const successDieIndices = order.slice(0, required);
+  const successDieIndex = successDieIndices[0];
+  const successDice = successDieIndices.map((i) => faces[i]);
   const successDie = faces[successDieIndex];
   if (unopposed) {
     const surges = faces.reduce((sum, f) => sum + (f >= 6 ? 1 : 0), 0);
-    return { successDieIndex: -1, successDie, succeeded: true, surges };
+    return { successDieIndex: -1, successDieIndices: [], successDice: [], successDie, succeeded: true, surges, required };
   }
-  const succeeded = defense == null ? successDie >= 6 : successDie >= defense;
-  const surges = faces.reduce((sum, f, i) => sum + (i !== successDieIndex && f >= 6 ? 1 : 0), 0);
-  return { successDieIndex, successDie, succeeded, surges };
+  const threshold = defense == null ? 6 : defense;
+  const succeeded = successDieIndices.length >= required && successDice.every((f) => f >= threshold);
+  const reserved = new Set(successDieIndices);
+  const surges = faces.reduce((sum, f, i) => sum + (!reserved.has(i) && f >= 6 ? 1 : 0), 0);
+  return { successDieIndex, successDieIndices, successDice, successDie, succeeded, surges, required };
 }
 
 /**
@@ -142,12 +152,13 @@ export function playChatContext(play) {
     poolLabel: play.poolLabel ?? "Action", cost: Number(play.cost) || 0, resource, maxRolled: play.maxRolled ?? null, burnOnly: !!play.burnOnly
   };
 }
-export async function rollEssencePool({ pool, defense = null, targets = null, label = "Essence Roll", actor = null, surgeOptions = [], bonusSurges = 0, freeDice = 0, unopposed = false, nonCombat = false, difficulty = null, noSurges = false, card = null, play = null } = {}) {
+export async function rollEssencePool({ pool, defense = null, targets = null, label = "Essence Roll", actor = null, surgeOptions = [], bonusSurges = 0, freeDice = 0, unopposed = false, nonCombat = false, difficulty = null, noSurges = false, card = null, play = null, requiredSuccesses = 1, rerollOf = null, resolvedFrom = null } = {}) {
   const n = Math.max(1, Math.floor(pool));
   const nFree = Math.max(0, Math.floor(freeDice) || 0);
   const roll = new Roll(`${n + nFree}d10`);
   await roll.evaluate();
   const faces = roll.terms[0].results.map((r) => r.result);
+  const required = Math.max(1, Math.floor(requiredSuccesses) || 1);
 
   const multi = Array.isArray(targets) && targets.length > 0;
   // "Open" roll: no Defense was targeted or declared (the dice-commit dialog's own "leave blank to
@@ -156,19 +167,29 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
   // different, fully-authoritative case (see @param unopposed above), so it's excluded here even
   // though it also has no Defense value.
   const openRoll = !unopposed && !multi && defense == null;
-  const combat = resolveCombatRoll(faces, multi ? null : defense, unopposed);
+  const combat = resolveCombatRoll(faces, multi ? null : defense, unopposed, required);
   // Mooks roll their printed dice against the Defense but never generate Surges (Ryan, 2026-09-27,
   // gap question 5); Normals and Elites do.
   if (noSurges) combat.surges = 0; else combat.surges += bonusSurges;
-  const task = nonCombat ? resolveNonCombatRoll(faces, difficulty) : null;
+  const task = nonCombat ? resolveNonCombatRoll(faces, difficulty, required) : null;
 
+  // Several targets share one roll and one reservation (Doc, "Multi-Target Cards"): the reserved
+  // dice are checked against each target's own Defense.
   const targetResults = multi
     ? targets.map((t) => ({
         name: t.name,
         defense: t.defense,
-        succeeded: unopposed ? true : (t.defense == null ? combat.successDie >= 6 : combat.successDie >= t.defense)
+        succeeded: unopposed ? true : combat.successDice.length >= required && combat.successDice.every((f) => f >= (t.defense == null ? 6 : t.defense))
       }))
     : [];
+
+  // Adaptability (Doc, Core Rules "Improvisation"): a character may reroll every die of one of
+  // their own Non-Combat checks, a number of times per Adventure equal to Adaptability. The chat
+  // card offers the reroll while uses remain; the button handler (essence.mjs) spends one.
+  const rerollState = nonCombat && actor?.type === "character" ? actor.system.adaptabilityRerolls : null;
+  const rerollOffer = rerollState && rerollState.remaining > 0 && !rerollOf
+    ? { actorUuid: actor.uuid, pool: n, freeDice: nFree, difficulty, label, requiredSuccesses: required, remaining: rerollState.remaining }
+    : null;
 
   const content = await foundry.applications.handlebars.renderTemplate(
     "systems/essence-system/templates/chat/roll-card.hbs",
@@ -178,7 +199,8 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
       // One entry per die for the chat card: its role class and the label read aloud and shown on
       // hover (0.18.12). The Success Die never counts as a Surge (resolveCombatRoll).
       dice: faces.map((face, i) => {
-        const role = i === combat.successDieIndex ? "success" : face >= 6 ? "surge" : "rolled";
+        const isSuccess = nonCombat ? isNonCombatSuccessDie(faces, task?.successDice ?? [], i) : combat.successDieIndices.includes(i);
+        const role = isSuccess ? "success" : !nonCombat && face >= 6 ? "surge" : "rolled";
         const key = { success: "ESSENCE.Chat.SuccessDieAria", surge: "ESSENCE.Chat.SurgeDieAria", rolled: "ESSENCE.Chat.RolledDieAria" }[role];
         return { face, cls: role === "rolled" ? "" : `${role}-die`, label: game.i18n.format(key, { n: face }) };
       }),
@@ -187,8 +209,15 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
       unopposed,
       successDieIndex: combat.successDieIndex,
       successDie: combat.successDie,
+      successDice: nonCombat ? (task?.successDice ?? []) : combat.successDice,
+      successDiceText: (nonCombat ? (task?.successDice ?? []) : combat.successDice).join(", "),
+      required,
+      multiSuccess: required > 1,
       succeeded: combat.succeeded,
       surges: combat.surges,
+      rerollOffer,
+      rerollOf,
+      resolvedFrom,
       openRoll: nonCombat || noSurges ? false : openRoll,
       noSurges,
       nonCombat,
@@ -218,10 +247,65 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
         surgeOptions: nonCombat || noSurges ? [] : surgeOptions.map((opt) => ({ n: opt.n, html: opt.html })),
         spentIndices: [],
         applyTargets: card && !nonCombat ? Array.from(game.user.targets).filter((t) => t.actor).map((t) => ({ name: t.actor.name, uuid: t.actor.uuid })) : [],
-        cardUuid: card?.uuid ?? null
+        cardUuid: card?.uuid ?? null,
+        rerollOffer,
+        rerolled: false
       }
     }
   });
 
   return { roll, faces, ...combat, task, targets: targetResults };
+}
+
+/** Whether die `i` is one of the reserved Success Dice of a Non-Combat check, matching by face so
+ *  two equal faces reserve the leftmost first. */
+function isNonCombatSuccessDie(faces, successDice, i) {
+  const counts = new Map();
+  for (const f of successDice) counts.set(f, (counts.get(f) ?? 0) + 1);
+  for (let j = 0; j <= i; j++) {
+    const f = faces[j];
+    if (!counts.get(f)) continue;
+    counts.set(f, counts.get(f) - 1);
+    if (j === i) return true;
+  }
+  return false;
+}
+
+/**
+ * Roll at resolution (Doc, Combat Encounters "Card Sequence", 2026-09-28): a card's dice are
+ * committed and its costs paid when it is played, but nothing is rolled until every response is
+ * declared and the chain resolves back to it. This posts the card's chat card without dice and
+ * with a Roll button; essence.mjs's chat hook rolls it through `resolvePendingCardPlay` when the
+ * player clicks. Targets are read again at that moment (Doc: "finalize targeting when it
+ * resolves"), and the Success Die requirement is asked then ("Set Success Dice Before Rolling").
+ * Cancelling keeps the dice and Resources spent (Doc: a cancelled card's costs remain spent).
+ * @param {object} options - everything rollEssencePool will need, minus the targets
+ */
+export async function postPendingCardPlay({ card, play, pool, defenseKey = "", label, actor, surgeOptions = [], bonusSurges = 0, unopposed = false, nonCombat = false, noSurges = false } = {}) {
+  const content = await foundry.applications.handlebars.renderTemplate(
+    "systems/essence-system/templates/chat/roll-card.hbs",
+    { label, pending: true, pool, card: cardChatContext(card), play: playChatContext(play), cardUuid: card?.uuid ?? null, dice: [], surgeOptions: [], targets: [] }
+  );
+  const pending = {
+    actorUuid: actor?.uuid ?? null, cardUuid: card?.uuid ?? null, pool, defenseKey, label,
+    surgeOptions: (surgeOptions ?? []).map((o) => ({ n: o.n, html: o.html })), bonusSurges, unopposed, nonCombat, noSurges, play
+  };
+  await ChatMessage.create({
+    speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
+    content,
+    flags: { "essence-system": { pending, pendingState: "open", cardUuid: card?.uuid ?? null } }
+  });
+}
+
+/** Rolls a card posted by postPendingCardPlay. `targets` is what the caller resolved now. */
+export async function resolvePendingCardPlay(message, { defense = null, targets = null, requiredSuccesses = 1 } = {}) {
+  const pending = message.flags?.["essence-system"]?.pending;
+  if (!pending) return null;
+  const actor = pending.actorUuid ? await fromUuid(pending.actorUuid) : null;
+  const card = pending.cardUuid ? await fromUuid(pending.cardUuid) : null;
+  return rollEssencePool({
+    card, play: pending.play, pool: pending.pool, defense, targets, label: pending.label, actor,
+    surgeOptions: pending.surgeOptions, bonusSurges: pending.bonusSurges, unopposed: pending.unopposed,
+    nonCombat: pending.nonCombat, noSurges: pending.noSurges, requiredSuccesses, resolvedFrom: message.id
+  });
 }

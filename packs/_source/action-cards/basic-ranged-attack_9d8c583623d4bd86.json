@@ -25,7 +25,7 @@
       },
       {
         "label": "Effect",
-        "html": "Against a creature, roll against Fortitude unless Helpless Targets applies; against an object use its declared Difficulty. Commit at least 2 Action dice. The maximum is Grace + Ballistics, or 2 if that sum is lower. On success, deal 1 Physical Damage of a type appropriate to the Source. An attack into a suspected space burns 1 extra die."
+        "html": "Against a creature, roll against Fortitude unless Helpless Targets applies; against an object use its declared Difficulty. Commit at least 2 Action Dice. The roll maximum is Grace + Ballistics. If the maximum is 1, roll 1 die and burn the other die of the minimum commitment. On success, deal 1 Physical Damage of a type appropriate to the Source. An attack into a suspected space burns 1 extra die."
       }
     ],
     "surges": [

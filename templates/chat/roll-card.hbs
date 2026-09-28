@@ -22,6 +22,17 @@
     <h3 class="rc-title">{{label}}</h3>
   {{/if}}
 
+  {{#if pending}}
+  {{!-- Roll at resolution: committed and paid, not yet rolled. The buttons are wired in essence.mjs. --}}
+  <div class="rc-pending">
+    <p class="rc-pending-note"><strong>{{localize "ESSENCE.Chat.PendingTitle"}}</strong> {{localize "ESSENCE.Chat.PendingNote" n=pool}}</p>
+    <div class="rc-actions rc-pending-actions">
+      <button type="button" class="rc-apply" data-action="resolvePending">{{localize "ESSENCE.Chat.ResolveRoll"}}</button>
+      <button type="button" data-action="cancelPending">{{localize "ESSENCE.Chat.CancelPending"}}</button>
+      <span class="rc-pending-state muted"></span>
+    </div>
+  </div>
+  {{else}}
   {{!-- Each die is drawn as a d10: a kite-shaped top face inside the ten-sided silhouette, the
         number on the face. Gold is the Success Die, green made a Surge, dashed was burned. --}}
   <div class="dice-roll">
@@ -43,8 +54,10 @@
   <p class="rc-burn-note muted">{{localize "ESSENCE.Chat.BurnOnlyNote"}}</p>
   {{else}}
   <div class="roll-summary">
+    {{#if resolvedFrom}}<p class="muted">{{localize "ESSENCE.Chat.ResolvedNote"}}</p>{{/if}}
+    {{#if rerollOf}}<p class="muted">{{localize "ESSENCE.Chat.RerollNote" remaining=rerollOf.remaining max=rerollOf.max}}</p>{{/if}}
     {{#if nonCombat}}
-      <p><strong>{{localize "ESSENCE.Chat.HighestDie"}}:</strong> {{successDie}} —
+      <p><strong>{{#if multiSuccess}}{{localize "ESSENCE.Chat.SuccessDice" n=required}}:</strong> {{successDiceText}}{{else}}{{localize "ESSENCE.Chat.HighestDie"}}:</strong> {{successDie}}{{/if}} —
         {{#if difficulty}}
           {{#if taskSucceeded}}<span class="pass">{{localize "ESSENCE.Chat.Success"}}</span>{{else}}<span class="fail">{{localize "ESSENCE.Chat.Failure"}}</span>{{/if}}
         {{else}}
@@ -52,7 +65,11 @@
         {{/if}}
       </p>
       <p class="muted non-combat-note">{{localize "ESSENCE.Chat.NoSurgesNonCombat"}}</p>
+      {{#if rerollOffer}}
+        <div class="rc-actions"><button type="button" class="rc-reroll" data-action="adaptabilityReroll">{{localize "ESSENCE.Chat.RerollButton" remaining=rerollOffer.remaining}}</button></div>
+      {{/if}}
     {{else}}
+    {{#if multiSuccess}}<p class="muted">{{localize "ESSENCE.Chat.SuccessDiceNote" n=required dice=successDiceText}}</p>{{/if}}
     {{#if targets.length}}
       <div class="rc-results">
         <span class="rc-lbl">{{localize "ESSENCE.Chat.Target"}}</span><span class="rc-lbl">{{localize "ESSENCE.Chat.Defense"}}</span><span class="rc-lbl">{{localize "ESSENCE.Chat.Result"}}</span>
@@ -65,7 +82,7 @@
     {{else if unopposed}}
       <p><strong>{{localize "ESSENCE.Chat.Unopposed"}}</strong> — <span class="pass">{{localize "ESSENCE.Chat.UnopposedNote"}}</span></p>
     {{else}}
-      <p><strong>{{localize "ESSENCE.Chat.SuccessDie"}}:</strong> {{successDie}} —
+      <p><strong>{{#if multiSuccess}}{{localize "ESSENCE.Chat.SuccessDice" n=required}}:</strong> {{successDiceText}}{{else}}{{localize "ESSENCE.Chat.SuccessDie"}}:</strong> {{successDie}}{{/if}} —
         {{#if succeeded}}<span class="pass">{{localize "ESSENCE.Chat.Success"}}</span>{{else}}<span class="fail">{{localize "ESSENCE.Chat.Failure"}}</span>{{/if}}
       </p>
     {{/if}}
@@ -93,6 +110,8 @@
     {{/if}}
     {{/if}}
   </div>
+
+  {{/if}}
 
   {{/if}}
 
