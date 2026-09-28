@@ -2,6 +2,36 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.8
+
+Fixes from a design review of the 0.18.7 sidebar.
+
+**Fix: the Death Track was cramped again.** 0.18.7 removed the sidebar styling the Death Track
+still used, so "Death Track — Dying" was squeezed into a narrow column with Stabilized wrapping
+below it. That was at the moment it matters most. It now sits under its own rule with even
+square steps like the Core Wound boxes, and Stabilized underneath.
+
+**The Wounds tiles lead with the number you play with.**
+- **Resilience:** shows the effective value (with gear) as the big number, and the base value as a
+  small input under it.
+- **Temporary Wounds:** shows how many are still available, with − and + to spend or restore one,
+  and "of" the number granted as a small input. The old dots ran past the tile edge on a narrower
+  sheet, and a new player could read the granted count as wounds taken.
+- Both tiles read number, then label, like the Defense tiles above them.
+
+**Smaller fixes.**
+- **Core Wound boxes:** each box's tooltip names its severity (Light, Serious, Critical) and any
+  Condition on it.
+- **Buttons:** Apply Damage takes the full-width slot, since it is the most used. Recover Wound and
+  Grant Recovery share a row, and all three have tooltips saying what they do.
+- **Locked sheet:** the Adaptability Reroll and Stabilized checkboxes work again. They are play
+  toggles, so the safety lock no longer greys them out.
+- **Conditions:** an open "Rules" stays open when you click something else on the sheet. The edit
+  and delete buttons are larger, and on NPC and Monster sheets they now sit at the right edge.
+- **Influence:** Temporary Influence shows its maximum ("2 / 5"), like Core Influence.
+- **Readability:** small labels in the sidebar are a little larger. Screen readers get "Rules for
+  Fatigued" rather than repeated "Rules", and don't hear the Adaptability state twice.
+
 ## 0.18.7
 
 **Fix: Conditions in the sidebar were laid out sideways.** Each Condition is a list row, and the

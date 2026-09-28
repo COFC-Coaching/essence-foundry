@@ -106,6 +106,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       itemEdit: EssenceActorSheet.#onItemEdit,
       itemDelete: EssenceActorSheet.#onItemDelete,
       toggleTempWound: EssenceActorSheet.#onToggleTempWound,
+      adjustTempWounds: EssenceActorSheet.#onAdjustTempWounds,
       toggleCoreWound: EssenceActorSheet.#onToggleCoreWound,
       toggleDeathTrack: EssenceActorSheet.#onToggleDeathTrack,
       toggleDeathTrackStabilized: EssenceActorSheet.#onToggleDeathTrackStabilized,
@@ -197,6 +198,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   _onRender(context, options) {
     super._onRender(context, options);
     this.#applyEditable();
+    this.#keepConditionRulesOpen();
     wireTabArrowKeys(this.element);
     this.#wireCardControls();
     this.#wireExpertiseSelects();
@@ -210,6 +212,21 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    * list (it's filtered by `skill` in _prepareContext). Read-modify-write the whole array in JS
    * instead, the same safe pattern #onAddExpertise/#onAddRite/etc. already use elsewhere.
    */
+  /** Condition ids whose "Rules" fold is open. Every sheet action re-renders the sidebar, which
+   *  would otherwise close an open fold mid-combat (0.18.8). Not persisted: it is view state. */
+  #openConditionRules = new Set();
+
+  #keepConditionRulesOpen() {
+    for (const details of this.element.querySelectorAll("details.condition-rules[data-item-id]")) {
+      const id = details.dataset.itemId;
+      if (this.#openConditionRules.has(id)) details.open = true;
+      details.addEventListener("toggle", () => {
+        if (details.open) this.#openConditionRules.add(id);
+        else this.#openConditionRules.delete(id);
+      });
+    }
+  }
+
   #wireExpertiseSelects() {
     for (const select of this.element.querySelectorAll(".expertise-name-select")) {
       select.addEventListener("change", async (event) => {
@@ -313,9 +330,11 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // [data-card-filter]/[data-card-sort] are pure client-side view controls (see #wireCardControls)
     // with no `name` attribute — nothing they touch is actor data, so the safety lock that guards
     // against fat-fingering a build value has nothing to protect here, and disabling them just
-    // blocked sorting/filtering your own card list for no reason.
+    // blocked sorting/filtering your own card list for no reason. A checkbox with a data-action
+    // (Adaptability Reroll, Stabilized) is a play toggle like the pip buttons, which the lock
+    // never touches either (0.18.8).
     for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) {
-      if (el.matches("[data-card-filter], [data-card-sort]")) continue;
+      if (el.matches("[data-card-filter], [data-card-sort], input[type='checkbox'][data-action]")) continue;
       el.disabled = true;
     }
   }
@@ -503,6 +522,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // Core Wounds use the same five-box severity ladder (actor-combatant.mjs schema comment), so
     // the sidebar's squares carry the same L L S S C letters (0.16.0).
     context.coreWoundLabels = CORE_INFLUENCE_LABELS;
+    // The severity each box stands for, as the tooltip key to those letters (0.18.8).
+    context.coreWoundSeverities = SEVERITY_BY_INDEX.map((s) => game.i18n.localize(`ESSENCE.Sheet.CoreWoundSeverity${s}`));
+    context.tempWoundsCanRestore = (system.playState.currentTemporaryWounds ?? 0) < (system.temporaryWoundsAvailable ?? 0);
     // Adventure-Limited Reach Triggers (Letters of Standing et al. — see reachTriggers' schema
     // comment in actor-combatant.mjs). effectiveReach already folds in every `active` trigger's
     // tempBonus; exposed again here bare so the template doesn't need to reach through `system.`.
@@ -1402,6 +1424,16 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   /** Clicking pip i sets the current count to i+1, or to i if that pip was already the last filled one. */
   static #onTogglePip(current, index) {
     return current === index + 1 ? index : index + 1;
+  }
+
+  /** The sidebar's −/+ beside the Temporary Wounds still available: spend one or restore one,
+   *  never past the number gear and features grant. */
+  static async #onAdjustTempWounds(event, target) {
+    const delta = Number(target.dataset.delta) || 0;
+    const granted = this.actor.system.temporaryWoundsAvailable ?? 0;
+    const current = this.actor.system.playState.currentTemporaryWounds ?? 0;
+    const next = Math.min(granted, Math.max(0, current + delta));
+    if (next !== current) await this.actor.update({ "system.playState.currentTemporaryWounds": next });
   }
 
   static async #onToggleTempWound(event, target) {

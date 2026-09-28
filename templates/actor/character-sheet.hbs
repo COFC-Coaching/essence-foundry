@@ -706,54 +706,61 @@
 
   <div class="side-panel side-wounds">
     <span class="side-label">{{localize "ESSENCE.Common.Wounds"}} <span class="side-state">{{system.woundState}}</span></span>
+    {{!-- Each tile leads with the number used in play and keeps the build value it comes from
+          as a small input underneath, number first like the Defense tiles above (0.18.8). --}}
     <div class="side-tiles">
       <div class="side-tile">
+        <span class="side-tile-num">{{system.effectiveResilience}}</span>
         <span class="side-tile-label">{{localize "ESSENCE.Common.Resilience"}}</span>
-        <input class="side-tile-input" type="number" name="system.resilience" value="{{system.resilience}}" aria-label="{{localize 'ESSENCE.Common.Resilience'}}">
-        <span class="side-tile-note">{{#if (ne system.effectiveResilience system.resilience)}}{{localize "ESSENCE.Sheet.EffectiveResilienceNote" n=system.effectiveResilience}}{{else}}&nbsp;{{/if}}</span>
+        <label class="side-tile-note">{{localize "ESSENCE.Sheet.BaseValue"}}
+          <input class="side-tile-input" type="number" name="system.resilience" value="{{system.resilience}}" min="0" aria-label="{{localize 'ESSENCE.Sheet.BaseResilienceAria'}}">
+        </label>
       </div>
       <div class="side-tile">
-        {{!-- How many Temporary Wounds gear and features grant. Nothing derives this field and no
-              Active Effect writes it, so it needs a real input somewhere; it used to live on the
-              Character Wizard's Wounds step, which was removed as play state. --}}
-        <span class="side-tile-label" data-tooltip-text="{{localize 'ESSENCE.Sheet.TemporaryWoundsAvailableHint'}}">{{localize "ESSENCE.Common.TemporaryWounds"}}</span>
-        <input class="side-tile-input" type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" min="0" max="5" aria-label="{{localize 'ESSENCE.Sheet.TemporaryWoundsAvailableAria'}}" data-tooltip-text="{{localize 'ESSENCE.Sheet.TemporaryWoundsAvailableHint'}}">
-        <span class="side-tile-note">
-          {{#if temporaryWoundPips.length}}
-            <span class="pip-track">
-              {{#each temporaryWoundPips as |filled i|}}
-                <button type="button" class="pip toggle {{#if filled}}filled{{/if}}" data-action="toggleTempWound" data-index="{{i}}" aria-pressed="{{filled}}" aria-label="{{localize 'ESSENCE.Sheet.TemporaryWoundAria' n=(addOne i)}}"></button>
-              {{/each}}
-            </span>
-          {{else}}{{localize "ESSENCE.Sheet.NoneGranted"}}{{/if}}
+        {{!-- The big number is the Temporary Wounds still available (Apply Damage spends them);
+              the input is how many gear and features grant. Nothing derives the granted count and
+              no Active Effect writes it, so it needs a real input somewhere. --}}
+        <span class="side-tile-num-row">
+          <button type="button" class="resource-step" data-action="adjustTempWounds" data-delta="-1" aria-label="{{localize 'ESSENCE.Sheet.DecreaseAria' label=(localize 'ESSENCE.Common.TemporaryWounds')}}" {{#unless system.playState.currentTemporaryWounds}}disabled{{/unless}}>−</button>
+          <span class="side-tile-num">{{system.playState.currentTemporaryWounds}}</span>
+          <button type="button" class="resource-step" data-action="adjustTempWounds" data-delta="1" aria-label="{{localize 'ESSENCE.Sheet.IncreaseAria' label=(localize 'ESSENCE.Common.TemporaryWounds')}}" {{#unless tempWoundsCanRestore}}disabled{{/unless}}>+</button>
         </span>
+        <span class="side-tile-label">{{localize "ESSENCE.Sheet.TemporaryWoundsShort"}}</span>
+        <label class="side-tile-note" data-tooltip-text="{{localize 'ESSENCE.Sheet.TemporaryWoundsAvailableHint'}}">{{localize "ESSENCE.Sheet.OfGranted"}}
+          <input class="side-tile-input" type="number" name="system.temporaryWoundsAvailable" value="{{system.temporaryWoundsAvailable}}" min="0" max="5" aria-label="{{localize 'ESSENCE.Sheet.TemporaryWoundsAvailableAria'}}">
+        </label>
       </div>
     </div>
 
     <div class="side-core-wounds">
-      <span class="side-tile-label">{{localize "ESSENCE.Common.CoreWounds"}}</span>
+      <span class="side-sublabel">{{localize "ESSENCE.Common.CoreWounds"}}</span>
       <span class="side-core-track">
         {{#each system.coreWounds as |w i|}}
-          <button type="button" class="pip toggle labeled sq {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" data-tooltip-text="{{w.condition}}" aria-pressed="{{w.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreWoundAria' n=(addOne i)}}{{#if w.condition}}: {{w.condition}}{{/if}}">{{lookup ../coreWoundLabels i}}</button>
+          {{!-- The tooltip names the box's severity, so the L/S/C letters have a key even on an
+                empty box; a marked box adds its Condition. --}}
+          <button type="button" class="pip toggle labeled sq {{#if w.filled}}filled{{/if}}" data-action="toggleCoreWound" data-index="{{i}}" data-tooltip-text="{{lookup ../coreWoundSeverities i}}{{#if w.condition}}: {{w.condition}}{{/if}}" aria-pressed="{{w.filled}}" aria-label="{{localize 'ESSENCE.Sheet.CoreWoundAria' n=(addOne i)}}, {{lookup ../coreWoundSeverities i}}{{#if w.condition}}: {{w.condition}}{{/if}}">{{lookup ../coreWoundLabels i}}</button>
         {{/each}}
       </span>
     </div>
 
+    {{!-- Apply Damage is the action used most in a fight, so it takes the full-width slot. --}}
     <div class="side-actions">
-      <button type="button" data-action="applyDamage">{{localize "ESSENCE.Sheet.ApplyDamage"}}</button>
-      <button type="button" data-action="recoverWound">{{localize "ESSENCE.Sheet.RecoverWound"}}</button>
-      <button type="button" class="side-actions-wide" data-action="grantRecovery">{{localize "ESSENCE.Sheet.GrantRecovery"}}</button>
+      <button type="button" class="side-actions-wide" data-action="applyDamage" data-tooltip-text="{{localize 'ESSENCE.Sheet.ApplyDamageHint'}}">{{localize "ESSENCE.Sheet.ApplyDamage"}}</button>
+      <button type="button" data-action="recoverWound" data-tooltip-text="{{localize 'ESSENCE.Sheet.RecoverWoundHint'}}">{{localize "ESSENCE.Sheet.RecoverWound"}}</button>
+      <button type="button" data-action="grantRecovery" data-tooltip-text="{{localize 'ESSENCE.Sheet.GrantRecoveryHint'}}">{{localize "ESSENCE.Sheet.GrantRecovery"}}</button>
     </div>
 
+    {{!-- The checkbox carries the state for screen readers, so the Available/Used word is hidden
+          from them; the hint is its description, since a tooltip never shows on keyboard focus. --}}
     <label class="side-toggle" data-tooltip-text="{{localize 'ESSENCE.Sheet.AdaptabilityRerollHint'}}">
-      <input type="checkbox" data-action="toggleAdaptabilityReroll" {{#if system.playState.adaptabilityRerollAvailable}}checked{{/if}}>
+      <input type="checkbox" data-action="toggleAdaptabilityReroll" aria-description="{{localize 'ESSENCE.Sheet.AdaptabilityRerollHint'}}" {{#if system.playState.adaptabilityRerollAvailable}}checked{{/if}}>
       <span class="side-toggle-label">{{localize "ESSENCE.Sheet.AdaptabilityRerollShort"}}</span>
-      <span class="side-toggle-state">{{#if system.playState.adaptabilityRerollAvailable}}{{localize "ESSENCE.Common.Available"}}{{else}}{{localize "ESSENCE.Common.Used"}}{{/if}}</span>
+      <span class="side-toggle-state" aria-hidden="true">{{#if system.playState.adaptabilityRerollAvailable}}{{localize "ESSENCE.Common.Available"}}{{else}}{{localize "ESSENCE.Common.Used"}}{{/if}}</span>
     </label>
 
     {{#if equipmentBonusSources.length}}
       <div class="side-bonus">
-        <span class="side-tile-label">{{localize "ESSENCE.Sheet.EquipmentBonusSourcesLabel"}}</span>
+        <span class="side-sublabel">{{localize "ESSENCE.Sheet.EquipmentBonusSourcesLabel"}}</span>
         {{#each equipmentBonusSources as |b|}}
           <div class="side-bonus-row"><span class="side-bonus-name">{{b.name}}</span><span class="side-bonus-parts">{{b.summary}}</span></div>
         {{/each}}
@@ -776,8 +783,9 @@
             {{#if item.system.sections.length}}
               {{!-- The rule text is folded: a Condition such as Fatigued runs to a dozen lines, and
                     the sidebar is for seeing what is active at a glance. --}}
-              <details class="condition-rules">
-                <summary>{{localize "ESSENCE.Sheet.ConditionRules"}}</summary>
+              {{!-- data-item-id lets the sheet reopen this after a re-render (see #keepConditionRulesOpen). --}}
+              <details class="condition-rules" data-item-id="{{item.id}}">
+                <summary aria-label="{{localize 'ESSENCE.Sheet.ConditionRulesAria' name=item.name}}">{{localize "ESSENCE.Sheet.ConditionRules"}}</summary>
                 {{#each item.system.sections as |s|}}
                   <div class="condition-section"><span class="condition-label">{{s.label}}</span> {{{s.html}}}</div>
                 {{/each}}
@@ -796,7 +804,7 @@
     <dl class="side-readout-list">
       <dt>{{localize "ESSENCE.Sheet.Reach"}}</dt><dd>{{system.effectiveReach}}</dd>
       <dt>{{localize "ESSENCE.Sheet.ReachPressure"}}</dt><dd>{{system.reachPressure}} <span class="muted">/ {{system.effectiveReach}}</span></dd>
-      <dt>{{localize "ESSENCE.Sheet.TemporaryInfluence"}}</dt><dd>{{system.playState.currentTemporaryInfluence}}</dd>
+      <dt>{{localize "ESSENCE.Sheet.TemporaryInfluence"}}</dt><dd>{{system.playState.currentTemporaryInfluence}} <span class="muted">/ {{system.temporaryInfluence}}</span></dd>
       <dt>{{localize "ESSENCE.Sheet.CoreInfluence"}}</dt><dd>{{system.coreInfluenceFilled}} <span class="muted">/ {{system.coreInfluence.length}}</span></dd>
     </dl>
   </div>

@@ -465,9 +465,9 @@
   {{#each conditions as |item|}}
     <li class="condition-entry">
       <div class="condition-head">
-        <strong>{{item.name}}</strong>
-        <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
-        <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button>
+        <strong class="condition-name">{{item.name}}</strong>
+        <button type="button" data-action="itemEdit" data-item-id="{{item.id}}" data-tooltip-text="{{localize 'ESSENCE.Common.EditAria' name=item.name}}" aria-label="{{localize 'ESSENCE.Common.EditAria' name=item.name}}"><i class="fa-solid fa-pen"></i></button>
+        <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" data-tooltip-text="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button>
       </div>
     </li>
   {{/each}}
