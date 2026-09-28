@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.11
+
+**Fix: an item's read view could not be scrolled.** The Equipment card's read view (and the
+Chassis, Fitting, Augment, Condition and Combat Card read views) cut off at the bottom of the
+window with no scrollbar, so a long Granted Equipment Card ended mid-sentence. The card was shrinking to fit
+the window and clipping its own text, which left the window nothing to scroll. It now keeps its
+full height and the window scrolls, as the edit view already did.
+
 ## 0.18.10
 
 **Fix: switching a Focus's Chassis left the old one in the Armory.** Choosing a Chassis, Fitting

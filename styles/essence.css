@@ -361,6 +361,10 @@
    the fold with no way to reach it (Shane: Half-Plate's Combined Effect ended at "Fortress Shell —").
    Each item PART lists scrollable: [""] so the position survives submitOnChange re-renders. */
 .essence.item .essence-sheet-root { overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; }
+/* The root is a flex column, and the read view (.card-view) sets overflow: hidden for its rounded
+   corners, which lets a flex item shrink below its content. It shrank to the window and clipped its
+   own text, leaving the root nothing to scroll (0.18.11). Parts keep their full height instead. */
+.essence.item .essence-sheet-root > * { flex-shrink: 0; }
 /* A Chassis or Fitting effect is rich text (<p>…</p>). Inside the "Source — effect" list item the
    first paragraph continues the line instead of dropping under the source name. */
 .essence .combined-effect li > p:first-of-type { display: inline; margin: 0; }
