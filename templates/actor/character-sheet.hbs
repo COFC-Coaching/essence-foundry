@@ -57,7 +57,10 @@
       {{!-- Senses (0.18.14): free text, like "Darkvision". A Species trait's Senses pick writes here
             too (EssenceActor#syncSpeciesSubChoices). --}}
       <div class="resist-group">
-        <span class="resist-label">{{localize "ESSENCE.Common.Senses"}}</span>
+        <div class="resist-head">
+          <span class="resist-label">{{localize "ESSENCE.Common.Senses"}}</span>
+          <button type="button" class="resist-add" data-action="addSense"><i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "ESSENCE.Sheet.AddSense"}}</button>
+        </div>
         <div class="resist-tags">
           {{#each system.senses as |sense i|}}
             <span class="tag">{{sense}}
@@ -65,10 +68,12 @@
             </span>
           {{else}}<span class="muted">{{localize "ESSENCE.Common.None"}}</span>{{/each}}
         </div>
-        <button type="button" class="resist-add" data-action="addSense">{{localize "ESSENCE.Sheet.AddSense"}}</button>
       </div>
       <div class="resist-group">
-        <span class="resist-label">{{localize "ESSENCE.Common.Resistances"}}</span>
+        <div class="resist-head">
+          <span class="resist-label">{{localize "ESSENCE.Common.Resistances"}}</span>
+          <button type="button" class="resist-add" data-action="addResistance"><i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "ESSENCE.Sheet.AddResistance"}}</button>
+        </div>
         <div class="resist-tags">
           {{#each system.resistances as |r i|}}
             <span class="tag">{{r.damageType}}{{#if r.source}} ({{r.source}}){{/if}}
@@ -76,10 +81,12 @@
             </span>
           {{else}}<span class="muted">{{localize "ESSENCE.Common.None"}}</span>{{/each}}
         </div>
-        <button type="button" class="resist-add" data-action="addResistance">{{localize "ESSENCE.Sheet.AddResistance"}}</button>
       </div>
       <div class="resist-group">
-        <span class="resist-label">{{localize "ESSENCE.Common.Vulnerabilities"}}</span>
+        <div class="resist-head">
+          <span class="resist-label">{{localize "ESSENCE.Common.Vulnerabilities"}}</span>
+          <button type="button" class="resist-add" data-action="addVulnerability"><i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "ESSENCE.Sheet.AddVulnerability"}}</button>
+        </div>
         <div class="resist-tags">
           {{#each system.vulnerabilities as |r i|}}
             <span class="tag">{{r.damageType}}{{#if r.source}} ({{r.source}}){{/if}}
@@ -87,7 +94,6 @@
             </span>
           {{else}}<span class="muted">{{localize "ESSENCE.Common.None"}}</span>{{/each}}
         </div>
-        <button type="button" class="resist-add" data-action="addVulnerability">{{localize "ESSENCE.Sheet.AddVulnerability"}}</button>
       </div>
     </div>
   </div>

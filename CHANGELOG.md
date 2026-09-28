@@ -7,8 +7,11 @@ All notable changes to the essence-foundry system are recorded here.
 **Senses on the Core tab.** The box beside Spiritual now holds Senses, Resistances and
 Vulnerabilities, with Senses first. Senses were already recorded on every character, and a Species
 trait that picks Senses fills them in, but the sheet never showed them. Each Sense is a removable
-tag, and Add Sense takes a free-text entry such as "Darkvision". The three Add buttons are the same
-width so they line up.
+tag, and Add Sense takes a free-text entry such as "Darkvision".
+
+All three groups share one layout: the name on the left with a compact Add button on the same line,
+then one row for the tags (or "none") that is always at least a tag tall. Thin rules separate the
+groups, and the Add buttons are the same width so they line up.
 
 ## 0.18.13
 
