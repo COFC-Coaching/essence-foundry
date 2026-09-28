@@ -150,6 +150,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       addResistance: EssenceActorSheet.#onAddResistance,
       removeResistance: EssenceActorSheet.#onRemoveResistance,
       addVulnerability: EssenceActorSheet.#onAddVulnerability,
+      addSense: EssenceActorSheet.#onAddSense,
+      removeSense: EssenceActorSheet.#onRemoveSense,
       removeVulnerability: EssenceActorSheet.#onRemoveVulnerability,
       toggleAdaptabilityReroll: EssenceActorSheet.#onToggleAdaptabilityReroll,
       addCondition: EssenceActorSheet.#onAddCondition
@@ -1599,6 +1601,27 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
   static async #onAddVulnerability() {
     await EssenceActorSheet.#onAddResistanceOrVulnerability.call(this, "vulnerabilities", "Add Vulnerability");
+  }
+
+  /** Senses (0.18.14): a free-text entry such as "Darkvision", added to system.senses. */
+  static async #onAddSense() {
+    const sense = await foundry.applications.api.DialogV2.prompt({
+      window: { title: game.i18n.localize("ESSENCE.Sheet.AddSense") },
+      classes: ["essence-dialog"],
+      content: `<label>${game.i18n.localize("ESSENCE.Common.Sense")} <input type="text" name="sense" placeholder="${game.i18n.localize("ESSENCE.Sheet.SensePlaceholder")}" autofocus></label>`,
+      ok: { label: game.i18n.localize("ESSENCE.Sheet.Add"), callback: (event, button) => button.form.elements.sense.value.trim() },
+      rejectClose: false
+    });
+    if (!sense) return;
+    const senses = [...(this.actor.system.senses ?? [])];
+    if (senses.some((s) => s.toLowerCase() === sense.toLowerCase())) return;
+    await this.actor.update({ "system.senses": [...senses, sense] });
+  }
+
+  static async #onRemoveSense(event, target) {
+    const senses = [...(this.actor.system.senses ?? [])];
+    senses.splice(Number(target.dataset.index), 1);
+    await this.actor.update({ "system.senses": senses });
   }
 
   static async #onRemoveResistance(event, target) {

@@ -54,6 +54,19 @@
     {{!-- Two over one, with Resistances and Vulnerabilities in the fourth cell (Shane, 0.18.13):
           a fixed two-column grid sized to its boxes, so nothing reflows as the sheet opens. --}}
     <div class="domain resist-box">
+      {{!-- Senses (0.18.14): free text, like "Darkvision". A Species trait's Senses pick writes here
+            too (EssenceActor#syncSpeciesSubChoices). --}}
+      <div class="resist-group">
+        <span class="resist-label">{{localize "ESSENCE.Common.Senses"}}</span>
+        <div class="resist-tags">
+          {{#each system.senses as |sense i|}}
+            <span class="tag">{{sense}}
+              <button type="button" data-action="removeSense" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Sheet.RemoveSenseAria' name=sense}}"><i class="fa-solid fa-xmark"></i></button>
+            </span>
+          {{else}}<span class="muted">{{localize "ESSENCE.Common.None"}}</span>{{/each}}
+        </div>
+        <button type="button" class="resist-add" data-action="addSense">{{localize "ESSENCE.Sheet.AddSense"}}</button>
+      </div>
       <div class="resist-group">
         <span class="resist-label">{{localize "ESSENCE.Common.Resistances"}}</span>
         <div class="resist-tags">
