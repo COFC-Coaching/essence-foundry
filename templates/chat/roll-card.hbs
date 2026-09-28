@@ -26,9 +26,11 @@
   {{!-- Roll at resolution: committed and paid, not yet rolled. The buttons are wired in essence.mjs. --}}
   <div class="rc-pending">
     <p class="rc-pending-note"><strong>{{localize "ESSENCE.Chat.PendingTitle"}}</strong> {{localize "ESSENCE.Chat.PendingNote" n=pool}}</p>
+    {{#if pendingTargets.length}}<p class="rc-pending-targets muted">{{localize "ESSENCE.Chat.PendingTargets"}} {{#each pendingTargets as |t|}}{{#if @index}}, {{/if}}{{t.name}}{{/each}}</p>{{/if}}
     <div class="rc-actions rc-pending-actions">
       <button type="button" class="rc-apply" data-action="resolvePending">{{localize "ESSENCE.Chat.ResolveRoll"}}</button>
       <button type="button" data-action="cancelPending">{{localize "ESSENCE.Chat.CancelPending"}}</button>
+      <label class="rc-pending-required">{{localize "ESSENCE.Chat.SuccessDiceShort"}} <input type="number" name="required" value="{{pendingRequired}}" min="1" max="10"></label>
       <span class="rc-pending-state muted"></span>
     </div>
   </div>
@@ -127,7 +129,8 @@
   {{/if}}
   {{#if card}}
     <div class="rc-actions">
-      {{#each applyTargets as |t|}}<button type="button" class="rc-apply" data-action="applyDamage" data-uuid="{{t.uuid}}"><span class="rc-apply-label">{{localize "ESSENCE.Chat.ApplyDamageTo" name=t.name}}</span><span class="rc-applied-mark" hidden><i class="fa-solid fa-check" aria-hidden="true"></i> {{localize "ESSENCE.Chat.AppliedTo" name=t.name}}</span></button>{{/each}}
+      {{#each applyTargets as |t|}}<button type="button" class="rc-apply" data-action="applyDamage" data-uuid="{{t.uuid}}"><span class="rc-apply-label">{{localize "ESSENCE.Chat.ApplyDamageTo" name=t.name}}</span><span class="rc-applied-mark is-hidden"><i class="fa-solid fa-check" aria-hidden="true"></i> {{localize "ESSENCE.Chat.AppliedTo" name=t.name}}</span></button>{{/each}}
+      {{#if applyToTargets}}<button type="button" class="rc-apply rc-apply-all" data-action="applyToTargets" data-tooltip-text="{{localize 'ESSENCE.Chat.ApplyToTargetsHint'}}">{{localize "ESSENCE.Chat.ApplyToTargets"}}</button>{{/if}}
       {{#if cardUuid}}<button type="button" class="rc-card" data-action="openCard" data-uuid="{{cardUuid}}" aria-label="{{localize 'ESSENCE.Chat.OpenCardAria' name=label}}" data-tooltip-text="{{localize 'ESSENCE.Chat.OpenCardAria' name=label}}">{{localize "ESSENCE.Chat.OpenCard"}}</button>{{/if}}
     </div>
   {{/if}}

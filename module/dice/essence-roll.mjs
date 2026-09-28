@@ -227,7 +227,8 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
       surgeOptions: nonCombat ? [] : surgeOptions.map((opt, i) => ({ i, n: opt.n, html: opt.html })),
       // Apply buttons (Shane, 2026-09-27): one per targeted token, opening that actor's own Apply
       // Damage dialog; and a Card button that opens the played card. Only for card plays.
-      applyTargets: card && !nonCombat ? Array.from(game.user.targets).filter((t) => t.actor).map((t) => ({ name: t.actor.name, uuid: t.actor.uuid })) : [],
+      applyTargets: card && !nonCombat ? applyTargetList(targets) : [],
+      applyToTargets: !!card && !nonCombat,
       cardUuid: card?.uuid ?? null,
       card: cardChatContext(card),
       play: playChatContext(play),
@@ -246,7 +247,7 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
         surgesAvailable: nonCombat || noSurges ? 0 : combat.surges,
         surgeOptions: nonCombat || noSurges ? [] : surgeOptions.map((opt) => ({ n: opt.n, html: opt.html })),
         spentIndices: [],
-        applyTargets: card && !nonCombat ? Array.from(game.user.targets).filter((t) => t.actor).map((t) => ({ name: t.actor.name, uuid: t.actor.uuid })) : [],
+        applyTargets: card && !nonCombat ? applyTargetList(targets) : [],
         cardUuid: card?.uuid ?? null,
         rerollOffer,
         rerolled: false
@@ -255,6 +256,14 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
   });
 
   return { roll, faces, ...combat, task, targets: targetResults };
+}
+
+/** The Apply buttons a card's chat card carries: one per actor the roll was made against (a
+ *  target list that came from tokens carries uuids), else the clicker's targets at roll time. */
+function applyTargetList(targets) {
+  const fromRoll = Array.isArray(targets) ? targets.filter((t) => t.uuid).map((t) => ({ name: t.name, uuid: t.uuid })) : [];
+  if (fromRoll.length) return fromRoll;
+  return Array.from(game.user.targets).filter((t) => t.actor).map((t) => ({ name: t.actor.name, uuid: t.actor.uuid }));
 }
 
 /** Whether die `i` is one of the reserved Success Dice of a Non-Combat check, matching by face so
@@ -281,14 +290,18 @@ function isNonCombatSuccessDie(faces, successDice, i) {
  * Cancelling keeps the dice and Resources spent (Doc: a cancelled card's costs remain spent).
  * @param {object} options - everything rollEssencePool will need, minus the targets
  */
-export async function postPendingCardPlay({ card, play, pool, defenseKey = "", label, actor, surgeOptions = [], bonusSurges = 0, unopposed = false, nonCombat = false, noSurges = false } = {}) {
+export async function postPendingCardPlay({ card, play, pool, defenseKey = "", label, actor, surgeOptions = [], bonusSurges = 0, unopposed = false, nonCombat = false, noSurges = false, requiredSuccesses = 1, playTargets = [] } = {}) {
   const content = await foundry.applications.handlebars.renderTemplate(
     "systems/essence-system/templates/chat/roll-card.hbs",
-    { label, pending: true, pool, card: cardChatContext(card), play: playChatContext(play), cardUuid: card?.uuid ?? null, dice: [], surgeOptions: [], targets: [] }
+    { label, pending: true, pendingRequired: requiredSuccesses, pendingTargets: playTargets, pool, card: cardChatContext(card), play: playChatContext(play), cardUuid: card?.uuid ?? null, dice: [], surgeOptions: [], targets: [] }
   );
+  // `playTargets` are the tokens targeted when the card was played: the fallback when nobody has
+  // a target set at resolution. `requiredSuccesses` is what the play prompt asked; the pending
+  // card shows it as an editable number so the GM can change it before pressing Roll now.
   const pending = {
     actorUuid: actor?.uuid ?? null, cardUuid: card?.uuid ?? null, pool, defenseKey, label,
-    surgeOptions: (surgeOptions ?? []).map((o) => ({ n: o.n, html: o.html })), bonusSurges, unopposed, nonCombat, noSurges, play
+    surgeOptions: (surgeOptions ?? []).map((o) => ({ n: o.n, html: o.html })), bonusSurges, unopposed, nonCombat, noSurges, play,
+    requiredSuccesses, playTargets
   };
   await ChatMessage.create({
     speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),

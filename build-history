@@ -3876,3 +3876,34 @@ it replaced the reroll and pending handlers wired just above it with `fromUuid(u
 loop now skips anything but `applyDamage` and `openCard`. Lesson for the next chat button: that
 loop is a catch-all by selector, not by action name; add new actions to its skip list or give
 them a row class other than `.rc-actions`.
+
+### 2026-09-28 -- 0.19.2: Shane's review of the resolution flow, and the chat sanitizer
+
+Shane, with screenshots: resolving asked for Success Dice twice (play prompt, then Roll now),
+Roll now stacked two dialogs, the Apply button had vanished, and "the dice are not showing up
+correctly". Live-verified on the same install as the 0.19.1 run (Caelon and a Mook Skirmisher
+token placed on the default scene, then removed).
+
+- **Resolution has no prompts.** `wirePendingCardButtons` reads `game.user.targets` through the
+  new prompt-free `targetsFromTokens` (card-play.mjs), falls back to `pending.playTargets` (the
+  tokens targeted when the card was played, snapshotted by `#finishCardPlay`), and otherwise
+  rolls open. The Success Dice count is the play prompt's value, stored on the pending flags and
+  shown as `input[name=required]` on the card. `promptRequiredSuccesses` and
+  `resolveTargetsForDefense` are no longer imported by essence.mjs (the sheet's immediate path
+  still uses the latter, dialog included).
+- **Apply follows the roll's targets.** `applyTargetList(targets)` in essence-roll.mjs prefers
+  target entries carrying a `uuid` (token-derived lists now include one) over the clicker's
+  targets at roll time. `applyToTargets` is a second button whose handler reads the clicker's
+  targets when pressed and runs each actor sheet's `applyDamage` action, the same path as the
+  per-target button.
+- **Foundry sanitizes stored chat content.** `ChatMessage.content` had no `<svg` and no ` hidden`
+  in it: the sanitizer removed the d10 SVG (bare numbers since 0.18.9's SVG dice; 0.18.12 only
+  re-centred the number) and the `hidden` attribute on the Applied mark (visible on every fresh
+  card). The 0.18 live test read the DOM's `.die` count, never the picture. d10-shape.hbs is now
+  four spans; `.d10-line`/`.d10-body`/`.d10-face` are clip-path polygons, the outline being the
+  full-size layer behind a body inset 1.5px. Rule for chat templates from here: no SVG, no boolean
+  attributes the sanitizer drops (`hidden`), inputs and data-attributes survive.
+- Verified: a targeted deferred play resolved in one click against the play-time target with the
+  GM's targets cleared; an untargeted one rolled open with no dialog; Apply to targeted tokens
+  opened the Mook's Apply Damage dialog; the resolved card shows three drawn dice (gold Success
+  Die, green Surge die) and no Applied mark until damage is applied.

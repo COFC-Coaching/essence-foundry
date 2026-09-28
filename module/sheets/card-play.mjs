@@ -27,13 +27,13 @@ export async function resolveTargetsForDefense(defenseKey) {
   if (targeted.length > 1) {
     const targets = targeted.map((t) => {
       const d = t.actor?.system?.defenses?.[defenseKey];
-      return { name: t.actor?.name ?? t.document.name, defense: typeof d === "number" ? d : null };
+      return { name: t.actor?.name ?? t.document.name, uuid: t.actor?.uuid ?? null, defense: typeof d === "number" ? d : null };
     });
     return { defense: null, targets };
   }
 
   const targetDefense = targeted[0]?.actor?.system?.defenses?.[defenseKey];
-  if (typeof targetDefense === "number") return { defense: targetDefense, targets: null };
+  if (typeof targetDefense === "number") return { defense: targetDefense, targets: null, single: { name: targeted[0].actor.name, uuid: targeted[0].actor.uuid, defense: targetDefense } };
 
   const declared = await new Promise((resolve) => {
     new foundry.applications.api.DialogV2({
@@ -55,6 +55,21 @@ export async function resolveTargetsForDefense(defenseKey) {
     }).render(true);
   });
   return { defense: declared, targets: null };
+}
+
+/**
+ * The same reading of a token set with no prompt: the tokens the clicker has targeted right now,
+ * as a list ready for rollEssencePool. Used when a deferred card resolves (the GM or player targets
+ * whoever the card ends up hitting, then presses Roll now), where a dialog would only be in the way.
+ * @param {Iterable<Token>} tokens
+ * @param {string} defenseKey
+ * @returns {Array<{name: string, uuid: string, defense: number|null}>}
+ */
+export function targetsFromTokens(tokens, defenseKey) {
+  return Array.from(tokens ?? []).filter((t) => t.actor).map((t) => {
+    const d = defenseKey ? t.actor.system?.defenses?.[defenseKey] : null;
+    return { name: t.actor.name, uuid: t.actor.uuid, defense: typeof d === "number" ? d : null };
+  });
 }
 
 /**

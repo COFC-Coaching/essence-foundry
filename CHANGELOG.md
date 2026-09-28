@@ -2,6 +2,15 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.19.2
+
+**Shane's review of 0.19.1 (2026-09-28): one prompt, one click, and dice that draw.**
+
+- **Success Dice asked once.** The play prompt's "Success Dice required" is the only place it is asked. A pending card shows that number as an editable field beside Roll now, so the GM can change it before the roll.
+- **Roll now is a single click.** No Declare Defense prompt and no second Success Dice prompt. The roll uses whoever the clicker has targeted at that moment (the GM can target for a player), falls back to the tokens targeted when the card was played (listed on the pending card as "Targeted when played"), and otherwise rolls open for the GM to read.
+- **Apply to targeted tokens.** Every card's chat card carries this button next to the per-target Apply buttons. It reads the clicker's targets when pressed and opens Apply Damage for each, so the GM can target one or several tokens and apply a card the player rolled without a target. The per-target buttons now follow the tokens the roll was actually made against.
+- **Dice draw again.** Foundry sanitizes stored chat content and drops `<svg>`, so since 0.18.9 the d10s rendered as bare numbers with no die behind them. The d10 is now drawn with CSS clip-paths on plain spans. The same sanitizer strips the `hidden` attribute, which is why "Applied to …" showed on a fresh card; it is a class now.
+
 ## 0.19.1
 
 **Live-test fix for 0.19.0.** The Adaptability reroll button and the pending card's Roll now and Cancelled buttons did nothing: the chat hook's Apply and Card loop rebinds every button in the actions row and had overwritten their handlers. Only Apply and Card go through that loop now. Verified in the test world: reroll spends a use and posts the rerolled check, Roll now reads targets and the Success Dice requirement then rolls, Cancelled marks the card with its dice still spent.

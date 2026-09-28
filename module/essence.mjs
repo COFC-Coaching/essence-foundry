@@ -22,7 +22,7 @@ import EssenceContentWizard, { canCreateContent } from "./apps/content-wizard.mj
 import EssenceBulkImport from "./apps/bulk-import.mjs";
 import { capitalize, fitTitleSize, domainResource, fittingReconfigureCost } from "./utils.mjs";
 import { rollEssencePool, resolvePendingCardPlay } from "./dice/essence-roll.mjs";
-import { resolveTargetsForDefense, promptRequiredSuccesses } from "./sheets/card-play.mjs";
+import { targetsFromTokens } from "./sheets/card-play.mjs";
 import { syncEquipmentEffect } from "./data/equipment-effects.mjs";
 import { GRADE_BUDGETS } from "./data/monster-budgets.mjs";
 import EssenceGradeBudgetsSettings from "./apps/grade-budgets-settings.mjs";
@@ -529,9 +529,18 @@ function wirePendingCardButtons(message, html, data) {
   const rollBtn = box.querySelector("[data-action='resolvePending']");
   if (rollBtn) rollBtn.onclick = async () => {
     if (!(await mayAct())) return;
-    const { defense, targets } = await resolveTargetsForDefense(pending.unopposed ? "" : pending.defenseKey);
-    const required = await promptRequiredSuccesses(pending.label);
-    if (required === null) return;
+    // No prompts at resolution (Shane, 2026-09-28). Targets: whoever the clicker has targeted now
+    // (the GM can target for a player), else the tokens targeted when the card was played, else
+    // the card rolls open and the GM reads it. Success Dice: the number on the card, prefilled
+    // from the play prompt.
+    const defenseKey = pending.unopposed ? "" : pending.defenseKey;
+    let list = targetsFromTokens(game.user.targets, defenseKey);
+    if (!list.length && Array.isArray(pending.playTargets)) list = pending.playTargets;
+    let defense = null, targets = null;
+    if (list.length > 1) targets = list;
+    else if (list.length === 1) { defense = list[0].defense; targets = [list[0]]; }
+    const required = Math.max(1, parseInt(box.querySelector("input[name='required']")?.value, 10) || pending.requiredSuccesses || 1);
+    rollBtn.disabled = true;
     await resolvePendingCardPlay(message, { defense, targets, requiredSuccesses: required });
     await settle("resolved");
   };
@@ -659,13 +668,27 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
   // shows "Applied" once damage has gone through, so a GM can see which targets are done (0.18.12).
   // The mark is a message flag; a player who cannot edit the message still sees it on their click.
   const applied = new Set(data?.appliedTo ?? []);
+  // "Apply to targeted tokens" (Shane, 2026-09-28): reads the clicker's targets when pressed, so a
+  // GM can target one or several tokens and apply a card the player rolled without a target.
+  const applyAll = html.querySelector("[data-action='applyToTargets']");
+  if (applyAll) applyAll.onclick = async () => {
+    const tokens = Array.from(game.user.targets).filter((t) => t.actor);
+    if (!tokens.length) return ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ApplyNeedsTarget"));
+    for (const t of tokens) {
+      const sheet = t.actor.sheet;
+      await sheet.render(true);
+      const handler = sheet.options.actions?.applyDamage;
+      if (typeof handler === "function") await handler.call(sheet, new Event("click"), sheet.element);
+    }
+  };
   for (const btn of html.querySelectorAll(".rc-actions [data-action]")) {
     // Only the Apply and Card buttons belong to this loop; the reroll and pending-card buttons
     // share the .rc-actions row and are wired above (0.19.0).
     if (!["applyDamage", "openCard"].includes(btn.dataset.action)) continue;
     const markApplied = () => {
       btn.classList.add("applied");
-      btn.querySelector(".rc-applied-mark")?.removeAttribute("hidden");
+      // A class, not the `hidden` attribute: Foundry strips that attribute from stored chat content.
+      btn.querySelector(".rc-applied-mark")?.classList.remove("is-hidden");
     };
     if (btn.dataset.action === "applyDamage" && applied.has(btn.dataset.uuid)) markApplied();
     btn.onclick = async () => {

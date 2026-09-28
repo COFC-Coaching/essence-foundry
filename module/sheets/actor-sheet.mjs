@@ -2,7 +2,7 @@ import { rollEssencePool, postPendingCardPlay } from "../dice/essence-roll.mjs";
 import { EXPERTISE_DATABASE, THREAD_EFFECTS } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { addSecondDistinction } from "../data/origin-select.mjs";
-import { playBurnOnlyCard, resolveTargetsForDefense, promptRequiredSuccesses, promptDamageComponents, promptConcentrationOnWound } from "./card-play.mjs";
+import { playBurnOnlyCard, resolveTargetsForDefense, targetsFromTokens, promptDamageComponents, promptConcentrationOnWound } from "./card-play.mjs";
 import { returnFromManifestation, isBroken, entryCostFor } from "../apps/manifestation.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, tierQualifiesForGrant } from "../data/item-grants.mjs";
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
@@ -1155,7 +1155,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     if (defer) {
       // Roll at resolution: the dice and costs above are spent; the chat card's Roll button
       // (essence.mjs) rolls when the chain resolves back to this card.
-      await postPendingCardPlay({ card: item, play, pool: rolled, defenseKey, label, actor, surgeOptions: sys.surges, bonusSurges, unopposed, nonCombat: !!sys.noSurges });
+      await postPendingCardPlay({ card: item, play, pool: rolled, defenseKey, label, actor, surgeOptions: sys.surges, bonusSurges, unopposed, nonCombat: !!sys.noSurges, requiredSuccesses, playTargets: targetsFromTokens(game.user.targets, defenseKey) });
     } else {
       await rollEssencePool({ card: item, play, pool: rolled, defense, targets, label, actor, surgeOptions: sys.surges, bonusSurges, unopposed, nonCombat: !!sys.noSurges, requiredSuccesses });
     }
