@@ -2,6 +2,33 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.7
+
+**Fix: Conditions in the sidebar were laid out sideways.** Each Condition is a list row, and the
+list's general "lay each row out horizontally" rule out-ranked the Condition card's own rule, so a
+Condition's name, buttons and every rules section sat side by side. A long one such as Fatigued ran
+down the sidebar a word per line. The card now stacks: the name and Edit/Delete on one line, the
+rule text folded under a "Rules" toggle. The ranking fix covers the NPC and Monster sheets too.
+
+**The Wounds and Influence sidebar panels, tidied.** They were cramped, with labels and inputs
+wrapping onto ragged lines in the narrow sidebar.
+- **Stat tiles:** Resilience and Temporary Wounds are two tiles like the Defense tiles above them.
+  "(effective 2)" sits under Resilience.
+- **Core Wounds:** a full-width row of five even L/L/S/S/C boxes.
+- **Buttons:** Apply Damage, Recover Wound and Grant Recovery sit in an even grid.
+- **Adaptability Reroll:** a slim row that says Available or Used.
+- **Equipment bonuses:** one line per item, such as "Half-Plate · Resilience +2 · Movement −2".
+- **Influence panel:** the bottom block is now a proper Influence panel, with Standing in its
+  heading and one aligned row each for Reach, Reach Pressure, Temporary Influence and Core
+  Influence. Nothing wraps mid-number any more.
+
+**Fix: a character with a short Core Wound track.** Every character has five Core Wound spaces and
+five Core Influence spaces. One test character was found with only two Core Wound spaces saved, so
+its sheet showed two boxes. The cause couldn't be traced to current code. A character that loads
+with a short track is now padded back to five and saved, with the usual world-repair notice to the
+GM. The repair never removes a space, so marked Wounds keep their places. NPCs and Monsters are
+unaffected, since their track size comes from Grade.
+
 ## 0.18.6
 
 **Fix: the Core tab's Attribute boxes.** Two things from Shane's screenshot. The tooltip cue from 0.18.5 was a bottom border on the label, and on the Core tab that label is a fixed-width column, so Might, Grace and the rest trailed a dotted line to the dice button; it is a text underline now, under the word only. And the three Attribute boxes were each given a third of the tab body whatever its width, about 250px at the default window, while a row (label, roll button, value, six pips) needs about 270px, so the pips ran past the border and everything sat cramped. The boxes now keep their width: three across on a wide window, two across (then one) on a narrower one. Rows and boxes also get a little more room.

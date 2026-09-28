@@ -77,6 +77,17 @@ export function takeRepairLog() {
   return repairLog.splice(0, repairLog.length);
 }
 
+/**
+ * Records a repair a model made itself, beyond what the schema walk below can detect, so it is
+ * logged, persisted by world-repair.mjs, and reported to the GM like every other repair.
+ * @param {object} source - the `system` source object that was changed
+ * @param {{path: string, from: *, to: *, kind: string}} entry
+ */
+export function recordRepair(source, entry) {
+  repairLog.push(entry);
+  repairedSources.add(source);
+}
+
 /** @returns {boolean} whether this exact source object was changed on the way in. */
 export function wasRepaired(source) {
   try {

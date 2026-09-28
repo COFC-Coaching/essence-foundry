@@ -231,5 +231,18 @@ check("printed Defenses load", migrate(EssenceNpcData, { printedDefenses: { fort
 check("a negative Task Dice value is clamped", migrate(EssenceNpcData, { taskDice: -2 }).taskDice, 0);
 check("an enemy saved before 0.11.0 still loads", migrate(EssenceNpcData, { ...modernNpc }).grade, modernNpc.grade);
 
+console.log("\n--- a character's Core tracks always have five spaces (0.18.7) ---");
+const wound = (filled) => ({ filled, domain: filled ? "Physical" : "", severity: filled ? "Light" : "", condition: filled ? "Light Physical Wound" : "" });
+const shortTrack = migrate(EssenceCharacterData, { coreWounds: [wound(true), wound(false)] }).coreWounds;
+check("a two-space Core Wound track is padded to five", shortTrack.length, 5);
+check("a marked Wound keeps its place when padding", shortTrack[0].filled, true);
+check("padded spaces are empty", shortTrack.slice(1).every((w) => !w.filled && w.severity === ""), true);
+check("a full five-space track is left alone",
+  migrate(EssenceCharacterData, { coreWounds: [wound(true), wound(true), wound(false), wound(false), wound(false)] }).coreWounds.length, 5);
+check("a short Core Influence track is padded to five",
+  migrate(EssenceCharacterData, { coreInfluence: [{ filled: false, severity: "", condition: "" }] }).coreInfluence.length, 5);
+check("an enemy's track is sized by Grade, never padded here",
+  migrate(EssenceNpcData, { coreWounds: [wound(false), wound(false)] }).coreWounds.length, 2);
+
 console.log(`\n${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);

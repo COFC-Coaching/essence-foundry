@@ -420,7 +420,16 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // item's chassisItemId/fittingItemId that was never actually embedded on this actor, so its
     // Effect/bonuses still resolve to something instead of silently rendering blank.
     const equipmentResolver = await buildEquipmentResolver(this.actor);
-    context.equipmentBonusSources = computeEquipmentBonusSources(this.actor.items, (item) => deriveEquipmentStats(equipmentResolver, item));
+    // One readable line per item for the vitals sidebar: "Resilience +2 · Movement −2".
+    const signed = (n) => (n > 0 ? `+${n}` : `−${Math.abs(n)}`);
+    context.equipmentBonusSources = computeEquipmentBonusSources(this.actor.items, (item) => deriveEquipmentStats(equipmentResolver, item))
+      .map((b) => ({
+        ...b,
+        summary: [
+          ["ESSENCE.Common.Fortitude", b.fortitude], ["ESSENCE.Common.Resilience", b.resilience],
+          ["ESSENCE.Common.Movement", b.movement], ["ESSENCE.Sheet.Reach", b.reach]
+        ].filter(([, n]) => n).map(([key, n]) => `${game.i18n.localize(key)} ${signed(n)}`).join(" · ")
+      }));
 
     // v0.6 allows two Distinctions (Doc L4911): the starting one, and one acquired later through
     // the Skill Tree, flagged acquiredLater. Style gating and Expertise limits read both.

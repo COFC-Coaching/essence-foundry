@@ -1,10 +1,36 @@
 import EssenceCombatantData from "./actor-combatant.mjs";
+import { recordRepair } from "./migration.mjs";
+import { SEVERITY_BY_INDEX } from "../utils.mjs";
 
 const { fields } = foundry.data;
 
 /** Adds the player-only fluff (Concept, Career, Non-Combat Skills, etc.) on top of the combat
  * fields every combatant shares — see actor-combatant.mjs. */
 export default class EssenceCharacterData extends EssenceCombatantData {
+  /**
+   * A character always has five Core Wound spaces and five Core Influence spaces: Light, Light,
+   * Serious, Serious, Critical (Doc L914, L920). A world was found holding a character with only
+   * two Core Wound spaces (0.18.7), which the sheet then drew as two boxes and the Wound math
+   * could never fill past. The cause could not be traced, so the repair does not depend on it:
+   * a short track is padded back to five as the actor loads. Nothing is ever removed, so a marked
+   * Wound or Influence space keeps its place. Adversaries are excluded on purpose: their track is
+   * sized by Grade (actor-adversary.mjs).
+   */
+  static migrateData(source) {
+    source = super.migrateData(source);
+    for (const key of ["coreWounds", "coreInfluence"]) {
+      const track = source?.[key];
+      if (!Array.isArray(track) || track.length >= SEVERITY_BY_INDEX.length) continue;
+      const from = track.length;
+      const blank = key === "coreWounds"
+        ? { filled: false, domain: "", severity: "", condition: "" }
+        : { filled: false, severity: "", condition: "" };
+      while (track.length < SEVERITY_BY_INDEX.length) track.push({ ...blank });
+      recordRepair(source, { path: key, from: `${from} spaces`, to: `${SEVERITY_BY_INDEX.length} spaces`, kind: "restored" });
+    }
+    return source;
+  }
+
   static defineSchema() {
     return {
       ...super.defineSchema(),
