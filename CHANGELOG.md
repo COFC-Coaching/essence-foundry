@@ -2,6 +2,10 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.19.3
+
+**Roll now asks for the Defense when nobody targeted anyone (Shane, 2026-09-28).** A deferred card resolves against the clicker's targets, else the targets set when it was played, else one Declare Defense prompt, the same prompt an immediate play shows; leaving it blank still rolls open. The Success Dice count is never asked a second time.
+
 ## 0.19.2
 
 **Shane's review of 0.19.1 (2026-09-28): one prompt, one click, and dice that draw.**

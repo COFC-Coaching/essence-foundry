@@ -22,7 +22,7 @@ import EssenceContentWizard, { canCreateContent } from "./apps/content-wizard.mj
 import EssenceBulkImport from "./apps/bulk-import.mjs";
 import { capitalize, fitTitleSize, domainResource, fittingReconfigureCost } from "./utils.mjs";
 import { rollEssencePool, resolvePendingCardPlay } from "./dice/essence-roll.mjs";
-import { targetsFromTokens } from "./sheets/card-play.mjs";
+import { targetsFromTokens, resolveTargetsForDefense } from "./sheets/card-play.mjs";
 import { syncEquipmentEffect } from "./data/equipment-effects.mjs";
 import { GRADE_BUDGETS } from "./data/monster-budgets.mjs";
 import EssenceGradeBudgetsSettings from "./apps/grade-budgets-settings.mjs";
@@ -529,16 +529,21 @@ function wirePendingCardButtons(message, html, data) {
   const rollBtn = box.querySelector("[data-action='resolvePending']");
   if (rollBtn) rollBtn.onclick = async () => {
     if (!(await mayAct())) return;
-    // No prompts at resolution (Shane, 2026-09-28). Targets: whoever the clicker has targeted now
-    // (the GM can target for a player), else the tokens targeted when the card was played, else
-    // the card rolls open and the GM reads it. Success Dice: the number on the card, prefilled
-    // from the play prompt.
+    // Targets (Shane, 2026-09-28): whoever the clicker has targeted now (the GM can target for a
+    // player), else the tokens targeted when the card was played, else one Declare Defense prompt.
+    // Success Dice: the number on the card, prefilled from the play prompt; never asked again.
     const defenseKey = pending.unopposed ? "" : pending.defenseKey;
     let list = targetsFromTokens(game.user.targets, defenseKey);
     if (!list.length && Array.isArray(pending.playTargets)) list = pending.playTargets;
     let defense = null, targets = null;
     if (list.length > 1) targets = list;
     else if (list.length === 1) { defense = list[0].defense; targets = [list[0]]; }
+    else if (defenseKey) {
+      // Nobody targeted anyone (Shane, 2026-09-28): ask for the Defense, as an immediate play
+      // does; blank rolls open.
+      const declared = await resolveTargetsForDefense(defenseKey);
+      defense = declared.defense;
+    }
     const required = Math.max(1, parseInt(box.querySelector("input[name='required']")?.value, 10) || pending.requiredSuccesses || 1);
     rollBtn.disabled = true;
     await resolvePendingCardPlay(message, { defense, targets, requiredSuccesses: required });

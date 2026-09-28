@@ -3907,3 +3907,12 @@ token placed on the default scene, then removed).
   GM's targets cleared; an untargeted one rolled open with no dialog; Apply to targeted tokens
   opened the Mook's Apply Damage dialog; the resolved card shows three drawn dice (gold Success
   Die, green Surge die) and no Applied mark until damage is applied.
+
+### 2026-09-28 -- 0.19.3: Declare Defense at resolution when there is no target
+
+Shane: "it should ask for Defense if they don't target someone." The 0.19.2 fallback from "no
+target anywhere" to an open roll is replaced by `resolveTargetsForDefense` (one Declare prompt,
+blank = open), so a deferred card and an immediate one behave the same when untargeted. The
+order at resolution is now: clicker's targets, play-time targets, Declare prompt. Verified live:
+an untargeted deferred Basic Ranged Attack showed exactly one dialog on Roll now and rolled
+against the declared 6.

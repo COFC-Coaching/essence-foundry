@@ -274,7 +274,7 @@
   "ESSENCE.Sheet.PlayLabel": "Play",
   "ESSENCE.Sheet.RollLabel": "Roll",
   "ESSENCE.Chat.PendingTitle": "Committed, not yet rolled.",
-  "ESSENCE.Chat.PendingNote": "{n} dice wait for the chain to resolve. Declare responses, target the tokens it hits (or leave the play-time targets), then press Roll now.",
+  "ESSENCE.Chat.PendingNote": "{n} dice wait for the chain to resolve. Declare responses, target the tokens it hits (or leave the play-time targets), then press Roll now. With no target it asks for the Defense.",
   "ESSENCE.Chat.ResolveRoll": "Roll now (resolve)",
   "ESSENCE.Chat.SuccessDiceShort": "Success Dice",
   "ESSENCE.Chat.PendingTargets": "Targeted when played:",
