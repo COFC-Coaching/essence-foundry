@@ -175,6 +175,13 @@ export async function rollEssencePool({ pool, defense = null, targets = null, la
     {
       label,
       faces,
+      // One entry per die for the chat card: its role class and the label read aloud and shown on
+      // hover (0.18.12). The Success Die never counts as a Surge (resolveCombatRoll).
+      dice: faces.map((face, i) => {
+        const role = i === combat.successDieIndex ? "success" : face >= 6 ? "surge" : "rolled";
+        const key = { success: "ESSENCE.Chat.SuccessDieAria", surge: "ESSENCE.Chat.SurgeDieAria", rolled: "ESSENCE.Chat.RolledDieAria" }[role];
+        return { face, cls: role === "rolled" ? "" : `${role}-die`, label: game.i18n.format(key, { n: face }) };
+      }),
       pool: n,
       defense: multi || unopposed ? null : defense,
       unopposed,

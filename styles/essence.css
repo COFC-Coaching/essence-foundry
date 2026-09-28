@@ -550,7 +550,7 @@
 .essence button[data-action="releaseItem"],
 .essence button.used-toggle {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 1.7em; height: 1.7em; min-height: 0; padding: 0; margin: 0; flex: 0 0 auto;
+  width: max(24px, 1.7em); height: max(24px, 1.7em); min-height: 0; padding: 0; margin: 0; flex: 0 0 auto;
   font: inherit; font-size: 0.95em; color: var(--essence-muted-soft); background: none; border: none; border-radius: 4px;
   cursor: pointer; -webkit-appearance: none; appearance: none; line-height: 1;
   transition: background-color 0.1s ease, color 0.1s ease;
@@ -725,11 +725,11 @@
 .essence .item-table th, .essence .item-table td { padding: 6px 8px; text-align: left; vertical-align: top; }
 .essence .item-table th {
   padding-top: 0; padding-bottom: 4px; border-bottom: 1px solid var(--essence-line);
-  font-size: 0.78em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.65; font-weight: normal;
+  font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; color: var(--essence-muted); font-weight: 600;
 }
 .essence .item-table tbody tr { border-bottom: 1px solid rgba(var(--essence-ink-rgb), 0.08); }
 /* Connections: Tier is a 1-5 dropdown (0.18.9), so its column only needs to fit "Tier 5". */
-.essence .item-table .connection-tier-col { width: 6.5em; }
+.essence .item-table .connection-tier-col { width: 5em; }
 .essence .item-table .connection-tier-col select { width: 100%; }
 .essence .item-table tbody tr:last-child { border-bottom: none; }
 /* Rows in the Equipment tables are draggable and individually actionable (View/Edit/Move/Delete),
@@ -816,8 +816,12 @@
    Kind colors are the card-type tokens; the gold accent is the Success Die. Foundry's chat
    message keeps its own background: the card draws its own panel so it reads the same on the
    parchment (light) and dark chat logs. */
+/* Opaque (0.18.12): the chat log sits on Foundry's light parchment, and the sheets' 0.84-alpha
+   panel let it through, lightening the card until muted text, red "Failure" and the burned dice
+   fell below readable contrast. */
+.essence.roll-card { --essence-panel: #201d19; --essence-panel-raised: #25211c; }
 .essence.roll-card { padding: 0; margin: 2px 0; border: 1px solid var(--essence-line); border-radius: var(--essence-radius); overflow: hidden; background: var(--essence-panel-raised); color: var(--essence-ink); font-family: var(--essence-font-body); }
-.essence.roll-card .rc-band { display: flex; justify-content: space-between; gap: 8px; padding: 4px 10px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--essence-accent-ink); background: var(--essence-muted-soft); }
+.essence.roll-card .rc-band { display: flex; justify-content: space-between; gap: 8px; padding: 4px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--essence-accent-ink); background: var(--essence-muted-soft); }
 .essence.roll-card.kind-action .rc-band { background: var(--essence-card-action); }
 .essence.roll-card.kind-reaction .rc-band { background: var(--essence-card-reaction); }
 .essence.roll-card.kind-equipment .rc-band { background: var(--essence-card-equipment); }
@@ -826,7 +830,7 @@
 .essence.roll-card h3.rc-title { font-size: 1.1em; }
 .essence.roll-card .rc-meta, .essence.roll-card .muted { color: var(--essence-muted); font-size: 0.9em; }
 .essence.roll-card .rc-meta { margin: 0 10px 6px; }
-.essence.roll-card .rc-lbl { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--essence-muted); }
+.essence.roll-card .rc-lbl { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--essence-muted); }
 .essence.roll-card .rc-accent { color: var(--essence-accent); }
 .essence.roll-card .dice-roll { margin: 0 10px; }
 .essence.roll-card .dice-roll .dice-result { color: inherit; }
@@ -843,10 +847,11 @@
 .essence.roll-card .die .d10-body { fill: var(--d10-fill); stroke: var(--d10-line); stroke-width: 1.2; stroke-linejoin: round; }
 .essence.roll-card .die .d10-face { fill: var(--d10-face); stroke: var(--d10-line); stroke-width: 1; stroke-linejoin: round; }
 .essence.roll-card .die .d10-edge { fill: none; stroke: var(--d10-line); stroke-width: 1; }
-.essence.roll-card .die .die-num { position: absolute; left: 0; right: 0; top: 12px; text-align: center; line-height: 1; }
+.essence.roll-card .die .d10-num { fill: var(--d10-ink); font-size: 14px; font-weight: 700; font-family: var(--essence-font-body); font-variant-numeric: tabular-nums; }
+.essence.roll-card .die .d10-num.two { font-size: 11.5px; letter-spacing: -0.04em; }
 .essence.roll-card .die.success-die { --d10-fill: #b8944f; --d10-face: var(--essence-accent); --d10-line: #7a6232; --d10-ink: var(--essence-accent-ink); filter: drop-shadow(0 0 3px rgba(var(--essence-accent-rgb), 0.45)); }
 .essence.roll-card .die.surge-die { --d10-fill: #256a29; --d10-face: var(--essence-success); --d10-line: #174a1a; --d10-ink: #fff; }
-.essence.roll-card .die.burned-die { --d10-fill: transparent; --d10-face: transparent; --d10-ink: var(--essence-line-bright); }
+.essence.roll-card .die.burned-die { --d10-fill: transparent; --d10-face: transparent; --d10-line: var(--essence-muted); --d10-ink: var(--essence-muted); }
 .essence.roll-card .die.burned-die .d10 * { stroke-dasharray: 2.5 2; }
 .essence.roll-card .rc-dice-note { margin-left: 4px; font-size: 0.85em; color: var(--essence-muted); }
 .essence.roll-card .roll-summary { padding: 0 10px 8px; }
@@ -870,7 +875,7 @@
 }
 .essence.roll-card .surge-option .surge-text { flex: 1; }
 .essence.roll-card .surge-option.spent { background: rgba(var(--essence-success-rgb), 0.22); border-color: var(--essence-success); }
-.essence.roll-card .surge-option.spent .cost { background: var(--essence-success); border-color: var(--essence-success); color: var(--essence-ink-bright); }
+.essence.roll-card .surge-option.spent .cost { background: var(--essence-success); border-color: var(--essence-success); color: #fff; }
 .essence.roll-card .surge-option:disabled { opacity: 0.45; cursor: not-allowed; }
 .essence.roll-card .rc-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 10px 8px; }
 .essence.roll-card .rc-actions button { width: auto; flex: 0 0 auto; height: 28px !important; min-height: 0 !important; line-height: 1 !important; padding: 0 10px; border-radius: var(--essence-radius-sm); font-size: 12px; font-weight: 600; background: var(--essence-well); border: 1px solid var(--essence-line-strong); color: var(--essence-ink); cursor: pointer; }
@@ -888,12 +893,17 @@
 .essence.roll-card.kind-basic .rc-apply { background: var(--essence-card-basic-ink); border-color: var(--essence-card-basic-ink); color: #141210; }
 .essence.roll-card .rc-text { display: flex; flex-direction: column; gap: 6px; padding: 8px 10px 10px; border-top: 1px solid var(--essence-line); }
 .essence.roll-card .rc-sec { display: flex; gap: 8px; line-height: 1.4; font-size: 0.9em; }
-.essence.roll-card .rc-sec > b { flex: 0 0 60px; padding-top: 2px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--essence-muted); }
+.essence.roll-card .rc-sec > b { flex: 0 0 auto; min-width: 62px; max-width: 35%; padding-top: 2px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--essence-muted); }
 .essence.roll-card .rc-sec > span > p { margin: 0; }
 .essence.roll-card .rc-rider { border-top: 1px dashed var(--essence-line-dashed); padding-top: 6px; }
 .essence.roll-card .rc-lead { margin: 0 10px 6px; }
 .essence.roll-card .rc-cont { margin-top: -2px; }
 .essence.roll-card .rc-lbl-row { margin: 6px 0 2px; }
+.essence.roll-card .rc-burn-note { margin: 0 10px 8px; }
+.essence.roll-card .rc-results .rc-target { overflow-wrap: anywhere; }
+/* An Apply button that has been used keeps working but says so (0.18.12). */
+.essence.roll-card .rc-apply.applied { opacity: 0.75; }
+.essence.roll-card .rc-apply.applied .rc-apply-label { display: none; }
 .essence.roll-card .rc-text + .rc-actions { padding-top: 0; }
 
 /* ============ Card sheet: read view (plan step 6) ============
@@ -996,6 +1006,12 @@
 .essence .card-view-toggle.equipment-view-toggle:hover { background: rgba(var(--essence-equipment-rgb), 0.22); }
 .essence .equipment-view { border-color: var(--essence-equipment); }
 .essence .equipment-view .card-view-label { color: var(--essence-equipment); }
+/* Equipment the item is blue; an Equipment Card it grants is amber, as on the Combat tab and in chat. */
+.essence .equipment-view .granted-cards .card-view-label { color: var(--essence-card-equipment-ink); }
+.essence .granted-card { margin: 4px 0 8px; padding: 6px 8px; border: 1px solid rgba(249, 168, 37, 0.45); border-radius: var(--essence-radius-sm); background: rgba(249, 168, 37, 0.06); }
+.essence .granted-card-head { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.08em; color: var(--essence-muted); }
+.essence .granted-card .card-view-text p { margin: 0 0 4px; }
+.essence .granted-card-hint { margin: 0; font-size: 0.85em; }
 
 /* Chassis — var(--essence-chassis) (bronze/structural) and Fitting — var(--essence-fitting) (teal), sharing one sheet/template
    but branching on item.type via the .component-view-chassis/.component-view-fitting modifier. */

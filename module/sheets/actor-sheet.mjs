@@ -1649,8 +1649,10 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       return;
     }
     const picked = await promptDamageComponents({ types: DAMAGE_TYPES });
-    if (!picked) return;
+    if (!picked) return false;
     await EssenceActorSheet.#applyDamageComponents(this.actor, picked.components, picked.reduction, picked.weakened);
+    // true tells a chat card's Apply button the damage went through (renderChatMessageHTML).
+    return true;
   }
 
   /** The Apply Damage engine (Doc L3896-L3918), shared with forced Strain's Psychic Breach Damage. */

@@ -27,18 +27,21 @@
   <div class="dice-roll">
     <div class="dice-result">
       {{#unless card}}<div class="dice-formula">{{pool}}d10{{#if defense}} {{localize "ESSENCE.Chat.VsDefense" defense=defense}}{{/if}}{{#if difficulty}} {{localize "ESSENCE.Chat.VsDifficulty" difficulty=difficulty}}{{/if}}</div>{{/unless}}
-      <div class="dice-faces">
-        {{#each faces as |face i|}}
-          {{!-- The Success Die never carries surge-die: Surges are counted after the Defense check
-               and the Success Die is excluded from that count (resolveCombatRoll). --}}
-          <span class="die {{#if (eq i ../successDieIndex)}}success-die{{/if}} {{#if (and (gte face 6) (ne i ../successDieIndex))}}surge-die{{/if}}" role="img" aria-label="{{#if (eq i ../successDieIndex)}}{{localize 'ESSENCE.Chat.SuccessDieAria' n=face}}{{else if (gte face 6)}}{{localize 'ESSENCE.Chat.SurgeDieAria' n=face}}{{else}}{{localize 'ESSENCE.Chat.RolledDieAria' n=face}}{{/if}}">{{> "systems/essence-system/templates/chat/d10-shape.hbs"}}<span class="die-num">{{face}}</span></span>
+      <div class="dice-faces" role="group" aria-label="{{localize 'ESSENCE.Chat.DiceRolled'}}">
+        {{#each dice as |d|}}
+          {{!-- Each die's role class and spoken label come from rollEssencePool's `dice`; the Success
+               Die is never a Surge die (resolveCombatRoll). --}}
+          <span class="die {{d.cls}}" role="img" aria-label="{{d.label}}" data-tooltip-text="{{d.label}}">{{> "systems/essence-system/templates/chat/d10-shape.hbs" n=d.face}}</span>
         {{/each}}
-        {{#if play.burned}}{{#each play.burnedList}}<span class="die burned-die" role="img" aria-label="{{localize 'ESSENCE.Chat.BurnedDie'}}">{{> "systems/essence-system/templates/chat/d10-shape.hbs"}}<span class="die-num">·</span></span>{{/each}}{{/if}}
+        {{#if play.burned}}{{#each play.burnedList}}<span class="die burned-die" role="img" aria-label="{{localize 'ESSENCE.Chat.BurnedDie'}}" data-tooltip-text="{{localize 'ESSENCE.Chat.BurnedDie'}}">{{> "systems/essence-system/templates/chat/d10-shape.hbs" n="×"}}</span>{{/each}}{{/if}}
         {{#if card.attr}}<span class="rc-dice-note">{{card.attr}}{{#if play.maxRolled}}, {{localize "ESSENCE.Chat.Max" n=play.maxRolled}}{{/if}}</span>{{/if}}
       </div>
     </div>
   </div>
 
+  {{#if play.burnOnly}}
+  <p class="rc-burn-note muted">{{localize "ESSENCE.Chat.BurnOnlyNote"}}</p>
+  {{else}}
   <div class="roll-summary">
     {{#if nonCombat}}
       <p><strong>{{localize "ESSENCE.Chat.HighestDie"}}:</strong> {{successDie}} —
@@ -59,7 +62,6 @@
           <span>{{#if t.succeeded}}<span class="pass">{{localize "ESSENCE.Chat.Success"}}</span>{{else}}<span class="fail">{{localize "ESSENCE.Chat.Failure"}}</span>{{/if}}</span>
         {{/each}}
       </div>
-      {{#unless unopposed}}<p class="muted">{{localize "ESSENCE.Chat.SuccessDie"}}: {{successDie}}</p>{{/unless}}
     {{else if unopposed}}
       <p><strong>{{localize "ESSENCE.Chat.Unopposed"}}</strong> — <span class="pass">{{localize "ESSENCE.Chat.UnopposedNote"}}</span></p>
     {{else}}
@@ -92,6 +94,8 @@
     {{/if}}
   </div>
 
+  {{/if}}
+
   {{#if (or card.body.length card.rider)}}
     <div class="rc-text">
       {{#each card.body as |line|}}
@@ -104,8 +108,8 @@
   {{/if}}
   {{#if card}}
     <div class="rc-actions">
-      {{#each applyTargets as |t|}}<button type="button" class="rc-apply" data-action="applyDamage" data-uuid="{{t.uuid}}">{{localize "ESSENCE.Chat.ApplyDamageTo" name=t.name}}</button>{{/each}}
-      {{#if cardUuid}}<button type="button" class="rc-card" data-action="openCard" data-uuid="{{cardUuid}}">{{localize "ESSENCE.Chat.OpenCard"}}</button>{{/if}}
+      {{#each applyTargets as |t|}}<button type="button" class="rc-apply" data-action="applyDamage" data-uuid="{{t.uuid}}"><span class="rc-apply-label">{{localize "ESSENCE.Chat.ApplyDamageTo" name=t.name}}</span><span class="rc-applied-mark" hidden><i class="fa-solid fa-check" aria-hidden="true"></i> {{localize "ESSENCE.Chat.AppliedTo" name=t.name}}</span></button>{{/each}}
+      {{#if cardUuid}}<button type="button" class="rc-card" data-action="openCard" data-uuid="{{cardUuid}}" aria-label="{{localize 'ESSENCE.Chat.OpenCardAria' name=label}}" data-tooltip-text="{{localize 'ESSENCE.Chat.OpenCardAria' name=label}}">{{localize "ESSENCE.Chat.OpenCard"}}</button>{{/if}}
     </div>
   {{/if}}
 </div>

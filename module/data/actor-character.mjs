@@ -39,12 +39,17 @@ export default class EssenceCharacterData extends EssenceCombatantData {
         if (!c || typeof c !== "object" || !("scope" in c)) return;
         const scope = String(c.scope ?? "").trim();
         delete c.scope;
-        if (c.tier !== undefined && c.tier !== null) return;
-        const n = Number(scope.match(/\d+/)?.[0]);
-        c.tier = Number.isFinite(n) ? Math.min(CONNECTION_TIER_MAX, Math.max(CONNECTION_TIER_MIN, n)) : CONNECTION_TIER_MIN;
-        const words = scope.replace(/^\s*(tier|t)?\s*\d+\s*[:\-–—,.]?\s*/i, "").trim();
+        if (!scope) return;
+        // Only a Scope that reads as a Tier ("3", "Tier 2", "T2 - docks", "Team Tier 4") sets the
+        // Tier (0.18.12); a number inside other words ("up to 3 guards") is not a Tier, so that
+        // whole text moves to the Area and the Tier starts at 1. A row that somehow has both keeps
+        // its Tier and still keeps the text.
+        const m = scope.match(/^(?:(?:team\s+)?(?:tier|t)\s*)?(\d+)\s*(?:$|[:\-–—,.;(]\s*)/i);
+        const hasTier = c.tier !== undefined && c.tier !== null;
+        if (!hasTier) c.tier = m ? Math.min(CONNECTION_TIER_MAX, Math.max(CONNECTION_TIER_MIN, Number(m[1]))) : CONNECTION_TIER_MIN;
+        const words = (m ? scope.slice(m[0].length) : scope).replace(/[)\s]+$/, "").trim();
         if (words) c.area = c.area ? `${c.area} (${words})` : words;
-        if (scope) recordRepair(source, { path: `connections.${i}.scope`, from: scope, to: `Tier ${c.tier}`, kind: "restored" });
+        recordRepair(source, { path: `connections.${i}.scope`, from: scope, to: `Tier ${c.tier}${words ? "; text moved to Area of Involvement" : ""}`, kind: "migrated" });
       });
     }
     return source;

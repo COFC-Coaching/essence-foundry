@@ -52,13 +52,18 @@
         Interface) is left out of the Combined Effect and played from the Combat tab, so the read
         view lists it here; before 0.18.10 only the edit view did, and the card looked missing. --}}
   {{#if stats.grantedCards.length}}
-    <div class="card-view-line">
+    {{!-- Amber like every other Equipment Card (chat, Combat tab): the item itself stays blue,
+          anything played as a card is amber (0.18.12). Each card is its own block so its own
+          stat lines read in order instead of running on after the part's name. --}}
+    <div class="card-view-line granted-cards">
       <div class="card-view-label">{{localize "ESSENCE.Item.Equipment.GrantedEquipmentCards"}}</div>
-      <ul class="combined-effect">
-        {{#each stats.grantedCards as |g|}}
-          <li><strong>{{g.source}}</strong>{{#if g.uses}} ({{localize "ESSENCE.Common.UsesFraction" remaining=g.usesRemaining total=g.uses}}){{/if}} — {{{g.effect}}}</li>
-        {{/each}}
-      </ul>
+      {{#each stats.grantedCards as |g|}}
+        <div class="granted-card">
+          <div class="granted-card-head"><span>{{localize "ESSENCE.Item.Equipment.GrantedBy" source=g.source}}</span>{{#if g.uses}}<span>{{localize "ESSENCE.Common.UsesFraction" remaining=g.usesRemaining total=g.uses}}</span>{{/if}}</div>
+          <div class="card-view-text">{{{g.effect}}}</div>
+        </div>
+      {{/each}}
+      <p class="muted granted-card-hint">{{localize "ESSENCE.Item.Equipment.GrantedCardsHint"}}</p>
     </div>
   {{/if}}
   {{#if system.effect}}

@@ -2,6 +2,42 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.12
+
+Fixes from a design review of the 0.18.9 to 0.18.11 changes.
+
+**Chat cards.**
+- **Readable on the light chat log:** the card is now fully opaque. The parchment behind the chat
+  column used to show through and wash out grey labels, red "Failure" and burned dice.
+- **d10 numbers:** the number sits in the middle of the die's top face, and "10" fits on it.
+- **Burned dice:** they show a clear dashed outline with a ×.
+- **Hover names:** hovering a die names it: Success Die, Surge die, or burned.
+- **Apply Damage:** after damage goes through, the button reads "✓ Applied to Raider". It still
+  works if a Reaction changes the damage and it needs applying again.
+- **Card button:** it names the card for screen readers.
+- **Removed repetition:** the "Success Die: X" line under the target table repeated the gold die
+  and is gone.
+- **Text size:** band and section labels are a little larger, and the pool line no longer leaves
+  "→ 2" alone on a line.
+
+**Connections.**
+- **Safer Tier upgrade:** only an old Scope that reads as a Tier ("3", "Tier 2", "Team Tier 4",
+  "T2 - docks") sets the Tier. A number inside other words ("up to 3 guards") is no longer read as
+  a Tier; the whole text moves to Area of Involvement and the Tier starts at 1. The world-repair
+  notice now says when text was moved. A row that already had a Tier keeps its old Scope text too.
+- **Tier dropdown:** it shows just the numbers 1 to 5 under the Tier header, and screen readers hear
+  "Tier for Ilsa the Fence".
+- **Hints:** the Area of Involvement hint is shorter so it isn't cut off. The column hints also
+  reach keyboard and screen-reader users.
+
+**Item read views.**
+- **Granted Equipment Cards:** each card now sits in its own amber block with its lines in order,
+  with a note that it's played from the Combat tab. Blue marks the item itself and amber marks
+  anything played as a card, matching the Combat tab and chat.
+
+**Everywhere:** row icon buttons (view, edit, delete and the rest) and table headers are a little
+larger and easier to hit and read.
+
 ## 0.18.11
 
 **Fix: an item's read view could not be scrolled.** The Equipment card's read view (and the

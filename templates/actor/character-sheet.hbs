@@ -536,9 +536,9 @@
       {{#each connections as |c|}}
         <tr>
           <td><input name="system.connections.{{c.i}}.name" type="text" value="{{c.name}}"></td>
-          <td><input name="system.connections.{{c.i}}.area" type="text" value="{{c.area}}" placeholder="{{localize 'ESSENCE.Character.ConnectionAreaPlaceholder'}}"></td>
-          <td><input name="system.connections.{{c.i}}.relationship" type="text" value="{{c.relationship}}" placeholder="{{localize 'ESSENCE.Character.ConnectionRelationshipPlaceholder'}}"></td>
-          <td class="connection-tier-col"><select name="system.connections.{{c.i}}.tier" data-dtype="Number" aria-label="{{localize 'ESSENCE.Character.ConnectionTier'}}">{{#each @root.connectionTierOptions as |o|}}<option value="{{o.value}}" {{#if (eq o.value c.tier)}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></td>
+          <td><input name="system.connections.{{c.i}}.area" type="text" value="{{c.area}}" placeholder="{{localize 'ESSENCE.Character.ConnectionAreaPlaceholder'}}" aria-label="{{localize 'ESSENCE.Character.ConnectionArea'}}" aria-description="{{localize 'ESSENCE.Character.ConnectionAreaHint'}}"></td>
+          <td><input name="system.connections.{{c.i}}.relationship" type="text" value="{{c.relationship}}" placeholder="{{localize 'ESSENCE.Character.ConnectionRelationshipPlaceholder'}}" aria-label="{{localize 'ESSENCE.Character.ConnectionRelationship'}}" aria-description="{{localize 'ESSENCE.Character.ConnectionRelationshipHint'}}"></td>
+          <td class="connection-tier-col"><select name="system.connections.{{c.i}}.tier" data-dtype="Number" aria-label="{{localize 'ESSENCE.Character.ConnectionTierAria' name=c.name}}" aria-description="{{localize 'ESSENCE.Character.ConnectionTierHint'}}">{{#each @root.connectionTierOptions as |o|}}<option value="{{o.value}}" {{#if (eq o.value c.tier)}}selected{{/if}}>{{o.value}}</option>{{/each}}</select></td>
           <td><button type="button" data-action="deleteArrayRow" data-array="connections" data-index="{{c.i}}" aria-label="{{localize 'ESSENCE.Character.DeleteConnectionAria' n=(addOne c.i)}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
       {{/each}}

@@ -572,7 +572,16 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
   // Apply and Card buttons on a card play (Shane, 2026-09-27): Apply opens the target's own Apply
   // Damage dialog through the sheet's registered action, so the engine, Wound Cards and status
   // handling are exactly what the sheet button gives; Card opens the played card's sheet.
+  // An Apply button stays live after use (a Reaction can change the damage, Shane 2026-09-27) but
+  // shows "Applied" once damage has gone through, so a GM can see which targets are done (0.18.12).
+  // The mark is a message flag; a player who cannot edit the message still sees it on their click.
+  const applied = new Set(data?.appliedTo ?? []);
   for (const btn of html.querySelectorAll(".rc-actions [data-action]")) {
+    const markApplied = () => {
+      btn.classList.add("applied");
+      btn.querySelector(".rc-applied-mark")?.removeAttribute("hidden");
+    };
+    if (btn.dataset.action === "applyDamage" && applied.has(btn.dataset.uuid)) markApplied();
     btn.onclick = async () => {
       const doc = await fromUuid(btn.dataset.uuid);
       if (!doc) return ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ChatTargetGone"));
@@ -580,7 +589,13 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       await sheet.render(true);
       if (btn.dataset.action === "applyDamage") {
         const handler = sheet.options.actions?.applyDamage;
-        if (typeof handler === "function") await handler.call(sheet, new Event("click"), sheet.element);
+        if (typeof handler !== "function") return;
+        const done = await handler.call(sheet, new Event("click"), sheet.element);
+        if (done !== true) return;
+        markApplied();
+        if (message.isOwner && !applied.has(btn.dataset.uuid)) {
+          await message.update({ "flags.essence-system.appliedTo": [...applied, btn.dataset.uuid] });
+        }
       }
     };
   }

@@ -874,7 +874,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
    */
   static async #onApplyDamage() {
     const picked = await promptDamageComponents({ types: DAMAGE_TYPES });
-    if (!picked) return;
+    if (!picked) return false;
 
     const sys = this.actor.system;
     const { coreWounds, capacity } = EssenceNpcSheet.#storedCoreWoundsAndCapacity(this.actor);
@@ -913,6 +913,8 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       // Doc L4062: a Defeated simplified enemy is unconscious (Foundry's own status).
       await this.actor.setUnconscious(true);
     }
+    // true tells a chat card's Apply button the damage went through (renderChatMessageHTML).
+    return true;
   }
 
   /** V6 §2415: adversaries recover Wounds order-free too (no severity to sequence by) — this is a

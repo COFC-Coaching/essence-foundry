@@ -255,6 +255,10 @@ check("words after a Tier number are kept", conn("T2 - city watch only").area, "
 check("an empty Scope leaves the Area alone", conn("").area, "fencing goods");
 check("the old scope key is gone", "scope" in conn("2"), false);
 check("an existing Tier is not overwritten", conn("4", { tier: 2 }).tier, 2);
+check("a number inside other words is not a Tier", conn("up to 3 guards").tier, 1);
+check("...and those words move to the Area", conn("up to 3 guards").area, "fencing goods (up to 3 guards)");
+check("\"Team Tier 4\" becomes Tier 4", conn("Team Tier 4").tier, 4);
+check("a row with a Tier keeps its Scope text too", conn("docks", { tier: 3 }).area, "fencing goods (docks)");
 check("Scope text fills an empty Area", migrate(EssenceCharacterData, { connections: [{ name: "Ilsa", area: "", scope: "docks" }] }).connections[0].area, "docks");
 
 console.log(`\n${pass} passed, ${fail} failed\n`);
