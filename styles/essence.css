@@ -411,6 +411,21 @@
    pips ran past the border. The grid now fits as many 270px boxes as the body allows: three on a
    wide window, two (then one) on a narrower one, never a squeezed box (Shane, screenshot). */
 .essence .tab.core .domains { grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); }
+/* Character Core tab (0.18.13, Shane): always two over one, with Resistances and Vulnerabilities in
+   the fourth cell. The columns are as wide as the boxes' contents rather than stretched across the
+   tab, so the boxes carry no empty right side and don't reflow from three to two as the sheet
+   opens. One column only when the tab body is too narrow for two. */
+.essence.character .tab.core .domains { grid-template-columns: repeat(2, max-content); justify-content: start; align-items: stretch; margin-bottom: 10px; }
+.essence.character .tab.core .domain { padding: 8px 12px 6px; }
+.essence.character .tab.core .attr-row .pip-track { margin-right: 2px; }
+.essence .resist-box { display: flex; flex-direction: column; gap: 10px; }
+.essence .resist-group { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto; gap: 4px 8px; align-items: center; }
+.essence .resist-label { font-weight: 600; }
+.essence .resist-tags { grid-column: 1; grid-row: 2; display: flex; flex-wrap: wrap; gap: 4px; min-width: 0; }
+.essence .resist-add { grid-column: 2; grid-row: 1 / span 2; align-self: center; white-space: nowrap; font-size: 0.85em; padding: 2px 8px; }
+@container (max-width: 600px) {
+  .essence.character .tab.core .domains { grid-template-columns: minmax(0, 1fr); }
+}
 .essence .attr-row, .essence .resource-row, .essence .defense-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
 .essence .attr-label { flex: 0 0 80px; text-transform: capitalize; }
 .essence .attr-input, .essence .current-input { width: 3em; }

@@ -2,6 +2,15 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.13
+
+**Core tab: Attributes two over one, with Resistances and Vulnerabilities beside Spiritual.**
+Physical and Mental sit side by side, with Spiritual underneath. Resistances and Vulnerabilities
+move into the fourth box beside Spiritual: each shows its entries (or "none") and its Add button.
+The boxes are only as wide as their contents, so they no longer stretch across the tab with an
+empty right side. The layout no longer jumps from three columns to two as the sheet opens. On a
+very narrow sheet the boxes stack in one column. NPC and Monster sheets are unchanged.
+
 ## 0.18.12
 
 Fixes from a design review of the 0.18.9 to 0.18.11 changes.

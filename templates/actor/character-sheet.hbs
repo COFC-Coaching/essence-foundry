@@ -51,26 +51,31 @@
         {{/each}}
       </div>
     {{/each}}
-  </div>
-
-  <div class="resistances-row">
-    <div class="resistance-block">
-      <span class="attr-label">{{localize "ESSENCE.Common.Resistances"}}</span>
-      {{#each system.resistances as |r i|}}
-        <span class="tag">{{r.damageType}}{{#if r.source}} ({{r.source}}){{/if}}
-          <button type="button" data-action="removeResistance" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Sheet.RemoveResistance'}}"><i class="fa-solid fa-xmark"></i></button>
-        </span>
-      {{/each}}
-      <button type="button" data-action="addResistance">{{localize "ESSENCE.Sheet.AddResistance"}}</button>
-    </div>
-    <div class="resistance-block">
-      <span class="attr-label">{{localize "ESSENCE.Common.Vulnerabilities"}}</span>
-      {{#each system.vulnerabilities as |r i|}}
-        <span class="tag">{{r.damageType}}{{#if r.source}} ({{r.source}}){{/if}}
-          <button type="button" data-action="removeVulnerability" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Sheet.RemoveVulnerability'}}"><i class="fa-solid fa-xmark"></i></button>
-        </span>
-      {{/each}}
-      <button type="button" data-action="addVulnerability">{{localize "ESSENCE.Sheet.AddVulnerability"}}</button>
+    {{!-- Two over one, with Resistances and Vulnerabilities in the fourth cell (Shane, 0.18.13):
+          a fixed two-column grid sized to its boxes, so nothing reflows as the sheet opens. --}}
+    <div class="domain resist-box">
+      <div class="resist-group">
+        <span class="resist-label">{{localize "ESSENCE.Common.Resistances"}}</span>
+        <div class="resist-tags">
+          {{#each system.resistances as |r i|}}
+            <span class="tag">{{r.damageType}}{{#if r.source}} ({{r.source}}){{/if}}
+              <button type="button" data-action="removeResistance" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Sheet.RemoveResistance'}}"><i class="fa-solid fa-xmark"></i></button>
+            </span>
+          {{else}}<span class="muted">{{localize "ESSENCE.Common.None"}}</span>{{/each}}
+        </div>
+        <button type="button" class="resist-add" data-action="addResistance">{{localize "ESSENCE.Sheet.AddResistance"}}</button>
+      </div>
+      <div class="resist-group">
+        <span class="resist-label">{{localize "ESSENCE.Common.Vulnerabilities"}}</span>
+        <div class="resist-tags">
+          {{#each system.vulnerabilities as |r i|}}
+            <span class="tag">{{r.damageType}}{{#if r.source}} ({{r.source}}){{/if}}
+              <button type="button" data-action="removeVulnerability" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Sheet.RemoveVulnerability'}}"><i class="fa-solid fa-xmark"></i></button>
+            </span>
+          {{else}}<span class="muted">{{localize "ESSENCE.Common.None"}}</span>{{/each}}
+        </div>
+        <button type="button" class="resist-add" data-action="addVulnerability">{{localize "ESSENCE.Sheet.AddVulnerability"}}</button>
+      </div>
     </div>
   </div>
 
