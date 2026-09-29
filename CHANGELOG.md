@@ -2,6 +2,10 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.19.4
+
+**Condition text caught up with the 2026-09-28 draft.** Weakened now reads as the draft has it: each separate instance of Damage is reduced by 1, per target and per component (the Apply Damage prompt already worked that way since 0.13.6; the card said the old "once to the total"). Dazed no longer says Mooks and Normals waive it; it says a profile states its treatment and that by default they lose the Turn's Action allowance, which is what 0.18.1 built. Conditions pack rebuilt; re-import the two cards on existing actors.
+
 ## 0.19.3
 
 **Roll now asks for the Defense when nobody targeted anyone (Shane, 2026-09-28).** A deferred card resolves against the clicker's targets, else the targets set when it was played, else one Declare Defense prompt, the same prompt an immediate play shows; leaving it blank still rolls open. The Success Dice count is never asked a second time.
