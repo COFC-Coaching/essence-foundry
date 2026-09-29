@@ -111,3 +111,7 @@ which releases the lock without dropping the session or requiring you to log bac
   `scripts/combat-cards/` for the 396-card Style catalogue) — dev tooling only, not shipped in
   releases
 - `.github/workflows/release.yml` — the release pipeline described above
+
+## Copyright
+
+The Essence System rules, card content, and game mechanics are (c) 2026 Ryan Shaw. All rights reserved. See [LICENSE](LICENSE).
