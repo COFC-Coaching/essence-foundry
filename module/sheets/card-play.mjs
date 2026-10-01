@@ -11,6 +11,82 @@
  */
 import { burnOnlyProfile, stripHtml } from "../utils.mjs";
 
+/**
+ * The Defense(s) a card rolls against, read from the user's current targets: several targets give
+ * a per-target list, one gives its value, none asks for a declared value (blank rolls open).
+ * Shared by the Character sheet's immediate roll and by the chat hook that rolls a deferred card at
+ * resolution (essence.mjs), which is when the Doc says targeting is finalized.
+ * @param {string} defenseKey - "fortitude" | "composure" | "harmony" | ""
+ * @returns {Promise<{defense: number|null, targets: Array|null}>}
+ */
+export async function resolveTargetsForDefense(defenseKey) {
+  if (!defenseKey) return { defense: null, targets: null };
+
+  const targeted = Array.from(game.user.targets);
+
+  if (targeted.length > 1) {
+    const targets = targeted.map((t) => {
+      const d = t.actor?.system?.defenses?.[defenseKey];
+      return { name: t.actor?.name ?? t.document.name, uuid: t.actor?.uuid ?? null, defense: typeof d === "number" ? d : null };
+    });
+    return { defense: null, targets };
+  }
+
+  const targetDefense = targeted[0]?.actor?.system?.defenses?.[defenseKey];
+  if (typeof targetDefense === "number") return { defense: targetDefense, targets: null, single: { name: targeted[0].actor.name, uuid: targeted[0].actor.uuid, defense: targetDefense } };
+
+  const declared = await new Promise((resolve) => {
+    new foundry.applications.api.DialogV2({
+      window: { title: `Declare ${defenseKey[0].toUpperCase()}${defenseKey.slice(1)}` },
+      content: `<p>No target selected. Enter the target's ${defenseKey} (leave blank to roll open):</p>
+        <input type="number" name="defense" autofocus>`,
+      buttons: [{
+        action: "roll",
+        label: "Roll",
+        default: true,
+        // DialogV2 falls back to the button's own `action` ("roll") whenever a callback
+        // returns null/undefined, so an empty string (not null) means "roll open".
+        callback: (event, button) => {
+          const val = button.form.elements.defense.value;
+          return val === "" ? "" : Number(val);
+        }
+      }],
+      submit: (result) => resolve(result === "" || result === "roll" ? null : result)
+    }).render(true);
+  });
+  return { defense: declared, targets: null };
+}
+
+/**
+ * The same reading of a token set with no prompt: the tokens the clicker has targeted right now,
+ * as a list ready for rollEssencePool. Used when a deferred card resolves (the GM or player targets
+ * whoever the card ends up hitting, then presses Roll now), where a dialog would only be in the way.
+ * @param {Iterable<Token>} tokens
+ * @param {string} defenseKey
+ * @returns {Array<{name: string, uuid: string, defense: number|null}>}
+ */
+export function targetsFromTokens(tokens, defenseKey) {
+  return Array.from(tokens ?? []).filter((t) => t.actor).map((t) => {
+    const d = defenseKey ? t.actor.system?.defenses?.[defenseKey] : null;
+    return { name: t.actor.name, uuid: t.actor.uuid, defense: typeof d === "number" ? d : null };
+  });
+}
+
+/**
+ * "Set Success Dice Before Rolling" (Doc 2026-09-28): the number of Success Dice a card needs is
+ * fixed when it reaches resolution. Asked once, default 1.
+ * @returns {Promise<number|null>} null when the prompt was closed
+ */
+export async function promptRequiredSuccesses(title = "Success Dice") {
+  const n = await foundry.applications.api.DialogV2.prompt({
+    window: { title }, classes: ["essence-dialog"],
+    content: `<p>${game.i18n.localize("ESSENCE.Sheet.RequiredSuccessesPrompt")}</p><input type="number" name="required" value="1" min="1" max="10" autofocus>`,
+    ok: { label: game.i18n.localize("ESSENCE.Sheet.RollLabel"), callback: (event, button) => Math.max(1, parseInt(button.form.elements.required.value, 10) || 1) },
+    rejectClose: false
+  });
+  return typeof n === "number" ? n : null;
+}
+
 function cardText(item) {
   const lines = (item.system.body ?? []).filter((b) => stripHtml(b.html)).map((b) => `<p><strong>${b.label}.</strong> ${b.html}</p>`);
   return lines.join("");

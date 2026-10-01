@@ -569,24 +569,24 @@ const BASIC_CARDS = [
   { kind: "action", name: "Basic Melee Attack", domain: "physical", attr: "might", skill: "prowess", defense: "fortitude", min: "2",
     body: [
       { label: "Target", html: "One creature within the Range of a melee Source you can use, or one unattended object that the Source can plausibly damage." },
-      { label: "Effect", html: "Against a creature, roll against Fortitude unless Helpless Targets applies; against an object use its declared Difficulty. Commit at least 2 Action dice. The maximum is Might + Prowess, or 2 if that sum is lower. If the Source explicitly permits another Physical Attribute, substitute it for Might. On success, deal 1 Physical Damage of a type appropriate to the Source. An unarmed attack uses Range 1 and can always use Bludgeoning. An attack into a suspected space burns 1 extra die." }
+      { label: "Effect", html: "Against a creature, roll against Fortitude unless Helpless Targets applies; against an object use its declared Difficulty. Commit at least 2 Action Dice. The roll maximum is Might + Prowess. If the maximum is 1, roll 1 die and burn the other die of the minimum commitment. If the Source explicitly permits another Physical Attribute, substitute it for Might. On success, deal 1 Physical Damage of a type appropriate to the Source. An unarmed attack uses Range 1 and can always use Bludgeoning. An attack into a suspected space burns 1 extra die." }
     ],
     surges: [{ n: "2", html: "Deal +1 Damage." }] },
   { kind: "action", name: "Basic Ranged Attack", domain: "physical", attr: "grace", skill: "ballistics", defense: "fortitude", min: "2",
     body: [
       { label: "Target", html: "One creature within the Range of a ranged Source you can use, or one unattended object that the Source can plausibly damage." },
-      { label: "Effect", html: "Against a creature, roll against Fortitude unless Helpless Targets applies; against an object use its declared Difficulty. Commit at least 2 Action dice. The maximum is Grace + Ballistics, or 2 if that sum is lower. On success, deal 1 Physical Damage of a type appropriate to the Source. An attack into a suspected space burns 1 extra die." }
+      { label: "Effect", html: "Against a creature, roll against Fortitude unless Helpless Targets applies; against an object use its declared Difficulty. Commit at least 2 Action Dice. The roll maximum is Grace + Ballistics. If the maximum is 1, roll 1 die and burn the other die of the minimum commitment. On success, deal 1 Physical Damage of a type appropriate to the Source. An attack into a suspected space burns 1 extra die." }
     ],
     surges: [{ n: "2", html: "Deal +1 Damage." }] },
   { kind: "reaction", name: "Defend", domain: "physical", attr: "", skill: "", defense: "", min: "2", unopposed: true,
     body: [
-      { label: "Trigger", html: "You are targeted by an opposed Action or Reaction." },
-      { label: "Effect", html: "Choose the Endurance Attribute of the targeted Defense: Vigor for Fortitude, Resolve for Composure, or Anima for Harmony. Roll at least 2 Reaction dice, up to that Attribute; if the Attribute is 1, your maximum is 2 instead. This Reaction is unopposed. Gain +1 to the targeted Defense against the triggering card." }
+      { label: "Trigger", html: "An opposed Action or Reaction declares you as an intended target or includes you in its declared potential area, including an announced Surge expansion or fallback." },
+      { label: "Effect", html: "Choose the Endurance Attribute of the targeted Defense: Vigor for Fortitude, Resolve for Composure, or Anima for Harmony. Commit at least 2 Reaction Dice; when Defend resolves, roll up to that Attribute. If the Attribute is 1, roll 1 die and burn the other die of the minimum commitment. This Reaction is unopposed. Gain +1 to the targeted Defense against the triggering card." }
     ],
     surges: [{ n: "2", html: "Increase that Defense by an additional +1 against the triggering card." }] },
   { kind: "action", name: "Dash", domain: "physical", attr: "", skill: "", defense: "", min: "2", burnDice: 2, noRoll: true,
     body: [
-      { label: "Effect", html: "Burn 2 Action dice to move up to 4 additional units. This movement is voluntary and follows ordinary terrain and movement restrictions. It is in addition to normal Movement for the Turn." }
+      { label: "Effect", html: "Burn any number of Action dice, at least 2, to gain that many units of Movement this Turn: 1 unit per burned die, the general movement rule restated. This movement is voluntary and follows ordinary terrain and movement restrictions. It is in addition to normal Movement for the Turn." }
     ],
     surges: [] },
   { kind: "action", name: "Reconfigure", domain: "physical", attr: "", skill: "", defense: "", min: "3", burnDice: 3, noRoll: true,

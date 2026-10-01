@@ -1,8 +1,8 @@
-import { rollEssencePool } from "../dice/essence-roll.mjs";
+import { rollEssencePool, postPendingCardPlay } from "../dice/essence-roll.mjs";
 import { EXPERTISE_DATABASE, THREAD_EFFECTS } from "../data/expertise-database.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { addSecondDistinction } from "../data/origin-select.mjs";
-import { playBurnOnlyCard, promptDamageComponents, promptConcentrationOnWound } from "./card-play.mjs";
+import { playBurnOnlyCard, resolveTargetsForDefense, targetsFromTokens, promptDamageComponents, promptConcentrationOnWound } from "./card-play.mjs";
 import { returnFromManifestation, isBroken, entryCostFor } from "../apps/manifestation.mjs";
 import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, tierQualifiesForGrant } from "../data/item-grants.mjs";
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
@@ -153,7 +153,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       addSense: EssenceActorSheet.#onAddSense,
       removeSense: EssenceActorSheet.#onRemoveSense,
       removeVulnerability: EssenceActorSheet.#onRemoveVulnerability,
-      toggleAdaptabilityReroll: EssenceActorSheet.#onToggleAdaptabilityReroll,
+      adjustAdaptabilityReroll: EssenceActorSheet.#onAdjustAdaptabilityReroll,
       addCondition: EssenceActorSheet.#onAddCondition
     }
   };
@@ -732,24 +732,27 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    */
   /** `extraCheckbox` yields `{count, extra}`; `checkboxes` ([{name,label}]) adds more, read back as
    *  `result[name]`. */
-  static async #promptDiceCount({ title, label, min, max, initial, note = "", extraCheckbox = null, checkboxes = [] }) {
-    const box = (name, text) => `<label style="display:flex;align-items:center;gap:6px;margin-top:6px;"><input type="checkbox" name="${name}"> ${text}</label>`;
+  static async #promptDiceCount({ title, label, min, max, initial, note = "", extraCheckbox = null, checkboxes = [], requiredField = false, okLabel = "Roll" }) {
+    const box = (name, text, checked = false) => `<label style="display:flex;align-items:center;gap:6px;margin-top:6px;"><input type="checkbox" name="${name}"${checked ? " checked" : ""}> ${text}</label>`;
+    // Multiple Success Dice (Doc 2026-09-28): the requirement is normally 1; a GM can ask for more.
+    const required = requiredField ? `<label style="display:flex;align-items:center;gap:6px;margin-top:6px;">${game.i18n.localize("ESSENCE.Sheet.RequiredSuccessesShort")} <input type="number" name="required" value="1" min="1" max="10" style="width:4em"></label>` : "";
     return new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
         window: { title },
-        content: `<p>${label}</p>${note ? `<p class="muted">${note}</p>` : ""}<input type="number" name="count" value="${initial}" min="${min}" max="${max}" autofocus>${extraCheckbox ? box("extra", extraCheckbox.label) : ""}${checkboxes.map((c) => box(c.name, c.label)).join("")}`,
+        content: `<p>${label}</p>${note ? `<p class="muted">${note}</p>` : ""}<input type="number" name="count" value="${initial}" min="${min}" max="${max}" autofocus>${required}${extraCheckbox ? box("extra", extraCheckbox.label) : ""}${checkboxes.map((c) => box(c.name, c.label, c.checked)).join("")}`,
         buttons: [
           {
             action: "commit",
-            label: "Roll",
+            label: okLabel,
             default: true,
             callback: (event, button) => {
               const raw = Number(button.form.elements.count.value);
               const n = Number.isFinite(raw) ? raw : initial;
               const count = Math.min(max, Math.max(min, n));
-              if (!extraCheckbox && !checkboxes.length) return count;
+              if (!extraCheckbox && !checkboxes.length && !requiredField) return count;
               const out = { count, extra: extraCheckbox ? button.form.elements.extra.checked : false };
               for (const c of checkboxes) out[c.name] = !!button.form.elements[c.name]?.checked;
+              out.required = requiredField ? Math.max(1, parseInt(button.form.elements.required.value, 10) || 1) : 1;
               return out;
             }
           },
@@ -827,7 +830,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    * @param {string} title
    * @param {object} [opts]
    * @param {boolean} [opts.fixedAttr] - hide the Attribute select (the roll already knows it)
-   * @returns {Promise<{attr: string, difficulty: number|null, freeDice: number}|null>}
+   * @returns {Promise<{attr: string, difficulty: number|null, freeDice: number, requiredSuccesses: number}|null>}
    */
   static async #promptAttrAndCooperation(title, { fixedAttr = null } = {}) {
     const attrField = fixedAttr
@@ -838,7 +841,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
         window: { title },
         content: `${attrField}
           <label>${game.i18n.localize("ESSENCE.Sheet.DifficultyPrompt")}<input type="number" name="difficulty" value="" min="1" max="10" step="1" placeholder="${game.i18n.localize("ESSENCE.Sheet.DifficultyBlank")}"></label>
-          <label>${game.i18n.localize("ESSENCE.Sheet.CooperationPrompt")}<input type="number" name="freeDice" value="0" min="0" step="1"></label>`,
+          <label>${game.i18n.localize("ESSENCE.Sheet.CooperationPrompt")}<input type="number" name="freeDice" value="0" min="0" step="1"></label>
+          <label>${game.i18n.localize("ESSENCE.Sheet.RequiredSuccessesPrompt")}<input type="number" name="required" value="1" min="1" max="10" step="1"></label>`,
         buttons: [{
           action: "roll",
           label: "Roll",
@@ -848,7 +852,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
             return {
               attr: button.form.elements.attr.value,
               difficulty: Number.isFinite(raw) && raw > 0 ? raw : null,
-              freeDice: Math.max(0, parseInt(button.form.elements.freeDice.value, 10) || 0)
+              freeDice: Math.max(0, parseInt(button.form.elements.freeDice.value, 10) || 0),
+              requiredSuccesses: Math.max(1, parseInt(button.form.elements.required.value, 10) || 1)
             };
           }
         }],
@@ -867,7 +872,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const picked = await EssenceActorSheet.#promptAttrAndCooperation(`Roll ${capitalize(attr)}`, { fixedAttr: attr });
     if (!picked) return;
     const pool = this.actor.system[attr] ?? 0;
-    await rollEssencePool({ pool, freeDice: picked.freeDice, difficulty: picked.difficulty, label: capitalize(attr), actor: this.actor, nonCombat: true });
+    await rollEssencePool({ pool, freeDice: picked.freeDice, difficulty: picked.difficulty, requiredSuccesses: picked.requiredSuccesses, label: capitalize(attr), actor: this.actor, nonCombat: true });
   }
 
   /**
@@ -884,7 +889,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const picked = await EssenceActorSheet.#promptAttrAndCooperation(`Roll ${entry.name}`);
     if (!picked) return;
     const pool = (this.actor.system[picked.attr] ?? 0) + (entry.rating ?? 0);
-    await rollEssencePool({ pool, freeDice: picked.freeDice, difficulty: picked.difficulty, label: `${capitalize(picked.attr)} + ${entry.name}`, actor: this.actor, nonCombat: true });
+    await rollEssencePool({ pool, freeDice: picked.freeDice, difficulty: picked.difficulty, requiredSuccesses: picked.requiredSuccesses, label: `${capitalize(picked.attr)} + ${entry.name}`, actor: this.actor, nonCombat: true });
   }
 
   /**
@@ -900,7 +905,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const picked = await EssenceActorSheet.#promptAttrAndCooperation(`Roll Key Aspect: ${value}`);
     if (!picked) return;
     const pool = (this.actor.system[picked.attr] ?? 0) + 5;
-    await rollEssencePool({ pool, freeDice: picked.freeDice, difficulty: picked.difficulty, label: `${capitalize(picked.attr)} + 5 (${value})`, actor: this.actor, nonCombat: true });
+    await rollEssencePool({ pool, freeDice: picked.freeDice, difficulty: picked.difficulty, requiredSuccesses: picked.requiredSuccesses, label: `${capitalize(picked.attr)} + 5 (${value})`, actor: this.actor, nonCombat: true });
   }
 
   /**
@@ -987,41 +992,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    * @returns {Promise<{defense: number|null, targets: Array<{name:string, defense:number|null}>|null}>}
    */
   static async #resolveTargets(defenseKey) {
-    if (!defenseKey) return { defense: null, targets: null };
-
-    const targeted = Array.from(game.user.targets);
-
-    if (targeted.length > 1) {
-      const targets = targeted.map((t) => {
-        const d = t.actor?.system?.defenses?.[defenseKey];
-        return { name: t.actor?.name ?? t.document.name, defense: typeof d === "number" ? d : null };
-      });
-      return { defense: null, targets };
-    }
-
-    const targetDefense = targeted[0]?.actor?.system?.defenses?.[defenseKey];
-    if (typeof targetDefense === "number") return { defense: targetDefense, targets: null };
-
-    const declared = await new Promise((resolve) => {
-      new foundry.applications.api.DialogV2({
-        window: { title: `Declare ${defenseKey[0].toUpperCase()}${defenseKey.slice(1)}` },
-        content: `<p>No target selected. Enter the target's ${defenseKey} (leave blank to roll open):</p>
-          <input type="number" name="defense" autofocus>`,
-        buttons: [{
-          action: "roll",
-          label: "Roll",
-          default: true,
-          // DialogV2 falls back to the button's own `action` ("roll") whenever a callback
-          // returns null/undefined, so an empty string (not null) means "roll open".
-          callback: (event, button) => {
-            const val = button.form.elements.defense.value;
-            return val === "" ? "" : Number(val);
-          }
-        }],
-        submit: (result) => resolve(result === "" || result === "roll" ? null : result)
-      }).render(true);
-    });
-    return { defense: declared, targets: null };
+    return resolveTargetsForDefense(defenseKey);
   }
 
   /**
@@ -1083,6 +1054,11 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     }
     const checkboxes = [];
     if (isPsionics && strain < STRAIN_MAX) checkboxes.push({ name: "strainSurge", label: game.i18n.format("ESSENCE.Sheet.StrainForSurge", { next: strain + 1 }) });
+    // Roll at resolution (Doc 2026-09-28, "Card Sequence"): commit dice and pay costs now, roll when
+    // the card resolves after responses. On by default for an opposed card during Combat, where a
+    // Reaction can still answer it; an unopposed card or a play outside Combat rolls at once.
+    const opposed = !!(sys.defense || "").trim() && !sys.unopposed;
+    checkboxes.push({ name: "defer", label: game.i18n.localize("ESSENCE.Sheet.DeferRoll"), checked: opposed && !!game.combat });
 
     // Reactions: the unaware tax (Doc L4460) burns 1 extra Reaction die on top of the roll; it is
     // a cost, never rolled, and can't be skipped by committing every die (checked below).
@@ -1095,10 +1071,12 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       extraCheckbox: isReaction
         ? { label: "Target is unaware (burn 1 additional Reaction die)" }
         : { label: game.i18n.localize("ESSENCE.Sheet.HelplessTarget") },
-      checkboxes
+      checkboxes, requiredField: true, okLabel: game.i18n.localize("ESSENCE.Sheet.PlayLabel")
     });
     if (promptResult === null) return;
     const committed = promptResult.count;
+    const defer = !!promptResult.defer;
+    const requiredSuccesses = promptResult.required ?? 1;
     const unawareTax = isReaction && promptResult.extra ? 1 : 0;
     const helpless = !isReaction && promptResult.extra;
     const strainGain = isPsionics && promptResult.strainSurge ? 1 : 0;
@@ -1111,7 +1089,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     }
     if (strainGain) await this.actor.update({ "system.specialties.strain": strainAfter });
 
-    await EssenceActorSheet.#finishCardPlay(this.actor, item, { committed, cardMin, unawareTax: extraBurn, poolField, available, unopposed: !!sys.unopposed || helpless, extraSurges: strainGain, costNotes: [strainGain ? `+1 Strain (now ${strainAfter}) for 1 free Surge` : "", strainBurn ? "1 additional die burned for Strain 5-6" : ""].filter(Boolean) });
+    await EssenceActorSheet.#finishCardPlay(this.actor, item, { committed, cardMin, unawareTax: extraBurn, poolField, available, unopposed: !!sys.unopposed || helpless, extraSurges: strainGain, defer, requiredSuccesses, costNotes: [strainGain ? `+1 Strain (now ${strainAfter}) for 1 free Surge` : "", strainBurn ? "1 additional die burned for Strain 5-6" : ""].filter(Boolean) });
   }
 
   /**
@@ -1125,7 +1103,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     return (actor.system[String(sys.attr).toLowerCase()] ?? 0) + (actor.system[String(sys.skill).toLowerCase()] ?? 0);
   }
 
-  static async #finishCardPlay(actor, item, { committed, unawareTax = 0, poolField, available, unopposed, fromReserved = false, extraSurges = 0, costNotes = [], cardMin = 2 }) {
+  static async #finishCardPlay(actor, item, { committed, unawareTax = 0, poolField, available, unopposed, fromReserved = false, extraSurges = 0, costNotes = [], cardMin = 2, defer = false, requiredSuccesses = 1 }) {
     const sys = item.system;
     const { rolled, burned } = splitCommitment(committed, cardMin, EssenceActorSheet.#cardMaxRolled(actor, sys));
     if (burned > 0) costNotes = [...costNotes, `pays ${committed} ${poolField === "reactionDice" ? "Reaction" : "Action"} dice, rolls ${rolled}, burns ${burned} (maximum below the minimum)`];
@@ -1134,7 +1112,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     }
     const isReaction = item.type === "reaction-card";
     const defenseKey = (sys.defense || "").toLowerCase();
-    const { defense, targets } = await EssenceActorSheet.#resolveTargets(defenseKey);
+    // Targets are read now for an immediate roll; a deferred card reads them when it resolves.
+    const { defense, targets } = defer ? { defense: null, targets: null } : await EssenceActorSheet.#resolveTargets(defenseKey);
     const update = {};
     if (fromReserved) {
       // Doc L4330: after firing, discard all remaining reserved dice.
@@ -1172,7 +1151,14 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     await applyCardCooldown(actor, item);
     const bonusSurges = (hasMastery(sys, actor.system.expertises) ? 1 : 0) + (extraSurges | 0);
     const play = { committed, rolled, burned, available, after: fromReserved ? null : available - (committed + unawareTax), poolLabel: poolField === "reactionDice" ? "Reaction" : "Action", cost, domain: sys.domain, maxRolled: EssenceActorSheet.#cardMaxRolled(actor, sys) };
-    await rollEssencePool({ card: item, play, pool: rolled, defense, targets, label: fromReserved ? `${item.name} (prepared)` : item.name, actor, surgeOptions: sys.surges, bonusSurges, unopposed, nonCombat: !!sys.noSurges });
+    const label = fromReserved ? `${item.name} (prepared)` : item.name;
+    if (defer) {
+      // Roll at resolution: the dice and costs above are spent; the chat card's Roll button
+      // (essence.mjs) rolls when the chain resolves back to this card.
+      await postPendingCardPlay({ card: item, play, pool: rolled, defenseKey, label, actor, surgeOptions: sys.surges, bonusSurges, unopposed, nonCombat: !!sys.noSurges, requiredSuccesses, playTargets: targetsFromTokens(game.user.targets, defenseKey) });
+    } else {
+      await rollEssencePool({ card: item, play, pool: rolled, defense, targets, label, actor, surgeOptions: sys.surges, bonusSurges, unopposed, nonCombat: !!sys.noSurges, requiredSuccesses });
+    }
     // V6 "Acting While Dying" (design/v6-revision-delta.md §2.4): this Combat/Reaction Card is an
     // Action or Reaction, so it's eligible — see #applyDyingExertion for the once-per-Round gate.
     // Fires even if the roll above failed or was interrupted (the book: "a failed or interrupted
@@ -1547,14 +1533,17 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   }
 
   /**
-   * V6 Adaptability benefit (design/v6-revision-delta.md §2.2): a player-facing manual toggle for
-   * "used my one Exploration reroll this Adventure" — a plain boolean per the book's explicit
-   * non-accumulation rule, restored automatically by #onGrantRecovery. Mirrors
-   * #onToggleDeathTrackStabilized's own checkbox-toggle shape.
+   * Adaptability's Non-Combat rerolls (Doc 2026-09-28, Core Rules "Improvisation"): uses per
+   * Adventure equal to Adaptability, spent by hand here or by the chat card's Reroll button
+   * (essence.mjs), refreshed by Reset Adventure Uses, never by Recovery. The sidebar's − / +
+   * mirror the Pool steppers (#onAdjustPoolDice); the count is clamped to 0..Adaptability.
    */
-  static async #onToggleAdaptabilityReroll() {
-    const current = this.actor.system.playState.adaptabilityRerollAvailable;
-    await this.actor.update({ "system.playState.adaptabilityRerollAvailable": !current });
+  static async #onAdjustAdaptabilityReroll(event, target) {
+    const delta = Number(target.dataset.delta) || 0;
+    const state = this.actor.system.adaptabilityRerolls ?? { max: 0, used: 0 };
+    const next = Math.max(0, Math.min(state.max, state.used - delta));
+    if (next === state.used) return;
+    await this.actor.update({ "system.playState.adaptabilityRerollsUsed": next });
   }
 
   /**
@@ -1795,9 +1784,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
           <p class="muted">Per Part III, Recovery follows what the situation provides — judge how much this one grants.
           Restores 25% of max Stamina/Focus/Mana (rounded up), plus up to ${anima} additional Resource points from
           your Anima benefit (distribute below — any that can't land at a full Resource are lost), reduces the
-          Death Track by 1, clears Psionic Strain, removes 1 Manifestation Wound, and restores your one
-          Adaptability Exploration reroll (does not stack with an unused one). It does not restore Temporary
-          Wounds or Temporary Influence, clear Core Influence, reset Reach pressure, or refill Consumable Kits.
+          Death Track by 1, clears Psionic Strain, and removes 1 Manifestation Wound. It does not restore Temporary
+          Wounds, Temporary Influence, or Adaptability's Non-Combat rerolls, clear Core Influence, reset Reach
+          pressure, or refill Consumable Kits.
           One fictional opportunity = one Recovery — it cannot be subdivided into partial grants.</p>
           <label>Stamina / Focus / Mana Restored <input type="number" name="pct" value="25" min="0" max="100" autofocus> %</label>
           <p class="muted">Distribute up to ${anima} additional Anima points among Stamina/Focus/Mana:</p>
@@ -1892,11 +1881,9 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       strainLog.push("Psionic Strain cleared");
     }
 
-    // V6 Adaptability benefit (design/v6-revision-delta.md §2.2): "Completing a Recovery also
-    // restores your one use of Adaptability's Exploration reroll." A plain boolean set back to
-    // true — an already-available reroll simply stays true, so this never "stacks" a second use.
-    const adaptabilityRestored = sys.playState.adaptabilityRerollAvailable === false;
-    if (adaptabilityRestored) update["system.playState.adaptabilityRerollAvailable"] = true;
+    // Adaptability's Non-Combat rerolls are NOT restored here (Doc 2026-09-28: "Recovery does not
+    // restore spent uses"); they refresh with Reset Adventure Uses.
+    const adaptabilityRestored = false;
 
     // The Death Track step and the shared Manifestation Wound track are reduced below through
     // their own helpers; count them here too, or a Broken caller with full Resources is told there
@@ -2400,7 +2387,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     await resetAdventureUses(this.actor);
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: `<p><strong>${this.actor.name}</strong> resets Reach pressure, Reach Triggers, Augment Uses, and Equipment Card Uses for a new Adventure.</p>`
+      content: `<p><strong>${this.actor.name}</strong> resets Reach pressure, Reach Triggers, Augment Uses, Equipment Card Uses, and Adaptability's Non-Combat rerolls for a new Adventure.</p>`
     });
   }
 

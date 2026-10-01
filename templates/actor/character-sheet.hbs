@@ -776,11 +776,14 @@
 
     {{!-- The checkbox carries the state for screen readers, so the Available/Used word is hidden
           from them; the hint is its description, since a tooltip never shows on keyboard focus. --}}
-    <label class="side-toggle" data-tooltip-text="{{localize 'ESSENCE.Sheet.AdaptabilityRerollHint'}}">
-      <input type="checkbox" data-action="toggleAdaptabilityReroll" aria-description="{{localize 'ESSENCE.Sheet.AdaptabilityRerollHint'}}" {{#if system.playState.adaptabilityRerollAvailable}}checked{{/if}}>
+    <div class="side-toggle side-rerolls" data-tooltip-text="{{localize 'ESSENCE.Sheet.AdaptabilityRerollHint'}}">
       <span class="side-toggle-label">{{localize "ESSENCE.Sheet.AdaptabilityRerollShort"}}</span>
-      <span class="side-toggle-state" aria-hidden="true">{{#if system.playState.adaptabilityRerollAvailable}}{{localize "ESSENCE.Common.Available"}}{{else}}{{localize "ESSENCE.Common.Used"}}{{/if}}</span>
-    </label>
+      <div class="side-pool-row side-rerolls-row">
+        <button type="button" class="resource-step" data-action="adjustAdaptabilityReroll" data-delta="-1" aria-label="{{localize 'ESSENCE.Sheet.DecreaseAria' label=(localize 'ESSENCE.Sheet.AdaptabilityRerollShort')}}">−</button>
+        <span class="side-rerolls-num" aria-description="{{localize 'ESSENCE.Sheet.AdaptabilityRerollHint'}}">{{system.adaptabilityRerolls.remaining}} / {{system.adaptabilityRerolls.max}}</span>
+        <button type="button" class="resource-step" data-action="adjustAdaptabilityReroll" data-delta="1" aria-label="{{localize 'ESSENCE.Sheet.IncreaseAria' label=(localize 'ESSENCE.Sheet.AdaptabilityRerollShort')}}">+</button>
+      </div>
+    </div>
 
     {{#if equipmentBonusSources.length}}
       <div class="side-bonus">

@@ -7,8 +7,8 @@
  * here; module/utils.mjs has no imports and loads under plain Node.
  */
 
-import { ordinaryDamageWounds, isDistinctionStyle, distinctionUnlocks, componentTiers, computeTierGate, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, burnOnlyProfile, equipmentCardCommitment, recoveryBaseAmount, initiativeTieBreak, applyFlatReduction, resolveDamageComponents, hasOriginDistinction, addThread, authorityCapacity, authorityResultsPerCard, storeAuthority, spendAuthority, lockCapacity, contingencyCapacity, riteCapacity, placeRite, adaptationUpkeep, forcedStrain, psionicsBurnSurchargeAt, manifestationEntryCost, manifestationTrack, splitCommitment } from "../module/utils.mjs";
-import { resolveNonCombatRoll } from "../module/dice/essence-roll.mjs";
+import { ordinaryDamageWounds, isDistinctionStyle, distinctionUnlocks, componentTiers, computeTierGate, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, burnOnlyProfile, equipmentCardCommitment, recoveryBaseAmount, initiativeTieBreak, applyFlatReduction, resolveDamageComponents, hasOriginDistinction, addThread, authorityCapacity, authorityResultsPerCard, storeAuthority, spendAuthority, lockCapacity, contingencyCapacity, riteCapacity, placeRite, adaptationUpkeep, forcedStrain, psionicsBurnSurchargeAt, manifestationEntryCost, manifestationTrack, splitCommitment, adaptabilityRerollState } from "../module/utils.mjs";
+import { resolveNonCombatRoll, resolveCombatRoll } from "../module/dice/essence-roll.mjs";
 import { laterAcquisitionText } from "../module/data/origin-features.mjs";
 import { ITEM_GRANT_REGISTRY, tierQualifiesForGrant } from "../module/data/item-grants.mjs";
 
@@ -210,6 +210,27 @@ deep("minimum 2, maximum 1: pay 2, roll 1, burn 1", splitCommitment(2, 2, 1), { 
 deep("minimum 3, maximum 2: pay 3, roll 2, burn 1", splitCommitment(3, 3, 2), { rolled: 2, burned: 1 });
 deep("maximum at or above the minimum rolls everything", splitCommitment(4, 2, 3), { rolled: 4, burned: 0 });
 deep("no known maximum rolls everything", splitCommitment(2, 2, null), { rolled: 2, burned: 0 });
+
+console.log("\n--- Multiple Success Dice (Doc 2026-09-28, Core Rules and Combat Encounters) ---");
+// Doc example: a five-die check needing two Success Dice at Difficulty 8.
+check("two required, both meet", resolveNonCombatRoll([9, 8, 5, 3, 1], 8, 2).succeeded, true);
+check("two required, second falls short", resolveNonCombatRoll([9, 7, 5, 3, 1], 8, 2).succeeded, false);
+deep("the reserved dice are the highest, never summed", resolveNonCombatRoll([4, 9, 8, 2], 8, 2).successDice, [9, 8]);
+check("too few dice for the requirement fails", resolveNonCombatRoll([10], 6, 2).succeeded, false);
+check("requirement below 1 reads as 1", resolveNonCombatRoll([7], 7, 0).succeeded, true);
+const two = resolveCombatRoll([9, 8, 7, 6, 2], 7, false, 2);
+check("Combat: two Success Dice at or above Defense 7 succeed", two.succeeded, true);
+check("Combat: a reserved die never counts as a Surge (7 and 6 remain -> 2 Surges)", two.surges, 2);
+deep("Combat: reserved indices are the two highest", two.successDieIndices, [0, 1]);
+check("Combat: one reserved die short fails even with a 10", resolveCombatRoll([10, 6, 6], 7, false, 2).succeeded, false);
+check("Combat: default requirement keeps the single Success Die", resolveCombatRoll([10, 6, 6], 7).surges, 2);
+check("Combat: unopposed ignores the requirement and counts every 6+", resolveCombatRoll([6, 6, 3], 9, true, 3).surges, 2);
+
+console.log("\n--- Adaptability rerolls (Doc 2026-09-28, Core Rules Improvisation) ---");
+deep("Adaptability 2 begins with two uses", adaptabilityRerollState(2, 0), { max: 2, used: 0, remaining: 2 });
+deep("one spent leaves one", adaptabilityRerollState(2, 1), { max: 2, used: 1, remaining: 1 });
+deep("spent uses cannot exceed the Attribute", adaptabilityRerollState(2, 5), { max: 2, used: 2, remaining: 0 });
+deep("a raised Attribute adds uses without touching the count", adaptabilityRerollState(3, 1), { max: 3, used: 1, remaining: 2 });
 
 console.log(`\n${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);

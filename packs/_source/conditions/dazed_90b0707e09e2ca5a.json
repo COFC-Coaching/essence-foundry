@@ -12,7 +12,7 @@
       },
       {
         "label": "EFFECT",
-        "html": "At the start of your next Turn, immediately after forming your Action Pool, burn 3 Action dice, or all remaining dice if fewer than 3 remain. Then remove Dazed. Reapplication does not add another penalty. Dazed has no immediate application cost and does not tax individual Actions or Reactions. It can empty a small Action Pool; otherwise-legal Movement remains available. Mooks and Normals waive this Pool penalty under their reduced engine."
+        "html": "At the start of your next Turn, immediately after forming your Action Pool, burn 3 Action dice, or all remaining dice if fewer than 3 remain. Then remove Dazed. Reapplication does not add another penalty. Dazed has no immediate application cost and does not tax individual Actions or Reactions. It can empty a small Action Pool; otherwise-legal Movement remains available. A Mook or Normal profile states how it takes Dazed; by default it loses its Action allowance for the Turn."
       }
     ]
   },

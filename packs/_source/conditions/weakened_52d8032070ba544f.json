@@ -12,7 +12,7 @@
       },
       {
         "label": "EFFECT",
-        "html": "Reduce Damage you deal by 1 per target, minimum 0, before target protections. Reduce the highest component; the damaged creature chooses between ties. Apply the reduction once to the total."
+        "html": "Reduce each separate instance of Damage you deal by 1, minimum 0, before target protections. Apply the reduction to each target and to each Damage component of a card separately. Reapplication does not stack."
       }
     ]
   },

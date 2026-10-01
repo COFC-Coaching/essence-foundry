@@ -199,6 +199,9 @@
 .essence .side-toggle input[type="checkbox"] { margin: 0; width: 15px; height: 15px; flex: 0 0 auto; accent-color: var(--essence-accent); }
 .essence .side-toggle-label { flex: 1 1 auto; font-size: 0.9em; }
 .essence .side-toggle-state { font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; color: var(--essence-muted); }
+.essence .side-rerolls { cursor: default; }
+.essence .side-rerolls-row { gap: 4px; }
+.essence .side-rerolls-num { font-family: var(--essence-font-display); font-size: 1.1em; color: var(--essence-ink-bright); min-width: 3em; text-align: center; }
 .essence .side-toggle:has(input:checked) .side-toggle-state { color: var(--essence-success-ink); }
 .essence .side-toggle:has(input:disabled) { cursor: default; opacity: 0.6; }
 .essence .side-bonus { display: flex; flex-direction: column; gap: 3px; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--essence-line); }
@@ -865,16 +868,21 @@
   position: relative; display: inline-flex; flex: 0 0 auto; width: 34px; height: 37px;
   font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--d10-ink);
 }
-.essence.roll-card .die .d10 { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.essence.roll-card .die .d10-body { fill: var(--d10-fill); stroke: var(--d10-line); stroke-width: 1.2; stroke-linejoin: round; }
-.essence.roll-card .die .d10-face { fill: var(--d10-face); stroke: var(--d10-line); stroke-width: 1; stroke-linejoin: round; }
-.essence.roll-card .die .d10-edge { fill: none; stroke: var(--d10-line); stroke-width: 1; }
-.essence.roll-card .die .d10-num { fill: var(--d10-ink); font-size: 14px; font-weight: 700; font-family: var(--essence-font-body); font-variant-numeric: tabular-nums; }
+/* The d10 is three stacked clip-path layers (0.19.2): the outline colour at full size, the body
+   inset by 1.5px inside the same silhouette (so the outline shows as a border), and the kite face
+   on top. Foundry drops <svg> from stored chat content, which is why it is not drawn as one. */
+.essence.roll-card .die .d10 { position: absolute; inset: 0; width: 100%; height: 100%; }
+.essence.roll-card .die .d10-line, .essence.roll-card .die .d10-body { position: absolute; clip-path: polygon(50% 3%, 96% 36%, 91% 69%, 50% 97%, 9% 69%, 4% 36%); }
+.essence.roll-card .die .d10-line { inset: 0; background: var(--d10-line); }
+.essence.roll-card .die .d10-body { inset: 1.5px; background: var(--d10-fill); }
+.essence.roll-card .die .d10-face { position: absolute; inset: 1.5px; clip-path: polygon(50% 2%, 78% 50%, 50% 67%, 22% 50%); background: var(--d10-face); }
+.essence.roll-card .die .d10-num { position: absolute; left: 0; right: 0; top: 24%; text-align: center; color: var(--d10-ink); font-size: 14px; line-height: 1; font-weight: 700; font-family: var(--essence-font-body); font-variant-numeric: tabular-nums; }
 .essence.roll-card .die .d10-num.two { font-size: 11.5px; letter-spacing: -0.04em; }
 .essence.roll-card .die.success-die { --d10-fill: #b8944f; --d10-face: var(--essence-accent); --d10-line: #7a6232; --d10-ink: var(--essence-accent-ink); filter: drop-shadow(0 0 3px rgba(var(--essence-accent-rgb), 0.45)); }
 .essence.roll-card .die.surge-die { --d10-fill: #256a29; --d10-face: var(--essence-success); --d10-line: #174a1a; --d10-ink: #fff; }
 .essence.roll-card .die.burned-die { --d10-fill: transparent; --d10-face: transparent; --d10-line: var(--essence-muted); --d10-ink: var(--essence-muted); }
-.essence.roll-card .die.burned-die .d10 * { stroke-dasharray: 2.5 2; }
+.essence.roll-card .die.burned-die .d10-line { background: repeating-linear-gradient(45deg, var(--essence-muted) 0 2px, transparent 2px 4px); }
+.essence.roll-card .rc-applied-mark.is-hidden { display: none; }
 .essence.roll-card .rc-dice-note { margin-left: 4px; font-size: 0.85em; color: var(--essence-muted); }
 .essence.roll-card .roll-summary { padding: 0 10px 8px; }
 .essence.roll-card .roll-summary p { margin: 2px 0; }
@@ -902,6 +910,14 @@
 .essence.roll-card .rc-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 10px 8px; }
 .essence.roll-card .rc-actions button { width: auto; flex: 0 0 auto; height: 28px !important; min-height: 0 !important; line-height: 1 !important; padding: 0 10px; border-radius: var(--essence-radius-sm); font-size: 12px; font-weight: 600; background: var(--essence-well); border: 1px solid var(--essence-line-strong); color: var(--essence-ink); cursor: pointer; }
 .essence.roll-card .rc-actions .rc-card { margin-left: auto; }
+.essence.roll-card .rc-pending { padding: 4px 10px 0; }
+.essence.roll-card .rc-pending-note { margin: 0 0 6px; }
+.essence.roll-card .rc-pending-actions { padding: 0 0 8px; align-items: center; }
+.essence.roll-card .rc-pending-state:empty { display: none; }
+.essence.roll-card .rc-pending-required { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; }
+.essence.roll-card .rc-pending-required input { width: 3.2em; height: 26px; padding: 0 4px; }
+.essence.roll-card .rc-apply-all { background: var(--essence-well); border-color: var(--essence-line-strong); color: var(--essence-ink); }
+.essence.roll-card .rc-reroll { background: var(--essence-accent); border-color: var(--essence-accent); color: #141210; }
 /* Type colour on the Apply button, the card border and emphasised rules text (damage amounts). */
 .essence.roll-card.kind-action { border-color: #2e7d32; --rc-ink: var(--essence-card-action-ink); }
 .essence.roll-card.kind-reaction { border-color: #c62828; --rc-ink: var(--essence-card-reaction-ink); }

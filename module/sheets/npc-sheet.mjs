@@ -411,11 +411,13 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
   }
 
   /** Shared dice-commit prompt — see EssenceActorSheet#promptDiceCount for the full rationale. */
-  static async #promptDiceCount({ title, label, min, max, initial, note = "", extraCheckbox = null }) {
+  static async #promptDiceCount({ title, label, min, max, initial, note = "", extraCheckbox = null, requiredField = false }) {
+    // Multiple Success Dice (Doc 2026-09-28): asked on a card play; 1 unless the GM says otherwise.
+    const required = requiredField ? `<label style="display:flex;align-items:center;gap:6px;margin-top:6px;">${game.i18n.localize("ESSENCE.Sheet.RequiredSuccessesShort")} <input type="number" name="required" value="1" min="1" max="10" style="width:4em"></label>` : "";
     return new Promise((resolve) => {
       new foundry.applications.api.DialogV2({
         window: { title },
-        content: `<p>${label}</p>${note ? `<p class="muted">${note}</p>` : ""}<input type="number" name="count" value="${initial}" min="${min}" max="${max}" autofocus>${extraCheckbox ? `<label style="display:flex;align-items:center;gap:6px;margin-top:6px;"><input type="checkbox" name="extra"> ${extraCheckbox.label}</label>` : ""}`,
+        content: `<p>${label}</p>${note ? `<p class="muted">${note}</p>` : ""}<input type="number" name="count" value="${initial}" min="${min}" max="${max}" autofocus>${required}${extraCheckbox ? `<label style="display:flex;align-items:center;gap:6px;margin-top:6px;"><input type="checkbox" name="extra"> ${extraCheckbox.label}</label>` : ""}`,
         buttons: [
           {
             action: "commit",
@@ -425,7 +427,8 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
               const raw = Number(button.form.elements.count.value);
               const n = Number.isFinite(raw) ? raw : initial;
               const count = Math.min(max, Math.max(min, n));
-              return extraCheckbox ? { count, extra: button.form.elements.extra.checked } : count;
+              const required = requiredField ? Math.max(1, parseInt(button.form.elements.required.value, 10) || 1) : 1;
+              return extraCheckbox || requiredField ? { count, extra: extraCheckbox ? button.form.elements.extra.checked : false, required } : count;
             }
           },
           { action: "cancel", label: "Cancel", callback: () => "essence-cancelled" }
@@ -581,10 +584,12 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
       label: `Commit how many ${poolLabel} Dice? (min ${cardMin}, max ${available})`,
       min: cardMin, max: available, initial: cardMin,
       note: EssenceNpcSheet.#maxRolledDiceNote(this.actor, sys),
-      extraCheckbox: isReaction ? { label: "Target is unaware (burn 1 additional Reaction die)" } : null
+      extraCheckbox: isReaction ? { label: "Target is unaware (burn 1 additional Reaction die)" } : null,
+      requiredField: true
     });
     if (promptResult === null) return;
-    const committed = isReaction ? promptResult.count : promptResult;
+    const committed = promptResult.count;
+    const requiredSuccesses = promptResult.required ?? 1;
     const unawareTax = isReaction && promptResult.extra ? 1 : 0;
     // Doc L4460: the unaware tax is a cost on top of the roll; it can't be absorbed by committing
     // every die.
@@ -624,7 +629,7 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     const maxRolled = typeof sys.rollLimit === "number" || !sys.attr || !sys.skill ? null : (this.actor.system[String(sys.attr).toLowerCase()] ?? 0) + (this.actor.system[String(sys.skill).toLowerCase()] ?? 0);
     const { rolled, burned } = splitCommitment(committed, cardMin, maxRolled);
     if (burned > 0) await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: `<p><strong>${this.actor.name}</strong> plays <strong>${item.name}</strong>: pays ${committed} ${poolLabel} dice, rolls ${rolled}, burns ${burned} (maximum below the minimum).</p>` });
-    await rollEssencePool({ card: item, play: { committed, rolled, burned, available, after: available - (committed + unawareTax), poolLabel, cost: Number(sys.cost) || 0, domain: sys.domain, maxRolled }, pool: rolled, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges, unopposed: !!sys.unopposed, nonCombat: !!sys.noSurges });
+    await rollEssencePool({ card: item, play: { committed, rolled, burned, available, after: available - (committed + unawareTax), poolLabel, cost: Number(sys.cost) || 0, domain: sys.domain, maxRolled }, pool: rolled, requiredSuccesses, defense, targets, label: item.name, actor: this.actor, surgeOptions: sys.surges, bonusSurges, unopposed: !!sys.unopposed, nonCombat: !!sys.noSurges });
   }
 
   /** See EssenceActorSheet#onRollEquipmentCard — same V6 §9.6 fold-into-Combat-Card-flow, same

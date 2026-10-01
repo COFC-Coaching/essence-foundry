@@ -2,13 +2,46 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
-## 0.18.15
+## 0.19.5
 
 **Career explains itself.** Hovering "Career" on the Non-Combat tab or in the Character Wizard
 now says that Career has no Rank and is never rolled, that it sets what the character already
 knows professionally, and that a roll uses a Key Aspect (Attribute + 5) or a Non-Combat Skill.
 Screen readers hear the same note on the field. Nothing about how Career or Key Aspects work
 changed: a Key Aspect still rolls Attribute + 5 in place of a Skill Rank, never on top of one.
+## 0.19.4
+
+**Condition text caught up with the 2026-09-28 draft.** Weakened now reads as the draft has it: each separate instance of Damage is reduced by 1, per target and per component (the Apply Damage prompt already worked that way since 0.13.6; the card said the old "once to the total"). Dazed no longer says Mooks and Normals waive it; it says a profile states its treatment and that by default they lose the Turn's Action allowance, which is what 0.18.1 built. Conditions pack rebuilt; re-import the two cards on existing actors.
+
+## 0.19.3
+
+**Roll now asks for the Defense when nobody targeted anyone (Shane, 2026-09-28).** A deferred card resolves against the clicker's targets, else the targets set when it was played, else one Declare Defense prompt, the same prompt an immediate play shows; leaving it blank still rolls open. The Success Dice count is never asked a second time.
+
+## 0.19.2
+
+**Shane's review of 0.19.1 (2026-09-28): one prompt, one click, and dice that draw.**
+
+- **Success Dice asked once.** The play prompt's "Success Dice required" is the only place it is asked. A pending card shows that number as an editable field beside Roll now, so the GM can change it before the roll.
+- **Roll now is a single click.** No Declare Defense prompt and no second Success Dice prompt. The roll uses whoever the clicker has targeted at that moment (the GM can target for a player), falls back to the tokens targeted when the card was played (listed on the pending card as "Targeted when played"), and otherwise rolls open for the GM to read.
+- **Apply to targeted tokens.** Every card's chat card carries this button next to the per-target Apply buttons. It reads the clicker's targets when pressed and opens Apply Damage for each, so the GM can target one or several tokens and apply a card the player rolled without a target. The per-target buttons now follow the tokens the roll was actually made against.
+- **Dice draw again.** Foundry sanitizes stored chat content and drops `<svg>`, so since 0.18.9 the d10s rendered as bare numbers with no die behind them. The d10 is now drawn with CSS clip-paths on plain spans. The same sanitizer strips the `hidden` attribute, which is why "Applied to …" showed on a fresh card; it is a class now.
+
+## 0.19.1
+
+**Live-test fix for 0.19.0.** The Adaptability reroll button and the pending card's Roll now and Cancelled buttons did nothing: the chat hook's Apply and Card loop rebinds every button in the actions row and had overwritten their handlers. Only Apply and Card go through that loop now. Verified in the test world: reroll spends a use and posts the rerolled check, Roll now reads targets and the Success Dice requirement then rolls, Cancelled marks the card with its dice still spent.
+
+## 0.19.0
+
+**The 2026-09-28 rules draft: roll at resolution, multiple Success Dice, Adaptability rerolls per Adventure.**
+
+- **Roll when the card resolves.** The play prompt has a new box, "Commit now, roll when the card resolves", on by default for an opposed card during Combat. The dice leave the Pool and the costs are paid at once, but the chat card shows only what was committed and a **Roll now** button. Declare responses, then press it when the chain resolves back to the card: targets are read at that moment, the prompt asks how many Success Dice the card needs, and the roll posts below. **Cancelled** marks the card cancelled with its dice and costs still spent. Untick the box to roll immediately, as before.
+- **Multiple Success Dice.** Every roll prompt (Attribute, Non-Combat Skill, Key Aspect, card plays on characters and Elites) asks how many Success Dice are required, normally 1. The engine reserves that many highest dice; each must meet the Defense or Difficulty on its own, and a reserved die never counts as a Surge. The chat card lists the reserved dice.
+- **Adaptability rerolls.** The old "one reroll between Recoveries" checkbox is a counter: uses per Adventure equal to Adaptability, shown in the sidebar as remaining / maximum with − and + steppers. A character's Non-Combat chat card carries an **Adaptability reroll** button while uses remain; it rerolls every die with the same Difficulty and requirement and the new result stands. Reset Adventure Uses refreshes the count; Recovery no longer restores it. Existing characters migrate (a spent checkbox becomes one spent use).
+- **Reach cannot fall below 0.**
+- **Basic cards.** Basic Melee Attack, Basic Ranged Attack and Defend carry the new text: the roll maximum is Attribute + Rank with "roll 1, burn 1" when it is 1, and Defend also triggers when you are inside a card's declared potential area, Surge expansion or fallback. Re-import the three cards on existing characters. `scripts/build-packs.mjs` keeps the same text (and Dash's 1-per-die text) for the next full rebuild.
+- **Player's Guide journal** updated for all of the above.
+
+Not changed on purpose: Mooks and Normals still take Dazed and the unaware surcharge as characters do (0.18.1); the draft now calls that treatment provisional and per-profile, and this build's treatment is the stated one.
 
 ## 0.18.14
 
