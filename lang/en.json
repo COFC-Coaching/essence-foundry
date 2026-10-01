@@ -454,6 +454,7 @@
   "ESSENCE.Manifestation.NoManeuvers": "No maneuvers.",
   "ESSENCE.Character.CareerKeyAspects": "Career & Key Aspects",
   "ESSENCE.Character.Career": "Career",
+  "ESSENCE.Character.CareerHint": "Career has no Rank and is never rolled. It sets the professional facts, practices and tasks your character already knows. For a roll, use a Key Aspect (Attribute + 5) or a Non-Combat Skill.",
   "ESSENCE.Character.KeyAspect": "Key Aspect",
   "ESSENCE.Character.Languages": "Languages",
   "ESSENCE.Character.LanguagesHint": "One primary language plus additional languages equal to permanent Acuity: {n} in total. The Campaign defines its languages.",

@@ -519,7 +519,8 @@
 .essence :is(span, label, h3, h4, p, tr, div)[data-tooltip-text] { cursor: help; }
 /* A text underline, not a border: the Core tab's labels are a fixed 80px column, and a border ran
    the whole column as a dotted line trailing off to the dice button (Shane, screenshot). */
-.essence span.attr-label[data-tooltip-text] { text-decoration: underline dotted var(--essence-line-bright); text-underline-offset: 3px; }
+.essence span.attr-label[data-tooltip-text],
+.essence .hint-term[data-tooltip-text] { text-decoration: underline dotted var(--essence-line-bright); text-underline-offset: 3px; }
 .essence .specialty-row input[type="text"] { flex: 1; min-width: 120px; }
 .essence .specialty-row-wrap { align-items: flex-start; }
 .essence .thread-chips { display: flex; gap: 4px; flex-wrap: wrap; }

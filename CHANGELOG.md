@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.18.15
+
+**Career explains itself.** Hovering "Career" on the Non-Combat tab or in the Character Wizard
+now says that Career has no Rank and is never rolled, that it sets what the character already
+knows professionally, and that a roll uses a Key Aspect (Attribute + 5) or a Non-Combat Skill.
+Screen readers hear the same note on the field. Nothing about how Career or Key Aspects work
+changed: a Key Aspect still rolls Attribute + 5 in place of a Skill Rank, never on top of one.
+
 ## 0.18.14
 
 **Senses on the Core tab.** The box beside Spiritual now holds Senses, Resistances and

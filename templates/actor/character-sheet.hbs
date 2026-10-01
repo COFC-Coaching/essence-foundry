@@ -528,7 +528,7 @@
 <section class="tab noncombat {{tabs.noncombat.cssClass}}" data-group="primary" data-tab="noncombat">
   <h3 class="section-head">{{localize "ESSENCE.Character.CareerKeyAspects"}}</h3>
   <div class="career-row">
-    <label>{{localize "ESSENCE.Character.Career"}} <input name="system.career" type="text" value="{{system.career}}"></label>
+    <label><span class="hint-term" data-tooltip-text="{{localize 'ESSENCE.Character.CareerHint'}}">{{localize "ESSENCE.Character.Career"}}</span> <input name="system.career" type="text" value="{{system.career}}" aria-description="{{localize 'ESSENCE.Character.CareerHint'}}"></label>
   </div>
   <div class="key-aspects-row">
     {{#each keyAspects as |aspect|}}

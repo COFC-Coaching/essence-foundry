@@ -147,7 +147,7 @@
   {{!-- ============ STEP 4: NON-COMBAT ============ --}}
   {{#if (eq step 3)}}
     <h2>{{localize "ESSENCE.Character.TabNonCombat"}}</h2>
-    <label>{{localize "ESSENCE.Character.Career"}} <input type="text" name="system.career" value="{{system.career}}"></label>
+    <label><span class="hint-term" data-tooltip-text="{{localize 'ESSENCE.Character.CareerHint'}}">{{localize "ESSENCE.Character.Career"}}</span> <input type="text" name="system.career" value="{{system.career}}" aria-description="{{localize 'ESSENCE.Character.CareerHint'}}"></label>
     <div class="wizard-row">
       <label>{{localize "ESSENCE.Character.KeyAspect"}} 1 <input type="text" name="system.keyAspects.0" value="{{lookup system.keyAspects 0}}"></label>
       <label>{{localize "ESSENCE.Character.KeyAspect"}} 2 <input type="text" name="system.keyAspects.1" value="{{lookup system.keyAspects 1}}"></label>
