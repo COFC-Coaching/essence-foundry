@@ -16,7 +16,7 @@
     "expertises": "Transmutation, Sculpting",
     "expertisesMode": "any",
     "tags": "damage, control, debuff",
-    "flavor": "",
+    "flavor": "<p>Etch a lock with acid, freeze a hinge solid, shock a mechanism until it jams, or nudge a crate, a barrel, or a person one step sideways off a line.</p><p>Not enough to burn through a door or shove anyone across a room.</p>",
     "body": [
       {
         "label": "Target",

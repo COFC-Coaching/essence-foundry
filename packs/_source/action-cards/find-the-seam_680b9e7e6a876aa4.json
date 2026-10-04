@@ -16,7 +16,7 @@
     "expertises": "Precision, Penetration",
     "expertisesMode": "any",
     "tags": "damage, debuff, setup",
-    "flavor": "",
+    "flavor": "<p>Shoot the hasp off a padlock, split the pin out of a hinge, put a bolt through the one gap in a boarded window, or find the soft spot in a cracked beam and knock it loose. Spot where a stranger's coat hangs wrong over a hidden blade.</p><p>Not enough to break through a vault door or a wall.</p>",
     "body": [
       {
         "label": "Target",

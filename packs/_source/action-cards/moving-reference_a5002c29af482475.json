@@ -16,7 +16,7 @@
     "expertises": "Mobility, Trajectory",
     "expertisesMode": "any",
     "tags": "damage, mobility, setup",
-    "flavor": "",
+    "flavor": "<p>Hit a mark from the back of a galloping horse, from a moving cart, or from a boat in a current. Shoot while running across a yard without breaking stride, or lean out of a window and still hit the sign across the street.</p>",
     "body": [
       {
         "label": "Target",

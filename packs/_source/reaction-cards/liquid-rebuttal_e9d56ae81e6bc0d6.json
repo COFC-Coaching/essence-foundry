@@ -16,7 +16,7 @@
     "expertises": "Transmutation, Reinforcement",
     "expertisesMode": "any",
     "tags": "protection, support, mobility",
-    "flavor": "",
+    "flavor": "<p>Keep your feet when a crowd surges, a horse shies, a deck pitches, a river tugs at your legs, or a drunk shoves you off a bench. Hold one friend steady through the same.</p><p>Not enough to stand in a flood or stop a cart.</p>",
     "body": [
       {
         "label": "Target",

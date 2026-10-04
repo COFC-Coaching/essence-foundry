@@ -16,7 +16,7 @@
     "expertises": "Observation, Exploitation",
     "expertisesMode": "any",
     "tags": "information, setup, debuff",
-    "flavor": "",
+    "flavor": "<p>Size up two people at once: which of a pair of guards will crack, which negotiator across the table is bluffing, which of two bodyguards is tired and which is hungover, or which of two witnesses has the shakier story.</p><p>Not enough to read a whole room or to know anyone's secrets.</p>",
     "body": [
       {
         "label": "Target",

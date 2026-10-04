@@ -16,7 +16,7 @@
     "expertises": "Cadence, Payload",
     "expertisesMode": "any",
     "tags": "damage, area, control",
-    "flavor": "",
+    "flavor": "<p>Pin a group of raiders down in a ditch, stop a gang from crossing a yard, or scatter a knot of rioters and keep them from forming back up. Hold a whole patrol flat behind their wagon while friends get clear.</p><p>Not enough to hold a whole street or a full crowd.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Berserking, Skirmishing",
     "expertisesMode": "any",
     "tags": "damage, mobility, control",
-    "flavor": "",
+    "flavor": "<p>Run down a pickpocket who bolts, stay on the heels of someone fleeing through alleys, catch a loose horse's bridle before it clears the yard, or close on anyone who turns their back and runs.</p><p>Not enough to outrun a horse at full gallop or stop a fleeing cart.</p>",
     "body": [
       {
         "label": "Target",

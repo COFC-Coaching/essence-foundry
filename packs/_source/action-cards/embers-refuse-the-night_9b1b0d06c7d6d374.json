@@ -16,7 +16,7 @@
     "expertises": "Berserking, Phalanx",
     "expertisesMode": "any",
     "tags": "damage, suppression, support",
-    "flavor": "",
+    "flavor": "<p>Keep going when a wound should stop you, and do something with it. Carry a companion out of a burning house on a broken ankle, swing a sledge through a door with a bad shoulder, or pass that grit to a friend so they can finish the climb.</p><p>Not enough to heal anything. The wound comes back when the scene ends.</p>",
     "body": [
       {
         "label": "Target",

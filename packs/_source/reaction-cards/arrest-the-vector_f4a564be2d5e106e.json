@@ -16,7 +16,7 @@
     "expertises": "Telekinesis, Precognition",
     "expertisesMode": "any",
     "tags": "protection, support",
-    "flavor": "",
+    "flavor": "<p>Catch a friend slipping off a ledge, hold a child against a river current, stop a rider from being thrown by a bolting horse, or keep someone from going over a rooftop edge.</p><p>Not enough to stop a cart or a falling tree.</p>",
     "body": [
       {
         "label": "Target",

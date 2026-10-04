@@ -16,7 +16,7 @@
     "expertises": "Sabotage, Exploitation",
     "expertisesMode": "any",
     "tags": "damage, debuff, setup",
-    "flavor": "",
+    "flavor": "<p>Jam a lock so the key will not turn, wedge a hinge so a door sticks, loosen the buckle on a saddle strap, or work a blade into the seam of a chest. One lock, one door, one strap.</p><p>Not enough to break through, only to make it stick or slip when it matters.</p>",
     "body": [
       {
         "label": "Target",

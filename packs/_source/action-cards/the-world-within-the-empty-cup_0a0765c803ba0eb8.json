@@ -16,7 +16,7 @@
     "expertises": "Reagents, Severance",
     "expertisesMode": "any",
     "tags": "suppression, protection, support",
-    "flavor": "",
+    "flavor": "<p>Three of you walk through a haunted hall, a sorcerer's fog, a siren's song or a cursed grove with your wits intact. Each shrugs off one enchantment and takes the sting out of the next.</p><p>Not enough to lift the spell from the place or shelter a whole crew.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Berserking, Brawling",
     "expertisesMode": "any",
     "tags": "damage, mobility, control",
-    "flavor": "",
+    "flavor": "<p>Take a barred door off its hinges, shove a loaded cart out of a gateway, drive a bull back through a gap in the fence, or plow through a wall of men and put the one in front on the ground.</p><p>Not enough to break stone or move anything a draft team could not.</p>",
     "body": [
       {
         "label": "Target",

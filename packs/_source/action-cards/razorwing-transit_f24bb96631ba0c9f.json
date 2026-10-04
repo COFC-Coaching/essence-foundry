@@ -16,7 +16,7 @@
     "expertises": "Locomotion, Armament",
     "expertisesMode": "any",
     "tags": "damage, mobility, area",
-    "flavor": "",
+    "flavor": "<p>Glide across a chasm from the high side, drop from a tower window and land unhurt, skim over a bog or a burning floor, or cut a rope as you pass it.</p><p>Not enough to fly, gain height, or carry anyone with you.</p>",
     "body": [
       {
         "label": "Target",

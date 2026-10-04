@@ -16,7 +16,7 @@
     "expertises": "Transmutation, Disjunction",
     "expertisesMode": "any",
     "tags": "protection, support",
-    "flavor": "",
+    "flavor": "<p>Turn a gout of flame into a cold wind, a lightning strike into a hard shove, or a splash of acid into a harmless spray before it reaches one person. Soften it on the way.</p><p>Not enough to shield a crowd or stop a blow that is not magical.</p>",
     "body": [
       {
         "label": "Target",

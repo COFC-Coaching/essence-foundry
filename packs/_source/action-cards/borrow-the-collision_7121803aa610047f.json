@@ -16,7 +16,7 @@
     "expertises": "Improvisation, Exploitation",
     "expertisesMode": "any",
     "tags": "damage, control, area",
-    "flavor": "",
+    "flavor": "<p>Send one drunk stumbling into another, steer two guards into each other in a doorway, start a brawl between two strangers with a well-timed shove, or send a running man into the one he is chasing.</p><p>Not enough to throw anyone or to move a person who is set.</p>",
     "body": [
       {
         "label": "Target",

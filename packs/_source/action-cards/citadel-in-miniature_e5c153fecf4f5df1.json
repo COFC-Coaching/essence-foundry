@@ -16,7 +16,7 @@
     "expertises": "Fabrication, Reinforcement",
     "expertisesMode": "any",
     "tags": "terrain, protection, support",
-    "flavor": "",
+    "flavor": "<p>Raise a waist-high stone wall across a street, dam a stream, close off a doorway, hold back a slide of rubble while a crowd passes, or give a whole party something to crouch behind.</p><p>Not enough to seal a gate for good, hold back a flood, or build anything that outlasts the scene.</p>",
     "body": [
       {
         "label": "Target",

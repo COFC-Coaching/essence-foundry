@@ -16,7 +16,7 @@
     "expertises": "Severance, Liturgy",
     "expertisesMode": "any",
     "tags": "damage, debuff",
-    "flavor": "",
+    "flavor": "<p>Tie a knot in a charm and its gift unravels: a spell-quick runner falls back to an ordinary pace, a glamoured thief shows plain in the lamplight, a charmed horse loses its wind, a cloak of shadows thins. The one wearing it feels the loss.</p><p>Not enough to end a true curse or strip a working stronger than a charm.</p>",
     "body": [
       {
         "label": "Target",

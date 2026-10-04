@@ -16,7 +16,7 @@
     "expertises": "Transmutation, Reinforcement",
     "expertisesMode": "any",
     "tags": "damage, control, protection",
-    "flavor": "",
+    "flavor": "<p>Lock one person in ice to the knees, freeze a lock solid, ice a doorway shut, make a plank bridge too slick to cross, or walk through a burning room with frost on your coat.</p><p>Not enough to freeze a river or hold anyone past the scene.</p>",
     "body": [
       {
         "label": "Target",

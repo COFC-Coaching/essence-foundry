@@ -16,7 +16,7 @@
     "expertises": "Trajectory, Payload",
     "expertisesMode": "any",
     "tags": "damage, control, counterattack",
-    "flavor": "",
+    "flavor": "<p>Take a deer crossing a clearing, a thief slipping between two carts, or a runner crossing the gap between two houses. Hit something the moment it leaves cover, and make it stumble.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Berserking, Brawling",
     "expertisesMode": "any",
     "tags": "damage, suppression, setup",
-    "flavor": "",
+    "flavor": "<p>Work through an injury for a scene. Finish a climb on a twisted ankle, keep walking a hard road with a cracked rib, lift a beam off a trapped companion while hurt, or stay on your feet when the pain says sit down.</p><p>Not enough to mend anything. The wound is still there when the scene ends.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Berserking, Phalanx",
     "expertisesMode": "any",
     "tags": "damage, support, setup",
-    "flavor": "",
+    "flavor": "<p>A blow that draws every eye in the room. Smash a table so a companion can slip out the back, kick a weak door off its hinges, put a bouncer down in front of a crowd, or make enough of a scene that the guards turn toward you and away from a friend.</p><p>Not enough to clear the room or hold everyone's attention past the moment.</p>",
     "body": [
       {
         "label": "Target",

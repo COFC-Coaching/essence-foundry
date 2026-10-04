@@ -16,7 +16,7 @@
     "expertises": "Consecration, Sympathy",
     "expertisesMode": "any",
     "tags": "protection, support, terrain",
-    "flavor": "",
+    "flavor": "<p>Shelter your whole party under one sign: cross a rockfall, a burning stair, a stoning crowd or a collapsing floor with no one badly hurt. Keep three people on their feet when the ground shakes or the river rises.</p><p>Not enough to shield a crowd or hold up a falling wall.</p>",
     "body": [
       {
         "label": "Target",

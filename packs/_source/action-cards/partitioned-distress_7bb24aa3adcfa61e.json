@@ -16,7 +16,7 @@
     "expertises": "Biokinesis, Telepathy",
     "expertisesMode": "any",
     "tags": "suppression, protection, support",
-    "flavor": "",
+    "flavor": "<p>Let a wounded friend walk a mile on a bad ankle, keep a man quiet while a cut is stitched, hold a burned hand steady on a rope, or help someone work through a sore back for the scene.</p><p>Not enough to heal anything or hide a serious injury.</p>",
     "body": [
       {
         "label": "Target",

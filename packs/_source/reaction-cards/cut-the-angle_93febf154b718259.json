@@ -16,7 +16,7 @@
     "expertises": "Mobility, Flair",
     "expertisesMode": "any",
     "tags": "protection, mobility",
-    "flavor": "",
+    "flavor": "<p>Step out of the way of a thrown axe, slide clear of a rockfall, or shift a half pace so a bottle sails past your ear. Move so the thing meant for you misses.</p>",
     "body": [
       {
         "label": "Target",

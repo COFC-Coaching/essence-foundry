@@ -16,7 +16,7 @@
     "expertises": "Imprint, Clairvoyance",
     "expertisesMode": "any",
     "tags": "protection, information, suppression",
-    "flavor": "",
+    "flavor": "<p>Shield a friend's mind from a charm or a haunting for a scene, feel which direction a mental pull came from, see clearly through smoke or glare for a moment, or leave a mental mark on a spot to find it again in the dark.</p><p>Not enough to break a charm already set or shield more than one person.</p>",
     "body": [
       {
         "label": "Target",

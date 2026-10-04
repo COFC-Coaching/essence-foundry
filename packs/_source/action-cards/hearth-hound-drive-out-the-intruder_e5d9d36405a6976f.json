@@ -16,7 +16,7 @@
     "expertises": "Banishment, Accord",
     "expertisesMode": "any",
     "tags": "damage, debuff, support",
-    "flavor": "",
+    "flavor": "<p>Warn one trespasser off a threshold, send a lesser spirit or wisp out of a room, keep one stranger from following you up the stairs, or light a doorway so nothing slips in by dark. The hound stands at the door and means it.</p><p>Not enough to break a ward, drive out a haunting, or bar a whole house.</p>",
     "body": [
       {
         "label": "Target",

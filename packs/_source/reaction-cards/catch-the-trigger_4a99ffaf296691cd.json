@@ -16,7 +16,7 @@
     "expertises": "Sabotage, Observation",
     "expertisesMode": "any",
     "tags": "protection, support, suppression",
-    "flavor": "",
+    "flavor": "<p>Catch a tripwire before it springs, pull a friend off a pressure plate, kick a falling beam aside, or take the worst of a collapsing shelf for someone who did not see it. Whatever is set to go off, you take the teeth out of it.</p><p>Not enough to stop the trap entirely or to disarm it for good.</p>",
     "body": [
       {
         "label": "Target",

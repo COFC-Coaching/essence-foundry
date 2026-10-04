@@ -16,7 +16,7 @@
     "expertises": "Consecration, Sympathy",
     "expertisesMode": "any",
     "tags": "mobility, protection, support",
-    "flavor": "",
+    "flavor": "<p>Hand a friend a second rein and they cross the mud without sinking, keep their feet in a river current, climb a scree slope at a run, hold their place in a shoving crowd, catch the runaway cart before the corner.</p><p>Not enough to leap a chasm or outrun a horse.</p>",
     "body": [
       {
         "label": "Target",

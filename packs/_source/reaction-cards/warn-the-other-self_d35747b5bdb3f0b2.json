@@ -16,7 +16,7 @@
     "expertises": "Clairvoyance, Telepathy",
     "expertisesMode": "any",
     "tags": "protection, support, information",
-    "flavor": "",
+    "flavor": "<p>Make a friend duck a thrown bottle without a word spoken, show a companion the pickpocket's hand before it closes, or point out the window the arrow came from.</p><p>Not enough to warn more than one person at a time.</p>",
     "body": [
       {
         "label": "Target",

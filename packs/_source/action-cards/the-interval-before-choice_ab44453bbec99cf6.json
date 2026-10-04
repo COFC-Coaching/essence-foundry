@@ -16,7 +16,7 @@
     "expertises": "Precognition, Clairvoyance",
     "expertisesMode": "any",
     "tags": "protection, information, setup",
-    "flavor": "",
+    "flavor": "<p>Read when a gambler is about to bluff, see a tavern punch coming before the fist moves, know whether a guard is ready to act or too tired to bother, or brace for a harsh word before it lands.</p>",
     "body": [
       {
         "label": "Target",

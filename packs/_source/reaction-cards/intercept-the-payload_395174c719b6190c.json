@@ -16,7 +16,7 @@
     "expertises": "Precision, Penetration",
     "expertisesMode": "any",
     "tags": "protection, support, suppression",
-    "flavor": "",
+    "flavor": "<p>Shoot a thrown bottle out of the air before it hits, knock an arrow off course mid flight, swat a falling lantern aside before it lands on the hay, or catch a thrown knife with a shot of your own. Keep a flung stone off a friend across the yard.</p><p>Not enough to stop a boulder, a flood, or anything you cannot see coming.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Sleight, Infiltration",
     "expertisesMode": "any",
     "tags": "damage, mobility, control",
-    "flavor": "",
+    "flavor": "<p>Duck under a grabbing arm in a tavern, slip past a doorman who has already reached for you, get around a man in a hallway without being caught, or jab and go before a bouncer can turn.</p><p>Not enough to get past more than one person or to leave anyone unable to follow.</p>",
     "body": [
       {
         "label": "Target",

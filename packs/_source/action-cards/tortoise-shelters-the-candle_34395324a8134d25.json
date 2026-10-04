@@ -16,7 +16,7 @@
     "expertises": "Phalanx, Brawling",
     "expertisesMode": "any",
     "tags": "protection, support",
-    "flavor": "",
+    "flavor": "<p>Put yourself between a companion and falling plaster, brace a friend on a swaying rope bridge, take a thrown bottle meant for someone else, or keep a child from being swept off their feet by a crowd.</p>",
     "body": [
       {
         "label": "Target",

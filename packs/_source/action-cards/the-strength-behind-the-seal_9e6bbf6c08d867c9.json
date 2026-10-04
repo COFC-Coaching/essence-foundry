@@ -16,7 +16,7 @@
     "expertises": "Inscription, Consecration",
     "expertisesMode": "any",
     "tags": "protection, support, control",
-    "flavor": "",
+    "flavor": "<p>Seal strength into one person: shove a loaded cart out of a rut, heave a vault door that takes two, throw a man through a tavern door, stand under a falling beam, hold a gate shut against a mob's push.</p><p>Not enough to lift a cart or stop a charging horse.</p>",
     "body": [
       {
         "label": "Target",

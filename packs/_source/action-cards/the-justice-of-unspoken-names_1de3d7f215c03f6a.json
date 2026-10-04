@@ -16,7 +16,7 @@
     "expertises": "Inscription, Liturgy",
     "expertisesMode": "any",
     "tags": "damage, debuff, information",
-    "flavor": "",
+    "flavor": "<p>Speak a name you should not and that person fumbles their one important moment: the duelist's first lunge, the forger's signature, the orator's opening line, the lockpick's touch, the rider's jump. Learn where they are weakest as they fail.</p><p>Not enough to ruin more than one moment or reach someone out of sight.</p>",
     "body": [
       {
         "label": "Target",

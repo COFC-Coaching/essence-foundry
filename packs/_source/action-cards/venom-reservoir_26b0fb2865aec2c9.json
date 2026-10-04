@@ -16,7 +16,7 @@
     "expertises": "Metabolism, Armament",
     "expertisesMode": "any",
     "tags": "damage, debuff, control",
-    "flavor": "",
+    "flavor": "<p>Lace a blade or a drink with your own venom, put a guard dog to sleep for the night, drop a horse to its knees, or leave a thief with a numb and useless hand.</p><p>Not enough to kill outright or to poison a well.</p>",
     "body": [
       {
         "label": "Target",

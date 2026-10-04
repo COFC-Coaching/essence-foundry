@@ -16,7 +16,7 @@
     "expertises": "Channeling, Disjunction",
     "expertisesMode": "any",
     "tags": "damage, information, debuff",
-    "flavor": "",
+    "flavor": "<p>Burn away a disguise, strip the dark from a lurker in a doorway, tell whether an illusion sits over one face, or scorch a cheat caught at a table. One person, plainly shown.</p><p>Not enough to find someone who is truly hidden or break a lasting ward.</p>",
     "body": [
       {
         "label": "Target",

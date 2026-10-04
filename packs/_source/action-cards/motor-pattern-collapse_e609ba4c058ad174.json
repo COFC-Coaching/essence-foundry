@@ -16,7 +16,7 @@
     "expertises": "Biokinesis, Imprint",
     "expertisesMode": "any",
     "tags": "damage, control, debuff",
-    "flavor": "",
+    "flavor": "<p>Drop a running man on his face, make a guard's legs fold under him, keep a captive from standing, or make a horse stumble mid-stride.</p><p>Not enough to cause lasting harm or hold anyone down past the scene.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Reagents, Liturgy",
     "expertisesMode": "any",
     "tags": "protection, suppression, support",
-    "flavor": "",
+    "flavor": "<p>Hang the charm and one room sheds a steady light through the night. The one who keeps it sleeps through a sent nightmare, stays calm under a fortune-teller's glamour, keeps a clear head in a haunted house, and sees a sorcerer's trick for what it is.</p><p>Not enough to break a curse already laid or light more than one room.</p>",
     "body": [
       {
         "label": "Target",

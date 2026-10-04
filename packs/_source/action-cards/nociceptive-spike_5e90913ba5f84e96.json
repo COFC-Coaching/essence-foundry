@@ -16,7 +16,7 @@
     "expertises": "Biokinesis, Mesmerism",
     "expertisesMode": "any",
     "tags": "damage, debuff, suppression",
-    "flavor": "",
+    "flavor": "<p>Cramp a pickpocket's hand so he drops the purse, stop a runner with a stitch in his side, make a brute let go of what he is holding, or shut out your own aching feet for a while longer on the road.</p><p>Not enough to leave a mark, drop anyone, or quiet a real wound.</p>",
     "body": [
       {
         "label": "Target",

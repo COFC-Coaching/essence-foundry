@@ -16,7 +16,7 @@
     "expertises": "Transmutation, Augmentation",
     "expertisesMode": "any",
     "tags": "control, mobility, area, support",
-    "flavor": "",
+    "flavor": "<p>Swap places with a prisoner in a cell, trade a guard for a friend on the far side of a gate, change two crates in a storeroom, or move someone off a crumbling floor by taking their place.</p><p>Not enough to swap anyone out of sight or anything heavier than a person.</p>",
     "body": [
       {
         "label": "Target",

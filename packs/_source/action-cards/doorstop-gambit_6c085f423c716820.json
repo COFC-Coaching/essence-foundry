@@ -16,7 +16,7 @@
     "expertises": "Sabotage, Improvisation",
     "expertisesMode": "any",
     "tags": "control, terrain",
-    "flavor": "",
+    "flavor": "<p>Hold a door shut against one person, wedge a gate so it jams when the next guard pulls it, pin a man in a narrow gap with a cart, or shove someone back out of a doorway he is trying to push through.</p><p>Not enough to bar a door against a crowd or to hold it all night.</p>",
     "body": [
       {
         "label": "Target",

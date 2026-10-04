@@ -16,7 +16,7 @@
     "expertises": "Sculpting, Transmutation",
     "expertisesMode": "any",
     "tags": "damage, area, control",
-    "flavor": "",
+    "flavor": "<p>Gather scattered goods into one pile, pull a knot of people together off a crumbling ledge, drag several crates to one corner, or snatch a handful of loose arrows to a single spot.</p><p>Not enough to pull down a wall or drag anything heavier than a cart.</p>",
     "body": [
       {
         "label": "Target",

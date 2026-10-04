@@ -16,7 +16,7 @@
     "expertises": "Sculpting, Channeling",
     "expertisesMode": "any",
     "tags": "damage, area, debuff",
-    "flavor": "",
+    "flavor": "<p>Light a bonfire in one go, burn a pile of letters to ash, drive rats or wasps out of a cellar, dry a soaked camp, or throw a column of flame into the sky as a signal.</p><p>Not enough to burn down a building, melt metal, or hold a crowd back.</p>",
     "body": [
       {
         "label": "Target",

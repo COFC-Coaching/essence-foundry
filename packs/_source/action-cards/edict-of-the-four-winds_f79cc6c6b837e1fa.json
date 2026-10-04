@@ -16,7 +16,7 @@
     "expertises": "Sculpting, Channeling",
     "expertisesMode": "any",
     "tags": "area, control, support",
-    "flavor": "",
+    "flavor": "<p>Drive a group back from a doorway, blow a street clear of smoke, fill a sail, push a boat off a sandbar, or carry three friends a few steps across a gap on a single gust.</p><p>Not enough to flatten a house or throw anyone off a wall.</p>",
     "body": [
       {
         "label": "Target",

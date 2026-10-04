@@ -16,7 +16,7 @@
     "expertises": "Regeneration, Plasticity",
     "expertisesMode": "any",
     "tags": "suppression, protection",
-    "flavor": "",
+    "flavor": "<p>Walk on a broken leg long enough to get out of the mine, carry a wounded friend on cracked ribs, climb with a crushed hand, or keep working through a wound that would drop anyone else.</p><p>Not enough to heal anything, or to ignore a Critical injury.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Entreaty, Severance",
     "expertisesMode": "any",
     "tags": "damage, debuff",
-    "flavor": "",
+    "flavor": "<p>Interrupt the bargain and a working falters: a warded door's spell lapses, a charmed vest goes cold, an amulet fails its wearer, a sorcerer's shield thins. The one holding it sickens as it fails.</p><p>Not enough to end the enchantment for good or touch more than one.</p>",
     "body": [
       {
         "label": "Target",

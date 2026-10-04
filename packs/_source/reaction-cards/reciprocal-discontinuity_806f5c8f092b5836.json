@@ -16,7 +16,7 @@
     "expertises": "Telepathy, Mesmerism",
     "expertisesMode": "any",
     "tags": "suppression, debuff, counterattack",
-    "flavor": "",
+    "flavor": "<p>Shake off a charm and leave the charmer reeling, throw a mesmerist's push back in his face, or dismiss a fear sent at you and stagger whoever sent it.</p><p>Not enough to break a hold set on someone else or hurt the sender for long.</p>",
     "body": [
       {
         "label": "Target",

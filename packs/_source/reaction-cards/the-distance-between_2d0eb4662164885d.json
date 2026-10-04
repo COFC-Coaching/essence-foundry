@@ -16,7 +16,7 @@
     "expertises": "Sculpting, Transmutation",
     "expertisesMode": "any",
     "tags": "protection, mobility, suppression",
-    "flavor": "",
+    "flavor": "<p>Pull one person clear of a collapsing floor, a flood surge, a toppling shelf, or a spreading fire with two quick steps before it reaches them.</p><p>Not enough to carry anyone out of a building or escape a whole avalanche.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Improvisation, Deception",
     "expertisesMode": "any",
     "tags": "control, support, setup",
-    "flavor": "",
+    "flavor": "<p>Tip a cart to slow a pursuer, pull a stack of crates into a man's path, bump a market stall so a guard has to stop and catch it, or buy a friend a moment to get past the same obstacle. One person, one thing in the way.</p><p>Not enough to block a street or to stop more than one person.</p>",
     "body": [
       {
         "label": "Target",

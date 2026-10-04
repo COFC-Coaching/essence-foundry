@@ -16,7 +16,7 @@
     "expertises": "Sculpting, Augmentation",
     "expertisesMode": "any",
     "tags": "control, mobility, support",
-    "flavor": "",
+    "flavor": "<p>Shove a person off their feet, push a boat away from the dock, blow a door shut against someone, clear smoke from a room, or carry one friend over a gap with a gust at their back.</p><p>Not enough to move a cart, drive back a crowd, or knock anyone off a roof.</p>",
     "body": [
       {
         "label": "Target",

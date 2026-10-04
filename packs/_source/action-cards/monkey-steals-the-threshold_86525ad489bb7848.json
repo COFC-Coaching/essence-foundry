@@ -16,7 +16,7 @@
     "expertises": "Brawling, Grappling",
     "expertisesMode": "any",
     "tags": "damage, mobility, control",
-    "flavor": "",
+    "flavor": "<p>Slip past a guard in a doorway and leave them on your side of it, trade places with someone on a ladder, get through a crowd by swapping spots with whoever is in the way, or take a seat before the person reaching for it.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Reagents, Consecration",
     "expertisesMode": "any",
     "tags": "protection, support, suppression",
-    "flavor": "",
+    "flavor": "<p>Burn the candle at both ends and you and one friend walk through a hailstorm, a tavern brawl, a jeering mob or a rockfall with your heads up: stones glance, shoves slide off, nothing moves you from your path.</p><p>Not enough to walk through fire or shelter more than two.</p>",
     "body": [
       {
         "label": "Target",

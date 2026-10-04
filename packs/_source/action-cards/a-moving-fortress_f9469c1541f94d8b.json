@@ -16,7 +16,7 @@
     "expertises": "Guardianship, Coordination",
     "expertisesMode": "any",
     "tags": "protection, support, mobility",
-    "flavor": "",
+    "flavor": "<p>Move a knot of three through a hostile crowd, a riot, a collapsing hallway, or a river ford, each person covering the next. Nobody gets split off, nobody gets dragged away.</p><p>Not enough to protect a whole caravan or stand against a stampede.</p>",
     "body": [
       {
         "label": "Target",

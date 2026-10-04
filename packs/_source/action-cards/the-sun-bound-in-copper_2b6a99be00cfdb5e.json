@@ -16,7 +16,7 @@
     "expertises": "Reagents, Inscription",
     "expertisesMode": "any",
     "tags": "support, setup, information",
-    "flavor": "",
+    "flavor": "<p>Bind a little sun into a tool and it bites where it would skid: a pick in a rusted lock, an axe in wet oak, a chisel in mortared stone, a knife through a frozen rope. What it strikes glows for a while, so the mark is easy to find again in the dark.</p><p>Not enough to cut through iron or light a hall.</p>",
     "body": [
       {
         "label": "Target",

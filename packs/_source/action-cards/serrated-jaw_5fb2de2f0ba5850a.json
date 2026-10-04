@@ -16,7 +16,7 @@
     "expertises": "Armament, Metabolism",
     "expertisesMode": "any",
     "tags": "damage, control, suppression",
-    "flavor": "",
+    "flavor": "<p>Bite through a rope or a leather strap, tear a sack open, strip the hide from a carcass, gnaw through a thin wooden bar, or drag a sled by a strap in your teeth.</p><p>Not enough to bite through iron or hold someone who is fighting to get free.</p>",
     "body": [
       {
         "label": "Target",

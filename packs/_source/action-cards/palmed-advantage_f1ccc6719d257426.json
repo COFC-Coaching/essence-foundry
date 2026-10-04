@@ -16,7 +16,7 @@
     "expertises": "Sleight, Deception",
     "expertisesMode": "any",
     "tags": "damage, debuff, control",
-    "flavor": "",
+    "flavor": "<p>Lift a key ring from a belt, pick a purse in a crowd, swap a sealed letter for a blank one, or walk off with a guard's lantern while he is answering your question. One small thing that is not in his hand.</p><p>Not enough to take a drawn weapon or anything he is holding onto.</p>",
     "body": [
       {
         "label": "Target",

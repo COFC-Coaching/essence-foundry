@@ -16,7 +16,7 @@
     "expertises": "Awareness, Regeneration",
     "expertisesMode": "any",
     "tags": "protection, suppression, information",
-    "flavor": "",
+    "flavor": "<p>Keep your sight through a flash of light, walk through a cloud of pepper or smoke, hear through a deafening bell, shake off a blow to the head, or keep walking with a leg caught in briars.</p><p>Not enough to shrug off something that holds you fast, like a locked door or a pit.</p>",
     "body": [
       {
         "label": "Target",

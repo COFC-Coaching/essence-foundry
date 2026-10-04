@@ -16,7 +16,7 @@
     "expertises": "Integration, Awareness",
     "expertisesMode": "any",
     "tags": "damage, information, mobility",
-    "flavor": "",
+    "flavor": "<p>Track a quarry through a dark warehouse by its movement, run a wall to cut off a fleeing thief, find everyone moving in a fogbound camp, or follow a swimmer from the bank at night.</p><p>Not enough to see through walls or track something that holds still.</p>",
     "body": [
       {
         "label": "Target",

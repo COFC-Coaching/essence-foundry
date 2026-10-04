@@ -16,7 +16,7 @@
     "expertises": "Imprint, Clairvoyance",
     "expertisesMode": "any",
     "tags": "information, setup, mobility",
-    "flavor": "",
+    "flavor": "<p>Scout the room ahead before you open the door, set your mind down a corridor and work a latch from there, look over a wall into a courtyard, or reach past a locked gate with your other cards.</p><p>Not enough to pass through a closed door or a solid wall.</p>",
     "body": [
       {
         "label": "Target",

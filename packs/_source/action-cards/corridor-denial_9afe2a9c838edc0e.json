@@ -16,7 +16,7 @@
     "expertises": "Trajectory, Penetration",
     "expertisesMode": "any",
     "tags": "terrain, control",
-    "flavor": "",
+    "flavor": "<p>Close a street so no one walks it, keep a mob off a bridge, hold a long hallway against everyone coming down it, or deny a mountain pass to a band of raiders. Strip the hiding spots out of a lane so nothing in it stays hidden.</p><p>Not enough to hold more than one street or to keep it closed once you stop.</p>",
     "body": [
       {
         "label": "Target",

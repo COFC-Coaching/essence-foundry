@@ -16,7 +16,7 @@
     "expertises": "Reagents, Entreaty",
     "expertisesMode": "any",
     "tags": "damage, debuff, setup",
-    "flavor": "",
+    "flavor": "<p>Spoil one person's hand or eye for the scene: an archer's aim at the fair, a forger's pen, a card sharp's deal, a sentry's attention, a hunter's shot at the stag. They lose the thread of what they were doing.</p><p>Not enough to blind anyone or spoil a whole crew's work.</p>",
     "body": [
       {
         "label": "Target",

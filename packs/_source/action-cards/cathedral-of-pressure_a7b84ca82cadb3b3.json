@@ -16,7 +16,7 @@
     "expertises": "Telekinesis, Imprint",
     "expertisesMode": "any",
     "tags": "damage, area, control",
-    "flavor": "",
+    "flavor": "<p>Drive a crowd back from a doorway, clear a hallway of fallen debris, scatter a pack of dogs, or knock a market stall and everything on it flat.</p><p>Not enough to bring down a wall or lift a cart.</p>",
     "body": [
       {
         "label": "Target",

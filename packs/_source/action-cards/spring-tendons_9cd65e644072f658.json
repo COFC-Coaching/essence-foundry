@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "damage, mobility",
-    "flavor": "",
+    "flavor": "<p>Hop a low wall, clear a narrow ditch, reach a ledge just past your fingertips, keep your feet on a slick deck, or get from a cart bed to a balcony in one bound.</p><p>Not enough to clear a stream or reach a second-storey window.</p>",
     "body": [
       {
         "label": "Target",

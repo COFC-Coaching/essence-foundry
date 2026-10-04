@@ -16,7 +16,7 @@
     "expertises": "Disjunction, Sculpting",
     "expertisesMode": "any",
     "tags": "protection, debuff, terrain",
-    "flavor": "",
+    "flavor": "<p>Spoil a pickpocket's reach, make a guard's search miss what you carry, cloud the eye of a sentry who has just spotted a friend, or fog the look of someone lying to your face. Drop a shadow over the spot they were watching.</p><p>Not enough to blind anyone or hide a whole room.</p>",
     "body": [
       {
         "label": "Target",

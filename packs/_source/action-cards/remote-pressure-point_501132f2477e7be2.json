@@ -16,7 +16,7 @@
     "expertises": "Telekinesis, Imprint",
     "expertisesMode": "any",
     "tags": "damage, control, terrain",
-    "flavor": "",
+    "flavor": "<p>Shove a man off his feet from across the room, hold a door shut against someone pushing, press a trapdoor closed, or pin a loose rope end to the ground while a friend climbs.</p><p>Not enough to move a cart or hold a door against several people.</p>",
     "body": [
       {
         "label": "Target",

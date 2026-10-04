@@ -16,7 +16,7 @@
     "expertises": "Phalanx, Reaving",
     "expertisesMode": "any",
     "tags": "protection, support, mobility",
-    "flavor": "",
+    "flavor": "<p>Hold two companions steady on a pitching deck, brace three people against a collapsing scaffold, shelter a small group from falling rubble, or keep your party on their feet in a crowd that has turned into a stampede.</p><p>Not enough to protect a whole room or stop what is falling.</p>",
     "body": [
       {
         "label": "Target",

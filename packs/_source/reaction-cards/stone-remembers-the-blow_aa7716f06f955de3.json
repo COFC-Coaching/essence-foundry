@@ -16,7 +16,7 @@
     "expertises": "Reinforcement, Fabrication",
     "expertisesMode": "any",
     "tags": "protection, terrain, support",
-    "flavor": "",
+    "flavor": "<p>Brace a friend against a falling beam, a horse's kick, a rockfall, or a swung club, and leave a low screen of stone beside them to duck behind. One blow, one person.</p><p>Not enough to hold up a roof or stop a cart.</p>",
     "body": [
       {
         "label": "Target",

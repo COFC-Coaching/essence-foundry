@@ -16,7 +16,7 @@
     "expertises": "Telepathy, Imprint",
     "expertisesMode": "any",
     "tags": "damage, area, information",
-    "flavor": "",
+    "flavor": "<p>Fill two guards' heads with noise so they lose the thread of their talk, catch what two merchants mutter across a hall, or set a pair of dogs barking at nothing.</p><p>Not enough to read private thoughts or hush a whole room.</p>",
     "body": [
       {
         "label": "Target",

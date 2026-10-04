@@ -16,7 +16,7 @@
     "expertises": "Awareness, Locomotion",
     "expertisesMode": "any",
     "tags": "damage, mobility, information",
-    "flavor": "",
+    "flavor": "<p>Vanish against a wall while a patrol walks past, cross a courtyard unseen in daylight, sit in a crowded room and go unnoticed, get within arm's reach of a deer in the brush, or follow someone through a market all afternoon.</p><p>Not enough to disappear on open ground with nothing to blend into.</p>",
     "body": [
       {
         "label": "Target",

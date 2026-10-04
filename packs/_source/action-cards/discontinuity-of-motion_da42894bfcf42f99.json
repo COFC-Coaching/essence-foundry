@@ -16,7 +16,7 @@
     "expertises": "Biokinesis, Precognition",
     "expertisesMode": "any",
     "tags": "control, setup, information",
-    "flavor": "",
+    "flavor": "<p>Make a running thief stumble, slow a sentry's reach for his sword, make a horse balk at a gate, or tell whether a tired guard has any fight left in him.</p><p>Not enough to freeze anyone in place.</p>",
     "body": [
       {
         "label": "Target",

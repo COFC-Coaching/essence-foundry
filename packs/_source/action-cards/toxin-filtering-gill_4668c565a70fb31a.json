@@ -16,7 +16,7 @@
     "expertises": "Metabolism, Regeneration",
     "expertisesMode": "any",
     "tags": "suppression, protection, support",
-    "flavor": "",
+    "flavor": "<p>Breathe in a smoke-filled hall, swim the length of a flooded tunnel, taste a drink and know it is tainted, keep a friend breathing in a mine shaft gone bad, or work a tanner's vat without retching.</p><p>Not enough to live underwater or to clear a poison already in the blood.</p>",
     "body": [
       {
         "label": "Target",

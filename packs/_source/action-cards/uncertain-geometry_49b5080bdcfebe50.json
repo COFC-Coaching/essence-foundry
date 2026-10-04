@@ -16,7 +16,7 @@
     "expertises": "Fabrication, Augmentation",
     "expertisesMode": "any",
     "tags": "terrain, mobility, support",
-    "flavor": "",
+    "flavor": "<p>Lay a false stair over a broken one so a friend crosses while a pursuer stumbles, make a safe path look like loose rubble, or trip up two guards in a narrow passage for a moment.</p><p>Not enough to bridge a gap or fool anyone who tests the footing with their hand.</p>",
     "body": [
       {
         "label": "Target",

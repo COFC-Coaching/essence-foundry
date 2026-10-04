@@ -16,7 +16,7 @@
     "expertises": "Provocation, Guardianship",
     "expertisesMode": "any",
     "tags": "protection, debuff, support",
-    "flavor": "",
+    "flavor": "<p>Make one person deal with you instead of your friend: the drunk picks a fight with you, the inspector asks you the questions, the creditor turns to argue with you. Stay close and they keep looking your way.</p><p>Not enough to hold more than one person or make them forget your friend entirely.</p>",
     "body": [
       {
         "label": "Target",

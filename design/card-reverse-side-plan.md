@@ -93,6 +93,67 @@ scale table. Seed candidates: utility, movement, information, environment and bu
 Pure damage cards stay single-sided unless the effect has an obvious physical application
 (cut, melt, push, light).
 
+## Rank scope table (draft for Ryan, 2026-10-03)
+
+The card outline the entries must respect is the "Choose Rank" table in
+`Essence_Combat_Card_Design_Production_Guide_v3_1_1.docx` (Downloads), repeated in the v0.7 Doc's
+"Combat Card Rank Benchmarks" and "Combat Card Ranks":
+
+| Rank | Min dice | Expertises listed / required | Surges | Typical Resource cost |
+|---|---|---|---|---|
+| 0 | 2+ | 0 / 0 | 2 | none |
+| 1 | 2+ | 2 / 1 | 2 | 1 |
+| 2 | 3+ | 2 / 1 | 2 | 1 to 2 |
+| 3 | 4+ | 3 / 2 | 3 | rises with Rank |
+| 4 | 5+ | 3 / 2 | 3 | rises with Rank |
+| 5 | 6+ | 4 / 3 | 4 | rises with Rank |
+
+The guide's rule for what Rank buys: "Rank is permission and complexity, not simply damage."
+Scaling comes from reach, extra targets, area, conditions, control and reliability, never from
+bigger numbers (Generation Prompts v3). Range benchmarks: Touch, Melee 1 unit, Close 2 to 3,
+Medium 4 to 8, Long 9 to 15, Extreme 16+ (Rank 4 and 5 only). A second Wound exists only as a
+Rank 5 Surge.
+
+What each Rank adds, from Shane's Close Burst ladder (2026-10-03). Every card has one Rank;
+this ladder shows what Close Burst would be IF it were printed at each Rank. It is a calibration
+tool, not six entries for one card: place a card's effect on the rung for its own Rank, and the
+rungs above and below say what is too strong and too weak for its back.
+
+| Rank | Close Burst (front) | What the step adds | Surges |
+|---|---|---|---|
+| 0 | One creature within 2 units: 1 damage, pushed 1 unit | the technique at its smallest | 2 basic |
+| 1 | One creature within 2 units: 1 damage, pushed 5 units | magnitude: the same effect, five times as far | 2 specialty |
+| 2 | Each creature in a 2 or 3 unit cone: 1 damage, pushed 5 | from one target to an area | 2 specialty |
+| 3 | Each creature in a 3 unit cone: 2 damage, pushed 5 | intensity: the area hits twice as hard | 3 specialty |
+| 4 | Each other creature within 3 units of you: 2 damage, pushed 5 | all directions at once, centred on you | 3 specialty |
+| 5 | Each other creature within 3 units of a point you can see within 10 units: 2 damage, pushed 5 | the same burst placed at range | 4 specialty |
+
+Shane's second yardstick (2026-10-03): a card's Rank has the power and functionality of the
+matching D&D spell level. Rank 0 is a cantrip, Rank 1 a 1st-level spell, up to Rank 5 as a
+5th-level spell. Rank 0 backs sit at Prestidigitation or Light scale, Rank 2 at Knock or Shatter
+scale, Rank 5 at Telekinesis or Wall of Stone scale.
+
+Read as a scope ladder for the back: Rank 0 is one small thing within reach; Rank 1 is the same
+thing with real force or distance; Rank 2 is several things or a whole area; Rank 3 is that area
+with enough force to break or move heavy things; Rank 4 is everything around you at once;
+Rank 5 is that, placed anywhere you can see.
+
+Calibration example, the back Close Burst would carry at each Rank (Space: a shove of compressed
+air or force). The real Close Burst is Rank 0 and gets only the Rank 0 line:
+
+| Rank | Examples (the first paragraph) | Not enough to (optional second line) |
+|---|---|---|
+| 0 | Knock a box off a shelf, slam a door, scatter papers, push a lever, crack a thin pane of glass. | Move a person or anything heavier than you can lift. |
+| 1 | Shove a person off their feet, throw a chair across a room, slam a cart door shut, blow out every candle in a room, knock a climber off a low wall. | Move a cart or break a solid door. |
+| 2 | Clear a hallway of loose debris, drive a group back from a doorway, blow a weak door off its hinges, push a loaded cart a few units, scatter a market stall. | Flip a wagon or knock down a wall. |
+| 3 | Flip a cart, bring down a loose stone wall or a scaffold, hurl a group across a courtyard, snap rigging, clear a street of a crowd. | Move a ship or level a house. |
+| 4 | Everything within 3 units of you goes outward at once: end a brawl, throw a room's furniture to the walls, clear falling rubble off yourself, slow a fall by pushing down. | Reach anything you are not standing near. |
+| 5 | The same burst anywhere you can see within 10 units: collapse a scaffold across a square, clear a gate of a mob from a tower, knock riders off a bridge, drop a hanging load. | Last beyond the moment or reshape the ground. |
+
+Cost follows the card: Rank 0 entries cost only time, every other Rank pays its Resource per use,
+which is the throttle on repeated out-of-combat casting. The dice commitment is charged only in a
+timed scene (chase, trap room, escape under pressure).
+
 ### Not changed
 
 Front-face play, costs, the roll engine, Equipment Cards, and all existing pack data.

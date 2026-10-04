@@ -16,7 +16,7 @@
     "expertises": "Locomotion, Armament",
     "expertisesMode": "any",
     "tags": "damage, mobility, control",
-    "flavor": "",
+    "flavor": "<p>Leap to a second-storey window, clear a stream, jump a fence from a standstill, cross from one rooftop to the next, or come down a flight of stairs in one bound.</p><p>Not enough to clear a river or reach a tower top.</p>",
     "body": [
       {
         "label": "Target",

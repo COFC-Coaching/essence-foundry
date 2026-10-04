@@ -16,7 +16,7 @@
     "expertises": "Dominion, Chorus",
     "expertisesMode": "any",
     "tags": "damage, area, counterattack",
-    "flavor": "",
+    "flavor": "<p>Give a thief a jolt and a shove when they step up to your campfire uninvited, knock a drunk back from a friend's table, throw a door open against whoever leaned on it, or send a wolf yelping away from the picket line. The first one through gets the thunder.</p><p>Not enough to ward a whole camp, hurt anyone badly, or hold a door against a crowd.</p>",
     "body": [
       {
         "label": "Target",

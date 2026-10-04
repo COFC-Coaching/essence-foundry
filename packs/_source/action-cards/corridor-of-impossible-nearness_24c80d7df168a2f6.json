@@ -16,7 +16,7 @@
     "expertises": "Fabrication, Augmentation",
     "expertisesMode": "any",
     "tags": "terrain, mobility, support",
-    "flavor": "",
+    "flavor": "<p>Open a short passage past a wall of flame, across a chasm, or over a flooded gap so a whole party can walk through it one after another. It holds only while you watch it.</p><p>Not enough to pass through a wall or carry anyone further than a short sprint.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "protection, mobility",
-    "flavor": "",
+    "flavor": "<p>Sidestep a falling tile, a thrown mug, or a hand reaching for your purse, one step without planting a foot. Get out from under a dropped sack.</p><p>Not enough to dodge a collapse or get out of a room.</p>",
     "body": [
       {
         "label": "Target",

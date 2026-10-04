@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "control, setup, damage",
-    "flavor": "",
+    "flavor": "<p>Hang a knotted cord and one pair of legs goes heavy: a pickpocket loses a step in the market, a child stops short of the road, a nervous horse stays put, a rival reaches the door after you.</p><p>Not enough to root anyone in place or stop a horse at a gallop.</p>",
     "body": [
       {
         "label": "Target",

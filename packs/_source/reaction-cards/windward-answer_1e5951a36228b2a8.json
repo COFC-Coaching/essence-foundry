@@ -16,7 +16,7 @@
     "expertises": "Sculpting, Augmentation",
     "expertisesMode": "any",
     "tags": "protection, support, mobility",
-    "flavor": "",
+    "flavor": "<p>Turn a thrown stone or a falling slate with a gust and step one person out from under it. Catch an arrow from ambush on the wind before it lands.</p><p>Not enough to stop a collapse or move anyone more than a step.</p>",
     "body": [
       {
         "label": "Target",

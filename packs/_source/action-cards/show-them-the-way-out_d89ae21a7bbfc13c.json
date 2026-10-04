@@ -16,7 +16,7 @@
     "expertises": "Tactics, Inspiration",
     "expertisesMode": "any",
     "tags": "terrain, mobility, support",
-    "flavor": "",
+    "flavor": "<p>Call out the route through rubble, a packed market, a smoking hallway, or a scree slope, and the people who follow it move clean. Take the first steps yourself to show it is safe.</p><p>Not enough to clear the way or guide people you cannot see or shout to.</p>",
     "body": [
       {
         "label": "Target",

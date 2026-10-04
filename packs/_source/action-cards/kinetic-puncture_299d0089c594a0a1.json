@@ -16,7 +16,7 @@
     "expertises": "Telekinesis, Clairvoyance",
     "expertisesMode": "any",
     "tags": "damage, information, setup",
-    "flavor": "",
+    "flavor": "<p>Tap along a wall and find the hollow behind it, tell whether a curtain hides a door or stone, punch a hole in a wine cask, or knock a latch loose from the wrong side of a door.</p><p>Not enough to break through the wall once you have found it.</p>",
     "body": [
       {
         "label": "Target",

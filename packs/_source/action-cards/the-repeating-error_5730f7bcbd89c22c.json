@@ -16,7 +16,7 @@
     "expertises": "Imprint, Mesmerism",
     "expertisesMode": "any",
     "tags": "damage, debuff, control",
-    "flavor": "",
+    "flavor": "<p>Make a lockpick botch the same pin twice, a scribe keep copying the wrong word, a drummer lose the beat on the same bar, or a liar trip over a story he has told before.</p><p>Not enough to plant a new mistake or make anyone forget what they know.</p>",
     "body": [
       {
         "label": "Target",

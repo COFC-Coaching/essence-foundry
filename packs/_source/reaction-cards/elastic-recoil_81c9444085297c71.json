@@ -16,7 +16,7 @@
     "expertises": "Locomotion, Plasticity",
     "expertisesMode": "any",
     "tags": "protection, mobility",
-    "flavor": "",
+    "flavor": "<p>Slip a punch in a tavern, step clear of a horse's kick, get out from under a falling sign, sidestep a trap's jaws as they snap, or spring off a ledge as it gives way.</p><p>Not enough to dodge an arrow or escape something you never saw coming.</p>",
     "body": [
       {
         "label": "Target",

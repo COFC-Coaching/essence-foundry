@@ -16,7 +16,7 @@
     "expertises": "Reinforcement, Augmentation",
     "expertisesMode": "any",
     "tags": "suppression, protection, support",
-    "flavor": "",
+    "flavor": "<p>Let a wounded ally walk, climb, ride, or swim as if whole for the scene. Carry a broken leg over a pass, hold a bleeding hand steady on a rope. The wound is still there when the scene ends.</p><p>Not enough to heal, stop bleeding, or keep anyone from dying.</p>",
     "body": [
       {
         "label": "Target",

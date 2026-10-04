@@ -16,7 +16,7 @@
     "expertises": "Payload, Flair",
     "expertisesMode": "any",
     "tags": "damage, control, utility",
-    "flavor": "",
+    "flavor": "<p>Snag a ring of keys off a hook across the room, pull a dropped pouch back from a ledge, haul a rope end over to you, or yank a lever you cannot reach. Drag one person a step toward you by their belt or collar.</p><p>Not enough to pull anything heavier than a person or to lift a load.</p>",
     "body": [
       {
         "label": "Target",

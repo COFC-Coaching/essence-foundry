@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "damage, mobility",
-    "flavor": "",
+    "flavor": "<p>Climb a rough stone wall with one hand free, score your mark into a doorframe, cut a rope or a strap, pry the lid off a crate, or shred a sack to get at what is inside.</p><p>Not enough to cut through a lock or scale a smooth face.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Cadence, Mobility",
     "expertisesMode": "any",
     "tags": "damage, control, protection",
-    "flavor": "",
+    "flavor": "<p>Pin a runner against a wall with shots, keep a cornered thief from bolting out of the alley, or drive a stray horse into a pen and hold it there. Make one person stay put with their back to the stone.</p><p>Not enough to hold more than one person or to keep anyone pinned once you look away.</p>",
     "body": [
       {
         "label": "Target",

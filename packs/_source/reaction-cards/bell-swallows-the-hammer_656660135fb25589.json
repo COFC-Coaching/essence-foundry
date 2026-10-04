@@ -16,7 +16,7 @@
     "expertises": "Brawling, Phalanx",
     "expertisesMode": "any",
     "tags": "protection, control, support",
-    "flavor": "",
+    "flavor": "<p>Catch a companion as they slip off a ledge, hold someone against a wave breaking over the deck, stop a friend being dragged by a spooked horse, or plant your feet when the crowd surges and keep the person beside you up.</p>",
     "body": [
       {
         "label": "Target",

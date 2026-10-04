@@ -16,7 +16,7 @@
     "expertises": "Telekinesis, Mesmerism",
     "expertisesMode": "any",
     "tags": "damage, control, mobility",
-    "flavor": "",
+    "flavor": "<p>Punch through a weak door, snap a link of chain, crack a flagstone, or knock a man clean through a hedge.</p><p>Not enough to breach a stone wall or a vault door.</p>",
     "body": [
       {
         "label": "Target",

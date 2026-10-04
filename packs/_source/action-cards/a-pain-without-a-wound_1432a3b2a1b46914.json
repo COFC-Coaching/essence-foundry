@@ -16,7 +16,7 @@
     "expertises": "Telepathy, Biokinesis",
     "expertisesMode": "any",
     "tags": "damage, debuff, protection",
-    "flavor": "",
+    "flavor": "<p>Drop a brute to his knees without a mark on him, make a guard flinch and drop his spear, break a man's nerve in a standoff, or stop a charging bully cold.</p><p>Not enough to injure, scar, or kill, and it leaves no evidence.</p>",
     "body": [
       {
         "label": "Target",

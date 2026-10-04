@@ -16,7 +16,7 @@
     "expertises": "Skirmishing, Brawling",
     "expertisesMode": "any",
     "tags": "damage, mobility",
-    "flavor": "",
+    "flavor": "<p>Slide through a packed crowd without touching a shoulder, squeeze between two guards standing shoulder to shoulder in a doorway, dive through a gate as it closes, or come out the far side of a brawl untouched.</p><p>Not enough to bring anyone else through with you.</p>",
     "body": [
       {
         "label": "Target",

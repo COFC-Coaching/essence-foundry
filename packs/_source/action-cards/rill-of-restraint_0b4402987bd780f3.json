@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "damage, control",
-    "flavor": "",
+    "flavor": "<p>Chill a drink, frost a lock so it sticks, slick one step with ice, or chill a nervous animal into standing still for a breath. Slow one person who is walking away from you.</p><p>Not enough to freeze a door shut or hold anyone who really wants to move.</p>",
     "body": [
       {
         "label": "Target",

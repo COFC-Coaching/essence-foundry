@@ -16,7 +16,7 @@
     "expertises": "Precognition, Telekinesis",
     "expertisesMode": "any",
     "tags": "protection, support, mobility",
-    "flavor": "",
+    "flavor": "<p>Shield yourself and a friend from falling rubble, keep two people on their feet in a rockslide, walk a pair through stones thrown by a mob, or hold both of you upright in a flooding stream.</p><p>Not enough to shelter a crowd or stop a collapsing roof.</p>",
     "body": [
       {
         "label": "Target",

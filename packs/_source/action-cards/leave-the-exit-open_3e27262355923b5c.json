@@ -16,7 +16,7 @@
     "expertises": "Infiltration, Observation",
     "expertisesMode": "any",
     "tags": "mobility, information, support",
-    "flavor": "",
+    "flavor": "<p>Pick the one door nobody is watching, cross a courtyard by the route the guards cannot reach in time, know which window a pursuer could cut off, or spot where a crowd will not block you. You learn the way, and whether anyone can close it.</p>",
     "body": [
       {
         "label": "Target",

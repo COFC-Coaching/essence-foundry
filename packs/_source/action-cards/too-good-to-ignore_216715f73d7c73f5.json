@@ -16,7 +16,7 @@
     "expertises": "Deception, Exploitation",
     "expertisesMode": "any",
     "tags": "debuff, setup, mobility",
-    "flavor": "",
+    "flavor": "<p>Drop a purse where a guard will see it, name a bargain too sweet to walk past, dangle a rumor a gossip has to chase, or keep one sentry talking while a friend goes by. One person's full attention, for a little while.</p><p>Not enough to hold a crowd or to make anyone leave his post.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Payload, Trajectory",
     "expertisesMode": "any",
     "tags": "damage, area, control",
-    "flavor": "",
+    "flavor": "<p>Make a few toughs back off from a gate, scatter a pack of dogs, or clear the people out of a doorway so a friend can get through. Slow a handful of pursuers at the mouth of an alley.</p><p>Not enough to drive back a crowd or to clear a whole room.</p>",
     "body": [
       {
         "label": "Target",

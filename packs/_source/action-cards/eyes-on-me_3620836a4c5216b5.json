@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "debuff, protection, setup",
-    "flavor": "",
+    "flavor": "<p>Pull one person's attention onto you: a guard turns from the door you need, a bully forgets the kid he was leaning on, a merchant stops watching your friend's hands. It lasts while you keep facing them.</p><p>Not enough to hold a room, or to make them forget what they saw.</p>",
     "body": [
       {
         "label": "Target",

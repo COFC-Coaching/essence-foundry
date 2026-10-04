@@ -16,7 +16,7 @@
     "expertises": "Phalanx, Skirmishing",
     "expertisesMode": "any",
     "tags": "damage, control, support",
-    "flavor": "",
+    "flavor": "<p>Clear two people out of a doorway, make room in a crowd for a friend to get through, shove two drunks apart before the fight starts, or force a path across a busy market stall.</p><p>Not enough to drive back a whole crowd or clear a hallway.</p>",
     "body": [
       {
         "label": "Target",

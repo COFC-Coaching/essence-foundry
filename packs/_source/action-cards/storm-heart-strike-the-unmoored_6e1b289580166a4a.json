@@ -16,7 +16,7 @@
     "expertises": "Vessel, Banishment",
     "expertisesMode": "any",
     "tags": "damage, debuff, control",
-    "flavor": "",
+    "flavor": "<p>Shatter a lock or a chain with one bolt, fell a tree with a strike, start a fire in sodden wood, break a stone hinge, or stun a horse in its tracks. A storm's weight put on one thing.</p><p>Not enough to level a wall, strike a crowd, or call a storm over a town.</p>",
     "body": [
       {
         "label": "Target",

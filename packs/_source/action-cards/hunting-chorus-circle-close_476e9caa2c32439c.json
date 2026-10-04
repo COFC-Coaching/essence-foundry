@@ -16,7 +16,7 @@
     "expertises": "Chorus, Dominion",
     "expertisesMode": "any",
     "tags": "area, debuff, control",
-    "flavor": "",
+    "flavor": "<p>Turn two guards' heads toward a noise in the wrong direction, send a stray dog slinking off, break up two drunks squaring up, or spook a pair of lookouts off a corner. Snarls and movement where nothing should be.</p><p>Not enough to clear a street, hush a tavern, or scare anyone who knows a trick when they see one.</p>",
     "body": [
       {
         "label": "Target",

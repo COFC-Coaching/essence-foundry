@@ -16,7 +16,7 @@
     "expertises": "Accord, Transference",
     "expertisesMode": "any",
     "tags": "damage, mobility, support",
-    "flavor": "",
+    "flavor": "<p>Run down a thief before they reach the alley, cover a mile of road in a hurry, carry a message between two camps, or bound up a slope that would wind a person. A friend on four legs who runs ahead and comes back.</p><p>Not enough to outrun a horse over distance or carry a rider.</p>",
     "body": [
       {
         "label": "Target",

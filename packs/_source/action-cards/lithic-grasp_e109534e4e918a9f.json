@@ -16,7 +16,7 @@
     "expertises": "Transmutation, Disjunction",
     "expertisesMode": "any",
     "tags": "damage, control, debuff",
-    "flavor": "",
+    "flavor": "<p>Root a running thief in place for a breath, hold a bolting horse by the hoof, pin a cart wheel on a slope, or clamp a ladder's feet so it does not slip. One person or one animal on solid ground.</p><p>Not enough to hold anyone for long or stop anything bigger than a horse.</p>",
     "body": [
       {
         "label": "Target",

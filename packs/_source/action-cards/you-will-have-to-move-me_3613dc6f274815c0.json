@@ -16,7 +16,7 @@
     "expertises": "Provocation, Valor",
     "expertisesMode": "any",
     "tags": "protection, debuff, support",
-    "flavor": "",
+    "flavor": "<p>Block a doorway, a bridge, or a road and make it clear nothing short of force is getting you out of it. Officials argue, a crowd grumbles, one determined man loses his nerve trying. He is too busy with you to bother your friends.</p><p>Not enough to stop a mounted rider or a crowd that has decided to go through you.</p>",
     "body": [
       {
         "label": "Target",

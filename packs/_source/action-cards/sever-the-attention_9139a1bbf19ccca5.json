@@ -16,7 +16,7 @@
     "expertises": "Telepathy, Clairvoyance",
     "expertisesMode": "any",
     "tags": "debuff, information, setup",
-    "flavor": "",
+    "flavor": "<p>Point out a hidden pickpocket to your companions, make a marksman's aim drift at an archery contest, know where a watcher stands in the shadows and show your friends, or make a merchant lose his edge mid-haggle.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Dominion, Chorus",
     "expertisesMode": "any",
     "tags": "damage, area, debuff",
-    "flavor": "",
+    "flavor": "<p>Light every torch in a hall at once, burn a stand of brush to clear a path, drive a crowd back from a gate with a wall of heat, melt through an iron bar, or dry a soaked company by a roaring fire in a wet camp. A forge's worth of fire for one scene.</p><p>Not enough to burn down a house, hold a street, or keep burning after you stop.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "damage, debuff, control",
-    "flavor": "",
+    "flavor": "<p>Sour the drink in one cup, give a rival a stabbing headache in the middle of their speech, make a guard's feet drag so you reach the gate first, or put a dog off its scent for a moment.</p><p>Not enough to sicken someone past the scene or hurt anyone badly.</p>",
     "body": [
       {
         "label": "Target",

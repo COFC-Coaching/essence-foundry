@@ -16,7 +16,7 @@
     "expertises": "Sympathy, Inscription",
     "expertisesMode": "any",
     "tags": "debuff, damage, protection",
-    "flavor": "",
+    "flavor": "<p>Write a name in ash and that person goes soft: a strongman loses the arm-wrestle, a guard's grip slips on the collar, a bully's nerve breaks when you stare him down, a drunk cannot keep his feet, a bargainer cannot hold his price.</p><p>Not enough to make anyone obey you or lay them low.</p>",
     "body": [
       {
         "label": "Target",

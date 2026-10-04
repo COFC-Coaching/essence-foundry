@@ -16,7 +16,7 @@
     "expertises": "Guardianship, Coordination",
     "expertisesMode": "any",
     "tags": "protection, support, mobility",
-    "flavor": "",
+    "flavor": "<p>Lock arms with one friend and hold: a door against the men on the other side, a line of two in a shoving crowd, a rope with a weight on it. Carry a wounded person between you without dropping them.</p><p>Not enough to hold a gate against a mob or move more than two people together.</p>",
     "body": [
       {
         "label": "Target",

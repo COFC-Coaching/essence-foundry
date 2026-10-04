@@ -16,7 +16,7 @@
     "expertises": "Grappling, Brawling",
     "expertisesMode": "any",
     "tags": "damage, control",
-    "flavor": "",
+    "flavor": "<p>Throw a brawler across the room, flip a man over a table, toss someone into a cart bed, or put a struggling prisoner on the ground and keep them there.</p><p>Not enough to throw anyone off a roof or lift anything heavier than a person.</p>",
     "body": [
       {
         "label": "Target",

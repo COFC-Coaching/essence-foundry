@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "protection, support, terrain",
-    "flavor": "",
+    "flavor": "<p>Point to a spot and make it the place everyone falls back to: a doorway, a lamppost, a tree at the edge of camp. One friend near it stands a little steadier against the first thing that comes at them.</p><p>Not enough to steady more than one person or hold the spot against a crowd.</p>",
     "body": [
       {
         "label": "Target",

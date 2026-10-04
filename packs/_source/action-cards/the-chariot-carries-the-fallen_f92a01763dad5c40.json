@@ -16,7 +16,7 @@
     "expertises": "Liturgy, Reagents",
     "expertisesMode": "any",
     "tags": "suppression, support, mobility",
-    "flavor": "",
+    "flavor": "<p>Get a hurt friend up and moving: off the field, up the ladder, across the rope bridge, out of the burning house, over the wall, on a leg that will still be broken when they stop.</p><p>Not enough to mend anything or carry them through a day's march.</p>",
     "body": [
       {
         "label": "Target",

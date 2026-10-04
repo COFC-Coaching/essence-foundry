@@ -16,7 +16,7 @@
     "expertises": "Sleight, Improvisation",
     "expertisesMode": "any",
     "tags": "damage, terrain, control",
-    "flavor": "",
+    "flavor": "<p>Leave a snare in the spot you just left so a pursuer hits it, rig a loop under a rug before you step away from a table, or set a cord across your own tracks as you go. One snare, one spot, in plain sight to anyone who looks.</p><p>Not enough to hide the snare or to lay more than one.</p>",
     "body": [
       {
         "label": "Target",

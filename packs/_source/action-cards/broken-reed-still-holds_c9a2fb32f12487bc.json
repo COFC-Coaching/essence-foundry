@@ -16,7 +16,7 @@
     "expertises": "Brawling, Berserking",
     "expertisesMode": "any",
     "tags": "protection, suppression",
-    "flavor": "",
+    "flavor": "<p>Finish a day's march on a broken arm, climb out of a pit with a bad leg, keep working the oars with a wound that should have put you down, or stand a watch no one else could stand.</p><p>Not enough to mend anything. The wound is waiting when the scene ends.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Fabrication, Reinforcement",
     "expertisesMode": "any",
     "tags": "terrain, protection, support",
-    "flavor": "",
+    "flavor": "<p>Drop a band of darkness across a corridor so one person can slip past the guard, hide a doorway from the street, dim a window so no one sees who sits inside, or shade a stall at noon.</p><p>Not enough to darken a whole hall or hide a crowd.</p>",
     "body": [
       {
         "label": "Target",

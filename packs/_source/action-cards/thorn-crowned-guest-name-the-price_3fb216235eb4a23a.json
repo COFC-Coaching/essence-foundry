@@ -16,7 +16,7 @@
     "expertises": "Dominion, Banishment",
     "expertisesMode": "any",
     "tags": "damage, control, debuff",
-    "flavor": "",
+    "flavor": "<p>Slow a thief in a crowded street so a friend catches up, bring a bolting horse down to a walk, hold a runner at a crossing, or make a sprinting courier stumble with thorns at their ankles. One person caught in the Court's briar.</p><p>Not enough to hold anyone fast, stop a cart, or slow a crowd.</p>",
     "body": [
       {
         "label": "Target",

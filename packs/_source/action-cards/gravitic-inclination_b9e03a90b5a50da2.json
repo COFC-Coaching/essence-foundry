@@ -16,7 +16,7 @@
     "expertises": "Sculpting, Channeling",
     "expertisesMode": "any",
     "tags": "damage, control",
-    "flavor": "",
+    "flavor": "<p>Pull a dropped key up out of a grate, drag a person back from a ledge by a step, yank a chair out from under someone, or tug a hanging rope into reach. One person-sized thing, one short pull.</p><p>Not enough to lift anyone off the ground or drag a cart.</p>",
     "body": [
       {
         "label": "Target",

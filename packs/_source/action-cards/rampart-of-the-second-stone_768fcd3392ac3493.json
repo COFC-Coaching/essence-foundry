@@ -16,7 +16,7 @@
     "expertises": "Fabrication, Reinforcement",
     "expertisesMode": "any",
     "tags": "terrain, protection, support",
-    "flavor": "",
+    "flavor": "<p>Raise a low stone wall to crouch behind, dam a stream for a few minutes, close off a doorway at knee height so a crawling thing cannot pass, or hold back a slide of loose scree while people pass.</p><p>Not enough to block a door, stop a cart, or leave anything standing after the scene.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Sabotage, Infiltration",
     "expertisesMode": "any",
     "tags": "mobility, support, setup",
-    "flavor": "",
+    "flavor": "<p>Knock over a stack of plates and slip out the back, kick a bucket down a stair so heads turn, set a shutter banging, or drop a lantern in a market and be three paces away before anyone looks back. If you end somewhere hidden, you are hidden.</p><p>Not enough to clear a room or to keep anyone looking for long.</p>",
     "body": [
       {
         "label": "Target",

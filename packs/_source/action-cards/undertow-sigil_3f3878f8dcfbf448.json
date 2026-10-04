@@ -16,7 +16,7 @@
     "expertises": "Sculpting, Channeling",
     "expertisesMode": "any",
     "tags": "damage, area, control",
-    "flavor": "",
+    "flavor": "<p>Drag a drifting boat to the bank, pull two swimmers together, gather floating cargo to one spot in a flooded cellar, or tug two people a step closer to you. Chill one of them to the bone.</p><p>Not enough to pull a boat upstream or drag anyone off their feet.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Metabolism, Integration",
     "expertisesMode": "any",
     "tags": "protection, support",
-    "flavor": "",
+    "flavor": "<p>Shield a companion from falling tile with your back, take a spilled kettle on your arm, hold a friend steady on a windy ledge, or catch a slammed shutter on your shoulder.</p><p>Not enough to stop a falling beam or shrug off a crossbow bolt.</p>",
     "body": [
       {
         "label": "Target",

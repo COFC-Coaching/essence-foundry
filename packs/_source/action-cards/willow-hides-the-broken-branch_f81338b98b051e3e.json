@@ -16,7 +16,7 @@
     "expertises": "Berserking, Grappling",
     "expertisesMode": "any",
     "tags": "protection, suppression",
-    "flavor": "",
+    "flavor": "<p>Hide a limp from a watching guard, climb a wall with a wrenched shoulder, walk a market without showing you are hurt, or finish a long watch on an injured leg.</p><p>Not enough to heal anything. The wound returns when the scene ends.</p>",
     "body": [
       {
         "label": "Target",

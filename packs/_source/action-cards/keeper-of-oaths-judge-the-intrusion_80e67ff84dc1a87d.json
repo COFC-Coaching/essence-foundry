@@ -16,7 +16,7 @@
     "expertises": "Dominion, Banishment",
     "expertisesMode": "any",
     "tags": "damage, debuff, suppression",
-    "flavor": "",
+    "flavor": "<p>Lift a charm from a friend for the scene, break a hex on a doorway, quiet a cursed object in someone's hand, burn a glamour off a false face, or make a bound spirit let go of a person. The oath-keeper calls it an intrusion and sets it aside.</p><p>Not enough to end a curse for good, undo a bargain, or break a ward on a whole house.</p>",
     "body": [
       {
         "label": "Target",

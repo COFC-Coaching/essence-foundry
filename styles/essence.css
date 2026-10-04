@@ -1014,7 +1014,6 @@
 .essence .card-faces.kind-action a.active { border-bottom-color: var(--essence-card-action); }
 .essence .card-faces.kind-reaction a.active { border-bottom-color: var(--essence-card-reaction); }
 .essence .card-faces.kind-basic a.active { border-bottom-color: var(--essence-card-basic); }
-.essence .card-view-back .cv-band { background-image: repeating-linear-gradient(135deg, transparent 0 6px, rgba(0, 0, 0, 0.14) 6px 8px); }
 .essence .cv-noncombat { display: flex; flex-direction: column; gap: 4px; }
 .essence .cv-noncombat-text { line-height: 1.45; font-size: 0.95em; }
 .essence .cv-noncombat-text p { margin: 0 0 6px; }

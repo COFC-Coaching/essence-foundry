@@ -16,7 +16,7 @@
     "expertises": "Entreaty, Severance",
     "expertisesMode": "any",
     "tags": "damage, debuff, protection",
-    "flavor": "",
+    "flavor": "<p>Give up your own shadow to blight one person: a rival takes to bed too sick to make the meeting, a watcher in the dark shows up plain, a runner's legs give out in the street. You pay too. You are shaky and open until it passes.</p><p>Not enough to kill or lay a curse that lasts.</p>",
     "body": [
       {
         "label": "Target",

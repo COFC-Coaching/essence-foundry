@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "damage, setup, counterattack",
-    "flavor": "",
+    "flavor": "<p>Snap a shot at a hare breaking from a hedge, a bird flushed from the brush, a rat from its hole, or a thief darting out of an alley mouth. Hit the thing that moves the moment it moves.</p>",
     "body": [
       {
         "label": "Target",

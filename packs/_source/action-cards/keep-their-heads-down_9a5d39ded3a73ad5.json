@@ -16,7 +16,7 @@
     "expertises": "Cadence, Payload",
     "expertisesMode": "any",
     "tags": "damage, debuff, area",
-    "flavor": "",
+    "flavor": "<p>Keep a pair of guards ducked behind their wall while friends cross the yard, scatter two lookouts from a rooftop, or make the loudest two men in a brawl drop to the floor. Hold a pair of watchmen's whole attention on you instead of the door behind them.</p><p>Not enough to hush a tavern or stop a crowd.</p>",
     "body": [
       {
         "label": "Target",

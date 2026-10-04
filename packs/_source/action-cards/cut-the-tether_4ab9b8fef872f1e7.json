@@ -16,7 +16,7 @@
     "expertises": "Penetration, Payload",
     "expertisesMode": "any",
     "tags": "damage, suppression, support",
-    "flavor": "",
+    "flavor": "<p>Cut a mooring line from the dock, shoot the rope off a hanged man before the drop, snap the chain on a gate winch, or free a snared horse from across the field. Sever the cord holding a portcullis so it falls.</p><p>Not enough to cut through a wall or a locked iron door.</p>",
     "body": [
       {
         "label": "Target",

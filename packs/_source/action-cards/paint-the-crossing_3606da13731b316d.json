@@ -16,7 +16,7 @@
     "expertises": "Trajectory, Cadence",
     "expertisesMode": "any",
     "tags": "terrain, control, setup",
-    "flavor": "",
+    "flavor": "<p>Hold a doorway or a narrow bridge so nobody steps through it, keep a gang from crossing a gap in an alley, or make the path between two carts a place no one wants to walk. Keep a pack of wolves off the edge of camp.</p><p>Not enough to close a street or hold back a crowd.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "protection, mobility",
-    "flavor": "",
+    "flavor": "<p>Take a thrown mug on the stock of your weapon, turn a flung stone with the barrel, or shield your face from a burst of splinters. Flinch the right way when something comes at your head.</p>",
     "body": [
       {
         "label": "Target",

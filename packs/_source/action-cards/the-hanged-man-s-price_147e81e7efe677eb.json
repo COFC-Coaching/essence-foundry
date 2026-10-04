@@ -16,7 +16,7 @@
     "expertises": "Entreaty, Sympathy",
     "expertisesMode": "any",
     "tags": "damage, control, setup",
-    "flavor": "",
+    "flavor": "<p>Pay in your own stride to hang another's: a fleeing killer's legs give out in the street, a charging bull stalls, a thief cannot get the gate open in time, a sentry cannot reach the bell. You limp for the scene.</p><p>Not enough to hold anyone in place or kill.</p>",
     "body": [
       {
         "label": "Target",

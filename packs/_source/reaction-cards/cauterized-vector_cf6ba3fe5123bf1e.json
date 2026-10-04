@@ -16,7 +16,7 @@
     "expertises": "Channeling, Disjunction",
     "expertisesMode": "any",
     "tags": "damage, debuff, counterattack",
-    "flavor": "",
+    "flavor": "<p>When a bottle or a stone is thrown at you and misses, flash a spark back at the thrower and light their hiding spot. Catch an ambusher in a window, a rooftop, or a dark doorway.</p><p>Not enough to burn anyone badly or light a whole alley.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "damage, information, debuff",
-    "flavor": "",
+    "flavor": "<p>Light a dark room, read a page by its glow, or signal across a valley at night. Mark one object so it stays visible for the scene.</p><p>Not enough to blind a watcher, burn anything, or light more than one room.</p>",
     "body": [
       {
         "label": "Target",

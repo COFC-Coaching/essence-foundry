@@ -16,7 +16,7 @@
     "expertises": "Reinforcement, Disjunction",
     "expertisesMode": "any",
     "tags": "protection, suppression, support",
-    "flavor": "",
+    "flavor": "<p>Walk three people across a warded threshold, through a cursed fog, or past a glowing rune without harm. Shrug off a hex long enough to finish a task.</p><p>Not enough to break a ward, lift a curse, or cross a sealed gate.</p>",
     "body": [
       {
         "label": "Target",

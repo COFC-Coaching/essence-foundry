@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "damage, control, setup",
-    "flavor": "",
+    "flavor": "<p>Trip one person at a doorway, snag a running thief's ankle with a cord, hook a foot under a table so a drunk goes down, or set a loop in a path where one person will step. One person, one stumble.</p><p>Not enough to hold anyone down or to catch more than one.</p>",
     "body": [
       {
         "label": "Target",

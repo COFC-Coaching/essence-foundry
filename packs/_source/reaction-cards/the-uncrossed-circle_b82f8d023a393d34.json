@@ -16,7 +16,7 @@
     "expertises": "Consecration, Inscription",
     "expertisesMode": "any",
     "tags": "protection, support",
-    "flavor": "",
+    "flavor": "<p>Whoever stands inside a mark you laid is a hard target: the thrown bottle misses, the dog's lunge falls short, the guard's grab closes on air, the stone from the crowd goes wide. Only inside the circle.</p>",
     "body": [
       {
         "label": "Target",

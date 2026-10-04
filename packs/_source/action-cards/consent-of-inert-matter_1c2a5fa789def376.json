@@ -16,7 +16,7 @@
     "expertises": "Telekinesis, Clairvoyance",
     "expertisesMode": "any",
     "tags": "damage, control, utility",
-    "flavor": "",
+    "flavor": "<p>Push a loaded cart, drag a chest across a room, haul a rope up to a ledge, slide a bar out of a barred door, or shove a man through a doorway.</p><p>Not enough to lift a cart off the ground or throw a person.</p>",
     "body": [
       {
         "label": "Target",

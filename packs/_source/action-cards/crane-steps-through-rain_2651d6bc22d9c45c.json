@@ -16,7 +16,7 @@
     "expertises": "Skirmishing, Dueling",
     "expertisesMode": "any",
     "tags": "damage, mobility, protection",
-    "flavor": "",
+    "flavor": "<p>Cross a slick deck in a storm, run over loose scree without a stumble, pick a way across a stream on wet stones, or get through a muddy field and still reach the far gate first. Move fast over ground that slows everyone else.</p><p>Not enough to carry someone across with you or clear the ground for others.</p>",
     "body": [
       {
         "label": "Target",

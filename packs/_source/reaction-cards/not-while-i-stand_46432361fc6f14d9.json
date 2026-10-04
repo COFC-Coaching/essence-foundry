@@ -16,7 +16,7 @@
     "expertises": "Guardianship, Valor",
     "expertisesMode": "any",
     "tags": "protection, support, suppression",
-    "flavor": "",
+    "flavor": "<p>Step between one friend and what is coming: the thrown stone, the kick, the falling beam. You take some of it or all of it. Soften the hit for yourself the same way.</p><p>Not enough to shield more than one person, or stop something heavier than a man can stand under.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Telekinesis, Mesmerism",
     "expertisesMode": "any",
     "tags": "mobility, protection, setup",
-    "flavor": "",
+    "flavor": "<p>Cross a field of rubble without slowing, hop a narrow gap between rooftops, keep your feet on ice or a pitching deck, or stand firm against a crowd pushing you back.</p><p>Not enough to fly, clear a wide gap, or outrun a horse.</p>",
     "body": [
       {
         "label": "Target",

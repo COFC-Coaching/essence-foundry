@@ -16,7 +16,7 @@
     "expertises": "Regeneration, Metabolism",
     "expertisesMode": "any",
     "tags": "protection, suppression",
-    "flavor": "",
+    "flavor": "<p>Take a cart's impact and get back up, fall from a roof and walk away, come out of a collapsing building with bruises, or take a mule's full kick and stay on your feet.</p><p>Not enough to live through a fall from a cliff.</p>",
     "body": [
       {
         "label": "Target",

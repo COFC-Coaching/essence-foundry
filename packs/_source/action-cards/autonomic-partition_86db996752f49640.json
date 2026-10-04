@@ -16,7 +16,7 @@
     "expertises": "Regeneration, Metabolism",
     "expertisesMode": "any",
     "tags": "suppression, protection",
-    "flavor": "",
+    "flavor": "<p>Shrug off a drugged drink long enough to walk out, hold a conversation with a knife wound, work with a snakebite until a healer is found, or keep a straight face through a branding.</p><p>Not enough to clear the poison from your blood or heal the wound.</p>",
     "body": [
       {
         "label": "Target",

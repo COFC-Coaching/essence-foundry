@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "debuff, control, information",
-    "flavor": "",
+    "flavor": "<p>Make a sentry lose his count, a clerk skip a line in the ledger, a dog forget what it was sniffing, or a guard glance the wrong way for one breath while a friend slips past.</p><p>Not enough to make anyone forget a face or hold them dazed for longer than a moment.</p>",
     "body": [
       {
         "label": "Target",

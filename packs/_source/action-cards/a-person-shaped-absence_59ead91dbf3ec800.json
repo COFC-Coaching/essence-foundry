@@ -16,7 +16,7 @@
     "expertises": "Infiltration, Sleight",
     "expertisesMode": "any",
     "tags": "mobility, suppression",
-    "flavor": "",
+    "flavor": "<p>Slip a rope, wriggle out of a grip and into a crowd, be out of manacles long enough to get through a door, or go over a wall while the hand that had you closes on your cloak.</p><p>Not enough to stay free if the hold still reaches you when you stop.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Locomotion, Integration",
     "expertisesMode": "any",
     "tags": "protection, support, mobility",
-    "flavor": "",
+    "flavor": "<p>Snatch a friend out from under a falling roof, haul a child clear of a bolting cart, pull a companion back from a crumbling ledge, yank someone out of a river current, or drag a friend out of a fire's reach.</p><p>Not enough to pull more than one person or carry them further than a few steps.</p>",
     "body": [
       {
         "label": "Target",

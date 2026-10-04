@@ -16,7 +16,7 @@
     "expertises": "Awareness, Armament",
     "expertisesMode": "any",
     "tags": "damage, information",
-    "flavor": "",
+    "flavor": "<p>Feel someone creeping up on you in the dark, know which door a hidden guard stands behind, find the rat under the floorboards, follow footsteps across a bridge in fog, or feel a cellar hatch open under your feet.</p><p>Not enough to tell who it is, or to feel anything that holds still.</p>",
     "body": [
       {
         "label": "Target",

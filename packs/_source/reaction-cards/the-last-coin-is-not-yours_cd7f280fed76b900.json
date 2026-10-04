@@ -16,7 +16,7 @@
     "expertises": "Severance, Sympathy",
     "expertisesMode": "any",
     "tags": "damage, debuff, counterattack",
-    "flavor": "",
+    "flavor": "<p>When someone breaks a mark you laid, scuffs the circle, tears down the charm, snuffs the candle, the breaking costs them: they sicken, go slow, lose the thread of what they were doing. The mark stays broken.</p><p>Not enough to kill or restore what they ruined.</p>",
     "body": [
       {
         "label": "Target",

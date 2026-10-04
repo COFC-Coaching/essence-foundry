@@ -16,7 +16,7 @@
     "expertises": "Banishment, Transference",
     "expertisesMode": "any",
     "tags": "damage, suppression, support",
-    "flavor": "",
+    "flavor": "<p>Slip a knot a friend cannot reach, ease a shackle open at the pin, work a snare loose from a trapped leg, or pull one guard's grip off an arm. One restraint, one hand, one moment.</p><p>Not enough to open a lock, break a chain, or free someone held by more than one pair of hands.</p>",
     "body": [
       {
         "label": "Target",

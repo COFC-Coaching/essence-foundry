@@ -16,7 +16,7 @@
     "expertises": "Mobility, Penetration",
     "expertisesMode": "any",
     "tags": "damage, terrain, mobility",
-    "flavor": "",
+    "flavor": "<p>Kick up a cloud of dust or plaster to cover a getaway down an alley, shatter a sack of flour so a watcher loses sight of the door, or spray gravel so a pursuer stops to shield their eyes. Hide one person for the moment it takes them to slip away.</p><p>Not enough to fill a street or to blind anyone for long.</p>",
     "body": [
       {
         "label": "Target",

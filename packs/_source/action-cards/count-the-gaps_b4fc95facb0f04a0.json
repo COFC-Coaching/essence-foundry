@@ -16,7 +16,7 @@
     "expertises": "Observation, Exploitation",
     "expertisesMode": "any",
     "tags": "damage, information, setup",
-    "flavor": "",
+    "flavor": "<p>Tell if a man wears mail under his coat, whether a strongbox has a false bottom, which plank in a wall is rotten, or where the one loose stone sits in a cell. You learn what is there, not what it hides.</p>",
     "body": [
       {
         "label": "Target",

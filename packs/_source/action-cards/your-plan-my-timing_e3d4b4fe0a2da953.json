@@ -16,7 +16,7 @@
     "expertises": "Observation, Deception",
     "expertisesMode": "any",
     "tags": "debuff, protection, support",
-    "flavor": "",
+    "flavor": "<p>Wreck a rival's speech by stepping on his best line, make a duelist's challenge fall flat in front of the crowd, upstage a merchant's pitch at the moment he wants his sale, or get a friend out of a confrontation by taking his place in it.</p><p>Not enough to change a crowd's mind or to silence more than one person.</p>",
     "body": [
       {
         "label": "Target",

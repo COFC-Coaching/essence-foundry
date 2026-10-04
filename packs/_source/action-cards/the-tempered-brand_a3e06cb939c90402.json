@@ -16,7 +16,7 @@
     "expertises": "Augmentation, Disjunction",
     "expertisesMode": "any",
     "tags": "damage, debuff, setup",
-    "flavor": "",
+    "flavor": "<p>Heat an iron bar until it bends, scorch a leather strap so it tears, burn through a rope that bears weight, or brand a mark onto a door, a post, or a hide. Weaken one thing so the next blow finishes it.</p><p>Not enough to melt a lock outright or cut through a chain.</p>",
     "body": [
       {
         "label": "Target",

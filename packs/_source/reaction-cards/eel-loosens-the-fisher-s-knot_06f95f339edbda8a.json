@@ -16,7 +16,7 @@
     "expertises": "Grappling, Dueling",
     "expertisesMode": "any",
     "tags": "protection, mobility, suppression",
-    "flavor": "",
+    "flavor": "<p>Slip out of a net as it falls, roll clear of a snare's jaws as they close, twist free of a grab before the hand tightens, or come up standing when the floor drops away.</p><p>Not enough to break iron shackles once they are locked.</p>",
     "body": [
       {
         "label": "Target",

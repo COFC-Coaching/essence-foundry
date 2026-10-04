@@ -16,7 +16,7 @@
     "expertises": "Improvisation, Observation",
     "expertisesMode": "any",
     "tags": "damage, terrain, control",
-    "flavor": "",
+    "flavor": "<p>Scatter marbles across a landing, throw gravel and broken crockery on a stair, spread tacks in a doorway, or dump a sack of nails where a pursuer has to step. One patch of floor, for the scene.</p><p>Not enough to cover a street or to lame a horse.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "suppression, protection",
-    "flavor": "",
+    "flavor": "<p>Stop a cut bleeding long enough to finish a climb, keep a gash clean in dirty water, walk through a bramble thicket without being torn up, or hide a fresh scrape from a guard's eye.</p><p>Not enough to heal the wound or close anything deep.</p>",
     "body": [
       {
         "label": "Target",

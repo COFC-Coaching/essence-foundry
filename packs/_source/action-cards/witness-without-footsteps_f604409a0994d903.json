@@ -16,7 +16,7 @@
     "expertises": "Clairvoyance, Precognition",
     "expertisesMode": "any",
     "tags": "information, protection, setup",
-    "flavor": "",
+    "flavor": "<p>Watch a corridor from a hiding place, keep an eye on a sleeping camp from behind a rock, know the moment a guard begins his rounds, or watch a locked chest from outside the room.</p><p>Not enough to see through a wall or watch more than one spot.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Tactics, Coordination",
     "expertisesMode": "any",
     "tags": "damage, support, mobility",
-    "flavor": "",
+    "flavor": "<p>Time a rush for a small group: two friends cross the courtyard while the lantern swings away, go over the wall together, hit the door on your word. Everyone moves at once, nobody goes early.</p><p>Not enough to move a crowd or make the crossing itself any safer.</p>",
     "body": [
       {
         "label": "Target",

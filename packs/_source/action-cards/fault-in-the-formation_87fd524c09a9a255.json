@@ -16,7 +16,7 @@
     "expertises": "Sabotage, Exploitation",
     "expertisesMode": "any",
     "tags": "area, control, setup",
-    "flavor": "",
+    "flavor": "<p>Tangle two guards in a doorway, drop a rope across a patrol pair as they turn a corner, pull the same rug out from under two men, or throw a handful of gravel so two pursuers break stride together.</p><p>Not enough to stop a whole squad or to knock anyone down.</p>",
     "body": [
       {
         "label": "Target",

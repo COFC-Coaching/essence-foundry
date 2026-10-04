@@ -16,7 +16,7 @@
     "expertises": "Grappling, Reaving",
     "expertisesMode": "any",
     "tags": "damage, control, mobility",
-    "flavor": "",
+    "flavor": "<p>Drag a person off a window ledge, yank a companion back from the edge of a drop, haul someone out of the shallows by their collar, or pull a runaway down and keep them there.</p><p>Not enough to move something heavier than a person or pull anyone up a cliff.</p>",
     "body": [
       {
         "label": "Target",

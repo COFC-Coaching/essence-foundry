@@ -16,7 +16,7 @@
     "expertises": "Transference, Accord",
     "expertisesMode": "any",
     "tags": "mobility, control, support",
-    "flavor": "",
+    "flavor": "<p>Trade places with a friend across a room, put a companion on the far side of a locked gate and take their place, swap a hostage out of a captor's reach, or send someone across a chasm while you stand where they stood. Two people, two places, exchanged in a blink.</p><p>Not enough to cross a wall with no way through, move more than two, or take an unwilling guard anywhere they will not go.</p>",
     "body": [
       {
         "label": "Target",

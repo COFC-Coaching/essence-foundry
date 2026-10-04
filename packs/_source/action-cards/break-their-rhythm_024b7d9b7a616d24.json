@@ -16,7 +16,7 @@
     "expertises": "Provocation, Discipline",
     "expertisesMode": "any",
     "tags": "area, debuff, control",
-    "flavor": "",
+    "flavor": "<p>Throw off two people working together: two guards lose their patrol pattern, a pair of hagglers lose their script, two toughs stop coordinating and start talking over each other. For the moment they are slow and distracted.</p><p>Not enough to rattle a crowd or make anyone forget what they were doing.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Awareness, Armament",
     "expertisesMode": "any",
     "tags": "damage, protection, control",
-    "flavor": "",
+    "flavor": "<p>Make a grab for your purse cost a handful of bloodied fingers, keep dogs from closing on you, pin a cloak to a wall, hang a lantern or a pack from your own back, or snag a rope your hand has missed.</p><p>Not enough to hold off a crowd or get through armor.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Sympathy, Reagents",
     "expertisesMode": "any",
     "tags": "damage, area, control",
-    "flavor": "",
+    "flavor": "<p>Lay the ten on two people at once and both go heavy and ill: two pursuers lose you in the alleys, two guards cannot run down the thief, two toughs at the door drag their feet, a pair of horses will not pull.</p><p>Not enough to slow a crowd or lay anyone low past the scene.</p>",
     "body": [
       {
         "label": "Target",

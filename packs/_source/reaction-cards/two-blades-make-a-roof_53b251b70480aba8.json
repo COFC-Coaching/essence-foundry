@@ -16,7 +16,7 @@
     "expertises": "Dueling, Phalanx",
     "expertisesMode": "any",
     "tags": "protection, support",
-    "flavor": "",
+    "flavor": "<p>Get a companion under cover as the ceiling comes down, knock a thrown bottle away from a friend, take the edge off a falling beam, or stand between someone and the first swing of a tavern brawl.</p>",
     "body": [
       {
         "label": "Target",

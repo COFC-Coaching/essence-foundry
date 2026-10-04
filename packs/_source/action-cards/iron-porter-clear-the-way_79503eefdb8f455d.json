@@ -16,7 +16,7 @@
     "expertises": "Dominion, Banishment",
     "expertisesMode": "any",
     "tags": "control, damage, utility",
-    "flavor": "",
+    "flavor": "<p>Shift a fallen beam off the road, drag a crate out of a passage, push a broken cart clear of a gate, or move one person out of a doorway with a firm shove. Heavy things get moved a few paces.</p><p>Not enough to clear a whole hallway, lift a loaded wagon, or move anything bolted down.</p>",
     "body": [
       {
         "label": "Target",

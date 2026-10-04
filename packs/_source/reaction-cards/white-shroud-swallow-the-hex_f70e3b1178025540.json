@@ -16,7 +16,7 @@
     "expertises": "Banishment, Anchoring",
     "expertisesMode": "any",
     "tags": "protection, suppression, support",
-    "flavor": "",
+    "flavor": "<p>Keep a charm from taking hold of a friend's mind, hold a hex off long enough to leave the house, keep a witch's mark from spreading for the scene, or let someone shrug off a cursed drink. The shroud takes the spell first.</p><p>Not enough to lift a curse already set, protect a group, or stop poison or a blade.</p>",
     "body": [
       {
         "label": "Target",

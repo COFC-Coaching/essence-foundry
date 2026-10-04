@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "protection, suppression, terrain",
-    "flavor": "",
+    "flavor": "<p>Soften a thrown punch, take a thrown stone on a cushion of shadow, or shade your eyes from a lantern swung in your face. One blow, one moment.</p><p>Not enough to stop a falling beam or turn a blade.</p>",
     "body": [
       {
         "label": "Target",

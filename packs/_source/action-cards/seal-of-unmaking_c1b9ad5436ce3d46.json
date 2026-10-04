@@ -16,7 +16,7 @@
     "expertises": "Disjunction, Channeling",
     "expertisesMode": "any",
     "tags": "damage, debuff, utility",
-    "flavor": "",
+    "flavor": "<p>Dim a magical lamp, dull the glow on an enchanted lock, quiet a ward long enough to step past it, blunt a charm on a ring, or sap the strength from a cheap enchanted blade for a moment.</p><p>Not enough to break a lasting enchantment, open a sealed vault, or undo a curse.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Banishment, Anchoring",
     "expertisesMode": "any",
     "tags": "damage, information, debuff",
-    "flavor": "",
+    "flavor": "<p>Pick out a figure hiding in fog or shadow, find the one person in a crowd wearing a glamour, tell whether a charm holds an old lock shut, or point to the one thing in a room that is not what it seems. The pale one sees and says.</p><p>Not enough to read a mind, see through walls, or name what a spell does.</p>",
     "body": [
       {
         "label": "Target",

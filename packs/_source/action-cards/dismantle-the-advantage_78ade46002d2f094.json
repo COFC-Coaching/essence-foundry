@@ -16,7 +16,7 @@
     "expertises": "Sabotage, Sleight",
     "expertisesMode": "any",
     "tags": "damage, debuff, setup",
-    "flavor": "",
+    "flavor": "<p>Kick the stool out from under a man who is standing on it, strip a bully of the high step he is shouting from, drag away the barrel a thug is using for cover, or pull the one fact a magistrate is hiding behind out into the open. One advantage, taken away.</p><p>Not enough to take armor off anyone or to undo anything built to last.</p>",
     "body": [
       {
         "label": "Target",

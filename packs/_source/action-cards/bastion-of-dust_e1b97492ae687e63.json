@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "terrain, protection, support",
-    "flavor": "",
+    "flavor": "<p>Raise a low ridge of packed earth to turn a trickle of water, block a rat hole, stop a rolling barrel, or give one crouching person something to duck behind. It crumbles when the scene ends.</p><p>Not enough to stop a person, hold back a flood, or build anything that lasts.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Tactics, Valor",
     "expertisesMode": "any",
     "tags": "damage, control, support",
-    "flavor": "",
+    "flavor": "<p>Shove one person out of a doorway or a narrow stair and hold the gap so your friends get through. Clear the drunk blocking the bar, the guard in the archway, the porter in the alley.</p><p>Not enough to clear a crowd or hold the gap longer than it takes them to pass.</p>",
     "body": [
       {
         "label": "Target",

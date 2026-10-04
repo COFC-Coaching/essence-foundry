@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "damage, area, debuff",
-    "flavor": "",
+    "flavor": "<p>Snuff two candles, ring two bells, startle two crows off a fence, or drop two bottles from a shelf with one quick pair of shots. Make two lookouts flinch at once.</p><p>Not enough to hit anything much farther apart than a doorway is wide.</p>",
     "body": [
       {
         "label": "Target",

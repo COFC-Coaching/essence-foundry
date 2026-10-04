@@ -16,7 +16,7 @@
     "expertises": "Mesmerism, Precognition",
     "expertisesMode": "any",
     "tags": "area, debuff, information",
-    "flavor": "",
+    "flavor": "<p>Make two sentries doubt what they just saw, fill a pair of clerks with second-guessing, get two gamblers to misread their own hands, or set two hecklers arguing with each other instead of you.</p><p>Not enough to plant a false memory or sway a whole room.</p>",
     "body": [
       {
         "label": "Target",

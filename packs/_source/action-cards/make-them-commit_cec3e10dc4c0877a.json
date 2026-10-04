@@ -16,7 +16,7 @@
     "expertises": "Provocation, Tactics",
     "expertisesMode": "any",
     "tags": "debuff, protection, mobility",
-    "flavor": "",
+    "flavor": "<p>Force one person to show their hand: a guard steps out from his post, a bluffing gambler calls, a thief breaks from the crowd and runs. While they are rattled, a friend slips past or gets a step ahead.</p><p>Not enough to make them act against their own interest, or to draw out more than one person.</p>",
     "body": [
       {
         "label": "Target",

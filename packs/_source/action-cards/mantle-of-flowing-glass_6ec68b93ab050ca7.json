@@ -16,7 +16,7 @@
     "expertises": "Reinforcement, Transmutation",
     "expertisesMode": "any",
     "tags": "protection, suppression, support",
-    "flavor": "",
+    "flavor": "<p>Walk one person through a burning doorway, pull someone out of a fire, free a boot stuck in deep mud, or keep moving through snow and chest-high water as if it were a dry road.</p><p>Not enough to walk through a burning building or wade a river in flood.</p>",
     "body": [
       {
         "label": "Target",

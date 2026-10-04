@@ -16,7 +16,7 @@
     "expertises": "Sabotage, Observation",
     "expertisesMode": "any",
     "tags": "terrain, control, damage",
-    "flavor": "",
+    "flavor": "<p>Rig the whole landing outside a vault door with caltrops and cord, sow a camp's edge with snares and leave one safe path for your friends, or make an alley floor a mess of broken glass and loose tiles with a clean line through it. It takes trap material and a few minutes, and the trap is there to be seen.</p><p>Not enough to hide the work or to hold a street for more than the scene.</p>",
     "body": [
       {
         "label": "Target",

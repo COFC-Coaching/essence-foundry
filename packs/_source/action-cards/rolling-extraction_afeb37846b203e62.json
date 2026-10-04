@@ -16,7 +16,7 @@
     "expertises": "Mobility, Flair",
     "expertisesMode": "any",
     "tags": "damage, area, support, mobility",
-    "flavor": "",
+    "flavor": "<p>Cover a friend's escape out of a riot, get someone out from a mob by making the nearest few duck, or clear the road ahead of a fleeing cart. Keep the heads down on a whole gang while two people run.</p>",
     "body": [
       {
         "label": "Target",

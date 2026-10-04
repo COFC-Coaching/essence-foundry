@@ -16,7 +16,7 @@
     "expertises": "Inscription, Reagents",
     "expertisesMode": "any",
     "tags": "terrain, protection, control",
-    "flavor": "",
+    "flavor": "<p>Chalk a ring and the ones inside shrug off arrows, thrown stones, hail and falling slate. The ring itself turns strangers' feet: a mob slows at the mark, a horse balks, a thief hesitates on the shop step. Hold a doorway against a street for the scene.</p><p>Not enough to seal a door or hold a determined crowd for good.</p>",
     "body": [
       {
         "label": "Target",

@@ -2,6 +2,12 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.20.1
+
+**Non-Combat faces written for the ranked catalogue.** 342 of the 396 Rank 0 to 2 Action and Reaction Cards now carry a Non-Combat face: three to five concrete examples of what the card can reasonably do at its Rank, and usually a line naming what it is not strong enough to do. Written from each card's name, Target, Effect, Surges and Rider against the Rank ladder in `design/card-reverse-side-plan.md` (Rank 0 is one small thing within reach, Rank 1 one person-sized thing or one room with real force, Rank 2 several things or an area). The 54 pure strikes and miss-counters stay single-sided. Basic and Species cards are unchanged. Per Style: Magecraft 43, Ritualism 43, Calling 41, Psionics 41, Gestalt 40, Cunning 37, Leadership 33, Prowess 33, Ballistics 31. The full draft with each card's front beside its back is `design/card-backs-review-2026-10-03.md`. Action and Reaction packs rebuilt; cards already owned by actors keep their old text until re-imported.
+
+**Non-Combat band is a plain color.** The striped pattern on the back face's band is gone (Shane, 2026-10-03); the band's "Non-Combat" label is the cue.
+
 ## 0.20.0
 
 **Combat Cards have a Non-Combat face (v0.7 Doc, Part III "Abilities Outside Combat").** A card's Flavor text is now its out-of-combat entry. When Flavor is filled in, the card sheet's read view shows a Combat / Non-Combat tab pair above the card. The Non-Combat face keeps the band (marked "Non-Combat"), the Style and Rank chips, and the Commit and Cost tiles, noted "Timed scenes only" and "Always paid", then shows the Flavor text as "Non-Combat Applications" and a reminder that any roll it calls for is an ordinary Non-Combat roll with no Surges unless the entry says otherwise. A card with empty Flavor has no tabs and looks as before. The face resets to Combat when the sheet is reopened; locked compendium cards can be flipped; the tabs answer Enter and Space.

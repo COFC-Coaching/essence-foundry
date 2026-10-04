@@ -16,7 +16,7 @@
     "expertises": "Chorus, Dominion",
     "expertisesMode": "any",
     "tags": "damage, area, debuff",
-    "flavor": "",
+    "flavor": "<p>Make a guard glance over their shoulder when they should be watching the door, rattle two bargainers so they fumble their numbers, send a dog whimpering under a table, or put a chill in a room so a liar loses their place. A sigh from an empty corner.</p><p>Not enough to drive anyone from a room, frighten a crowd, or make someone believe a thing they do not.</p>",
     "body": [
       {
         "label": "Target",

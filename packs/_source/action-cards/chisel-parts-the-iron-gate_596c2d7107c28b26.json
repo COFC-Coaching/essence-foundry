@@ -16,7 +16,7 @@
     "expertises": "Dueling, Phalanx",
     "expertisesMode": "any",
     "tags": "damage, debuff, support",
-    "flavor": "",
+    "flavor": "<p>Break a padlock with one strike, split a plank shield down the middle, crack a chain link, knock the bar off a door from the wrong side, or dent a breastplate so it will not hold.</p><p>Not enough to cut through a vault door or break stone.</p>",
     "body": [
       {
         "label": "Target",

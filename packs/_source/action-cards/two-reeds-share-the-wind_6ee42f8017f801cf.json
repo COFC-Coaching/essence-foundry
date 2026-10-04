@@ -16,7 +16,7 @@
     "expertises": "Phalanx, Grappling",
     "expertisesMode": "any",
     "tags": "damage, support, setup",
-    "flavor": "",
+    "flavor": "<p>Pull a companion up onto a ledge beside you, trade places on a narrow bridge, steady a friend who slips on wet stairs, or get the two of you through a crowd together without losing each other.</p>",
     "body": [
       {
         "label": "Target",

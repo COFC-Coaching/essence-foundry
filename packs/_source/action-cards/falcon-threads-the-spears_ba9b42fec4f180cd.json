@@ -16,7 +16,7 @@
     "expertises": "Skirmishing, Reaving",
     "expertisesMode": "any",
     "tags": "damage, mobility, area",
-    "flavor": "",
+    "flavor": "<p>Run a line through a corridor and knock two guards aside without breaking stride, cross a crowded hall and shove every mark on the way, dash a rooftop and kick two loose tiles down as you pass, or open a path through two men holding a gate.</p><p>Not enough to clear a whole hallway or stop to deal with anyone properly.</p>",
     "body": [
       {
         "label": "Target",

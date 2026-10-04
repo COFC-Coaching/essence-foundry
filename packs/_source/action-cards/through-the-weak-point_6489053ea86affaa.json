@@ -16,7 +16,7 @@
     "expertises": "Penetration, Precision",
     "expertisesMode": "any",
     "tags": "damage, debuff, support",
-    "flavor": "",
+    "flavor": "<p>Shoot through a door, a shutter, a wagon canvas, or a wattle wall and hit what is behind it. Put a shot through a thin plank to trip the latch on the far side, or knock out a lamp through a paper screen.</p><p>Not enough to shoot through stone, brick, or iron.</p>",
     "body": [
       {
         "label": "Target",

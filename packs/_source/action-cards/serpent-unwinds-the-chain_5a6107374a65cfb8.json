@@ -16,7 +16,7 @@
     "expertises": "Grappling, Skirmishing",
     "expertisesMode": "any",
     "tags": "damage, control, support",
-    "flavor": "",
+    "flavor": "<p>Slip ropes tied by someone who knew their knots, break a companion out of a net, pull a friend free of a grip on their collar, or loosen a snare before it tightens.</p><p>Not enough to break iron shackles or open a locked cell.</p>",
     "body": [
       {
         "label": "Target",

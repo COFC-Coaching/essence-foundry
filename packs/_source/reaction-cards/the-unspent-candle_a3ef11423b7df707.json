@@ -16,7 +16,7 @@
     "expertises": "Severance, Consecration",
     "expertisesMode": "any",
     "tags": "protection, suppression, support",
-    "flavor": "",
+    "flavor": "<p>Snuff a rite you have laid and spend it to take the edge off a blow: the beam that falls on a friend, the trap's blade, the kick of a mule, the fall from the loft. They are hurt less than they should be.</p>",
     "body": [
       {
         "label": "Target",

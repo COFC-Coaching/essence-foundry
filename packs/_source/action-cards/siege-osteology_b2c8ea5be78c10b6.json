@@ -16,7 +16,7 @@
     "expertises": "Armament, Integration",
     "expertisesMode": "any",
     "tags": "damage, control, utility",
-    "flavor": "",
+    "flavor": "<p>Smash a barred door off its hinges, knock a hole in a mud-brick wall, batter a portcullis loose, break a cart axle, or shatter a stone trough.</p><p>Not enough to bring down a tower wall or a keep's gate.</p>",
     "body": [
       {
         "label": "Target",

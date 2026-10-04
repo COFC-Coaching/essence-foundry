@@ -16,7 +16,7 @@
     "expertises": "Locomotion, Plasticity",
     "expertisesMode": "any",
     "tags": "mobility, suppression",
-    "flavor": "",
+    "flavor": "<p>Climb a sheer wall, hang from the rafters while a patrol passes beneath you, cross a ceiling to drop behind a guard, scale a cliff face without rope, or cling to the side of a moving wagon.</p><p>Not enough to carry another person up with you.</p>",
     "body": [
       {
         "label": "Target",

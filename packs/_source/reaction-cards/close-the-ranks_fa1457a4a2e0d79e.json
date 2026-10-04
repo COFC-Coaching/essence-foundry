@@ -16,7 +16,7 @@
     "expertises": "Guardianship, Discipline",
     "expertisesMode": "any",
     "tags": "protection, support, mobility",
-    "flavor": "",
+    "flavor": "<p>Grab one friend who is about to be dragged: swept by a crowd, pulled toward the edge by a snagged rope, carried by a river current. Keep them with you and on their feet.</p><p>Not enough to hold against a cart or a bolting horse.</p>",
     "body": [
       {
         "label": "Target",

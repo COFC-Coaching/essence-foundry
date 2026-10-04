@@ -16,7 +16,7 @@
     "expertises": "Disjunction, Sculpting",
     "expertisesMode": "any",
     "tags": "damage, information, area",
-    "flavor": "",
+    "flavor": "<p>Light up two figures in a dark crowd so no one loses them, strip the shadow from a doorway a lurker is using, or make a cloaked face plain in a market. Break a cheap glamour on one of them.</p><p>Not enough to find someone who is truly hidden or see through a wall.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Sleight, Exploitation",
     "expertisesMode": "any",
     "tags": "mobility, suppression, setup",
-    "flavor": "",
+    "flavor": "<p>Slip a grabbing hand and leave your cloak in it, twist out of a rope before the knot bites, or wriggle free of a guard's grip for one step. If he still reaches you, he has you again.</p>",
     "body": [
       {
         "label": "Target",

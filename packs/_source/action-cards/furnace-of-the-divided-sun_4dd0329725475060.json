@@ -16,7 +16,7 @@
     "expertises": "Channeling, Sculpting",
     "expertisesMode": "any",
     "tags": "damage, area, control",
-    "flavor": "",
+    "flavor": "<p>Burn a barricade to ash, melt through an iron bar, drive a crowd back from a gate with heat, light a whole courtyard at midnight, or boil a pond dry.</p><p>Not enough to bring down a stone wall or burn a whole street.</p>",
     "body": [
       {
         "label": "Target",

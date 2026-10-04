@@ -16,7 +16,7 @@
     "expertises": "Locomotion, Integration",
     "expertisesMode": "any",
     "tags": "damage, mobility",
-    "flavor": "",
+    "flavor": "<p>Run down a fleeing thief in a market, keep pace with a bolting horse for the length of a street, close on a deer before it reaches the treeline, or catch a child before they reach the river.</p><p>Not enough to outrun a horse across open country.</p>",
     "body": [
       {
         "label": "Target",

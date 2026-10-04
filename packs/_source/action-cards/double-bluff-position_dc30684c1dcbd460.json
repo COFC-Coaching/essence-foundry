@@ -16,7 +16,7 @@
     "expertises": "Deception, Infiltration",
     "expertisesMode": "any",
     "tags": "mobility, protection, setup",
-    "flavor": "",
+    "flavor": "<p>Trade places with a friend under the watchers' noses, be the decoy while your ally takes the real path, step into the open so the guard looks at you and not the window, or walk two people through a checkpoint with the wrong one in front.</p><p>Not enough to make anyone disappear or to fool a watcher who already knows your face.</p>",
     "body": [
       {
         "label": "Target",

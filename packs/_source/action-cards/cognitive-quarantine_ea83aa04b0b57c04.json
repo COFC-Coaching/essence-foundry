@@ -16,7 +16,7 @@
     "expertises": "Telepathy, Mesmerism",
     "expertisesMode": "any",
     "tags": "protection, suppression, support",
-    "flavor": "",
+    "flavor": "<p>Hold back a charm, a fear, or a compulsion on a friend for a scene, keep a panicking ally thinking straight, let a haunted man sleep one night, or shut out a siren's call long enough to get past.</p><p>Not enough to cure anything or break a curse for good.</p>",
     "body": [
       {
         "label": "Target",

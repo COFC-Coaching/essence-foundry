@@ -16,7 +16,7 @@
     "expertises": "Sabotage, Improvisation",
     "expertisesMode": "any",
     "tags": "control, setup, mobility",
-    "flavor": "",
+    "flavor": "<p>Redirect a snare you set so it catches the pursuer and not your friend, hold a trap back until the right man is on it, or spring it a step early so a mule walks around it. Your trap, your timing.</p><p>Not enough to move a trap someone else laid.</p>",
     "body": [
       {
         "label": "Target",

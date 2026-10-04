@@ -16,7 +16,7 @@
     "expertises": "Flair, Payload",
     "expertisesMode": "any",
     "tags": "damage, control, support",
-    "flavor": "",
+    "flavor": "<p>Drive one staggering drunk back out the door, shove a distracted guard a step away from the latch, or burst a lantern at your own feet so the smoke and dust cover you while a friend gets behind the bar. Make a loud exit people remember.</p><p>Not enough to move anyone steady on their feet or to hide more than yourself.</p>",
     "body": [
       {
         "label": "Target",

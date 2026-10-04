@@ -16,7 +16,7 @@
     "expertises": "Skirmishing, Reaving",
     "expertisesMode": "any",
     "tags": "mobility, protection",
-    "flavor": "",
+    "flavor": "<p>Stay on the heels of a thief who turns and runs, close the gap on someone slipping out a side door, keep pace with a bolting horse long enough to grab its bridle, or follow a mark through a crowd without losing them.</p><p>Not enough to outrun a galloping horse or catch what has already turned the corner.</p>",
     "body": [
       {
         "label": "Target",

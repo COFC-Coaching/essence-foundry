@@ -16,7 +16,7 @@
     "expertises": "Telepathy, Mesmerism",
     "expertisesMode": "any",
     "tags": "support, protection, mobility",
-    "flavor": "",
+    "flavor": "<p>Pass a silent warning to a friend across a crowded room, keep a companion from being pulled away by a street hawker, or work a two-person sneak without a spoken word between you.</p><p>Not enough to share whole sentences, thoughts, or memories.</p>",
     "body": [
       {
         "label": "Target",

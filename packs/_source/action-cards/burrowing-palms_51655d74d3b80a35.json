@@ -16,7 +16,7 @@
     "expertises": "Plasticity, Locomotion",
     "expertisesMode": "any",
     "tags": "mobility, suppression, terrain",
-    "flavor": "",
+    "flavor": "<p>Dig yourself out of a collapsed trench, come up behind a palisade, pass under a fence, pull a buried friend out of a landslide, or hide under the soil while a patrol passes.</p><p>Not enough to tunnel through stone or leave a passage others can follow.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "Dueling, Grappling",
     "expertisesMode": "any",
     "tags": "damage, setup, control",
-    "flavor": "",
+    "flavor": "<p>Read a person's rhythm and use it. Time a sentry's turn to the step, catch a brawler's pattern in two exchanges and stay with them, pull a dancer out of a crowd without breaking the dance, or walk a guard's beat beside them without being seen.</p><p>Not enough to know what they are thinking, only what they will do next.</p>",
     "body": [
       {
         "label": "Target",

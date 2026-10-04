@@ -16,7 +16,7 @@
     "expertises": "Regeneration, Plasticity",
     "expertisesMode": "any",
     "tags": "suppression, protection",
-    "flavor": "",
+    "flavor": "<p>Walk on a sprained ankle for the rest of the day, hold a rope with a cut hand, stand in a river current on a bad leg, or keep your grip on a ladder while the wind pulls at you.</p><p>Not enough to mend the injury or to carry anything worse than a Light Wound.</p>",
     "body": [
       {
         "label": "Target",

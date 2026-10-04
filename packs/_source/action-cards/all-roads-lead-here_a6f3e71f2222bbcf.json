@@ -16,7 +16,7 @@
     "expertises": "Observation, Improvisation",
     "expertisesMode": "any",
     "tags": "control, terrain, support",
-    "flavor": "",
+    "flavor": "<p>Herd a mark down a street toward a waiting friend, close two routes with threats that are only noise, funnel a crowd through the one gate you want, or keep a guard busy enough that he never takes the shortcut. One person, two paths, and he will take the third.</p><p>Not enough to steer a crowd or to move anyone who is not already walking.</p>",
     "body": [
       {
         "label": "Target",

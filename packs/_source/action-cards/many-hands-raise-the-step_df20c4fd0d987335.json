@@ -16,7 +16,7 @@
     "expertises": "Chorus, Transference",
     "expertisesMode": "any",
     "tags": "terrain, mobility, support",
-    "flavor": "",
+    "flavor": "<p>Lay a step across a short gap in a broken stair, bridge a narrow stream, give a friend a foothold up a wall, or set a plank across a sinkhole long enough to cross. Stone hands make a step where there was none.</p><p>Not enough to span a river, hold through the night, or carry a cart.</p>",
     "body": [
       {
         "label": "Target",

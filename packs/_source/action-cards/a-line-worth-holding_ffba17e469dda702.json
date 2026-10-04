@@ -16,7 +16,7 @@
     "expertises": "Guardianship, Discipline",
     "expertisesMode": "any",
     "tags": "protection, suppression, support",
-    "flavor": "",
+    "flavor": "<p>Keep one person at their post when they want to bolt: the sentry on the wall, the boy holding the rope, the clerk standing in front of the ledger. They hold their place against a shove, a jostling crowd, or a bad moment.</p><p>Not enough to hold a line of people or keep them there past the scene.</p>",
     "body": [
       {
         "label": "Target",

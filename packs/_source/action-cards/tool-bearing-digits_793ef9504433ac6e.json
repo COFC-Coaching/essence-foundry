@@ -16,7 +16,7 @@
     "expertises": "Plasticity, Integration",
     "expertisesMode": "any",
     "tags": "damage, control, utility",
-    "flavor": "",
+    "flavor": "<p>Snag a key from a hook across the cell, pluck a purse from a passing belt, fish a dropped knife out of a drain, reel a letter off a table before someone else reaches it, or pull a friend back from a ledge.</p><p>Not enough to pick a lock or lift anything heavier than a hand holds.</p>",
     "body": [
       {
         "label": "Target",

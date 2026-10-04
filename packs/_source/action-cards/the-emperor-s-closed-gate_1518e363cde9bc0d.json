@@ -16,7 +16,7 @@
     "expertises": "Consecration, Inscription",
     "expertisesMode": "any",
     "tags": "terrain, protection, support",
-    "flavor": "",
+    "flavor": "<p>Mark a threshold with a sigil and whoever stands in it holds: a doorman against a shoving crowd, a friend on a ledge in a hard wind, a sailor on a pitching deck, a sentry who will not be dragged from his post.</p><p>Not enough to bar the door itself or hold more than one spot.</p>",
     "body": [
       {
         "label": "Target",

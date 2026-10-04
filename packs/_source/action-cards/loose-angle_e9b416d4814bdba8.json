@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "damage, mobility",
-    "flavor": "",
+    "flavor": "<p>Knock a lantern off a hook behind a stack of crates, hit a mark half hidden by a post, or thread a shot through the gap in a fence. Shoot the latch on a shutter that is mostly closed.</p><p>Not enough to shoot through the cover itself.</p>",
     "body": [
       {
         "label": "Target",

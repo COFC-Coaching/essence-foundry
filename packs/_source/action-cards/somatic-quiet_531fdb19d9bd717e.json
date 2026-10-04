@@ -16,7 +16,7 @@
     "expertises": "Biokinesis, Imprint",
     "expertisesMode": "any",
     "tags": "setup, suppression, protection",
-    "flavor": "",
+    "flavor": "<p>Walk on a bad leg for a scene, keep working with a burned hand, hold down a mouthful of poison long enough to reach a healer, or stay steady while a surgeon works on you.</p><p>Not enough to heal a wound or cure a poison.</p>",
     "body": [
       {
         "label": "Target",

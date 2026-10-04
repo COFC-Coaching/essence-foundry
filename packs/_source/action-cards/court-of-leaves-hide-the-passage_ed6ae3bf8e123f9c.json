@@ -16,7 +16,7 @@
     "expertises": "Chorus, Anchoring",
     "expertisesMode": "any",
     "tags": "terrain, mobility, support",
-    "flavor": "",
+    "flavor": "<p>Raise a hedge of leaves along a wall so a party crosses a lit yard, hide the mouth of a tunnel for a scene, screen a window from the street, or shade a path through an open field. A green line nobody looks past.</p><p>Not enough to hide a whole camp, fool someone who walks into it, or last past the scene.</p>",
     "body": [
       {
         "label": "Target",

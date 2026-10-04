@@ -16,7 +16,7 @@
     "expertises": "Telepathy, Imprint",
     "expertisesMode": "any",
     "tags": "damage, information, counterattack",
-    "flavor": "",
+    "flavor": "<p>Sting back at whoever just reached into your head, a hedge-wizard's hex, a mesmerist's push, a haunting. Learn whether their body or their mind is the weaker.</p><p>Not enough to break the hold on you or trace them farther than the room.</p>",
     "body": [
       {
         "label": "Target",

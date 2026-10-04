@@ -16,7 +16,7 @@
     "expertises": "Precognition, Telekinesis",
     "expertisesMode": "any",
     "tags": "protection, support, mobility",
-    "flavor": "",
+    "flavor": "<p>Pull a friend from under a falling beam and roll clear, blunt a fall from a roof, take a horse's kick for someone and step them away, or shield one person from a cave-in.</p><p>Not enough to shelter a crowd or stop a wall from coming down.</p>",
     "body": [
       {
         "label": "Target",

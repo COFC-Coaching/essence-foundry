@@ -16,7 +16,7 @@
     "expertises": "Fabrication, Transmutation",
     "expertisesMode": "any",
     "tags": "mobility, suppression, support",
-    "flavor": "",
+    "flavor": "<p>Step past a locked gate with bars to see through, cross a gap of a few paces without a jump, slip out of a rope or a grip, or move one friend from a ledge to the window beside it.</p><p>Not enough to pass through a wall or reach anywhere you cannot see.</p>",
     "body": [
       {
         "label": "Target",

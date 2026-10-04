@@ -16,7 +16,7 @@
     "expertises": "Inscription, Reagents",
     "expertisesMode": "any",
     "tags": "protection, suppression, support",
-    "flavor": "",
+    "flavor": "<p>Keep one person on their feet when the ground tries to take them: a rope snapping, ice underfoot, a river current, a crowd surge, a rearing horse, a trapdoor dropping open. They stay where they stood.</p><p>Not enough to hold a cart or save someone already falling.</p>",
     "body": [
       {
         "label": "Target",

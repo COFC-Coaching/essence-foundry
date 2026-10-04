@@ -16,7 +16,7 @@
     "expertises": "Plasticity, Locomotion",
     "expertisesMode": "any",
     "tags": "damage, control, mobility",
-    "flavor": "",
+    "flavor": "<p>Swing a companion from one ledge to another, sweep a bench out of your path, set a drunk down in the corner where he will do no harm, keep your feet on a rolling deck, or walk a beam with a load on your back.</p><p>Not enough to throw someone across a room.</p>",
     "body": [
       {
         "label": "Target",

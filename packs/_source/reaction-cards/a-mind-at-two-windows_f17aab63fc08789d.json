@@ -16,7 +16,7 @@
     "expertises": "Clairvoyance, Imprint",
     "expertisesMode": "any",
     "tags": "protection, mobility, information",
-    "flavor": "",
+    "flavor": "<p>Pull a friend clear of a collapsing scaffold, out of a spreading fire, off a bridge as it gives way, or out of the path of a stampede.</p><p>Not enough to move more than one person or carry anyone farther than a few steps.</p>",
     "body": [
       {
         "label": "Target",

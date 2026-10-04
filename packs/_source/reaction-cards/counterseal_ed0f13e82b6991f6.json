@@ -16,7 +16,7 @@
     "expertises": "Disjunction, Reinforcement",
     "expertisesMode": "any",
     "tags": "protection, suppression, support",
-    "flavor": "",
+    "flavor": "<p>Shrug off a sleep charm long enough to get out of the room, hold a hex at bay through a conversation, or steady a friend under a curse until they finish a climb. It comes back when the moment passes.</p><p>Not enough to break a curse or undo a lasting enchantment.</p>",
     "body": [
       {
         "label": "Target",

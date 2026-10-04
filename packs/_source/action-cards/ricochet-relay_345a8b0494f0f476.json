@@ -16,7 +16,7 @@
     "expertises": "Trajectory, Flair",
     "expertisesMode": "any",
     "tags": "damage, area, control",
-    "flavor": "",
+    "flavor": "<p>Skip a shot off two walls to ring a bell at the end of a crooked hall, knock a lever and a lantern with one bounce, or send a shot around two corners of an alley to hit a mark you have never seen directly. Carry a signal down a bent tunnel with a single thrown stone.</p><p>Not enough to go through anything solid along the way.</p>",
     "body": [
       {
         "label": "Target",

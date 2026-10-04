@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "damage, information, debuff",
-    "flavor": "",
+    "flavor": "<p>Light a dark room, pick one face out of a crowd with a bright spot, read a page by its glow, or sting a pickpocket's hand so they drop what they took. A flare bright enough to make one person flinch.</p><p>Not enough to blind anyone, start a fire, or light more than one room.</p>",
     "body": [
       {
         "label": "Target",

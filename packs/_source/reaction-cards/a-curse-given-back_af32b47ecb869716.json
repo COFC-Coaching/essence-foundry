@@ -16,7 +16,7 @@
     "expertises": "Severance, Sympathy",
     "expertisesMode": "any",
     "tags": "suppression, debuff, counterattack",
-    "flavor": "",
+    "flavor": "<p>When a charm settles on you, shrug it off and send it home: the glamour fades, the sleep does not take, the fear lifts, and the one who sent it goes pale and shaky for the scene.</p><p>Not enough to break the working for good or protect anyone but yourself.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "damage, information",
-    "flavor": "",
+    "flavor": "<p>Light a candle or a lantern from across the room, set tinder going in the rain, scorch a mark into a door, or burn through a thin cord. Make one spot glow long enough to see what is there.</p><p>Not enough to set a wall alight, burn a rope that bears weight, or light more than one spot.</p>",
     "body": [
       {
         "label": "Target",

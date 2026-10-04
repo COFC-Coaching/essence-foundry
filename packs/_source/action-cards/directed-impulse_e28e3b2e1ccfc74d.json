@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "damage, control, mobility",
-    "flavor": "",
+    "flavor": "<p>Knock a mug off a table, slam a door from across the room, push a lever, snuff a candle, or tip a sack off a cart with a nudge of thought.</p><p>Not enough to move a person or anything heavier than you can lift.</p>",
     "body": [
       {
         "label": "Target",

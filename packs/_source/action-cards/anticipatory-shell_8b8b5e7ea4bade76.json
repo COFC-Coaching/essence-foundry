@@ -16,7 +16,7 @@
     "expertises": "Precognition, Telekinesis",
     "expertisesMode": "any",
     "tags": "protection, support, debuff",
-    "flavor": "",
+    "flavor": "<p>Brace a friend against a falling beam, keep someone on their feet in a shoving crowd, catch a stumble on the stairs, or turn a thrown bottle aside from a companion's head.</p><p>Not enough to shield more than one person or stand against a cart.</p>",
     "body": [
       {
         "label": "Target",

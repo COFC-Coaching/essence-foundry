@@ -16,7 +16,7 @@
     "expertises": "Consecration, Inscription",
     "expertisesMode": "any",
     "tags": "information, terrain, protection",
-    "flavor": "",
+    "flavor": "<p>Fix a point and know every moving thing near it: who walks in the fog, what stirs in the dark cellar, who creeps through the tall grass toward the camp, which of the sleeping shapes is not asleep. Your friends see what you see.</p><p>Not enough to see through a wall or watch a whole street.</p>",
     "body": [
       {
         "label": "Target",

@@ -16,7 +16,7 @@
     "expertises": "",
     "expertisesMode": "any",
     "tags": "damage, control, counterattack",
-    "flavor": "",
+    "flavor": "<p>Hook the ankle of a pickpocket as they bolt past, catch a runaway child's foot before they reach the road, snag a fleeing drunk's heel on the stairs, or stop one person leaving a room before they reach the door.</p>",
     "body": [
       {
         "label": "Target",
