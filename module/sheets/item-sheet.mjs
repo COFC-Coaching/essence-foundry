@@ -77,7 +77,8 @@ class EssenceItemSheetBase extends HandlebarsApplicationMixin(ItemSheetV2) {
     for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) el.disabled = true;
     // toggleCardView only flips local read/edit display state — it doesn't write to the
     // document, so a locked compendium (or any non-editable) card must still be viewable.
-    for (const el of body.querySelectorAll('button[data-action]:not([data-action="toggleCardView"]), a[data-action]')) {
+    // cardFace likewise only switches the read view between the card's two faces.
+    for (const el of body.querySelectorAll('button[data-action]:not([data-action="toggleCardView"]), a[data-action]:not([data-action="cardFace"])')) {
       el.classList.add("locked");
       el.style.pointerEvents = "none";
     }
@@ -106,6 +107,7 @@ class EssenceItemSheetBase extends HandlebarsApplicationMixin(ItemSheetV2) {
    *  for the rest of the session, per the field's own comment above). */
   renderAsView(options) {
     this._viewMode = true;
+    if ("_showBack" in this) this._showBack = false;
     return this.render({ force: true, ...options });
   }
 
@@ -138,6 +140,29 @@ export class EssenceCardSheet extends EssenceItemSheetBase {
     body: { template: "systems/essence-system/templates/item/card-sheet.hbs", scrollable: [""] }
   };
 
+  static DEFAULT_OPTIONS = {
+    actions: { cardFace: EssenceCardSheet.#onCardFace }
+  };
+
+  /**
+   * Which face the read view shows. A card's Flavor text is its out-of-combat entry (v0.7 Doc,
+   * Part III "Abilities Outside Combat": the reverse side says what the technique can do during
+   * Exploration or social play), so a card with Flavor gets a Card / Non-Combat tab pair and this
+   * flag picks the face. Local display state like _viewMode, not document data.
+   */
+  _showBack = false;
+
+  static #onCardFace(event, target) {
+    this._showBack = target.dataset.face === "back";
+    this.render();
+  }
+
+  /** A fresh open always shows the Combat face; the flip is for the sheet currently open. */
+  _onClose(options) {
+    super._onClose(options);
+    this._showBack = false;
+  }
+
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.skillOptions = COMBAT_STYLES.map((key) => ({ key, label: key }));
@@ -152,8 +177,9 @@ export class EssenceCardSheet extends EssenceItemSheetBase {
     const max = actor && sys.attr && sys.skill ? (actor.system[String(sys.attr).toLowerCase()] ?? 0) + (actor.system[String(sys.skill).toLowerCase()] ?? 0) : null;
     const attrRank = sys.attr && sys.skill ? `${sys.attr.charAt(0).toUpperCase() + sys.attr.slice(1)} + ${sys.skill.charAt(0).toUpperCase() + sys.skill.slice(1)}` : "";
     const resource = { physical: "Stamina", mental: "Focus", spiritual: "Mana" }[sys.domain] ?? "";
+    const hasBack = !!String(sys.flavor ?? "").replace(/<[^>]*>/g, "").trim();
     context.cardView = {
-      kind, kindLabel, isReaction,
+      kind, kindLabel, isReaction, hasBack, back: hasBack && this._showBack,
       commit: burnOnly ? game.i18n.format("ESSENCE.Item.Card.BurnDice", { n: sys.burnDice }) : game.i18n.format("ESSENCE.Item.Card.RollDice", { n: min }),
       commitNote: burnOnly ? game.i18n.localize("ESSENCE.Item.Card.NoRollAutomatic") : (max !== null ? game.i18n.format("ESSENCE.Item.Card.MaxNote", { max, attrRank }) : attrRank),
       resource, resourceNote: resource ? game.i18n.format("ESSENCE.Item.Card.ResourceNote", { domain: sys.domain.charAt(0).toUpperCase() + sys.domain.slice(1) }) : ""
@@ -173,6 +199,15 @@ export class EssenceCardSheet extends EssenceItemSheetBase {
   _onRender(context, options) {
     super._onRender(context, options);
     this.#wireSkillSelect();
+    // ApplicationV2 dispatches data-action on click only; the face tabs are <a> without href, so
+    // Enter and Space activate them here for keyboard users.
+    for (const tab of this.element.querySelectorAll('.card-faces [data-action="cardFace"]')) {
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        tab.click();
+      });
+    }
   }
 
   /**

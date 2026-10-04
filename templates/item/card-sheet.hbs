@@ -10,16 +10,36 @@
 {{#if viewMode}}
 {{!-- Read view (plan step 6, concept "Card anatomy and colors"): type band, name, Style and Rank
      chips, Requires, the Commit / Cost / Roll / Against stat tiles, body lines, numbered Surges,
-     the Rider, then tags. Colors come from the card-type and domain tokens. --}}
-<div class="card-view kind-{{cardView.kind}}">
+     the Rider, then tags. Colors come from the card-type and domain tokens.
+     A card whose Flavor is filled in has a second face (v0.7 Doc, "Abilities Outside Combat"): the
+     Flavor text is the card's out-of-combat entry. The Card / Non-Combat tabs switch faces; a card
+     with no Flavor shows no tabs. --}}
+{{#if cardView.hasBack}}
+<nav class="sheet-tabs tabs card-faces kind-{{cardView.kind}}" role="tablist" aria-label="{{localize 'ESSENCE.Item.Card.FacesAria'}}">
+  <a class="{{#unless cardView.back}}active{{/unless}}" data-action="cardFace" data-face="front" role="tab" tabindex="0" aria-selected="{{#if cardView.back}}false{{else}}true{{/if}}">{{localize "ESSENCE.Item.Card.FaceCard"}}</a>
+  <a class="{{#if cardView.back}}active{{/if}}" data-action="cardFace" data-face="back" role="tab" tabindex="0" aria-selected="{{#if cardView.back}}true{{else}}false{{/if}}">{{localize "ESSENCE.Item.Card.FaceNonCombat"}}</a>
+</nav>
+{{/if}}
+<div class="card-view kind-{{cardView.kind}}{{#if cardView.back}} card-view-back{{/if}}">
   <div class="cv-band">
     <span>{{cardView.kindLabel}}{{#if system.subtype}} · {{system.subtype}}{{/if}}</span>
-    <span>{{#if system.skill}}{{capitalize system.skill}} R{{system.rank}}{{else}}{{localize "ESSENCE.Item.Card.Universal"}}{{/if}}</span>
+    <span>{{#if cardView.back}}{{localize "ESSENCE.Item.Card.FaceNonCombat"}} · {{/if}}{{#if system.skill}}{{capitalize system.skill}} R{{system.rank}}{{else}}{{localize "ESSENCE.Item.Card.Universal"}}{{/if}}</span>
   </div>
   <div class="cv-body">
     <div class="cv-chips">
       {{#if system.skill}}<span class="chip dom-{{system.domain}}">{{capitalize system.skill}}</span><span class="chip">{{localize "ESSENCE.Common.Rank"}} {{system.rank}}</span>{{else}}<span class="chip dom-{{system.domain}}">{{capitalize system.domain}}</span><span class="chip">{{localize "ESSENCE.Item.Card.UnrankedNoStyle"}}</span>{{/if}}
     </div>
+{{#if cardView.back}}
+    <div class="cv-stats">
+      <div class="cv-stat"><span class="cv-lbl">{{localize "ESSENCE.Item.Card.Commit"}}</span><span class="cv-v cv-accent">{{cardView.commit}}</span><span class="muted">{{localize "ESSENCE.Item.Card.CommitNoteNonCombat"}}</span></div>
+      <div class="cv-stat"><span class="cv-lbl">{{localize "ESSENCE.Common.Cost"}}</span><span class="cv-v cv-accent">{{#if system.cost}}{{system.cost}} {{cardView.resource}}{{else}}—{{/if}}</span><span class="muted">{{#if system.cost}}{{localize "ESSENCE.Item.Card.CostNoteNonCombat"}}{{else}}{{localize "ESSENCE.Item.Card.NoResource"}}{{/if}}</span></div>
+    </div>
+    <div class="cv-noncombat">
+      <span class="cv-lbl">{{localize "ESSENCE.Item.Card.NonCombatHeading"}}</span>
+      <div class="cv-noncombat-text">{{{system.flavor}}}</div>
+    </div>
+    <div class="cv-noncombat-note muted">{{localize "ESSENCE.Item.Card.NonCombatNote"}}</div>
+{{else}}
     <div class="cv-sec"><b>{{localize "ESSENCE.Item.Card.Requires"}}</b><span>{{#if system.expertises}}{{#if (eq system.expertisesMode "any2")}}{{localize "ESSENCE.Item.Card.AnyTwoOf"}}{{else}}{{localize "ESSENCE.Item.Card.AnyOf"}}{{/if}} {{system.expertises}}{{else}}<span class="muted">{{localize "ESSENCE.Item.Card.NoExpertise"}}</span>{{/if}}</span></div>
     <div class="cv-stats">
       <div class="cv-stat"><span class="cv-lbl">{{localize "ESSENCE.Item.Card.Commit"}}</span><span class="cv-v cv-accent">{{cardView.commit}}</span>{{#if cardView.commitNote}}<span class="muted">{{cardView.commitNote}}</span>{{/if}}</div>
@@ -47,8 +67,8 @@
     {{else}}
       <div class="cv-rider cv-rider-none"><span class="muted">{{#if cardView.isReaction}}{{localize "ESSENCE.Item.Card.NoRiderReaction"}}{{else}}{{localize "ESSENCE.Item.Card.NoRider"}}{{/if}}</span></div>
     {{/if}}
-    {{#if system.flavor}}<div class="cv-flavor">{{{system.flavor}}}</div>{{/if}}
     {{#if system.tags}}<div class="cv-tags muted">{{system.tags}}</div>{{/if}}
+{{/if}}
   </div>
 </div>
 {{else}}
@@ -109,6 +129,7 @@
 <div>{{essenceEditor system.rider.html target="system.rider.html" button=true}}</div>
 
 <h3 class="section-head">{{localize "ESSENCE.Common.Flavor"}}</h3>
+<p class="muted flavor-help">{{localize "ESSENCE.Item.Card.FlavorHelp"}}</p>
 <div>{{essenceEditor system.flavor target="system.flavor" button=true}}</div>
 {{/if}}
 </div>

@@ -724,7 +724,7 @@ function speciesCardToItem(sc, folderId) {
       expertises: "",
       expertisesMode: "any",
       tags: "species",
-      flavor: `<p>${sc.requirement}</p>`,
+      flavor: "",  // the Requirement already heads the body; flavor is the card's Non-Combat face
       body: sc.body,
       surges: [],
       rider: { title: "", html: "", meta: "" },

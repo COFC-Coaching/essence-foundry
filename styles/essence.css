@@ -1008,7 +1008,19 @@
 .essence .cv-rider-none { border-top-style: dotted; }
 .essence .cv-rider-title { font-weight: 700; color: var(--essence-accent); }
 .essence .cv-rider > span > p { margin: 0; }
-.essence .cv-flavor { font-style: italic; color: var(--essence-muted); }
+/* Combat / Non-Combat faces: the Flavor text is the card's out-of-combat entry, shown on a second
+   face behind a tab pair. The tabs only render when the card has Flavor. */
+.essence .card-faces { margin: 4px 0 8px; }
+.essence .card-faces.kind-action a.active { border-bottom-color: var(--essence-card-action); }
+.essence .card-faces.kind-reaction a.active { border-bottom-color: var(--essence-card-reaction); }
+.essence .card-faces.kind-basic a.active { border-bottom-color: var(--essence-card-basic); }
+.essence .card-view-back .cv-band { background-image: repeating-linear-gradient(135deg, transparent 0 6px, rgba(0, 0, 0, 0.14) 6px 8px); }
+.essence .cv-noncombat { display: flex; flex-direction: column; gap: 4px; }
+.essence .cv-noncombat-text { line-height: 1.45; font-size: 0.95em; }
+.essence .cv-noncombat-text p { margin: 0 0 6px; }
+.essence .cv-noncombat-text ul { margin: 0 0 6px; padding-left: 1.2em; }
+.essence .cv-noncombat-note { font-size: 0.85em; border-top: 1px dotted var(--essence-line-dashed); padding-top: 6px; }
+.essence .flavor-help { margin: -4px 0 6px; font-size: 0.85em; }
 .essence .cv-tags { font-size: 0.85em; text-transform: capitalize; }
 
 /* ============ Condition/Equipment/Chassis/Fitting/Augment sheets: read view ============

@@ -2,6 +2,14 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.20.0
+
+**Combat Cards have a Non-Combat face (v0.7 Doc, Part III "Abilities Outside Combat").** A card's Flavor text is now its out-of-combat entry. When Flavor is filled in, the card sheet's read view shows a Combat / Non-Combat tab pair above the card. The Non-Combat face keeps the band (marked "Non-Combat"), the Style and Rank chips, and the Commit and Cost tiles, noted "Timed scenes only" and "Always paid", then shows the Flavor text as "Non-Combat Applications" and a reminder that any roll it calls for is an ordinary Non-Combat roll with no Surges unless the entry says otherwise. A card with empty Flavor has no tabs and looks as before. The face resets to Combat when the sheet is reopened; locked compendium cards can be flipped; the tabs answer Enter and Space.
+
+Write the entry as concrete examples of what the card can reasonably do at its Rank (Ryan, 2026-10-03), optionally followed by what it is not strong enough to do. Old one-line Flavor on cards already owned by actors will show as a thin Non-Combat face until it is rewritten or cleared.
+
+The four Species cards (Ink Cloud, Shaper, Spore Cloud, True Breath) had their Requirement line duplicated into Flavor; it is cleared in the pack and the build script. Re-import them on existing actors to drop the stray face.
+
 ## 0.19.5
 
 **Career explains itself.** Hovering "Career" on the Non-Combat tab or in the Character Wizard
