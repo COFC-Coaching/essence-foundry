@@ -1,0 +1,72 @@
+{{!-- Structured editor for one granted Equipment Card. Context: a grantedCards entry (g) carrying
+      `card` (parseEquipmentCard's model), `itemId` (the granting Component), `source`, `uses`,
+      `usesRemaining`, `editable`. Every control carries data-card-field; the sheet rebuilds the
+      Component's `system.effect` from the whole form on any change (#wireGrantedCardEditors). --}}
+<div class="granted-card granted-card-edit" data-component-id="{{itemId}}" data-intro-label="{{card.introLabel}}" data-extra="{{card.extra}}">
+  <div class="granted-card-head">
+    <span>{{localize "ESSENCE.Item.Equipment.GrantedBy" source=source}}</span>
+    {{#if uses}}<span>{{localize "ESSENCE.Common.UsesFraction" remaining=usesRemaining total=uses}}</span>{{/if}}
+    {{#if editable}}
+      <button type="button" class="granted-card-mode" data-mode="{{#if card.structured}}text{{else}}form{{/if}}" data-tooltip-text="{{#if card.structured}}{{localize 'ESSENCE.Item.Equipment.CardEditAsTextHint'}}{{else}}{{localize 'ESSENCE.Item.Equipment.CardEditAsFormHint'}}{{/if}}">
+        <i class="fa-solid {{#if card.structured}}fa-code{{else}}fa-table-list{{/if}}"></i> {{#if card.structured}}{{localize "ESSENCE.Item.Equipment.CardEditAsText"}}{{else}}{{localize "ESSENCE.Item.Equipment.CardEditAsForm"}}{{/if}}
+      </button>
+    {{/if}}
+  </div>
+  {{#unless editable}}
+    <div class="card-view-text">{{{effect}}}</div>
+  {{else}}
+  {{#if card.structured}}
+  <div class="granted-card-form">
+    <label class="span-all">{{localize "ESSENCE.Item.Equipment.CardIntro"}}
+      <input type="text" data-card-field="intro" value="{{card.intro}}" placeholder="{{localize 'ESSENCE.Item.Equipment.CardIntroPlaceholder'}}">
+    </label>
+    <div class="grid-3">
+      <label>{{localize "ESSENCE.Item.Equipment.CardName"}} <input type="text" data-card-field="name" value="{{card.name}}"></label>
+      <label>{{localize "ESSENCE.Item.Equipment.CardCode"}} <input type="text" data-card-field="code" value="{{card.code}}" placeholder="EC01"></label>
+      <label>{{localize "ESSENCE.Common.Type"}}
+        <select data-card-field="kind">
+          <option value="reaction" {{#if (eq card.kind "reaction")}}selected{{/if}}>{{localize "ESSENCE.Common.Reaction"}}</option>
+          <option value="action" {{#if (eq card.kind "action")}}selected{{/if}}>{{localize "ESSENCE.Common.Action"}}</option>
+        </select>
+      </label>
+    </div>
+    <div class="grid-3">
+      <label>{{localize "ESSENCE.Item.Equipment.CardDice"}}
+        <span class="granted-card-dice">
+          <select data-card-field="dice">
+            <option value="roll" {{#if (eq card.dice "roll")}}selected{{/if}}>{{localize "ESSENCE.Item.Equipment.CardDiceRoll"}}</option>
+            <option value="burn" {{#if (eq card.dice "burn")}}selected{{/if}}>{{localize "ESSENCE.Item.Equipment.CardDiceBurn"}}</option>
+          </select>
+          <input type="number" data-card-field="roll" value="{{card.roll}}" min="2" step="1" aria-label="{{localize 'ESSENCE.Item.Equipment.CardRoll'}}">
+        </span>
+      </label>
+      <label>{{localize "ESSENCE.Common.Uses"}} <input type="number" data-card-field="uses" value="{{card.uses}}" min="0" step="1" placeholder="{{localize 'ESSENCE.Common.LeaveBlankUnlimited'}}"></label>
+      <label>{{localize "ESSENCE.Item.Equipment.CardResource"}} <input type="number" data-card-field="resource" value="{{card.resource}}" min="0" step="1"></label>
+    </div>
+    <label class="span-all">{{localize "ESSENCE.Item.Equipment.CardResolution"}} <input type="text" data-card-field="resolution" value="{{card.resolution}}" placeholder="{{localize 'ESSENCE.Item.Equipment.CardResolutionPlaceholder'}}"></label>
+    <label class="span-all">{{localize "ESSENCE.Item.Equipment.CardRange"}} <input type="text" data-card-field="range" value="{{card.range}}" placeholder="{{localize 'ESSENCE.Item.Equipment.CardRangePlaceholder'}}"></label>
+    <label class="span-all granted-card-trigger" {{#if (eq card.kind "action")}}hidden{{/if}}>{{localize "ESSENCE.Common.Trigger"}} <textarea data-card-field="trigger" rows="2">{{card.trigger}}</textarea></label>
+    <label class="span-all">{{localize "ESSENCE.Common.Effect"}} <textarea data-card-field="effect" rows="4">{{card.effect}}</textarea></label>
+    <div class="span-all granted-card-surges">
+      <span class="granted-card-sublabel">{{localize "ESSENCE.Common.Surges"}}</span>
+      <ol>
+        {{#each card.surges as |s i|}}
+          <li>
+            <input class="w-3" type="number" data-card-field="surge-n" data-index="{{i}}" value="{{s.n}}" min="1" step="1" aria-label="{{localize 'ESSENCE.Item.Equipment.CardSurgeCostAria'}}">
+            <input type="text" data-card-field="surge-text" data-index="{{i}}" value="{{s.text}}" aria-label="{{localize 'ESSENCE.Item.Equipment.CardSurgeTextAria' n=(addOne i)}}">
+            <button type="button" class="granted-card-surge-delete" data-index="{{i}}" aria-label="{{localize 'ESSENCE.Item.Card.DeleteSurgeAria' n=(addOne i)}}"><i class="fa-solid fa-trash"></i></button>
+          </li>
+        {{/each}}
+      </ol>
+      <button type="button" class="granted-card-surge-add"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Item.Card.AddSurge"}}</button>
+    </div>
+    <label class="span-all">{{localize "ESSENCE.Item.Equipment.CardNote"}} <input type="text" data-card-field="note" value="{{card.note}}"></label>
+    {{#if card.extra}}
+      <div class="span-all muted granted-card-extra">{{localize "ESSENCE.Item.Equipment.CardExtraKept"}} {{{card.extra}}}</div>
+    {{/if}}
+  </div>
+  {{else}}
+    <prose-mirror class="editor granted-card-editor" toggled value="{{effect}}">{{{effect}}}</prose-mirror>
+  {{/if}}
+  {{/unless}}
+</div>

@@ -64,6 +64,7 @@ Hooks.once("init", () => {
   foundry.applications.handlebars.loadTemplates([
     "systems/essence-system/templates/actor/parts/death-track.hbs",
     "systems/essence-system/templates/actor/parts/wounds-header.hbs",
+    "systems/essence-system/templates/item/parts/equipment-card-editor.hbs",
     "systems/essence-system/templates/chat/d10-shape.hbs"
   ]);
 
@@ -167,6 +168,9 @@ Hooks.once("init", () => {
     scope: "world", config: false, type: Boolean, default: false
   });
   game.settings.register("essence-system", "rekeyedResilienceEffects", {
+    scope: "world", config: false, type: Boolean, default: false
+  });
+  game.settings.register("essence-system", "resetInflatedBaseResilience", {
     scope: "world", config: false, type: Boolean, default: false
   });
   game.settings.register("essence-system", "migratedRoleToGrade", {
@@ -385,6 +389,37 @@ Hooks.once("ready", async () => {
     });
   }
   await game.settings.set("essence-system", "rekeyedResilienceEffects", true);
+});
+
+/**
+ * One-time repair (0.20.2): the 0.7.10 rekey above could only warn — it left each character's
+ * crept-up base Resilience in place because the true value was unknown. It IS known: a character
+ * has no inherent Resilience (character-wizard.mjs STEPS comment; actor-combatant.mjs schema
+ * default 0) — every point a character legitimately has arrives through resilienceBonus from gear
+ * and feature effects (equipment-effects.mjs). So any non-zero base on a character actor is
+ * leftover compounding (a +1 Shell or Athlete effect re-saved into the base on every form submit)
+ * or a hand edit that should have gone on the gear. Reset it to 0, scoped to `character` actors
+ * only: NPC/monster/manifestation Resilience is a GM-set base by design (monster-budgets.mjs) and
+ * must not be touched. The old values go to the GM in a whisper so a deliberate edit can be redone.
+ */
+Hooks.once("ready", async () => {
+  if (!game.user.isGM) return;
+  if (game.settings.get("essence-system", "resetInflatedBaseResilience")) return;
+  const reset = [];
+  for (const actor of game.actors) {
+    if (actor.type !== "character") continue;
+    const base = actor.system._source?.resilience ?? actor.system.resilience ?? 0;
+    if (!(base > 0)) continue;
+    await actor.update({ "system.resilience": 0 });
+    reset.push(`${actor.name} (${base})`);
+  }
+  if (reset.length) {
+    await ChatMessage.create({
+      whisper: ChatMessage.getWhisperRecipients("GM"),
+      content: game.i18n.format("ESSENCE.Notify.BaseResilienceReset", { names: reset.join(", ") })
+    });
+  }
+  await game.settings.set("essence-system", "resetInflatedBaseResilience", true);
 });
 
 /**

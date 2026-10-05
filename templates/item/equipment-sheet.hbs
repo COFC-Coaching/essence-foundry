@@ -214,16 +214,19 @@
 
       {{#if stats.grantedCards.length}}
         <h4>{{localize "ESSENCE.Item.Equipment.GrantedEquipmentCards"}}</h4>
-        <ul>
-          {{#each stats.grantedCards as |g|}}
-            <li><strong>{{g.source}}</strong>{{#if g.uses}} ({{localize "ESSENCE.Common.UsesFraction" remaining=g.usesRemaining total=g.uses}}){{/if}} — {{{g.effect}}}</li>
-          {{/each}}
-        </ul>
+        {{!-- Each card's text lives on the Component that grants it (its own `system.effect`), so
+              editing here writes to THAT embedded Component, not this equipment Item — see
+              #wireGrantedCardEditors and equipment-card-text.mjs. A card from a Component this user
+              can't edit (a locked compendium entry, someone else's actor) stays read-only. --}}
+        {{#each stats.grantedCards as |g|}}
+          {{> "systems/essence-system/templates/item/parts/equipment-card-editor.hbs" g}}
+        {{/each}}
+        <p class="muted granted-card-hint">{{localize "ESSENCE.Item.Equipment.GrantedCardEditHint"}}</p>
       {{/if}}
     {{/if}}
   {{/if}}
 <h3 class="section-head">{{localize "ESSENCE.Common.Effect"}}</h3>
-<div>{{essenceEditor system.effect target="system.effect" button=true}}</div>
+<div class="editor-tall">{{essenceEditor system.effect target="system.effect" button=true}}</div>
 <h3 class="section-head">{{localize "ESSENCE.Common.Passive"}}</h3>
 <div>{{essenceEditor system.passive target="system.passive" button=true}}</div>
 <h3 class="section-head">{{localize "ESSENCE.Common.Special"}}</h3>

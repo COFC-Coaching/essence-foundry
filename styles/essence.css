@@ -321,6 +321,14 @@
    Description) — these hold a sentence or two, not a full page, so the 150px default reads as
    mostly empty box, but they still need real room for the toolbar + a typable area under it. */
 .essence.item prose-mirror.editor { --min-height: 8em; }
+/* Core's .editor-content is position:absolute inside the container, so a <prose-mirror> never
+   grows with its text: the ONLY thing that sets its height is --min-height. An Effect field on a
+   Component/Augment/Equipment item holds a whole granted Equipment Card (intro, name, stat line,
+   Resolution, Range, Trigger, Effect, Surges, note: 8 to 10 paragraphs), which at 8em showed two
+   lines and a scrollbar. Give those the room to read and write a full card. The granted-card
+   free-text fallback on the equipment sheet holds the same text, so it gets the same height. */
+.essence.item .editor-tall prose-mirror.editor,
+.essence .granted-card-edit prose-mirror.editor { --min-height: 34em; }
 .essence .locked { opacity: 0.4; cursor: not-allowed; }
 .essence .sheet-header { display: flex; align-items: flex-start; gap: 10px; }
 .essence .profile-img { width: 64px; height: 64px; object-fit: cover; border-radius: 4px; }
@@ -1061,6 +1069,19 @@
 .essence .granted-card-head { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.08em; color: var(--essence-muted); }
 .essence .granted-card .card-view-text p { margin: 0 0 4px; }
 .essence .granted-card-hint { margin: 0; font-size: 0.85em; }
+.essence .granted-card-head .granted-card-mode { margin-left: auto; padding: 1px 8px; font-size: 0.95em; letter-spacing: 0; text-transform: none; line-height: 1.6; }
+.essence .granted-card-form { display: grid; gap: 8px; }
+.essence .granted-card-form label { display: flex; flex-direction: column; gap: 2px; font-size: 0.85em; font-weight: 600; color: var(--essence-muted); }
+.essence .granted-card-form label input, .essence .granted-card-form label select, .essence .granted-card-form label textarea { font-size: 1rem; font-weight: 400; color: inherit; }
+.essence .granted-card-form textarea { resize: vertical; min-height: 2.6em; line-height: 1.35; }
+.essence .granted-card-form .grid-3 { gap: 8px; }
+.essence .granted-card-dice { display: grid; grid-template-columns: minmax(0, 1fr) 3.5em; gap: 4px; }
+.essence .granted-card-sublabel { font-size: 0.85em; font-weight: 600; color: var(--essence-muted); }
+.essence .granted-card-surges ol { margin: 2px 0 4px; padding: 0; list-style: none; display: grid; gap: 4px; }
+.essence .granted-card-surges li { display: grid; grid-template-columns: 3em minmax(0, 1fr) auto; gap: 6px; align-items: center; }
+.essence .granted-card-surges button, .essence .granted-card-form .granted-card-surge-add { width: fit-content; }
+.essence .granted-card-extra { font-size: 0.85em; }
+.essence .granted-card-extra p { margin: 2px 0; }
 
 /* Chassis — var(--essence-chassis) (bronze/structural) and Fitting — var(--essence-fitting) (teal), sharing one sheet/template
    but branching on item.type via the .component-view-chassis/.component-view-fitting modifier. */

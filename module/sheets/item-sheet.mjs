@@ -1,4 +1,5 @@
 import { deriveEquipmentStats, buildEquipmentResolver } from "../data/equipment-features.mjs";
+import { parseEquipmentCard, renderEquipmentCard } from "../data/equipment-card-text.mjs";
 import { SUBTYPE_DATABASE } from "../data/expertise-database.mjs";
 import { CHASSIS_LABELS, FITTING_LABELS } from "../data/item-component.mjs";
 import { EQUIPMENT_CATEGORY_LABELS, MODULAR_EQUIPMENT_CATEGORIES } from "../data/item-card.mjs";
@@ -269,6 +270,96 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
     super._onRender(context, options);
     this.#wireModularSelects();
     this.#wireEquipmentCardFields();
+    this.#wireGrantedCardEditors();
+  }
+
+  /** Per-Component "form"/"text" override for the granted-card editor, chosen with the mode button.
+   *  Sheet-lifetime only (a Map on the sheet instance, never written to the document). */
+  #grantedCardMode = new Map();
+
+  /**
+   * A granted Equipment Card's text is the granting Component's own `system.effect` (see
+   * deriveEquipmentStats), and an owned equipment Item's Components are the actor's own embedded
+   * copies (#materializeComponent) — so "edit the card on my Kite Shield" means editing the Ready
+   * Shield Grip this actor owns, which touches nobody else's shield. The form's controls carry no
+   * `name`, so DocumentSheetV2's form submit never tries to write them onto THIS item; any change
+   * reads the whole form back into an EquipmentCardModel (equipment-card-text.mjs), renders the
+   * template HTML and updates the Component by data-component-id, then re-renders since a sibling
+   * document's update doesn't refresh this sheet on its own. The free-text fallback (a
+   * `<prose-mirror>` for a card the template can't parse) saves the raw HTML the same way.
+   */
+  #wireGrantedCardEditors() {
+    for (const box of this.element.querySelectorAll(".granted-card-edit[data-component-id]")) {
+      const id = box.dataset.componentId;
+      const save = async (html) => {
+        const items = await this.#resolveComponentSource();
+        const component = items.get(id);
+        if (!component?.isOwner) return;
+        await component.update({ "system.effect": html });
+        this.render();
+      };
+      const saveForm = () => save(renderEquipmentCard(EssenceEquipmentSheet.#readGrantedCardForm(box)));
+      for (const el of box.querySelectorAll("[data-card-field]")) el.addEventListener("change", saveForm);
+      box.querySelector("prose-mirror.granted-card-editor")?.addEventListener("change", (event) => save(event.currentTarget.value));
+      box.querySelector(".granted-card-surge-add")?.addEventListener("click", () => {
+        const model = EssenceEquipmentSheet.#readGrantedCardForm(box);
+        // An empty Surge line renders as nothing, so seed it with a placeholder to overwrite.
+        model.surges.push({ n: model.surges.length + 1, text: game.i18n.localize("ESSENCE.Item.Equipment.CardSurgePlaceholder") });
+        save(renderEquipmentCard(model));
+      });
+      for (const btn of box.querySelectorAll(".granted-card-surge-delete")) {
+        btn.addEventListener("click", () => {
+          const model = EssenceEquipmentSheet.#readGrantedCardForm(box);
+          model.surges.splice(Number(btn.dataset.index), 1);
+          save(renderEquipmentCard(model));
+        });
+      }
+      // A Reaction has a Trigger, an Action doesn't: hide the row live, ahead of the re-render.
+      box.querySelector('[data-card-field="kind"]')?.addEventListener("change", (event) => {
+        const trigger = box.querySelector(".granted-card-trigger");
+        if (trigger) trigger.hidden = event.currentTarget.value === "action";
+      });
+      box.querySelector(".granted-card-mode")?.addEventListener("click", async (event) => {
+        const mode = event.currentTarget.dataset.mode;
+        this.#grantedCardMode.set(id, mode);
+        if (mode === "form") {
+          // Rebuild free text onto the template so the form has fields to show; the parse keeps
+          // every unrecognised paragraph in `extra`, so converting loses nothing.
+          const items = await this.#resolveComponentSource();
+          const component = items.get(id);
+          const model = parseEquipmentCard(component?.system.effect ?? "");
+          if (!model.structured) return save(renderEquipmentCard(model));
+        }
+        this.render();
+      });
+    }
+  }
+
+  /** Reads one granted-card form (equipment-card-editor.hbs) back into an EquipmentCardModel. */
+  static #readGrantedCardForm(box) {
+    const model = parseEquipmentCard("");
+    model.structured = true;
+    const val = (field) => box.querySelector(`[data-card-field="${field}"]`)?.value ?? "";
+    const num = (field, fallback) => { const v = val(field); return v === "" ? fallback : Number(v); };
+    model.introLabel = box.dataset.introLabel || model.introLabel;
+    model.intro = val("intro").trim();
+    model.name = val("name").trim();
+    model.code = val("code").trim();
+    model.kind = val("kind") === "action" ? "action" : "reaction";
+    model.dice = val("dice") === "burn" ? "burn" : "roll";
+    model.roll = num("roll", 2);
+    model.uses = num("uses", null);
+    model.resource = num("resource", 0);
+    model.resolution = val("resolution").trim();
+    model.range = val("range").trim();
+    model.trigger = model.kind === "reaction" ? val("trigger").trim() : "";
+    model.effect = val("effect").trim();
+    model.note = val("note").trim();
+    model.extra = box.dataset.extra ?? "";
+    const ns = [...box.querySelectorAll('[data-card-field="surge-n"]')];
+    const texts = [...box.querySelectorAll('[data-card-field="surge-text"]')];
+    model.surges = ns.map((n, i) => ({ n: n.value === "" ? 1 : Number(n.value), text: (texts[i]?.value ?? "").trim() }));
+    return model;
   }
 
   async _prepareContext(options) {
@@ -298,6 +389,19 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
     context.fittingOptions = items.all.filter((i) => i.type === "fitting" && (i.system.category === category || i.id === this.item.system.fittingItemId)).map(toOption);
     context.augmentOptions = items.all.filter((i) => i.type === "augment").map(toOption);
     context.stats = deriveEquipmentStats(items, this.item);
+    // Which granted cards the edit view may rewrite in place (#wireGrantedCardEditors): the
+    // Component has to be one this user owns and not sit in a locked pack.
+    for (const g of context.stats.grantedCards) {
+      const component = items.get(g.itemId);
+      g.editable = Boolean(this.isEditable && component?.isOwner && !component.compendium?.locked);
+      g.card = parseEquipmentCard(g.effect);
+      // A card the template can't round-trip is edited as free text; the mode button flips it to
+      // the form, which rebuilds the text onto the template with unknown paragraphs kept verbatim.
+      // The choice lives on the sheet instance only: the next render re-parses the saved text.
+      const mode = this.#grantedCardMode.get(g.itemId);
+      if (mode === "form") g.card.structured = true;
+      else if (mode === "text") g.card.structured = false;
+    }
     // See EssenceComponentSheet's own comment on CHASSIS_LABELS/FITTING_LABELS — once a Chassis/
     // Fitting is assigned, ITS category is the authority on which in-fiction term to show (a
     // weapon's Chassis could be melee "weapon" or "ranged", which this equipment Item's own
