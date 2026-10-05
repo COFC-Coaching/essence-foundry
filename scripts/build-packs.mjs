@@ -477,7 +477,12 @@ function writeCategoryFolders(packName, categories) {
   const map = {};
   for (const category of categories) {
     const _id = stableId(`folder:${packName}:${category}`);
-    const name = category.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");
+    // The printed category for `shield` is "Guard item" (v0.6 Doc L1401) — same override as
+    // EQUIPMENT_CATEGORY_LABELS in item-card.mjs and COMPONENT_CATEGORY_FOLDERS above. The source
+    // folder doc had been hand-corrected to "Guard" since v0.13.0 while this titlecase kept
+    // emitting "Shield" on every rebuild (and shipped that way in the 0.20.2 pack).
+    const name = category === "shield" ? "Guard"
+      : category.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");
     writeSourceDoc(packName, {
       _id,
       name,

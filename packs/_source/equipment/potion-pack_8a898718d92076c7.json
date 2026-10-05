@@ -19,18 +19,18 @@
     "tags": "consumable",
     "flavor": "",
     "reachBonus": 0,
-    "uses": 3,
+    "uses": 5,
     "slotCost": 1,
-    "isModular": false,
-    "quantity": 1,
     "equipmentCards": [
       {
         "name": "Concoction",
         "effect": "<p><strong>Action.</strong> Burn 2 Action dice and spend 1 Use.</p><p><strong>Target.</strong> Yourself or one adjacent willing creature.</p><p><strong>Effect.</strong> Unopposed. Choose one when you play the card: the target restores 2 Stamina, 2 Focus, or 2 Mana, never above its maximum; or the target removes one of Weakened, Chilled, or Burning. This card has no Surges.</p>",
-        "uses": 3,
-        "usesRemaining": 3
+        "uses": 5,
+        "usesRemaining": 5
       }
-    ]
+    ],
+    "isModular": false,
+    "quantity": 1
   },
   "folder": "ce2bb523a719e8fc",
   "flags": {},

@@ -19,18 +19,18 @@
     "tags": "consumable",
     "flavor": "",
     "reachBonus": 0,
-    "uses": 3,
+    "uses": 5,
     "slotCost": 1,
-    "isModular": false,
-    "quantity": 1,
     "equipmentCards": [
       {
         "name": "Medkit",
         "effect": "<p><strong>Action.</strong> Burn 2 Action dice and spend 1 Use.</p><p><strong>Target.</strong> Yourself, or one adjacent willing or Helpless creature whose injury you can reach.</p><p><strong>Effect.</strong> Unopposed. Remove Bleeding from the target, and the target gains 1 Temporary Wound that expires at the end of the Encounter. This card has no Surges.</p><p><strong>Supplies.</strong> When you Stabilize or provide a Wound Card's care, you may spend 1 Use of this Pack instead of playing this card to satisfy a requirement for a Medical Toolkit.</p>",
-        "uses": 3,
-        "usesRemaining": 3
+        "uses": 5,
+        "usesRemaining": 5
       }
-    ]
+    ],
+    "isModular": false,
+    "quantity": 1
   },
   "folder": "ce2bb523a719e8fc",
   "flags": {},

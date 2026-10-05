@@ -21,6 +21,7 @@
     "reachBonus": 0,
     "uses": null,
     "slotCost": 1,
+    "equipmentCards": [],
     "isModular": false,
     "quantity": 1
   },

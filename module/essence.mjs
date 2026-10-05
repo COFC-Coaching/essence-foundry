@@ -174,6 +174,9 @@ Hooks.once("init", () => {
   game.settings.register("essence-system", "resetInflatedBaseResilience", {
     scope: "world", config: false, type: Boolean, default: false
   });
+  game.settings.register("essence-system", "consumableKitsFiveUses", {
+    scope: "world", config: false, type: Boolean, default: false
+  });
   game.settings.register("essence-system", "migratedRoleToGrade", {
     scope: "world", config: false, type: Boolean, default: false
   });
@@ -325,6 +328,36 @@ Hooks.once("ready", async () => {
     }
   }
   await game.settings.set("essence-system", "grantedConsumableKitCards", true);
+});
+
+/**
+ * One-time correction (0.20.3): the four Consumable Kits shipped in 0.20.2 with 3 Uses; the Doc
+ * gives every Pack 5 (Shane, 2026-10-04). The compendium copies now say 5, and this pass brings an
+ * owned Explosives / Medical / Munitions / Potion Pack up to match: its own `uses` and each
+ * Equipment Card's `uses` go 3 -> 5, and `usesRemaining` gains the same 2 so a kit that has been
+ * spent down keeps its spent count rather than refilling. A kit the GM already set to anything
+ * other than 3 is left alone — that number was a deliberate choice, not the shipped default.
+ */
+Hooks.once("ready", async () => {
+  if (!game.user.isGM) return;
+  if (game.settings.get("essence-system", "consumableKitsFiveUses")) return;
+  const KITS = new Set(["Explosives Pack", "Medical Pack", "Munitions Pack", "Potion Pack"]);
+  const bump = (uses, remaining) => (uses === 3 ? { uses: 5, usesRemaining: Math.min(5, (remaining ?? 3) + 2) } : null);
+  for (const actor of game.actors) {
+    for (const item of actor.items) {
+      if (item.type !== "equipment" || item.system.category !== "consumable-kit" || !KITS.has(item.name)) continue;
+      const update = {};
+      const own = bump(item.system.uses, item.system.usesRemaining);
+      if (own) { update["system.uses"] = own.uses; if ("usesRemaining" in item.system) update["system.usesRemaining"] = own.usesRemaining; }
+      const cards = (item.system.equipmentCards ?? []).map((card) => {
+        const b = bump(card.uses, card.usesRemaining);
+        return b ? { ...card, ...b } : { ...card };
+      });
+      if (cards.some((card, i) => card.uses !== item.system.equipmentCards[i].uses)) update["system.equipmentCards"] = cards;
+      if (Object.keys(update).length) await item.update(update);
+    }
+  }
+  await game.settings.set("essence-system", "consumableKitsFiveUses", true);
 });
 
 /**

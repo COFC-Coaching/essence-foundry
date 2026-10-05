@@ -207,14 +207,14 @@
     "resilience": "",
     "movement": "",
     "tags": "consumable",
-    "uses": 3,
+    "uses": 5,
     "isModular": false,
     "equipmentCards": [
       {
         "name": "Medkit",
         "effect": "<p><strong>Action.</strong> Burn 2 Action dice and spend 1 Use.</p><p><strong>Target.</strong> Yourself, or one adjacent willing or Helpless creature whose injury you can reach.</p><p><strong>Effect.</strong> Unopposed. Remove Bleeding from the target, and the target gains 1 Temporary Wound that expires at the end of the Encounter. This card has no Surges.</p><p><strong>Supplies.</strong> When you Stabilize or provide a Wound Card's care, you may spend 1 Use of this Pack instead of playing this card to satisfy a requirement for a Medical Toolkit.</p>",
-        "uses": 3,
-        "usesRemaining": 3
+        "uses": 5,
+        "usesRemaining": 5
       }
     ]
   },
@@ -230,14 +230,14 @@
     "resilience": "",
     "movement": "",
     "tags": "consumable",
-    "uses": 3,
+    "uses": 5,
     "isModular": false,
     "equipmentCards": [
       {
         "name": "Explosives",
         "effect": "<p><strong>Action.</strong> Roll 2 or more Action dice and spend 1 Use.</p><p><strong>Target.</strong> One visible space within 4 units. Every creature in that space or within 1 unit of it is a target; make one roll against each target's Fortitude.</p><p><strong>Effect.</strong> Each hit creature suffers 2 Physical Fire Damage. An unattended object in the area suffers the same Damage against its declared Difficulty.</p><p><strong>Surges.</strong> 1 Surge: push one hit creature 1 unit directly away from the targeted space. 2 Surges: the targeted space and the spaces within 1 unit of it become Difficult Terrain until the start of your next Turn.</p>",
-        "uses": 3,
-        "usesRemaining": 3
+        "uses": 5,
+        "usesRemaining": 5
       }
     ]
   },
@@ -253,14 +253,14 @@
     "resilience": "",
     "movement": "",
     "tags": "consumable",
-    "uses": 3,
+    "uses": 5,
     "isModular": false,
     "equipmentCards": [
       {
         "name": "Heavy Munitions",
         "effect": "<p><strong>Action.</strong> Roll 3 or more Action dice and spend 1 Use. Requires a ranged Source you can use.</p><p><strong>Target.</strong> One creature within the Source's Range, against Fortitude. The roll maximum is Grace + Ballistics, as for Basic Ranged Attack.</p><p><strong>Effect.</strong> On success, deal 2 Physical Damage of a type appropriate to the Source.</p><p><strong>Surges.</strong> 1 Surge: deal +1 Damage. 2 Surges: push the target 1 unit directly away from you.</p>",
-        "uses": 3,
-        "usesRemaining": 3
+        "uses": 5,
+        "usesRemaining": 5
       }
     ]
   },
@@ -276,14 +276,14 @@
     "resilience": "",
     "movement": "",
     "tags": "consumable",
-    "uses": 3,
+    "uses": 5,
     "isModular": false,
     "equipmentCards": [
       {
         "name": "Concoction",
         "effect": "<p><strong>Action.</strong> Burn 2 Action dice and spend 1 Use.</p><p><strong>Target.</strong> Yourself or one adjacent willing creature.</p><p><strong>Effect.</strong> Unopposed. Choose one when you play the card: the target restores 2 Stamina, 2 Focus, or 2 Mana, never above its maximum; or the target removes one of Weakened, Chilled, or Burning. This card has no Surges.</p>",
-        "uses": 3,
-        "usesRemaining": 3
+        "uses": 5,
+        "usesRemaining": 5
       }
     ]
   }

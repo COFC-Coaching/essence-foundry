@@ -2,6 +2,12 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.20.3
+
+**Consumable Kits have 5 Uses.** The Explosives, Medical, Munitions and Potion Packs shipped in 0.20.2 with 3 Uses on the pack and on its Equipment Card; the Doc gives every Pack 5 (Shane, 2026-10-04). The compendium copies now say 5. On first GM load, a pack already on an actor that still shows the shipped 3 goes to 5, and its remaining Uses rise by the same 2, so a partly spent kit keeps what it has spent. A pack the GM had set to any other number is left as it is.
+
+**Equipment compendium's Guard folder keeps its name.** The pack build titlecased the `shield` category key into a "Shield" folder on every rebuild, while the Doc, the sheet's category label and the committed source all say "Guard". The build now writes "Guard"; the 0.20.2 pack had shipped the folder as "Shield".
+
 ## 0.20.2
 
 **Five starting Expertises (v0.7 Doc, Shane 2026-10-04).** Character Creation now reads "Choose 5 Expertises from your accessible Styles." The Character Wizard's Expertise step counts to 5 (was 4). The per-Style limit stays at the Style's Rank, +1 for the Distinction's Style, following the Doc's own example (Mara, Magecraft Rank 2, two Magecraft Expertises) rather than its "one plus that Style's Rank" sentence (Shane's call, 2026-10-04). The step's hint and the Player's Guide now state both numbers.
