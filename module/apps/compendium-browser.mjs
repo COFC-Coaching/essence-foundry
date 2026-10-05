@@ -5,6 +5,7 @@ import { stripHtml } from "../utils.mjs";
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
 
 const COMPONENT_KINDS = ["equipment", "chassis", "fitting", "augment"];
+const MODULAR = ["weapon", "ranged", "armor", "shield", "implement"];
 
 /**
  * The Essence Browser (Shane, 2026-10-04): a standalone window to search and filter the system's
@@ -124,13 +125,18 @@ export default class EssenceCompendiumBrowser extends HandlebarsApplicationMixin
       }));
     if (search) rows = rows.filter((r) => r.name.toLowerCase().includes(search));
     if (f.kind !== "all") rows = rows.filter((r) => r.kind === f.kind);
-    if (f.category !== "all") rows = rows.filter((r) => r.category === f.category);
     if (f.tier !== "all") rows = rows.filter((r) => String(r.tier ?? "") === f.tier);
-    rows.sort((a, b) => a.name.localeCompare(b.name));
-    context.equipmentRows = rows;
     context.equipFilter = { ...f };
     context.equipKindOptions = COMPONENT_KINDS.map((k) => ({ value: k, label: game.i18n.localize(`ESSENCE.Browser.Kind.${k}`) }));
-    context.equipCategoryOptions = Object.entries(EQUIPMENT_CATEGORY_LABELS).map(([value, label]) => ({ value, label }));
+    // Category follows Kind: a Chassis or Fitting is one of the five modular categories; a complete
+    // item in the pack is a Toolkit or Consumable Kit (or Gear); an Augment has no category at all.
+    const categoriesFor = { chassis: MODULAR, fitting: MODULAR, equipment: ["toolkit", "consumable-kit", "gear"], augment: [], all: [...MODULAR, "toolkit", "consumable-kit", "gear"] };
+    const allowed = categoriesFor[f.kind] ?? categoriesFor.all;
+    if (f.category !== "all" && !allowed.includes(f.category)) { f.category = "all"; context.equipFilter.category = "all"; }
+    context.equipCategoryOptions = allowed.map((value) => ({ value, label: EQUIPMENT_CATEGORY_LABELS[value] }));
+    if (f.category !== "all") rows = rows.filter((r) => r.category === f.category);
+    rows.sort((a, b) => a.name.localeCompare(b.name));
+    context.equipmentRows = rows;
     context.equipTierOptions = [1, 2, 3, 4, 5];
     context.equipCount = rows.length;
     return context;

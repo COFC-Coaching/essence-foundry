@@ -2,7 +2,12 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
-## 0.21.1
+## 0.21.2
+
+**Equipment compendium without the empty folders.** The pack's six empty top-level folders (Armor, Gear, Guard, Implement, Ranged, Weapon) are gone; they dated from before the modular system, when flat weapon and armor rows existed. What remains is what the game uses: Chassis and Fitting (each nested by category), Augment, Toolkit and Consumable Kit. Worlds that already imported the pack keep their own copies untouched.
+
+**Browser Category follows Kind.** In the Essence Browser's Equipment tab the Category list now offers only the categories that exist for the chosen Kind: the five modular ones for Chassis and Fitting, Toolkit and Consumable Kit for complete items, and none for Augments.
+
 
 Released as 0.21.1: the v0.21.0 tag was cut with the manifest still reading 0.20.5, the release workflow refused it, and nothing was published under that tag.
 

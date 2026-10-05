@@ -30,7 +30,7 @@
             {{#each equipKindOptions as |k|}}<option value="{{k.value}}" {{#if (eq ../equipFilter.kind k.value)}}selected{{/if}}>{{k.label}}</option>{{/each}}
           </select>
         </label>
-        <label><span>{{localize "ESSENCE.Common.Category"}}</span>
+        <label {{#unless equipCategoryOptions.length}}hidden{{/unless}}><span>{{localize "ESSENCE.Common.Category"}}</span>
           <select data-browser-select="category">
             <option value="all" {{#if (eq equipFilter.category "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
             {{#each equipCategoryOptions as |c|}}<option value="{{c.value}}" {{#if (eq ../equipFilter.category c.value)}}selected{{/if}}>{{c.label}}</option>{{/each}}

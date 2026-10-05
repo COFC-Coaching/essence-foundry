@@ -400,7 +400,12 @@ function writeCombatSkillFolders(packName) {
  *  still only ever produces "weapon" for legacy raw data, since no legacy source data used the
  *  distinct assembled category — the playtest catalog's Launcher/Payload chassis/fittings already
  *  carry `category: "ranged"` directly, bypassing mapCategory entirely). */
-const EQUIPMENT_CATEGORIES_FOR_FOLDERS = ["weapon", "ranged", "armor", "shield", "implement", "toolkit", "consumable-kit", "gear"];
+// Only the two non-modular Kit shapes get a top-level folder. The pack holds no flat weapon /
+// ranged / armor / shield / implement / gear items any more (every one migrated to a Chassis +
+// Fitting pair, see below), so those six folders sat empty at the top of the compendium (Shane,
+// 2026-10-04). Items of those categories, should any ever be authored again, simply land at the
+// pack root (equipmentToItem / extraEquipmentToItem fall back to `null`).
+const EQUIPMENT_CATEGORIES_FOR_FOLDERS = ["toolkit", "consumable-kit"];
 /**
  * Chassis/Fitting/Augment used to be their own separate (always-empty — there's no pre-authored
  * content for them, players build their own via the modular equipment system) compendium packs;
