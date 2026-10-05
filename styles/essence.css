@@ -1073,7 +1073,8 @@
 .essence .granted-card-form { display: grid; gap: 8px; }
 .essence .granted-card-form label { display: flex; flex-direction: column; gap: 2px; font-size: 0.85em; font-weight: 600; color: var(--essence-muted); }
 .essence .granted-card-form label input, .essence .granted-card-form label select, .essence .granted-card-form label textarea { font-size: 1rem; font-weight: 400; color: inherit; }
-.essence .granted-card-form textarea { resize: vertical; min-height: 2.6em; line-height: 1.35; }
+.essence .granted-card-form textarea { resize: vertical; min-height: 2.6em; line-height: 1.35; font-family: inherit; }
+.essence .granted-card-form .granted-card-stats { grid-template-columns: 1.5fr 1fr 1fr; }
 .essence .granted-card-form .grid-3 { gap: 8px; }
 .essence .granted-card-dice { display: grid; grid-template-columns: minmax(0, 1fr) 3.5em; gap: 4px; }
 .essence .granted-card-sublabel { font-size: 0.85em; font-weight: 600; color: var(--essence-muted); }
