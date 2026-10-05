@@ -1,0 +1,63 @@
+{{!-- Essence Browser (module/apps/compendium-browser.mjs): Cards tab reuses the wizards' card-browser partial. --}}
+<div class="essence-sheet-root browser-root{{#unless hasActor}} no-target{{/unless}}">
+  <nav class="sheet-tabs tabs" role="tablist" data-group="primary">
+    {{#each tabs as |t|}}<a class="{{t.cssClass}}" data-action="tab" data-group="{{t.group}}" data-tab="{{t.id}}" role="tab" tabindex="0">{{localize t.label}}</a>{{/each}}
+  </nav>
+
+  <div class="browser-target">
+    <label><span>{{localize "ESSENCE.Browser.For"}}</span>
+      <select data-browser-select="actor">
+        <option value="" {{#unless actorId}}selected{{/unless}}>{{localize "ESSENCE.Browser.NoCharacter"}}</option>
+        {{#each actorOptions as |a|}}
+          <option value="{{a.id}}" {{#if a.selected}}selected{{/if}}>{{a.name}}</option>
+        {{/each}}
+      </select>
+    </label>
+    <span class="muted browser-target-hint">{{#if hasActor}}{{localize "ESSENCE.Browser.ForHint"}}{{else}}{{localize "ESSENCE.Browser.NoCharacterHint"}}{{/if}}</span>
+  </div>
+
+  <section class="tab cards {{tabs.cards.cssClass}}" data-group="primary" data-tab="cards">
+    {{> "systems/essence-system/templates/wizard/parts/card-browser.hbs"}}
+  </section>
+
+  <section class="tab equipment {{tabs.equipment.cssClass}}" data-group="primary" data-tab="equipment">
+    <div class="card-browser">
+      <input type="search" class="card-browser-search" data-browser-search="equipment" placeholder="{{localize 'ESSENCE.Common.SearchPlaceholder'}}" value="{{equipFilter.search}}" aria-label="{{localize 'ESSENCE.Common.SearchPlaceholder'}}">
+      <div class="card-browser-filters">
+        <label><span>{{localize "ESSENCE.Browser.Kind.label"}}</span>
+          <select data-browser-select="kind">
+            <option value="all" {{#if (eq equipFilter.kind "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
+            {{#each equipKindOptions as |k|}}<option value="{{k.value}}" {{#if (eq ../equipFilter.kind k.value)}}selected{{/if}}>{{k.label}}</option>{{/each}}
+          </select>
+        </label>
+        <label><span>{{localize "ESSENCE.Common.Category"}}</span>
+          <select data-browser-select="category">
+            <option value="all" {{#if (eq equipFilter.category "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
+            {{#each equipCategoryOptions as |c|}}<option value="{{c.value}}" {{#if (eq ../equipFilter.category c.value)}}selected{{/if}}>{{c.label}}</option>{{/each}}
+          </select>
+        </label>
+        <label><span>{{localize "ESSENCE.Common.Tier"}}</span>
+          <select data-browser-select="tier">
+            <option value="all" {{#if (eq equipFilter.tier "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
+            {{#each equipTierOptions as |t|}}<option value="{{t}}" {{#if (eq ../equipFilter.tier (concat "" t))}}selected{{/if}}>{{t}}</option>{{/each}}
+          </select>
+        </label>
+      </div>
+      <p class="muted card-browser-count">{{localize "ESSENCE.Browser.ItemsShown" n=equipCount}}</p>
+      <ul class="item-list wizard-scroll-list card-browser-list browser-list">
+        {{#each equipmentRows as |item|}}
+          <li class="card-browser-row browser-draggable" draggable="true" data-uuid="{{item.uuid}}">
+            <span class="card-browser-rank" aria-label="{{localize 'ESSENCE.Common.Tier'}} {{item.tier}}">{{#if item.tier}}T{{item.tier}}{{else}}—{{/if}}</span>
+            <span class="card-browser-main">
+              <button type="button" class="link-button card-browser-name" data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</button>
+              <span class="muted card-browser-meta">{{item.kindLabel}}{{#if item.categoryLabel}} · {{item.categoryLabel}}{{/if}}{{#if item.augmentKind}} · {{capitalize item.augmentKind}}{{/if}}{{#if item.summary}} · {{item.summary}}{{/if}}</span>
+            </span>
+            <button type="button" class="card-browser-add" data-action="addEquipment" data-uuid="{{item.uuid}}" aria-label="{{localize 'ESSENCE.Common.AddAria' name=item.name}}"><i class="fa-solid fa-plus"></i></button>
+          </li>
+        {{else}}
+          <li class="muted">{{localize "ESSENCE.Wizard.Character.NoCardsMatchFilters"}}</li>
+        {{/each}}
+      </ul>
+    </div>
+  </section>
+</div>

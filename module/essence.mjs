@@ -20,6 +20,7 @@ import EssenceCombat from "./documents/combat.mjs";
 import EssenceActor from "./documents/actor.mjs";
 import EssenceContentWizard, { canCreateContent } from "./apps/content-wizard.mjs";
 import EssenceBulkImport from "./apps/bulk-import.mjs";
+import EssenceCompendiumBrowser from "./apps/compendium-browser.mjs";
 import { capitalize, fitTitleSize, domainResource, fittingReconfigureCost } from "./utils.mjs";
 import { rollEssencePool, resolvePendingCardPlay } from "./dice/essence-roll.mjs";
 import { targetsFromTokens, resolveTargetsForDefense } from "./sheets/card-play.mjs";
@@ -572,13 +573,26 @@ Hooks.once("ready", async () => {
  * rather than switching into an interaction mode.
  */
 Hooks.on("getSceneControlButtons", (controls) => {
-  if (!canCreateContent()) return;
+  // The Browser is for everyone (a reference window); the two authoring tools below stay gated.
+  const tools = {
+    browseContent: {
+      name: "browseContent",
+      order: 0,
+      title: "ESSENCE.Browser.Title",
+      icon: "fa-solid fa-magnifying-glass",
+      button: true,
+      onChange: () => new EssenceCompendiumBrowser().render(true)
+    }
+  };
   controls.essenceContent = {
     name: "essenceContent",
     order: 100,
     title: "Essence System",
     icon: "fa-solid fa-wand-magic-sparkles",
-    tools: {
+    tools
+  };
+  if (!canCreateContent()) return;
+  Object.assign(tools, {
       createContent: {
         name: "createContent",
         order: 1,
@@ -595,8 +609,21 @@ Hooks.on("getSceneControlButtons", (controls) => {
         button: true,
         onChange: () => new EssenceBulkImport().render(true)
       }
-    }
-  };
+  });
+});
+
+/** A "Browse" button at the top of the Compendium sidebar tab, next to core's own controls, so
+ *  the Essence Browser is one click from where players already look for cards. */
+Hooks.on("renderCompendiumDirectory", (app, html) => {
+  const root = html instanceof HTMLElement ? html : html[0];
+  if (!root || root.querySelector(".essence-browse-button")) return;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "essence-browse-button";
+  button.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> ${game.i18n.localize("ESSENCE.Browser.SidebarButton")}`;
+  button.addEventListener("click", () => new EssenceCompendiumBrowser().render(true));
+  const host = root.querySelector(".header-actions") ?? root.querySelector(".directory-header") ?? root;
+  host.prepend(button);
 });
 
 /**

@@ -56,21 +56,33 @@
       "label": "Action Cards",
       "path": "packs/action-cards",
       "type": "Item",
-      "system": "essence-system"
+      "system": "essence-system",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "reaction-cards",
       "label": "Reaction Cards",
       "path": "packs/reaction-cards",
       "type": "Item",
-      "system": "essence-system"
+      "system": "essence-system",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "conditions",
       "label": "Conditions",
       "path": "packs/conditions",
       "type": "Item",
-      "system": "essence-system"
+      "system": "essence-system",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "equipment",
@@ -88,47 +100,75 @@
       "label": "Species",
       "path": "packs/species",
       "type": "Item",
-      "system": "essence-system"
+      "system": "essence-system",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "heritages",
       "label": "Heritages",
       "path": "packs/heritages",
       "type": "Item",
-      "system": "essence-system"
+      "system": "essence-system",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "distinctions",
       "label": "Distinctions",
       "path": "packs/distinctions",
       "type": "Item",
-      "system": "essence-system"
+      "system": "essence-system",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "combat-styles",
       "label": "Combat Styles Reference",
       "path": "packs/combat-styles",
-      "type": "JournalEntry"
+      "type": "JournalEntry",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "manifestations",
       "label": "Calling Full Manifestations",
       "path": "packs/manifestations",
       "type": "Actor",
-      "system": "essence-system"
+      "system": "essence-system",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "enemies",
       "label": "Starting Enemy Examples",
       "path": "packs/enemies",
       "type": "Actor",
-      "system": "essence-system"
+      "system": "essence-system",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "guide",
       "label": "Player & GM Guide",
       "path": "packs/guide",
-      "type": "JournalEntry"
+      "type": "JournalEntry",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "primaryTokenAttribute": "resources.stamina",

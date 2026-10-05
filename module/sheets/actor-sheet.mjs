@@ -8,6 +8,7 @@ import { ITEM_GRANT_REGISTRY, deriveActiveGrants, equipmentMatchesGrant, tierQua
 import { deriveEquipmentStats, equipmentEffectSummary, buildEquipmentResolver } from "../data/equipment-features.mjs";
 import { EQUIPMENT_CATEGORY_LABELS } from "../data/item-card.mjs";
 import EssenceCharacterWizard from "../apps/character-wizard.mjs";
+import EssenceCompendiumBrowser from "../apps/compendium-browser.mjs";
 import { pickConditions } from "../apps/condition-picker.mjs";
 import { wireTabArrowKeys, splitCommitment, capitalize, cardSummary, domainResource, hasMastery, isDistinctionStyle, distinctionUnlocks, teamForActor, teamTierFor, componentTiers, assembledComponentIds, computeSlotUsage, computeTierGate, computeEquipmentBonusSources, resetAdventureUses, resolveEquipmentDropSlot, stripHtml, SEVERITY_BY_INDEX, deathTrackAfterWoundRemoval, deathTrackAfterWoundFilled, deathTrackAfterCardWhileDying, ordinaryDamageWounds, attachWoundCards, removeWoundCard, removeWoundCards, attachConsequenceCard, attachConsequenceCards, removeConsequenceCard, removeConsequenceCards, applyResistanceVulnerability, DAMAGE_TYPES, cardOnCooldown, applyCardCooldown, resetEncounterCooldowns, resetEncounterSpecialties, equipmentCardCommitment, recoveryBaseAmount, resolveDamageComponents, hasOriginDistinction, THREAD_CAPACITY, addThread, authorityCapacity, authorityResultsPerCard, storeAuthority, spendAuthority, lockCapacity, contingencyCapacity, riteCapacity, placeRite, adaptationUpkeep, STRAIN_MAX, forcedStrain, psionicsBurnSurchargeAt, MANIFESTATION_TRACK } from "../utils.mjs";
 import { availableSubtypes, enterManifestation } from "../apps/manifestation.mjs";
@@ -82,6 +83,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     dragDrop: [{ dragSelector: ".draggable-row", dropSelector: null }],
     actions: {
       openTeam: EssenceActorSheet.#onOpenTeam,
+      openBrowser: EssenceActorSheet.#onOpenBrowser,
       openWizard: EssenceActorSheet.#onOpenWizard,
       editTokenImage: EssenceActorSheet.#onEditTokenImage,
       toggleEditLock: EssenceActorSheet.#onToggleEditLock,
@@ -164,6 +166,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    *  shown for Rank 0-without-Calling characters, since there's nothing to manifest into yet. */
   _getHeaderControls() {
     const controls = super._getHeaderControls();
+    controls.push({ icon: "fa-solid fa-magnifying-glass", label: game.i18n.localize("ESSENCE.Browser.SheetControl"), action: "openBrowser" });
     if ((this.actor.system.calling ?? 0) > 0) {
       const active = this.actor.system.specialties.activeManifestation;
       controls.push({
@@ -405,6 +408,10 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
 
   static #onOpenWizard() {
     new EssenceCharacterWizard(this.actor).render(true);
+  }
+
+  static #onOpenBrowser() {
+    new EssenceCompendiumBrowser(this.actor).render(true);
   }
 
   /** Foundry's core "editImage" action (used by the Portrait above) only ever targets `img` —

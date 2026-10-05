@@ -1095,6 +1095,24 @@
 .essence .item-grants .grant-item button.link-button[data-action="itemView"] { display: inline-block; width: auto; height: auto; max-width: 100%; padding: 0; border: none; background: none; box-shadow: none; font: inherit; color: var(--essence-accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
 .essence .item-grants .grant-item button.link-button[data-action="itemView"]:hover { background: none; color: var(--essence-accent); text-decoration: underline; }
 .essence .item-grants .grant-action { justify-self: end; white-space: nowrap; padding: 1px 10px; }
+/* Essence Browser window (module/apps/compendium-browser.mjs): the wizards' card-browser block,
+   given the whole window. The list grows to fill the window instead of the wizard's 300px cap. */
+.application.essence.compendium-browser .window-content { display: flex; flex-direction: column; padding: 0; }
+.essence .browser-root { display: flex; flex-direction: column; flex: 1; min-height: 0; padding: 8px 12px 12px; gap: 8px; }
+.essence .browser-root .sheet-tabs { margin: 0; }
+.essence .browser-root .tab { display: none; flex: 1; min-height: 0; flex-direction: column; }
+.essence .browser-root .tab.active { display: flex; }
+.essence .browser-root .card-browser { flex: 1; min-height: 0; }
+.essence .browser-root .card-browser-list { flex: 1; min-height: 0; max-height: none; }
+.essence .browser-target { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.essence .browser-target label { display: flex; align-items: center; gap: 6px; font-weight: 600; }
+.essence .browser-target select { min-width: 14em; }
+.essence .browser-target-hint { font-size: 0.8em; flex: 1; min-width: 12em; }
+.essence .browser-root.no-target .card-browser-add { display: none; }
+.essence .card-browser-owned { width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; color: var(--essence-accent); }
+.essence .card-browser-row.is-owned .card-browser-name { color: var(--essence-muted); }
+.essence .browser-draggable { cursor: grab; }
+#sidebar .essence-browse-button { margin-right: 4px; }
 .essence .natural-badge { display: inline-block; margin-left: 4px; padding: 0 5px; border-radius: 8px; font-size: 0.72em; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--essence-accent); border: 1px solid currentColor; vertical-align: middle; }
 
 /* Chassis — var(--essence-chassis) (bronze/structural) and Fitting — var(--essence-fitting) (teal), sharing one sheet/template

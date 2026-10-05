@@ -42,16 +42,16 @@
       </select>
     </label>
   </div>
-  <p class="muted card-browser-count">{{#if (eq browsableCards.length 1)}}{{localize "ESSENCE.Wizard.Character.CardShown"}}{{else}}{{localize "ESSENCE.Wizard.Character.CardsShown" n=browsableCards.length}}{{/if}}</p>
+  <p class="muted card-browser-count">{{#if browserReference}}{{localize "ESSENCE.Browser.CardsShown" n=browsableCards.length}}{{else if (eq browsableCards.length 1)}}{{localize "ESSENCE.Wizard.Character.CardShown"}}{{else}}{{localize "ESSENCE.Wizard.Character.CardsShown" n=browsableCards.length}}{{/if}}</p>
   <ul class="item-list wizard-scroll-list card-browser-list">
     {{#each browsableCards as |item|}}
-      <li class="card-browser-row{{#if item.isReaction}} is-reaction{{/if}}">
+      <li class="card-browser-row browser-draggable{{#if item.isReaction}} is-reaction{{/if}}{{#if item.owned}} is-owned{{/if}}" draggable="true" data-uuid="{{item.uuid}}">
         <span class="card-browser-rank" aria-label="{{localize 'ESSENCE.Common.Rank'}} {{item.system.rank}}">R{{item.system.rank}}</span>
         <span class="card-browser-main">
           <button type="button" class="link-button card-browser-name" data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</button>
           <span class="muted card-browser-meta">{{item.skillLabel}}{{#if item.system.subtype}} · {{item.system.subtype}}{{/if}}{{#if item.isReaction}} · {{localize "ESSENCE.Common.Reaction"}}{{/if}}{{#if item.mastery}} · <b class="card-browser-mastery" data-tooltip-text="{{localize 'ESSENCE.Wizard.Character.MasteryTip'}}">{{localize "ESSENCE.Wizard.Character.MasteryTag"}}</b>{{/if}}</span>
         </span>
-        <button type="button" class="card-browser-add" data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.AddAria' name=item.name}}"><i class="fa-solid fa-plus"></i></button>
+        {{#if item.owned}}<span class="card-browser-owned" data-tooltip-text="{{localize 'ESSENCE.Browser.OwnedTip'}}"><i class="fa-solid fa-check"></i></span>{{else}}<button type="button" class="card-browser-add" data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.AddAria' name=item.name}}"><i class="fa-solid fa-plus"></i></button>{{/if}}
       </li>
     {{else}}
       <li class="muted">{{localize "ESSENCE.Wizard.Character.NoCardsMatchFilters"}}</li>
