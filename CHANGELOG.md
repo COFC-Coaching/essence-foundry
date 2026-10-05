@@ -2,9 +2,13 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
-## 0.21.0 (unreleased)
+## 0.21.1
+
+Released as 0.21.1: the v0.21.0 tag was cut with the manifest still reading 0.20.5, the release workflow refused it, and nothing was published under that tag.
 
 **Essence Browser.** A window to search and filter the system's compendium content from anywhere: the Essence scene-control group, a Browse button at the top of the Compendium sidebar, or the Browse control on a character sheet. The Cards tab is the Character Wizard's Qualifying Cards browser (search, Type, Style, Subtype, Expertise, Sort, Rank badges, Mastery tags) over every Action and Reaction Card. The Equipment tab filters the equipment pack by Kind (complete item, Chassis, Fitting, Augment), Category and Tier. A "For" select names one of your characters: their Expertises drive the Expertise filter and Mastery, cards they already own show a check, and Add puts a card or item straight on their sheet. Every row drags onto any sheet.
+
+**Players can use it.** The Browse button, the scene-control tool and the window itself are available to every user. The manifest now states Observer access for Players on every compendium pack, which was already Foundry's default; verified by logging in as a Player on the test world and reading all 408 cards and 94 equipment entries.
 
 
 **Item Grants rows aligned.** The Equipment tab's Item Grants list (Quartermaster's Due, Inherited Tools and the like) now lays each grant out as one row: the feature name, the chosen item as a link, and the Choose or Replace button at the right. The item name no longer wraps mid-word into the button.
