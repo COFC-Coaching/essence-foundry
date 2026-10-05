@@ -1083,6 +1083,7 @@
 .essence .granted-card-surges button, .essence .granted-card-form .granted-card-surge-add { width: fit-content; }
 .essence .granted-card-extra { font-size: 0.85em; }
 .essence .granted-card-extra p { margin: 2px 0; }
+.essence .natural-badge { display: inline-block; margin-left: 4px; padding: 0 5px; border-radius: 8px; font-size: 0.72em; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--essence-accent); border: 1px solid currentColor; vertical-align: middle; }
 
 /* Chassis — var(--essence-chassis) (bronze/structural) and Fitting — var(--essence-fitting) (teal), sharing one sheet/template
    but branching on item.type via the .component-view-chassis/.component-view-fitting modifier. */

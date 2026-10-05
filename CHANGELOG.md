@@ -2,7 +2,10 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
-## 0.20.3
+## 0.20.4
+
+**Natural weapons are Items on the sheet.** Choosing Natural Armament (Beastfolk) or Draconic Armament (Dragonkin) in the Character Wizard now puts the chosen anatomy on the Equipment tab as its own weapon Item, named Claws, Horns, Fangs, Tail or Mandibles (Natural Weapon until an anatomy is picked), marked Natural. It takes no Inventory or Armory capacity, is not assembled from a Chassis and Fitting, and its text carries the Doc's rule: a basic one-handed weapon attacked with through Basic Melee Attack, Range 1, cannot be disarmed, with the Damage type suggested by its anatomy and editable where the GM agreed otherwise. Changing the anatomy renames the Item; un-choosing the Trait removes it. On first GM load, characters who already chose either Trait receive theirs and the GM is whispered the names. The four Species Combat Cards (True Breath, Shaper, Ink Cloud, Spore Cloud) were already granted as Action Cards and are unchanged.
+
 
 **Consumable Kits have 5 Uses.** The Explosives, Medical, Munitions and Potion Packs shipped in 0.20.2 with 3 Uses on the pack and on its Equipment Card; the Doc gives every Pack 5 (Shane, 2026-10-04). The compendium copies now say 5. On first GM load, a pack already on an actor that still shows the shipped 3 goes to 5, and its remaining Uses rise by the same 2, so a partly spent kit keeps what it has spent. A pack the GM had set to any other number is left as it is.
 

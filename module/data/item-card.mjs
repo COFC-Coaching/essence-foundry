@@ -236,6 +236,11 @@ export class EssenceEquipmentData extends foundry.abstract.TypeDataModel {
       // template) a sibling document in the shared `essence-system.equipment` pack — see
       // item-sheet.mjs's #resolveComponentSource() for which source applies.
       isModular: new fields.BooleanField({ initial: false }),
+      // A natural weapon granted by a Species Trait (module/data/natural-weapons.mjs): claws,
+      // horns, fangs, a tail. A `weapon` that is deliberately NOT modular — essence.mjs's
+      // force-set of isModular skips it — and costs no capacity (slotCost 0). Display-only
+      // otherwise: there is no rules engine to make "cannot be disarmed" do anything.
+      natural: new fields.BooleanField({ initial: false }),
       chassisItemId: new fields.StringField({ initial: "" }),
       fittingItemId: new fields.StringField({ initial: "" }),
       // One entry per the Chassis's Mount (by index) — see EssenceChassisData#mounts in

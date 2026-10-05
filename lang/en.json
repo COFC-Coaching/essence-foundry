@@ -1067,6 +1067,9 @@
   "ESSENCE.Notify.PersonalTierEntry": "{name}: was Tier {tier}, Level {level}",
   "ESSENCE.Notify.PersonalTierNoneAffected": "<p>No character had a personal Tier above 1, so no Pool bonus or Level needs adjusting.</p>",
   "ESSENCE.Notify.ResilienceEffectRekeyed": "<p><strong>Essence System update:</strong> the Athlete Distinction's Resilience +1 was being saved into these characters' base Resilience, adding 1 more each time their sheet saved. It now applies as a bonus instead. Please check each character's base Resilience and correct it by hand if it grew: {names}.</p>",
+  "ESSENCE.Sheet.NaturalWeapon": "Natural",
+  "ESSENCE.Sheet.NaturalWeaponHint": "A natural weapon from a Species Trait: takes no Inventory or Armory capacity and cannot be disarmed.",
+  "ESSENCE.Notify.NaturalWeaponsGranted": "<p><strong>Essence System update:</strong> a Species Trait that grants a natural weapon (Natural Armament, Draconic Armament) now puts that weapon on the sheet as its own Item, outside Inventory and Armory capacity. Granted to: {names}.</p>",
   "ESSENCE.Notify.BaseResilienceReset": "<p><strong>Essence System update:</strong> characters have no base Resilience of their own; all of it comes from equipment and feature bonuses. These characters had a non-zero base Resilience left over from an old bug that re-saved bonuses into the base, so it has been reset to 0 (old value in brackets). Their equipment bonuses still apply. If one of these was a deliberate edit, put it back on the item instead: {names}.</p>",
   "ESSENCE.Notify.EndOfDeathTrack": "{name} has reached the end of the Death Track.",
 

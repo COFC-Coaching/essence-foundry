@@ -1,5 +1,6 @@
 import { EXPERTISE_DATABASE } from "../data/expertise-database.mjs";
 import CardBrowser from "./card-browser.mjs";
+import { NATURAL_WEAPON_TRAITS, syncNaturalWeapons } from "../data/natural-weapons.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import { assembledComponentIds, capitalize, computeTierGate, computeSlotUsage, isDistinctionStyle, distinctionUnlocks, teamForActor, teamTierFor, componentTiers } from "../utils.mjs";
@@ -623,6 +624,9 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     if (SPECIES_CARD_TRAIT_NAMES.includes(row.name)) {
       await EssenceCharacterWizard.#syncSpeciesCombatCard(this.document, row.name, row.chosen);
     }
+    // Same shape for a Trait that grants a natural weapon (Natural/Draconic Armament): the chosen
+    // anatomy is a real weapon Item on the sheet — see natural-weapons.mjs.
+    if (NATURAL_WEAPON_TRAITS[row.name]) await syncNaturalWeapons(this.document, speciesItem);
   }
 
   /** See #onToggleTraitChosen's doc comment above. */
@@ -679,6 +683,8 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       if (!selected) return;
       row.subChoice.selected = selected;
       await speciesItem.update({ "system.traits": traits });
+      // Picking Claws vs Fangs renames the granted natural weapon Item (natural-weapons.mjs).
+      if (NATURAL_WEAPON_TRAITS[row.name]) await syncNaturalWeapons(this.document, speciesItem);
     }
   }
 

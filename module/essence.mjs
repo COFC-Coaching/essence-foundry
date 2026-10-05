@@ -23,6 +23,7 @@ import EssenceBulkImport from "./apps/bulk-import.mjs";
 import { capitalize, fitTitleSize, domainResource, fittingReconfigureCost } from "./utils.mjs";
 import { rollEssencePool, resolvePendingCardPlay } from "./dice/essence-roll.mjs";
 import { targetsFromTokens, resolveTargetsForDefense } from "./sheets/card-play.mjs";
+import { syncNaturalWeapons } from "./data/natural-weapons.mjs";
 import { syncEquipmentEffect } from "./data/equipment-effects.mjs";
 import { GRADE_BUDGETS } from "./data/monster-budgets.mjs";
 import EssenceGradeBudgetsSettings from "./apps/grade-budgets-settings.mjs";
@@ -175,6 +176,9 @@ Hooks.once("init", () => {
     scope: "world", config: false, type: Boolean, default: false
   });
   game.settings.register("essence-system", "consumableKitsFiveUses", {
+    scope: "world", config: false, type: Boolean, default: false
+  });
+  game.settings.register("essence-system", "grantedNaturalWeapons", {
     scope: "world", config: false, type: Boolean, default: false
   });
   game.settings.register("essence-system", "migratedRoleToGrade", {
@@ -358,6 +362,31 @@ Hooks.once("ready", async () => {
     }
   }
   await game.settings.set("essence-system", "consumableKitsFiveUses", true);
+});
+
+/**
+ * One-time grant (0.20.4): a character who already chose Natural Armament / Draconic Armament
+ * before natural weapons became Items (natural-weapons.mjs) gets the Item now, named for the
+ * anatomy already picked on the Trait. The wizard keeps it in sync from here on.
+ */
+Hooks.once("ready", async () => {
+  if (!game.user.isGM) return;
+  if (game.settings.get("essence-system", "grantedNaturalWeapons")) return;
+  const granted = [];
+  for (const actor of game.actors) {
+    if (actor.type !== "character") continue;
+    const species = actor.items.find((i) => i.type === "species");
+    if (!species) continue;
+    const result = await syncNaturalWeapons(actor, species);
+    if (result.created.length) granted.push(`${actor.name} (${result.created.join(", ")})`);
+  }
+  if (granted.length) {
+    await ChatMessage.create({
+      whisper: ChatMessage.getWhisperRecipients("GM"),
+      content: game.i18n.format("ESSENCE.Notify.NaturalWeaponsGranted", { names: granted.join("; ") })
+    });
+  }
+  await game.settings.set("essence-system", "grantedNaturalWeapons", true);
 });
 
 /**
@@ -749,11 +778,13 @@ Hooks.on("deleteItem", (item) => resyncEquipmentReferencing(item));
 Hooks.on("preCreateItem", (item, data) => {
   if (item.type !== "equipment") return;
   const category = data.system?.category ?? "gear";
+  if (data.system?.natural) return; // a Species Trait's natural weapon is never assembled (natural-weapons.mjs)
   if (MODULAR_EQUIPMENT_CATEGORIES.includes(category)) item.updateSource({ "system.isModular": true });
 });
 Hooks.on("preUpdateItem", (item, changes) => {
   if (item.type !== "equipment") return;
   const nextCategory = changes.system?.category ?? item.system.category;
+  if (changes.system?.natural ?? item.system.natural) return;
   if (MODULAR_EQUIPMENT_CATEGORIES.includes(nextCategory)) foundry.utils.setProperty(changes, "system.isModular", true);
 });
 

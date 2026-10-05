@@ -608,6 +608,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
         name: item.name,
         category: item.system.category,
         type: item.system.type,
+        natural: item.system.natural ?? false,
         componentTier,
         exceptionSource,
         overTier,
