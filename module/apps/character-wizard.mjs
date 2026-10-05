@@ -17,7 +17,8 @@ const ATTRIBUTE_POOL = 7;
 const ATTRIBUTE_MAX = 3;
 const SKILL_POOL = 5;
 const SKILL_MAX_AT_CREATION = 2;
-const EXPERTISE_COUNT = 4;
+/** v0.7 Doc (Shane, 2026-10-04): "Choose 5 Expertises from your accessible Styles." Was 4 through 0.20.1. */
+const EXPERTISE_COUNT = 5;
 const NONCOMBAT_POOL = 5;
 const NONCOMBAT_MAX = 2;
 /** Doc L815: "5 + permanent Intellect Skill Points, plus any explicit grants." */
@@ -56,15 +57,12 @@ function isSpeciesCard(cardSystem) {
 const SPECIES_CARD_TRAIT_NAMES = ["Shaper", "True Breath", "Ink Cloud", "Spore Cloud"];
 
 /**
- * V6 (design/v6-revision-delta.md's own task framing; book text: "Your Expertise limit for a Style
- * equals its Rank, increased by 1 if you possess the associated Distinction") — a PER-STYLE cap,
- * layered on top of (not replacing) the overall "Choose 4 Expertises" creation budget
- * (EXPERTISE_COUNT, unchanged — the book's own worked example still picks exactly 4 total). Checked
- * the actual current code before building this: `character-wizard.mjs` only ever enforced the flat
- * 4-total budget above; no per-Style rank-based sub-limit existed anywhere (the main Character
- * sheet's own #onAddExpertise, actor-sheet.mjs, has no cap enforcement at all). The task's framing
- * that this was "already partially built" does not hold against the actual code — flagging the
- * discrepancy per this project's standing practice rather than silently trusting the framing.
+ * Per-Style Expertise cap, layered on top of the overall EXPERTISE_COUNT creation budget: the
+ * Style's Rank, +1 for the Style tied to the character's Distinction (Character Options: "the
+ * character's Expertise limit is one higher than the Style's Rank"). Shane, 2026-10-04: the v0.7
+ * creation text's "one plus that Style's Rank" wording is NOT the rule — its own example (Mara,
+ * Magecraft Rank 2, two Magecraft Expertises) is; the limit stays at Rank, only the count moved to
+ * 5. The main Character sheet's own #onAddExpertise (actor-sheet.mjs) enforces no cap at all.
  * `keyCombatSkill` is item-origin.mjs's own field for "the Style associated with the Distinction."
  */
 function expertiseLimitForSkill(system, skill, distinctionItem) {
@@ -774,7 +772,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
         ui.notifications.warn(game.i18n.format("ESSENCE.Notify.AlreadyChosenExpertises", { count: expertiseCount }));
         return;
       }
-      // V6 per-Style Expertise limit (see expertiseLimitForSkill's own doc comment): a Style's
+      // Per-Style Expertise limit (see expertiseLimitForSkill's own doc comment): the Style's
       // Rank, +1 if it's the Style tied to the character's Distinction.
       const styleLimit = expertiseLimitForSkill(this.document.system, skill, distinctionItem);
       const styleChosen = expertises.filter((e) => e.skill === skill).length;

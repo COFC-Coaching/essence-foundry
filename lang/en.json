@@ -900,7 +900,7 @@
   "ESSENCE.Wizard.Character.AttributesHint": "Distribute {pool} points across the 9 Attributes, starting at 1 each, none above 3.",
   "ESSENCE.Wizard.Character.SkillsHint": "Distribute {pool} points among the 9 Combat Styles — no Style above Rank 2 at creation.",
   "ESSENCE.Wizard.Character.Expertises": "Expertises",
-  "ESSENCE.Wizard.Character.ExpertisesHint": "Each Expertise must belong to a Style rated at least 1. No per-Style limit — specialize or spread out.",
+  "ESSENCE.Wizard.Character.ExpertisesHint": "Choose 5. A Style needs Rank 1 or higher before you can pick its Expertises, and each Style holds at most its Rank in Expertises.",
   "ESSENCE.Wizard.Character.AssignRankHint": "Assign at least 1 Rank to a Combat Style above to unlock its Expertises.",
   "ESSENCE.Wizard.Character.BasicCombatCards": "Basic Combat Cards",
   "ESSENCE.Wizard.Character.GrantMissingBasicCards": "Grant Missing Basic Cards",

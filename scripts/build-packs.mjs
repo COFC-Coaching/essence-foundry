@@ -911,6 +911,11 @@ function extraEquipmentToItem(e, folderMap) {
       reachBonus: 0,
       uses: e.uses ?? null,
       slotCost: 1,
+      // Consumable Kit Equipment Cards (item-card.mjs's `equipmentCards`): each card tracks its own
+      // Uses, so a fresh copy starts with usesRemaining = uses unless the data says otherwise.
+      equipmentCards: (e.equipmentCards ?? []).map((c) => ({
+        name: c.name, effect: c.effect, uses: c.uses ?? null, usesRemaining: c.usesRemaining ?? c.uses ?? null
+      })),
       isModular: !!e.isModular,
       quantity: 1
     },

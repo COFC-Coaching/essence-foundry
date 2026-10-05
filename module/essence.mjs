@@ -160,6 +160,9 @@ Hooks.once("init", () => {
   game.settings.register("essence-system", "dedupedEquipmentBonusEffects", {
     scope: "world", config: false, type: Boolean, default: false
   });
+  game.settings.register("essence-system", "grantedConsumableKitCards", {
+    scope: "world", config: false, type: Boolean, default: false
+  });
   game.settings.register("essence-system", "notifiedPersonalTierRemoved", {
     scope: "world", config: false, type: Boolean, default: false
   });
@@ -287,6 +290,36 @@ Hooks.once("ready", async () => {
     }
   }
   await game.settings.set("essence-system", "dedupedEquipmentBonusEffects", true);
+});
+
+/**
+ * One-time fill (0.20.2): the four Consumable Kits (Explosives, Medical, Munitions, Potion Pack)
+ * shipped with an `effect` promising a named card that never existed. The compendium copies now
+ * carry it as an Equipment Card (item-card.mjs's `equipmentCards`), but a kit already sitting on an
+ * actor keeps whatever it was imported with. One world-wide pass copies the cards from the
+ * compendium onto any owned Consumable Kit of the same name that has none of its own — so a GM
+ * doesn't have to delete and re-import every pack on every sheet. A kit the GM has already given
+ * cards to is left alone; nothing else on the item changes.
+ */
+Hooks.once("ready", async () => {
+  if (!game.user.isGM) return;
+  if (game.settings.get("essence-system", "grantedConsumableKitCards")) return;
+  const pack = game.packs.get("essence-system.equipment");
+  // Filtered in JS: a nested "system.category" query to getDocuments matches nothing in v14 (live, 2026-10-04).
+  const templates = pack ? (await pack.getDocuments({ type: "equipment" })).filter((t) => t.system.category === "consumable-kit") : [];
+  const byName = new Map(templates.filter((t) => t.system.equipmentCards?.length).map((t) => [t.name, t.system.equipmentCards]));
+  if (byName.size) {
+    for (const actor of game.actors) {
+      for (const item of actor.items) {
+        if (item.type !== "equipment" || item.system.category !== "consumable-kit") continue;
+        if (item.system.equipmentCards?.length) continue;
+        const cards = byName.get(item.name);
+        if (!cards) continue;
+        await item.update({ "system.equipmentCards": cards.map((c) => ({ ...c })), "system.effect": templates.find((t) => t.name === item.name).system.effect });
+      }
+    }
+  }
+  await game.settings.set("essence-system", "grantedConsumableKitCards", true);
 });
 
 /**

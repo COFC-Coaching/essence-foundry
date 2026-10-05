@@ -10,7 +10,7 @@
     "type": "Consumable",
     "cost": "1",
     "range": "",
-    "effect": "Gain the 'Concoction' Action Card. Each use of the card consumes 1 charge.",
+    "effect": "Grants the 'Concoction' Equipment Card below. Each use of the card spends 1 Use of this Pack.",
     "passive": "",
     "special": "",
     "fortitude": "",
@@ -22,7 +22,15 @@
     "uses": 3,
     "slotCost": 1,
     "isModular": false,
-    "quantity": 1
+    "quantity": 1,
+    "equipmentCards": [
+      {
+        "name": "Concoction",
+        "effect": "<p><strong>Action.</strong> Burn 2 Action dice and spend 1 Use.</p><p><strong>Target.</strong> Yourself or one adjacent willing creature.</p><p><strong>Effect.</strong> Unopposed. Choose one when you play the card: the target restores 2 Stamina, 2 Focus, or 2 Mana, never above its maximum; or the target removes one of Weakened, Chilled, or Burning. This card has no Surges.</p>",
+        "uses": 3,
+        "usesRemaining": 3
+      }
+    ]
   },
   "folder": "ce2bb523a719e8fc",
   "flags": {},

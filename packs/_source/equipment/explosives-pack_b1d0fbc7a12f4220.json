@@ -10,7 +10,7 @@
     "type": "Consumable",
     "cost": "1",
     "range": "",
-    "effect": "Gain the 'Explosives' Action Card. Each use of the card consumes 1 charge.",
+    "effect": "Grants the 'Explosives' Equipment Card below. Each use of the card spends 1 Use of this Pack.",
     "passive": "",
     "special": "",
     "fortitude": "",
@@ -22,7 +22,15 @@
     "uses": 3,
     "slotCost": 1,
     "isModular": false,
-    "quantity": 1
+    "quantity": 1,
+    "equipmentCards": [
+      {
+        "name": "Explosives",
+        "effect": "<p><strong>Action.</strong> Roll 2 or more Action dice and spend 1 Use.</p><p><strong>Target.</strong> One visible space within 4 units. Every creature in that space or within 1 unit of it is a target; make one roll against each target's Fortitude.</p><p><strong>Effect.</strong> Each hit creature suffers 2 Physical Fire Damage. An unattended object in the area suffers the same Damage against its declared Difficulty.</p><p><strong>Surges.</strong> 1 Surge: push one hit creature 1 unit directly away from the targeted space. 2 Surges: the targeted space and the spaces within 1 unit of it become Difficult Terrain until the start of your next Turn.</p>",
+        "uses": 3,
+        "usesRemaining": 3
+      }
+    ]
   },
   "folder": "ce2bb523a719e8fc",
   "flags": {},
