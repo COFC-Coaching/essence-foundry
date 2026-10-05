@@ -1083,6 +1083,18 @@
 .essence .granted-card-surges button, .essence .granted-card-form .granted-card-surge-add { width: fit-content; }
 .essence .granted-card-extra { font-size: 0.85em; }
 .essence .granted-card-extra p { margin: 2px 0; }
+/* Item Grants (Equipment tab): one aligned row per grant — feature name, the chosen item as a
+   link, the Choose/Replace button pinned right. As a plain flex .item-list row the item link
+   wrapped mid-word against the button (Shane, 2026-10-04). */
+.essence .item-grants li { display: grid; grid-template-columns: minmax(0, max-content) minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--essence-line); }
+.essence .item-grants li:last-child { border-bottom: none; }
+.essence .item-grants .grant-source { font-weight: 700; white-space: nowrap; }
+.essence .item-grants .grant-item { min-width: 0; }
+/* The generic 24px icon-button rule for [data-action="itemView"] (above) would squash this text
+   link to a 24px box; it is a name link here, not an eye icon. */
+.essence .item-grants .grant-item button.link-button[data-action="itemView"] { display: inline-block; width: auto; height: auto; max-width: 100%; padding: 0; border: none; background: none; box-shadow: none; font: inherit; color: var(--essence-accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
+.essence .item-grants .grant-item button.link-button[data-action="itemView"]:hover { background: none; color: var(--essence-accent); text-decoration: underline; }
+.essence .item-grants .grant-action { justify-self: end; white-space: nowrap; padding: 1px 10px; }
 .essence .natural-badge { display: inline-block; margin-left: 4px; padding: 0 5px; border-radius: 8px; font-size: 0.72em; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--essence-accent); border: 1px solid currentColor; vertical-align: middle; }
 
 /* Chassis — var(--essence-chassis) (bronze/structural) and Fitting — var(--essence-fitting) (teal), sharing one sheet/template

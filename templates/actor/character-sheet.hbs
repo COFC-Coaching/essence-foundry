@@ -461,17 +461,18 @@
 
   {{#if itemGrants.length}}
     <h3 class="section-head">{{localize "ESSENCE.Sheet.ItemGrants"}} <span class="muted">{{localize "ESSENCE.Sheet.ItemGrantsExamples"}}</span></h3>
-    <ul class="item-list">
+    <ul class="item-list item-grants">
       {{#each itemGrants as |grant|}}
         <li>
-          <strong>{{grant.sourceName}}</strong>
-          {{#if grant.grantedItem}}
-            — <button type="button" class="link-button" data-action="itemView" data-item-id="{{grant.grantedItem.id}}">{{grant.grantedItem.name}}</button>
-            <button type="button" data-action="chooseGrantedItem" data-grant-source="{{grant.sourceName}}">{{localize "ESSENCE.Common.Replace"}}</button>
-          {{else}}
-            <span class="muted">{{localize "ESSENCE.Sheet.NotYetChosen"}}</span>
-            <button type="button" data-action="chooseGrantedItem" data-grant-source="{{grant.sourceName}}">{{localize "ESSENCE.Sheet.ChooseItem"}}</button>
-          {{/if}}
+          <span class="grant-source">{{grant.sourceName}}</span>
+          <span class="grant-item">
+            {{#if grant.grantedItem}}
+              <button type="button" class="link-button" data-action="itemView" data-item-id="{{grant.grantedItem.id}}">{{grant.grantedItem.name}}</button>
+            {{else}}
+              <span class="muted">{{localize "ESSENCE.Sheet.NotYetChosen"}}</span>
+            {{/if}}
+          </span>
+          <button type="button" class="grant-action" data-action="chooseGrantedItem" data-grant-source="{{grant.sourceName}}">{{#if grant.grantedItem}}{{localize "ESSENCE.Common.Replace"}}{{else}}{{localize "ESSENCE.Sheet.ChooseItem"}}{{/if}}</button>
         </li>
       {{/each}}
     </ul>

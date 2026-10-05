@@ -2,6 +2,10 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.20.5
+
+**Item Grants rows aligned.** The Equipment tab's Item Grants list (Quartermaster's Due, Inherited Tools and the like) now lays each grant out as one row: the feature name, the chosen item as a link, and the Choose or Replace button at the right. The item name no longer wraps mid-word into the button.
+
 ## 0.20.4
 
 **Natural weapons are Items on the sheet.** Choosing Natural Armament (Beastfolk) or Draconic Armament (Dragonkin) in the Character Wizard now puts the chosen anatomy on the Equipment tab as its own weapon Item, named Claws, Horns, Fangs, Tail or Mandibles (Natural Weapon until an anatomy is picked), marked Natural. It takes no Inventory or Armory capacity, is not assembled from a Chassis and Fitting, and its text carries the Doc's rule: a basic one-handed weapon attacked with through Basic Melee Attack, Range 1, cannot be disarmed, with the Damage type suggested by its anatomy and editable where the GM agreed otherwise. Changing the anatomy renames the Item; un-choosing the Trait removes it. On first GM load, characters who already chose either Trait receive theirs and the GM is whispered the names. The four Species Combat Cards (True Breath, Shaper, Ink Cloud, Spore Cloud) were already granted as Action Cards and are unchanged.
