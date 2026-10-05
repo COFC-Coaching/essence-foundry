@@ -256,6 +256,12 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
   /** Foundry's own SearchFilter (0.16.0) owns the card search box: one instance per sheet, re-bound
    *  on every render, so the query and the hidden rows survive the re-render that submitOnChange
    *  triggers on every edit (bind() restores the input's value and re-applies the filter). */
+  /** Sort key per card list ("name" | "skill" | "cost" | "rank"). Display state, not document
+   *  data; the lists are sorted in _prepareContext so the order survives every re-render (before
+   *  0.20.2 the Sort select only reordered the DOM once, and the next edit's re-render put the
+   *  list back in item order while the select still read "Sort: Name"). */
+  #cardSort = { action: "name", reaction: "name" };
+
   #cardSearch = new foundry.applications.ux.SearchFilter({
     inputSelector: "[data-card-filter]",
     contentSelector: ".tab.combat",
@@ -280,18 +286,8 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     for (const select of this.element.querySelectorAll("[data-card-sort]")) {
       select.addEventListener("change", (e) => {
         e.stopPropagation();
-        const list = this.element.querySelector(`.card-list[data-card-list="${select.dataset.cardSort}"]`);
-        if (!list) return;
-        const key = select.value;
-        const rows = [...list.querySelectorAll("li[data-card-name]")];
-        const prop = `card${capitalize(key)}`;
-        rows.sort((a, b) => {
-          if (key === "cost" || key === "rank") {
-            return (Number(a.dataset[prop]) || 0) - (Number(b.dataset[prop]) || 0);
-          }
-          return (a.dataset[prop] ?? "").localeCompare(b.dataset[prop] ?? "");
-        });
-        for (const row of rows) list.appendChild(row);
+        this.#cardSort[select.dataset.cardSort] = select.value;
+        this.render();
       });
     }
   }
@@ -587,10 +583,18 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const allActionCards = this.actor.items.filter((i) => i.type === "action-card");
     const allReactionCards = this.actor.items.filter((i) => i.type === "reaction-card");
     const byName = (a, b) => a.name.localeCompare(b.name);
+    const sorters = {
+      name: byName,
+      skill: (a, b) => (a.system.skill || "").localeCompare(b.system.skill || "") || byName(a, b),
+      cost: (a, b) => (Number(a.system.cost) || 0) - (Number(b.system.cost) || 0) || byName(a, b),
+      rank: (a, b) => (Number(a.system.rank) || 0) - (Number(b.system.rank) || 0) || byName(a, b)
+    };
+    const sortedBy = (key) => sorters[key] ?? byName;
     context.basicActionCards = allActionCards.filter((i) => !i.system.skill).map(cardView).sort(byName);
-    context.actionCards = allActionCards.filter((i) => i.system.skill).map(cardView);
+    context.actionCards = allActionCards.filter((i) => i.system.skill).map(cardView).sort(sortedBy(this.#cardSort.action));
     context.basicReactionCards = allReactionCards.filter((i) => !i.system.skill).map(cardView).sort(byName);
-    context.reactionCards = allReactionCards.filter((i) => i.system.skill).map(cardView);
+    context.reactionCards = allReactionCards.filter((i) => i.system.skill).map(cardView).sort(sortedBy(this.#cardSort.reaction));
+    context.cardSort = { ...this.#cardSort };
     context.conditions = this.actor.items.filter((i) => i.type === "condition");
     context.openConditionRules = Object.fromEntries([...this.#openConditionRules].map((id) => [id, true]));
     // Team Tier access (computeTierGate in utils.mjs, Doc L1793): each Chassis and Fitting Tier

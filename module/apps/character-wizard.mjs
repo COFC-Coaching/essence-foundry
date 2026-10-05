@@ -1,4 +1,5 @@
-import { EXPERTISE_DATABASE, SUBTYPE_DATABASE } from "../data/expertise-database.mjs";
+import { EXPERTISE_DATABASE } from "../data/expertise-database.mjs";
+import CardBrowser from "./card-browser.mjs";
 import { deriveOriginFeatures } from "../data/origin-features.mjs";
 import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import { assembledComponentIds, capitalize, computeTierGate, computeSlotUsage, isDistinctionStyle, distinctionUnlocks, teamForActor, teamTierFor, componentTiers } from "../utils.mjs";
@@ -144,11 +145,8 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
   };
 
   #step = 0;
-  #cardSearch = "";
-  #cardTypeFilter = "all";
-  #cardSkillFilter = "all";
-  #cardSubtypeFilter = "all";
-  #cardSort = "rank";
+  /** Qualifying Cards browser state and context (shared with the Monster Wizard). */
+  #cards = new CardBrowser();
   #equipmentSearch = "";
   #equipmentCategoryFilter = "all";
   #equipmentTypeFilter = "equipment";
@@ -173,18 +171,11 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     // Typing in a search box triggers a re-render (the filtered list isn't part of document
     // data, so nothing else refreshes it) — that replaces the input element, so focus and the
     // caret position have to be restored manually or every keystroke would kick focus out.
-    this.#wireSearch("cards", (v) => { this.#cardSearch = v; });
+    this.#cards.wire(this.element, () => this.render());
     this.#wireSearch("equipment", (v) => { this.#equipmentSearch = v; });
     this.#wireSelect("equipmentCategory", (v) => { this.#equipmentCategoryFilter = v; });
     this.#wireSelect("equipmentType", (v) => { this.#equipmentTypeFilter = v; });
     this.#wireSelect("buildCategory", (v) => { this.#buildCategory = v; });
-    this.#wireSelect("cardType", (v) => { this.#cardTypeFilter = v; });
-    // Subtype is nested under Skill (each Skill has its own fixed 7 — see SUBTYPE_DATABASE), so
-    // changing Skill resets a no-longer-relevant Subtype selection back to "all" rather than
-    // silently filtering against a subtype that may not even exist for the new Skill.
-    this.#wireSelect("cardSkill", (v) => { this.#cardSkillFilter = v; this.#cardSubtypeFilter = "all"; });
-    this.#wireSelect("cardSubtype", (v) => { this.#cardSubtypeFilter = v; });
-    this.#wireSelect("cardSort", (v) => { this.#cardSort = v; });
     this.#wireScrollList();
     this.#wireSubChoiceText();
   }
@@ -379,7 +370,6 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       game.packs.get("essence-system.reaction-cards")?.getDocuments() ?? []
     ]);
     const ownedNames = new Set(ownedCards.map((i) => i.name));
-    const search = this.#cardSearch.trim().toLowerCase();
 
     const qualifies = (cardSystem) => {
       const skill = (cardSystem.skill || "").toLowerCase();
@@ -398,47 +388,14 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       // schema only defines "any" (>=1 of the listed) and "any2" (>=2) — there's no "all".
       return matched >= (cardSystem.expertisesMode === "any2" ? 2 : 1);
     };
-
-    const toBrowserEntry = (type) => (doc) =>
-      ({ id: doc.id, uuid: doc.uuid, name: doc.name, system: doc.system, type, pack: `essence-system.${type}s` });
-
     // Species Combat Cards (speciesGranted) are excluded here too — they're a Species Trait grant,
     // not a pickable ranked selection; a character gains them automatically (or via a dedicated
     // grant flow), never by spending one of the 10 card picks in this browser.
-    let combined = [
-      ...actionPack.filter((d) => !isBasicCard(d.system) && !isSpeciesCard(d.system) && !ownedNames.has(d.name) && qualifies(d.system)).map(toBrowserEntry("action-card")),
-      ...reactionPack.filter((d) => !isBasicCard(d.system) && !isSpeciesCard(d.system) && !ownedNames.has(d.name) && qualifies(d.system)).map(toBrowserEntry("reaction-card"))
-    ];
-
-    if (search) combined = combined.filter((c) => c.name.toLowerCase().includes(search));
-    if (this.#cardTypeFilter !== "all") combined = combined.filter((c) => c.type === this.#cardTypeFilter);
-    if (this.#cardSkillFilter !== "all") combined = combined.filter((c) => (c.system.skill || "").toLowerCase() === this.#cardSkillFilter);
-    if (this.#cardSubtypeFilter !== "all") combined = combined.filter((c) => c.system.subtype === this.#cardSubtypeFilter);
-
-    const sorters = {
-      rank: (a, b) => a.system.rank - b.system.rank || a.name.localeCompare(b.name),
-      name: (a, b) => a.name.localeCompare(b.name),
-      skill: (a, b) => (a.system.skill || "").localeCompare(b.system.skill || "") || a.name.localeCompare(b.name)
-    };
-    combined.sort(sorters[this.#cardSort] ?? sorters.rank);
-
-    context.browsableCards = combined;
-    context.cardSearch = this.#cardSearch;
-    context.cardTypeFilter = this.#cardTypeFilter;
-    context.cardSkillFilter = this.#cardSkillFilter;
-    context.cardSubtypeFilter = this.#cardSubtypeFilter;
-    context.cardSort = this.#cardSort;
-    context.cardSkillOptions = SKILLS;
-    // Subtype options are scoped to whichever Skill is currently filtered — SUBTYPE_DATABASE's
-    // keys are already lowercase, matching #cardSkillFilter's own stored casing (unlike
-    // system.skill on a card document, which is capitalized — see item-sheet.mjs's
-    // subtypesForSkill() for that unrelated gotcha; #cardSkillFilter never touches that value).
-    // With no Skill chosen, offer the union of every skill's subtypes rather than hiding the
-    // filter entirely, since browsing by Subtype alone (e.g. every "Opener" across all Skills) is
-    // a reasonable thing to want.
-    context.cardSubtypeOptions = this.#cardSkillFilter !== "all"
-      ? (SUBTYPE_DATABASE[this.#cardSkillFilter] ?? [])
-      : [...new Set(Object.values(SUBTYPE_DATABASE).flat())].sort();
+    const pickable = (d) => !isBasicCard(d.system) && !isSpeciesCard(d.system) && !ownedNames.has(d.name) && qualifies(d.system);
+    this.#cards.prepare(context, [
+      ...actionPack.filter(pickable).map((doc) => ({ doc, type: "action-card" })),
+      ...reactionPack.filter(pickable).map((doc) => ({ doc, type: "reaction-card" }))
+    ], system.expertises);
     context.missingBasicCount = 7 - context.ownedBasicCards.length;
   }
 

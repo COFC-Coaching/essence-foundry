@@ -1,0 +1,60 @@
+{{!-- Qualifying Cards browser shared by the Character and Monster Wizards; context from module/apps/card-browser.mjs. --}}
+<div class="card-browser">
+  <input type="search" class="card-browser-search" data-wizard-search="cards" placeholder="{{localize 'ESSENCE.Common.SearchPlaceholder'}}" value="{{cardSearch}}" aria-label="{{localize 'ESSENCE.Common.SearchPlaceholder'}}">
+  <div class="card-browser-filters">
+    <label><span>{{localize "ESSENCE.Common.Type"}}</span>
+      <select data-wizard-select="cardType">
+        <option value="all" {{#if (eq cardTypeFilter "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
+        <option value="action-card" {{#if (eq cardTypeFilter "action-card")}}selected{{/if}}>{{localize "ESSENCE.Common.Action"}}</option>
+        <option value="reaction-card" {{#if (eq cardTypeFilter "reaction-card")}}selected{{/if}}>{{localize "ESSENCE.Common.Reaction"}}</option>
+      </select>
+    </label>
+    <label><span>{{localize "ESSENCE.Common.Style"}}</span>
+      <select data-wizard-select="cardSkill">
+        <option value="all" {{#if (eq cardSkillFilter "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
+        {{#each cardSkillOptions as |sk|}}
+          <option value="{{sk}}" {{#if (eq ../cardSkillFilter sk)}}selected{{/if}}>{{capitalize sk}}</option>
+        {{/each}}
+      </select>
+    </label>
+    <label><span>{{localize "ESSENCE.Common.Subtype"}}</span>
+      <select data-wizard-select="cardSubtype">
+        <option value="all" {{#if (eq cardSubtypeFilter "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
+        {{#each cardSubtypeOptions as |st|}}
+          <option value="{{st}}" {{#if (eq ../cardSubtypeFilter st)}}selected{{/if}}>{{st}}</option>
+        {{/each}}
+      </select>
+    </label>
+    <label><span>{{localize "ESSENCE.Common.Expertise"}}</span>
+      <select data-wizard-select="cardExpertise" {{#unless cardExpertiseOptions.length}}disabled data-tooltip-text="{{localize 'ESSENCE.Wizard.Character.NoExpertisesYet'}}"{{/unless}}>
+        <option value="all" {{#if (eq cardExpertiseFilter "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
+        {{#if cardMasteryCount}}<option value="mastery" {{#if (eq cardExpertiseFilter "mastery")}}selected{{/if}}>{{localize "ESSENCE.Wizard.Character.MasteryTag"}} ({{cardMasteryCount}})</option>{{/if}}
+        {{#each cardExpertiseOptions as |ex|}}
+          <option value="{{ex.value}}" {{#if (eq ../cardExpertiseFilter ex.value)}}selected{{/if}}>{{ex.label}}</option>
+        {{/each}}
+      </select>
+    </label>
+    <label class="card-browser-sort"><span>{{localize "ESSENCE.Common.Sort"}}</span>
+      <select data-wizard-select="cardSort">
+        <option value="rank" {{#if (eq cardSort "rank")}}selected{{/if}}>{{localize "ESSENCE.Common.Rank"}}</option>
+        <option value="name" {{#if (eq cardSort "name")}}selected{{/if}}>{{localize "ESSENCE.Common.Name"}}</option>
+        <option value="skill" {{#if (eq cardSort "skill")}}selected{{/if}}>{{localize "ESSENCE.Common.Style"}}</option>
+      </select>
+    </label>
+  </div>
+  <p class="muted card-browser-count">{{#if (eq browsableCards.length 1)}}{{localize "ESSENCE.Wizard.Character.CardShown"}}{{else}}{{localize "ESSENCE.Wizard.Character.CardsShown" n=browsableCards.length}}{{/if}}</p>
+  <ul class="item-list wizard-scroll-list card-browser-list">
+    {{#each browsableCards as |item|}}
+      <li class="card-browser-row{{#if item.isReaction}} is-reaction{{/if}}">
+        <span class="card-browser-rank" aria-label="{{localize 'ESSENCE.Common.Rank'}} {{item.system.rank}}">R{{item.system.rank}}</span>
+        <span class="card-browser-main">
+          <button type="button" class="link-button card-browser-name" data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</button>
+          <span class="muted card-browser-meta">{{item.skillLabel}}{{#if item.system.subtype}} · {{item.system.subtype}}{{/if}}{{#if item.isReaction}} · {{localize "ESSENCE.Common.Reaction"}}{{/if}}{{#if item.mastery}} · <b class="card-browser-mastery" data-tooltip-text="{{localize 'ESSENCE.Wizard.Character.MasteryTip'}}">{{localize "ESSENCE.Wizard.Character.MasteryTag"}}</b>{{/if}}</span>
+        </span>
+        <button type="button" class="card-browser-add" data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.AddAria' name=item.name}}"><i class="fa-solid fa-plus"></i></button>
+      </li>
+    {{else}}
+      <li class="muted">{{localize "ESSENCE.Wizard.Character.NoCardsMatchFilters"}}</li>
+    {{/each}}
+  </ul>
+</div>

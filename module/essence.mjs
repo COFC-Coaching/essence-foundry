@@ -63,6 +63,7 @@ Hooks.once("init", () => {
   // template AND registers it as a partial when given an array of paths.
   foundry.applications.handlebars.loadTemplates([
     "systems/essence-system/templates/actor/parts/death-track.hbs",
+    "systems/essence-system/templates/wizard/parts/card-browser.hbs",
     "systems/essence-system/templates/actor/parts/wounds-header.hbs",
     "systems/essence-system/templates/item/parts/equipment-card-editor.hbs",
     "systems/essence-system/templates/chat/d10-shape.hbs"

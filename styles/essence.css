@@ -1127,6 +1127,27 @@
    they are button.link-button (keyboard-reachable), styled by the .link-button rule above. */
 .essence .wizard-two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .essence .wizard-scroll-list { max-height: 220px; overflow-y: auto; border: 1px solid var(--essence-line); border-radius: 4px; padding: 4px 6px; }
+/* Character Wizard, Qualifying Cards browser (0.20.2): search, a two-column filter grid with the
+   label above each select, a count line, then one row per card: Rank badge, name over its Style /
+   Subtype / Reaction / Mastery line, Add button pinned right. */
+.essence .card-browser { display: flex; flex-direction: column; gap: 6px; }
+.essence .card-browser-search { width: 100%; }
+.essence .card-browser-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 10px; }
+.essence .card-browser-filters label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.essence .card-browser-filters label > span { font-size: 0.72em; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--essence-muted); }
+.essence .card-browser-filters select { width: 100%; min-width: 0; }
+.essence .card-browser-filters select:disabled { opacity: 0.55; }
+.essence .card-browser-count { margin: 0; font-size: 0.8em; }
+.essence .card-browser-list { max-height: 300px; padding: 0; }
+.essence .card-browser-list li.card-browser-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 5px 8px; border-bottom: 1px solid var(--essence-line); }
+.essence .card-browser-list li.card-browser-row:last-child { border-bottom: none; }
+.essence .card-browser-rank { font-size: 0.72em; font-weight: 700; padding: 1px 6px; border-radius: 9px; background: var(--essence-well); border: 1px solid var(--essence-card-action); color: var(--essence-card-action-ink); }
+.essence .is-reaction .card-browser-rank { border-color: var(--essence-card-reaction); color: var(--essence-card-reaction-ink); }
+.essence .card-browser-main { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.essence .card-browser-main .card-browser-name { display: block; width: 100%; justify-content: flex-start; text-align: left; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.essence .card-browser-meta { font-size: 0.8em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.essence .card-browser-mastery { color: var(--essence-accent); font-weight: 700; }
+.essence .card-browser-add { flex: 0 0 auto; width: 26px; height: 26px; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
 .essence .wizard-checklist { list-style: none; padding: 0; }
 .essence .wizard-checklist li { padding: 2px 0; }
 .essence .wizard-checklist li.ok { color: var(--essence-success-ink); }

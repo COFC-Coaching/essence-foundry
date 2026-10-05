@@ -336,10 +336,10 @@
   <div class="card-section-head">
     <h3 class="section-head">{{localize "ESSENCE.Item.ActionCard"}}</h3>
     <select data-card-sort="action" aria-label="{{localize 'ESSENCE.Sheet.SortCardsAria'}}">
-      <option value="name">{{localize "ESSENCE.Sheet.SortName"}}</option>
-      <option value="skill">{{localize "ESSENCE.Sheet.SortSkill"}}</option>
-      <option value="cost">{{localize "ESSENCE.Sheet.SortCost"}}</option>
-      <option value="rank">{{localize "ESSENCE.Sheet.SortRank"}}</option>
+      <option value="name" {{#if (eq cardSort.action "name")}}selected{{/if}}>{{localize "ESSENCE.Sheet.SortName"}}</option>
+      <option value="skill" {{#if (eq cardSort.action "skill")}}selected{{/if}}>{{localize "ESSENCE.Sheet.SortSkill"}}</option>
+      <option value="cost" {{#if (eq cardSort.action "cost")}}selected{{/if}}>{{localize "ESSENCE.Sheet.SortCost"}}</option>
+      <option value="rank" {{#if (eq cardSort.action "rank")}}selected{{/if}}>{{localize "ESSENCE.Sheet.SortRank"}}</option>
     </select>
   </div>
   {{!-- Card rows (0.16.0): a grid of cards with the type rail, the Style chip in its domain color
@@ -377,10 +377,10 @@
   <div class="card-section-head">
     <h3 class="section-head">{{localize "ESSENCE.Item.ReactionCard"}}</h3>
     <select data-card-sort="reaction" aria-label="{{localize 'ESSENCE.Sheet.SortCardsAria'}}">
-      <option value="name">{{localize "ESSENCE.Sheet.SortName"}}</option>
-      <option value="skill">{{localize "ESSENCE.Sheet.SortSkill"}}</option>
-      <option value="cost">{{localize "ESSENCE.Sheet.SortCost"}}</option>
-      <option value="rank">{{localize "ESSENCE.Sheet.SortRank"}}</option>
+      <option value="name" {{#if (eq cardSort.reaction "name")}}selected{{/if}}>{{localize "ESSENCE.Sheet.SortName"}}</option>
+      <option value="skill" {{#if (eq cardSort.reaction "skill")}}selected{{/if}}>{{localize "ESSENCE.Sheet.SortSkill"}}</option>
+      <option value="cost" {{#if (eq cardSort.reaction "cost")}}selected{{/if}}>{{localize "ESSENCE.Sheet.SortCost"}}</option>
+      <option value="rank" {{#if (eq cardSort.reaction "rank")}}selected{{/if}}>{{localize "ESSENCE.Sheet.SortRank"}}</option>
     </select>
   </div>
   <ul class="item-list card-list" data-card-list="reaction">

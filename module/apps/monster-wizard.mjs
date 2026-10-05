@@ -2,6 +2,7 @@ import { setOriginItem, clearOriginItem } from "../data/origin-select.mjs";
 import { getGradeBudget } from "../data/monster-budgets.mjs";
 import { MONSTER_TYPES_LOW, MONSTER_TYPES_HIGH } from "../data/monster-types.mjs";
 import { capitalize, buildEnemyHeaderLabel } from "../utils.mjs";
+import CardBrowser from "./card-browser.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { DocumentSheetV2 } = foundry.applications.api;
@@ -87,7 +88,8 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
 
   #step = 0;
   #emphasis = "balanced";
-  #cardSearch = "";
+  /** Qualifying Cards browser state and context (shared with the Character Wizard). */
+  #cards = new CardBrowser();
   #equipmentSearch = "";
   #refocusSearch = null;
 
@@ -101,7 +103,7 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
 
   _onRender(context, options) {
     super._onRender(context, options);
-    this.#wireSearch("cards", (v) => { this.#cardSearch = v; });
+    this.#cards.wire(this.element, () => this.render());
     this.#wireSearch("equipment", (v) => { this.#equipmentSearch = v; });
   }
 
@@ -202,7 +204,6 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
       game.packs.get("essence-system.reaction-cards")?.getDocuments() ?? []
     ]);
     const ownedNames = new Set(ownedCards.map((i) => i.name));
-    const search = this.#cardSearch.trim().toLowerCase();
 
     // Doc L6868: "enemies do not automatically receive Basic Melee Attack, Basic Ranged Attack, or
     // Defend." Prepare Action needs permission too (L7966).
@@ -217,18 +218,11 @@ export default class EssenceMonsterWizard extends HandlebarsApplicationMixin(Doc
       return true;
     };
 
-    const toBrowserEntry = (type) => (doc) =>
-      ({ id: doc.id, uuid: doc.uuid, name: doc.name, system: doc.system, type, pack: `essence-system.${type}s` });
-
-    let combined = [
-      ...actionPack.filter((d) => !ownedNames.has(d.name) && qualifies(d.system)).map(toBrowserEntry("action-card")),
-      ...reactionPack.filter((d) => !ownedNames.has(d.name) && qualifies(d.system)).map(toBrowserEntry("reaction-card"))
-    ];
-    if (search) combined = combined.filter((c) => c.name.toLowerCase().includes(search));
-    combined.sort((a, b) => a.system.rank - b.system.rank || a.name.localeCompare(b.name));
-
-    context.browsableCards = combined;
-    context.cardSearch = this.#cardSearch;
+    const pickable = (d) => !ownedNames.has(d.name) && qualifies(d.system, d.name);
+    this.#cards.prepare(context, [
+      ...actionPack.filter(pickable).map((doc) => ({ doc, type: "action-card" })),
+      ...reactionPack.filter(pickable).map((doc) => ({ doc, type: "reaction-card" }))
+    ], system.expertises ?? []);
   }
 
   async #prepareEquipment(context) {

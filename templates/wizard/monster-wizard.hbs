@@ -211,14 +211,7 @@
       </div>
       <div>
         <h4>{{localize "ESSENCE.Wizard.Monster.QualifyingCards"}}</h4>
-        <input type="text" data-wizard-search="cards" placeholder="{{localize 'ESSENCE.Common.SearchPlaceholder'}}" value="{{cardSearch}}">
-        <ul class="item-list wizard-scroll-list">
-          {{#each browsableCards as |item|}}
-            <li><button type="button" class="link-button" data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</button> <span class="muted">R{{item.system.rank}} · {{item.system.skill}}{{#if (eq item.type "reaction-card")}} · {{localize "ESSENCE.Common.Reaction"}}{{/if}}</span> <button type="button" data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.AddAria' name=item.name}}"><i class="fa-solid fa-plus"></i></button></li>
-          {{else}}
-            <li class="muted">{{localize "ESSENCE.Wizard.Monster.NoCardsMatch"}}</li>
-          {{/each}}
-        </ul>
+        {{> "systems/essence-system/templates/wizard/parts/card-browser.hbs"}}
       </div>
     </div>
   {{/if}}

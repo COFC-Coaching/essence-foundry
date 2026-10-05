@@ -244,46 +244,7 @@
       </div>
       <div>
         <h4>{{localize "ESSENCE.Wizard.Monster.QualifyingCards"}}</h4>
-        <input type="text" data-wizard-search="cards" placeholder="{{localize 'ESSENCE.Common.SearchPlaceholder'}}" value="{{cardSearch}}">
-        <div class="wizard-row wizard-card-filters">
-          <label>{{localize "ESSENCE.Common.Type"}}
-            <select data-wizard-select="cardType">
-              <option value="all" {{#if (eq cardTypeFilter "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
-              <option value="action-card" {{#if (eq cardTypeFilter "action-card")}}selected{{/if}}>{{localize "ESSENCE.Common.Action"}}</option>
-              <option value="reaction-card" {{#if (eq cardTypeFilter "reaction-card")}}selected{{/if}}>{{localize "ESSENCE.Common.Reaction"}}</option>
-            </select>
-          </label>
-          <label>{{localize "ESSENCE.Common.Style"}}
-            <select data-wizard-select="cardSkill">
-              <option value="all" {{#if (eq cardSkillFilter "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
-              {{#each cardSkillOptions as |sk|}}
-                <option value="{{sk}}" {{#if (eq ../cardSkillFilter sk)}}selected{{/if}} class="capitalize">{{sk}}</option>
-              {{/each}}
-            </select>
-          </label>
-          <label>{{localize "ESSENCE.Common.Subtype"}}
-            <select data-wizard-select="cardSubtype">
-              <option value="all" {{#if (eq cardSubtypeFilter "all")}}selected{{/if}}>{{localize "ESSENCE.Common.All"}}</option>
-              {{#each cardSubtypeOptions as |st|}}
-                <option value="{{st}}" {{#if (eq ../cardSubtypeFilter st)}}selected{{/if}}>{{st}}</option>
-              {{/each}}
-            </select>
-          </label>
-          <label>{{localize "ESSENCE.Common.Sort"}}
-            <select data-wizard-select="cardSort">
-              <option value="rank" {{#if (eq cardSort "rank")}}selected{{/if}}>{{localize "ESSENCE.Common.Rank"}}</option>
-              <option value="name" {{#if (eq cardSort "name")}}selected{{/if}}>{{localize "ESSENCE.Common.Name"}}</option>
-              <option value="skill" {{#if (eq cardSort "skill")}}selected{{/if}}>{{localize "ESSENCE.Common.Style"}}</option>
-            </select>
-          </label>
-        </div>
-        <ul class="item-list wizard-scroll-list">
-          {{#each browsableCards as |item|}}
-            <li><button type="button" class="link-button" data-action="previewItem" data-uuid="{{item.uuid}}">{{item.name}}</button> <span class="muted">R{{item.system.rank}} · {{item.system.skill}}{{#if item.system.subtype}} · {{item.system.subtype}}{{/if}}{{#if (eq item.type "reaction-card")}} · {{localize "ESSENCE.Common.Reaction"}}{{/if}}</span> <button type="button" data-action="toggleCard" data-pack="{{item.pack}}" data-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.AddAria' name=item.name}}"><i class="fa-solid fa-plus"></i></button></li>
-          {{else}}
-            <li class="muted">{{localize "ESSENCE.Wizard.Character.NoCardsMatchFilters"}}</li>
-          {{/each}}
-        </ul>
+        {{> "systems/essence-system/templates/wizard/parts/card-browser.hbs"}}
       </div>
     </div>
   {{/if}}
