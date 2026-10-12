@@ -61,7 +61,7 @@ const ATTR_BENEFIT = {
 /** Default new-row shape for each free-length array field, keyed by the sheet's data-array value. */
 const ARRAY_ROW_DEFAULTS = {
   nonCombatSkills: { name: "", rating: 0 },
-  connections: { name: "", area: "", relationship: "", tier: 1 },
+  connections: { name: "", area: "", relationship: "", tier: 1, earned: false },
   passiveFeatures: { name: "", source: "", text: "" },
   reachTriggers: { name: "", tempBonus: 1, tempInfluenceGrant: 0, usedThisAdventure: false, active: false }
 };
@@ -99,6 +99,7 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
       reconfigureItem: EssenceActorSheet.#onReconfigureItem,
       releaseItem: EssenceActorSheet.#onReleaseItem,
       toggleItemUsed: EssenceActorSheet.#onToggleItemUsed,
+      toggleConnectionEarned: EssenceActorSheet.#onToggleConnectionEarned,
       rollInitiative: EssenceActorSheet.#onRollInitiative,
       endTurn: EssenceActorSheet.#onEndTurn,
       applyDamage: EssenceActorSheet.#onApplyDamage,
@@ -338,8 +339,12 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     // blocked sorting/filtering your own card list for no reason. A checkbox with a data-action
     // (Adaptability Reroll, Stabilized) is a play toggle like the pip buttons, which the lock
     // never touches either (0.18.8).
+    // The lock guards build values (Attributes, Styles, Level, pools); narrative and roster
+    // fields carry no such risk, so anything inside a [data-lock-exempt] container (Career, Key
+    // Aspects, Connections, the Biography prose and notes) stays editable while locked (0.21.3).
     for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) {
       if (el.matches("[data-card-filter], [data-card-sort], input[type='checkbox'][data-action]")) continue;
+      if (el.closest("[data-lock-exempt]")) continue;
       el.disabled = true;
     }
   }
@@ -511,7 +516,11 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     context.keyAspects = system.keyAspects.map((value, i) => ({ value, i, n: i + 1 }));
     context.connections = system.connections.map((c, i) => ({ ...c, i }));
     context.connectionTierOptions = [1, 2, 3, 4, 5].map((n) => ({ value: n, label: game.i18n.format("ESSENCE.Character.ConnectionTierOption", { n }) }));
-    context.connectionsOverLimit = system.connections.length > (system.connectionLimit ?? 0);
+    // Only Connections from the Presence benefit count against it; one flagged `earned` (gained
+    // through play, Doc L7832) is listed but unrestricted.
+    context.connectionsBenefitCount = system.connections.filter((c) => !c.earned).length;
+    context.connectionsEarnedCount = system.connections.length - context.connectionsBenefitCount;
+    context.connectionsOverLimit = context.connectionsBenefitCount > (system.connectionLimit ?? 0);
     context.temporaryWoundPips = pips(system.playState.currentTemporaryWounds, system.temporaryWoundsAvailable);
     // V6: track length is deathTrackMax (5, or 7 for Deathless — design/v6-revision-delta.md §2.3).
     context.deathTrackPips = pips(system.playState.deathTrackStep, system.deathTrackMax);
@@ -3007,6 +3016,15 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
     const item = this.actor.items.get(target.dataset.itemId);
     if (!item || !["equipment", "chassis", "fitting"].includes(item.type)) return;
     await item.update({ "system.usedThisAdventure": !item.system.usedThisAdventure });
+  }
+
+  /** Flags a Connection row as gained through play, which takes it out of the Presence count. */
+  static async #onToggleConnectionEarned(event, target) {
+    const i = Number(target.dataset.index);
+    const connections = this.actor.system.connections.map((c) => ({ ...c }));
+    if (!connections[i]) return;
+    connections[i].earned = !connections[i].earned;
+    await this.actor.update({ "system.connections": connections });
   }
 
   /** Add Condition dialog (0.17.0): lists the Conditions compendium; adds through toggleStatusEffect. */

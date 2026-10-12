@@ -212,6 +212,8 @@ check("Languages and skillPointBonus load", migrate(EssenceCharacterData, { lang
 check("Connection rows keep their fields",
   migrate(EssenceCharacterData, { connections: [{ name: "Bren", area: "docks", relationship: "cousin", tier: 2 }] }).connections,
   [{ name: "Bren", area: "docks", relationship: "cousin", tier: 2 }]);
+check("a Connection gained in play keeps its flag",
+  migrate(EssenceCharacterData, { connections: [{ name: "Samuel", area: "deliveries", relationship: "source", tier: 1, earned: true }] }).connections[0].earned, true);
 check("a stored Intellect-sourced Skill still loads", migrate(EssenceCharacterData, { nonCombatSkills: [{ name: "History", rating: 1, source: "intellect" }] }).nonCombatSkills[0].source, "intellect");
 check("a Distinction saved before acquiredLater loads", migrate(EssenceDistinctionData, { keyCombatSkill: "Cunning" }).keyCombatSkill, "Cunning");
 

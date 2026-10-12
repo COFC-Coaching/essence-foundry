@@ -763,6 +763,13 @@
 .essence .item-table tbody tr { border-bottom: 1px solid rgba(var(--essence-ink-rgb), 0.08); }
 /* Connections: Tier is a 1-5 dropdown (0.18.9), so its column only needs to fit "Tier 5". */
 .essence .item-table .connection-tier-col { width: 5em; }
+/* Hands and Range from the Fitting lead a modular item's Effect cell (equipmentEffectSummary). */
+.essence .equipment-traits { display: inline-block; margin-right: 6px; padding: 0 6px; border: 1px solid var(--essence-line-bright); border-radius: var(--essence-radius-sm); font-size: 0.85em; color: var(--essence-muted); white-space: nowrap; }
+/* The sprout column flags a Connection gained in play (outside the Presence allowance); the
+   amber fill is the same state treatment as the Inventory used-toggle. */
+.essence .item-table .connection-earned-col { width: 2em; text-align: center; }
+.essence .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.essence .item-table tr.connection-earned input { border-color: rgba(var(--essence-accent-rgb), 0.35); }
 .essence .item-table .connection-tier-col select { width: 100%; }
 .essence .item-table tbody tr:last-child { border-bottom: none; }
 /* Rows in the Equipment tables are draggable and individually actionable (View/Edit/Move/Delete),
@@ -970,6 +977,9 @@
   padding: 8px 10px; border: 1px solid var(--essence-line); border-radius: var(--essence-radius-sm); background: var(--essence-well);
 }
 .essence .card-view-infogrid > div { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+/* The one editable cell in the read view: Range typed straight onto the assembled item. */
+.essence .card-view-infogrid .card-view-range input { width: 100%; min-height: 0; height: 1.6em; padding: 0 4px; font: inherit; background: rgba(0, 0, 0, 0.25); border: 1px solid var(--essence-line-bright); border-radius: var(--essence-radius-sm); color: inherit; }
+.essence .card-view-infogrid .card-view-range input::placeholder { color: var(--essence-muted); opacity: 1; }
 .essence .card-view-statlabel { font-size: 0.8em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--essence-muted); }
 .essence .card-view-tags { font-size: 0.85em; text-transform: capitalize; margin: 0 0 8px; }
 .essence .card-view-line { margin: 0 0 10px; }
@@ -1069,6 +1079,17 @@
 .essence .granted-card-head { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.08em; color: var(--essence-muted); }
 .essence .granted-card .card-view-text p { margin: 0 0 4px; }
 .essence .granted-card-hint { margin: 0; font-size: 0.85em; }
+/* Consumable Kit read view: each Equipment Card is its own block with a Uses pip track in its
+   head (one square pip per Use, filled while unspent) and a Refill button, instead of a one-line
+   "(Uses 5/5)" nobody could change without opening the edit form. */
+.essence .consumable-cards { list-style: none; margin: 0; padding: 0; }
+.essence .consumable-card { margin: 4px 0 8px; padding: 6px 8px; border: 1px solid rgba(249, 168, 37, 0.45); border-radius: var(--essence-radius-sm); background: rgba(249, 168, 37, 0.06); }
+.essence .consumable-card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px; margin-bottom: 4px; }
+.essence .consumable-card .card-view-text p { margin: 0 0 4px; }
+.essence .consumable-uses { display: inline-flex; align-items: center; gap: 8px; }
+.essence .consumable-uses-count { font-size: 0.85em; font-variant-numeric: tabular-nums; }
+.essence .consumable-refill { width: auto; padding: 1px 8px; font-size: 0.85em; line-height: 1.6; }
+.essence .consumable-refill:disabled { opacity: 0.45; cursor: default; }
 .essence .granted-card-head .granted-card-mode { margin-left: auto; padding: 1px 8px; font-size: 0.95em; letter-spacing: 0; text-transform: none; line-height: 1.6; }
 .essence .granted-card-form { display: grid; gap: 8px; }
 .essence .granted-card-form label { display: flex; flex-direction: column; gap: 2px; font-size: 0.85em; font-weight: 600; color: var(--essence-muted); }

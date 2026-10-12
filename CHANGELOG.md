@@ -2,6 +2,16 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.21.3
+
+**Hands and Range on the assembled item.** A weapon, shield or implement's sheet now shows Hands (one or two) and Range in its info grid, read from its Fitting, and the Equipment tab's Effect cell leads with the same pair, for example "Two hands · Melee 1". Both were already stored on each Grip and Interface but only visible by opening that part. The rules (Doc v0.7, Fittings) place hand requirements and Range on the Fitting; Launchers and Payloads carry no Range in the playtest catalog, so the edit view now has a Range box on every weapon, shield and implement: type one and it shows on the sheet and the Equipment tab; leave it blank and the Fitting's Range is used. The box stays until the catalog prints ranged Ranges, when it can be filled automatically.
+
+**The lock leaves narrative fields alone.** The sheet's safety lock exists to stop a stray click changing an Attribute, Style or pool. It was also disabling Career, Key Aspects, Connections and the Biography tab's Concept, Appearance, Personality, Backstory and General Notes, so adding a Connection meant unlocking first. Those stay editable while locked; the GM Notes on NPC and Monster sheets too. Attributes, Styles, Level, Advancement Points, Non-Combat Skill ratings, Reach and the other build fields still need the unlock.
+
+**Connections gained in play.** Each Connection row on the Biography tab has a sprout button at its left. Mark a relationship earned at the table with it and that row stops counting against permanent Presence: the header reads "1 / 1 +1 gained in play" and the over-limit note only appears when the benefit rows themselves exceed Presence. The Character Wizard's checklist counts the same way. Existing rows load as benefit Connections, so nothing changes until you mark one.
+
+**Consumable Kit Uses you can tick off.** A Consumable Kit's sheet now shows each Equipment Card as its own block with a row of square pips, one per Use, filled while unspent, and a count beside it. Click the last filled pip to spend a Use, click any pip to set the count directly, or press Refill to restore every Use (the Reset Adventure Uses button still does this for every kit at once). Playing the card from the Combat tab spends a Use automatically, as before, and the pips follow. Before this the read view printed "(Uses 5/5)" and the only way to change it was the edit form's number box.
+
 ## 0.21.2
 
 **Equipment compendium without the empty folders.** The pack's six empty top-level folders (Armor, Gear, Guard, Implement, Ranged, Weapon) are gone; they dated from before the modular system, when flat weapon and armor rows existed. What remains is what the game uses: Chassis and Fitting (each nested by category), Augment, Toolkit and Consumable Kit. Worlds that already imported the pack keep their own copies untouched.

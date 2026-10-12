@@ -1,4 +1,4 @@
-import { deriveEquipmentStats, buildEquipmentResolver } from "../data/equipment-features.mjs";
+import { deriveEquipmentStats, buildEquipmentResolver, handednessLabel } from "../data/equipment-features.mjs";
 import { parseEquipmentCard, renderEquipmentCard } from "../data/equipment-card-text.mjs";
 import { SUBTYPE_DATABASE } from "../data/expertise-database.mjs";
 import { CHASSIS_LABELS, FITTING_LABELS } from "../data/item-component.mjs";
@@ -258,7 +258,9 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
       swapAugmentCost: EssenceEquipmentSheet.#onSwapAugmentCost,
       reconfigureFittingCost: EssenceEquipmentSheet.#onReconfigureFittingCost,
       addEquipmentCard: EssenceEquipmentSheet.#onAddEquipmentCard,
-      deleteEquipmentCard: EssenceEquipmentSheet.#onDeleteEquipmentCard
+      deleteEquipmentCard: EssenceEquipmentSheet.#onDeleteEquipmentCard,
+      setEquipmentCardUses: EssenceEquipmentSheet.#onSetEquipmentCardUses,
+      refillEquipmentCard: EssenceEquipmentSheet.#onRefillEquipmentCard
     }
   };
 
@@ -389,6 +391,7 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
     context.fittingOptions = items.all.filter((i) => i.type === "fitting" && (i.system.category === category || i.id === this.item.system.fittingItemId)).map(toOption);
     context.augmentOptions = items.all.filter((i) => i.type === "augment").map(toOption);
     context.stats = deriveEquipmentStats(items, this.item);
+    context.handsLabel = handednessLabel(context.stats.handedness);
     // Which granted cards the edit view may rewrite in place (#wireGrantedCardEditors): the
     // Component has to be one this user owns and not sit in a locked pack.
     for (const g of context.stats.grantedCards) {
@@ -420,6 +423,16 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
     context.isToolkit = context.system.category === "toolkit";
     context.isConsumableKit = context.system.category === "consumable-kit";
     context.isGear = context.system.category === "gear";
+    // Read view of a Consumable Kit: each Equipment Card that tracks Uses gets a pip track (one
+    // pip per Use, filled while unspent) so a Use can be ticked off or restored by hand, the same
+    // control the Combo/Temporary Wound tracks use. Playing the card from the Combat tab spends a
+    // Use through EssenceActorSheet's #spendEquipmentCardUse; this is for the uses that happen
+    // off-card (the Medical Pack's Supplies clause) and for topping the kit back up.
+    context.consumableCards = (context.system.equipmentCards ?? []).map((c, index) => {
+      const uses = Number.isInteger(c.uses) && c.uses > 0 ? c.uses : null;
+      const remaining = uses === null ? null : Math.max(0, Math.min(uses, c.usesRemaining ?? uses));
+      return { ...c, index, uses, remaining, pips: uses === null ? [] : Array.from({ length: uses }, (_, i) => i < remaining) };
+    });
     return context;
   }
 
@@ -595,6 +608,30 @@ export class EssenceEquipmentSheet extends EssenceItemSheetBase {
     const i = Number(target.dataset.index);
     const cards = this.item.system.equipmentCards.map((c) => ({ ...c }));
     cards.splice(i, 1);
+    await this.item.update({ "system.equipmentCards": cards });
+  }
+
+  /** A pip on a Consumable Kit card's Uses track: clicking the highest filled pip spends that Use;
+   *  clicking any other pip sets the remaining Uses to that pip's position (same rule as
+   *  EssenceActorSheet's #onTogglePip for the Combo and Temporary Wound tracks). */
+  static async #onSetEquipmentCardUses(event, target) {
+    const i = Number(target.dataset.index);
+    const pip = Number(target.dataset.pip);
+    const cards = this.item.system.equipmentCards.map((c) => ({ ...c }));
+    const card = cards[i];
+    if (!card || card.uses == null) return;
+    const current = Math.max(0, Math.min(card.uses, card.usesRemaining ?? card.uses));
+    card.usesRemaining = current === pip + 1 ? pip : pip + 1;
+    await this.item.update({ "system.equipmentCards": cards });
+  }
+
+  /** Restores a card's Uses to its maximum, as resetAdventureUses does for every kit at once. */
+  static async #onRefillEquipmentCard(event, target) {
+    const i = Number(target.dataset.index);
+    const cards = this.item.system.equipmentCards.map((c) => ({ ...c }));
+    const card = cards[i];
+    if (!card || card.uses == null || card.usesRemaining === card.uses) return;
+    card.usesRemaining = card.uses;
     await this.item.update({ "system.equipmentCards": cards });
   }
 

@@ -535,6 +535,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
     const inventoryUsed = computeSlotUsage(this.document.items, "inventory");
     // Armory 8 includes the Inventory 4 (Doc, Part III): stored + prepared against the Armory limit.
     const armoryUsed = inventoryUsed + computeSlotUsage(this.document.items, "armory");
+    const benefitConnections = system.connections.filter((c) => !c.earned).length;
     const bonus = creationBonusFor(distinctionItem);
     const expertiseCount = EXPERTISE_COUNT + bonus.expertise;
     const cardLimit = CARD_LIMIT + bonus.actionCards;
@@ -547,7 +548,7 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
       { label: `Basic Combat Cards granted (${ownedCards.filter((i) => isBasicCard(i.system)).length} / 7)`, ok: ownedCards.filter((i) => isBasicCard(i.system)).length === 7 },
       { label: `Combat Cards chosen (${nonBasicCardCount} / ${cardLimit})`, ok: nonBasicCardCount <= cardLimit },
       { label: `Skill Points spent (${ncSpent} / ${ncPool})`, ok: ncSpent === ncPool },
-      { label: `Connections within permanent Presence (${system.connections.length} / ${system.connectionLimit})`, ok: system.connections.length <= system.connectionLimit },
+      { label: `Connections within permanent Presence (${benefitConnections} / ${system.connectionLimit})`, ok: benefitConnections <= system.connectionLimit },
       { label: `Inventory Equipment within limit (${inventoryUsed} / ${system.inventoryLimit})`, ok: inventoryUsed <= system.inventoryLimit },
       { label: `Armory within limit (${armoryUsed} / ${system.armoryLimit})`, ok: armoryUsed <= system.armoryLimit }
     ];
@@ -808,10 +809,10 @@ export default class EssenceCharacterWizard extends HandlebarsApplicationMixin(D
 
   static async #onAddConnection() {
     const connections = this.document.system.connections.map((c) => ({ ...c }));
-    if (connections.length >= (this.document.system.connectionLimit ?? 0)) {
+    if (connections.filter((c) => !c.earned).length >= (this.document.system.connectionLimit ?? 0)) {
       ui.notifications.warn(game.i18n.format("ESSENCE.Character.ConnectionsOverLimit", { n: this.document.system.connectionLimit }));
     }
-    connections.push({ name: "", area: "", relationship: "", tier: 1 });
+    connections.push({ name: "", area: "", relationship: "", tier: 1, earned: false });
     await this.document.update({ "system.connections": connections });
   }
 

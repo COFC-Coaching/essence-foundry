@@ -123,7 +123,7 @@
   </table>
   <button type="button" data-action="addArrayRow" data-array="passiveFeatures"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Character.AddFeature"}}</button>
 
-  <div class="career-row">
+  <div class="career-row" data-lock-exempt>
     <label data-tooltip-text="{{localize 'ESSENCE.Character.LanguagesHint' n=system.languageCount}}">{{localize "ESSENCE.Character.Languages"}} <input name="system.languages" type="text" value="{{system.languages}}" placeholder="{{localize 'ESSENCE.Character.LanguagesPlaceholder'}}"> <span class="muted">{{localize "ESSENCE.Character.LanguagesAllowance" n=system.languageCount acuity=system.acuity}}</span></label>
   </div>
 </section>
@@ -531,7 +531,7 @@
   <div class="career-row">
     <label><span class="hint-term" data-tooltip-text="{{localize 'ESSENCE.Character.CareerHint'}}">{{localize "ESSENCE.Character.Career"}}</span> <input name="system.career" type="text" value="{{system.career}}" aria-description="{{localize 'ESSENCE.Character.CareerHint'}}"></label>
   </div>
-  <div class="key-aspects-row">
+  <div class="key-aspects-row" data-lock-exempt>
     {{#each keyAspects as |aspect|}}
       <div class="key-aspect-row">
         <label>{{localize "ESSENCE.Character.KeyAspect"}} {{aspect.n}}<input name="system.keyAspects.{{aspect.i}}" type="text" value="{{aspect.value}}"></label>
@@ -553,13 +553,14 @@
   </div>
   <button type="button" data-action="addArrayRow" data-array="nonCombatSkills"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Character.AddSkill"}}</button>
 
-  <h3 class="section-head">{{localize "ESSENCE.Character.Connections"}} <span class="muted">({{connections.length}} / {{system.connectionLimit}}) · {{localize "ESSENCE.Character.ConnectionsHint"}}</span></h3>
+  <h3 class="section-head">{{localize "ESSENCE.Character.Connections"}} <span class="muted">({{connectionsBenefitCount}} / {{system.connectionLimit}}{{#if connectionsEarnedCount}} {{localize "ESSENCE.Character.ConnectionsEarnedCount" n=connectionsEarnedCount}}{{/if}}) · {{localize "ESSENCE.Character.ConnectionsHint"}}</span></h3>
   {{#if connectionsOverLimit}}<p class="muted bio-standing-note">{{localize "ESSENCE.Character.ConnectionsOverLimit" n=system.connectionLimit}}</p>{{/if}}
-  <table class="item-table">
-    <thead><tr><th>{{localize "ESSENCE.Common.Name"}}</th><th data-tooltip-text="{{localize 'ESSENCE.Character.ConnectionAreaHint'}}">{{localize "ESSENCE.Character.ConnectionArea"}}</th><th data-tooltip-text="{{localize 'ESSENCE.Character.ConnectionRelationshipHint'}}">{{localize "ESSENCE.Character.ConnectionRelationship"}}</th><th class="connection-tier-col" data-tooltip-text="{{localize 'ESSENCE.Character.ConnectionTierHint'}}">{{localize "ESSENCE.Character.ConnectionTier"}}</th><th></th></tr></thead>
+  <table class="item-table" data-lock-exempt>
+    <thead><tr><th class="connection-earned-col" data-tooltip-text="{{localize 'ESSENCE.Character.ConnectionEarnedHint'}}"><i class="fa-solid fa-seedling" aria-hidden="true"></i><span class="sr-only">{{localize "ESSENCE.Character.ConnectionEarned"}}</span></th><th>{{localize "ESSENCE.Common.Name"}}</th><th data-tooltip-text="{{localize 'ESSENCE.Character.ConnectionAreaHint'}}">{{localize "ESSENCE.Character.ConnectionArea"}}</th><th data-tooltip-text="{{localize 'ESSENCE.Character.ConnectionRelationshipHint'}}">{{localize "ESSENCE.Character.ConnectionRelationship"}}</th><th class="connection-tier-col" data-tooltip-text="{{localize 'ESSENCE.Character.ConnectionTierHint'}}">{{localize "ESSENCE.Character.ConnectionTier"}}</th><th></th></tr></thead>
     <tbody>
       {{#each connections as |c|}}
-        <tr>
+        <tr class="{{#if c.earned}}connection-earned{{/if}}">
+          <td class="connection-earned-col"><button type="button" class="used-toggle{{#if c.earned}} used{{/if}}" data-action="toggleConnectionEarned" data-index="{{c.i}}" data-tooltip-text="{{#if c.earned}}{{localize 'ESSENCE.Character.ConnectionEarnedOn'}}{{else}}{{localize 'ESSENCE.Character.ConnectionEarnedOff'}}{{/if}}" aria-label="{{localize 'ESSENCE.Character.ConnectionEarnedAria' n=(addOne c.i)}}" aria-pressed="{{#if c.earned}}true{{else}}false{{/if}}"><i class="fa-solid fa-seedling"></i></button></td>
           <td><input name="system.connections.{{c.i}}.name" type="text" value="{{c.name}}"></td>
           <td><input name="system.connections.{{c.i}}.area" type="text" value="{{c.area}}" placeholder="{{localize 'ESSENCE.Character.ConnectionAreaPlaceholder'}}" aria-label="{{localize 'ESSENCE.Character.ConnectionArea'}}" aria-description="{{localize 'ESSENCE.Character.ConnectionAreaHint'}}"></td>
           <td><input name="system.connections.{{c.i}}.relationship" type="text" value="{{c.relationship}}" placeholder="{{localize 'ESSENCE.Character.ConnectionRelationshipPlaceholder'}}" aria-label="{{localize 'ESSENCE.Character.ConnectionRelationship'}}" aria-description="{{localize 'ESSENCE.Character.ConnectionRelationshipHint'}}"></td>
@@ -671,11 +672,14 @@
     {{#unless team}}<p class="muted bio-standing-note">{{localize "ESSENCE.Character.NoTeamHint"}}</p>{{/unless}}
     {{#if apOverspent}}<p class="bio-standing-note reach-warning" id="essence-ap-overspent-{{actor.id}}"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> {{localize "ESSENCE.Character.AdvancementPointsOverspent"}}</p>{{/if}}
   </div>
+  {{!-- Prose and notes are never build values, so the safety lock leaves them editable. --}}
+  <div class="bio-prose" data-lock-exempt>
   <label>{{localize "ESSENCE.Character.Concept"}}{{essenceEditor system.concept target="system.concept" button=true}}</label>
   <label>{{localize "ESSENCE.Character.Appearance"}}{{essenceEditor system.appearance target="system.appearance" button=true}}</label>
   <label>{{localize "ESSENCE.Character.Personality"}}{{essenceEditor system.personality target="system.personality" button=true}}</label>
   <label>{{localize "ESSENCE.Character.Backstory"}}{{essenceEditor system.backstory target="system.backstory" button=true}}</label>
   <label>{{localize "ESSENCE.Character.GeneralNotes"}}<textarea name="system.playState.sessionNotes">{{system.playState.sessionNotes}}</textarea></label>
+  </div>
 </section>
 </div>
 {{!-- Vitals sidebar (frame 0.14.0, contents 0.15.0): the blocks that used to sit on the Core and

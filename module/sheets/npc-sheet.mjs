@@ -190,9 +190,10 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
     if (this.#editUnlocked) return;
     // See EssenceActorSheet#applyEditable — [data-card-filter]/[data-card-sort] are pure
     // client-side view controls with no `name` attribute (as is the full-stats toggle), so the lock has nothing to
-    // protect by disabling them.
+    // protect by disabling them. [data-lock-exempt] marks narrative fields (GM Notes) the same way.
     for (const el of body.querySelectorAll("input, select, textarea, prose-mirror")) {
       if (el.matches("[data-card-filter], [data-card-sort], [data-action=\"toggleFullStats\"], [data-origin-select]")) continue;
+      if (el.closest("[data-lock-exempt]")) continue;
       el.disabled = true;
     }
   }

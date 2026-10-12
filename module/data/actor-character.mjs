@@ -80,13 +80,15 @@ export default class EssenceCharacterData extends EssenceCombatantData {
       // v0.6 Part II "Connections" (Doc L1155): up to permanent Presence dependable allies, each with
       // "a name, an area of involvement, and a relationship to you". `tier` (1-5) is the Tier of
       // the ally's help, agreed with the GM (Doc L2608); it replaced the free-text `scope` in
-      // 0.18.9 (see migrateData). Relationships gained through play are unrestricted, so the sheet
-      // warns past the allowance rather than blocking (L7832).
+      // 0.18.9 (see migrateData). Relationships gained through play are unrestricted (L7832):
+      // `earned` marks one of those, and the sheet counts only the unmarked rows against the
+      // Presence allowance (0.21.3) instead of warning on the raw length.
       connections: new fields.ArrayField(new fields.SchemaField({
         name: new fields.StringField({ initial: "" }),
         area: new fields.StringField({ initial: "" }),
         relationship: new fields.StringField({ initial: "" }),
-        tier: new fields.NumberField({ required: true, integer: true, initial: CONNECTION_TIER_MIN, min: CONNECTION_TIER_MIN, max: CONNECTION_TIER_MAX })
+        tier: new fields.NumberField({ required: true, integer: true, initial: CONNECTION_TIER_MIN, min: CONNECTION_TIER_MIN, max: CONNECTION_TIER_MAX }),
+        earned: new fields.BooleanField({ initial: false })
       })),
       nonCombatSkills: new fields.ArrayField(new fields.SchemaField({
         name: new fields.StringField({ initial: "" }),

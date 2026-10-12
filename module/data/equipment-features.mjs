@@ -151,7 +151,21 @@ export function deriveEquipmentStats(items, equipmentItem) {
     }
   }
 
-  return { chassis, fitting, fortitude, resilience, movement, grantedCards, combinedEffect, mountDisplay };
+  // Doc v0.7 "Fittings": the Fitting "may determine hand requirements, Range". Both live on the
+  // Fitting document (item-component.mjs handedness/rangeModifier) and are read here so the
+  // assembled item shows them without opening the Fitting (0.21.3).
+  const handedness = fitting?.system.handedness || "";
+  // The item's own `range` (edited on the equipment sheet) wins; the Fitting's modifier is the
+  // fallback. Launchers and Payloads print no Range yet, so a ranged weapon's Range is typed in
+  // by hand until the catalog supplies one.
+  const range = sys.range || fitting?.system.rangeModifier || "";
+  return { chassis, fitting, fortitude, resilience, movement, grantedCards, combinedEffect, mountDisplay, handedness, range };
+}
+
+/** Localized "One hand" / "Two hands" for a Fitting's `handedness` value; "" when unset. */
+export function handednessLabel(handedness) {
+  const key = { "one-handed": "ESSENCE.Item.Component.OneHanded", "two-handed": "ESSENCE.Item.Component.TwoHanded" }[handedness];
+  return key ? game.i18n.localize(key) : "";
 }
 
 /**
@@ -170,9 +184,13 @@ export function deriveEquipmentStats(items, equipmentItem) {
 export function equipmentEffectSummary(items, item) {
   if (item.system.isModular) {
     const stats = deriveEquipmentStats(items, item);
+    // Hands and Range lead the summary so an inventory row answers "can I hold this with a
+    // shield?" and "how far?" without opening the item.
+    const traits = [handednessLabel(stats.handedness), stats.range].filter(Boolean);
+    const lead = traits.length ? [`<span class="equipment-traits">${traits.join(" · ")}</span>`] : [];
     const pieces = stats.combinedEffect.map((ce) => `<strong>${ce.source}:</strong> ${ce.html}`);
     const cards = stats.grantedCards.map((g) => `<strong>${g.source}:</strong> ${g.effect}`);
-    return [...pieces, ...cards].join(" ");
+    return [...lead, ...pieces, ...cards].join(" ");
   }
   const flat = item.system.effect || item.system.passive || item.system.special || "";
   const cards = (item.system.equipmentCards ?? []).map((c) => `<strong>${c.name}:</strong> ${c.effect}`);
