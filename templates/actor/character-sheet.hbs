@@ -453,6 +453,8 @@
               <button type="button" data-action="releaseItem" data-item-id="{{item.id}}" data-tooltip-text="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}" aria-label="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}"><i class="fa-solid fa-hand"></i></button>
               <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
+      {{else}}
+        <tr class="drop-empty"><td colspan="5" class="muted">{{localize "ESSENCE.Sheet.DropItemsHere"}}</td></tr>
       {{/each}}
     </tbody>
   </table>
@@ -495,6 +497,8 @@
               <button type="button" data-action="releaseItem" data-item-id="{{item.id}}" data-tooltip-text="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}" aria-label="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}"><i class="fa-solid fa-hand"></i></button>
               <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
+      {{else}}
+        <tr class="drop-empty"><td colspan="4" class="muted">{{localize "ESSENCE.Sheet.DropItemsHere"}}</td></tr>
       {{/each}}
     </tbody>
   </table>
@@ -518,6 +522,8 @@
               <button type="button" data-action="releaseItem" data-item-id="{{item.id}}" data-tooltip-text="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}" aria-label="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}"><i class="fa-solid fa-hand"></i></button>
               <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button></td>
         </tr>
+      {{else}}
+        <tr class="drop-empty"><td colspan="4" class="muted">{{localize "ESSENCE.Sheet.DropItemsHere"}}</td></tr>
       {{/each}}
     </tbody>
   </table>

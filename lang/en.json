@@ -114,6 +114,7 @@
   "ESSENCE.Sheet.UsedThisAdventureHint": "Used allocation stays committed for the rest of the Adventure, even if stored, lent, depleted, lost, or replaced. Only Unused items freely transfer to an equal-capacity replacement on Armory access.",
   "ESSENCE.Sheet.ToggleItemUsedAria": "Mark {name} as used or unused this Adventure",
   "ESSENCE.Sheet.AddItem": "Add Item",
+  "ESSENCE.Sheet.DropItemsHere": "No items yet. Drag equipment here from the Essence Browser, a compendium or the Items directory, or use Add Item.",
   "ESSENCE.Sheet.AddItemToSlotAria": "Add a new item to {slot}",
   "ESSENCE.Common.EditThisItem": "Edit this item",
   "ESSENCE.Common.Effect": "Effect",

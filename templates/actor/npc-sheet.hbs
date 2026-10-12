@@ -485,6 +485,8 @@
       <button type="button" data-action="releaseItem" data-item-id="{{item.id}}" data-tooltip-text="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}" aria-label="{{localize 'ESSENCE.Sheet.ReleaseItemAria' name=item.name}}"><i class="fa-solid fa-hand"></i></button>
       <button type="button" data-action="itemDelete" data-item-id="{{item.id}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=item.name}}"><i class="fa-solid fa-trash"></i></button>
     </li>
+  {{else}}
+    <li class="drop-empty muted">{{localize "ESSENCE.Sheet.DropItemsHere"}}</li>
   {{/each}}
 </ul>
 <button type="button" data-action="createEquipment" data-slot="inventory"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.AddItem"}}</button>

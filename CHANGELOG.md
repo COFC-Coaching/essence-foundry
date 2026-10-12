@@ -2,6 +2,12 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.21.4
+
+**Portrait art reaches the token.** Uploading a Portrait now sets the prototype token's image to the same file whenever the token was still showing Foundry's placeholder silhouette or the previous Portrait. Players were uploading the same art twice (2026-10-11 playtest) because core copies the Portrait across only once, on an Actor's first customisation. A token image chosen deliberately, different from the Portrait, is left as it is, and the Token Image button on the sheet still sets one. Applies to Characters, NPCs and Monsters.
+
+**Empty equipment tables accept a drop.** An empty Inventory, Temporary Items or Armory table had no body to drop onto, so a new character's first item could only arrive through Add Item or the Essence Browser's Add button. Each empty table now shows a "No items yet" row that names where to drag from, and the whole section keeps a minimum height, so a drag from the Browser, a compendium or the Items directory lands in the right slot. The NPC and Monster Equipment lists have the same row.
+
 ## 0.21.3
 
 **Hands and Range on the assembled item.** A weapon, shield or implement's sheet now shows Hands (one or two) and Range in its info grid, read from its Fitting, and the Equipment tab's Effect cell leads with the same pair, for example "Two hands · Melee 1". Both were already stored on each Grip and Interface but only visible by opening that part. The rules (Doc v0.7, Fittings) place hand requirements and Range on the Fitting; Launchers and Payloads carry no Range in the playtest catalog, so the edit view now has a Range box on every weapon, shield and implement: type one and it shows on the sheet and the Equipment tab; leave it blank and the Fitting's Range is used. The box stays until the catalog prints ranged Ranges, when it can be filled automatically.

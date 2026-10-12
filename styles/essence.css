@@ -795,6 +795,12 @@
    and, via its parent .equipment-drop-zone, the drop target for new items from a compendium/the
    Items directory. */
 .essence .draggable-row { cursor: grab; }
+/* An empty tbody has no height, so there was nothing to drop onto until one item existed
+   (2026-10-11 playtest). The zone keeps a floor and the empty row names the target. */
+.essence .equipment-drop-zone { min-height: 6em; }
+.essence .drop-empty { font-style: italic; }
+.essence .item-table .drop-empty td { padding: 10px 6px; text-align: center; }
+.essence .item-list li.drop-empty { justify-content: center; padding: 10px 0; }
 .essence .draggable-row:active { cursor: grabbing; }
 /* Every "add a new row" button system-wide (+ Add Item, Add Skill, Add Expertise, Add Mount, Add
    Body Line, Add Trait, ...) shares one plus-icon-first, labeled-button markup convention

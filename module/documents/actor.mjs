@@ -23,6 +23,17 @@ export default class EssenceActor extends Actor {
       const current = sys.playState?.currentTemporaryWounds ?? this.system?.playState?.currentTemporaryWounds ?? 0;
       if (current > granted) foundry.utils.setProperty(changes, "system.playState.currentTemporaryWounds", granted);
     }
+    // Core copies the Portrait onto the prototype token only once, on first customisation, so
+    // players were uploading the same art twice (2026-10-11 playtest). When the Portrait changes
+    // and the token image is still Foundry's placeholder or the old Portrait, the token follows.
+    // A token image chosen deliberately (different from the Portrait) is left alone.
+    if (typeof changes.img === "string" && changes.img !== this.img
+        && foundry.utils.getProperty(changes, "prototypeToken.texture.src") === undefined) {
+      const tokenSrc = this.prototypeToken?.texture?.src;
+      if (!tokenSrc || tokenSrc === CONST.DEFAULT_TOKEN || tokenSrc === this.img) {
+        foundry.utils.setProperty(changes, "prototypeToken.texture.src", changes.img);
+      }
+    }
     return super._preUpdate(changes, options, user);
   }
   /**
