@@ -546,12 +546,23 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
         ui.notifications.warn(game.i18n.format("ESSENCE.Notify.EnemyNeedsPermission", { name: this.actor.name, card: item.name }));
         return;
       }
+      // Ryan (2026-10-18): a Mook's cards are "limited per turn/fight rather than die pool", so the
+      // card's own once-per-Round / once-per-Encounter cooldown applies here as it does for an
+      // Elite, and the Turn/Round allowance warns when exceeded (this project's convention).
+      if (cardOnCooldown(item)) {
+        ui.notifications.warn(`${item.name} is on cooldown (${sys.cooldownFrequency === "perEncounter" ? "once per Encounter" : "once per Round"}) and isn't available yet.`);
+        return;
+      }
       const isReaction = item.type === "reaction-card";
       const turn = this.actor.system.enemyTurn ?? { actionsUsed: 0, reactionsUsed: 0 };
+      const rsys = this.actor.system;
+      if (isReaction && (turn.reactionsUsed ?? 0) >= (rsys.effectiveReactionsPerRound ?? 0)) ui.notifications.warn(game.i18n.format("ESSENCE.Notify.EnemyReactionsUsed", { name: this.actor.name, n: rsys.effectiveReactionsPerRound }));
+      if (!isReaction && (turn.actionsUsed ?? 0) >= (rsys.effectiveActionsPerTurn ?? 1)) ui.notifications.warn(game.i18n.format("ESSENCE.Notify.EnemyActionsUsed", { name: this.actor.name, n: rsys.effectiveActionsPerTurn }));
       const update = isReaction
         ? { "system.enemyTurn.reactionsUsed": (turn.reactionsUsed ?? 0) + 1 }
         : { "system.enemyTurn.actionsUsed": (turn.actionsUsed ?? 0) + 1 };
       await this.actor.update(update);
+      await applyCardCooldown(this.actor, item);
       const pool = Math.max(2, parseInt(sys.min, 10) || 2);
       const { defense, targets } = await EssenceNpcSheet.#resolveTargets((sys.defense || "").toLowerCase());
       await rollEssencePool({ card: item, pool, defense, targets, label: `${item.name} (printed ${pool}d10)`, actor: this.actor, surgeOptions: sys.surges, unopposed: !!sys.unopposed, nonCombat: !!sys.noSurges });

@@ -2,6 +2,16 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.21.5
+
+Ryan's notes on the Mook sheet (2026-10-18). Rules details checked against the v0.7 Doc's Enemy Construction section.
+
+**An ability's text is where you can find it.** Each Ability on an NPC or Monster sheet now has a labeled Effect box under its name, kind, frequency, dice and defense controls, full width, with a placeholder when empty and the edit pencil always showing. It stays editable while the sheet is locked, like GM Notes. Before this the text was a third table column that the controls squeezed to a sliver, and Foundry only shows a rich-text field's pencil on hover, so a new ability on a locked or unlocked sheet looked like it had no text field at all.
+
+**Mooks and Normals keep their cards in view.** The Action Card, Reaction Card and Equipment Card lists now show on the compact Mook and Normal view, with the card search box, and a line explaining how a card plays there: a printed roll of its minimum dice that spends one of this Turn's Actions or this Round's Reactions. Playing one also respects the card's own once-per-Round or once-per-Encounter cooldown and warns when the Turn or Round allowance is already spent. Only the Basic Action and Basic Reaction grids stay behind the "Show Attributes, Styles, Basic Actions and Pools" toggle, since the reduced engine refuses Basic attacks and Defend without explicit permission. The Doc gives Mooks and Normals printed abilities rather than player cards; this follows Ryan's request that they can still hold cards, limited per Turn and per fight rather than by a Pool.
+
+**No Influence or Reach on the compact view.** Mook and Normal sheets no longer show the Influence pips and buttons, the Reach field or Reach Triggers; the Doc defines Influence and Reach for characters only and lists neither on a compact enemy record. Elites keep them. The Reset Adventure Uses and New Encounter buttons stay on every Grade, and the stored values are untouched, so switching a Grade to Elite shows them again.
+
 ## 0.21.4
 
 **Portrait art reaches the token.** Uploading a Portrait now sets the prototype token's image to the same file whenever the token was still showing Foundry's placeholder silhouette or the previous Portrait. Players were uploading the same art twice (2026-10-11 playtest) because core copies the Portrait across only once, on an Actor's first customisation. A token image chosen deliberately, different from the Portrait, is left as it is, and the Token Image button on the sheet still sets one. Applies to Characters, NPCs and Monsters.

@@ -779,6 +779,26 @@
 .essence .item-table td p:first-child { margin-top: 0; }
 .essence .item-table td p:last-child { margin-bottom: 0; }
 .essence .item-table td p { margin: 0 0 4px; }
+/* Enemy Abilities (Ryan, 2026-10-18): the six controls wrap on one line and the Effect text sits
+   under them full-width. Before this the text was a third table column that the controls squeezed
+   to a sliver, and core shows a toggled editor's pencil only on hover, so a fresh ability read as
+   "no text field". The pencil stays visible here, the idle box is short, the open editor tall
+   enough to write in (core's .editor-content is absolute, so only --min-height sizes it), and the
+   placeholder is a sibling span over the empty box that hides once the editor opens. */
+.essence .ability-controls { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; margin-bottom: 6px; }
+.essence .ability-controls > input[type="text"] { flex: 1 1 10em; min-width: 8em; }
+.essence .ability-controls > select { flex: 0 1 auto; width: auto; max-width: 13em; }
+.essence .ability-controls > label { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.essence .ability-text { position: relative; }
+.essence .ability-text > .attr-label { display: block; margin-bottom: 2px; }
+.essence .ability-text prose-mirror.editor { --min-height: 5.2em; }
+.essence .ability-text prose-mirror.editor[open] { --min-height: 12em; }
+.essence .ability-text prose-mirror button.toggle:enabled { display: block; }
+.essence .ability-text prose-mirror.inactive .editor-content { padding-right: 36px; }
+.essence .ability-text .editor-placeholder { position: absolute; z-index: 1; left: 13px; top: calc(1.4em + 10px); right: 40px; font-style: italic; font-size: 0.9em; pointer-events: none; }
+.essence .ability-text:has(prose-mirror[open]) .editor-placeholder { display: none; }
+.essence .item-table td.ability-actions { width: 1%; white-space: nowrap; }
+.essence .cards-reduced-hint { margin: 2px 0 8px; font-size: 0.85em; }
 /* An assembled equipment item's Effect cell can hold an entire merged card (requirement, name,
    resolution, range, trigger, effect, two surge tiers, design note) — a scanning table row should
    preview that, not carry it in full; the View button already opens the same content as a clean

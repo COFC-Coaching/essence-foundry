@@ -230,6 +230,9 @@
 </div>
 {{> "systems/essence-system/templates/actor/parts/death-track.hbs"}}
 
+{{!-- Ryan (2026-10-18): a Mook or Normal has no Influence or Reach to track; both blocks are
+     Elite-only on the compact engine. The data stays on the actor untouched. --}}
+{{#unless isReduced}}
 <h3 class="section-head">{{localize "ESSENCE.Sheet.Influence"}} <span class="muted">— {{system.standing}}</span></h3>
 <div class="influence-row">
   <div class="wound-block">
@@ -284,6 +287,8 @@
 {{/if}}
 <div class="button-row">
   <button type="button" data-action="addReachTrigger"><i class="fa-solid fa-plus"></i> {{localize "ESSENCE.Sheet.AddReachTrigger"}}</button>
+{{/unless}}
+{{#if isReduced}}<div class="button-row">{{/if}}
   <button type="button" data-action="resetAdventureUses" data-tooltip-text="{{localize 'ESSENCE.Sheet.ResetAdventureUsesTooltip'}}">{{localize "ESSENCE.Sheet.ResetAdventureUses"}}</button>
   <button type="button" data-action="newEncounter" data-tooltip-text="{{localize 'ESSENCE.Sheet.NewEncounterTooltip'}}">{{localize "ESSENCE.Sheet.NewEncounter"}}</button>
 </div>
@@ -293,7 +298,8 @@
     <tbody>
       {{#each abilities as |a|}}
         <tr>
-          <td>
+          <td class="ability-cell">
+            <div class="ability-controls">
             <input type="text" name="system.abilities.{{a.i}}.name" value="{{a.name}}" placeholder="{{localize 'ESSENCE.Common.Name'}}">
             <select name="system.abilities.{{a.i}}.kind">
               <option value="action" {{#if (eq a.kind "action")}}selected{{/if}}>{{localize "ESSENCE.Item.Monster.KindAction"}}</option>
@@ -321,9 +327,18 @@
               <span class="muted">{{localize "ESSENCE.Common.UsesFraction" remaining=a.usesRemaining total=a.usesMax}}</span>
             {{/if}}
             {{#if (eq a.frequency "perRound")}}<span class="muted">{{#if a.usedThisRound}}({{localize "ESSENCE.Common.Used"}}){{/if}}</span>{{/if}}
+            </div>
+            {{!-- Ryan (2026-10-18): the text sat in a side column that the six controls squeezed to a
+                 sliver, with core's edit pencil hidden until hover, so a new ability looked to have no
+                 text field at all. Full-width under the controls, labeled, placeholder when empty,
+                 pencil always visible (essence.css .ability-text). Lock-exempt like GM Notes. --}}
+            <div class="ability-text" data-lock-exempt>
+              <span class="attr-label">{{localize "ESSENCE.Item.Monster.AbilityText"}}</span>
+              {{#unless a.text}}<span class="editor-placeholder muted">{{localize "ESSENCE.Item.Monster.AbilityTextPlaceholder"}}</span>{{/unless}}
+              {{essenceEditor a.text target=(concat "system.abilities." a.i ".text") button=true}}
+            </div>
           </td>
-          <td>{{essenceEditor a.text target=(concat "system.abilities." a.i ".text") button=true}}</td>
-          <td>
+          <td class="ability-actions">
             <button type="button" data-action="useAbility" data-index="{{a.i}}">{{localize "ESSENCE.Sheet.Use"}}</button>
             <button type="button" data-action="deleteAbility" data-index="{{a.i}}" aria-label="{{localize 'ESSENCE.Common.DeleteAria' name=a.name}}"><i class="fa-solid fa-trash"></i></button>
           </td>
@@ -369,9 +384,14 @@
     </div>
   </div>
 
-{{#if showFullStats}}
+{{!-- Ryan (2026-10-18): a Mook or Normal still holds Action and Reaction Cards, played as a printed
+     roll against its Turn/Round allowance (#onRollItem's reduced branch), so the card lists and
+     Equipment Cards show on the compact view too. Only the Basic Action/Reaction grids stay behind
+     the full-stats toggle: the reduced engine refuses Basic attacks and Defend without permission. --}}
   <input type="text" data-card-filter placeholder="{{localize 'ESSENCE.Sheet.SearchCardsPlaceholder'}}" class="card-filter-input">
+  {{#if isReduced}}<p class="muted cards-reduced-hint">{{localize "ESSENCE.Item.Monster.CardsReducedHint"}}</p>{{/if}}
 
+{{#if showFullStats}}
   <h3 class="section-head">{{localize "ESSENCE.Sheet.BasicActions"}}</h3>
   <div class="basic-action-grid">
     {{#each basicActionCards as |item|}}
@@ -380,6 +400,7 @@
       <span class="muted">{{localize "ESSENCE.Sheet.NoBasicActions"}}</span>
     {{/each}}
   </div>
+{{/if}}
 
   <div class="card-section-head">
     <h3 class="section-head">{{localize "ESSENCE.Item.ActionCard"}}</h3>
@@ -407,6 +428,7 @@
     {{/each}}
   </ul>
 
+{{#if showFullStats}}
   <h3 class="section-head">{{localize "ESSENCE.Sheet.BasicReactions"}}</h3>
   <div class="basic-action-grid">
     {{#each basicReactionCards as |item|}}
@@ -415,6 +437,7 @@
       <span class="muted">{{localize "ESSENCE.Sheet.NoBasicReactions"}}</span>
     {{/each}}
   </div>
+{{/if}}
 
   <div class="card-section-head">
     <h3 class="section-head">{{localize "ESSENCE.Item.ReactionCard"}}</h3>
@@ -459,7 +482,6 @@
   </ul>
 {{/if}}
 
-{{/if}}
 <h3 class="section-head">{{localize "ESSENCE.Sheet.Conditions"}}</h3>
 <ul class="item-list condition-list">
   {{#each conditions as |item|}}
