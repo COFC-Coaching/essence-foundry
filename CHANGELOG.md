@@ -2,6 +2,10 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.21.7
+
+**Basic cards stay current.** A Dash on a live sheet posted "Deal 1 damage" when played. Dash has never dealt damage in the compendium; the sheet held an old copy of the card, and the chat card prints the copy the actor owns. Every actor's Basic cards (Basic Melee Attack, Basic Ranged Attack, Dash, Perform Task, Prepare Action, Reconfigure, Stabilize, Defend) are now rewritten from the compendium on the first GM load of each system version, keeping the card's cooldown state. The GM gets a whisper naming each sheet and card that changed, so a deliberate house edit can be put back by hand. The six non-attack Basics in the compendium were checked: none of them mentions damage in any body line, Surge or Rider.
+
 ## 0.21.6
 
 **Initiative can take 0 dice.** The Roll Initiative prompt for a character or Elite now accepts 0. Committing nothing rolls nothing: the combatant is placed at Initiative 0, acts last in the Round, and keeps its whole first Action Pool. A chat line records it. The v0.7 Doc still words the choice as "from 1 die up to your base Action Pool size" in the Initiative chapter, Advancement, the Glossary and Appendix B; this follows Shane's ruling (2026-10-18) and the Doc wording is to catch up.

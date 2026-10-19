@@ -30,6 +30,7 @@ import { GRADE_BUDGETS } from "./data/monster-budgets.mjs";
 import EssenceGradeBudgetsSettings from "./apps/grade-budgets-settings.mjs";
 import { registerWhatsNewSetting, checkWhatsNew, handleWhatsNewChatCommand } from "./apps/whats-new.mjs";
 import { repairWorldData } from "./apps/world-repair.mjs";
+import { registerBasicCardSyncSetting, syncBasicCards } from "./data/basic-card-sync.mjs";
 
 /** Foundry combat's own enum values, given a display label a player should actually see. */
 const TURN_LABELS = { notStarted: "Not Started", first: "First Turn", active: "Active", ended: "Ended" };
@@ -136,6 +137,7 @@ Hooks.once("init", () => {
   });
 
   registerWhatsNewSetting();
+  registerBasicCardSyncSetting();
 
   // Cover art behind every actor sheet (sheet concept, 2026-09-27). A world-scoped image path
   // through Foundry's own FilePathField, so the settings UI shows its file picker; blank = plain
@@ -904,4 +906,13 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
       await message.update({ "flags.essence-system.spentIndices": Array.from(next) });
     };
   }
+});
+
+/**
+ * Once per system version: rewrite every actor's Basic cards from the compendium, so a reminder
+ * card never keeps an old version's text (Shane, 2026-10-18: a live Dash read "Deal 1 damage").
+ * See module/data/basic-card-sync.mjs. Runs after repairWorldData, which is the first ready hook.
+ */
+Hooks.once("ready", async () => {
+  await syncBasicCards();
 });

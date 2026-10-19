@@ -1085,6 +1085,7 @@
   "ESSENCE.Notify.PersonalTierAffectedIntro": "<p>These characters had a personal Tier above 1. Adjust their Pool bonus and Level by hand if needed:</p>",
   "ESSENCE.Notify.PersonalTierEntry": "{name}: was Tier {tier}, Level {level}",
   "ESSENCE.Notify.PersonalTierNoneAffected": "<p>No character had a personal Tier above 1, so no Pool bonus or Level needs adjusting.</p>",
+  "ESSENCE.Notify.BasicCardsResynced": "<p><strong>Essence System {version}:</strong> the Basic cards on these sheets were older copies and now match the compendium text: {details}. If one of them was a deliberate house edit, put it back by hand.</p>",
   "ESSENCE.Notify.ResilienceEffectRekeyed": "<p><strong>Essence System update:</strong> the Athlete Distinction's Resilience +1 was being saved into these characters' base Resilience, adding 1 more each time their sheet saved. It now applies as a bonus instead. Please check each character's base Resilience and correct it by hand if it grew: {names}.</p>",
   "ESSENCE.Browser.Title": "Essence Browser",
   "ESSENCE.Browser.SidebarButton": "Browse",
