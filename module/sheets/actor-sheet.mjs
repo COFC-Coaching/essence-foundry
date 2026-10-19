@@ -1678,12 +1678,12 @@ export default class EssenceActorSheet extends HandlebarsApplicationMixin(ActorS
    * (L4117) leaves the character Stabilized and unconscious; the Death Track threshold is death
    * (L4059); a Core Wound while concentrating asks for the burn-or-end choice (L4632).
    */
-  static async #onApplyDamage() {
+  static async #onApplyDamage(event, target, prefill = null) {
     if (this.actor.system.playState.deathTrackState === "dead") {
       ui.notifications.warn(game.i18n.format("ESSENCE.Notify.DeadActor", { name: this.actor.name }));
       return;
     }
-    const picked = await promptDamageComponents({ types: DAMAGE_TYPES });
+    const picked = await promptDamageComponents({ types: DAMAGE_TYPES, prefill: prefill?.rows ?? [], source: prefill?.source ?? "" });
     if (!picked) return false;
     await EssenceActorSheet.#applyDamageComponents(this.actor, picked.components, picked.reduction, picked.weakened);
     // true tells a chat card's Apply button the damage went through (renderChatMessageHTML).

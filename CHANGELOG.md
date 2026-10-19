@@ -2,6 +2,12 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.21.8
+
+**Apply Damage is small and arrives filled in.** The Apply Damage form was a screen-wide dialog with three blank rows and a paragraph of rules, and pressing Apply on a chat card opened the target's whole sheet first. It is now a 440-pixel dialog with one row per printed component, a "+ Component" button for more (up to three), Reduction and Weakened on one line, and the rules text behind a question-mark tooltip. From a chat card it opens with the played card's printed Damage already in the rows, including Surges spent on that roll ("deal 1 Radiant Damage" plus "+1 Damage" gives one row of 2 Radiant); "weapon Damage" fills the amount and leaves the type for you, since equipment carries no Damage number. The target's sheet stays closed. The sheet's own Apply Damage button opens the same dialog, blank.
+
+**Surge options on an open roll.** A card rolled without a declared target showed only the "Defense wasn't declared, so the GM decides" note and dropped the card's Surge options, so nobody could spend them. The options now follow the note, with the candidate-dice count as the ceiling.
+
 ## 0.21.7
 
 **Basic cards stay current.** A Dash on a live sheet posted "Deal 1 damage" when played. Dash has never dealt damage in the compendium; the sheet held an old copy of the card, and the chat card prints the copy the actor owns. Every actor's Basic cards (Basic Melee Attack, Basic Ranged Attack, Dash, Perform Task, Prepare Action, Reconfigure, Stabilize, Defend) are now rewritten from the compendium on the first GM load of each system version, keeping the card's cooldown state. The GM gets a whisper naming each sheet and card that changed, so a deliberate house edit can be put back by hand. The six non-attack Basics in the compendium were checked: none of them mentions damage in any body line, Surge or Rider.

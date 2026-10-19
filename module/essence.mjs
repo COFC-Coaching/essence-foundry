@@ -23,7 +23,7 @@ import EssenceBulkImport from "./apps/bulk-import.mjs";
 import EssenceCompendiumBrowser from "./apps/compendium-browser.mjs";
 import { capitalize, fitTitleSize, domainResource, fittingReconfigureCost } from "./utils.mjs";
 import { rollEssencePool, resolvePendingCardPlay } from "./dice/essence-roll.mjs";
-import { targetsFromTokens, resolveTargetsForDefense } from "./sheets/card-play.mjs";
+import { targetsFromTokens, resolveTargetsForDefense, printedDamageComponents } from "./sheets/card-play.mjs";
 import { syncNaturalWeapons } from "./data/natural-weapons.mjs";
 import { syncEquipmentEffect } from "./data/equipment-effects.mjs";
 import { GRADE_BUDGETS } from "./data/monster-budgets.mjs";
@@ -837,16 +837,25 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
   const applied = new Set(data?.appliedTo ?? []);
   // "Apply to targeted tokens" (Shane, 2026-09-28): reads the clicker's targets when pressed, so a
   // GM can target one or several tokens and apply a card the player rolled without a target.
+  // Shane (2026-10-18): Apply no longer opens the target's sheet first; the sheet's action runs
+  // on the actor directly, and the form opens with the card's printed Damage and spent Surges
+  // already in its rows (printedDamageComponents, card-play.mjs).
+  const damagePrefill = async () => {
+    const card = data?.cardUuid ? await fromUuid(data.cardUuid) : null;
+    const spent = (data?.spentIndices ?? []).map((i) => data.surgeOptions?.[i]?.html).filter(Boolean);
+    return { rows: printedDamageComponents(card, spent), source: card?.name ?? "" };
+  };
+  const applyTo = async (actor) => {
+    const sheet = actor.sheet;
+    const handler = sheet?.options.actions?.applyDamage;
+    if (typeof handler !== "function") return false;
+    return handler.call(sheet, new Event("click"), null, await damagePrefill());
+  };
   const applyAll = html.querySelector("[data-action='applyToTargets']");
   if (applyAll) applyAll.onclick = async () => {
     const tokens = Array.from(game.user.targets).filter((t) => t.actor);
     if (!tokens.length) return ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ApplyNeedsTarget"));
-    for (const t of tokens) {
-      const sheet = t.actor.sheet;
-      await sheet.render(true);
-      const handler = sheet.options.actions?.applyDamage;
-      if (typeof handler === "function") await handler.call(sheet, new Event("click"), sheet.element);
-    }
+    for (const t of tokens) await applyTo(t.actor);
   };
   for (const btn of html.querySelectorAll(".rc-actions [data-action]")) {
     // Only the Apply and Card buttons belong to this loop; the reroll and pending-card buttons
@@ -861,12 +870,9 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
     btn.onclick = async () => {
       const doc = await fromUuid(btn.dataset.uuid);
       if (!doc) return ui.notifications.warn(game.i18n.localize("ESSENCE.Notify.ChatTargetGone"));
-      const sheet = doc.sheet;
-      await sheet.render(true);
+      if (btn.dataset.action === "openCard") return doc.sheet.render(true);
       if (btn.dataset.action === "applyDamage") {
-        const handler = sheet.options.actions?.applyDamage;
-        if (typeof handler !== "function") return;
-        const done = await handler.call(sheet, new Event("click"), sheet.element);
+        const done = await applyTo(doc);
         if (done !== true) return;
         markApplied();
         if (message.isOwner && !applied.has(btn.dataset.uuid)) {

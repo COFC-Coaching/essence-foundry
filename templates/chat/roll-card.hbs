@@ -94,10 +94,20 @@
     {{#if noSurges}}
       <p class="muted no-surges-note"><strong>{{localize "ESSENCE.Chat.Surges"}}:</strong> {{localize "ESSENCE.Chat.NoSurgesMook"}}</p>
     {{else if openRoll}}
-      <p class="rc-lbl-row"><span class="rc-lbl">{{localize "ESSENCE.Chat.Surges"}}</span></p>
-      <p class="muted open-roll-note">
-        {{#if (eq surges 1)}}{{localize "ESSENCE.Chat.OpenRollNoteSingular" surges=surges}}{{else}}{{localize "ESSENCE.Chat.OpenRollNotePlural" surges=surges}}{{/if}}
-      </p>
+      {{!-- Shane (2026-10-18): a roll with no declared Defense used to show only this note and
+           drop the card's Surge options, so nobody could spend them. The options follow the note;
+           the candidate count is the ceiling the GM works within. --}}
+      <div class="surge-options">
+        <p class="surges-remaining"><span class="rc-lbl">{{localize "ESSENCE.Chat.Surges"}}</span> <span class="muted"><span class="remaining">{{surges}}</span> / {{surges}} {{localize "ESSENCE.Chat.Available"}}</span></p>
+        <p class="muted open-roll-note">
+          {{#if (eq surges 1)}}{{localize "ESSENCE.Chat.OpenRollNoteSingular" surges=surges}}{{else}}{{localize "ESSENCE.Chat.OpenRollNotePlural" surges=surges}}{{/if}}
+        </p>
+        {{#each surgeOptions as |opt|}}
+          <button type="button" class="surge-option" data-index="{{opt.i}}" data-cost="{{opt.n}}">
+            <span class="cost">{{opt.n}}</span> <span class="surge-text">{{{opt.html}}}</span>
+          </button>
+        {{/each}}
+      </div>
     {{else if surgeOptions.length}}
       <div class="surge-options">
         <p class="surges-remaining"><span class="rc-lbl">{{localize "ESSENCE.Chat.Surges"}}</span> <span class="muted"><span class="remaining">{{surges}}</span> / {{surges}} {{localize "ESSENCE.Chat.Available"}}</span></p>

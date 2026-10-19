@@ -889,8 +889,8 @@ export default class EssenceNpcSheet extends HandlebarsApplicationMixin(ActorShe
    * Wounds and the capacity. A full capacity is Defeated and unconscious (L4062); a nonlethal
    * component filling it leaves the enemy Defeated but stable (L4117). No Death Track.
    */
-  static async #onApplyDamage() {
-    const picked = await promptDamageComponents({ types: DAMAGE_TYPES });
+  static async #onApplyDamage(event, target, prefill = null) {
+    const picked = await promptDamageComponents({ types: DAMAGE_TYPES, prefill: prefill?.rows ?? [], source: prefill?.source ?? "" });
     if (!picked) return false;
 
     const sys = this.actor.system;

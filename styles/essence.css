@@ -261,6 +261,16 @@
    own, and core's and other modules' dialogs are left alone. */
 .application.dialog.essence-dialog { max-width: min(560px, 95vw); }
 .application.dialog.essence-dialog .damage-component select { min-width: 0; }
+/* Apply Damage (0.21.8, Shane: "simpler and not so HUGE"): a 440px dialog, one compact row per
+   printed component (amount, type, Breach, Nonlethal), more rows on request, the rules text in a
+   tooltip behind the question mark. .is-hidden rather than `hidden` so the add button can reveal. */
+.application.dialog.essence-apply-damage .damage-component { display: grid; grid-template-columns: 3.6em minmax(0, 1fr) auto auto; gap: 6px; align-items: center; margin-bottom: 4px; }
+.application.dialog.essence-apply-damage .damage-component.is-hidden { display: none; }
+.application.dialog.essence-apply-damage .damage-component label { display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; font-size: 0.85em; }
+.application.dialog.essence-apply-damage .apply-damage-source { margin: 0 0 6px; font-size: 0.85em; }
+.application.dialog.essence-apply-damage .apply-damage-foot { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin-top: 6px; font-size: 0.9em; }
+.application.dialog.essence-apply-damage .apply-damage-foot input[type="number"] { width: 3.6em; }
+.application.dialog.essence-apply-damage .apply-damage-foot .fa-circle-question { margin-left: auto; cursor: help; }
 /* .essence-sheet-root is a column flexbox, so any element placed directly inside it — rather than
    inside a section/div wrapper, as everything else on every sheet is — inherits the column's
    default cross-axis stretch and silently becomes full sheet-width. Invisible on a div or table

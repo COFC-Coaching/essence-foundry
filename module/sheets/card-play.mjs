@@ -9,7 +9,7 @@
  * real mechanic lives on the Equipment tab's per-item buttons; from the card row it only spends and
  * posts, as before.
  */
-import { burnOnlyProfile, stripHtml } from "../utils.mjs";
+import { burnOnlyProfile, stripHtml, DAMAGE_TYPES } from "../utils.mjs";
 
 /**
  * The Defense(s) a card rolls against, read from the user's current targets: several targets give
@@ -227,29 +227,74 @@ async function preparePlay(actor, item, available, burn) {
 }
 
 /**
+ * The Damage a played card prints, as Apply Damage rows (Shane, 2026-10-18: the form should open
+ * filled in, not blank). Reads "deal 2 Piercing Damage", "1 weapon Damage", "+1 Damage" and the
+ * like from the card's body lines and the Surge options that were spent on this roll. A typed
+ * component gets its type; "weapon" and untyped Damage keep the default type for the GM to set,
+ * since equipment carries no Damage number of its own. A bare "+N Damage" (a Surge rider) adds to
+ * the first component. Returns at most three rows, in the card's order.
+ * @param {Item|null} card
+ * @param {string[]} [spentSurgeHtml] the html of the Surge options spent on the roll
+ * @returns {Array<{amount: number, type: string|null}>}
+ */
+export function printedDamageComponents(card, spentSurgeHtml = []) {
+  if (!card) return [];
+  const texts = [...(card.system.body ?? []).map((b) => b.html), ...spentSurgeHtml].map((h) => stripHtml(h ?? ""));
+  const types = DAMAGE_TYPES.join("|");
+  // "1 Physical Piercing Damage": the domain word may sit between the number and the type.
+  const re = new RegExp(`(\\+)?(\\d+)\\s+(?:(?:Physical|Mental|Spiritual)\\s+)?(?:(${types}|weapon)\\s+)?Damage`, "gi");
+  const rows = [];
+  for (const text of texts) {
+    for (const m of text.matchAll(re)) {
+      const amount = parseInt(m[2], 10);
+      if (!amount) continue;
+      const typed = m[3] ? DAMAGE_TYPES.find((t) => t.toLowerCase() === m[3].toLowerCase()) ?? null : null;
+      if (m[1] === "+" && rows.length) { rows[0].amount += amount; continue; }
+      rows.push({ amount, type: typed });
+    }
+  }
+  return rows.slice(0, 3);
+}
+
+/**
  * Apply Damage prompt (0.10.1, Doc L3896-L3918): up to three printed components, each with an
  * amount, Damage type, Breach and (when the source grants it) nonlethal; plus the generic flat
  * reduction applied once to the total, with Weakened (Doc L4188) as a one-click −1 source.
+ * Compact since 0.21.8 (Shane, 2026-10-18): one row per prefilled component (at least one), more
+ * on request, the explanatory text in a tooltip, and the system's dialog width.
+ * @param {object} options
+ * @param {string[]} options.types
+ * @param {Array<{amount: number, type?: string|null}>} [options.prefill] rows from the played card
+ * @param {string} [options.source] the card the rows came from, named under the title
  * @returns {Promise<{components: Array, reduction: number, weakened: boolean}|null>}
  */
-export async function promptDamageComponents({ title = "Apply Damage", types, rows = 3 } = {}) {
-  const typeOptions = types.map((t) => `<option value="${t}">${t}</option>`).join("");
-  const row = (i) => `
-    <div class="damage-component" style="display:grid;grid-template-columns:4em 1fr auto auto;gap:6px;align-items:center;margin-bottom:4px;">
-      <input type="number" name="amount${i}" value="${i === 0 ? 1 : 0}" min="0" aria-label="Component ${i + 1} amount"${i === 0 ? " autofocus" : ""}>
-      <select name="type${i}" aria-label="Component ${i + 1} Damage type">${typeOptions}</select>
+export async function promptDamageComponents({ title = "Apply Damage", types, rows = 3, prefill = [], source = "" } = {}) {
+  const typeOptions = (selected) => types.map((t) => `<option value="${t}"${t === selected ? " selected" : ""}>${t}</option>`).join("");
+  const shown = Math.min(rows, Math.max(1, prefill.length));
+  const row = (i) => {
+    const pre = prefill[i];
+    const amount = pre ? pre.amount : i === 0 ? 1 : 0;
+    return `
+    <div class="damage-component${i < shown ? "" : " is-hidden"}" data-row="${i}">
+      <input type="number" name="amount${i}" value="${amount}" min="0" aria-label="Component ${i + 1} amount"${i === 0 ? " autofocus" : ""}>
+      <select name="type${i}" aria-label="Component ${i + 1} Damage type">${typeOptions(pre?.type ?? types[0])}</select>
       <label data-tooltip-text="${game.i18n.localize("ESSENCE.Sheet.BreachHint")}"><input type="checkbox" name="breach${i}"> ${game.i18n.localize("ESSENCE.Sheet.Breach")}</label>
       <label data-tooltip-text="${game.i18n.localize("ESSENCE.Sheet.NonlethalHint")}"><input type="checkbox" name="nonlethal${i}"> ${game.i18n.localize("ESSENCE.Sheet.Nonlethal")}</label>
     </div>`;
+  };
   const result = await new Promise((resolve) => {
-    new foundry.applications.api.DialogV2({
+    const dialog = new foundry.applications.api.DialogV2({
       window: { title },
+      classes: ["essence-dialog", "essence-apply-damage"],
+      position: { width: 440 },
       content: `
-        <p class="muted">${game.i18n.localize("ESSENCE.Sheet.DamageComponentsHint")}</p>
+        ${source ? `<p class="muted apply-damage-source">${game.i18n.format("ESSENCE.Sheet.DamageFromCard", { card: source })}</p>` : ""}
         ${Array.from({ length: rows }, (_, i) => row(i)).join("")}
-        <div style="display:flex;gap:12px;align-items:center;margin-top:6px;">
-          <label>${game.i18n.localize("ESSENCE.Sheet.FlatReduction")} <input type="number" name="reduction" value="0" min="0" style="width:4em"></label>
+        <div class="apply-damage-foot">
+          <button type="button" class="link-button add-component"${shown >= rows ? " hidden" : ""}>${game.i18n.localize("ESSENCE.Sheet.AddDamageComponent")}</button>
+          <label>${game.i18n.localize("ESSENCE.Sheet.FlatReduction")} <input type="number" name="reduction" value="0" min="0"></label>
           <label data-tooltip-text="${game.i18n.localize("ESSENCE.Sheet.WeakenedHint")}"><input type="checkbox" name="weakened"> ${game.i18n.localize("ESSENCE.Sheet.AttackerWeakened")}</label>
+          <i class="fa-solid fa-circle-question muted" data-tooltip-text="${game.i18n.localize("ESSENCE.Sheet.DamageComponentsHint")}"></i>
         </div>`,
       buttons: [{
         action: "apply", label: "Apply", default: true,
@@ -269,7 +314,17 @@ export async function promptDamageComponents({ title = "Apply Damage", types, ro
         }
       }],
       submit: (result) => resolve(result === "apply" ? null : result)
-    }).render(true);
+    });
+    dialog.render(true).then((app) => {
+      const add = app.element.querySelector(".add-component");
+      add?.addEventListener("click", () => {
+        const next = app.element.querySelector(".damage-component.is-hidden");
+        if (!next) return;
+        next.classList.remove("is-hidden");
+        next.querySelector("input[type=number]")?.focus();
+        if (!app.element.querySelector(".damage-component.is-hidden")) add.hidden = true;
+      });
+    });
   });
   if (!result || !result.components.length) return null;
   return result;

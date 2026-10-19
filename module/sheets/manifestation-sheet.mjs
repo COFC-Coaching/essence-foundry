@@ -261,8 +261,8 @@ export default class EssenceManifestationSheet extends HandlebarsApplicationMixi
    * any later components are posted for the GM to recheck against the returned caller by hand.
    * Ordinary accumulated Damage is not reset by the collapse.
    */
-  static async #onApplyDamage() {
-    const picked = await promptDamageComponents({ types: DAMAGE_TYPES });
+  static async #onApplyDamage(event, target, prefill = null) {
+    const picked = await promptDamageComponents({ types: DAMAGE_TYPES, prefill: prefill?.rows ?? [], source: prefill?.source ?? "" });
     if (!picked) return;
 
     const sys = this.actor.system;
