@@ -41,7 +41,8 @@
       "title": "Adaptation - Chimera",
       "html": "Assume Lateral Eyes (upkeep 0): ordinary visual concealment within 1 unit does not impose penalties on your attacks; solid barriers and complete invisibility still matter.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

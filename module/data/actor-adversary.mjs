@@ -109,6 +109,9 @@ export default class EssenceAdversaryData extends EssenceCombatantData {
       // Reaction per Round when a Reaction ability is listed. Elites use Pools and `rollLimit`
       // (Doc L7193) instead; Task Dice fall back to the Roll Limit (L6872).
       initiativeDice: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 1 }),
+      // Ryan (2026-10-18 session): Mooks and Normals ran on fixed Initiative values at the table.
+      // A printed number here replaces the 2d10 roll for a reduced-engine profile; blank rolls.
+      initiativeFixed: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 }),
       actionsPerTurn: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 }),
       reactionsPerRound: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 }),
       taskDice: new fields.NumberField({ integer: true, nullable: true, initial: null, min: 0 }),

@@ -41,7 +41,8 @@
       "title": "Strain - Projection",
       "html": "If you accepted Strain, your next Psionics Reaction triggered by a creature in the watched area ignores ordinary concealment before your next turn.",
       "meta": "STRAIN LIMIT: 6"
-    }
+    },
+    "unopposed": true
   },
   "folder": "8f21477433464e05",
   "flags": {},

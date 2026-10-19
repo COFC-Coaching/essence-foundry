@@ -41,7 +41,8 @@
       "title": "Authority - Order",
       "html": "Spend this Authority when the target misses a Combat Card: it may move 1 unit after resolving. This does not grant another attempt.",
       "meta": "AUTHORITY CAP: 1 AT R0-R2"
-    }
+    },
+    "unopposed": true
   },
   "folder": "a282a1a28b9c77ef",
   "flags": {},

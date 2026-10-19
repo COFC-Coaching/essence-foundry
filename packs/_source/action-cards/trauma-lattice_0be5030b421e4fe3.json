@@ -41,7 +41,8 @@
       "title": "Adaptation - Bulwark",
       "html": "Assume Lattice (upkeep 1): suppress one chosen Light physical Wound Condition's numerical penalties while this Adaptation remains. Missing structures, Critical effects and Wound spaces are unchanged.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

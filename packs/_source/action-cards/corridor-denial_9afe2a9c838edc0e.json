@@ -41,7 +41,8 @@
       "title": "Lock - Suppression",
       "html": "If your Locked target voluntarily moves into or along the line before your next turn, end Lock to halt that movement after its first unit. It may burn 1 die to continue.",
       "meta": "LOCK LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "cf9224daeb4d5858",
   "flags": {},

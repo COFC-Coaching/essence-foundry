@@ -41,7 +41,8 @@
       "title": "Rite - Divination",
       "html": "Rite, 2 Echoes: bind the target. Trigger: it misses a Combat Card. Echo: reveal the defending creature's lowest Defense, then the protected target may move 1 unit.",
       "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "978c8325f619ff38",
   "flags": {},

@@ -41,7 +41,8 @@
       "title": "Lock - Targeting",
       "html": "Your current Lock persists through one break in sight until the end of your next turn; if it is restored sooner, you may transfer it to a different visible creature without a burn.",
       "meta": "LOCK LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "cf9224daeb4d5858",
   "flags": {},

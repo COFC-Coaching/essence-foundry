@@ -40,7 +40,9 @@
       "meta": ""
     },
     "nonCombatTask": false,
-    "noSurges": false
+    "noSurges": false,
+    "burnDice": null,
+    "noRoll": false
   },
   "folder": "f57fad37b968baad",
   "flags": {},

@@ -41,7 +41,8 @@
       "title": "Adaptation - Titan",
       "html": "Assume Rooted Mass (upkeep 0): while stationary, adjacent willing allies resist the first 1 unit of forced movement against them each round. You count as an ally for this benefit.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

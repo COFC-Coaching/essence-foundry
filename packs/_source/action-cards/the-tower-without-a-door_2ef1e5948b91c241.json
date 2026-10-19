@@ -41,7 +41,8 @@
       "title": "Rite - Ward",
       "html": "Rite, 2 Echoes: anchor the center. Trigger: an enemy voluntarily enters the center space. Echo: push it 1 unit away after entry and make it Slowed 1 until your next turn.",
       "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "978c8325f619ff38",
   "flags": {},

@@ -41,7 +41,8 @@
       "title": "Water Thread",
       "html": "Gain a Water Thread. Before rolling a later Magecraft card, consume it: suppress one ordinary Movement penalty on yourself or one willing target of that card until the start of your next turn.",
       "meta": "THREAD LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "022752eb7d9bda7e",
   "flags": {},

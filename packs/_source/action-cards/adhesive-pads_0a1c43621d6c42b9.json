@@ -41,7 +41,8 @@
       "title": "Adaptation - Strider",
       "html": "Assume Pads (upkeep 0): climb walls at normal Movement while at least two limbs are available; a ceiling requires an extra 1 unit per space.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

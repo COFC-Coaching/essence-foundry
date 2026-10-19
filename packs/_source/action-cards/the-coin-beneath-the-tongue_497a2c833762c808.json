@@ -41,7 +41,8 @@
       "title": "Rite - Imbuement",
       "html": "Rite, 1 Echo: bind the target. Trigger: it ends voluntary movement beside a hostile creature. Echo: it gains +1 Harmony against the next attack targeting it before your next turn.",
       "meta": "ECHO LIMIT: 1; RITE LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "978c8325f619ff38",
   "flags": {},

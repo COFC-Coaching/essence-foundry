@@ -41,7 +41,8 @@
       "title": "Strain - Barrier",
       "html": "If you accepted Strain, choose the first visible attacker to miss the protected creature before your next turn; impose -1 on its next Success Die before your next turn.",
       "meta": "STRAIN LIMIT: 6"
-    }
+    },
+    "unopposed": true
   },
   "folder": "8f21477433464e05",
   "flags": {},

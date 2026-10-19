@@ -8,8 +8,8 @@
     "rank": 0,
     "style": "",
     "subtype": "",
-    "attr": "Might",
-    "skill": "Prowess",
+    "attr": "might",
+    "skill": "prowess",
     "defense": "fortitude",
     "unopposed": false,
     "min": "2",
@@ -40,7 +40,9 @@
       "meta": ""
     },
     "nonCombatTask": false,
-    "noSurges": false
+    "noSurges": false,
+    "burnDice": null,
+    "noRoll": false
   },
   "folder": "490568d9eb375ca8",
   "flags": {},

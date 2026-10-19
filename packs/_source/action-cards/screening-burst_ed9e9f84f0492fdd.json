@@ -41,7 +41,8 @@
       "title": "Lock - Suppression",
       "html": "While your Lock is visible, you may end it when its target attacks a protected creature before your next turn to reduce that attack's Damage by 1.",
       "meta": "LOCK LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "cf9224daeb4d5858",
   "flags": {},

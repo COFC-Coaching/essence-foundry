@@ -41,7 +41,8 @@
       "title": "Adaptation - Titan",
       "html": "Assume Stone Mantle (upkeep 1): gain +1 Fortitude while your normal Movement is reduced by 2, to a minimum of 1. Ending the Adaptation ends both effects.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

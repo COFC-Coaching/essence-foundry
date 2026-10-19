@@ -41,7 +41,8 @@
       "title": "Strain - Projection",
       "html": "If you accepted Strain, the first linked creature damaged before your next turn may move 1 unit after the Damage; this can be you.",
       "meta": "STRAIN LIMIT: 6"
-    }
+    },
+    "unopposed": true
   },
   "folder": "8f21477433464e05",
   "flags": {},

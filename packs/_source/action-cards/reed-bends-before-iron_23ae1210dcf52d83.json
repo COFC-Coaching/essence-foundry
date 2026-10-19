@@ -41,7 +41,8 @@
       "title": "Combo - Guard",
       "html": "You may enter Reed Stance: while you have not moved since your last turn began, the first forced movement against you each round is reduced by 1 unit.",
       "meta": "COMBO LIMIT: 5"
-    }
+    },
+    "unopposed": true
   },
   "folder": "2e78c5ed5c7f04ea",
   "flags": {},

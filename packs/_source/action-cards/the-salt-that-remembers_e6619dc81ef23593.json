@@ -41,7 +41,8 @@
       "title": "Rite - Ward",
       "html": "Rite, 2 Echoes: bind the target. Trigger: it is targeted by the source of the suppressed Condition. Echo: gain +1 to the targeted Defense against that Action.",
       "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "978c8325f619ff38",
   "flags": {},

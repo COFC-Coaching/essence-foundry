@@ -41,7 +41,8 @@
       "title": "Space Thread",
       "html": "Gain a Space Thread. Before rolling a later Magecraft card, consume it: choose a visible empty space within 2 units as its origin. Measure its Range and area from that space.",
       "meta": "THREAD LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "022752eb7d9bda7e",
   "flags": {},

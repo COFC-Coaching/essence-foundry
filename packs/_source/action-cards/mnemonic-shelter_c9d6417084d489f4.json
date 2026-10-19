@@ -41,7 +41,8 @@
       "title": "Strain - Barrier",
       "html": "If you accepted Strain, leave a mental landmark in the target's space: you ignore ordinary concealment when targeting that space with Psionics until the start of your next turn.",
       "meta": "STRAIN LIMIT: 6"
-    }
+    },
+    "unopposed": true
   },
   "folder": "8f21477433464e05",
   "flags": {},

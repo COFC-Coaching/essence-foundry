@@ -41,7 +41,8 @@
       "title": "Adaptation - Bulwark",
       "html": "Assume Sheath (upkeep 1): the first Damage each round of the chosen type is reduced by 1. Choosing another type requires establishing this Adaptation again.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

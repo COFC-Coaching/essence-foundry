@@ -41,7 +41,8 @@
       "title": "Adaptation - Chimera",
       "html": "Assume Partition (upkeep 1): while you maintain this Adaptation, suppress the Composure penalty from one ordinary pain Condition and ignore the penalty from Unstable. Neither Condition is removed.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

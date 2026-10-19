@@ -41,7 +41,8 @@
       "title": "Strain - Projection",
       "html": "If you accepted Strain, the first time a linked target is missed before your next turn, it may move 1 unit without triggering that attacker's movement Reactions.",
       "meta": "STRAIN LIMIT: 6"
-    }
+    },
+    "unopposed": true
   },
   "folder": "8f21477433464e05",
   "flags": {},

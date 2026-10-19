@@ -41,7 +41,8 @@
       "title": "Adaptation - Bulwark",
       "html": "Assume Scaffolding (upkeep 1): maintain suppression of one non-Critical physical Wound's numerical penalties; your Movement is reduced by 1. All injuries remain recorded.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

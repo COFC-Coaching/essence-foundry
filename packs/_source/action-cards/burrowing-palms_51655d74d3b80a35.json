@@ -41,7 +41,8 @@
       "title": "Adaptation - Strider",
       "html": "Assume Burrowing Palms (upkeep 0): loose earth and rubble do not count as difficult terrain for your normal Movement.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

@@ -41,7 +41,8 @@
       "title": "Rite - Divination",
       "html": "Rite, 2 Echoes: anchor the point. Trigger: a detected enemy begins an Action within 2 units. Echo: yourself or a willing ally within 3 units gains +1 Defense against that Action.",
       "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "978c8325f619ff38",
   "flags": {},

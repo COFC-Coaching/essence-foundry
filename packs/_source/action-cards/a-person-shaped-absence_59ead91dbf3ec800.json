@@ -41,7 +41,8 @@
       "title": "Contingency - Evasion",
       "html": "When an enemy enters within 1 unit of your destination, you may move 2 units farther into existing cover without triggering its movement Reactions.",
       "meta": "ESTABLISH: 1 PER ROUND"
-    }
+    },
+    "unopposed": true
   },
   "folder": "2f6e25a3d9e778f2",
   "flags": {},

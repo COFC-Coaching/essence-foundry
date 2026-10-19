@@ -41,7 +41,8 @@
       "title": "Strain - Barrier",
       "html": "If you accepted Strain for this card, the first creature to push or pull you before your next turn moves you 1 fewer unit.",
       "meta": "STRAIN LIMIT: 6"
-    }
+    },
+    "unopposed": true
   },
   "folder": "8f21477433464e05",
   "flags": {},

@@ -41,7 +41,8 @@
       "title": "Rite - Divination",
       "html": "Rite, 2 Echoes: anchor the point. Trigger: an enemy enters within 1 unit. Echo: reveal its occupied space through ordinary concealment until your next turn; solid barriers still block awareness.",
       "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "978c8325f619ff38",
   "flags": {},

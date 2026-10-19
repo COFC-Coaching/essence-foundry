@@ -41,7 +41,8 @@
       "title": "Combo - Guard",
       "html": "Spend 1 Combo to enter Tortoise Stance: while adjacent to the protected ally, you may take the first 1 Damage that would hit it before your next turn instead.",
       "meta": "COMBO LIMIT: 5"
-    }
+    },
+    "unopposed": true
   },
   "folder": "2e78c5ed5c7f04ea",
   "flags": {},

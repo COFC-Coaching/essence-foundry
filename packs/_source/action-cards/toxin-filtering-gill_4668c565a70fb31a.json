@@ -41,7 +41,8 @@
       "title": "Adaptation - Chimera",
       "html": "Assume Filter (upkeep 0): your first exposure each round to a harmful gas cannot apply an ordinary Poison Condition; its Damage and other effects remain.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

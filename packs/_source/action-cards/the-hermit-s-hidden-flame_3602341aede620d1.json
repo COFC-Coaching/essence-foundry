@@ -41,7 +41,8 @@
       "title": "Rite - Imbuement",
       "html": "Rite, 2 Echoes: bind the target. Trigger: it suffers Damage while a Wound penalty is suppressed. Echo: it may move 1 unit afterward. Damage and Wounds still apply.",
       "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "978c8325f619ff38",
   "flags": {},

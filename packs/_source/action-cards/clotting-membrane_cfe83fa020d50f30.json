@@ -41,7 +41,8 @@
       "title": "Adaptation - Bulwark",
       "html": "Assume Membrane (upkeep 0): your first entry into hazardous terrain each turn cannot add an ordinary Bleeding Condition. It still deals its Damage and other effects.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

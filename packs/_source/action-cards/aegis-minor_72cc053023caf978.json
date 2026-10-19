@@ -41,7 +41,8 @@
       "title": "Aether Thread",
       "html": "Gain an Aether Thread. Before rolling a later Magecraft card, consume it: increase its Success Die by 1, to a maximum of 10. This does not generate Surges.",
       "meta": "THREAD LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "022752eb7d9bda7e",
   "flags": {},

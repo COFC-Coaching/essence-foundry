@@ -41,7 +41,8 @@
       "title": "Lock - Suppression",
       "html": "After resolving, choose a visible creature within ranged Weapon Range. You may burn 1 die to establish Lock on it without leaving cover.",
       "meta": "LOCK LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "cf9224daeb4d5858",
   "flags": {},

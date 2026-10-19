@@ -11,9 +11,11 @@
  *
  * On the first GM load of each system version this walks every actor, finds owned Action/Reaction
  * cards with a Basic's name and type, and rewrites their text and mechanics from the compendium
- * copy. Play state the copy carries (cooldownUsed) and the item's own id and flags stay. A GM is
+ * copy. Every other owned card gets card-normalize.mjs's text-derived corrections (0.21.9). Play state the copy carries (cooldownUsed) and the item's own id and flags stay. A GM is
  * told which sheets changed, by whisper, so a deliberate house edit can be put back by hand.
  */
+
+import { normalizeCardSystem } from "./card-normalize.mjs";
 
 const SETTING = "basicCardsSyncedVersion";
 const CARD_TYPES = ["action-card", "reaction-card"];
@@ -55,7 +57,16 @@ export async function syncBasicCards({ force = false } = {}) {
     for (const item of actor.items) {
       if (!CARD_TYPES.includes(item.type) || item.system?.speciesGranted) continue;
       const source = basics.get(`${item.type}:${item.name.toLowerCase()}`);
-      if (!source) continue;
+      if (!source) {
+        // Not a Basic: apply the text-derived corrections (card-normalize.mjs) to the owned copy,
+        // the same ones build-packs.mjs applies to the compendium.
+        const fixed = normalizeCardSystem(item.toObject());
+        if (fixed.changes.length) {
+          updates.push({ _id: item.id, system: fixed.system });
+          names.push(`${item.name} (${fixed.changes.join(", ")})`);
+        }
+        continue;
+      }
       const fresh = foundry.utils.deepClone(source.toObject().system);
       // Play state lives on the owned copy, not the compendium: keep it.
       fresh.cooldownUsed = item.system.cooldownUsed ?? false;

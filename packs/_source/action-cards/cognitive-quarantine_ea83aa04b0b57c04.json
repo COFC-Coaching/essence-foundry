@@ -41,7 +41,8 @@
       "title": "Strain - Barrier",
       "html": "If you accepted Strain, the target cannot receive a second copy of the suppressed ordinary Condition from the same source before your next turn; different effects still apply.",
       "meta": "STRAIN LIMIT: 6"
-    }
+    },
+    "unopposed": true
   },
   "folder": "8f21477433464e05",
   "flags": {},

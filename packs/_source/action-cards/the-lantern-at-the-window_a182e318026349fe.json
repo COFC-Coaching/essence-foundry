@@ -41,7 +41,8 @@
       "title": "Rite - Ward",
       "html": "Rite, 2 Echoes: bind the target. Trigger: a detected enemy within 3 units uses an Action imposing a mental Condition on it. Echo: grant +1 Composure against that Action before its roll.",
       "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "978c8325f619ff38",
   "flags": {},

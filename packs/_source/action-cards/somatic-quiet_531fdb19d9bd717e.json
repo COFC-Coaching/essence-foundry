@@ -41,7 +41,8 @@
       "title": "Strain - Trance",
       "html": "Enter Somatic Trance until the end of your next turn: ignore 1 point of the Composure penalty caused by your current Strain. The Strain remains and other penalties still apply.",
       "meta": "STRAIN LIMIT: 6"
-    }
+    },
+    "unopposed": true
   },
   "folder": "8f21477433464e05",
   "flags": {},

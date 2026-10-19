@@ -6,6 +6,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import { compilePack } from "@foundryvtt/foundryvtt-cli";
+import { normalizeCardSystem } from "../module/data/card-normalize.mjs";
+/** Cards writeSourceDoc corrected this run, reported at the end. */
+const normalizedCards = [];
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url)) + "/..";
 const SOURCE_DIR = path.join(ROOT, "packs/_source");
@@ -352,6 +355,14 @@ function loadCombatCardCsv(filePath) {
 function writeSourceDoc(packName, doc, collection = "items") {
   const dir = path.join(SOURCE_DIR, packName);
   fs.mkdirSync(dir, { recursive: true });
+  // Text-derived mechanical corrections (module/data/card-normalize.mjs): the unopposed flag for
+  // cards whose prose says so, and hand-fixed wording. Applied here so the Neon rows (still
+  // uncorrected) never put the bug back on a rebuild; the client applies the same rules to
+  // owned copies (basic-card-sync.mjs).
+  if ((packName === "action-cards" || packName === "reaction-cards") && collection === "items" && doc.system) {
+    const fixed = normalizeCardSystem(doc);
+    if (fixed.changes.length) { doc.system = fixed.system; normalizedCards.push(`${doc.name} (${fixed.changes.join(", ")})`); }
+  }
   // Required by @foundryvtt/foundryvtt-cli's compilePack: identifies the doc's collection + id in the LevelDB key.
   doc._key = `!${collection}!${doc._id}`;
   fs.writeFileSync(path.join(dir, `${slugify(doc.name)}_${doc._id}.json`), JSON.stringify(doc, null, 2));
@@ -1482,6 +1493,7 @@ async function main() {
     await compilePack(srcDir, outDir, { type });
     console.log(`Packed: ${packName} -> ${outDir}`);
   }
+  if (normalizedCards.length) console.log(`Card corrections applied (card-normalize.mjs): ${normalizedCards.length}\n  ${normalizedCards.join("\n  ")}`);
 }
 
 main().catch((err) => {

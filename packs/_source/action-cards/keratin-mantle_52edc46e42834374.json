@@ -41,7 +41,8 @@
       "title": "Adaptation - Bulwark",
       "html": "Assume Mantle (upkeep 1): the first Damage you take each round is reduced by 1. This is prevention, not increased Resilience or removal of accumulated Damage.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

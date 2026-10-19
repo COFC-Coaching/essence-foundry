@@ -2,6 +2,20 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.21.9
+
+From the 2026-10-18 playtest.
+
+**Unopposed cards roll as unopposed.** Bashing of Dust and Mote of Mercy reserved a Success Die and could "fail" although their text says "Response (unopposed)". The roll engine was right; the cards were missing the unopposed flag: 188 cards in the packs said unopposed in prose and rolled against no Defense, but only Defend carried it. The pack builder now sets the flag from the card's own text, the two card packs are rebuilt, and on the first GM load each actor's owned copies get the same correction, named in the GM whisper. Bastion of Dust's Surge line now reads "in an additional adjacent space". The Neon rows the packs come from still lack the flag; the builder reapplies the fix on every rebuild.
+
+**Printed Initiative for Mooks and Normals.** Ryan ran the bandits on fixed values. A compact profile now has an "or fixed" box beside Initiative dice; a number there is the profile's Initiative and Roll Initiative posts it without rolling. Blank keeps the 2d10 roll.
+
+**Token art stays upright.** New actors are created with "lock artwork rotation" on, so a token no longer turns to face its last move. Existing tokens keep whatever they have.
+
+**Minimized sheets shrink properly.** A minimized actor sheet left a 560 by 420 empty frame because the sheet's size floor overrode the minimized height. The floor now applies only to an open sheet.
+
+**Not changed: "before rolling" in Reaction triggers.** Nineteen Reaction cards say a trigger happens "before rolling". The v0.7 Doc agrees with the cards: Reactions are declared before anyone rolls, the chain closes, then every card rolls in reverse declaration order, and "the eventual roll, Surge purchases, and final targeting do not reopen responses." At the table Ryan ruled the opposite, that Reactions wait for the attacker's roll. The cards stay as written until the Doc and the table agree.
+
 ## 0.21.8
 
 **Apply Damage is small and arrives filled in.** The Apply Damage form was a screen-wide dialog with three blank rows and a paragraph of rules, and pressing Apply on a chat card opened the target's whole sheet first. It is now a 440-pixel dialog with one row per printed component, a "+ Component" button for more (up to three), Reduction and Weakened on one line, and the rules text behind a question-mark tooltip. From a chat card it opens with the played card's printed Damage already in the rows, including Surges spent on that roll ("deal 1 Radiant Damage" plus "+1 Damage" gives one row of 2 Radiant); "weapon Damage" fills the amount and leaves the type for you, since equipment carries no Damage number. The target's sheet stays closed. The sheet's own Apply Damage button opens the same dialog, blank.

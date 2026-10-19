@@ -41,7 +41,8 @@
       "title": "Strain - Trance",
       "html": "Enter Silence Trance until the end of your next turn: you cannot accept Strain, but gain +1 Composure. End the Trance voluntarily only at the start of your turn.",
       "meta": "STRAIN LIMIT: 6"
-    }
+    },
+    "unopposed": true
   },
   "folder": "8f21477433464e05",
   "flags": {},

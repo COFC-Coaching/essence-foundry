@@ -41,7 +41,8 @@
       "title": "Combo - Opener",
       "html": "Gain 1 Combo if you have none. Your next Prowess hit on the chosen enemy before your next turn preserves 1 Combo from loss caused by your next Core Wound.",
       "meta": "COMBO LIMIT: 5"
-    }
+    },
+    "unopposed": true
   },
   "folder": "2e78c5ed5c7f04ea",
   "flags": {},

@@ -41,7 +41,8 @@
       "title": "Rite - Imbuement",
       "html": "Rite, 2 Echoes: bind the target. Trigger: it hits an enemy in concealment. Echo: illuminate that enemy's space and reveal its location until your next turn.",
       "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "978c8325f619ff38",
   "flags": {},

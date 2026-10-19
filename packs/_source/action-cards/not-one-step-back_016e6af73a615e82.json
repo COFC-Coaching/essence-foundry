@@ -41,7 +41,8 @@
       "title": "Authority - Vow",
       "html": "Vow: do not voluntarily move farther from a chosen visible enemy before your next turn. Spend this Authority when it damages you to reduce that Damage by 1; retreating first discards it.",
       "meta": "AUTHORITY CAP: 1 AT R0-R2"
-    }
+    },
+    "unopposed": true
   },
   "folder": "a282a1a28b9c77ef",
   "flags": {},

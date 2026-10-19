@@ -41,7 +41,8 @@
       "title": "Combo - Guard",
       "html": "Enter Willow Stance: you do not lose Combo from the first Core Wound you suffer each round. The Wound and its other consequences still occur.",
       "meta": "COMBO LIMIT: 5"
-    }
+    },
+    "unopposed": true
   },
   "folder": "2e78c5ed5c7f04ea",
   "flags": {},

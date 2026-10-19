@@ -41,7 +41,8 @@
       "title": "Authority - Order",
       "html": "Spend this Authority when the protected creature is targeted before your next turn: it gains +1 to the targeted Defense against that attack.",
       "meta": "AUTHORITY CAP: 1 AT R0-R2"
-    }
+    },
+    "unopposed": true
   },
   "folder": "a282a1a28b9c77ef",
   "flags": {},

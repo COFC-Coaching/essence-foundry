@@ -41,7 +41,8 @@
       "title": "Combo - Guard",
       "html": "Spend 2 Combo to enter Banner Stance: the first protected ally damaged before your next turn may move 1 unit into an empty space adjacent to you after the Damage.",
       "meta": "COMBO LIMIT: 5"
-    }
+    },
+    "unopposed": true
   },
   "folder": "2e78c5ed5c7f04ea",
   "flags": {},

@@ -41,7 +41,8 @@
       "title": "Rite - Ward",
       "html": "Rite, 2 Echoes: anchor one marked space. Trigger: a willing occupant would be pushed or pulled. Echo: reduce that movement by 1 unit.",
       "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "978c8325f619ff38",
   "flags": {},

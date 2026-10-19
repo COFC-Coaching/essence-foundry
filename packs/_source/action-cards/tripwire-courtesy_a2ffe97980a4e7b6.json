@@ -41,7 +41,8 @@
       "title": "Contingency - Trap",
       "html": "When an enemy voluntarily crosses the line, it takes 1 Piercing Damage after crossing and becomes Exposed until your next turn. Remove the trap.",
       "meta": "ESTABLISH: 1 PER ROUND"
-    }
+    },
+    "unopposed": true
   },
   "folder": "2f6e25a3d9e778f2",
   "flags": {},

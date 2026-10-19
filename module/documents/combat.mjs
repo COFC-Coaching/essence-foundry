@@ -77,14 +77,24 @@ export default class EssenceCombat extends Combat {
       // Reduced engine (Doc L6876): Mooks and Normals "roll 2d10 and total the results. This costs
       // no Action." No prompt, no Pool.
       if (actor.system.engine === "reduced") {
-        const n = actor.system.effectiveInitiativeDice ?? 2;
-        const roll = new Roll(`${n}d10`);
-        await roll.evaluate();
-        const total = roll.total;
-        await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor: "Initiative (printed dice)" });
+        // A printed fixed Initiative (Ryan, 2026-10-18) skips the roll entirely.
+        const fixed = actor.system.initiativeFixed;
+        let total;
+        let faces = [];
+        if (typeof fixed === "number") {
+          total = fixed;
+          await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p><strong>${actor.name}</strong>: Initiative ${total} (printed).</p>` });
+        } else {
+          const n = actor.system.effectiveInitiativeDice ?? 2;
+          const roll = new Roll(`${n}d10`);
+          await roll.evaluate();
+          total = roll.total;
+          faces = roll.terms[0].results.map((r) => r.result);
+          await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor: "Initiative (printed dice)" });
+        }
         await actor.update({
           "system.playState.initiativeDice": 0,
-          "system.playState.initiativeFaces": roll.terms[0].results.map((r) => r.result),
+          "system.playState.initiativeFaces": faces,
           "system.playState.initiativeTotal": total,
           "system.playState.initiativeCommitted": true
         });

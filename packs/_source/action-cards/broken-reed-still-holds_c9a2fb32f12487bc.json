@@ -41,7 +41,8 @@
       "title": "Combo - Guard",
       "html": "You may spend 1 Combo to enter Broken Reed Stance: each time you would lose Combo from a Core Wound, lose at most 1 from that entire Damage event. Injuries still apply.",
       "meta": "COMBO LIMIT: 5"
-    }
+    },
+    "unopposed": true
   },
   "folder": "2e78c5ed5c7f04ea",
   "flags": {},

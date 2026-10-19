@@ -30,7 +30,7 @@
     "surges": [
       {
         "n": "1",
-        "html": "Create the screen in an adjacent space instead after seeing the roll."
+        "html": "Create the screen in an additional adjacent space after seeing the roll."
       },
       {
         "n": "2",
@@ -41,7 +41,8 @@
       "title": "Earth Thread",
       "html": "Gain an Earth Thread. Before rolling a later Magecraft card, consume it: yourself or one willing target of that card reduces its next incoming Damage by 1 before the start of your next turn.",
       "meta": "THREAD LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "022752eb7d9bda7e",
   "flags": {},

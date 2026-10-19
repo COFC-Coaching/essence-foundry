@@ -41,7 +41,8 @@
       "title": "Rite - Imbuement",
       "html": "Rite, 2 Echoes: bind the target. Trigger: it pushes or pulls an enemy with a Combat Card. Echo: grant +1 Harmony against the next attack targeting it before your next turn.",
       "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "978c8325f619ff38",
   "flags": {},

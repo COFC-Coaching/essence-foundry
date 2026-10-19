@@ -92,6 +92,11 @@ export default class EssenceActor extends Actor {
     if (data.type === "character" && data.prototypeToken?.actorLink === undefined) {
       this.updateSource({ prototypeToken: { actorLink: true } });
     }
+    // Token art stays upright when the token moves (2026-10-18 playtest: three players had to
+    // find "lock artwork rotation" by hand). Only when the creator did not set it themselves.
+    if (data.prototypeToken?.lockRotation === undefined) {
+      this.updateSource({ prototypeToken: { lockRotation: true } });
+    }
     // A Team is a group, so give a new one Foundry's own group icon instead of the default
     // single-person silhouette.
     if (data.type === "team" && !data.img) {

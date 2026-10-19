@@ -41,7 +41,8 @@
       "title": "Authority - Standard",
       "html": "Spend this Authority when one marked target would lose Rallied from a Core Wound before your next turn: preserve Rallied until its original expiration; the Wound still applies.",
       "meta": "AUTHORITY CAP: 1 AT R0-R2"
-    }
+    },
+    "unopposed": true
   },
   "folder": "a282a1a28b9c77ef",
   "flags": {},

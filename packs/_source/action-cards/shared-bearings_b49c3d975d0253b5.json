@@ -41,7 +41,8 @@
       "title": "Strain - Barrier",
       "html": "If you accepted Strain, you know the location of the protected creature through ordinary concealment until your next turn, but not through solid barriers.",
       "meta": "STRAIN LIMIT: 6"
-    }
+    },
+    "unopposed": true
   },
   "folder": "8f21477433464e05",
   "flags": {},

@@ -41,7 +41,8 @@
       "title": "Rite - Ward",
       "html": "Rite, 1 Echo: bind the target. Trigger: an enemy finishes voluntary movement adjacent to it. Echo: the protected creature may move 1 unit away without triggering that enemy's movement Reactions.",
       "meta": "ECHO LIMIT: 1; RITE LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "978c8325f619ff38",
   "flags": {},

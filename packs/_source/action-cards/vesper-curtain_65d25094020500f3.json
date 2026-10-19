@@ -41,7 +41,8 @@
       "title": "Shadow Thread",
       "html": "Gain a Shadow Thread. Before rolling a later Magecraft card, consume it: after resolving, choose two adjacent spaces within 3 units; they provide concealment until the start of your next turn.",
       "meta": "THREAD LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "022752eb7d9bda7e",
   "flags": {},

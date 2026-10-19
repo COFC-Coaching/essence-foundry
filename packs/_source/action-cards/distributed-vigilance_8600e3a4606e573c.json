@@ -41,7 +41,8 @@
       "title": "Adaptation - Chimera",
       "html": "Assume Vigilance (upkeep 0): replacing an Adaptation never blocks your awareness of detected creatures during the transformation; gain +1 Composure against distraction while transforming.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

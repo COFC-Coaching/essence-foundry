@@ -41,7 +41,8 @@
       "title": "Adaptation - Strider",
       "html": "Assume Override (upkeep 0): ignore the Fortitude penalty from Prone; its other effects remain.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

@@ -41,7 +41,8 @@
       "title": "Lock - Targeting",
       "html": "Establish Lock on one visible creature in the line. If it leaves the line before your next turn, you may transfer Lock to another visible creature inside it.",
       "meta": "LOCK LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "cf9224daeb4d5858",
   "flags": {},

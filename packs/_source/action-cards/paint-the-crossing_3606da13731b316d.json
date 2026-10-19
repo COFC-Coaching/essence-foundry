@@ -41,7 +41,8 @@
       "title": "Lock - Suppression",
       "html": "If your Locked target voluntarily crosses the line before your next turn, you may end Lock to deal 1 weapon Damage to it. This rider resolves once.",
       "meta": "LOCK LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "cf9224daeb4d5858",
   "flags": {},

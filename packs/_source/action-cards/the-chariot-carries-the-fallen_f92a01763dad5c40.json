@@ -41,7 +41,8 @@
       "title": "Rite - Imbuement",
       "html": "Rite, 2 Echoes: bind the target. Trigger: it begins voluntary movement while a Wound penalty is suppressed. Echo: ignore the first difficult space and resist 1 unit of forced movement during that movement.",
       "meta": "ECHO LIMIT: 2; RITE LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "978c8325f619ff38",
   "flags": {},

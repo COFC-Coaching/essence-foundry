@@ -41,7 +41,8 @@
       "title": "Strain - Projection",
       "html": "If you accepted Strain, when the viewpoint expires you may move 2 units toward its last location without triggering movement Reactions.",
       "meta": "STRAIN LIMIT: 6"
-    }
+    },
+    "unopposed": true
   },
   "folder": "8f21477433464e05",
   "flags": {},

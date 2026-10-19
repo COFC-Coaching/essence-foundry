@@ -41,7 +41,8 @@
       "title": "Fire Thread",
       "html": "Gain a Fire Thread. Before rolling a later Magecraft card, consume it: one target that already took Damage since its last turn takes +1 Damage from that card if hit.",
       "meta": "THREAD LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "022752eb7d9bda7e",
   "flags": {},

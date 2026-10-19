@@ -41,7 +41,8 @@
       "title": "Air Thread",
       "html": "Gain an Air Thread. Before rolling a later Magecraft card, consume it: you may move 1 unit immediately before or after that card, without triggering movement Reactions.",
       "meta": "THREAD LIMIT: 3"
-    }
+    },
+    "unopposed": true
   },
   "folder": "022752eb7d9bda7e",
   "flags": {},

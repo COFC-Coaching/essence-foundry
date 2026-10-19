@@ -41,7 +41,8 @@
       "title": "Adaptation - Bulwark",
       "html": "Assume Honeycomb (upkeep 1): once each round, reduce 1 incoming Damage to an adjacent ally by taking that 1 Damage yourself instead; resolve it against your accumulated Damage normally.",
       "meta": "ADAPTATION LIMIT: 1"
-    }
+    },
+    "unopposed": true
   },
   "folder": "b2fe12c9944d6127",
   "flags": {},

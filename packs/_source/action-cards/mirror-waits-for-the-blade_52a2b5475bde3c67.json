@@ -41,7 +41,8 @@
       "title": "Combo - Guard",
       "html": "If the chosen enemy misses you before your next turn, you may spend 1 Combo to move 1 unit and give it -1 Fortitude against your next Prowess Action until the end of your next turn.",
       "meta": "COMBO LIMIT: 5"
-    }
+    },
+    "unopposed": true
   },
   "folder": "2e78c5ed5c7f04ea",
   "flags": {},

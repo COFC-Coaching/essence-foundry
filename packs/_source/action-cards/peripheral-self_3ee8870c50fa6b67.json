@@ -41,7 +41,8 @@
       "title": "Strain - Projection",
       "html": "If you accepted Strain, you may move the viewpoint up to 2 units when you next move before your next turn; it must stay within 4 units of you.",
       "meta": "STRAIN LIMIT: 6"
-    }
+    },
+    "unopposed": true
   },
   "folder": "8f21477433464e05",
   "flags": {},
