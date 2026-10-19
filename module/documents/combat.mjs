@@ -92,19 +92,30 @@ export default class EssenceCombat extends Combat {
         continue;
       }
       const base = actor.system.baseCombatDice;
-      // Doc L3386: "Choose from 1 die up to your base Action Pool size." No 0-die pass.
+      // Shane (2026-10-18): 0 dice is a legal commit — no roll, Initiative 0, the character acts
+      // last and keeps its whole first Action Pool. (The v0.6 text's "1 die up to your base
+      // Action Pool size", Doc L3386, was read as forbidding it.)
       const committed = await promptDiceCount({
         title: `Roll Initiative — ${actor.name}`,
-        label: `Commit how many dice to Initiative? (1 to ${base}). The chosen dice reduce only your first Action Pool; your starting Reaction Pool is not reduced.`,
-        min: 1, max: base, initial: base
+        label: `Commit how many dice to Initiative? (0 to ${base}). The chosen dice reduce only your first Action Pool; your starting Reaction Pool is not reduced. 0 rolls nothing: Initiative 0, act last, full first Action Pool.`,
+        min: 0, max: base, initial: base
       });
       if (committed === null) continue;
 
-      const roll = new Roll(`${committed}d10`);
-      await roll.evaluate();
-      const faces = roll.terms[0].results.map((r) => r.result);
-      const total = faces.reduce((a, b) => a + b, 0);
-      await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor: "Initiative" });
+      let faces = [];
+      let total = 0;
+      if (committed > 0) {
+        const roll = new Roll(`${committed}d10`);
+        await roll.evaluate();
+        faces = roll.terms[0].results.map((r) => r.result);
+        total = faces.reduce((a, b) => a + b, 0);
+        await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor: "Initiative" });
+      } else {
+        await ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<p><strong>${actor.name}</strong> commits no dice to Initiative: Initiative 0, acts last this Round, first Action Pool kept whole.</p>`
+        });
+      }
 
       await actor.update({
         "system.playState.initiativeDice": committed,

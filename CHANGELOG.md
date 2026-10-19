@@ -2,6 +2,10 @@
 
 All notable changes to the essence-foundry system are recorded here.
 
+## 0.21.6
+
+**Initiative can take 0 dice.** The Roll Initiative prompt for a character or Elite now accepts 0. Committing nothing rolls nothing: the combatant is placed at Initiative 0, acts last in the Round, and keeps its whole first Action Pool. A chat line records it. The v0.7 Doc still words the choice as "from 1 die up to your base Action Pool size" in the Initiative chapter, Advancement, the Glossary and Appendix B; this follows Shane's ruling (2026-10-18) and the Doc wording is to catch up.
+
 ## 0.21.5
 
 Ryan's notes on the Mook sheet (2026-10-18). Rules details checked against the v0.7 Doc's Enemy Construction section.
